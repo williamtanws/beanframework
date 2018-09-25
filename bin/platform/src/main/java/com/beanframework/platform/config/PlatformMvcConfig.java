@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Optional;
 
-import javax.servlet.MultipartConfigElement;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
