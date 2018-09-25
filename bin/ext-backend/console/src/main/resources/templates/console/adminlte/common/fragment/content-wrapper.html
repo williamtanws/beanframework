@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block th:fragment="wrapper">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Main content -->
+			<th:block layout:fragment="content"></th:block>
+		</div>
+		<!-- /.content-wrapper -->
+	</th:block>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{backoffice/adminlte/common/layout/layoutBackoffice}">
+<head>
+<title th:text="#{module.employee}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<section class="content">
+			<div class="row">
+				<th:block layout:insert="~{backoffice/adminlte/common/fragment/alert :: custom}"></th:block>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box box-solid">
+						<!-- /.box-header -->
+						<div class="">
+							<div class="box-group" id="accordion">
+								<!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+								<div class="panel box box-primary">
+									<div class="box-header with-border">
+										<h4 class="box-title">
+											<span th:class="@{${@environment.getProperty('module.employee.profile.icon')}}"></span>
+											&nbsp;&nbsp;
+											<span th:text="#{module.employee.profile}"></span>
+										</h4>
+									</div>
+									<div id="collapseOne" th:class="'panel-collapse collapse in'">
+										<div class="box-body">
+											<form id="employee-update-form" role="form" th:action="@{${@environment.getProperty('path.employee.profile')}}" enctype="multipart/form-data" method="post" th:object="${employeeProfile}">
+												<input type="hidden" name="update">
+												<input type="hidden" name="uuid" th:value="*{uuid}" />
+
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group">
+															<label th:text="#{module.employee.id}"></label>
+															<span class="form-control" th:text="*{id}"></span>
+														</div>
+														<div class="form-group">
+															<label for="name" th:text="#{module.employee.name}"></label>
+															<input type="text" class="form-control" name="name" th:value="*{name}">
+															<span class="help-block"></span>
+														</div>
+														<div class="form-group">
+															<label for="password" th:text="#{module.employee.password}"></label>
+															<input type="password" class="form-control" name="password">
+															<span class="help-block"></span>
+														</div>
+														<div class="form-group">
+															<label for="confirmPassword" th:text="#{module.employee.password.confirm}"></label>
+															<input name="confirmPassword" type="password" class="form-control">
+															<span class="help-block"></span>
+														</div>
+														<div class="form-group">
+															<label for="confirmPassword" th:text="#{module.usergroup}+': '"></label>
+															<th:block th:each="userGroup : *{userGroups}">
+																<p th:each="lang : ${userGroup.userGroupLangs}" th:text="${lang.name != null ? lang.name : userGroup.id}" th:if="${lang.language.id == #locale.toString()}"></p>
+															</th:block>
+															<span class="help-block"></span>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for="picture" th:text="#{module.employee.picture}"></label>
+															<input type="file" class="form-control" name="picture" accept="image/*">
+															<span class="help-block"></span>
+														</div>
+														<div class="form-group" style="text-align: center;">
+															<img style="max-width:100%" th:src="@{${@environment.getProperty('path.employee.profile.picture')}}+'?type=original'" class="img-circle" alt="User Image">
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-12">
+														<div class="box box-solid">
+															<div class="box-body bg-gray">
+																<div class="row">
+																	<div class="col-xs-12" style="text-align: right">
+																		<button type="submit" class="btn btn-success" th:text="#{module.backoffice.save}" sec:authorize="hasAuthority('employee_update')"></button>
+																	</div>
+																</div>
+															</div>
+															<!-- /.box-header -->
+														</div>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /.box-body -->
+					</div>
+				</div>
+			</div>
+		</section>
+	</th:block>
+	<th:block layout:fragment="js">
+		<!-- jstree -->
+		<script type="text/javascript" th:src="@{/static/common/plugin/jstree/dist/jstree.min.js}"></script>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    $(document).ready(function() {
+		    	
+		        $('#employee-update-form').validate({
+		            rules: {
+		            	name: {
+		                    required: true,
+		                },
+		                password: {
+		                    required: false,
+		                    minlength: /*[[${@environment.getProperty('module.employee.password.min')}]]*/,
+		                    maxlength: /*[[${@environment.getProperty('module.employee.password.max')}]]*/
+		                },
+		                confirmPassword: {
+		                    equalTo: "#employee-update-form input[name='password']"
+		                }
+		            },
+		            messages: {
+		                name: {
+		                    required: /*[[#{module.employee.name.required}]]*/
+		                },
+		                password: {
+		                    required: /*[[#{module.employee.password.required}]]*/
+		                },
+		                confirmPassword: {
+		                    required: /*[[#{module.employee.password.confirm.required}]]*/ ,
+		                    equalTo: /*[[#{module.employee.password.confirm.notmatch}]]*/
+		                }
+		            },
+		            highlight: function(element) {
+		                $(element).closest('.form-group').addClass('has-error');
+		            },
+		            unhighlight: function(element) {
+		                $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').find('.help-block').html('');
+		            },
+		            errorPlacement: function(error, element) {
+		                element.closest('.form-group').find('.help-block').html(error.text());
+		            }
+		        });
+		
+		    });
+		    /*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>

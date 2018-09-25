@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{console/adminlte/common/layout/layoutConsole}">
+<head>
+<title th:text="#{module.console.dashboard}"></title>
+<style>
+canvas {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+</style>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<section class="content">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title" th:text="'Application'"></h3>
+						</div>
+						<div class="box-body">
+							<table class="table">
+								<tbody>
+									<tr>
+										<th>Name</th>
+										<td>
+											<span class="text-block" id="appName">BeanFramework</span>
+										</td>
+									</tr>
+									<tr>
+										<th>Description</th>
+										<td>
+											<span class="text-block" id="appDescription">This is beanframework</span>
+										</td>
+									</tr>
+									<tr>
+										<th>Startup</th>
+										<td>
+											<span class="text-block" id="metadataApplicationStartup"></span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title" th:text="'Health'"></h3>
+						</div>
+						<div class="box-body">
+							<table class="table">
+								<tbody>
+									<tr>
+										<th colspan="3">Instance</th>
+										<td>
+											<span class="text-block" id="healthStatus"></span>
+										</td>
+									</tr>
+									<tr>
+										<th colspan="3">Diskspace</th>
+										<td>
+											<span class="text-block" id="healthDiskspaceStatus"></span>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Total</td>
+										<td>
+											<span class="text-block" id="healthDiskspaceTotal"></span>
+										</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Free</td>
+										<td>
+											<span class="text-block" id="healthDiskspaceFree"></span>
+										</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Threshold</td>
+										<td>
+											<span class="text-block" id="healthDiskspaceThreshold"></span>
+										</td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title" th:text="'Process'"></h3>
+						</div>
+						<div class="box-body">
+							<table class="table text-center">
+								<thead>
+									<tr>
+										<th scope="col">PID</th>
+										<th scope="col">UPTIME</th>
+										<th scope="col">CPU(s)</th>
+										<th scope="col">System Load</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<span class="text-block" th:text="${pid}"></span>
+										</td>
+										<td>
+											<span class="text-block" id="processUptime"></span>
+										</td>
+										<td>
+											<span class="text-block" id="processCPU"></span>
+										</td>
+										<td>
+											<input type="text" class="knob systemLoad" value="0" data-thickness="0.2" data-angleArc="250" data-angleOffset="-125" data-width="140" data-height="140" data-fgColor="#39CCCC">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title" th:text="'Threads'"></h3>
+						</div>
+						<div class="box-body">
+							<div class="chart">
+								<canvas id="threadsChart" height="200"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title" th:text="'Memory: Heap'"></h3>
+						</div>
+						<div class="box-body">
+							<div class="chart">
+								<canvas id="memoryHeapChart" height="200"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title" th:text="'Memory: Non Heap'"></h3>
+						</div>
+						<div class="box-body">
+							<div class="chart">
+								<canvas id="memoryNonHeapChart" height="200"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</th:block>
+	<th:block layout:fragment="pace">
+	</th:block>
+	<th:block layout:fragment="js">
+		<!-- jQuery Knob -->
+		<script th:src="@{/static/adminlte/bower_components/jquery-knob/dist/jquery.knob.min.js}"></script>
+		
+		<!-- Moment -->
+		<script th:src="@{/static/adminlte/bower_components/moment/min/moment.min.js}"></script>
+		
+		<!-- ChartJS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
+		<script>
+		var threadsChartCtx = document.getElementById("threadsChart");
+		var threadsChart = new Chart(threadsChartCtx, {
+		    type: 'line',
+		    data: {
+		        //labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+		        datasets: [{
+		            label: 'LIVE',
+		            //data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		                'rgba(255, 205, 86, 0.5)'
+		            ],
+		            borderColor: [
+		            	'rgba(255, 205, 86, 1)'
+		            ],
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'DAEMON',
+		            //data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		                'rgba(54, 162, 235, 1)'
+		            ],
+		            borderColor: [
+		            	'rgba(54, 162, 235, 1)'
+		            ],
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'PEAK LIVE',
+		            //data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		            	'rgba(255, 250, 250, 0)'
+		            ],
+		            borderColor: [
+		                'rgba(255, 250, 250, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+		    	responsive: true,
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    stepSize: 20,
+		                    beginAtZero:true
+		                }
+		            }],
+		            xAxes: [{
+		            	stacked: true,
+		            	type: 'time',
+		            	time: {
+		            		displayFormats: {
+		                      	'millisecond': 'hh:mm:ss',
+		                        'second': 'hh:mm:ss',
+		                        'minute': 'hh:mm:ss',
+		                        'hour': 'hh:mm:ss'
+		                    }
+		                },
+		                ticks: {
+		                    maxTicksLimit: 8
+		                }
+		            }]
+		        }
+		    }
+		});
+		</script>
+		
+		<script>
+		var memoryHeapChartCtx = document.getElementById("memoryHeapChart");
+		var memoryHeapChart = new Chart(memoryHeapChartCtx, {
+		    type: 'line',
+		    data: {
+		        datasets: [{
+		            label: 'USED',
+		            //data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		                'rgba(54, 162, 235, 1)'
+		            ],
+		            borderColor: [
+		            	'rgba(54, 162, 235, 1)'
+		            ],
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'SIZE',
+		            //data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		                'rgba(255, 205, 86, 0.5)'
+		            ],
+		            borderColor: [
+		            	'rgba(255, 205, 86, 1)'
+		            ],
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'MAX',
+		            //data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		            	'rgba(255, 250, 250, 0)'
+		            ],
+		            borderColor: [
+		                'rgba(255, 250, 250, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+		    	responsive: true,
+		    	tooltips: {
+		            callbacks: {
+		                label: function(tooltipItem, data) {
+		                    return Math.ceil(tooltipItem.yLabel/1000000)+' MB';
+		                }
+		            }
+		        },
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero:true,
+		                    stepSize: 200000000,
+		                    callback: function(label, index, labels) {
+		                    	return Math.ceil(label/1000000)+' MB';
+		                    }
+		                }
+		            }],
+		            xAxes: [{
+		            	stacked: true,
+		            	type: 'time',
+		            	time: {
+		            		displayFormats: {
+		                      	'millisecond': 'hh:mm:ss',
+		                        'second': 'hh:mm:ss',
+		                        'minute': 'hh:mm:ss',
+		                        'hour': 'hh:mm:ss'
+		                    }
+		                },
+		                ticks: {
+		                    maxTicksLimit: 8
+		                }
+		            }]
+		        }
+		    }
+		});
+		</script>
+		
+		<script>
+		var memoryNonHeapChartCtx = document.getElementById("memoryNonHeapChart");
+		var memoryNonHeapChart = new Chart(memoryNonHeapChartCtx, {
+		    type: 'line',
+		    data: {
+		        datasets: [{
+		            label: 'METASPACE',
+		            //data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		                'rgba(75, 192, 192, 1)'
+		            ],
+		            borderColor: [
+		            	'rgba(75, 192, 192, 1)'
+		            ],
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'USED',
+		            //data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		                'rgba(54, 162, 235, 0.6)'
+		            ],
+		            borderColor: [
+		            	'rgba(54, 162, 235, 1)'
+		            ],
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'SIZE',
+		            //data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		                'rgba(255, 205, 86, 0.3)'
+		            ],
+		            borderColor: [
+		            	'rgba(255, 205, 86, 1)'
+		            ],
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'MAX',
+		            //data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		            	'rgba(255, 250, 250, 0)'
+		            ],
+		            borderColor: [
+		                'rgba(255, 250, 250, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+		    	responsive: true,
+		    	tooltips: {
+		            callbacks: {
+		                label: function(tooltipItem, data) {
+		                    return Math.ceil(tooltipItem.yLabel/1000000)+' MB';
+		                }
+		            }
+		        },
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero:true,
+		                    stepSize: 200000000,
+		                    callback: function(label, index, labels) {
+		                    	return Math.ceil(label/1000000)+' MB';
+		                    }
+		                }
+		            }],
+		            xAxes: [{
+		            	stacked: true,
+		            	type: 'time',
+		            	time: {
+		            		displayFormats: {
+		                      	'millisecond': 'hh:mm:ss',
+		                        'second': 'hh:mm:ss',
+		                        'minute': 'hh:mm:ss',
+		                        'hour': 'hh:mm:ss'
+		                    }
+		                },
+		                ticks: {
+		                    maxTicksLimit: 8
+		                }
+		            }]
+		        }
+		    }
+		});
+		</script>
+
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+					
+		
+		var path_console_api_cpu = /*[[@{${@environment.getProperty('path.api.console.monitor.cpu')}}]]*/;
+		
+		var actuatorPath = /*[[@{${@environment.getProperty('management.endpoints.web.base-path')}}]]*/;
+				
+		function updateHealth() {
+		    $.getJSON(actuatorPath+'/health', 
+		      function(json){
+		    	  var status = json['status'];
+		    	  var details = json['details'];
+		    	  	
+		    	  if(status == 'UP'){
+			    	  $('#healthStatus').html('<p class="text-green">'+status+'</p>');
+		    	  }
+		    	  else{
+			    	  $('#healthStatus').html('<p class="text-red">'+status+'</p>');
+		    	  }
+		    	  
+		    	  if(details.diskSpace.status == 'UP'){
+			    	  $('#healthDiskspaceStatus').html('<p class="text-green">'+details.diskSpace.status+'</p>');
+		    	  }
+		    	  else{
+			    	  $('#healthDiskspaceStatus').html('<p class="text-red">'+details.diskSpace.status+'</p>');
+		    	  }
+		    	  $('#healthDiskspaceTotal').text(humanReadable(details.diskSpace.details.total));
+		    	  $('#healthDiskspaceFree').text(humanReadable(details.diskSpace.details.free));
+		    	  $('#healthDiskspaceThreshold').text(humanReadable(details.diskSpace.details.threshold));
+		    	  
+		    	  //var diskPercentage = ((diskSpaceTotal-diskSpaceFree)/ diskSpaceTotal)*100;
+		    	  //changeValueInPercentage(diskPercentage, $('.disk').val(), '.disk');
+		    });
+		}
+		
+		function updateMetadata(){
+			updateApplicationStartup();
+		}
+		
+		function updateApplicationStartup() {
+		    $.getJSON(actuatorPath+'/metrics/process.start.time', 
+		      function(json){
+		    	  var seconds = json['measurements'][0].value;
+
+		    	  var d = new Date(seconds*1000);
+		    	  		    	  		    
+		    	  $('#metadataApplicationStartup').text(d);
+		    });
+		}
+		
+		function updateProcess(){
+			updateProcessUptime();
+			updateCPU();
+			updateSystemLoad();
+		}
+		
+		function updateProcessUptime() {
+			
+		    $.getJSON(actuatorPath+'/metrics/process.uptime', 
+		      function(json){
+		    	  var seconds = json['measurements'][0].value;
+		    	  		    
+		    	  $('#processUptime').text(millisecondsToStr(seconds*1000));
+		    });
+		}
+		
+		
+		function updateCPU() {
+			
+		    $.getJSON(actuatorPath+'/metrics/system.cpu.count', 
+		      function(json){
+		    	  var value = json['measurements'][0].value;
+		    
+		    	  $('#processCPU').text(value);
+		    });
+		}
+		
+		function updateSystemLoad() {
+			
+		    $.getJSON(actuatorPath+'/metrics/system.cpu.usage', 
+		      function(json){
+		    	  var value = json['measurements'][0].value;
+		    
+		    	  changeValueInPercentage(value*100, $('.systemLoad').val(), '.systemLoad');
+		    });
+		}
+		
+		function updateThreads(){
+
+	   		threadsChart.data.labels.push(new moment());
+	   		
+			updateThreadsLive();
+			updateThreadsDaemon();
+			updateThreadsPeakLive();
+			
+	   		threadsChart.update();
+		}
+		
+		function updateThreadsLive() {
+			
+			 $.getJSON(actuatorPath+'/metrics/jvm.threads.live', 
+			   function(json){
+			   		var value = json['measurements'][0].value;
+			   		
+			   		threadsChart.data.datasets[0].data.push(value);
+			});
+		}
+		
+		function updateThreadsDaemon() {
+			
+			 $.getJSON(actuatorPath+'/metrics/jvm.threads.daemon', 
+			   function(json){
+			   		var value = json['measurements'][0].value;
+			   		
+			   		threadsChart.data.datasets[1].data.push(value);
+			});
+		}
+				
+		function updateThreadsPeakLive() {
+			
+			 $.getJSON(actuatorPath+'/metrics/jvm.threads.peak', 
+			   function(json){
+			   		var value = json['measurements'][0].value;
+			   		
+			   		threadsChart.data.datasets[2].data.push(value);
+			   		threadsChart.config.options.scales.yAxes[0].ticks.max = value;
+			});
+		}
+		
+		function updateMemoryHeap() {
+			memoryHeapChart.data.labels.push(new moment());
+	   		
+			updateMemoryUsed();
+			updateMemorySize();
+			updateMemoryMax();
+			
+	   		memoryHeapChart.update();
+		}
+		
+		function updateMemoryUsed() {
+			
+			 $.getJSON(actuatorPath+'/metrics/jvm.memory.used?tag=area:heap', 
+			   function(json){
+			   		var value = json['measurements'][0].value;
+			   		
+			   		memoryHeapChart.data.datasets[0].data.push(value);
+			});
+		}
+		
+		function updateMemorySize() {
+			
+			 $.getJSON(actuatorPath+'/metrics/jvm.memory.committed?tag=area:heap', 
+			   function(json){
+			   		var value = json['measurements'][0].value;
+			   		
+			   		memoryHeapChart.data.datasets[1].data.push(value);
+			});
+		}
+		
+		function updateMemoryMax() {
+			
+			 $.getJSON(actuatorPath+'/metrics/jvm.memory.max?tag=area:heap', 
+			   function(json){
+			   		var value = json['measurements'][0].value;
+			   		
+			   		memoryHeapChart.data.datasets[2].data.push(value);
+			   		memoryHeapChart.config.options.scales.yAxes[0].ticks.max = value;
+			});
+		}
+		
+		function updateNonMemoryHeap() {
+			memoryNonHeapChart.data.labels.push(new moment());
+	   		
+			updateNonMemoryUsedMetaspace();
+			updateNonMemoryUsed();
+			updateNonMemorySize();
+			updateNonMemoryMax();
+			
+	   		memoryNonHeapChart.update();
+		}
+		
+		function updateNonMemoryUsedMetaspace() {
+			
+			 $.getJSON(actuatorPath+'/metrics/jvm.memory.used?tag=area:nonheap&tag=id:Metaspace', 
+			   function(json){
+			   		var value = json['measurements'][0].value;
+			   		
+			   		memoryNonHeapChart.data.datasets[0].data.push(value);
+			});
+		}
+		
+		function updateNonMemoryUsed() {
+			
+			 $.getJSON(actuatorPath+'/metrics/jvm.memory.used?tag=area:nonheap', 
+			   function(json){
+			   		var value = json['measurements'][0].value;
+			   		
+			   		memoryNonHeapChart.data.datasets[1].data.push(value);
+			});
+		}
+		
+		function updateNonMemorySize() {
+			
+			 $.getJSON(actuatorPath+'/metrics/jvm.memory.committed?tag=area:nonheap', 
+			   function(json){
+			   		var value = json['measurements'][0].value;
+			   		
+			   		memoryNonHeapChart.data.datasets[2].data.push(value);
+			});
+		}
+		
+		function updateNonMemoryMax() {
+			
+			 $.getJSON(actuatorPath+'/metrics/jvm.memory.max?tag=area:nonheap', 
+			   function(json){
+			   		var value = json['measurements'][0].value;
+			   		
+			   		memoryNonHeapChart.data.datasets[3].data.push(value);
+			   		memoryNonHeapChart.config.options.scales.yAxes[0].ticks.max = value;
+			});
+		}
+
+		updateProcess();
+		
+		updateThreads();
+		
+		updateMemoryHeap();
+		
+		updateNonMemoryHeap();
+		
+		$(document).ready(function() {
+			updateHealth();
+			
+			updateMetadata();
+			
+			updateProcess();
+			setInterval(updateProcess, 10000);
+			
+			updateThreads();
+			setInterval(updateThreads, 10000);
+			
+			updateMemoryHeap();
+			setInterval(updateMemoryHeap, 10000);
+			
+			updateNonMemoryHeap();
+			setInterval(updateNonMemoryHeap, 10000);
+		});
+		
+		function millisecondsToStr (milliseconds) {
+			var date = new Date(milliseconds);
+			var str = '';
+			if(date.getUTCDate()-1 != 0){
+				if(date.getUTCDate()-1 == 1){
+					str += date.getUTCDate()-1 + " day ";
+				}
+				else{
+					str += date.getUTCDate()-1 + " days ";
+				}
+			}
+			if(date.getUTCHours != 0){
+				if(date.getUTCHours == 1){
+					str += date.getUTCHours() + " hour ";
+				}
+				else{
+					str += date.getUTCHours() + " hours ";
+				}
+			}
+			if(date.getUTCMinutes != 0){
+				if(date.getUTCMinutes == 1){
+					str += date.getUTCMinutes() + " minute ";
+				}
+				else{
+					str += date.getUTCMinutes() + " minutes ";
+				}
+			}
+			if(date.getUTCSeconds != 0){
+				if(date.getUTCSeconds == 1){
+					str += date.getUTCSeconds() + " second ";
+				}
+				else{
+					str += date.getUTCSeconds() + " seconds ";
+				}
+			}
+			return str;
+		}
+		
+		function humanReadable(bytes){
+			return getBytesWithUnit(bytes);
+		}
+		
+		function bytesToSize(bytes) {
+			   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+			   if (bytes == 0) return '0 Byte';
+			   var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+			   return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+		}
+		
+		function formatBytes(bytes) {
+		    if(bytes < 1024) return bytes + " Bytes";
+		    else if(bytes < 1048576) return(bytes / 1024).toFixed(3) + " KB";
+		    else if(bytes < 1073741824) return(bytes / 1048576).toFixed(3) + " MB";
+		    else return(bytes / 1073741824).toFixed(3) + " GB";
+		}
+		
+		function getBytesWithUnit( bytes ){
+			if( isNaN( bytes ) ){ return; }
+			var units = [ ' bytes', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB' ];
+			var amountOf2s = Math.floor( Math.log( +bytes )/Math.log(2) );
+			if( amountOf2s < 1 ){
+				amountOf2s = 0;
+			}
+			var i = Math.floor( amountOf2s / 10 );
+			bytes = +bytes / Math.pow( 2, 10*i );
+		 
+			// Rounds to 3 decimals places.
+		        if( bytes.toString().length > bytes.toFixed(3).toString().length ){
+		            bytes = bytes.toFixed(3);
+		        }
+			return bytes + units[i];
+		}
+		
+		function changeValueInPercentage(newval, preval, className){
+			var newval = parseInt(newval);
+		    var preval = parseInt(preval);  
+		    $({value: preval}).animate({value: newval}, {
+		        duration: 1000,
+		        easing:'swing',
+		        step: function() 
+		        {
+		            $(className).val(this.value).trigger('change');
+		            $(className).val(newval+ '%');
+		        }
+		    });
+		}
+		
+		
+		  $(function () {
+		    /* jQueryKnob */
+		
+		    $(".knob").knob({
+		      /*change : function (value) {
+		       //console.log("change : " + value);
+		       },
+		       release : function (value) {
+		       console.log("release : " + value);
+		       },
+		       cancel : function () {
+		       console.log("cancel : " + this.value);
+		       },*/
+		      'readOnly': true,
+		      'format' : function (value) {
+		    	     return value + '%';
+		   	  },
+		      draw: function () {
+		
+		        // "tron" case
+		        if (this.$.data('skin') == 'tron') {
+		
+		          var a = this.angle(this.cv)  // Angle
+		              , sa = this.startAngle          // Previous start angle
+		              , sat = this.startAngle         // Start angle
+		              , ea                            // Previous end angle
+		              , eat = sat + a                 // End angle
+		              , r = true;
+		
+		          this.g.lineWidth = this.lineWidth;
+		
+		          this.o.cursor
+		          && (sat = eat - 0.3)
+		          && (eat = eat + 0.3);
+		
+		          if (this.o.displayPrevious) {
+		            ea = this.startAngle + this.angle(this.value);
+		            this.o.cursor
+		            && (sa = ea - 0.3)
+		            && (ea = ea + 0.3);
+		            this.g.beginPath();
+		            this.g.strokeStyle = this.previousColor;
+		            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+		            this.g.stroke();
+		          }
+		
+		          this.g.beginPath();
+		          this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
+		          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+		          this.g.stroke();
+		
+		          this.g.lineWidth = 2;
+		          this.g.beginPath();
+		          this.g.strokeStyle = this.o.fgColor;
+		          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+		          this.g.stroke();
+		
+		          return false;
+		        }
+		      }
+		    });
+		    /* END JQUERY KNOB */
+  		});
+		  /*]]>*/
+		</script>
+	</th:block>
+	<th:block layout:fragment="pace">
+	</th:block>
+</body>
+</html>

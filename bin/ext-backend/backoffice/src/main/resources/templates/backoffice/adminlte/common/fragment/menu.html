@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<th:block th:fragment="tree">
+		<!-- sidebar menu: : style can be found in sidebar.less -->
+		<ul class="sidebar-menu" data-widget="tree">
+			<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.backoffice.dashboard') ? 'active':''}">
+				<a th:href="@{${@environment.getProperty('path.backoffice.dashboard')}}">
+					<i class="fa fa-dashboard"></i>
+					<span th:text="#{module.backoffice.dashboard}"></span>
+				</a>
+			</li>
+			<th:block th:if="${navigationTree != null}">
+				<th:block th:each="menu : ${navigationTree}" th:id="${menu.uuid}">
+					<th:block th:insert="backoffice/adminlte/common/fragment/menu :: tree-submenu" th:with="menu=${menu}"></th:block>
+				</th:block>
+			</th:block>
+		</ul>
+	</th:block>
+	<th:block th:fragment="tree-submenu">
+		<li th:class="${#httpServletRequest.requestURI == menu.path ? 'active':''}" th:if="${#lists.isEmpty(menu.childs)}" th:id="${menu.uuid}">
+			<a th:href="${menu.path}" th:target="${menu.target}">
+				<i th:classappend="${menu.icon}"></i>
+				<th:block th:each="lang: ${menu.menuLangs}">
+					<span th:text="${lang.name}" th:if="(${lang.language.id} == ${#locale.toString()})"></span>
+				</th:block>
+			</a>
+			<script th:inline="javascript">
+				$('.active').parents().addClass("active menu-open");
+			</script>
+		</li>
+		<li class="treeview" th:if="${not #lists.isEmpty(menu.childs)}" th:id="${menu.uuid}">
+			<a href="#">
+				<i th:classappend="${menu.icon}"></i>
+				<th:block th:each="lang: ${menu.menuLangs}">
+					<span th:text="${lang.name}" th:if="(${lang.language.id} == ${#locale.toString()})"></span>
+				</th:block>
+				<span class="pull-right-container">
+					<i class="fa fa-angle-left pull-right"></i>
+				</span>
+			</a>
+			<ul class="treeview-menu">
+				<li class="treeview" th:each="child : ${menu.childs}" th:id="${child.uuid}">
+					<th:block th:insert="backoffice/adminlte/common/fragment/menu :: tree-submenu" th:with="menu=${child}"></th:block>
+				</li>
+			</ul>
+		</li>
+	</th:block>
+
+	<th:block th:fragment="button">
+		<a class="btn btn-app" th:href="@{${@environment.getProperty('path.backoffice.dashboard')}}">
+			<i class="fa fa-dashboard"></i>
+			<span th:text="#{module.backoffice.dashboard}"></span>
+		</a>
+		<th:block th:if="${navigationTree != null}">
+			<th:block th:each="menu : ${navigationTree}">
+				<th:block th:insert="backoffice/adminlte/common/fragment/menu :: button-submenu" th:with="menu=${menu}"></th:block>
+			</th:block>
+		</th:block>
+	</th:block>
+	<th:block th:fragment="button-submenu">
+		<th:block th:if="${#lists.isEmpty(menu.childs)}">
+			<a class="btn btn-app" th:href="${menu.path}" th:target="${menu.target}">
+				<i th:classappend="${menu.icon}"></i>
+				<th:block th:each="lang: ${menu.menuLangs}">
+					<span th:text="${lang.name}" th:if="(${lang.language.id} == ${#locale.toString()})"></span>
+				</th:block>
+			</a>
+		</th:block>
+		<th:block th:each="child : ${menu.childs}">
+			<th:block th:insert="backoffice/adminlte/common/fragment/menu :: button-submenu" th:with="menu=${child}"></th:block>
+		</th:block>
+	</th:block>
+</body>
+</html>

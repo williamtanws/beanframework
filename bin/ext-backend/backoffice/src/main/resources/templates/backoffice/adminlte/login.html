@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layoutBackofficeLogin}">
+<head>
+<title th:text="#{module.backoffice.login}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<div class="login-box">
+			<div class="login-logo">
+				<a th:href="@{${@environment.getProperty('module.backoffice.path')}}">
+					<b th:text="#{module.backoffice}"></b>
+				</a>
+			</div>
+			<!-- /.login-logo -->
+			<div class="login-box-body">
+				<p class="login-box-msg" th:utext="#{module.backoffice.login.box.msg}"></p>
+
+				<div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null}">
+					<div class="alert alert-danger">
+						<i class="icon fa fa-lock"></i>
+						<span th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}" th:switch="${errorMsg}">
+							<span th:case="'Wrong username or password'" th:utext="#{module.backoffice.login.error.wrongusernameorpassword}"></span>
+							<span th:case="'Your account has been disabled'" th:utext="#{module.backoffice.login.error.accountdisabled}"></span>
+							<span th:case="'Maximum sessions of 1 for this principal exceeded'" th:utext="#{module.backoffice.login.error.exceeded}"></span>
+							<span th:case="*" th:text="${errorMsg}" th:utext="#{module.backoffice.login.error.unknown}"></span>
+						</span>
+
+					</div>
+				</div>
+				<div th:if="${param.denied}">
+					<div class="alert alert-danger">
+						<i class="icon fa fa-lock"></i>
+						<span th:utext="#{module.backoffice.login.error.accessdenied}"></span>
+					</div>
+				</div>
+				<div th:if="${param.expired}">
+					<div class="alert alert-danger">
+						<i class="icon fa fa-lock"></i>
+						<span th:utext="#{module.backoffice.login.error.sessionexpired}"></span>
+					</div>
+				</div>
+				<div th:if="${param.logout}">
+					<div class="alert alert-success">
+						<i class="icon fa fa-unlock"></i>
+						<span th:utext="#{module.backoffice.login.loggedout}"></span>
+					</div>
+				</div>
+
+				<form id="login-form" th:action="@{${@environment.getProperty('path.backoffice.login')}}" method="post">
+					<sec:csrfInput />
+					<div class="form-group has-feedback">
+						<input type="text" class="form-control" th:placeholder="#{module.employee.id}" name="username" value="employee">
+						<span class="glyphicon glyphicon-user form-control-feedback"></span>
+						<span class="help-block"></span>
+					</div>
+					<div class="form-group has-feedback">
+						<input type="password" class="form-control" th:placeholder="#{module.employee.password}" name="password" value="employee">
+						<span class="glyphicon glyphicon-lock form-control-feedback"></span>
+						<span class="help-block"></span>
+					</div>
+					<div class="form-group input-group">
+						<select class="form-control" id="changeLocale">
+							<option th:value="${#strings.arraySplit(locale,';')[0]}" th:text="${#strings.arraySplit(locale,';')[1]}" th:selected="(${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()})" th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}"></option>
+						</select>
+						<span class="input-group-addon">
+							<i class="fa fa-language"></i>
+						</span>
+					</div>
+					<div class="row">
+						<div class="col-xs-8">
+							<div class="checkbox icheck">
+								<label>
+									<input type="checkbox" name="rememberme">
+									<span th:utext="#{module.backoffice.login.rememberme}"></span>
+								</label>
+							</div>
+						</div>
+						<!-- /.col -->
+						<div class="col-xs-4">
+							<button type="submit" class="btn btn-primary btn-block btn-flat" th:utext="#{module.backoffice.login}"></button>
+						</div>
+						<!-- /.col -->
+					</div>
+				</form>
+				<a th:href="@{${@environment.getProperty('path.admin')}} + '/resetpassword'" href="#" th:utext="#{module.backoffice.login.iforgotpassword}"></a>
+				<br>
+			</div>
+			<!-- /.login-box-body -->
+		</div>
+		<!-- /.login-box -->
+	</th:block>
+
+	<th:block layout:fragment="js">
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+	$(document).ready(function() {
+	  $('#login-form').validate(
+	  {
+	    rules: {
+	      username: {
+	        required: true
+	      },
+	      password: {
+		    required: true
+		  }
+	    },
+	    messages: {
+	      username: {
+		      required: /*[[#{module.backoffice.login.username.required}]]*/
+		  },
+		  password: {
+	          required: /*[[#{module.backoffice.login.password.required}]]*/
+	      }
+	    },
+	    highlight: function(element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function(element) {
+            $(element).closest('.form-group').removeClass('has-error');
+            $(element).closest('.form-group').find('.help-block').html('');
+        },
+        errorPlacement: function(error, element) {
+        	element.closest('.form-group').find('.help-block').html(error.text());
+        }
+	  });
+	});
+	/*]]>*/
+	</script>
+	</th:block>
+</body>
+</html>

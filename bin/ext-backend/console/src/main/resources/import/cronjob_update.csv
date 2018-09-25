@@ -1,0 +1,3 @@
+id,jobClass,jobGroup,jobName,description,cronExpression,startup,jobTrigger,triggerStartDate,cronjobData
+samplejob,com.beanframework.cronjob.job.SampleJob,Sample Group,Sample Job,Just a sample job run at every 20 seconds,*/20 * * * * ?,true,START,,dataname1:datavalue1;dataname2:datavalue2
+emailjob,com.beanframework.email.job.EmailJob,Email Group,Send Email,Process emails every 20 seconds,*/20 * * * * ?,true,START,,

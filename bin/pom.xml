@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.beanframework</groupId>
+    <artifactId>beanframework</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+    	<module>ext-core/common</module>
+    	<module>ext-core/language</module>
+    	<module>ext-core/user</module>
+    	<module>ext-core/email</module>
+    	<module>ext-core/cronjob</module>
+    	<module>ext-core/configuration</module>
+    	<module>ext-core/catalog</module>
+    	<module>ext-core/media</module>
+    	<module>ext-core/history</module>
+		<module>ext-ui/adminlte</module>
+    	<module>ext-backend/admin</module>
+        <module>ext-backend/console</module>
+    	<module>ext-backend/menu</module>
+    	<module>ext-backend/employee</module>
+    	<module>ext-backend/customer</module>
+        <module>ext-backend/filemanager</module>
+        <module>ext-backend/backoffice</module>
+        <module>platform</module>
+    </modules>
+
+</project>

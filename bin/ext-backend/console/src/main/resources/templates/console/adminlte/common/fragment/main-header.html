@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf">
+<head>
+</head>
+<body>
+	<th:block th:fragment="header">
+		<header class="main-header">
+			<nav class="navbar navbar-static-top">
+				<div class="container">
+					<div class="navbar-header">
+						<a th:href="@{${@environment.getProperty('console.webroot')}}" class="navbar-brand">
+							<b th:text="#{module.console}"></b>
+						</a>
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+							<i class="fa fa-bars"></i>
+						</button>
+					</div>
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+						<ul class="nav navbar-nav">
+							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.dashboard') ? 'active':''}">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<span th:text="'Dashboard'"></span>
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu">
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.dashboard') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.console.dashboard')}}" th:text="'Overview'"></a>
+									</li>
+									<li>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Metrics'"></a>
+									</li>
+									<li>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Environment'"></a>
+									</li>
+									<li>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Logfile'"></a>
+									</li>
+									<li>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Loggers'"></a>
+									</li>
+									<li>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Threads'"></a>
+									</li>
+									<li>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Http Traces'"></a>
+									</li>
+									<li>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Audit Log'"></a>
+									</li>
+									<li>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Heapdump'"></a>
+									</li>
+								</ul>
+							</li>
+
+							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.configuration') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.initialize') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.update') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.remove') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.license') ? 'dropdown active':'dropdown'}">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<span th:text="#{module.console.platform}"></span>
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu">
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.configuration') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.configuration')}}" th:text="#{module.configuration}"></a>
+									</li>
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.initialize') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.console.platform.initialize')}}" th:text="#{module.console.platform.initialize}"></a>
+									</li>
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.update') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.console.platform.update')}}" th:text="#{module.console.platform.update}"></a>
+									</li>
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.remove') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.console.platform.remove')}}" th:text="#{module.console.platform.remove}"></a>
+									</li>
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.license') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.console.platform.license')}}" th:text="#{module.console.platform.license}"></a>
+									</li>
+								</ul>
+							</li>
+							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.cache') || #httpServletRequest.requestURI == @environment.getProperty('path.logging') ? 'dropdown active':'dropdown'}">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<span th:text="#{module.console.monitor}"></span>
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu">
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.cache') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.cache')}}" th:text="#{module.console.cache}"></a>
+									</li>
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.logging') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.logging}"></a>
+									</li>
+								</ul>
+							</li>
+							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.admin') ? 'active':''}">
+								<a th:href="@{${@environment.getProperty('path.admin')}}" th:text="#{module.admin}"></a>
+							</li>
+							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.documentation') ? 'active':''}">
+								<a th:href="@{${@environment.getProperty('path.documentation')}}" th:text="#{module.documentation}"></a>
+							</li>
+
+						</ul>
+					</div>
+					<!-- /.navbar-collapse -->
+					<!-- Navbar Right Menu -->
+					<div class="navbar-custom-menu">
+						<ul class="nav navbar-nav">
+							<!-- Notifications: style can be found in dropdown.less -->
+							<li class="dropdown notifications-menu">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<i class="fa fa-language"></i>
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<!-- inner menu: contains the actual data -->
+										<ul class="menu">
+											<li th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}" th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #f4f4f4':''">
+												<a href="#" th:onclick="'changeLocale(\''+${#strings.arraySplit(locale,';')[0]}+'\')'">
+													<i class="text-aqua"></i>
+													<span th:text="${#strings.arraySplit(locale,';')[1]}"></span>
+												</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<!-- User Account Menu -->
+							<li class="dropdown user user-menu">
+								<!-- Menu Toggle Button -->
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<span th:text="${#authentication.principal.id}"></span>
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<!-- Menu Footer-->
+									<li class="user-footer">
+										<div class="pull-right">
+											<form th:action="@{${@environment.getProperty('path.console.logout')}}" method="post">
+												<a onclick="this.parentNode.submit(); return false;" class="btn btn-default btn-flat" th:text="#{module.console.logout}"></a>
+											</form>
+										</div>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<!-- /.navbar-custom-menu -->
+				</div>
+				<!-- /.container-fluid -->
+			</nav>
+		</header>
+	</th:block>
+</body>
+</html>

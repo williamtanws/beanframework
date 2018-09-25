@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="form">
+		<div class="col-md-12" th:if="${#fields.hasErrors('*')}">
+			<div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<i class="icon fa fa-ban"></i> <span th:each="err : ${#fields.errors('*')}" th:text="${err}+' '"></span>
+			</div>
+		</div>
+		<div class="col-md-12" th:if="${#fields.hasErrors('global')}">
+			<div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<i class="icon fa fa-ban"></i> <span th:each="err : ${#fields.errors('global')}" th:text="${err}+' '"></span>
+			</div>
+		</div>
+	</th:block>
+	<th:block layout:fragment="custom">
+		<div class="col-md-12" th:if="${error}">
+			<div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<i class="icon fa fa-ban"></i> <span th:text=${error}></span>
+			</div>
+		</div>
+		<div class="col-md-12" th:if="${success}">
+			<div class="alert alert-success alert-dismissible">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<i class="icon fa fa-info"></i> <span th:text=${success}></span>
+			</div>
+		</div>
+		<div class="col-md-12" th:if="${info}">
+			<div class="alert alert-info alert-dismissible">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<i class="icon fa fa-info"></i> <span th:text=${success}></span>
+			</div>
+		</div>
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		  $(document).ready(function () {
+		    $('.sidebar-menu').tree();
+		    window.setTimeout(function() { $(".alert-dismissible").alert('close'); }, 10000);
+		  })
+		/*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>

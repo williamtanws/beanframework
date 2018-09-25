@@ -1,0 +1,2 @@
+id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds
+customer,Customer,customer,true,true,true,true,generalcustomer

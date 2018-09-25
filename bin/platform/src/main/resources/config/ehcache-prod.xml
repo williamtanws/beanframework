@@ -1,0 +1,46 @@
+<ehcache xsi:noNamespaceSchemaLocation="ehcache.xsd"
+	updateCheck="true" monitoring="autodetect" dynamicConfig="true">
+
+	<diskStore path="../temp/ehcache"/>
+
+	<defaultCache maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="menu" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="navigationTree" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="navigationTreeByUserGroup" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="language" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="languages" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="cronjob" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="cronjobs" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" />
+
+</ehcache>

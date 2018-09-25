@@ -1,0 +1,5 @@
+id,sort,name_en,name_cn
+create,0,Create,创建
+read,1,Read,查看
+update,2,Update,编辑
+delete,3,Delete,删除
