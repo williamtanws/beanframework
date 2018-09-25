@@ -15,8 +15,6 @@
     	<module>ext-core/email</module>
     	<module>ext-core/cronjob</module>
     	<module>ext-core/configuration</module>
-    	<module>ext-core/catalog</module>
-    	<module>ext-core/media</module>
     	<module>ext-core/history</module>
 		<module>ext-ui/adminlte</module>
     	<module>ext-backend/admin</module>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
 	layout:decorate="~{console/adminlte/common/layout/layoutConsole}">
 <head>
-<title th:text="#{module.console.dashboard}"></title>
+<title th:text="#{module.console.dashboard.overview}"></title>
 <style>
 canvas {
 	-moz-user-select: none;
@@ -24,19 +24,19 @@ canvas {
 							<table class="table">
 								<tbody>
 									<tr>
-										<th>Name</th>
+										<th th:text="#{module.console.dashboard.name}"></th>
 										<td>
-											<span class="text-block" id="appName">BeanFramework</span>
+											<span class="text-block" id="appName"></span>
 										</td>
 									</tr>
 									<tr>
-										<th>Description</th>
+										<th th:text="#{module.console.dashboard.description}"></th>
 										<td>
-											<span class="text-block" id="appDescription">This is beanframework</span>
+											<span class="text-block" id="appDescription"></span>
 										</td>
 									</tr>
 									<tr>
-										<th>Startup</th>
+										<th th:text="#{module.console.dashboard.startup}"></th>
 										<td>
 											<span class="text-block" id="metadataApplicationStartup"></span>
 										</td>

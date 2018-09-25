@@ -25,32 +25,32 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu" role="menu">
-									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.dashboard') ? 'active':''}">
-										<a th:href="@{${@environment.getProperty('path.console.dashboard')}}" th:text="'Overview'"></a>
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.dashboard.overview') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.console.dashboard')}}" th:text="#{module.console.dashboard.overview}"></a>
 									</li>
 									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Metrics'"></a>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.dashboard.metrics}"></a>
 									</li>
 									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Environment'"></a>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.dashboard.environment}"></a>
 									</li>
 									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Logfile'"></a>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.dashboard.logfile}"></a>
 									</li>
 									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Loggers'"></a>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.dashboard.loggers}"></a>
 									</li>
 									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Threads'"></a>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.dashboard.threads}"></a>
 									</li>
 									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Http Traces'"></a>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.dashboard.httptraces}"></a>
 									</li>
 									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Audit Log'"></a>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.dashboard.auditlog}"></a>
 									</li>
 									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="'Heapdump'"></a>
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.dashboard.heapdump}"></a>
 									</li>
 								</ul>
 							</li>
