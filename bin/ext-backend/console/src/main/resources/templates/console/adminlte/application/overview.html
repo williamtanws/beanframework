@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
 	layout:decorate="~{console/adminlte/common/layout/layoutConsole}">
 <head>
-<title th:text="#{module.console.dashboard.overview}"></title>
+<title th:text="#{module.console.application.overview}"></title>
 <style>
 canvas {
 	-moz-user-select: none;
@@ -24,19 +24,19 @@ canvas {
 							<table class="table">
 								<tbody>
 									<tr>
-										<th th:text="#{module.console.dashboard.name}"></th>
+										<th th:text="#{module.console.application.name}"></th>
 										<td>
-											<span class="text-block" id="appName"></span>
+											<span class="text-block" id="appName" th:text="@{${@environment.getProperty('info.app.name')}}"></span>
 										</td>
 									</tr>
 									<tr>
-										<th th:text="#{module.console.dashboard.description}"></th>
+										<th th:text="#{module.console.application.description}"></th>
 										<td>
-											<span class="text-block" id="appDescription"></span>
+											<span class="text-block" id="appDescription" th:text="@{${@environment.getProperty('info.app.description')}}"></span>
 										</td>
 									</tr>
 									<tr>
-										<th th:text="#{module.console.dashboard.startup}"></th>
+										<th th:text="#{module.console.application.startup}"></th>
 										<td>
 											<span class="text-block" id="metadataApplicationStartup"></span>
 										</td>
@@ -658,16 +658,16 @@ canvas {
 			updateMetadata();
 			
 			updateProcess();
-			setInterval(updateProcess, 10000);
+			setInterval(updateProcess, 5000);
 			
 			updateThreads();
-			setInterval(updateThreads, 10000);
+			setInterval(updateThreads, 5000);
 			
 			updateMemoryHeap();
-			setInterval(updateMemoryHeap, 10000);
+			setInterval(updateMemoryHeap, 5000);
 			
 			updateNonMemoryHeap();
-			setInterval(updateNonMemoryHeap, 10000);
+			setInterval(updateNonMemoryHeap, 5000);
 		});
 		
 		function millisecondsToStr (milliseconds) {
