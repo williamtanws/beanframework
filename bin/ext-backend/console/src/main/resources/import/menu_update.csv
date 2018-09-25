@@ -7,10 +7,8 @@ menu,4,fa fa-align-justify,/backoffice/menu,,true,system,Menu,菜单,employeegro
 cronjob,5,fa fa-calendar,/backoffice/cronjob,,true,system,Cron Job,定时任务,employeegroup
 email,6,fa fa-envelope,/backoffice/email,,true,system,Email,电子邮件,employeegroup
 history,6,fa fa-history,/backoffice/history,,true,system,History,历史,employeegroup
-catalog,1,fa fa-book,/backoffice/catalog,,true,,Catalog,目录,employeegroup
 multimedia,2,fa fa-file-image-o,,,true,,Multimedia,多媒体,customergroup
-media,0,fa fa-file-movie-o,/backoffice/media,,true,multimedia,Media,媒体,employeegroup
-filemanager,1,fa fa-folder,/backoffice/filemanager,,true,multimedia,File Manager,文件管理,employeegroup
+filemanager,1,fa fa-folder,/backoffice/filemanager,,true,multimedia,File Manager,文件管理器,employeegroup
 user,3,fa fa-user,,,true,,User,用户,employeegroup;customergroup
 employeesession,0,fa fa-clock-o,/backoffice/employee/session,,true,user,Employee Session,雇员会话,employeegroup
 usergroup,1,fa fa-users,/backoffice/usergroup,,true,user,User Group,用户组,employeegroup

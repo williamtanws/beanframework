@@ -58,17 +58,7 @@
         </dependency>
         <dependency>
             <groupId>com.beanframework</groupId>
-            <artifactId>media</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.beanframework</groupId>
             <artifactId>history</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.beanframework</groupId>
-            <artifactId>catalog</artifactId>
             <version>${project.version}</version>
         </dependency>
 		

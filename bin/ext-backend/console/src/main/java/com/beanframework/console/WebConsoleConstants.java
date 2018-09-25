@@ -29,12 +29,10 @@ public interface WebConsoleConstants {
 		public static final String CONSOLE_API = "${console.api}";
 		public static final String LOGIN = "${path.console.login}";
 		public static final String LOGOUT = "${path.console.logout}";
-		public static final String DASHBOARD = "${path.console.dashboard}";
 	}
 
 	public interface View {
 		public static final String LOGIN = "${view.console.login}";
-		public static final String DASHBOARD = "${view.console.dashboard}";
 	}
 	
 	public interface Authority {
