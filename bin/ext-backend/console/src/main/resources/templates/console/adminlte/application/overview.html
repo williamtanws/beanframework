@@ -184,7 +184,7 @@ canvas {
 		
 		<!-- ChartJS -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-
+		
 		<script>
 		var threadsChartCtx = document.getElementById("threadsChart");
 		var threadsChart = new Chart(threadsChartCtx, {
@@ -232,84 +232,6 @@ canvas {
 		                ticks: {
 		                    stepSize: 20,
 		                    beginAtZero:true
-		                }
-		            }],
-		            xAxes: [{
-		            	stacked: true,
-		            	type: 'time',
-		            	time: {
-		            		displayFormats: {
-		                      	'millisecond': 'hh:mm:ss',
-		                        'second': 'hh:mm:ss',
-		                        'minute': 'hh:mm:ss',
-		                        'hour': 'hh:mm:ss'
-		                    }
-		                },
-		                ticks: {
-		                    maxTicksLimit: 8
-		                }
-		            }]
-		        }
-		    }
-		});
-		</script>
-		
-		<script>
-		var memoryHeapChartCtx = document.getElementById("memoryHeapChart");
-		var memoryHeapChart = new Chart(memoryHeapChartCtx, {
-		    type: 'line',
-		    data: {
-		        datasets: [{
-		            label: 'USED',
-		            //data: [12, 19, 3, 5, 2, 3],
-		            backgroundColor: [
-		                'rgba(54, 162, 235, 1)'
-		            ],
-		            borderColor: [
-		            	'rgba(54, 162, 235, 1)'
-		            ],
-		            borderWidth: 1
-		        },
-		        {
-		            label: 'SIZE',
-		            //data: [12, 19, 3, 5, 2, 3],
-		            backgroundColor: [
-		                'rgba(255, 205, 86, 0.5)'
-		            ],
-		            borderColor: [
-		            	'rgba(255, 205, 86, 1)'
-		            ],
-		            borderWidth: 1
-		        },
-		        {
-		            label: 'MAX',
-		            //data: [12, 19, 3, 5, 2, 3],
-		            backgroundColor: [
-		            	'rgba(255, 250, 250, 0)'
-		            ],
-		            borderColor: [
-		                'rgba(255, 250, 250, 1)'
-		            ],
-		            borderWidth: 1
-		        }]
-		    },
-		    options: {
-		    	responsive: true,
-		    	tooltips: {
-		            callbacks: {
-		                label: function(tooltipItem, data) {
-		                    return Math.ceil(tooltipItem.yLabel/1000000)+' MB';
-		                }
-		            }
-		        },
-		        scales: {
-		            yAxes: [{
-		                ticks: {
-		                    beginAtZero:true,
-		                    stepSize: 200000000,
-		                    callback: function(label, index, labels) {
-		                    	return Math.ceil(label/1000000)+' MB';
-		                    }
 		                }
 		            }],
 		            xAxes: [{
@@ -428,6 +350,121 @@ canvas {
 		var path_console_api_cpu = /*[[@{${@environment.getProperty('path.api.console.monitor.cpu')}}]]*/;
 		
 		var actuatorPath = /*[[@{${@environment.getProperty('management.endpoints.web.base-path')}}]]*/;
+		
+		var memory_used_data;
+		var memory_size_data; 
+		var memory_max_data;
+		
+		$.ajax({
+			url: actuatorPath+'/metrics/jvm.memory.used?tag=area:heap',
+			dataType: 'json',
+			async: false,
+			success: function(json) {
+				var value = json['measurements'][0].value;
+				memory_used_data = value;
+			}
+		});
+		
+		$.ajax({
+			url: actuatorPath+'/metrics/jvm.memory.committed?tag=area:heap',
+			dataType: 'json',
+			async: false,
+			success: function(json) {
+				var value = json['measurements'][0].value;
+				memory_size_data = value;
+			}
+		});
+		
+		$.ajax({
+			url: actuatorPath+'/metrics/jvm.memory.max?tag=area:heap',
+			dataType: 'json',
+			async: false,
+			success: function(json) {
+				var value = json['measurements'][0].value;
+				memory_max_data = value;
+			}
+		});
+		
+		var memoryHeapChartCtx = document.getElementById("memoryHeapChart");
+		var memoryHeapChart = new Chart(memoryHeapChartCtx, {
+		    type: 'line',
+		    data: {
+		        datasets: [{
+		            label: 'USED',
+		            data: [memory_used_data],
+		            backgroundColor: [
+		                'rgba(54, 162, 235, 1)'
+		            ],
+		            borderColor: [
+		            	'rgba(54, 162, 235, 1)'
+		            ],
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'SIZE',
+		            data: [memory_size_data],
+		            backgroundColor: [
+		                'rgba(255, 205, 86, 0.5)'
+		            ],
+		            borderColor: [
+		            	'rgba(255, 205, 86, 1)'
+		            ],
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'MAX',
+		            data: [memory_max_data],
+		            backgroundColor: [
+		            	'rgba(128, 128, 128, 0.2)'
+		            ],
+		            borderColor: [
+		            	'rgba(128, 128, 128, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+		    	responsive: true,
+		    	tooltips: {
+		            callbacks: {
+		                label: function(tooltipItem, data) {
+		                    return Math.ceil(tooltipItem.yLabel/1000000)+' MB';
+		                }
+		            }
+		        },
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero:true,
+		                    stepSize: 200000000,
+		                    callback: function(label, index, labels) {
+		                    	return Math.ceil(label/1000000)+' MB';
+		                    }
+		                },
+		                max: memory_max_data
+		            }],
+		            xAxes: [{
+		            	stacked: true,
+		            	type: 'time',
+		            	time: {
+		            		displayFormats: {
+		                      	'millisecond': 'hh:mm:ss',
+		                        'second': 'hh:mm:ss',
+		                        'minute': 'hh:mm:ss',
+		                        'hour': 'hh:mm:ss'
+		                    }
+		                },
+		                ticks: {
+		                    maxTicksLimit: 8
+		                }
+		            }]
+		        }
+		    }
+		});
+		
+		
+		
+		
 				
 		function updateHealth() {
 		    $.getJSON(actuatorPath+'/health', 
@@ -552,44 +589,90 @@ canvas {
 		}
 		
 		function updateMemoryHeap() {
-			memoryHeapChart.data.labels.push(new moment());
+			
+			if(memoryHeapChart.data.labels.length > 6){
+				/*memoryHeapChart.data.labels[0] = memoryHeapChart.data.labels[1];
+				memoryHeapChart.data.labels[1] = memoryHeapChart.data.labels[2];
+				memoryHeapChart.data.labels[2] = memoryHeapChart.data.labels[3];
+				memoryHeapChart.data.labels[3] = memoryHeapChart.data.labels[4];
+				memoryHeapChart.data.labels[4] = memoryHeapChart.data.labels[5];
+				memoryHeapChart.data.labels[5] = new moment();*/
+			}
+			else{
+				memoryHeapChart.data.labels.push(new moment());
+			}
+			
+			var memory_used_data;
+			var memory_size_data;
+			var memory_max_data;
 	   		
-			updateMemoryUsed();
-			updateMemorySize();
-			updateMemoryMax();
+			$.ajax({
+				url: actuatorPath+'/metrics/jvm.memory.used?tag=area:heap',
+				dataType: 'json',
+				async: false,
+				success: function(json) {
+					var value = json['measurements'][0].value;
+					memory_used_data = value;
+				}
+			});
+			
+			$.ajax({
+				url: actuatorPath+'/metrics/jvm.memory.committed?tag=area:heap',
+				dataType: 'json',
+				async: false,
+				success: function(json) {
+					var value = json['measurements'][0].value;
+					memory_size_data = value;
+				}
+			});
+			
+			$.ajax({
+				url: actuatorPath+'/metrics/jvm.memory.max?tag=area:heap',
+				dataType: 'json',
+				async: false,
+				success: function(json) {
+					var value = json['measurements'][0].value;
+					memory_max_data = value;
+				}
+			});
+			
+			if(memoryHeapChart.data.datasets[0].data.length > 6){
+				memoryHeapChart.data.datasets[0].data[0] = memoryHeapChart.data.datasets[0].data[1];
+				memoryHeapChart.data.datasets[0].data[1] = memoryHeapChart.data.datasets[0].data[2];
+				memoryHeapChart.data.datasets[0].data[2] = memoryHeapChart.data.datasets[0].data[3];
+				memoryHeapChart.data.datasets[0].data[3] = memoryHeapChart.data.datasets[0].data[4];
+				memoryHeapChart.data.datasets[0].data[4] = memoryHeapChart.data.datasets[0].data[5];
+				memoryHeapChart.data.datasets[0].data[5] = memory_used_data;
+			}
+			else{
+				memoryHeapChart.data.datasets[0].data.push(memory_used_data);
+			}
+			
+			if(memoryHeapChart.data.datasets[1].data.length > 6){
+				memoryHeapChart.data.datasets[1].data[0] = memoryHeapChart.data.datasets[1].data[1];
+				memoryHeapChart.data.datasets[1].data[1] = memoryHeapChart.data.datasets[1].data[2];
+				memoryHeapChart.data.datasets[1].data[2] = memoryHeapChart.data.datasets[1].data[3];
+				memoryHeapChart.data.datasets[1].data[3] = memoryHeapChart.data.datasets[1].data[4];
+				memoryHeapChart.data.datasets[1].data[4] = memoryHeapChart.data.datasets[1].data[5];
+				memoryHeapChart.data.datasets[1].data[5] = memory_size_data;
+			}
+			else{
+				memoryHeapChart.data.datasets[1].data.push(memory_size_data);
+			}
+			
+			if(memoryHeapChart.data.datasets[2].data.length > 6){
+				memoryHeapChart.data.datasets[2].data[0] = memoryHeapChart.data.datasets[2].data[1];
+				memoryHeapChart.data.datasets[2].data[1] = memoryHeapChart.data.datasets[2].data[2];
+				memoryHeapChart.data.datasets[2].data[2] = memoryHeapChart.data.datasets[2].data[3];
+				memoryHeapChart.data.datasets[2].data[3] = memoryHeapChart.data.datasets[2].data[4];
+				memoryHeapChart.data.datasets[2].data[4] = memoryHeapChart.data.datasets[2].data[5];
+				memoryHeapChart.data.datasets[2].data[5] = memory_max_data;
+			}
+			else{
+				memoryHeapChart.data.datasets[2].data.push(memory_max_data);
+			}
 			
 	   		memoryHeapChart.update();
-		}
-		
-		function updateMemoryUsed() {
-			
-			 $.getJSON(actuatorPath+'/metrics/jvm.memory.used?tag=area:heap', 
-			   function(json){
-			   		var value = json['measurements'][0].value;
-			   		
-			   		memoryHeapChart.data.datasets[0].data.push(value);
-			});
-		}
-		
-		function updateMemorySize() {
-			
-			 $.getJSON(actuatorPath+'/metrics/jvm.memory.committed?tag=area:heap', 
-			   function(json){
-			   		var value = json['measurements'][0].value;
-			   		
-			   		memoryHeapChart.data.datasets[1].data.push(value);
-			});
-		}
-		
-		function updateMemoryMax() {
-			
-			 $.getJSON(actuatorPath+'/metrics/jvm.memory.max?tag=area:heap', 
-			   function(json){
-			   		var value = json['measurements'][0].value;
-			   		
-			   		memoryHeapChart.data.datasets[2].data.push(value);
-			   		memoryHeapChart.config.options.scales.yAxes[0].ticks.max = value;
-			});
 		}
 		
 		function updateNonMemoryHeap() {
@@ -658,16 +741,16 @@ canvas {
 			updateMetadata();
 			
 			updateProcess();
-			setInterval(updateProcess, 5000);
+			setInterval(updateProcess, 1000);
 			
-			updateThreads();
-			setInterval(updateThreads, 5000);
+			//updateThreads();
+			//setInterval(updateThreads, 1000);
 			
 			updateMemoryHeap();
-			setInterval(updateMemoryHeap, 5000);
+			setInterval(updateMemoryHeap, 1000);
 			
-			updateNonMemoryHeap();
-			setInterval(updateNonMemoryHeap, 5000);
+			//updateNonMemoryHeap();
+			//setInterval(updateNonMemoryHeap, 1000);
 		});
 		
 		function millisecondsToStr (milliseconds) {

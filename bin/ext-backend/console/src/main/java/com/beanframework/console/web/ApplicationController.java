@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.logging.LoggersEndpoint;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.beanframework.console.WebApplicationConstants;
 
 @Controller
-public class DashboardController {
+public class ApplicationController {
 
 	@Value("${spring.pid.file}")
 	private String PID_FILE;
@@ -44,6 +46,9 @@ public class DashboardController {
 	
 	@Value(WebApplicationConstants.View.APPLICATION_HEAPDUMP)
 	private String VIEW_CONSOLE_APPLICATION_HEAPDUMP;
+	
+	@Autowired
+	private LoggersEndpoint loggersEndpoint;
 
 	@RequestMapping(WebApplicationConstants.Path.APPLICATION_OVERVIEW)
 	public String overview(Model model) throws IOException {
@@ -73,6 +78,9 @@ public class DashboardController {
 	
 	@RequestMapping(WebApplicationConstants.Path.APPLICATION_LOGGERS)
 	public String loggers(Model model) throws IOException {
+		
+		model.addAttribute("loggers", loggersEndpoint.loggers());
+						
 		return VIEW_CONSOLE_APPLICATION_LOGGERS;
 	}
 	
