@@ -12,7 +12,7 @@ Beanframework is not a product and not build for any specific solution, it is a 
 ## Technologies
 
 * Java: 1.8
-* Spring Boot: 2.0.3.RELEASE
+* Spring Boot: 2.0.4.RELEASE
 * AdminLTE 2.4.5
 
 ## Instruction
