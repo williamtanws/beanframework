@@ -6,7 +6,8 @@ Development targeting at release 1.0.0.
 
 ## Why Beanframework
 
-Beanframework is a project template with ready made modules such as user management, login function, cronjob and so on. Beanframework is not a product and not build for any specific solution, it is a project framework with template that help you kick start your fresh project, with all the basic modules needed.
+Beanframework is a 100% open source project with ready made modules such as user management, login function, cronjob and so on. 
+Beanframework is not a product and not build for any specific solution, it is a project framework with template that help you kick start your fresh project, with all the basic modules needed.
 
 ## Technologies
 
