@@ -1,12 +1,12 @@
-# BeanFramework
+# Beanframework
 
 ## Development Status
 
-In progress, targeting at release 1.0.0.
+Development targeting at release 1.0.0.
 
-## Why BeanFramework
+## Why Beanframework
 
-BeanFramework is a project template with ready made modules such as user management, login function, cronjob and so on.
+Beanframework is a project template with ready made modules such as user management, login function, cronjob and so on. Beanframework is not a product and not build for any specific solution, it is a project framework with template that help you kick start your fresh project, with all the basic modules needed.
 
 ## Technologies
 
@@ -18,15 +18,11 @@ BeanFramework is a project template with ready made modules such as user managem
 
 * Quick Startup
 
-1. Copy all the directories under /beanframework/template/* and replace to /beanframework/*
-2. Configure /beanframework/config/local.properties
-3. Configure /beanframework/bin/pom.xml
-4. Configure /beanframework/bin/platform/src/main/resources/application.properties for [app env]
-5. Configure /beanframework/bin/platform/src/main/resources/config/ehcache-[Base on app env].xml
-6. Configure /beanframework/bin/platform/src/main/resources/config/logback-[Base on app env].xml
-7. Run "mvnw clean install" command in /beanframework/bin directory
-8. Run server.bat or server.sh
-9. Browse http://localhost:8080/console , navigate to Platform->Update to update all modules' data
+1. Rename or duplicate /beanframewrok/config_template to /beanframework/config
+2. Configure /beanframework/config/local.properties for Data Source, and Email (If you want to use email service)
+3. Navigate to /beanframework/bin and run "mvnw clean install" command
+4. Run server.bat or server.sh
+5. Browse http://localhost:8080/console , navigate to Platform->Update to update all modules' data
 
 * Console
 http://localhost:8080/console
@@ -51,7 +47,7 @@ Password: employee
 
 MIT license. https://github.com/beanproject/beanframework/blob/master/LICENSE.txt
 
-## Donation
-If this project helped you reduce development time, you can always buy me a cup of coffee :) 
+## Donation :)
+If this open source project helped in your project, you could always back up this project hosting at https://beanframework.com by donation: 
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QSJEVREPCXW72)
