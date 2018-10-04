@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{console/adminlte/common/layout/layoutConsole}">
+<head>
+<title th:text="#{module.console.application.loggers}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<section class="content">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box box-default">
+						<div class="box-header with-border">
+							<h3 class="box-title" th:text="#{module.console.application.loggers}"></h3>
+						</div>
+						<div class="box-body">
+							<table id="loggersTable" class="table table-hover">
+								<thead>
+									<tr>
+										<th th:text="#{module.console.application.loggers.logger}"></th>
+										<th th:text="#{module.console.application.loggers.effectivelevel}"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="logger : *{loggers.get('loggers')}">
+										<td th:text="${logger.key}"></td>
+										<td>
+											<select class="form-control" th:id="${logger.key}">
+							                    <option th:selected="${logger.value.effectiveLevel.toString() == level.toString()}" th:each="level : *{loggers.get('levels')}" th:text="${level}"></option>
+							                </select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    $(document).ready(function() {
+		    	
+		    var locale = /*[[${#locale}]]*/;
+		    
+			var pathSetLoggerLevel = /*[[@{${@environment.getProperty('path.api.application.setloggerlevel')}}]]*/;
+		    	
+		    $('#loggersTable').DataTable({
+	    		  'language' : {
+			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+			      },
+	    	      'pageLength'  : 10,
+	    	      'paging'      : true,
+	    	      'lengthChange': false,
+	    	      'searching'   : true,
+	    	      'ordering'    : true,
+	    	      'info'        : false,
+	    	      'autoWidth'   : true
+	    	})
+	    	
+	    	$('#loggersTable select').change(function(){
+	    		var opt = $(this).find('option:selected');
+	    		
+	    	    var id = $(this).attr('id');
+	    		var val = $(this).val();
+	    	    
+	    	    $.ajax({
+	    	        method: "GET",
+	    	        url: pathSetLoggerLevel,
+	    	        data: {name:id, level:val},
+	    	        cache: false
+	    	    }).done(function(response){
+	    	        console.log(response);
+	    	    });
+	    	});
+	    	
+		    });
+		    /*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>
