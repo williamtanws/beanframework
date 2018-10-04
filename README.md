@@ -46,7 +46,7 @@ Password: employee
 
 ## License
 
-MIT license. https://github.com/beanproject/beanframework/blob/master/LICENSE.txt
+MIT license. https://github.com/williamtanws/beanframework/blob/master/LICENSE
 
 ## Donation :)
 If this open source project helped in your project, you could always back up this project hosting at https://beanframework.com by donation: 
