@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<th:block th:fragment="header">
+		<header class="main-header">
+			<!-- Logo -->
+			<a th:href="@{${@environment.getProperty('module.backoffice.path')}}" class="logo">
+				<!-- mini logo for sidebar mini 50x50 pixels -->
+				<span class="logo-mini">
+					<b th:text="#{module.backoffice.short}"></b>
+				</span>
+				<!-- logo for regular state and mobile devices -->
+				<span class="logo-lg">
+					<b th:text="#{module.backoffice}"></b>
+				</span>
+			</a>
+			<!-- Header Navbar: style can be found in header.less -->
+			<nav class="navbar navbar-static-top">
+				<!-- Sidebar toggle button-->
+				<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+
+				<div class="navbar-custom-menu">
+					<ul class="nav navbar-nav">
+						<!-- Notifications: style can be found in dropdown.less -->
+						<li class="dropdown notifications-menu">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-language"></i>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<!-- inner menu: contains the actual data -->
+									<ul class="menu">
+										<li th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}" th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #f4f4f4':''">
+											<a href="#" th:onclick="'changeLocale([[${#strings.arraySplit(locale,';')[0]}]])'">
+												<i class="text-aqua"></i>
+												<span th:text="${#strings.arraySplit(locale,';')[1]}"></span>
+											</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<!-- User Account: style can be found in dropdown.less -->
+						<li class="dropdown user user-menu">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<img th:src="@{${@environment.getProperty('path.employee.profile.picture')}}" class="user-image" alt="User Image">
+								<span class="hidden-xs" th:text="${#authentication.principal.id}"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<!-- User image -->
+								<li class="user-header">
+									<img th:src="@{${@environment.getProperty('path.employee.profile.picture')}(type='thumbnail')}" class="img-circle" alt="User Image">
+									<p th:text="${#authentication.principal.name}"></p>
+								</li>
+								<!-- Menu Footer-->
+								<li class="user-footer">
+									<div class="pull-left">
+										<a th:href="@{${@environment.getProperty('path.employee.profile')}(type='thumbnail')}" class="btn btn-default btn-flat" th:text="#{module.employee.profile}"></a>
+									</div>
+									<div class="pull-right">
+										<form th:action="@{${@environment.getProperty('path.backoffice.logout')}}" method="post">
+											<a onclick="this.parentNode.submit(); return false;" class="btn btn-default btn-flat" th:text="#{module.backoffice.logout}"></a>
+										</form>
+									</div>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+	</th:block>
+</body>
+</html>

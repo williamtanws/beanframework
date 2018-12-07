@@ -9,22 +9,23 @@
     <packaging>pom</packaging>
 
     <modules>
-    	<module>ext-core/common</module>
-    	<module>ext-core/language</module>
-    	<module>ext-core/user</module>
-    	<module>ext-core/email</module>
-    	<module>ext-core/cronjob</module>
-    	<module>ext-core/configuration</module>
-    	<module>ext-core/history</module>
-		<module>ext-ui/adminlte</module>
-    	<module>ext-backend/admin</module>
-        <module>ext-backend/console</module>
-    	<module>ext-backend/menu</module>
-    	<module>ext-backend/employee</module>
-    	<module>ext-backend/customer</module>
-        <module>ext-backend/filemanager</module>
-        <module>ext-backend/backoffice</module>
+    	<module>core/common</module>
+    	<module>core/language</module>
+    	<module>core/user</module>
+    	<module>core/email</module>
+    	<module>core/cronjob</module>
+    	<module>core/configuration</module>
+    	<module>core/history</module>
+		<module>ui/adminlte</module>
+    	<module>backend/admin</module>
+        <module>backend/console</module>
+    	<module>backend/menu</module>
+    	<module>backend/employee</module>
+    	<module>backend/customer</module>
+        <module>backend/filemanager</module>
+        <module>backend/backoffice</module>
         <module>platform</module>
+        <module>../config</module>
     </modules>
 
 </project>

@@ -30,6 +30,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -42,6 +43,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableTransactionManagement
 @EnableCaching
 @PropertySource(value = "file:${config.local.properties}", ignoreResourceNotFound = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class PlatformConfig {
 	
 	protected final Logger logger = LoggerFactory.getLogger(PlatformConfig.class);
@@ -194,8 +196,12 @@ public class PlatformConfig {
 		properties.put("hibernate.format_sql", PLATFORM_HIBERNATE_FORMAT_SQL);
 		properties.put("hibernate.dialect", PLATFORM_HIBERNATE_DIALECT);
 		properties.put("hibernate.connection.release_mode", "auto");
-		properties.put("current_session_context_class", "thread");
 		properties.put("hibernate.connection.autoReconnect", "true");
+		properties.put("hibernate.c3p0.testWhileIdle", "true");
+		properties.put("hibernate.c3p0.preferredTestQuery", "SELECT 1");
+		properties.put("hibernate.c3p0.autoCommitOnClose", "true");
+		properties.put("hibernate.c3p0.testConnectionOnCheckout", "true");
+		properties.put("current_session_context_class", "thread");
 		// Fix hibernate multiple merge problem
 //		properties.put("hibernate.event.merge.entity_copy_observer", "allow");
 		// Fix LAZY on session problems in unit tests
