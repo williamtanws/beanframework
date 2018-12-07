@@ -1,7 +1,4 @@
-/data
-/log
-/temp
-/var
+var/
 target/
 !.mvn/wrapper/maven-wrapper.jar
 

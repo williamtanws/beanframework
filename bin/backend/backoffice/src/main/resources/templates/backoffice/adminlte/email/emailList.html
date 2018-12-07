@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{backoffice/adminlte/common/layout/layoutBackoffice}">
+<head>
+<title th:text="#{module.email}"></title>
+<!-- CK Editor -->
+<script th:src="@{/static/adminlte/bower_components/ckeditor/ckeditor.js}"></script>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<section class="content">
+			<div class="row">
+				<th:block layout:insert="~{backoffice/adminlte/email/emailSearch :: search}"></th:block>
+			</div>
+			<div class="row">
+				<th:block layout:insert="~{backoffice/adminlte/common/fragment/alert :: custom}"></th:block>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box box-solid">
+						<!-- /.box-header -->
+						<div class="box-group" id="accordion">
+							<!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+							<div class="panel box box-primary">
+								<div class="box-header with-border">
+									<h4 class="box-title">
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" th:aria-expanded="${emailUpdate.uuid == null ? 'true':'false'}" th:class="${emailUpdate.uuid == null ? '':'collapsed'}">
+											<span th:class="@{${@environment.getProperty('module.email.icon')}}"></span>
+											&nbsp;&nbsp;
+											<span th:text="#{module.email}+' ('+${pagination.getTotalElements()}+')'"></span>
+											<i class="fa fa-fw fa-angle-double-down"></i>
+										</a>
+									</h4>
+								</div>
+								<div id="collapseOne" th:class="'panel-collapse collapse '+${emailUpdate.uuid == null ? 'in':''}">
+									<div class="box-body">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="box box-solid">
+													<div class="box-body bg-gray">
+														<div class="row">
+															<div class="col-xs-4">
+																<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-create" sec:authorize="hasAuthority('email_create')">
+																	<span class="fa fa-plus color"></span>
+																</button>
+															</div>
+															<div class="col-xs-8" style="text-align: right">
+																<th:block layout:insert="~{backoffice/adminlte/common/fragment/pagination :: button}"></th:block>
+															</div>
+														</div>
+													</div>
+													<!-- /.box-header -->
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="dataTables_wrapper form-inline dt-bootstrap">
+													<table class="table table-bordered table-hover dataTable">
+														<thead>
+															<tr role="row">
+																<th th:text="#{module.backoffice.created.date}"></th>
+																<th th:text="#{module.email.torecipients}"></th>
+																<th th:text="#{module.email.ccrecipients}"></th>
+																<th th:text="#{module.email.bccrecipients}"></th>
+																<th th:text="#{module.email.status}"></th>
+															</tr>
+														</thead>
+														<tbody>
+															<th:block sec:authorize="hasAuthority('email_update')" th:each="row : ${pagination.content}">
+																<tr th:onclick="getForm([[${row.uuid}]])">
+																	<th scope="row" th:text="${#dates.format(row.createdDate, ' dd MMMM yyyy hh:mma')}"></th>
+																	<td scope="row" th:text="${#strings.abbreviate(row.toRecipients,30)}"></td>
+																	<td scope="row" th:text="${#strings.abbreviate(row.ccRecipients,30)}"></td>
+																	<td scope="row" th:text="${#strings.abbreviate(row.bccRecipients,30)}"></td>
+																	<td scope="row" th:text="${row.status}"></td>
+																</tr>
+															</th:block>
+															<th:block sec:authorize="!hasAuthority('email_update')" th:each="row : ${pagination.content}">
+																<tr>
+																	<th scope="row" th:text="${#dates.format(row.createdDate, ' dd MMMM yyyy hh:mma')}"></th>
+																	<td scope="row" th:text="${#strings.abbreviate(row.toRecipients,30)}"></td>
+																	<td scope="row" th:text="${#strings.abbreviate(row.ccRecipients,30)}"></td>
+																	<td scope="row" th:text="${#strings.abbreviate(row.bccRecipients,30)}"></td>
+																	<td scope="row" th:text="${row.status}"></td>
+																</tr>
+															</th:block>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="panel box box-success" th:if="${emailUpdate.uuid != null}" sec:authorize="hasAuthority('email_update')">
+								<div class="box-header with-border">
+									<h4 class="box-title">
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" th:aria-expanded="${emailUpdate.uuid == null ? 'false':'true'}" th:class="${emailUpdate.uuid == null ? 'collapsed':''}">
+											<span></span>
+											<i class="fa fa-fw fa-angle-double-down"></i>
+										</a>
+									</h4>
+								</div>
+								<div id="collapseTwo" th:class="'panel-collapse collapse '+${emailUpdate.uuid == null ? '':'in'}">
+									<div class="box-body">
+										<th:block layout:insert="~{backoffice/adminlte/email/emailForm :: update}" th:if="${emailUpdate.uuid != null}"></th:block>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /.box-body -->
+					</div>
+				</div>
+			</div>
+			<th:block layout:insert="~{backoffice/adminlte/email/emailForm :: create}"></th:block>
+			<form id="pagination-sort-form" th:action="@{${@environment.getProperty('path.email')}}" method="get" th:object="${emailSearch}" style="display: none">
+				<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
+				<input type="hidden" name="size" th:value="${pagination.getSize()}">
+				<input type="hidden" name="direction" th:value="${direction}">
+				<input type="hidden" name="properties" th:value="${properties}">
+				<input type="hidden" name="emailSearch" th:value="${emailSearch.emailSearch}">
+			</form>
+			<form id="get-email-form" th:action="@{${@environment.getProperty('path.email')}}" method="get" th:object="${emailSearch}" style="display: none">
+				<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
+				<input type="hidden" name="size" th:value="${pagination.getSize()}">
+				<input type="hidden" name="direction" th:value="${direction}">
+				<input type="hidden" name="properties" th:value="${properties}">
+				<input type="hidden" name="emailSearch" th:value="${emailSearch.emailSearch}">
+				<input type="hidden" name="uuid">
+			</form>
+			<form id="pagination-form" th:action="@{${@environment.getProperty('path.email')}}" method="get" th:object="${emailSearch}" style="display: none">
+				<input type="hidden" name="page">
+				<input type="hidden" name="size" th:value="${pagination.getSize()}">
+				<input type="hidden" name="direction" th:value="${direction}">
+				<input type="hidden" name="properties" th:value="${properties}">
+				<input type="hidden" name="emailSearch" th:value="${emailSearch.emailSearch}">
+			</form>
+		</section>
+	</th:block>
+	<th:block layout:fragment="js">
+
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			$('.table .sorting, .table .sorting_asc, .table .sorting_desc').on(
+					'click',
+					function(e) {
+						var theClass = this.className; // "this" is the element clicked
+						var theId = e.target.id;
+
+						$('#pagination-sort-form input[name=properties]').val(
+								theId);
+
+						if (theClass == 'sorting') {
+							$('#pagination-sort-form input[name=direction]')
+									.val('asc');
+						} else if (theClass == 'sorting_asc') {
+							$('#pagination-sort-form input[name=direction]')
+									.val('desc');
+						} else if (theClass == 'sorting_desc') {
+							$('#pagination-sort-form input[name=properties]')
+									.val('');
+							$('#pagination-sort-form input[name=direction]')
+									.val('');
+						}
+
+						$("#pagination-sort-form").submit();
+					});
+
+			function getPage(page) {
+				$('#pagination-form input[name="page"]').val(page);
+				$('#pagination-form').submit();
+			}
+
+			function getForm(uuid) {
+				$('#get-email-form input[name="uuid"]').val(uuid);
+				$('#delete-email-form input[name="uuid"]').val(uuid);
+				$('#get-email-form').submit();
+			}
+			/*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>
