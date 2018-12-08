@@ -34,4 +34,26 @@
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+	
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<finalName>beanframework</finalName>
+					<mainClass>com.beanframework.PlatformApplication</mainClass>
+					<outputDirectory>
+						..
+					</outputDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

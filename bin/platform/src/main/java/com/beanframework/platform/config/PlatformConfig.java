@@ -76,9 +76,6 @@ public class PlatformConfig {
 	@Value("${log.dir}")
 	private String DIR_LOG;
 
-	@Value("${config.dir}")
-	private String DIR_CONFIG;
-
 	/*
 	 * Populate SpringBoot DataSourceProperties object directly from application.yml 
 	 * based on prefix.Thanks to .yml, Hierachical data is mapped out of the box with matching-name
@@ -154,7 +151,6 @@ public class PlatformConfig {
 			Files.createDirectories(Paths.get(DIR_DATA));
 			Files.createDirectories(Paths.get(DIR_TEMP));
 			Files.createDirectories(Paths.get(DIR_LOG));
-			Files.createDirectories(Paths.get(DIR_CONFIG));
 						
 			return dataSource;
 	}

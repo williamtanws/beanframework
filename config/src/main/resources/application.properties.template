@@ -1,7 +1,13 @@
 # ===============================
 # = APPLICATION
 # ===============================
-spring.profiles.include=console,backoffice,platform,@activatedProperties@
+spring.profiles.active=dev
+spring.profiles.include=console,backoffice,platform
+
+# =======================================================
+# = INTERNATIONALIZATION (MessageSourceAutoConfiguration)
+# =======================================================
+i18n.resources.exclude=classpath*:i18n/backoffice_*.properties
 
 # ===============================
 # = LANGUAGE
@@ -26,14 +32,14 @@ backoffice.theme=backoffice/adminlte
 # = QUARTZ
 # ===============================
 quartz.properties.location=
-quartz.properties.classpath=application-@activatedProperties@.properties
+quartz.properties.classpath=application-${spring.profiles.active}.properties
 
 # ===============================
 # = CACHE
 # ===============================
-spring.cache.ehcache.config=classpath:ehcache-@activatedProperties@.xml
+spring.cache.ehcache.config=classpath:ehcache-${spring.profiles.active}.xml
 
 # ===============================
 # = LOGGING
 # ===============================
-logging.config=classpath:logback-@activatedProperties@.xml
+logging.config=classpath:logback-${spring.profiles.active}.xml
