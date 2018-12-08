@@ -1,0 +1,5 @@
+# ===============================
+# = APPLICATION
+# ===============================
+project.dir=..
+spring.devtools.add-properties=false
