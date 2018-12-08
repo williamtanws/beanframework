@@ -91,12 +91,16 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<finalName>beanframework</finalName>        
 					<mainClass>com.beanframework.PlatformApplication</mainClass>
 					<profiles>
 						<profile>dev</profile>
 						<profile>prod</profile>
 					</profiles>
 					<jvmArguments>${app.jvmArguments}</jvmArguments>
+					<outputDirectory>
+	                    ../bin
+	                </outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
