@@ -18,7 +18,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.dao.DataAccessException;
@@ -42,7 +41,6 @@ import com.zaxxer.hikari.HikariDataSource;
 		transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
 @EnableCaching
-@PropertySource(value = "file:${config.local.properties}", ignoreResourceNotFound = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class PlatformConfig {
 	
