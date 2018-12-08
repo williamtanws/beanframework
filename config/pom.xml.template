@@ -19,10 +19,5 @@
 			<artifactId>backoffice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.rentalan</groupId>
-			<artifactId>pms</artifactId>
-			<version>1.0.0</version>
-		</dependency>
 	</dependencies>
 </project>
