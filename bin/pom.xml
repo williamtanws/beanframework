@@ -26,6 +26,7 @@
         <module>backend/backoffice</module>
         <module>platform</module>
         <module>../config</module>
+        <module>../../rentalan/pms</module>
     </modules>
 
 </project>
