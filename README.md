@@ -2,7 +2,7 @@
 
 ## Development Status
 
-Development targeting at release 1.0.0.
+Developing Beanframework 2.0.x
 
 ## Why Beanframework
 
@@ -11,16 +11,21 @@ Beanframework is not a product and not build for any specific solution, it is a 
 
 ## Technologies
 
-* Java: 1.8
-* Spring Boot: 2.0.4.RELEASE
+* Java: 1.8.x
+* Spring Boot: 2.1.1.RELEASE
 * AdminLTE 2.4.5
 
 ## Instruction
 
 * Quick Startup
 
-1. Rename or duplicate /beanframewrok/config_template to /beanframework/config
-2. Configure /beanframework/config/local.properties for Data Source, and Email (If you want to use email service)
+1. Duplicate template files and remove .template suffix:
+beanframework/bin/pom.xml.template
+beanframework/config/pom.xml.template
+beanframework/config/src/main/resources/application.properties.template
+beanframework/config/src/main/resources/application-dev.properties.template
+beanframework/config/src/main/resources/application-prod.properties.template
+2. Configure all the template files properly
 3. Navigate to /beanframework/bin and run "mvnw clean install" command
 4. Run server.bat or server.sh
 5. Browse http://localhost:8080/console , navigate to Platform->Update to update all modules' data
