@@ -3,7 +3,6 @@
 # ===============================
 project.dir=../..
 spring.devtools.add-properties=true
-app.jvmArguments=-Xmx512m
 
 # ===============================
 # = THYMELEAF
