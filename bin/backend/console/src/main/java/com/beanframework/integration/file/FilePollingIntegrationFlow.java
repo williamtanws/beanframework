@@ -3,8 +3,6 @@ package com.beanframework.integration.file;
 import java.io.File;
 import java.util.Arrays;
 
-import javax.transaction.TransactionManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
