@@ -61,49 +61,4 @@
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<properties>
-				<activatedProperties>dev</activatedProperties>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<properties>
-				<activatedProperties>prod</activatedProperties>
-			</properties>
-		</profile>
-	</profiles>
-
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<finalName>beanframework</finalName>        
-					<mainClass>com.beanframework.PlatformApplication</mainClass>
-					<profiles>
-						<profile>dev</profile>
-						<profile>prod</profile>
-					</profiles>
-					<jvmArguments>${app.jvmArguments}</jvmArguments>
-					<outputDirectory>
-	                    ../bin
-	                </outputDirectory>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
 </project>
