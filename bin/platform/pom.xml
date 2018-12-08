@@ -25,12 +25,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.beanframework</groupId>
-			<artifactId>console</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>backoffice</artifactId>
+			<artifactId>config</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Add Cache support -->
