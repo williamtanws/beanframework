@@ -1,5 +1,7 @@
 package com.beanframework.history.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -17,44 +19,24 @@ public class History extends AbstractDomain {
 	private static final long serialVersionUID = 5992760081038782486L;
 	public static final String MODEL = "History";
 
-	private String ip;
+	private String entity;
+	private UUID entityUuid;
 
-	private String userAgent;
-
-	private String module;
-
-	private String action;
-
-	public String getIp() {
-		return ip;
+	public String getEntity() {
+		return entity;
 	}
 
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setEntity(String entity) {
+		this.entity = entity;
 	}
 
-	public String getUserAgent() {
-		return userAgent;
+	public UUID getEntityUuid() {
+		return entityUuid;
 	}
 
-	public void setUserAgent(String userAgent) {
-		this.userAgent = userAgent;
+	public void setEntityUuid(UUID entityUuid) {
+		this.entityUuid = entityUuid;
 	}
-
-	public String getModule() {
-		return module;
-	}
-
-	public void setModule(String module) {
-		this.module = module;
-	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
-	}
+	
 
 }

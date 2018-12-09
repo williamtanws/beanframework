@@ -8,10 +8,13 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.envers.Audited;
+
 import com.beanframework.common.domain.AbstractDomain;
 import com.beanframework.user.UserConstants;
 
 @Entity
+@Audited
 @Table(name = UserConstants.Table.USER_AUTHORITY)
 public class UserAuthority extends AbstractDomain {
 
