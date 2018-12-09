@@ -75,7 +75,7 @@ public class FilemanagerResource {
 					JSONObject fileItem = new JSONObject();
 					fileItem.put("name", pathObj.getFileName().toString());
 					
-					if (OS.IS_WIN32 == false && OS.IS_WIN64 == false){
+					if (System.getProperty("os.name").startsWith("Windows") == false){
 						fileItem.put("rights", com.beanframework.filemanager.utils.FileUtils.getPermissions(pathObj));
 		            }
 					
