@@ -6,7 +6,7 @@
 	<th:block th:fragment="header">
 		<header class="main-header">
 			<!-- Logo -->
-			<a th:href="@{${@environment.getProperty('module.backoffice.path')}}" class="logo">
+			<a th:href="@{${@environment.getProperty('backoffice.webroot')}}" class="logo">
 				<!-- mini logo for sidebar mini 50x50 pixels -->
 				<span class="logo-mini">
 					<b th:text="#{module.backoffice.short}"></b>
@@ -38,7 +38,7 @@
 									<!-- inner menu: contains the actual data -->
 									<ul class="menu">
 										<li th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}" th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #f4f4f4':''">
-											<a href="#" th:onclick="'changeLocale([[${#strings.arraySplit(locale,';')[0]}]])'">
+											<a href="#" th:onclick="changeLocale([[${#strings.arraySplit(locale,';')[0]}]])">
 												<i class="text-aqua"></i>
 												<span th:text="${#strings.arraySplit(locale,';')[1]}"></span>
 											</a>

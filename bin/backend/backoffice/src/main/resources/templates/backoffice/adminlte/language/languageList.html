@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="~{backoffice/adminlte/common/layout/layoutBackoffice}">
+	layout:decorate="/backoffice/adminlte/common/layout/layoutBackoffice">
 <head>
 <title th:text="#{module.language}"></title>
 </head>
@@ -8,10 +8,10 @@
 	<th:block layout:fragment="content">
 		<section class="content">
 			<div class="row">
-				<th:block layout:insert="~{backoffice/adminlte/language/languageSearch :: search}"></th:block>
+				<th:block layout:insert="/backoffice/adminlte/language/languageSearch :: search"></th:block>
 			</div>
 			<div class="row">
-				<th:block layout:insert="~{backoffice/adminlte/common/fragment/alert :: custom}"></th:block>
+				<th:block layout:insert="/backoffice/adminlte/common/fragment/alert :: custom"></th:block>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -44,7 +44,7 @@
 																</button>
 															</div>
 															<div class="col-xs-8" style="text-align: right">
-																<th:block layout:insert="~{backoffice/adminlte/common/fragment/pagination :: button}"></th:block>
+																<th:block layout:insert="/backoffice/adminlte/common/fragment/pagination :: button"></th:block>
 															</div>
 														</div>
 													</div>
@@ -72,7 +72,7 @@
 														</thead>
 														<tbody>
 															<th:block sec:authorize="hasAuthority('language_update')" th:each="row : ${pagination.content}">
-																<tr th:onclick="'getForm([[${row.uuid}]]);'">
+																<tr th:onclick="getForm([[${row.uuid}]])">
 																	<th scope="row" th:text="${row.id}"></th>
 																	<td scope="row" th:text="${row.name}"></td>
 																	<td scope="row" th:text="${row.active}"></td>
@@ -107,7 +107,7 @@
 								</div>
 								<div id="collapseTwo" th:class="'panel-collapse collapse '+${languageUpdate.uuid == null ? '':'in'}">
 									<div class="box-body">
-										<th:block layout:insert="~{backoffice/adminlte/language/languageForm :: update}" th:if="${languageUpdate.uuid != null}"></th:block>
+										<th:block layout:insert="/backoffice/adminlte/language/languageForm :: update" th:if="${languageUpdate.uuid != null}"></th:block>
 									</div>
 								</div>
 							</div>
@@ -116,7 +116,7 @@
 					</div>
 				</div>
 			</div>
-			<th:block layout:insert="~{backoffice/adminlte/language/languageForm :: create}"></th:block>
+			<th:block layout:insert="/backoffice/adminlte/language/languageForm :: create"></th:block>
 			<form id="pagination-sort-form" th:action="@{${@environment.getProperty('path.language')}}" method="get" th:object="${languageSearch}" style="display: none">
 				<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
 				<input type="hidden" name="size" th:value="${pagination.getSize()}">

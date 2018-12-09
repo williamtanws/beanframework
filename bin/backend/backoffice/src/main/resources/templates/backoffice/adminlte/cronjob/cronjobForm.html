@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="~{backoffice/adminlte/common/layout/layoutBackoffice}">
+	layout:decorate="/backoffice/adminlte/common/layout/layoutBackoffice">
 <head>
 <title th:text="#{module.cronjob}"></title>
 </head>
@@ -154,7 +154,7 @@
 						<div class="modal-body">
 							<div class="container-fluid">
 								<div class="row">
-									<th:block layout:insert="~{backoffice/adminlte/cronjob/cronjobForm :: general}"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/cronjob/cronjobForm :: general"></th:block>
 								</div>
 							</div>
 						</div>
@@ -330,21 +330,21 @@
 						<div class="tab-content">
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
-									<th:block layout:insert="~{backoffice/adminlte/cronjob/cronjobForm :: general}"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/cronjob/cronjobForm :: general"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_job">
 								<div class="box-body">
-									<th:block layout:insert="~{backoffice/adminlte/cronjob/cronjobForm :: job}"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/cronjob/cronjobForm :: job"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
-									<th:block layout:insert="~{backoffice/adminlte/cronjob/cronjobForm :: administration}"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/cronjob/cronjobForm :: administration"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
