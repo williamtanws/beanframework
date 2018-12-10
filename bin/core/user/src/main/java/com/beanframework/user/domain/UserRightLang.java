@@ -7,12 +7,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
 import com.beanframework.common.domain.AbstractDomain;
 import com.beanframework.language.domain.Language;
 import com.beanframework.user.UserConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Audited
 @Table(name = UserConstants.Table.USER_RIGHT_LANG)
 public class UserRightLang extends AbstractDomain {
 
@@ -22,6 +26,7 @@ public class UserRightLang extends AbstractDomain {
 	public static final String LANGUAGE = "language";
 	public static final String USER_RIGHT = "userRight";
 
+	@NotAudited
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "language_uuid")

@@ -78,14 +78,17 @@ public class EmployeeProfileController {
 			type = "thumbnail";
 		}
 		
+		InputStream targetStream;
 		File picture = new File(PROFILE_PICTURE_LOCATION+File.separator+employee.getUuid()+File.separator+type+".png");
 		
-		if(picture.exists() == false) {
+		if(picture.exists()) {
+			targetStream = new FileInputStream(picture);
+		}
+		else {
 			ClassPathResource resource = new ClassPathResource("static/common/img/avatar.png"); 
-			picture = resource.getFile();
+			targetStream = resource.getInputStream();
 		}
 		
-		InputStream targetStream = new FileInputStream(picture);
 		return IOUtils.toByteArray(targetStream);
 	}
 

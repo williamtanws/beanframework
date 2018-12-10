@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="~{backoffice/adminlte/common/layout/layoutBackoffice}">
+	layout:decorate="/backoffice/adminlte/common/layout/layoutBackoffice">
 <head>
 <title th:text="#{module.userpermission}"></title>
 </head>
@@ -8,10 +8,10 @@
 	<th:block layout:fragment="content">
 		<section class="content">
 			<div class="row">
-				<th:block layout:insert="~{backoffice/adminlte/user/userpermissionSearch :: search}"></th:block>
+				<th:block layout:insert="/backoffice/adminlte/user/userpermissionSearch :: search"></th:block>
 			</div>
 			<div class="row">
-				<th:block layout:insert="~{backoffice/adminlte/common/fragment/alert :: custom}"></th:block>
+				<th:block layout:insert="/backoffice/adminlte/common/fragment/alert :: custom"></th:block>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -44,7 +44,7 @@
 																</button>
 															</div>
 															<div class="col-xs-8" style="text-align: right">
-																<th:block layout:insert="~{backoffice/adminlte/common/fragment/pagination :: button}"></th:block>
+																<th:block layout:insert="/backoffice/adminlte/common/fragment/pagination :: button"></th:block>
 															</div>
 														</div>
 													</div>
@@ -92,7 +92,7 @@
 								</div>
 								<div id="collapseTwo" th:class="'panel-collapse collapse '+${userpermissionUpdate.uuid == null ? '':'in'}">
 									<div class="box-body">
-										<th:block layout:insert="~{backoffice/adminlte/user/userpermissionForm :: update}" th:if="${userpermissionUpdate.uuid != null}"></th:block>
+										<th:block layout:insert="/backoffice/adminlte/user/userpermissionForm :: update" th:if="${userpermissionUpdate.uuid != null}"></th:block>
 									</div>
 								</div>
 							</div>
@@ -101,7 +101,7 @@
 					</div>
 				</div>
 			</div>
-			<th:block layout:insert="~{backoffice/adminlte/user/userpermissionForm :: create}"></th:block>
+			<th:block layout:insert="/backoffice/adminlte/user/userpermissionForm :: create"></th:block>
 			<form id="pagination-sort-form" th:action="@{${@environment.getProperty('path.userpermission')}}" method="get" th:object="${userpermissionSearch}" style="display: none">
 				<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
 				<input type="hidden" name="size" th:value="${pagination.getSize()}">
