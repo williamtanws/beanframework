@@ -1,6 +1,7 @@
 package com.beanframework.platform.config;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -9,6 +10,8 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.hibernate.EmptyInterceptor;
+import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.dao.DataAccessException;
@@ -34,6 +36,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.beanframework.history.service.HistoryFacade;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
@@ -42,7 +45,6 @@ import com.zaxxer.hikari.HikariDataSource;
 		transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
 @EnableCaching
-@PropertySource(value = "file:${config.local.properties}", ignoreResourceNotFound = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class PlatformConfig {
 	
@@ -77,9 +79,6 @@ public class PlatformConfig {
 	
 	@Value("${log.dir}")
 	private String DIR_LOG;
-
-	@Value("${config.dir}")
-	private String DIR_CONFIG;
 
 	/*
 	 * Populate SpringBoot DataSourceProperties object directly from application.yml 
@@ -156,7 +155,6 @@ public class PlatformConfig {
 			Files.createDirectories(Paths.get(DIR_DATA));
 			Files.createDirectories(Paths.get(DIR_TEMP));
 			Files.createDirectories(Paths.get(DIR_LOG));
-			Files.createDirectories(Paths.get(DIR_CONFIG));
 						
 			return dataSource;
 	}
@@ -202,11 +200,17 @@ public class PlatformConfig {
 		properties.put("hibernate.c3p0.autoCommitOnClose", "true");
 		properties.put("hibernate.c3p0.testConnectionOnCheckout", "true");
 		properties.put("current_session_context_class", "thread");
+		properties.put("hibernate.ejb.interceptor", hibernateInterceptor());
 		// Fix hibernate multiple merge problem
 //		properties.put("hibernate.event.merge.entity_copy_observer", "allow");
 		// Fix LAZY on session problems in unit tests
 //		properties.put("hibernate.enable_lazy_load_no_trans", "true");
 		return properties;
+	}
+	
+	@Bean
+	public EmptyInterceptor hibernateInterceptor() {
+		return new EntityInterceptor();
 	}
 
 	@Bean

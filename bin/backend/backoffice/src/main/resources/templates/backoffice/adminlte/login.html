@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layoutBackofficeLogin}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/backoffice/adminlte/common/layout/layoutBackofficeLogin">
 <head>
 <title th:text="#{module.backoffice.login}"></title>
 </head>
@@ -8,7 +8,7 @@
 	<th:block layout:fragment="content">
 		<div class="login-box">
 			<div class="login-logo">
-				<a th:href="@{${@environment.getProperty('module.backoffice.path')}}">
+				<a th:href="@{${@environment.getProperty('backoffice.webroot')}}">
 					<b th:text="#{module.backoffice}"></b>
 				</a>
 			</div>

@@ -54,10 +54,10 @@ public class FilemanagerResource {
 	public Object list(@RequestBody JSONObject json) throws ServletException {
 
 		try {
-			// 需�?显示的目录路径
+			// Directory Listing
 			String path = json.getString("path");
 
-			// 返回的结果集
+			// Returned result
 			List<JSONObject> fileItems = new ArrayList<>();
 			
 			FileUtils.forceMkdir(new File(STORAGE));
@@ -67,14 +67,17 @@ public class FilemanagerResource {
 				String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 				SimpleDateFormat dt = new SimpleDateFormat(DATE_FORMAT);
 				for (Path pathObj : directoryStream) {
-					// 获�?�文件基本属性
+					// Retrieves file attribute
 					BasicFileAttributes attrs = Files.readAttributes(pathObj, BasicFileAttributes.class);
 
-					// �?装返回JSON数�?�
+					// Json result
 					JSONObject fileItem = new JSONObject();
 					fileItem.put("name", pathObj.getFileName().toString());
-//					fileItem.put("rights", com.beanframework.filemanager.utils.FileUtils.getPermissions(pathObj)); // 文件�?��?
-					// 文件�?��?
+					
+					if (System.getProperty("os.name").startsWith("Windows") == false){
+						fileItem.put("rights", com.beanframework.filemanager.utils.FileUtils.getPermissions(pathObj));
+		            }
+					
 					fileItem.put("date", dt.format(new Date(attrs.lastModifiedTime().toMillis())));
 					fileItem.put("size", attrs.size());
 					fileItem.put("type", attrs.isDirectory() ? "dir" : "file");
@@ -92,23 +95,23 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * 文件上传
+	 * Upload File
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.CREATE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_UPLOAD)
 	public Object upload(@RequestParam("destination") String destination, HttpServletRequest request) {
 
 		try {
-			// Servlet3.0方�?上传文件
+			// Servlet3.0 style upload
 			Collection<Part> parts = request.getParts();
 
 			for (Part part : parts) {
-				if (part.getContentType() != null) { // 忽略路径字段,�?�处�?�文件类型
+				if (part.getContentType() != null) { // Ignore path fields, file type
 					String path = STORAGE + destination;
 
 					File f = new File(path, com.beanframework.filemanager.utils.FileUtils.getFileName(part.getHeader("content-disposition")));
 					if (!com.beanframework.filemanager.utils.FileUtils.write(part.getInputStream(), f)) {
-						throw new Exception("文件上传失败");
+						throw new Exception("File upload failed");
 					}
 				}
 			}
@@ -119,7 +122,7 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * 文件下载/预览
+	 * File download/preview
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.READ)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_PREVIEW)
@@ -132,7 +135,7 @@ public class FilemanagerResource {
 		}
 
 		/*
-		 * 获�?�mimeType
+		 * Get Mime Type
 		 */
 		String mimeType = URLConnection.guessContentTypeFromName(file.getName());
 		if (mimeType == null) {
@@ -149,7 +152,7 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * 创建目录
+	 * Create directory
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.CREATE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_CREATEFOLDER)
@@ -158,7 +161,7 @@ public class FilemanagerResource {
 			String newPath = json.getString("newPath");
 			File newDir = new File(STORAGE + newPath);
 			if (!newDir.mkdir()) {
-				throw new Exception("�?能创建目录: " + newPath);
+				throw new Exception("Cannot create a directory: " + newPath);
 			}
 			return success();
 		} catch (Exception e) {
@@ -167,15 +170,15 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * 修改文件或目录�?��?
+	 * Modify file or directory
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.UPDATE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_CHANGEPERMISSIONS)
 	public Object changePermissions(@RequestBody JSONObject json) {
 		try {
 
-			String perms = json.getString("perms"); // �?��?
-			boolean recursive = json.getBoolean("recursive"); // �?目录是�?�生效
+			String perms = json.getString("perms");
+			boolean recursive = json.getBoolean("recursive");
 
 			JSONArray items = json.getJSONArray("items");
 			for (int i = 0; i < items.size(); i++) {
@@ -190,7 +193,7 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * �?制文件或目录
+	 * Create File or directory
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.CREATE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_COPY)
@@ -214,7 +217,7 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * 移动文件或目录
+	 * Move files or directories
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.UPDATE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_MOVE)
@@ -242,7 +245,7 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * 删除文件或目录
+	 * Delete file or directory
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.DELETE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_REMOVE)
@@ -253,7 +256,7 @@ public class FilemanagerResource {
 				String path = items.getString(i);
 				File srcFile = new File(STORAGE, path);
 				if (!FileUtils.deleteQuietly(srcFile)) {
-					throw new Exception("删除失败: " + srcFile.getAbsolutePath());
+					throw new Exception("Failed to delete: " + srcFile.getAbsolutePath());
 				}
 			}
 			return success();
@@ -263,7 +266,7 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * �?命�??文件或目录
+	 * Rename file or directory
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.UPDATE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_RENAME)
@@ -286,7 +289,7 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * 查看文件内容,针对html�?txt等�?�编辑文件
+	 * View the contents of the file, for html?txt, etc. Edit the file
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.CREATE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_GETCONTENT)
@@ -306,7 +309,7 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * 修改文件内容,针对html�?txt等�?�编辑文件
+	 * Modify the contents of the file, for html?txt, etc. Edit the file
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.UPDATE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_EDIT)
@@ -325,7 +328,7 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * 文件压缩
+	 * File compression
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.UPDATE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_COMPRESS)
@@ -352,7 +355,7 @@ public class FilemanagerResource {
 	}
 
 	/**
-	 * 文件解压
+	 * File decompression
 	 */
 	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.CREATE)
 	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_EXTRACT)

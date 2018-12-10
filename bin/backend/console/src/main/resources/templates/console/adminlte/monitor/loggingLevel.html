@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="~{console/adminlte/common/layout/layoutConsole}">
+	layout:decorate="/console/adminlte/common/layout/layoutConsole">
 <head>
 <title th:text="#{module.logging}"></title>
 </head>
@@ -8,7 +8,7 @@
 	<th:block layout:fragment="content">
 		<section class="content">
 			<div class="row">
-				<th:block layout:insert="~{console/adminlte/common/fragment/alert :: custom}"></th:block>
+				<th:block layout:insert="/console/adminlte/common/fragment/alert :: custom"></th:block>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
