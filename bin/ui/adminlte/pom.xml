@@ -6,7 +6,7 @@
 
 	<groupId>com.beanframework</groupId>
 	<artifactId>adminlte</artifactId>
-	<version>1.0.0</version>
+	<version>${beanframework.version}</version>
 	<packaging>jar</packaging>
 
 	<parent>
