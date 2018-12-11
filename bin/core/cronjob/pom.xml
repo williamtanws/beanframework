@@ -6,7 +6,7 @@
 
 	<groupId>com.beanframework</groupId>
 	<artifactId>cronjob</artifactId>
-	<version>1.0.0</version>
+	<version>${beanframework.version}</version>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -17,6 +17,7 @@
 	</parent>
 
 	<properties>
+		<beanframework.version>2.0.0</beanframework.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 	</properties>
