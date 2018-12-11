@@ -20,9 +20,9 @@ Beanframework is not a product and not build for any specific solution, it is a 
 * Quick Startup
 
 1. Duplicate all *.template files and remove .template suffix:
-beanframework/bin/pom.xml.template
-beanframework/config/pom.xml.template
-beanframework/config/src/main/resources/*.template
+a. beanframework/bin/pom.xml.template
+b. beanframework/config/pom.xml.template
+c. beanframework/config/src/main/resources/*.template
 2. Configure all the duplicated template files properly
 3. Navigate to /beanframework/bin and run "mvnw clean install" command
 4. Run server.bat or server.sh
