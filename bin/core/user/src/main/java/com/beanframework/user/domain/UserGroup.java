@@ -15,17 +15,17 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.user.UserConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = UserConstants.Table.USER_GROUP)
-public class UserGroup extends AbstractDomain {
+public class UserGroup extends GenericDomain {
 
 	private static final long serialVersionUID = 8938920413700273352L;
-	public static final String MODEL = "UserGroup";
+	public static final String DOMAIN = "UserGroup";
 	public static final String USER_GROUP_PERMISSION_RIGHTS = "userAuthorities";
 
 	@Cascade({ CascadeType.ALL })

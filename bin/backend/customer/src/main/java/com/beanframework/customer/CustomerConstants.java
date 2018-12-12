@@ -6,7 +6,7 @@ public interface CustomerConstants {
 		public static final String CUSTOMER = "customer";
 	}
 	
-	public static interface Customer {
+	public static interface Table {
 	}
 	
 	public static interface Locale{

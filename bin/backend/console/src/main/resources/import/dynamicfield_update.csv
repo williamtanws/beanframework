@@ -1,0 +1,6 @@
+id,type
+integer,INTEGER
+floatingpoint,FLOATING_POINT
+text,TEXT
+boolean,BOOLEAN
+date,DATE

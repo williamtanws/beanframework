@@ -30,7 +30,6 @@ public class DtoUserGroupLangConverter  implements Converter<UserGroupLang, User
 	}
 	
 	public UserGroupLang convert(UserGroupLang source, UserGroupLang prototype) {
-		prototype.setName(source.getName());
 		prototype.setLanguage(dtoLanguageConverter.convert(source.getLanguage()));
 		
 		return prototype;

@@ -14,17 +14,17 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.user.UserConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = UserConstants.Table.USER_RIGHT)
-public class UserRight extends AbstractDomain {
+public class UserRight extends GenericDomain {
 
 	private static final long serialVersionUID = 8192305251381233446L;
-	public static final String MODEL = "UserRight";
+	public static final String DOMAIN = "UserRight";
 	public static final String USER_RIGHT_LANGS = "userRightLangs";
 
 	@Cascade({ CascadeType.ALL })

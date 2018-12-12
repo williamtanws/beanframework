@@ -28,7 +28,6 @@ public class EntityEmployeeProfileConverter implements Converter<Employee, Emplo
 
 	private Employee convert(Employee source, Employee prototype) {
 
-		prototype.setName(source.getName());
 		prototype.setLastModifiedDate(new Date());
 
 		if (StringUtils.isNotEmpty(source.getPassword())) {

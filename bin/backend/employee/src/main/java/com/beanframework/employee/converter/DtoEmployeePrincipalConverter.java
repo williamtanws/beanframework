@@ -17,7 +17,6 @@ public class DtoEmployeePrincipalConverter implements Converter<Employee, Employ
 		Employee employeePrincipal = (Employee) auth.getPrincipal();
 		
 		employeePrincipal.setId(source.getId());
-		employeePrincipal.setName(source.getName());	
 		
 		return employeePrincipal;
 	}

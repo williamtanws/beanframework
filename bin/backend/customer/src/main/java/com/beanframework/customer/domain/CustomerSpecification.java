@@ -29,9 +29,6 @@ public class CustomerSpecification {
 				if (StringUtils.isNotEmpty(customer.getId())) {
 					predicates.add(cb.or(cb.like(root.get(Customer.ID), "%" + customer.getId() + "%")));
 				}
-				if (StringUtils.isNotEmpty(customer.getName())) {
-					predicates.add(cb.or(cb.like(root.get(Customer.NAME), "%" + customer.getId() + "%")));
-				}
 				
 				if(predicates.isEmpty()) {
 					return cb.and(predicates.toArray(new Predicate[predicates.size()]));

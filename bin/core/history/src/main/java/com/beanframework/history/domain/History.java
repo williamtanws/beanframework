@@ -8,16 +8,16 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.history.HistoryConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = HistoryConstants.Table.HISTORY)
-public class History extends AbstractDomain {
+public class History extends GenericDomain {
 
 	private static final long serialVersionUID = 5992760081038782486L;
-	public static final String MODEL = "History";
+	public static final String DOMAIN = "History";
 
 	private String entity;
 	private UUID entityUuid;

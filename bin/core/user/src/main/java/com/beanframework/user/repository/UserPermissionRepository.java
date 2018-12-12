@@ -21,7 +21,7 @@ public interface UserPermissionRepository
 
 	Optional<UserPermission> findById(String id);
 
-	@Query("select count(a) > 0 from " + UserGroup.MODEL + " a where a." + UserGroup.ID + " = :id")
+	@Query("select count(a) > 0 from " + UserGroup.DOMAIN + " a where a." + UserGroup.ID + " = :id")
 	boolean isIdExists(@Param("id") String id);
 
 	List<UserPermission> findByOrderBySortAsc();

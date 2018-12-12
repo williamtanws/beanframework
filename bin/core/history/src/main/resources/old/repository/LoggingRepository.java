@@ -16,15 +16,15 @@ import com.beanframework.logging.domain.Logging;
 @Repository
 public interface LoggingRepository extends JpaRepository<Logging, UUID>, JpaSpecificationExecutor<Logging> {
 	
-	@Query("select l.uuid from "+Logging.MODEL+" l")
+	@Query("select l.uuid from "+Logging.DOMAIN+" l")
 	List<UUID> getLastestLogId(Pageable pageable);
 
 	@Modifying
-    @Query("delete from "+Logging.MODEL+" l where l.uuid not in (:uuidList)")
+    @Query("delete from "+Logging.DOMAIN+" l where l.uuid not in (:uuidList)")
 	int deleteOldLogByExcludedId(@Param("uuidList") List<UUID> idList);
 
 	@Modifying
-	@Query("delete from "+Logging.MODEL+" l WHERE l.createdDate < :date")
+	@Query("delete from "+Logging.DOMAIN+" l WHERE l.createdDate < :date")
 	int removeOlderThan(@Param("date") java.sql.Date date);
 	
 }

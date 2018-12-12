@@ -28,9 +28,9 @@ public class SaveEmployeeProfileValidator implements Validator {
 		if(target instanceof Employee) {
 			final Employee employee = (Employee) target;
 
-			if (StringUtils.isEmpty(employee.getName())) {
-				errors.reject(Employee.NAME, localMessageService.getMessage(EmployeeConstants.Locale.NAME_REQUIRED));
-			}
+//			if (StringUtils.isEmpty(employee.getName())) {
+//				errors.reject(Employee.NAME, localMessageService.getMessage(EmployeeConstants.Locale.NAME_REQUIRED));
+//			}
 		}
 		
 		if(target instanceof MultipartFile) {
@@ -40,7 +40,7 @@ public class SaveEmployeeProfileValidator implements Validator {
 				String mimetype = picture.getContentType();
 				String type = mimetype.split("/")[0];
 				if (type.equals("image") == false) {
-					errors.reject(Employee.PICTURE, localMessageService.getMessage(EmployeeConstants.Locale.PICTURE_WRONGFORMAT));
+					errors.reject("picture", localMessageService.getMessage(EmployeeConstants.Locale.PICTURE_WRONGFORMAT));
 				}
 			}
 		}

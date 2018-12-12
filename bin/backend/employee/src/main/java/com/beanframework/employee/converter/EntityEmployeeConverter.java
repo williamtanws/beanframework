@@ -47,7 +47,6 @@ public class EntityEmployeeConverter implements Converter<Employee, Employee> {
 	private Employee convert(Employee source, Employee prototype) {
 
 		prototype.setId(source.getId());
-		prototype.setName(source.getName());
 		prototype.setAccountNonExpired(source.isAccountNonExpired());
 		prototype.setAccountNonLocked(source.isAccountNonLocked());
 		prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());

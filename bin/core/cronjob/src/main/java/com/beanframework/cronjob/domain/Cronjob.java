@@ -19,7 +19,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.domain.CronjobEnum.Status;
 import com.beanframework.cronjob.domain.CronjobEnum.JobTrigger;
@@ -28,9 +28,9 @@ import com.beanframework.cronjob.domain.CronjobEnum.Result;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = CronjobConstants.Table.CRONJOB)
-public class Cronjob extends AbstractDomain {
+public class Cronjob extends GenericDomain {
 
-	public static final String MODEL = "cronjob";
+	public static final String DOMAIN = "cronjob";
 
 	/**
 	 * 
