@@ -22,6 +22,7 @@
     	<module>core/cronjob</module>
     	<module>core/configuration</module>
     	<module>core/history</module>
+    	<module>core/dynamicfield</module>
 		<module>ui/adminlte</module>
     	<module>backend/admin</module>
         <module>backend/console</module>
