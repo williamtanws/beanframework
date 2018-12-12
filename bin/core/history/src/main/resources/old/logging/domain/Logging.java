@@ -23,7 +23,7 @@ public class Logging extends AbstractDomain {
 	 * 
 	 */
 	private static final long serialVersionUID = 3387103539059426180L;
-	public static final String MODEL = "Logging";
+	public static final String DOMAIN = "Logging";
 	public static final String IP = "ip";
 	public static final String CHANNEL = "channel";
 	public static final String OPERATE = "operate";

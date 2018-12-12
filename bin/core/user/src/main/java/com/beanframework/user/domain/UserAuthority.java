@@ -10,13 +10,13 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.Audited;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.user.UserConstants;
 
 @Entity
 @Audited
 @Table(name = UserConstants.Table.USER_AUTHORITY)
-public class UserAuthority extends AbstractDomain {
+public class UserAuthority extends GenericDomain {
 
 	/**
 	 * 

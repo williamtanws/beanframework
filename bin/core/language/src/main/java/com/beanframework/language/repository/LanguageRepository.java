@@ -22,7 +22,7 @@ public interface LanguageRepository extends JpaRepository<Language, UUID>, JpaSp
 
 	List<Language> findByOrderBySortAsc();
 
-	@Query("select count(a) > 0 from " + Language.MODEL + " a where a." + Language.ID + " = :id")
+	@Query("select count(a) > 0 from " + Language.DOMAIN + " a where a." + Language.ID + " = :id")
 	boolean isIdExists(String id);
 
 }

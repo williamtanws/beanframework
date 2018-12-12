@@ -22,6 +22,7 @@ public final class UserConstants{
 	
 	public interface Table {
 		public static final String USER = "user";
+		public static final String USER_FIELD = "userfield";
 		public static final String USER_GROUP = "usergroup";
 		public static final String USER_PERMISSION = "userpermission";
 		public static final String USER_RIGHT = "userright";
@@ -32,6 +33,8 @@ public final class UserConstants{
 		public static final String USER_PERMISSION_LANG = "userpermissionlang";
 
 		public static final String USER_GROUP_REL = "usergrouprel";
+		public static final String USER_GROUP_LANG_DYNAMIC_FIELD_REL = "usergroupdynrel";
+
 	}
 	
 	public interface Locale {

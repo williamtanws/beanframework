@@ -30,10 +30,6 @@ public class EmployeeSpecification {
 					predicates.add(cb.or(cb.like(root.get(Employee.ID), "%" + employee.getId() + "%")));
 				}
 				
-				if (StringUtils.isNotEmpty(employee.getName())) {
-					predicates.add(cb.or(cb.like(root.get(Employee.NAME), "%" + employee.getName() + "%")));
-				}
-				
 				if(predicates.isEmpty()) {
 					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 				}

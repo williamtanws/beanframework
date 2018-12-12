@@ -19,7 +19,7 @@ public interface UserRightRepository extends JpaRepository<UserRight, UUID>, Jpa
 
 	Optional<UserRight> findById(String id);
 	
-	@Query("select count(a) > 0 from " + UserRight.MODEL + " a where a." + UserRight.ID + " = :id")
+	@Query("select count(a) > 0 from " + UserRight.DOMAIN + " a where a." + UserRight.ID + " = :id")
 	boolean isIdExists(@Param("id") String id);
 
 	List<UserRight> findByOrderBySortAsc();

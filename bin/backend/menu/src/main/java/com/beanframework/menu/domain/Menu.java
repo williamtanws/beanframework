@@ -20,17 +20,17 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.menu.MenuConstants;
 import com.beanframework.user.domain.UserGroup;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = MenuConstants.Table.MENU)
-public class Menu extends AbstractDomain {
+public class Menu extends GenericDomain {
 
 	private static final long serialVersionUID = 8293422057240349702L;
-	public static final String MODEL = "menu";
+	public static final String DOMAIN = "menu";
 	public static final String SORT = "sort";
 	public static final String DESCRIPTION = "description";
 	public static final String ICON = "icon";

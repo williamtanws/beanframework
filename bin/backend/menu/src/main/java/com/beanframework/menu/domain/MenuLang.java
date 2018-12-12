@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.language.domain.Language;
 import com.beanframework.menu.MenuConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,10 +17,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = MenuConstants.Table.MENU_LANG)
-public class MenuLang extends AbstractDomain {
+public class MenuLang extends GenericDomain {
 
 	private static final long serialVersionUID = 3253296818921675586L;
-	public static final String MODEL = "MenuLang";
+	public static final String DOMAIN = "MenuLang";
 	public static final String NAME = "name";
 	public static final String LANGUAGE = "language";
 	public static final String MENU = "menu";

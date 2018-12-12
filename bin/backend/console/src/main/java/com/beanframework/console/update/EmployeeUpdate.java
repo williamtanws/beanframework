@@ -35,6 +35,7 @@ import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.EmployeeCsv;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeFacade;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 
 public class EmployeeUpdate extends Updater {
@@ -80,11 +81,13 @@ public class EmployeeUpdate extends Updater {
 	}
 
 	public void save(List<EmployeeCsv> employeeCsvList) {
+		
+		UserField userField = new UserField();
 
 		for (EmployeeCsv employeeCsv : employeeCsvList) {
 			Employee employee = employeeFacade.create();
 			employee.setId(employeeCsv.getId());
-			employee.setName(employeeCsv.getName());
+//			employee.setName(employeeCsv.getName());
 			employee.setPassword(employeeCsv.getPassword());
 			employee.setAccountNonExpired(employeeCsv.isAccountNonExpired());
 			employee.setAccountNonLocked(employeeCsv.isAccountNonLocked());

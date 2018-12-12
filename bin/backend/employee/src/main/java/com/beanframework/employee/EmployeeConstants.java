@@ -11,6 +11,9 @@ public interface EmployeeConstants {
 	public interface Cache{
 		public static final String EMPLOYEE_LIST = "employeeList";
 	}
+	
+	public interface Table{
+	}
 
 	public static interface Authority {
 		public static final String EMPLOYEE_READ = "EMPLOYEE_READ";

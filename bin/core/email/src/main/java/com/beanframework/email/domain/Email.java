@@ -13,18 +13,18 @@ import javax.persistence.Transient;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.EmailEnum.Status;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = EmailConstants.Table.EMAIL)
-public class Email extends AbstractDomain {
+public class Email extends GenericDomain {
 
 	private static final long serialVersionUID = 2324052965289006873L;
 
-	public static final String MODEL = "Email";
+	public static final String DOMAIN = "Email";
 	public static final String TORECIPIENTS = "toRecipients";
 	public static final String CCRECIPIENTS = "ccRecipients";
 	public static final String BCCRECIPIENTS = "bccRecipients";

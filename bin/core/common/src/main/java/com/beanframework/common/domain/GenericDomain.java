@@ -16,7 +16,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @MappedSuperclass
-public abstract class AbstractDomain implements Serializable {
+public abstract class GenericDomain implements Serializable {
 
 	/**
 	 * 
@@ -99,5 +99,4 @@ public abstract class AbstractDomain implements Serializable {
 	public void setLastModifiedBy(String lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
-
 }

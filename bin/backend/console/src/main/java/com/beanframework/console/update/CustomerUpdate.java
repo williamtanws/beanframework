@@ -84,7 +84,7 @@ public class CustomerUpdate extends Updater {
 		for (CustomerCsv customerCsv : customerCsvList) {
 			Customer customer = customerFacade.create();
 			customer.setId(customerCsv.getId());
-			customer.setName(customerCsv.getName());
+//			customer.setName(customerCsv.getName());
 			customer.setPassword(customerCsv.getPassword());
 			customer.setAccountNonExpired(customerCsv.isAccountNonExpired());
 			customer.setAccountNonLocked(customerCsv.isAccountNonLocked());

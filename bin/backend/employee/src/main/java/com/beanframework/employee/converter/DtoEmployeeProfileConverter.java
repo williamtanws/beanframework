@@ -33,7 +33,6 @@ public class DtoEmployeeProfileConverter implements Converter<Employee, Employee
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setName(source.getName());
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());

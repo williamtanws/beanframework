@@ -18,17 +18,5 @@ public class Employee extends User {
 	 * 
 	 */
 	private static final long serialVersionUID = -444547554032025L;
-	public static final String MODEL = "Employee";
-	public static final String NAME = "name";
-	public static final String PICTURE = "picture";
-
-	private String name;
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	public static final String DOMAIN = "Employee";
 }

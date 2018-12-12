@@ -20,16 +20,5 @@ public class Customer extends User {
 	 * 
 	 */
 	private static final long serialVersionUID = -628677275018700297L;
-	public static final String MODEL = "Customer";
-	public static final String NAME = "name";
-
-	private String name;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	public static final String DOMAIN = "Customer";
 }

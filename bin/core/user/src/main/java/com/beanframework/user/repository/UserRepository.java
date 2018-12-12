@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
 
 	Optional<User> findById(String id);
 
-	@Query("select count(a) > 0 from " + User.MODEL + " a where a." + User.ID + " = :id")
+	@Query("select count(a) > 0 from " + User.DOMAIN + " a where a." + User.ID + " = :id")
 	boolean isIdExists(@Param("id") String id);
 }

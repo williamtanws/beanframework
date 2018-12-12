@@ -89,14 +89,14 @@ public class UserGroupUpdate extends Updater {
 			language.setId("en");
 			UserGroupLang userGroupLang = new UserGroupLang();
 			userGroupLang.setLanguage(language);
-			userGroupLang.setName(userGroupCsv.getName_en());
+//			userGroupLang.setName(userGroupCsv.getName_en());
 			userGroup.getUserGroupLangs().add(userGroupLang);
 			
 			language = new Language();
 			language.setId("cn");
 			userGroupLang = new UserGroupLang();
 			userGroupLang.setLanguage(language);
-			userGroupLang.setName(userGroupCsv.getName_cn());
+//			userGroupLang.setName(userGroupCsv.getName_cn());
 			userGroup.getUserGroupLangs().add(userGroupLang);
 			
 			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),

@@ -38,7 +38,6 @@ public class DtoEmployeeConverter implements Converter<Employee, Employee> {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setName(source.getName());
 		prototype.setAccountNonExpired(source.isAccountNonExpired());
 		prototype.setAccountNonLocked(source.isAccountNonLocked());
 		prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());

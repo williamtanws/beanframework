@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.language.domain.Language;
 import com.beanframework.user.UserConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,10 +18,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Audited
 @Table(name = UserConstants.Table.USER_RIGHT_LANG)
-public class UserRightLang extends AbstractDomain {
+public class UserRightLang extends GenericDomain {
 
 	private static final long serialVersionUID = 3253296818921675586L;
-	public static final String MODEL = "UserRightLang";
+	public static final String DOMAIN = "UserRightLang";
 	public static final String NAME = "name";
 	public static final String LANGUAGE = "language";
 	public static final String USER_RIGHT = "userRight";
