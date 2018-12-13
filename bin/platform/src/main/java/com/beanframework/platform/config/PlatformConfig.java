@@ -1,7 +1,6 @@
 package com.beanframework.platform.config;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -10,8 +9,6 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.hibernate.EmptyInterceptor;
-import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +33,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.beanframework.history.service.HistoryFacade;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
@@ -200,17 +196,11 @@ public class PlatformConfig {
 		properties.put("hibernate.c3p0.autoCommitOnClose", "true");
 		properties.put("hibernate.c3p0.testConnectionOnCheckout", "true");
 		properties.put("current_session_context_class", "thread");
-		properties.put("hibernate.ejb.interceptor", hibernateInterceptor());
 		// Fix hibernate multiple merge problem
 //		properties.put("hibernate.event.merge.entity_copy_observer", "allow");
 		// Fix LAZY on session problems in unit tests
 //		properties.put("hibernate.enable_lazy_load_no_trans", "true");
 		return properties;
-	}
-	
-	@Bean
-	public EmptyInterceptor hibernateInterceptor() {
-		return new EntityInterceptor();
 	}
 
 	@Bean

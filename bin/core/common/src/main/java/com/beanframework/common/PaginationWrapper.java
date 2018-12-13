@@ -1,4 +1,4 @@
-package com.beanframework.common.domain;
+package com.beanframework.common;
 
 import java.util.ArrayList;
 import java.util.List;

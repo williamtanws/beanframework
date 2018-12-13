@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.service.CronjobService;
 
 @Component
-public class DtoCronjobConverter implements Converter<Cronjob, Cronjob> {
+public class DtoCronjobConverter implements DtoConverter<Cronjob, Cronjob> {
 
 	@Autowired
 	private CronjobService cronjobService;

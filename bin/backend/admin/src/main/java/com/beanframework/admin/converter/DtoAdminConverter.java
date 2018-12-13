@@ -4,21 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminService;
+import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.service.ModelService;
 
-@Component
-public class DtoAdminConverter implements Converter<Admin, Admin> {
-
+public class DtoAdminConverter implements DtoConverter<Admin, Admin> {
+	
 	@Autowired
-	private AdminService adminService;
+	private ModelService modelService;
 
 	@Override
 	public Admin convert(Admin source) {
-		return convert(source, adminService.create());
+		return convert(source, modelService.create(Admin.class));
 	}
 
 	public List<Admin> convert(List<Admin> sources) {

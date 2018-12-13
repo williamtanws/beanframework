@@ -4,14 +4,14 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.service.DynamicFieldService;
 
 @Component
-public class EntityDynamicFieldConverter implements Converter<DynamicField, DynamicField> {
+public class EntityDynamicFieldConverter implements EntityConverter<DynamicField, DynamicField> {
 
 	@Autowired
 	private DynamicFieldService dynamicFieldService;

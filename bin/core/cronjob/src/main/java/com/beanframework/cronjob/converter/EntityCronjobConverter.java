@@ -5,14 +5,14 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.service.CronjobService;
 
 @Component
-public class EntityCronjobConverter implements Converter<Cronjob, Cronjob> {
+public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob> {
 
 	@Autowired
 	private CronjobService cronjobService;

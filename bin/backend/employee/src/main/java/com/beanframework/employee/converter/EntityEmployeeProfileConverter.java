@@ -5,15 +5,15 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
 import com.beanframework.user.utils.PasswordUtils;
 
 @Component
-public class EntityEmployeeProfileConverter implements Converter<Employee, Employee> {
+public class EntityEmployeeProfileConverter implements EntityConverter<Employee, Employee> {
 
 	@Autowired
 	private EmployeeService employeeService;

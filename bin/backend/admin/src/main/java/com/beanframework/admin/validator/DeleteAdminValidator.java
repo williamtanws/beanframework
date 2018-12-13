@@ -9,14 +9,14 @@ import org.springframework.validation.Validator;
 
 import com.beanframework.admin.AdminConstants;
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminService;
+import com.beanframework.admin.service.AdminFacade;
 import com.beanframework.common.service.LocaleMessageService;
 
 @Component
 public class DeleteAdminValidator implements Validator {
 
 	@Autowired
-	private AdminService adminService;
+	private AdminFacade adminFacade;
 
 	@Autowired
 	private LocaleMessageService localMessageService;
@@ -31,7 +31,7 @@ public class DeleteAdminValidator implements Validator {
 		
 		UUID uuid = (UUID) target;
 
-		Admin admin = adminService.findByUuid(uuid);
+		Admin admin = adminFacade.findByUuid(uuid);
 		if(admin == null) {
 			errors.reject(Admin.ID, localMessageService.getMessage(AdminConstants.Locale.UUID_NOT_EXISTS));
 		}

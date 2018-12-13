@@ -4,15 +4,15 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.domain.EmailEnum.Status;
 import com.beanframework.email.service.EmailService;
 
 @Component
-public class EntityEmailConverter implements Converter<Email, Email> {
+public class EntityEmailConverter implements EntityConverter<Email, Email> {
 
 	@Autowired
 	private EmailService emailService;

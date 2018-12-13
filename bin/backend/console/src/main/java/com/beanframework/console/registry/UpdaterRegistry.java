@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.domain.Updater;
+import com.beanframework.common.Updater;
 
 @Component
 public class UpdaterRegistry {

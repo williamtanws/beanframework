@@ -5,9 +5,9 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.service.LanguageService;
 import com.beanframework.user.domain.UserRight;
@@ -15,7 +15,7 @@ import com.beanframework.user.domain.UserRightLang;
 import com.beanframework.user.service.UserRightService;
 
 @Component
-public class EntityUserRightConverter implements Converter<UserRight, UserRight> {
+public class EntityUserRightConverter implements EntityConverter<UserRight, UserRight> {
 
 	@Autowired
 	private UserRightService userRightService;

@@ -1,5 +1,7 @@
 package com.beanframework.admin.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,14 @@ import org.springframework.validation.Errors;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.validator.DeleteAdminValidator;
 import com.beanframework.admin.validator.SaveAdminValidator;
+import com.beanframework.common.service.ModelService;
 
 @Component
 public class AdminFacadeImpl implements AdminFacade {
 
+	@Autowired
+	private ModelService modelService;
+	
 	@Autowired
 	private AdminService adminService;
 
@@ -33,16 +39,6 @@ public class AdminFacadeImpl implements AdminFacade {
 	private DeleteAdminValidator deleteAdminValidator;
 
 	@Override
-	public Admin create() {
-		return adminService.create();
-	}
-
-	@Override
-	public Admin initDefaults(Admin admin) {
-		return adminService.initDefaults(admin);
-	}
-
-	@Override
 	public Admin save(Admin admin, Errors bindingResult) {
 		saveAdminValidator.validate(admin, bindingResult);
 
@@ -50,7 +46,9 @@ public class AdminFacadeImpl implements AdminFacade {
 			return admin;
 		}
 
-		return adminService.save(admin);
+		modelService.save(admin);
+		
+		return modelService.getDto(admin);
 	}
 
 	@Override
@@ -58,23 +56,28 @@ public class AdminFacadeImpl implements AdminFacade {
 		deleteAdminValidator.validate(uuid, bindingResult);
 		
 		if (bindingResult.hasErrors() == false) {
-			adminService.delete(uuid);
+			modelService.remove(uuid, Admin.class);
 		}
 	}
 
 	@Override
 	public void deleteAll() {
-		adminService.deleteAll();
+		modelService.removeAll();
 	}
 
 	@Override
 	public Admin findByUuid(UUID uuid) {
-		return adminService.findByUuid(uuid);
+		Admin admin = modelService.findByUuid(uuid, Admin.class);
+		return modelService.getDto(admin);
 	}
 
 	@Override
 	public Admin findById(String id) {
-		return adminService.findById(id);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(Admin.ID, id);
+		Admin admin = modelService.find(map, Admin.class);
+
+		return modelService.getDto(admin);
 	}
 
 	@Override
@@ -122,33 +125,8 @@ public class AdminFacadeImpl implements AdminFacade {
 		}
 
 		if (admin.isCredentialsNonExpired() == false) {
-			throw new CredentialsExpiredException("Passwrd Expired");
+			throw new CredentialsExpiredException("Password Expired");
 		}
 		return admin;
 	}
-
-	public AdminService getAdminService() {
-		return adminService;
-	}
-
-	public void setAdminService(AdminService adminService) {
-		this.adminService = adminService;
-	}
-
-	public SaveAdminValidator getSaveAdminValidator() {
-		return saveAdminValidator;
-	}
-
-	public void setSaveAdminValidator(SaveAdminValidator saveAdminValidator) {
-		this.saveAdminValidator = saveAdminValidator;
-	}
-
-	public DeleteAdminValidator getDeleteAdminValidator() {
-		return deleteAdminValidator;
-	}
-
-	public void setDeleteAdminValidator(DeleteAdminValidator deleteAdminValidator) {
-		this.deleteAdminValidator = deleteAdminValidator;
-	}
-
 }

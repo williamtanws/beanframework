@@ -10,10 +10,6 @@ import com.beanframework.admin.domain.Admin;
 
 public interface AdminFacade {
 
-	Admin create();
-
-	Admin initDefaults(Admin admin);
-
 	Admin save(Admin admin, Errors bindingResult);
 
 	void delete(UUID uuid, Errors bindingResult);

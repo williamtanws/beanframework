@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.MapBindingResult;
 
-import com.beanframework.common.domain.Initializer;
+import com.beanframework.common.Initializer;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuFacade;

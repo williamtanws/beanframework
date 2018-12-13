@@ -8,9 +8,9 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.service.LanguageService;
 import com.beanframework.menu.domain.Menu;
@@ -20,7 +20,7 @@ import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupService;
 
 @Component
-public class EntityMenuConverter implements Converter<Menu, Menu> {
+public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 
 	@Autowired
 	private MenuService menuService;

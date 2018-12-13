@@ -5,9 +5,9 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.service.LanguageService;
 import com.beanframework.user.domain.UserPermission;
@@ -15,7 +15,7 @@ import com.beanframework.user.domain.UserPermissionLang;
 import com.beanframework.user.service.UserPermissionService;
 
 @Component
-public class EntityUserPermissionConverter implements Converter<UserPermission, UserPermission> {
+public class EntityUserPermissionConverter implements EntityConverter<UserPermission, UserPermission> {
 
 	@Autowired
 	private UserPermissionService userPermissionService;

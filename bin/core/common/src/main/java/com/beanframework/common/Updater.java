@@ -1,12 +1,13 @@
-package com.beanframework.common.domain;
+package com.beanframework.common;
 
-public class Remover {
+public class Updater {
 
 	private String key;
 	private String name;
 	private int sort;
 	private String description;
 	public static final String SPLITTER = ";";
+	public static final String EQUALS = ":";
 	public static final String POSITIVE = "+";
 	public static final String NEGATIVE = "-";
 
@@ -42,6 +43,6 @@ public class Remover {
 		this.description = description;
 	}
 
-	public void remove() throws Exception {
+	public void update() throws Exception {
 	}
 }
