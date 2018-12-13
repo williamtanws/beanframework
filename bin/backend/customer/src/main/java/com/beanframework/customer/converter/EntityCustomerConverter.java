@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerService;
 import com.beanframework.user.domain.UserGroup;
@@ -16,7 +16,7 @@ import com.beanframework.user.service.UserGroupService;
 import com.beanframework.user.utils.PasswordUtils;
 
 @Component
-public class EntityCustomerConverter implements Converter<Customer, Customer> {
+public class EntityCustomerConverter implements EntityConverter<Customer, Customer> {
 
 	@Autowired
 	private CustomerService customerService;

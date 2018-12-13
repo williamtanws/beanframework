@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.common.domain.Initializer;
+import com.beanframework.common.Initializer;
 import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.registry.InitializerRegistry;

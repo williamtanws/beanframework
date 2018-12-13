@@ -5,15 +5,15 @@ import java.util.List;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
 import com.beanframework.user.converter.DtoUserGroupConverter;
 
 @Component
-public class DtoEmployeeConverter implements Converter<Employee, Employee> {
+public class DtoEmployeeConverter implements DtoConverter<Employee, Employee> {
 
 	@Autowired
 	private EmployeeService employeeService;

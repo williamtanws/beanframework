@@ -29,7 +29,7 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.domain.Updater;
+import com.beanframework.common.Updater;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserGroupCsv;
 import com.beanframework.language.domain.Language;

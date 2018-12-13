@@ -4,14 +4,14 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.history.domain.History;
 import com.beanframework.history.service.HistoryService;
 
 @Component
-public class EntityHistoryConverter implements Converter<History, History> {
+public class EntityHistoryConverter implements DtoConverter<History, History> {
 
 	@Autowired
 	private HistoryService historyService;

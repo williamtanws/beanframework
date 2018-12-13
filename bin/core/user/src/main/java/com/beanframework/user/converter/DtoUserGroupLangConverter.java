@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.language.converter.DtoLanguageConverter;
 import com.beanframework.user.domain.UserGroupLang;
 
 @Component
-public class DtoUserGroupLangConverter  implements Converter<UserGroupLang, UserGroupLang>{
+public class DtoUserGroupLangConverter  implements DtoConverter<UserGroupLang, UserGroupLang>{
 	
 	@Autowired
 	private DtoLanguageConverter dtoLanguageConverter;

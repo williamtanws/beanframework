@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
 
 @Component
-public class DtoEmployeeProfileConverter implements Converter<Employee, Employee> {
+public class DtoEmployeeProfileConverter implements DtoConverter<Employee, Employee> {
 
 	@Autowired
 	private EmployeeService employeeService;

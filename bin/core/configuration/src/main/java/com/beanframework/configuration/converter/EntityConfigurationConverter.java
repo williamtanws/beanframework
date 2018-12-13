@@ -4,14 +4,14 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 
 @Component
-public class EntityConfigurationConverter implements Converter<Configuration, Configuration> {
+public class EntityConfigurationConverter implements EntityConverter<Configuration, Configuration> {
 
 	@Autowired
 	private ConfigurationService configurationService;

@@ -8,14 +8,14 @@ import org.springframework.validation.Validator;
 
 import com.beanframework.admin.AdminConstants;
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminService;
+import com.beanframework.admin.service.AdminFacade;
 import com.beanframework.common.service.LocaleMessageService;
 
 @Component
 public class SaveAdminValidator implements Validator {
 
 	@Autowired
-	private AdminService adminService;
+	private AdminFacade adminFacade;
 
 	@Autowired
 	private LocaleMessageService localMessageService;
@@ -36,7 +36,7 @@ public class SaveAdminValidator implements Validator {
 			} else if (StringUtils.isEmpty(admin.getPassword())) {
 				errors.reject(Admin.PASSWORD, localMessageService.getMessage(AdminConstants.Locale.PASSWORD_REQUIRED));
 			} else {
-				Admin existsAdmin = adminService.findById(admin.getId());
+				Admin existsAdmin = adminFacade.findById(admin.getId());
 				if (existsAdmin != null) {
 					errors.reject(Admin.ID, localMessageService.getMessage(AdminConstants.Locale.ID_EXISTS));
 				}
@@ -45,7 +45,7 @@ public class SaveAdminValidator implements Validator {
 		} else {
 			// Update exists
 			if (StringUtils.isNotEmpty(admin.getId())) {
-				Admin existsAdmin = adminService.findById(admin.getId());
+				Admin existsAdmin = adminFacade.findById(admin.getId());
 				if (existsAdmin != null) {
 					if (!admin.getUuid().equals(existsAdmin.getUuid())) {
 						errors.reject(Admin.ID, localMessageService.getMessage(AdminConstants.Locale.ID_EXISTS));

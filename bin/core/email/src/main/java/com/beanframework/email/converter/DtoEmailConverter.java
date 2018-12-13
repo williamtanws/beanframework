@@ -6,15 +6,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.service.EmailService;
 
 @Component
-public class DtoEmailConverter implements Converter<Email, Email> {
+public class DtoEmailConverter implements DtoConverter<Email, Email> {
 
 	@Autowired
 	private EmailService emailService;

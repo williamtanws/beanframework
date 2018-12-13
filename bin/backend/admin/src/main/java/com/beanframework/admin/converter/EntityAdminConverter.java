@@ -1,38 +1,35 @@
 package com.beanframework.admin.converter;
 
 import java.util.Date;
-import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminService;
+import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.utils.PasswordUtils;
 
-@Component
-public class EntityAdminConverter implements Converter<Admin, Admin> {
+public class EntityAdminConverter implements EntityConverter<Admin, Admin> {
 
 	@Autowired
-	private AdminService adminService;
+	private ModelService modelService;
 
 	@Override
 	public Admin convert(Admin source) {
 
-		Optional<Admin> prototype = null;
+		Admin prototype = null;
 		if (source.getUuid() != null) {
-			prototype = adminService.findEntityByUuid(source.getUuid());
-			if (prototype.isPresent() == false) {
-				prototype = Optional.of(adminService.create());
+			prototype = modelService.findByUuid(source.getUuid(), Admin.class);
+			if (prototype == null) {
+				prototype = modelService.create(Admin.class);
 			}
 		}
 		else {
-			prototype = Optional.of(adminService.create());
+			prototype = modelService.create(Admin.class);
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	private Admin convert(Admin source, Admin prototype) {

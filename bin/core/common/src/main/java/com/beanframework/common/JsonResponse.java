@@ -1,4 +1,4 @@
-package com.beanframework.common.domain;
+package com.beanframework.common;
 
 public class JsonResponse {
 	

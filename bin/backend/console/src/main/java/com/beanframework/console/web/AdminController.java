@@ -25,6 +25,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.service.AdminFacade;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.console.WebAdminConstants;
 import com.beanframework.console.WebConsoleConstants;
@@ -32,6 +33,9 @@ import com.beanframework.console.domain.AdminSearch;
 
 @Controller
 public class AdminController {
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private AdminFacade adminFacade;
@@ -102,12 +106,12 @@ public class AdminController {
 
 	@ModelAttribute(WebAdminConstants.ModelAttribute.CREATE)
 	public Admin populateAdminCreate(HttpServletRequest request) {
-		return adminFacade.create();
+		return modelService.create(Admin.class);
 	}
 
 	@ModelAttribute(WebAdminConstants.ModelAttribute.UPDATE)
 	public Admin populateAdminForm(HttpServletRequest request) {
-		return adminFacade.create();
+		return modelService.create(Admin.class);
 	}
 
 	@ModelAttribute(WebAdminConstants.ModelAttribute.SEARCH)

@@ -1,4 +1,4 @@
-package com.beanframework.admin.domain;
+package com.beanframework.admin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
+
+import com.beanframework.admin.domain.Admin;
 
 public class AdminSpecification {
 	public static Specification<Admin> findByCriteria(final Admin admin) {
