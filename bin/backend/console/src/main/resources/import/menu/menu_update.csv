@@ -1,0 +1,16 @@
+id,sort,icon,path,target,enabled,parent,name_en,name_cn,userGroupIds
+system,0,fa fa-gears,,,true,,System,系统,employeegroup
+language,0,fa fa-language,/backoffice/language,,true,system,Language,语言,employeegroup
+userright,1,fa fa-user-plus,/backoffice/userright,,true,system,User Right,用户权利,employeegroup
+userpermission,2,fa fa-key,/backoffice/userpermission,,true,system,User Permission,用户权限,employeegroup
+menu,4,fa fa-align-justify,/backoffice/menu,,true,system,Menu,菜单,employeegroup
+cronjob,5,fa fa-calendar,/backoffice/cronjob,,true,system,Cron Job,定时任务,employeegroup
+email,6,fa fa-envelope,/backoffice/email,,true,system,Email,电子邮件,employeegroup
+history,6,fa fa-history,/backoffice/history,,true,system,History,历史,employeegroup
+multimedia,2,fa fa-file-image-o,,,true,,Multimedia,多媒体,customergroup
+filemanager,1,fa fa-folder,/backoffice/filemanager,,true,multimedia,File Manager,文件管理器,employeegroup
+user,3,fa fa-user,,,true,,User,用户,employeegroup;customergroup
+employeesession,0,fa fa-clock-o,/backoffice/employee/session,,true,user,Employee Session,雇员会话,employeegroup
+usergroup,1,fa fa-users,/backoffice/usergroup,,true,user,User Group,用户组,employeegroup
+employee,2,fa fa-user,/backoffice/employee,,true,user,Employee,雇员,employeegroup
+customer,3,fa fa-user,/backoffice/customer,,true,user,Customer,顾客,customergroup

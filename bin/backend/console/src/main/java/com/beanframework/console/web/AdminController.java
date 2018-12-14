@@ -150,9 +150,14 @@ public class AdminController {
 			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
-			adminCreate = adminFacade.save(adminCreate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
+			try {
+				adminCreate = adminFacade.save(adminCreate);
+				
+				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
+						localeMessageService.getMessage(WebConsoleConstants.Locale.SAVE_SUCCESS));
+			} catch (Exception e) {
+				bindingResult.reject(Admin.class.getSimpleName(), e.getMessage());
+				
 				StringBuilder errorMessage = new StringBuilder();
 				List<ObjectError> errors = bindingResult.getAllErrors();
 				for (ObjectError error : errors) {
@@ -163,11 +168,6 @@ public class AdminController {
 				}
 
 				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebConsoleConstants.Locale.SAVE_SUCCESS));
 			}
 		}
 
@@ -190,9 +190,9 @@ public class AdminController {
 			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
-			adminUpdate = adminFacade.save(adminUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
+			try {
+				adminUpdate = adminFacade.save(adminUpdate);
+				
 				StringBuilder errorMessage = new StringBuilder();
 				List<ObjectError> errors = bindingResult.getAllErrors();
 				for (ObjectError error : errors) {
@@ -203,9 +203,9 @@ public class AdminController {
 				}
 
 				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
+			} catch (Exception e) {
+				bindingResult.reject(Admin.class.getSimpleName(), e.getMessage());
+				
 				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
 						localeMessageService.getMessage(WebConsoleConstants.Locale.SAVE_SUCCESS));
 			}
@@ -226,10 +226,14 @@ public class AdminController {
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		adminFacade.delete(adminUpdate.getUuid(), bindingResult);
-
-		if (bindingResult.hasErrors()) {
-
+		try {
+			adminFacade.delete(adminUpdate.getUuid());
+			
+			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
+					localeMessageService.getMessage(WebConsoleConstants.Locale.DELETE_SUCCESS));
+		} catch (Exception e) {
+			bindingResult.reject(Admin.class.getSimpleName(), e.getMessage());
+			
 			StringBuilder errorMessage = new StringBuilder();
 			List<ObjectError> errors = bindingResult.getAllErrors();
 			for (ObjectError error : errors) {
@@ -241,10 +245,8 @@ public class AdminController {
 
 			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
 			redirectAttributes.addFlashAttribute(WebAdminConstants.ModelAttribute.UPDATE, adminUpdate);
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebConsoleConstants.Locale.DELETE_SUCCESS));
+			
+			
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, adminSearch);

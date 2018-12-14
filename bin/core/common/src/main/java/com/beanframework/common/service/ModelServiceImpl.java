@@ -5,9 +5,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
@@ -53,24 +55,38 @@ public class ModelServiceImpl extends AbstractModelServiceImpl implements ModelS
 	}
 
 	@Override
-	public <T> T findOne(Map<String, String> parameters, Class var2) {
-		StringBuilder parametersBuilder = new StringBuilder();
-		for (Map.Entry<String, String> entry : parameters.entrySet()) {
-			if (parametersBuilder.length() == 0) {
-				parametersBuilder.append("o." + entry.getKey() + " = :" + entry.getKey());
+	public <T> T findOneByFields(Map<String, String> fields, Class var2) {
+		StringBuilder fieldsBuilder = new StringBuilder();
+		for (Map.Entry<String, String> entry : fields.entrySet()) {
+			if (fieldsBuilder.length() == 0) {
+				fieldsBuilder.append("o." + entry.getKey() + " = :" + entry.getKey());
 			} else {
-				parametersBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey());
+				fieldsBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey());
 			}
 		}
 
 		Query query = entityManager
-				.createQuery("select o from " + var2.getName() + " o where " + parametersBuilder.toString());
+				.createQuery("select o from " + var2.getName() + " o where " + fieldsBuilder.toString());
 
-		for (Map.Entry<String, String> entry : parameters.entrySet()) {
+		for (Map.Entry<String, String> entry : fields.entrySet()) {
 			query.setParameter(entry.getKey(), entry.getValue());
 		}
 
-		Object model = (T) query.getSingleResult();
+		Object model;
+		try {
+			model = (T) query.getSingleResult();
+			
+			loadInterceptor(model);
+
+			return (T) model;
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public <T> T findByUuid(UUID uuid, Class objectClass) {
+		Object model = entityManager.find(objectClass, uuid);
 
 		loadInterceptor(model);
 
@@ -78,20 +94,20 @@ public class ModelServiceImpl extends AbstractModelServiceImpl implements ModelS
 	}
 
 	@Override
-	public <T extends Collection> T find(Map<String, String> parameters, Class objectClass) {
-		StringBuilder parametersBuilder = new StringBuilder();
-		for (Map.Entry<String, String> entry : parameters.entrySet()) {
-			if (parametersBuilder.length() == 0) {
-				parametersBuilder.append("o." + entry.getKey() + " = :" + entry.getKey());
+	public <T extends Collection> T findByParameters(Map<String, String> fields, Class objectClass) {
+		StringBuilder fieldsBuilder = new StringBuilder();
+		for (Map.Entry<String, String> entry : fields.entrySet()) {
+			if (fieldsBuilder.length() == 0) {
+				fieldsBuilder.append("o." + entry.getKey() + " = :" + entry.getKey());
 			} else {
-				parametersBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey());
+				fieldsBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey());
 			}
 		}
 
 		Query query = entityManager
-				.createQuery("select o from " + objectClass.getName() + " o where " + parametersBuilder.toString());
+				.createQuery("select o from " + objectClass.getName() + " o where " + fieldsBuilder.toString());
 
-		for (Map.Entry<String, String> entry : parameters.entrySet()) {
+		for (Map.Entry<String, String> entry : fields.entrySet()) {
 			query.setParameter(entry.getKey(), entry.getValue());
 		}
 
@@ -102,15 +118,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl implements ModelS
 		}
 
 		return (T) models;
-	}
-
-	@Override
-	public <T> T findByUuid(UUID uuid, Class objectClass) {
-		Object model = entityManager.find(objectClass, uuid);
-
-		loadInterceptor(model);
-
-		return (T) model;
 	}
 
 	@Override
@@ -126,16 +133,16 @@ public class ModelServiceImpl extends AbstractModelServiceImpl implements ModelS
 	}
 
 	@Override
-	public <T extends Collection> T findAll(@Nullable Specification spec, Pageable pageable, Class objectClass) {
-		Collection models = (T) page(spec, pageable, objectClass);
+	public <T> Page<T> findPage(@Nullable Specification spec, Pageable pageable, Class objectClass) {
+		Page<T> page = (Page<T>) page(spec, pageable, objectClass);
 
-		Iterator iterator = models.iterator();
+		Iterator iterator = page.getContent().iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
 			loadInterceptor(model);
 		}
 
-		return (T) models;
+		return page;
 	}
 
 	@Override
@@ -145,8 +152,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl implements ModelS
 
 	@Override
 	public void save(Object object) throws ModelSavingException {
-		prepareInterceptor(object);
 		validateInterceptor(object);
+		prepareInterceptor(object);
 		modelRepository.save(object);
 	}
 
@@ -164,6 +171,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl implements ModelS
 	@Override
 	public void remove(UUID uuid, Class objectClass) throws ModelRemovalException {
 		Object model = entityManager.find(objectClass, uuid);
+		
+		if(model == null) {
+			throw new ModelRemovalException("UUID not exists.", new Exception());
+		}
+		
 		modelRepository.delete(model);
 		removeInterceptor(model);
 	}
