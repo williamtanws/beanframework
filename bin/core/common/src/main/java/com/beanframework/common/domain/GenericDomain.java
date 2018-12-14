@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
@@ -35,6 +36,7 @@ public abstract class GenericDomain implements Serializable {
 	@Column(columnDefinition = "BINARY(16)", unique = true, updatable = false)
 	private UUID uuid;
 
+	@NotNull
 	@Column(unique = true)
 	private String id;
 

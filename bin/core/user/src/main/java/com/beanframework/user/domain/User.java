@@ -48,13 +48,9 @@ public abstract class User extends GenericDomain {
 	private static final long serialVersionUID = -7444894280894062710L;
 	@NotNull
 	private String password;
-	@NotNull
 	private boolean accountNonExpired;
-	@NotNull
 	private boolean accountNonLocked;
-	@NotNull
 	private boolean credentialsNonExpired;
-	@NotNull
 	private boolean enabled;
 
 	@Cascade({ CascadeType.REFRESH })

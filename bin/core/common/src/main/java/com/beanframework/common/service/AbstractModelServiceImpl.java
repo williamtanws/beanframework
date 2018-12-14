@@ -54,7 +54,7 @@ public class AbstractModelServiceImpl {
 				InitialDefaultsInterceptor<Object> interceptor = (InitialDefaultsInterceptor<Object>) interceptorMapping.getInterceptor();
 				try {
 					if(interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						interceptor.onLoad(model);
+						interceptor.onInitialDefaults(model);
 					}
 				} catch (InterceptorException e) {
 					e.printStackTrace();
@@ -84,7 +84,7 @@ public class AbstractModelServiceImpl {
 				PrepareInterceptor<Object> interceptor = (PrepareInterceptor<Object>) interceptorMapping.getInterceptor();
 				try {
 					if(interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						interceptor.onLoad(model);
+						interceptor.onPrepare(model);
 					}
 				} catch (InterceptorException e) {
 					e.printStackTrace();
@@ -99,7 +99,7 @@ public class AbstractModelServiceImpl {
 				RemoveInterceptor<Object> interceptor = (RemoveInterceptor<Object>) interceptorMapping.getInterceptor();
 				try {
 					if(interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						interceptor.onLoad(model);
+						interceptor.onRemove(model);
 					}
 				} catch (InterceptorException e) {
 					e.printStackTrace();
@@ -114,7 +114,7 @@ public class AbstractModelServiceImpl {
 				ValidateInterceptor<Object> interceptor = (ValidateInterceptor<Object>) interceptorMapping.getInterceptor();
 				try {
 					if(interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						interceptor.onLoad(model);
+						interceptor.onValidate(model);
 					}
 				} catch (InterceptorException e) {
 					e.printStackTrace();

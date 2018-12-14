@@ -16,11 +16,8 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.validator.DeleteAdminValidator;
-import com.beanframework.admin.validator.SaveAdminValidator;
 import com.beanframework.common.service.ModelService;
 
 @Component
@@ -32,32 +29,15 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Autowired
 	private AdminService adminService;
 
-	@Autowired
-	private SaveAdminValidator saveAdminValidator;
-
-	@Autowired
-	private DeleteAdminValidator deleteAdminValidator;
-
 	@Override
-	public Admin save(Admin admin, Errors bindingResult) {
-		saveAdminValidator.validate(admin, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return admin;
-		}
-
+	public Admin save(Admin admin) {
 		modelService.save(admin);
-		
 		return modelService.getDto(admin);
 	}
 
 	@Override
-	public void delete(UUID uuid, Errors bindingResult) {
-		deleteAdminValidator.validate(uuid, bindingResult);
-		
-		if (bindingResult.hasErrors() == false) {
-			modelService.remove(uuid, Admin.class);
-		}
+	public void delete(UUID uuid) {
+		modelService.remove(uuid, Admin.class);
 	}
 
 	@Override
@@ -68,16 +48,17 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Override
 	public Admin findByUuid(UUID uuid) {
 		Admin admin = modelService.findByUuid(uuid, Admin.class);
-		return modelService.getDto(admin);
+		
+		return admin == null ? null : modelService.getDto(admin);
 	}
 
 	@Override
 	public Admin findById(String id) {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(Admin.ID, id);
-		Admin admin = modelService.find(map, Admin.class);
+		Admin admin = modelService.findOneByFields(map, Admin.class);
 
-		return modelService.getDto(admin);
+		return admin == null ? null : modelService.getDto(admin);
 	}
 
 	@Override

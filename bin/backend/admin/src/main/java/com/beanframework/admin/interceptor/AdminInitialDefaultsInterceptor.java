@@ -7,7 +7,7 @@ import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
 public class AdminInitialDefaultsInterceptor implements InitialDefaultsInterceptor<Admin> {
 
 	@Override
-	public void onLoad(Admin model) throws InterceptorException {
+	public void onInitialDefaults(Admin model) throws InterceptorException {
 		model.setEnabled(true);
 		model.setAccountNonExpired(true);
 		model.setAccountNonLocked(true);

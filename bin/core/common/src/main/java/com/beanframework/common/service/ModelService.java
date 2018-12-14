@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
@@ -23,15 +24,15 @@ public interface ModelService {
 
 	<T> T create(Class objectClass);
 
-	<T> T findOne(Map<String, String> parameters, Class objectClass);
-
-	<T extends Collection> T find(Map<String, String> parameters, Class objectClass);
-
+	<T> T findOneByFields(Map<String, String> parameters, Class objectClass);
+	
 	<T> T findByUuid(UUID uuid, Class objectClass);
+
+	<T extends Collection> T findByParameters(Map<String, String> parameters, Class objectClass);
 
 	<T extends Collection> T findAll();
 
-	<T extends Collection> T findAll(@Nullable Specification spec, Pageable pageable, Class objectClass);
+	<T> Page<T> findPage(@Nullable Specification spec, Pageable pageable, Class objectClass);
 	
 	void refresh(Object object);
 

@@ -38,7 +38,7 @@ public class AdminServiceImpl implements AdminService {
 	@Transactional(readOnly = true)
 	@Override
 	public Page<Admin> page(Admin admin, Pageable pageable) {
-		Page<Admin> page = modelService.findAll(AdminSpecification.findByCriteria(admin), pageable, Admin.class);
+		Page<Admin> page = modelService.findPage(AdminSpecification.findByCriteria(admin), pageable, Admin.class);
 		List<Admin> content = dtoAdminConverter.convert(page.getContent());
 		return new PageImpl<Admin>(content, page.getPageable(), page.getTotalElements());
 	}
@@ -53,7 +53,7 @@ public class AdminServiceImpl implements AdminService {
 
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(Admin.ID, id);
-		Admin admin = modelService.findOne(map, Admin.class);
+		Admin admin = modelService.findOneByFields(map, Admin.class);
 
 		if (admin == null) {
 			if (StringUtils.compare(password, defaultAdminPassword) != 0) {
