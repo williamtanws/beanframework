@@ -15,38 +15,38 @@ import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
-import com.beanframework.user.UserConstants;
+import com.beanframework.user.UserRightConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
-@Table(name = UserConstants.Table.USER_RIGHT)
+@Table(name = UserRightConstants.Table.USER_RIGHT)
 public class UserRight extends GenericDomain {
 
 	private static final long serialVersionUID = 8192305251381233446L;
 	public static final String DOMAIN = "UserRight";
-	public static final String USER_RIGHT_LANGS = "userRightLangs";
+	public static final String USER_RIGHT_FIELDS = "userRightFields";
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserRightLang.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<UserRightLang> userRightLangs = new ArrayList<UserRightLang>();
+	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<UserRightField> userRightFields = new ArrayList<UserRightField>();
 
-	private Integer sort;
+	private int sort;
 
-	public List<UserRightLang> getUserRightLangs() {
-		return userRightLangs;
-	}
-
-	public void setUserRightLangs(List<UserRightLang> userRightLangs) {
-		this.userRightLangs = userRightLangs;
-	}
-
-	public Integer getSort() {
+	public int getSort() {
 		return sort;
 	}
 
-	public void setSort(Integer sort) {
+	public void setSort(int sort) {
 		this.sort = sort;
+	}
+
+	public List<UserRightField> getUserRightFields() {
+		return userRightFields;
+	}
+
+	public void setUserRightFields(List<UserRightField> userRightFields) {
+		this.userRightFields = userRightFields;
 	}
 
 }

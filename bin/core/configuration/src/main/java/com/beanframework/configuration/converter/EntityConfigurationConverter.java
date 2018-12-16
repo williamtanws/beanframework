@@ -18,20 +18,15 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 	@Override
 	public Configuration convert(Configuration source) {
 
-		Configuration prototype = null;
+		Configuration prototype = modelService.create(Configuration.class);
 		if (source.getUuid() != null) {
-			
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Configuration.UUID, source.getUuid());
+			Configuration exists = modelService.findOneEntityByProperties(properties, Configuration.class);
 			
-			prototype = modelService.findOneEntityByProperties(properties, Configuration.class);
-			
-			if (prototype == null) {
-				prototype = modelService.create(Configuration.class);
+			if (exists != null) {
+				prototype = exists;
 			}
-		}
-		else {
-			prototype = modelService.create(Configuration.class);
 		}
 
 		return convert(source, prototype);

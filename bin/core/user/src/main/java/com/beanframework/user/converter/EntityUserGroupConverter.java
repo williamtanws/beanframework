@@ -16,7 +16,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupLang;
+import com.beanframework.user.domain.UserGroupField;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 
@@ -34,20 +34,10 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 			
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(UserGroup.UUID, source.getUuid());
-			UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+			UserGroup exists = modelService.findOneEntityByProperties(properties, UserGroup.class);
 			
-			if(existingUserGroup != null) {
-				prototype = existingUserGroup;
-			}
-		}
-		else if (StringUtils.isNotEmpty(source.getId())) {
-			
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(UserGroup.ID, source.getId());
-			UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
-			
-			if(existingUserGroup != null) {
-				prototype = existingUserGroup;
+			if(exists != null) {
+				prototype = exists;
 			}
 		}
 
@@ -59,8 +49,8 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 		prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
 
-		prototype.getUserGroupLangs().clear();
-		for (UserGroupLang userGroupLang : source.getUserGroupLangs()) {
+		prototype.getUserGroupFields().clear();
+		for (UserGroupField userGroupLang : source.getUserGroupFields()) {
 			if (userGroupLang.getLanguage().getUuid() != null) {
 				
 				Map<String, Object> properties = new HashMap<String, Object>();
@@ -71,7 +61,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 				if (language != null) {
 					userGroupLang.setLanguage(language);
 					userGroupLang.setUserGroup(prototype);
-					prototype.getUserGroupLangs().add(userGroupLang);
+					prototype.getUserGroupFields().add(userGroupLang);
 				}
 			} else if (StringUtils.isNotEmpty(userGroupLang.getLanguage().getId())) {
 				
@@ -83,7 +73,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 				if (language != null) {
 					userGroupLang.setLanguage(language);
 					userGroupLang.setUserGroup(prototype);
-					prototype.getUserGroupLangs().add(userGroupLang);
+					prototype.getUserGroupFields().add(userGroupLang);
 				}
 			}
 		}

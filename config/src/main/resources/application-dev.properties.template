@@ -3,6 +3,7 @@
 # ===============================
 project.dir=../..
 spring.devtools.add-properties=true
+spring.devtools.restart.enabled=true
 
 # ===============================
 # = THYMELEAF

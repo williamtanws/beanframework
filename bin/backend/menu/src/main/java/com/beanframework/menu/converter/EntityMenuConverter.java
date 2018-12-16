@@ -36,15 +36,6 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 			if (exists != null) {
 				prototype = exists;
 			}
-		} else if (StringUtils.isNotEmpty(source.getId())) {
-			
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Menu.ID, source.getId());
-			
-			Menu exists = modelService.findOneEntityByProperties(properties, Menu.class);
-			if (exists != null) {
-				prototype = exists;
-			}
 		}
 
 		return convert(source, prototype);

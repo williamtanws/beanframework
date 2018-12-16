@@ -1,6 +1,6 @@
 package com.beanframework.console.domain;
 
-public class AdminCsv extends AbstractCsvDomain{
+public class AdminCsv extends AbstractCsv{
 
 	private String password;
 	private boolean accountNonExpired;

@@ -83,10 +83,10 @@ public class UpdateController {
 				if (parseBoolean(keyValue)) {
 					try {
 						entry.getValue().update();
-						successMessages.append(entry.getValue().getName() + " is updated successfully. \n");
+						successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
 					} catch (Exception e) {
 						logger.error(e.getMessage(), e);
-						errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " \n");
+						errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " <br>");
 					}
 				}
 			}

@@ -1,6 +1,6 @@
 package com.beanframework.console.domain;
 
-public class LanguageCsv extends AbstractCsv {
+public class DynamicFieldCsv extends AbstractCsv {
 
 	private String name;
 	private boolean active;

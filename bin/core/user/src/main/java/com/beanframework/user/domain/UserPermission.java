@@ -15,31 +15,31 @@ import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
-import com.beanframework.user.UserConstants;
+import com.beanframework.user.UserPermissionConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
-@Table(name = UserConstants.Table.USER_PERMISSION)
+@Table(name = UserPermissionConstants.Table.USER_PERMISSION)
 public class UserPermission extends GenericDomain {
 
 	private static final long serialVersionUID = 5923500001897510869L;
 	public static final String DOMAIN = "UserPermission";
-	public static final String USER_PERMISSIONS = "userPermissions";
+	public static final String USER_PERMISSION_FIELD = "userPermissionField";
 	public static final String SORT = "sort";
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserPermissionLang.USER_PERMISSION, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<UserPermissionLang> userPermissionLangs = new ArrayList<UserPermissionLang>();
+	@OneToMany(mappedBy = UserPermissionField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<UserPermissionField> userPermissionFields = new ArrayList<UserPermissionField>();
 
 	private int sort;
 
-	public List<UserPermissionLang> getUserPermissionLangs() {
-		return userPermissionLangs;
+	public List<UserPermissionField> getUserPermissionFields() {
+		return userPermissionFields;
 	}
 
-	public void setUserPermissionLangs(List<UserPermissionLang> userPermissionLangs) {
-		this.userPermissionLangs = userPermissionLangs;
+	public void setUserPermissionFields(List<UserPermissionField> userPermissionFields) {
+		this.userPermissionFields = userPermissionFields;
 	}
 
 	public int getSort() {

@@ -11,7 +11,7 @@ import org.springframework.validation.Validator;
 
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.user.UserConstants;
+import com.beanframework.user.UserRightConstants;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 
@@ -36,7 +36,7 @@ public class SaveUserRightValidator implements Validator {
 		if (userRight.getUuid() == null) {
 			// Save new
 			if (StringUtils.isEmpty(userRight.getId())) {
-				errors.reject(UserRight.ID, localMessageService.getMessage(UserConstants.Locale.UserRight.ID_REQUIRED));
+				errors.reject(UserRight.ID, localMessageService.getMessage(UserRightConstants.Locale.ID_REQUIRED));
 			} else {
 				
 				Map<String, Object> properties = new HashMap<String, Object>();
@@ -45,7 +45,7 @@ public class SaveUserRightValidator implements Validator {
 				boolean existsUserRight = modelService.existsByProperties(properties, UserRight.class);
 				
 				if (existsUserRight) {
-					errors.reject(UserRight.ID, localMessageService.getMessage(UserConstants.Locale.UserRight.ID_EXISTS));
+					errors.reject(UserRight.ID, localMessageService.getMessage(UserRightConstants.Locale.ID_EXISTS));
 				}
 			}
 
@@ -60,7 +60,7 @@ public class SaveUserRightValidator implements Validator {
 								
 				if (existsUserRight != null) {
 					if (!userRight.getUuid().equals(existsUserRight.getUuid())) {
-						errors.reject(UserRight.ID, localMessageService.getMessage(UserConstants.Locale.UserRight.ID_EXISTS));
+						errors.reject(UserRight.ID, localMessageService.getMessage(UserRightConstants.Locale.ID_EXISTS));
 					}
 				}
 			}

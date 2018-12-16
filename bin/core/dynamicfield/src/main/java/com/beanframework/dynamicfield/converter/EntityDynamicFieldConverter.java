@@ -1,36 +1,37 @@
 package com.beanframework.dynamicfield.converter;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.service.DynamicFieldService;
 
 @Component
 public class EntityDynamicFieldConverter implements EntityConverter<DynamicField, DynamicField> {
 
 	@Autowired
-	private DynamicFieldService dynamicFieldService;
+	private ModelService modelService;
 
 	@Override
 	public DynamicField convert(DynamicField source) {
 
-		Optional<DynamicField> prototype = null;
+		DynamicField prototype = modelService.create(DynamicField.class);
 		if (source.getUuid() != null) {
-			prototype = dynamicFieldService.findEntityByUuid(source.getUuid());
-			if (prototype.isPresent() == false) {
-				prototype = Optional.of(dynamicFieldService.create());
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(DynamicField.UUID, source.getUuid());
+			DynamicField exists = modelService.findOneEntityByProperties(properties, DynamicField.class);
+			
+			if (exists != null) {
+				prototype = exists;
 			}
 		}
-		else {
-			prototype = Optional.of(dynamicFieldService.create());
-		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	private DynamicField convert(DynamicField source, DynamicField prototype) {

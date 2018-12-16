@@ -83,10 +83,10 @@ public class RemoveController {
 				if (parseBoolean(keyValue)) {
 					try {
 						entry.getValue().remove();
-						successMessages.append(entry.getValue().getName() + " is removed successfully. \n");
+						successMessages.append(entry.getValue().getName() + " is removed successfully. <br>");
 					} catch (Exception e) {
 						logger.error(e.getMessage(), e);
-						errorMessages.append(entry.getValue().getName() + " is removed failed. Reason: " + e.getMessage() + " \n");
+						errorMessages.append(entry.getValue().getName() + " is removed failed. Reason: " + e.getMessage() + " <br>");
 					}
 				}
 			}

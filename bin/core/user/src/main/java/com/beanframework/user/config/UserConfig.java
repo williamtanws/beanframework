@@ -10,9 +10,9 @@ import com.beanframework.user.converter.DtoUserConverter;
 import com.beanframework.user.converter.DtoUserGroupConverter;
 import com.beanframework.user.converter.DtoUserGroupLangConverter;
 import com.beanframework.user.converter.DtoUserPermissionConverter;
-import com.beanframework.user.converter.DtoUserPermissionLangConverter;
+import com.beanframework.user.converter.DtoUserPermissionFieldConverter;
 import com.beanframework.user.converter.DtoUserRightConverter;
-import com.beanframework.user.converter.DtoUserRightLangConverter;
+import com.beanframework.user.converter.DtoUserRightFieldConverter;
 import com.beanframework.user.converter.EntityUserConverter;
 import com.beanframework.user.converter.EntityUserGroupConverter;
 import com.beanframework.user.converter.EntityUserPermissionConverter;
@@ -20,11 +20,11 @@ import com.beanframework.user.converter.EntityUserRightConverter;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupLang;
+import com.beanframework.user.domain.UserGroupField;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserPermissionLang;
+import com.beanframework.user.domain.UserPermissionField;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightLang;
+import com.beanframework.user.domain.UserRightField;
 import com.beanframework.user.interceptor.UserInitialDefaultsInterceptor;
 import com.beanframework.user.interceptor.UserLoadInterceptor;
 import com.beanframework.user.interceptor.UserPrepareInterceptor;
@@ -85,7 +85,7 @@ public class UserConfig {
 	public ConverterMapping dtoUserGroupLangConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoUserGroupLangConverter());
-		mapping.setTypeCode(UserGroupLang.class.getSimpleName());
+		mapping.setTypeCode(UserGroupField.class.getSimpleName());
 
 		return mapping;
 	}
@@ -105,15 +105,15 @@ public class UserConfig {
 	}
 	
 	@Bean
-	public DtoUserPermissionLangConverter dtoUserPermissionLangConverter() {
-		return new DtoUserPermissionLangConverter();
+	public DtoUserPermissionFieldConverter dtoUserPermissionLangConverter() {
+		return new DtoUserPermissionFieldConverter();
 	}
 
 	@Bean
 	public ConverterMapping dtoUserPermissionLangConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoUserPermissionLangConverter());
-		mapping.setTypeCode(UserPermissionLang.class.getSimpleName());
+		mapping.setTypeCode(UserPermissionField.class.getSimpleName());
 
 		return mapping;
 	}
@@ -133,15 +133,15 @@ public class UserConfig {
 	}
 	
 	@Bean
-	public DtoUserRightLangConverter dtoUserRightLangConverter() {
-		return new DtoUserRightLangConverter();
+	public DtoUserRightFieldConverter dtoUserRightFieldConverter() {
+		return new DtoUserRightFieldConverter();
 	}
 
 	@Bean
-	public ConverterMapping DtoUserRightLangConverterMapping() {
+	public ConverterMapping DtoUserRightFieldConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoUserRightLangConverter());
-		mapping.setTypeCode(UserRightLang.class.getSimpleName());
+		mapping.setConverter(dtoUserRightFieldConverter());
+		mapping.setTypeCode(UserRightField.class.getSimpleName());
 
 		return mapping;
 	}

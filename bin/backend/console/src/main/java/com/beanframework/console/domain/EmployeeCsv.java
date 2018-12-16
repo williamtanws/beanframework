@@ -1,6 +1,6 @@
 package com.beanframework.console.domain;
 
-public class EmployeeCsv extends AbstractCsvDomain {
+public class EmployeeCsv extends AbstractCsv {
 
 	private String name;
 	private String password;

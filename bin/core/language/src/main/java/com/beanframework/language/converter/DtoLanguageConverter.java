@@ -33,13 +33,14 @@ public class DtoLanguageConverter implements DtoConverter<Language, Language> {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setName(source.getName());
-		prototype.setSort(source.getSort());
-		prototype.setActive(source.getActive());
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
+
+		prototype.setName(source.getName());
+		prototype.setSort(source.getSort());
+		prototype.setActive(source.getActive());
 
 		return prototype;
 	}

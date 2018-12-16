@@ -31,14 +31,6 @@ public class EntityUserConverter implements EntityConverter<User, User> {
 			if (exists != null) {
 				prototype = exists;
 			}
-		} else if (StringUtils.isNotEmpty(source.getId())) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(User.ID, source.getId());
-			User exists = modelService.findOneEntityByProperties(properties, User.class);
-
-			if (exists != null) {
-				prototype = exists;
-			}
 		}
 
 		return convert(source, prototype);

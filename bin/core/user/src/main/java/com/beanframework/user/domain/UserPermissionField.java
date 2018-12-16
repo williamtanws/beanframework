@@ -12,22 +12,23 @@ import org.hibernate.envers.NotAudited;
 import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.language.domain.Language;
-import com.beanframework.user.UserConstants;
+import com.beanframework.user.UserPermissionConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Audited
-@Table(name = UserConstants.Table.USER_FIELD)
-public class UserField extends GenericDomain {
+@Table(name = UserPermissionConstants.Table.USER_PERMISSION_FIELD)
+public class UserPermissionField extends GenericDomain {
 
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7666190244677961254L;
-	public static final String DOMAIN = "UserDynamicField";
-	public static final String Language = "language";
-	public static final String USER = "user";
-	public static final String DynamicField = "dynamicField";
+	private static final long serialVersionUID = -4279536635924738476L;
+	public static final String DOMAIN = "UserPermissionField";
+	public static final String LANGUAGE = "language";
+	public static final String USER_RIGHT = "userPermission";
+	public static final String DYNAMIC_FIELD = "dynamicField";
 
 	@NotAudited
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -37,8 +38,8 @@ public class UserField extends GenericDomain {
 	@NotAudited
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_uuid")
-	private User user;
+	@JoinColumn(name = "userPermission_uuid")
+	private UserPermission userPermission;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")
@@ -55,12 +56,12 @@ public class UserField extends GenericDomain {
 		this.language = language;
 	}
 
-	public User getUser() {
-		return user;
+	public UserPermission getUserPermission() {
+		return userPermission;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserPermission(UserPermission userPermission) {
+		this.userPermission = userPermission;
 	}
 
 	public DynamicField getDynamicField() {

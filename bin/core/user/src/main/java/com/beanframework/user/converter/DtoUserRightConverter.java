@@ -1,18 +1,13 @@
 package com.beanframework.user.converter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightLang;
 
 
 public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight> {
@@ -21,7 +16,7 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 	private ModelService modelService;
 	
 	@Autowired
-	private DtoUserRightLangConverter dtoUserRightLangConverter;
+	private DtoUserRightFieldConverter dtoUserRightFieldConverter;
 
 	@Override
 	public UserRight convert(UserRight source) {
@@ -40,36 +35,35 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setSort(source.getSort());
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
-
-		// Process User Right Lang
-		prototype.setUserRightLangs(dtoUserRightLangConverter.convert(source.getUserRightLangs()));
 		
-		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(Language.SORT, Sort.Direction.ASC);
+		prototype.setSort(source.getSort());
+		prototype.setUserRightFields(dtoUserRightFieldConverter.convert(source.getUserRightFields()));
 		
-		List<Language> languages = modelService.findBySorts(sorts, Language.class);
-		
-		for (Language language : languages) {
-			boolean addNewLanguage = true;
-			for (UserRightLang userRightLang : source.getUserRightLangs()) {
-				if (userRightLang.getLanguage().getUuid().equals(language.getUuid())) {
-					addNewLanguage = false;
-				}
-			}
-
-			if (addNewLanguage) {
-				UserRightLang userRightLang = new UserRightLang();
-				userRightLang.setLanguage(language);
-				userRightLang.setUserRight(prototype);
-
-				prototype.getUserRightLangs().add(userRightLang);
-			}
-		}
+//		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+//		sorts.put(Language.SORT, Sort.Direction.ASC);
+//		
+//		List<Language> languages = modelService.findBySorts(sorts, Language.class);
+//		
+//		for (Language language : languages) {
+//			boolean addNewLanguage = true;
+//			for (UserRightField userRightField : source.getUserRightFields()) {
+//				if (userRightField.getLanguage().getUuid().equals(language.getUuid())) {
+//					addNewLanguage = false;
+//				}
+//			}
+//
+//			if (addNewLanguage) {
+//				UserRightField userRightField = new UserRightField();
+//				userRightField.setLanguage(language);
+//				userRightField.setUserRight(prototype);
+//
+//				prototype.getUserRightFields().add(userRightField);
+//			}
+//		}
 		
 		return prototype;
 	}

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
@@ -27,14 +26,6 @@ public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob>
 
 			Cronjob exists = modelService.findOneEntityByProperties(properties, Cronjob.class);
 
-			if (exists != null) {
-				prototype = exists;
-			}
-		} else if (StringUtils.isNotEmpty(source.getId())) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.ID, source.getId());
-
-			Cronjob exists = modelService.findOneEntityByProperties(properties, Cronjob.class);
 			if (exists != null) {
 				prototype = exists;
 			}

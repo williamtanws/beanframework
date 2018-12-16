@@ -83,10 +83,10 @@ public class InitializeController {
 				if (parseBoolean(keyValue)) {
 					try {
 						entry.getValue().initialize();
-						successMessages.append(entry.getValue().getName() + " is initialized successfully. \n");
+						successMessages.append(entry.getValue().getName() + " is initialized successfully. <br>");
 					} catch (Exception e) {
 						logger.error(e.getMessage(), e);
-						errorMessages.append(entry.getValue().getName() + " is initialized failed. Reason: " + e.getMessage() + " \n");
+						errorMessages.append(entry.getValue().getName() + " is initialized failed. Reason: " + e.getMessage() + " <br>");
 					}
 				}
 			}

@@ -20,18 +20,15 @@ public class EntityLanguageConverter implements EntityConverter<Language, Langua
 	@Override
 	public Language convert(Language source) {
 
-		Language prototype = null;
+		Language prototype = modelService.create(Language.class);
 		if (source.getUuid() != null) {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Language.UUID, source.getUuid());
-			prototype = modelService.findOneEntityByProperties(properties, Language.class);
+			Language exists = modelService.findOneEntityByProperties(properties, Language.class);
 			
-			if (prototype == null) {
-				prototype = modelService.create(Language.class);
+			if (exists != null) {
+				prototype = exists;
 			}
-		}
-		else {
-			prototype = modelService.create(Language.class);
 		}
 
 		return convert(source, prototype);
@@ -39,11 +36,11 @@ public class EntityLanguageConverter implements EntityConverter<Language, Langua
 
 	private Language convert(Language source, Language prototype) {
 
+		prototype.setLastModifiedDate(new Date());
 		prototype.setId(source.getId());
 		prototype.setName(source.getName());
 		prototype.setSort(source.getSort());
 		prototype.setActive(source.getActive());
-		prototype.setLastModifiedDate(new Date());
 
 		return prototype;
 	}

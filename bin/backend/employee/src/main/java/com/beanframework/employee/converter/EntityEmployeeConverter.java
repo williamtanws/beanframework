@@ -31,14 +31,6 @@ public class EntityEmployeeConverter implements EntityConverter<Employee, Employ
 			if (exists != null) {
 				prototype = exists;
 			}
-		} else if (StringUtils.isNotEmpty(source.getId())) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Employee.ID, source.getId());
-			Employee exists = modelService.findOneEntityByProperties(properties, Employee.class);
-
-			if (exists != null) {
-				prototype = exists;
-			}
 		}
 
 		return convert(source, prototype);

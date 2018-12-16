@@ -2,7 +2,7 @@ package com.beanframework.console.domain;
 
 import java.util.Date;
 
-public class CronjobCsv extends AbstractCsvDomain {
+public class CronjobCsv extends AbstractCsv {
 
 	private String jobClass;
 	private String jobGroup;

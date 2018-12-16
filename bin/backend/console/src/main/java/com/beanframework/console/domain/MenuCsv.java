@@ -1,6 +1,6 @@
 package com.beanframework.console.domain;
 
-public class MenuCsv extends AbstractCsvDomain {
+public class MenuCsv extends AbstractCsv {
 
 	private int sort;
 

@@ -22,18 +22,15 @@ public class EntityCustomerConverter implements EntityConverter<Customer, Custom
 	@Override
 	public Customer convert(Customer source) {
 
-		Customer prototype = null;
+		Customer prototype = modelService.create(Customer.class);
 		if (source.getUuid() != null) {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Customer.UUID, source.getUuid());
-			prototype = modelService.findOneEntityByProperties(properties, Customer.class);
+			Customer exists = modelService.findOneEntityByProperties(properties, Customer.class);
 			
-			if (prototype == null) {
-				prototype = modelService.create(Customer.class);
+			if (exists != null) {
+				prototype = exists;
 			}
-		}
-		else {
-			prototype = modelService.create(Customer.class);
 		}
 
 		return convert(source, prototype);

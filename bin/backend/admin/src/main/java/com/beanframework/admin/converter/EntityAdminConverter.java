@@ -20,18 +20,15 @@ public class EntityAdminConverter implements EntityConverter<Admin, Admin> {
 	@Override
 	public Admin convert(Admin source) {
 
-		Admin prototype = null;
+		Admin prototype = modelService.create(Admin.class);
 		if (source.getUuid() != null) {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Admin.UUID, source.getUuid());
-			prototype = modelService.findOneEntityByProperties(properties, Admin.class);
+			Admin exists = modelService.findOneEntityByProperties(properties, Admin.class);
 			
-			if (prototype == null) {
-				prototype = modelService.create(Admin.class);
+			if (exists != null) {
+				prototype = exists;
 			}
-		}
-		else {
-			prototype = modelService.create(Admin.class);
 		}
 
 		return convert(source, prototype);

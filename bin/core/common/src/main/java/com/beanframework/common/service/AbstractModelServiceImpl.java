@@ -49,7 +49,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 	@Autowired
 	private List<ConverterMapping> converterMappings;
-	
+
 	public void initialDefaultsInterceptor(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
@@ -74,7 +74,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 	}
-	
+
 	public void loadInterceptor(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
@@ -98,7 +98,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 	}
-	
+
 	public void prepareInterceptor(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
@@ -123,7 +123,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 	}
-	
+
 	public void removeInterceptor(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
@@ -147,7 +147,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 	}
-	
+
 	public void validateInterceptor(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
@@ -172,7 +172,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 	}
-	
+
 	public void entityConverter(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
@@ -198,7 +198,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 		return model;
 	}
-	
+
 	public void dtoConverter(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
@@ -317,5 +317,20 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 
 		return total;
+	}
+
+	protected Object parseObject(Object value) {
+		if (value instanceof Boolean) {
+
+			boolean di = ((Boolean) value).booleanValue();
+
+			if (di) {
+				return "1";
+			} else {
+				return "0";
+			}
+		} else {
+			return value;
+		}
 	}
 }

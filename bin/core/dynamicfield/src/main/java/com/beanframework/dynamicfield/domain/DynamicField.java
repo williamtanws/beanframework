@@ -25,10 +25,16 @@ public class DynamicField extends GenericDomain {
 	private static final long serialVersionUID = 4733112810509713059L;
 	public static final String DOMAIN = "DynamicField";
 	public static final String TYPE = "type";
+	public static final String SORT = "sort";
+	public static final String REQUIRED = "required";
+	public static final String RULE = "rule";
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private DynamicFieldType type;
+	private int sort;
+	private boolean required;
+	private String rule;
 
 	public DynamicFieldType getType() {
 		return type;
@@ -36,6 +42,30 @@ public class DynamicField extends GenericDomain {
 
 	public void setType(DynamicFieldType type) {
 		this.type = type;
+	}
+
+	public int getSort() {
+		return sort;
+	}
+
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
+
+	public boolean isRequired() {
+		return required;
+	}
+
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
+	public String getRule() {
+		return rule;
+	}
+
+	public void setRule(String rule) {
+		this.rule = rule;
 	}
 
 }

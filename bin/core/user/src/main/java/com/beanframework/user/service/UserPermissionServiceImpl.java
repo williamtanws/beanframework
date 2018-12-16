@@ -22,11 +22,11 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	public void deleteLanguageByLanguageUuid(UUID uuid) {
 		List<UserPermission> userPermissions = modelService.findAll();
 		for (UserPermission userPermission : userPermissions) {
-			Hibernate.initialize(userPermission.getUserPermissionLangs());
-			for (int i = 0; i < userPermission.getUserPermissionLangs().size(); i++) {
-				Hibernate.initialize(userPermission.getUserPermissionLangs().get(i).getLanguage());
-				if(userPermission.getUserPermissionLangs().get(i).getLanguage().getUuid().equals(uuid)) {
-					userPermission.getUserPermissionLangs().remove(i);
+			Hibernate.initialize(userPermission.getUserPermissionFields());
+			for (int i = 0; i < userPermission.getUserPermissionFields().size(); i++) {
+				Hibernate.initialize(userPermission.getUserPermissionFields().get(i).getLanguage());
+				if(userPermission.getUserPermissionFields().get(i).getLanguage().getUuid().equals(uuid)) {
+					userPermission.getUserPermissionFields().remove(i);
 					break;
 				}
 			}
