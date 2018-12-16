@@ -1,6 +1,6 @@
 package com.beanframework.console.domain;
 
-public class AbstractCsvDomain {
+public class AbstractCsv {
 	private String id;
 	
 	public String getId() {

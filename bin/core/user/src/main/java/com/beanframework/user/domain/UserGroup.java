@@ -16,25 +16,26 @@ import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
-import com.beanframework.user.UserConstants;
+import com.beanframework.user.UserGroupConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
-@Table(name = UserConstants.Table.USER_GROUP)
+@Table(name = UserGroupConstants.Table.USER_GROUP)
 public class UserGroup extends GenericDomain {
 
 	private static final long serialVersionUID = 8938920413700273352L;
 	public static final String DOMAIN = "UserGroup";
-	public static final String USER_GROUP_PERMISSION_RIGHTS = "userAuthorities";
+	public static final String USER_AUTHORITIES = "userAuthorities";
+	public static final String USER_GROUP_FIELDS = "userGroupFields";
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserAuthority.USER_GROUP, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserGroupLang.USER_GROUP, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<UserGroupLang> userGroupLangs = new ArrayList<UserGroupLang>();
+	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<UserGroupField> userGroupFields = new ArrayList<UserGroupField>();
 
 	@Transient
 	private String selected;
@@ -47,12 +48,12 @@ public class UserGroup extends GenericDomain {
 		this.userAuthorities = userAuthorities;
 	}
 
-	public List<UserGroupLang> getUserGroupLangs() {
-		return userGroupLangs;
+	public List<UserGroupField> getUserGroupFields() {
+		return userGroupFields;
 	}
 
-	public void setUserGroupLangs(List<UserGroupLang> userGroupLangs) {
-		this.userGroupLangs = userGroupLangs;
+	public void setUserGroupFields(List<UserGroupField> userGroupFields) {
+		this.userGroupFields = userGroupFields;
 	}
 
 	public String getSelected() {

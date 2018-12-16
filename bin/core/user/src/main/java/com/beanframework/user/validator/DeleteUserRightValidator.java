@@ -11,7 +11,7 @@ import org.springframework.validation.Validator;
 
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.user.UserConstants;
+import com.beanframework.user.UserRightConstants;
 import com.beanframework.user.domain.UserRight;
 
 @Component
@@ -39,7 +39,7 @@ public class DeleteUserRightValidator implements Validator {
 		UserRight userRight = modelService.findOneEntityByProperties(properties, UserRight.class);
 
 		if(userRight == null) {
-			errors.reject(UserRight.ID, localMessageService.getMessage(UserConstants.Locale.User.UUID_NOT_EXISTS));
+			errors.reject(UserRight.ID, localMessageService.getMessage(UserRightConstants.Locale.UUID_NOT_EXISTS));
 		}
 	}
 

@@ -55,11 +55,14 @@
 			</div>
 		</section>
 		<script type="text/javascript">
-			$("#checkAll").click(
-					function() {
-						$('#createForm input:checkbox').not(this).prop(
-								'checked', this.checked);
-					});
+		$(document).ready(function () {
+			$('#checkAll').on('ifChecked', function(event){
+				$('#createForm input:checkbox').iCheck('check');
+			});
+			$('#checkAll').on('ifUnchecked', function(event){
+				$('#createForm input:checkbox').iCheck('uncheck');
+			});
+		});
 		</script>
 	</th:block>
 </body>

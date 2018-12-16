@@ -7,28 +7,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.language.converter.DtoLanguageConverter;
-import com.beanframework.user.domain.UserGroupLang;
+import com.beanframework.user.domain.UserGroupField;
 
 
-public class DtoUserGroupLangConverter  implements DtoConverter<UserGroupLang, UserGroupLang>{
+public class DtoUserGroupLangConverter  implements DtoConverter<UserGroupField, UserGroupField>{
 	
 	@Autowired
 	private DtoLanguageConverter dtoLanguageConverter;
 
 	@Override
-	public UserGroupLang convert(UserGroupLang source) {
-		return convert(source, new UserGroupLang());
+	public UserGroupField convert(UserGroupField source) {
+		return convert(source, new UserGroupField());
 	}
 	
-	public List<UserGroupLang> convert(List<UserGroupLang> sources) {
-		List<UserGroupLang> convertedList = new ArrayList<UserGroupLang>();
-		for (UserGroupLang source : sources) {
+	public List<UserGroupField> convert(List<UserGroupField> sources) {
+		List<UserGroupField> convertedList = new ArrayList<UserGroupField>();
+		for (UserGroupField source : sources) {
 			convertedList.add(convert(source));
 		}
 		return convertedList;
 	}
 	
-	public UserGroupLang convert(UserGroupLang source, UserGroupLang prototype) {
+	public UserGroupField convert(UserGroupField source, UserGroupField prototype) {
 		prototype.setLanguage(dtoLanguageConverter.convert(source.getLanguage()));
 		
 		return prototype;

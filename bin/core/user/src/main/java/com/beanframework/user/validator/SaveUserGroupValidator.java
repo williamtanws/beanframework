@@ -11,7 +11,7 @@ import org.springframework.validation.Validator;
 
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.user.UserConstants;
+import com.beanframework.user.UserGroupConstants;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserRight;
 
@@ -37,7 +37,7 @@ public class SaveUserGroupValidator implements Validator {
 			// Save new
 			if (StringUtils.isEmpty(group.getId())) {
 				errors.reject(UserGroup.ID,
-						localMessageService.getMessage(UserConstants.Locale.UserGroup.ID_REQUIRED));
+						localMessageService.getMessage(UserGroupConstants.Locale.ID_REQUIRED));
 			} else {
 				
 				Map<String, Object> properties = new HashMap<String, Object>();
@@ -46,7 +46,7 @@ public class SaveUserGroupValidator implements Validator {
 				boolean existsGroup = modelService.existsByProperties(properties, UserGroup.class);
 				if (existsGroup) {
 					errors.reject(UserGroup.ID,
-							localMessageService.getMessage(UserConstants.Locale.UserGroup.ID_EXISTS));
+							localMessageService.getMessage(UserGroupConstants.Locale.ID_EXISTS));
 				}
 			}
 
@@ -62,7 +62,7 @@ public class SaveUserGroupValidator implements Validator {
 				if (existsGroup != null) {
 					if (!group.getUuid().equals(existsGroup.getUuid())) {
 						errors.reject(UserGroup.ID,
-								localMessageService.getMessage(UserConstants.Locale.UserGroup.ID_EXISTS));
+								localMessageService.getMessage(UserGroupConstants.Locale.ID_EXISTS));
 					}
 				}
 			}

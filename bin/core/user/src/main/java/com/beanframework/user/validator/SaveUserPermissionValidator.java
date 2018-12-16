@@ -11,7 +11,7 @@ import org.springframework.validation.Validator;
 
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.user.UserConstants;
+import com.beanframework.user.UserPermissionConstants;
 import com.beanframework.user.domain.UserPermission;
 
 @Component
@@ -36,7 +36,7 @@ public class SaveUserPermissionValidator implements Validator {
 			// Save new
 			if (StringUtils.isEmpty(userPermission.getId())) {
 				errors.reject(UserPermission.ID,
-						localMessageService.getMessage(UserConstants.Locale.UserPermission.ID_REQUIRED));
+						localMessageService.getMessage(UserPermissionConstants.Locale.ID_REQUIRED));
 			} else {
 				
 				Map<String, Object> properties = new HashMap<String, Object>();
@@ -46,7 +46,7 @@ public class SaveUserPermissionValidator implements Validator {
 				
 				if (existsPermission) {
 					errors.reject(UserPermission.ID,
-							localMessageService.getMessage(UserConstants.Locale.UserPermission.ID_EXISTS));
+							localMessageService.getMessage(UserPermissionConstants.Locale.ID_EXISTS));
 				}
 			}
 
@@ -62,7 +62,7 @@ public class SaveUserPermissionValidator implements Validator {
 				if (existsPermission != null) {
 					if (!userPermission.getUuid().equals(existsPermission.getUuid())) {
 						errors.reject(UserPermission.ID,
-								localMessageService.getMessage(UserConstants.Locale.UserPermission.ID_EXISTS));
+								localMessageService.getMessage(UserPermissionConstants.Locale.ID_EXISTS));
 					}
 				}
 			}

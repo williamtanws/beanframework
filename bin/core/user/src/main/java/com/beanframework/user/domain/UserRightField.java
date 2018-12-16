@@ -5,40 +5,47 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.language.domain.Language;
-import com.beanframework.user.UserConstants;
+import com.beanframework.user.UserRightConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Audited
-@Table(name = UserConstants.Table.USER_RIGHT_LANG)
-public class UserRightLang extends GenericDomain {
+@Table(name = UserRightConstants.Table.USER_RIGHT_FIELD)
+public class UserRightField extends GenericDomain {
 
-	private static final long serialVersionUID = 3253296818921675586L;
-	public static final String DOMAIN = "UserRightLang";
-	public static final String NAME = "name";
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7666190244677961254L;
+	public static final String DOMAIN = "UserRightField";
 	public static final String LANGUAGE = "language";
 	public static final String USER_RIGHT = "userRight";
+	public static final String DYNAMIC_FIELD = "dynamicField";
 
 	@NotAudited
-	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "language_uuid")
 	private Language language;
 
-	@NotNull
+	@NotAudited
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userRight_uuid")
 	private UserRight userRight;
 
-	private String name;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "dynamicfield_uuid")
+	private DynamicField dynamicField;
+
+	private String label;
+	private String value;
 
 	public Language getLanguage() {
 		return language;
@@ -56,12 +63,28 @@ public class UserRightLang extends GenericDomain {
 		this.userRight = userRight;
 	}
 
-	public String getName() {
-		return name;
+	public DynamicField getDynamicField() {
+		return dynamicField;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDynamicField(DynamicField dynamicField) {
+		this.dynamicField = dynamicField;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 }

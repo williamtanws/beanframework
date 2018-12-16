@@ -3,7 +3,6 @@ package com.beanframework.user.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
@@ -38,12 +37,11 @@ public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, Us
 	private UserAuthority convert(UserAuthority source, UserAuthority prototype) {
 
 		prototype.setUuid(source.getUuid());
+		
 		prototype.setEnabled(source.getEnabled());
-		
-		Hibernate.initialize(source.getUserPermission());
+//		Hibernate.initialize(source.getUserPermission());
 		prototype.setUserPermission(dtoUserPermissionConverter.convert(source.getUserPermission()));
-		
-		Hibernate.initialize(source.getUserRight());
+//		Hibernate.initialize(source.getUserRight());
 		prototype.setUserRight(dtoUserRightConverter.convert(source.getUserRight()));
 
 		return prototype;

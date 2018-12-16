@@ -34,9 +34,11 @@ import com.beanframework.common.exception.ModelSavingException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserPermissionCsv;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldType;
 import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserPermissionLang;
+import com.beanframework.user.domain.UserPermissionField;
 
 public class UserPermissionUpdate extends Updater {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -45,7 +47,7 @@ public class UserPermissionUpdate extends Updater {
 	private ModelService modelService;
 
 	@Value("${module.console.import.update.userpermission}")
-	private String USERRIGHT_IMPORT_UPDATE;
+	private String USERPERMISSION_IMPORT_UPDATE;
 
 	@PostConstruct
 	public void updater() {
@@ -60,7 +62,7 @@ public class UserPermissionUpdate extends Updater {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = null;
 		try {
-			resources = loader.getResources(USERRIGHT_IMPORT_UPDATE);
+			resources = loader.getResources(USERPERMISSION_IMPORT_UPDATE);
 			for (Resource resource : resources) {
 				try {
 					InputStream in = resource.getInputStream();
@@ -81,64 +83,112 @@ public class UserPermissionUpdate extends Updater {
 	}
 
 	public void save(List<UserPermissionCsv> userPermissionCsvList) {
-		
+
+		// Dynamic Field
+
+		Map<String, Object> enNameDynamicFieldProperties = new HashMap<String, Object>();
+		enNameDynamicFieldProperties.put(DynamicField.ID, "userpermission_name_en");
+		DynamicField enNameDynamicField = modelService.findOneEntityByProperties(enNameDynamicFieldProperties,
+				DynamicField.class);
+
+		if (enNameDynamicField == null) {
+			enNameDynamicField = modelService.create(DynamicField.class);
+			enNameDynamicField.setId("userpermission_name_en");
+		}
+		enNameDynamicField.setRequired(true);
+		enNameDynamicField.setRule(null);
+		enNameDynamicField.setSort(0);
+		enNameDynamicField.setType(DynamicFieldType.TEXT);
+		modelService.save(enNameDynamicField);
+
+		Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
+		cnNameDynamicFieldProperties.put(DynamicField.ID, "userpermission_name_cn");
+		DynamicField cnNameDynamicField = modelService.findOneEntityByProperties(cnNameDynamicFieldProperties,
+				DynamicField.class);
+
+		if (cnNameDynamicField == null) {
+			cnNameDynamicField = modelService.create(DynamicField.class);
+			cnNameDynamicField.setId("userpermission_name_cn");
+		}
+		cnNameDynamicField.setRequired(true);
+		cnNameDynamicField.setRule(null);
+		cnNameDynamicField.setSort(1);
+		cnNameDynamicField.setType(DynamicFieldType.TEXT);
+		modelService.save(cnNameDynamicField);
+
+		// Language
+
+		Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
+		enlanguageProperties.put(Language.ID, "en");
+		Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
+
+		Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
+		cnlanguageProperties.put(Language.ID, "cn");
+		Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
+
 		for (UserPermissionCsv csv : userPermissionCsvList) {
-			
+
+			// UserPermission
+
 			Map<String, Object> userPermissionProperties = new HashMap<String, Object>();
 			userPermissionProperties.put(UserPermission.ID, csv.getId());
-			
+
 			UserPermission userPermission = modelService.findOneEntityByProperties(userPermissionProperties, UserPermission.class);
-			
-			if(userPermission == null) {
+
+			if (userPermission == null) {
 				userPermission = modelService.create(UserPermission.class);
 				userPermission.setId(csv.getId());
 			}
 			userPermission.setSort(csv.getSort());
-			
-			Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
-			enlanguageProperties.put(Language.ID, "en");
-			
-			Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
-			
-			if(enLanguage != null) {
+
+			// UserPermission Field
+
+			if (enLanguage != null) {
 				boolean create = true;
-				for (int i = 0; i < userPermission.getUserPermissionLangs().size(); i++) {
-					if (userPermission.getUserPermissionLangs().get(i).getLanguage().getId().equals("en")) {
-						userPermission.getUserPermissionLangs().get(i).setName(csv.getName_en());
+				for (int i = 0; i < userPermission.getUserPermissionFields().size(); i++) {
+					if (userPermission.getUserPermissionFields().get(i).getId().equals(csv.getId() + "_name_en")
+							&& userPermission.getUserPermissionFields().get(i).getLanguage().getId().equals("en")) {
+						userPermission.getUserPermissionFields().get(i).setLabel("Name");
+						userPermission.getUserPermissionFields().get(i).setValue(csv.getName_en());
 						create = false;
 					}
 				}
-				
-				if(create) {
-					UserPermissionLang userPermissionLang = modelService.create(UserPermissionLang.class);
-					userPermissionLang.setLanguage(enLanguage);
-					userPermissionLang.setName(csv.getName_en());
-					userPermission.getUserPermissionLangs().add(userPermissionLang);
+
+				if (create) {
+					UserPermissionField userPermissionField = modelService.create(UserPermissionField.class);
+					userPermissionField.setId(csv.getId() + "_name_en");
+					userPermissionField.setDynamicField(enNameDynamicField);
+					userPermissionField.setLanguage(enLanguage);
+					userPermissionField.setLabel("Name");
+					userPermissionField.setValue(csv.getName_en());
+					userPermissionField.setUserPermission(userPermission);
+					userPermission.getUserPermissionFields().add(userPermissionField);
 				}
 			}
-			
-			Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
-			cnlanguageProperties.put(Language.ID, "cn");
-			
-			Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
-			
-			if(cnLanguage != null) {
+
+			if (cnLanguage != null) {
 				boolean create = true;
-				for (int i = 0; i < userPermission.getUserPermissionLangs().size(); i++) {
-					if (userPermission.getUserPermissionLangs().get(i).getLanguage().getId().equals("cn")) {
-						userPermission.getUserPermissionLangs().get(i).setName(csv.getName_cn());
+				for (int i = 0; i < userPermission.getUserPermissionFields().size(); i++) {
+					if (userPermission.getUserPermissionFields().get(i).getId().equals(csv.getId() + "_name_cn")
+							&& userPermission.getUserPermissionFields().get(i).getLanguage().getId().equals("cn")) {
+						userPermission.getUserPermissionFields().get(i).setLabel("名称");
+						userPermission.getUserPermissionFields().get(i).setValue(csv.getName_cn());
 						create = false;
 					}
 				}
-				
-				if(create) {
-					UserPermissionLang userPermissionLang = modelService.create(UserPermissionLang.class);
-					userPermissionLang.setLanguage(cnLanguage);
-					userPermissionLang.setName(csv.getName_cn());
-					userPermission.getUserPermissionLangs().add(userPermissionLang);
+
+				if (create) {
+					UserPermissionField userPermissionField = modelService.create(UserPermissionField.class);
+					userPermissionField.setId(csv.getId() + "_name_cn");
+					userPermissionField.setDynamicField(enNameDynamicField);
+					userPermissionField.setLanguage(cnLanguage);
+					userPermissionField.setLabel("名称");
+					userPermissionField.setValue(csv.getName_cn());
+					userPermissionField.setUserPermission(userPermission);
+					userPermission.getUserPermissionFields().add(userPermissionField);
 				}
 			}
-			
+
 			try {
 				modelService.save(userPermission);
 			} catch (ModelSavingException e) {
@@ -185,8 +235,7 @@ public class UserPermissionUpdate extends Updater {
 	}
 
 	public CellProcessor[] getProcessors() {
-		final CellProcessor[] processors = new CellProcessor[] { 
-				new UniqueHashCode(), // id
+		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
 				new ParseInt(), // sort
 				new NotNull(), // name_en
 				new NotNull() // name_cn

@@ -54,7 +54,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public <T> T create(Class modelClass) {
 		Assert.notNull(modelClass, "modelClass was null");
-		
+
 		Object model = null;
 		try {
 			model = modelClass.newInstance();
@@ -64,22 +64,22 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		initialDefaultsInterceptor(model);
 		return (T) model;
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
 	public <T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
-		
+
 		return findOneByProperties(properties, modelClass, false);
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
 	public <T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
-		
+
 		return findOneByProperties(properties, modelClass, true);
 	}
 
@@ -87,7 +87,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	private <T> T findOneByProperties(Map<String, Object> properties, Class modelClass, boolean dto) {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
-		
+
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
 			if (propertiesBuilder.length() == 0) {
@@ -107,18 +107,18 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Object model;
 		try {
 			model = query.getSingleResult();
-			
-			if(dto) {
+
+			if (dto) {
 				dtoConverter(model);
 			}
 			loadInterceptor(model);
-			
+
 			return (T) model;
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
 	public boolean existsByProperties(Map<String, Object> properties, Class modelClass) {
@@ -131,19 +131,18 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 		}
 
-		Query query = entityManager
-				.createQuery("select count(o) from " + modelClass.getName() + " o where " + propertiesBuilder.toString());
+		Query query = entityManager.createQuery(
+				"select count(o) from " + modelClass.getName() + " o where " + propertiesBuilder.toString());
 
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
 			query.setParameter(entry.getKey(), entry.getValue());
 		}
 
 		Collection models = query.getResultList();
-		
-		if(models.isEmpty()) {
+
+		if (models.isEmpty()) {
 			return false;
-		}
-		else {
+		} else {
 			return true;
 		}
 	}
@@ -153,9 +152,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public <T extends Collection> T findByProperties(Map<String, Object> properties, Class modelClass) {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
-		
+
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
+
 			if (propertiesBuilder.length() == 0) {
 				propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey());
 			} else {
@@ -171,51 +171,48 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 
 		Collection models = query.getResultList();
-		
+
 		dtoConverter(models);
 
 		loadInterceptor(models);
 
 		return (T) models;
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
 	public <T extends Collection> T findBySorts(Map<String, Sort.Direction> sorts, Class modelClass) {
 		Assert.notNull(sorts, "sorts was null");
 		Assert.notNull(modelClass, "modelClass was null");
-		
+
 		StringBuilder sortsBuilder = new StringBuilder();
 		for (Entry<String, Direction> entry : sorts.entrySet()) {
 			if (sortsBuilder.length() == 0) {
-				sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getKey());
+				sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getValue().toString());
 			} else {
-				sortsBuilder.append(", o." + entry.getKey() + " " + entry.getKey());
+				sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
 			}
 		}
 
 		Query query = entityManager
-				.createQuery("select o from " + modelClass.getName() + " o "+sortsBuilder.toString());
-		
-		for (Map.Entry<String, Sort.Direction> entry : sorts.entrySet()) {
-			query.setParameter(entry.getKey(), entry.getValue());
-		}
+				.createQuery("select o from " + modelClass.getName() + " o " + sortsBuilder.toString());
 
 		Collection models = query.getResultList();
-		
+
 		dtoConverter(models);
 		loadInterceptor(models);
 
 		return (T) models;
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Class modelClass) {
+	public <T extends Collection> T findByPropertiesAndSorts(Map<String, Object> properties,
+			Map<String, Sort.Direction> sorts, Class modelClass) {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(sorts, "sorts was null");
 		Assert.notNull(modelClass, "modelClass was null");
-		
+
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
 			if (propertiesBuilder.length() == 0) {
@@ -224,29 +221,25 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				propertiesBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey());
 			}
 		}
-		
+
 		StringBuilder sortsBuilder = new StringBuilder();
 		for (Entry<String, Direction> entry : sorts.entrySet()) {
 			if (sortsBuilder.length() == 0) {
-				sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getKey());
+				sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getValue().toString());
 			} else {
-				sortsBuilder.append(", o." + entry.getKey() + " " + entry.getKey());
+				sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
 			}
 		}
 
-		Query query = entityManager
-				.createQuery("select o from " + modelClass.getName() + " o where " + propertiesBuilder.toString() + " "+sortsBuilder.toString());
+		Query query = entityManager.createQuery("select o from " + modelClass.getName() + " o where "
+				+ propertiesBuilder.toString() + " " + sortsBuilder.toString());
 
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
 			query.setParameter(entry.getKey(), entry.getValue());
 		}
-		
-		for (Map.Entry<String, Sort.Direction> entry : sorts.entrySet()) {
-			query.setParameter(entry.getKey(), entry.getValue());
-		}
 
 		Collection models = query.getResultList();
-		
+
 		dtoConverter(models);
 		loadInterceptor(models);
 
@@ -257,7 +250,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public <T extends Collection> T findAll() {
 		Collection models = (T) modelRepository.findAll();
-		
+
 		dtoConverter(models);
 		loadInterceptor(models);
 
@@ -271,7 +264,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 		dtoConverter(page.getContent());
 		loadInterceptor(page.getContent());
-		
+
 		return page;
 	}
 
@@ -283,14 +276,14 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Transactional
 	@Override
 	public void save(Object model) throws ModelSavingException {
-		
+
 		validateInterceptor(model);
 		prepareInterceptor(model);
-		
-		entityConverter(model);
-		
+
+		model = entityConverter(model);
+
 		modelRepository.save(model);
-		
+
 		dtoConverter(model);
 	}
 
@@ -306,7 +299,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		modelRepository.delete(model);
 		removeInterceptor(model);
 	}
-	
+
 	@Transactional
 	@Override
 	public void remove(Collection<? extends Object> models) throws ModelRemovalException {
@@ -320,11 +313,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public void remove(UUID uuid, Class modelClass) throws ModelRemovalException {
 		Object model = entityManager.find(modelClass, uuid);
-		
-		if(model == null) {
+
+		if (model == null) {
 			throw new ModelRemovalException("UUID not exists.", new Exception());
 		}
-		
+
 		modelRepository.delete(model);
 		removeInterceptor(model);
 	}
@@ -338,10 +331,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public <T> T getEntity(Object model) {
-		entityConverter(model);
+		model = entityConverter(model);
 		return (T) model;
 	}
-	
+
 	@Override
 	public <T extends Collection> T getEntity(Collection<? extends Object> models) {
 		List<Object> entityObjects = new ArrayList<Object>();
@@ -356,7 +349,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		dtoConverter(model);
 		return (T) model;
 	}
-	
+
 	@Override
 	public <T extends Collection> T getDto(Collection<? extends Object> models) {
 		List<Object> dtoObjects = new ArrayList<Object>();

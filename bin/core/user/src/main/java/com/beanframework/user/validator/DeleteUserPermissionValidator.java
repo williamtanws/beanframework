@@ -11,7 +11,7 @@ import org.springframework.validation.Validator;
 
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.user.UserConstants;
+import com.beanframework.user.UserPermissionConstants;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 
@@ -40,7 +40,7 @@ public class DeleteUserPermissionValidator implements Validator {
 		UserPermission userPermission = modelService.findOneEntityByProperties(properties, UserPermission.class);
 
 		if(userPermission == null) {
-			errors.reject(UserPermission.ID, localMessageService.getMessage(UserConstants.Locale.User.UUID_NOT_EXISTS));
+			errors.reject(UserPermission.ID, localMessageService.getMessage(UserPermissionConstants.Locale.UUID_NOT_EXISTS));
 		}
 	}
 

@@ -23,14 +23,11 @@ public class EntityEmailConverter implements EntityConverter<Email, Email> {
 		if (source.getUuid() != null) {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Email.UUID, source.getUuid());
-			prototype = modelService.findOneEntityByProperties(properties, Email.class);
+			Email exists = modelService.findOneEntityByProperties(properties, Email.class);
 			
-			if (prototype == null) {
-				prototype = modelService.create(Email.class);
+			if (exists != null) {
+				prototype = exists;
 			}
-		}
-		else {
-			prototype = modelService.create(Email.class);
 		}
 
 		return convert(source, prototype);

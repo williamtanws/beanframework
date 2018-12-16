@@ -1,6 +1,6 @@
 package com.beanframework.console.domain;
 
-public class UserRightCsv extends AbstractCsvDomain {
+public class UserRightCsv extends AbstractCsv {
 
 	private int sort;
 	private String name_en;
