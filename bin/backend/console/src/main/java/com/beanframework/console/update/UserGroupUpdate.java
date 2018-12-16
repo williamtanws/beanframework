@@ -10,6 +10,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -20,8 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
+import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -30,21 +30,22 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserGroupCsv;
 import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupLang;
-import com.beanframework.user.service.UserGroupFacade;
 
 public class UserGroupUpdate extends Updater {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private UserGroupFacade userGroupFacade;
+	private ModelService modelService;
 
 	@Value("${module.console.import.update.usergroup}")
-	private String USERGROUP_IMPORT_UPDATE;
+	private String USERRIGHT_IMPORT_UPDATE;
 
 	@PostConstruct
 	public void updater() {
@@ -59,7 +60,7 @@ public class UserGroupUpdate extends Updater {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = null;
 		try {
-			resources = loader.getResources(USERGROUP_IMPORT_UPDATE);
+			resources = loader.getResources(USERRIGHT_IMPORT_UPDATE);
 			for (Resource resource : resources) {
 				try {
 					InputStream in = resource.getInputStream();
@@ -80,33 +81,67 @@ public class UserGroupUpdate extends Updater {
 	}
 
 	public void save(List<UserGroupCsv> userGroupCsvList) {
-
-		for (UserGroupCsv userGroupCsv : userGroupCsvList) {
-			UserGroup userGroup = userGroupFacade.create();
-			userGroup.setId(userGroupCsv.getId());
+		
+		for (UserGroupCsv csv : userGroupCsvList) {
 			
-			Language language = new Language();
-			language.setId("en");
-			UserGroupLang userGroupLang = new UserGroupLang();
-			userGroupLang.setLanguage(language);
-//			userGroupLang.setName(userGroupCsv.getName_en());
-			userGroup.getUserGroupLangs().add(userGroupLang);
+			Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+			userGroupProperties.put(UserGroup.ID, csv.getId());
 			
-			language = new Language();
-			language.setId("cn");
-			userGroupLang = new UserGroupLang();
-			userGroupLang.setLanguage(language);
-//			userGroupLang.setName(userGroupCsv.getName_cn());
-			userGroup.getUserGroupLangs().add(userGroupLang);
+			UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 			
-			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),
-					UserGroup.class.getName());
-			userGroupFacade.save(userGroup, bindingResult);
-
-			if (bindingResult.hasErrors()) {
-				for (ObjectError objectError : bindingResult.getAllErrors()) {
-					logger.error(objectError.toString());
+			if(userGroup == null) {
+				userGroup = modelService.create(UserGroup.class);
+				userGroup.setId(csv.getId());
+			}
+			
+			Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
+			enlanguageProperties.put(Language.ID, "en");
+			
+			Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
+			
+			if(enLanguage != null) {
+				boolean create = true;
+				for (int i = 0; i < userGroup.getUserGroupLangs().size(); i++) {
+					if (userGroup.getUserGroupLangs().get(i).getLanguage().getId().equals("en")) {
+						userGroup.getUserGroupLangs().get(i).setName(csv.getName_en());
+						create = false;
+					}
 				}
+				
+				if(create) {
+					UserGroupLang userGroupLang = modelService.create(UserGroupLang.class);
+					userGroupLang.setLanguage(enLanguage);
+					userGroupLang.setName(csv.getName_en());
+					userGroup.getUserGroupLangs().add(userGroupLang);
+				}
+			}
+			
+			Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
+			cnlanguageProperties.put(Language.ID, "cn");
+			
+			Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
+			
+			if(cnLanguage != null) {
+				boolean create = true;
+				for (int i = 0; i < userGroup.getUserGroupLangs().size(); i++) {
+					if (userGroup.getUserGroupLangs().get(i).getLanguage().getId().equals("cn")) {
+						userGroup.getUserGroupLangs().get(i).setName(csv.getName_cn());
+						create = false;
+					}
+				}
+				
+				if(create) {
+					UserGroupLang userGroupLang = modelService.create(UserGroupLang.class);
+					userGroupLang.setLanguage(cnLanguage);
+					userGroupLang.setName(csv.getName_cn());
+					userGroup.getUserGroupLangs().add(userGroupLang);
+				}
+			}
+			
+			try {
+				modelService.save(userGroup);
+			} catch (ModelSavingException e) {
+				logger.error(e.getMessage());
 			}
 		}
 	}
@@ -114,7 +149,7 @@ public class UserGroupUpdate extends Updater {
 	public List<UserGroupCsv> readCSVFile(Reader reader) {
 		ICsvBeanReader beanReader = null;
 
-		List<UserGroupCsv> userGroupCsvList = new ArrayList<UserGroupCsv>();
+		List<UserGroupCsv> permissionCsvList = new ArrayList<UserGroupCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -124,12 +159,12 @@ public class UserGroupUpdate extends Updater {
 			final String[] header = beanReader.getHeader(true);
 			final CellProcessor[] processors = getProcessors();
 
-			UserGroupCsv userGroupCsv;
+			UserGroupCsv permissionCsv;
 			logger.info("Start import UserGroup Csv.");
-			while ((userGroupCsv = beanReader.read(UserGroupCsv.class, header, processors)) != null) {
+			while ((permissionCsv = beanReader.read(UserGroupCsv.class, header, processors)) != null) {
 				logger.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
-						userGroupCsv);
-				userGroupCsvList.add(userGroupCsv);
+						permissionCsv);
+				permissionCsvList.add(permissionCsv);
 			}
 			logger.info("Finished import UserGroup Csv.");
 		} catch (FileNotFoundException ex) {
@@ -145,12 +180,13 @@ public class UserGroupUpdate extends Updater {
 				}
 			}
 		}
-		return userGroupCsvList;
+		return permissionCsvList;
 	}
 
 	public CellProcessor[] getProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { 
-				new UniqueHashCode(), // ID
+				new UniqueHashCode(), // id
+				new ParseInt(), // sort
 				new NotNull(), // name_en
 				new NotNull() // name_cn
 		};

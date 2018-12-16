@@ -1,38 +1,28 @@
 package com.beanframework.user.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Sort;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupLang;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserGroupService;
-import com.beanframework.user.service.UserPermissionService;
-import com.beanframework.user.service.UserRightService;
 
-@Component
+
 public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup> {
-
-	@Autowired
-	private UserGroupService userGroupService;
 	
 	@Autowired
-	private UserPermissionService userPermissionService;
-	
-	@Autowired
-	private UserRightService userRightService;
-	
-	@Autowired
-	private LanguageService languageService;
+	private ModelService modelService;
 	
 	@Autowired
 	private DtoUserAuthorityConverter dtoUserAuthorityConverter;
@@ -42,7 +32,7 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 
 	@Override
 	public UserGroup convert(UserGroup source) {
-		return convert(source, userGroupService.create());
+		return convert(source, modelService.create(UserGroup.class));
 	}
 
 	public List<UserGroup> convert(List<UserGroup> sources) {
@@ -64,7 +54,12 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 
 		// Process User Group Lang
 		prototype.setUserGroupLangs(dtoUserGroupLangConverter.convert(source.getUserGroupLangs()));
-		List<Language> languages = languageService.findByOrderBySortAsc();
+		
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Language.SORT, Sort.Direction.ASC);
+		
+		List<Language> languages = modelService.findBySorts(sorts, Language.class);
+		
 		for (Language language : languages) {
 			boolean addNewLanguage = true;
 			for (UserGroupLang userGroupLang : source.getUserGroupLangs()) {
@@ -86,8 +81,13 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 		Hibernate.initialize(source.getUserAuthorities());
 		prototype.setUserAuthorities(dtoUserAuthorityConverter.convert(source.getUserAuthorities()));
 		if(prototype.getUserAuthorities().isEmpty()) {
-			List<UserPermission> userPermissions = userPermissionService.findEntityAllByOrderBySortAsc();
-			List<UserRight> userRights = userRightService.findEntityAllByOrderBySortAsc();
+			
+			Map<String, Sort.Direction> permissionSorts = new HashMap<String, Sort.Direction>();
+			permissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
+			
+			List<UserPermission> userPermissions = modelService.findBySorts(permissionSorts, UserPermission.class);
+			
+			List<UserRight> userRights = modelService.findBySorts(sorts, UserRight.class);
 			
 			for (UserPermission userPermission : userPermissions) {
 				for (UserRight userRight : userRights) {

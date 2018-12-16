@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -21,8 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.ParseInt;
@@ -34,19 +31,20 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.MenuCsv;
 import com.beanframework.language.domain.Language;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuLang;
-import com.beanframework.menu.service.MenuFacade;
 import com.beanframework.user.domain.UserGroup;
 
 public class MenuUpdate extends Updater {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private MenuFacade menuFacade;
+	private ModelService modelService;
 
 	@Value("${module.console.import.update.menu}")
 	private String MENU_IMPORT_UPDATE;
@@ -87,7 +85,7 @@ public class MenuUpdate extends Updater {
 	public void save(List<MenuCsv> menuCsvList) {
 
 		for (MenuCsv menuCsv : menuCsvList) {
-			Menu menu = menuFacade.create();
+			Menu menu = modelService.create(Menu.class);
 			menu.setId(menuCsv.getId());
 			menu.setSort(menuCsv.getSort());
 			menu.setIcon(menuCsv.getIcon());
@@ -123,13 +121,10 @@ public class MenuUpdate extends Updater {
 				menu.getUserGroups().add(userGroup);
 			}
 			
-			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(), Menu.class.getName());
-			menuFacade.save(menu, bindingResult);
-
-			if (bindingResult.hasErrors()) {
-				for (ObjectError objectError : bindingResult.getAllErrors()) {
-					logger.error(objectError.toString());
-				}
+			try {
+				modelService.save(menu);
+			} catch (ModelSavingException e) {
+				logger.error(e.getMessage());
 			}
 		}
 		

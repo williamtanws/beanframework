@@ -36,9 +36,19 @@ public class Cronjob extends GenericDomain {
 	 * 
 	 */
 	private static final long serialVersionUID = 8939913795649500178L;
+	public static final String JOB_CLASS = "jobClass";
 	public static final String JOB_NAME = "jobName";
 	public static final String JOB_GROUP = "jobGroup";
 	public static final String DESCRIPTION = "description";
+	public static final String CRON_EXPRESSION = "cronExpression";
+	public static final String STARTUP = "startup";
+	public static final String RESULT = "result";
+	public static final String MESSAGE = "message";
+	public static final String JOB_TRIGGER = "jobTrigger";
+	public static final String TRIGGER_START_DATE = "triggerStartDate";
+	public static final String LAST_TRIGGERED_DATE = "lastTriggeredDate";
+	public static final String LAST_START_EXECUTED_DATE = "lastStartExecutedDate";
+	public static final String LAST_FINISH_EXECUTED_DATE = "lastFinishExecutedDate";
 	public static final String CRONJOB_DATAS = "cronjobDatas";
 
 	private String jobClass;
@@ -54,7 +64,7 @@ public class Cronjob extends GenericDomain {
 	/** Task run time expression */
 	private String cronExpression;
 
-	private Boolean startup;
+	private boolean startup;
 
 	@Enumerated(EnumType.STRING)
 	private Status status;
@@ -122,11 +132,11 @@ public class Cronjob extends GenericDomain {
 		this.cronExpression = cronExpression;
 	}
 
-	public Boolean getStartup() {
+	public boolean isStartup() {
 		return startup;
 	}
 
-	public void setStartup(Boolean startup) {
+	public void setStartup(boolean startup) {
 		this.startup = startup;
 	}
 

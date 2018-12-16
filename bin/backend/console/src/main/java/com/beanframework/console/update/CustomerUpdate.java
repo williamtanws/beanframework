@@ -10,18 +10,18 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
@@ -31,17 +31,18 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.CustomerCsv;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerFacade;
 import com.beanframework.user.domain.UserGroup;
 
 public class CustomerUpdate extends Updater {
 	protected final Logger logger = LoggerFactory.getLogger(CustomerUpdate.class);
 
 	@Autowired
-	private CustomerFacade customerFacade;
+	private ModelService modelService;
 
 	@Value("${module.console.import.update.customer}")
 	private String IMPORT_UPDATE_EMPLOYEE_PATH;
@@ -81,32 +82,50 @@ public class CustomerUpdate extends Updater {
 
 	public void save(List<CustomerCsv> customerCsvList) {
 
-		for (CustomerCsv customerCsv : customerCsvList) {
-			Customer customer = customerFacade.create();
-			customer.setId(customerCsv.getId());
-//			customer.setName(customerCsv.getName());
-			customer.setPassword(customerCsv.getPassword());
-			customer.setAccountNonExpired(customerCsv.isAccountNonExpired());
-			customer.setAccountNonLocked(customerCsv.isAccountNonLocked());
-			customer.setCredentialsNonExpired(customerCsv.isCredentialsNonExpired());
-			customer.setEnabled(customerCsv.isEnabled());
+		for (CustomerCsv csv : customerCsvList) {
 
-			customer.getUserGroups().clear();
-			String[] userGroupIds = customerCsv.getUserGroupIds().split(SPLITTER);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Customer.ID, csv.getId());
+
+			Customer customer = modelService.findOneEntityByProperties(properties, Customer.class);
+
+			if (customer == null) {
+				customer = modelService.create(Customer.class);
+				customer.setId(csv.getId());
+			}
+			customer.setPassword(csv.getPassword());
+			customer.setAccountNonExpired(csv.isAccountNonExpired());
+			customer.setAccountNonLocked(csv.isAccountNonLocked());
+			customer.setCredentialsNonExpired(csv.isCredentialsNonExpired());
+			customer.setEnabled(csv.isEnabled());
+
+			Hibernate.initialize(customer.getUserGroups());
+
+			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
 			for (int i = 0; i < userGroupIds.length; i++) {
-				UserGroup userGroup = new UserGroup();
-				userGroup.setId(userGroupIds[i]);
-				customer.getUserGroups().add(userGroup);
+
+				boolean addUserGroup = true;
+				for (UserGroup userGroup : customer.getUserGroups()) {
+					if (userGroup.getId().equals(userGroupIds[i])) {
+						addUserGroup = false;
+					}
+				}
+
+				if (addUserGroup) {
+
+					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+
+					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+
+					customer.getUserGroups().add(userGroup);
+				}
 			}
 
-			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),
-					Customer.class.getName());
-			customerFacade.save(customer, bindingResult);
-
-			if (bindingResult.hasErrors()) {
-				for (ObjectError objectError : bindingResult.getAllErrors()) {
-					logger.error(objectError.toString());
-				}
+			try {
+				modelService.save(customer);
+			} catch (ModelSavingException e) {
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}
@@ -149,8 +168,7 @@ public class CustomerUpdate extends Updater {
 	}
 
 	public CellProcessor[] getProcessors() {
-		final CellProcessor[] processors = new CellProcessor[] { 
-				new UniqueHashCode(), // id
+		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
 				new NotNull(), // name
 				new NotNull(), // password
 				new ParseBool(), // accountNonExpired

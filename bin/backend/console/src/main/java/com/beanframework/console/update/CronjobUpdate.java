@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -21,8 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.ParseDate;
@@ -35,6 +32,8 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.CronjobCsv;
 import com.beanframework.cronjob.domain.Cronjob;
@@ -45,6 +44,9 @@ import com.beanframework.cronjob.service.CronjobFacade;
 public class CronjobUpdate extends Updater {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+	@Autowired
+	private ModelService modelService;
+	
 	@Autowired
 	private CronjobFacade cronjobFacade;
 
@@ -87,7 +89,7 @@ public class CronjobUpdate extends Updater {
 	public void save(List<CronjobCsv> cronjobCsvList) {
 
 		for (CronjobCsv cronjobCsv : cronjobCsvList) {
-			Cronjob cronjob = cronjobFacade.create();
+			Cronjob cronjob = modelService.create(Cronjob.class);
 			cronjob.setId(cronjobCsv.getId());
 			cronjob.setJobClass(cronjobCsv.getJobClass());
 			cronjob.setJobGroup(cronjobCsv.getJobGroup());
@@ -110,20 +112,16 @@ public class CronjobUpdate extends Updater {
 				}
 			}
 
-			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),
-					Cronjob.class.getName());
-			cronjobFacade.save(cronjob, bindingResult);
-
-			if (StringUtils.isNotEmpty(cronjobCsv.getJobTrigger())) {
-				cronjob.setJobTrigger(CronjobEnum.JobTrigger.fromName(cronjobCsv.getJobTrigger()));
-				cronjob.setTriggerStartDate(cronjobCsv.getTriggerStartDate());
-				cronjobFacade.trigger(cronjob, bindingResult);
-			}
-
-			if (bindingResult.hasErrors()) {
-				for (ObjectError objectError : bindingResult.getAllErrors()) {
-					logger.error(objectError.toString());
+			try {
+				modelService.save(cronjob);
+				
+				if (StringUtils.isNotEmpty(cronjobCsv.getJobTrigger())) {
+					cronjob.setJobTrigger(CronjobEnum.JobTrigger.fromName(cronjobCsv.getJobTrigger()));
+					cronjob.setTriggerStartDate(cronjobCsv.getTriggerStartDate());
+					cronjobFacade.trigger(cronjob);
 				}
+			} catch (ModelSavingException e) {
+				logger.error(e.getMessage());
 			}
 		}
 	}

@@ -1,5 +1,8 @@
 package com.beanframework.user.validator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -7,15 +10,16 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.UserConstants;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupService;
+import com.beanframework.user.domain.UserRight;
 
 @Component
 public class SaveUserGroupValidator implements Validator {
 
 	@Autowired
-	private UserGroupService userGroupService;
+	private ModelService modelService;
 
 	@Autowired
 	private LocaleMessageService localMessageService;
@@ -35,7 +39,11 @@ public class SaveUserGroupValidator implements Validator {
 				errors.reject(UserGroup.ID,
 						localMessageService.getMessage(UserConstants.Locale.UserGroup.ID_REQUIRED));
 			} else {
-				boolean existsGroup = userGroupService.isIdExists(group.getId());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserRight.ID, group.getId());
+				
+				boolean existsGroup = modelService.existsByProperties(properties, UserGroup.class);
 				if (existsGroup) {
 					errors.reject(UserGroup.ID,
 							localMessageService.getMessage(UserConstants.Locale.UserGroup.ID_EXISTS));
@@ -45,7 +53,12 @@ public class SaveUserGroupValidator implements Validator {
 		} else {
 			// Update exists
 			if (StringUtils.isNotEmpty(group.getId())) {
-				UserGroup existsGroup = userGroupService.findById(group.getId());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserRight.ID, group.getId());
+				
+				UserGroup existsGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+				
 				if (existsGroup != null) {
 					if (!group.getUuid().equals(existsGroup.getUuid())) {
 						errors.reject(UserGroup.ID,

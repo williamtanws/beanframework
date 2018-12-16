@@ -1,6 +1,7 @@
 package com.beanframework.backoffice.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +27,10 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebEmployeeConstants;
 import com.beanframework.backoffice.domain.EmployeeSearch;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.exception.ModelRemovalException;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.employee.domain.Employee;
@@ -36,16 +39,13 @@ import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupFacade;
 
 @Controller
-public class EmployeeController {
+public class EmployeeController extends AbstractCommonController {
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private EmployeeFacade employeeFacade;
-	
-	@Autowired
-	private UserGroupFacade userGroupFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@Value(WebEmployeeConstants.Path.EMPLOYEE)
 	private String PATH_EMPLOYEE;
@@ -110,12 +110,12 @@ public class EmployeeController {
 
 	@ModelAttribute(WebEmployeeConstants.ModelAttribute.CREATE)
 	public Employee populateEmployeeCreate(HttpServletRequest request) {
-		return employeeFacade.create();
+		return modelService.create(Employee.class);
 	}
 
 	@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE)
 	public Employee populateEmployeeForm(HttpServletRequest request) {
-		return employeeFacade.create();
+		return modelService.create(Employee.class);
 	}
 
 	@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH)
@@ -132,10 +132,17 @@ public class EmployeeController {
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (employeeUpdate.getUuid() != null) {
-			Employee existingEmployee = employeeFacade.findByUuid(employeeUpdate.getUuid());
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Employee.UUID, employeeUpdate.getUuid());
+			Employee existingEmployee= modelService.findOneEntityByProperties(properties, Employee.class);
+			
 			if (existingEmployee != null) {
 				
-				List<UserGroup> userGroups = userGroupFacade.findByOrderByCreatedDate();
+				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
+				
+				List<UserGroup> userGroups = modelService.findBySorts(sorts, UserGroup.class);
+				
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingEmployee.getUserGroups()) {
 						if(userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
@@ -148,8 +155,7 @@ public class EmployeeController {
 				model.addAttribute(WebEmployeeConstants.ModelAttribute.UPDATE, existingEmployee);
 			} else {
 				employeeUpdate.setUuid(null);
-				model.addAttribute(WebBackofficeConstants.Model.ERROR,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND));
+				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 		
@@ -175,24 +181,12 @@ public class EmployeeController {
 			}
 			employeeCreate.setUserGroups(userGroups);
 			
-			employeeCreate = employeeFacade.save(employeeCreate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(employeeCreate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -224,24 +218,13 @@ public class EmployeeController {
 			}
 			employeeUpdate.setUserGroups(userGroups);
 			
-			employeeUpdate = employeeFacade.save(employeeUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(employeeUpdate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
+				
 			}
 		}
 
@@ -261,25 +244,14 @@ public class EmployeeController {
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		employeeFacade.delete(employeeUpdate.getUuid(), bindingResult);
-
-		if (bindingResult.hasErrors()) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
+		try {
+			modelService.remove(employeeUpdate.getUuid());
+			employeeFacade.deleteEmployeeProfilePictureByUuid(employeeUpdate.getUuid());
+			
+			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+		} catch (ModelRemovalException e) {
+			addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebEmployeeConstants.ModelAttribute.UPDATE, employeeUpdate);
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebBackofficeConstants.Locale.DELETE_SUCCESS));
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, employeeSearch);

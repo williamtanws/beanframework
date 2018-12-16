@@ -11,6 +11,8 @@ public interface MenuConstants {
 
 	public static interface Locale{
 		public static final String UUID_NOT_EXISTS = "module.menu.uuid.notexists";
+		public static final String ID_REQUIRED = "module.menu.id.required";
+		public static final String ID_EXISTS = "module.menu.id.exists";
 	}
 	
 	public static interface Cache{

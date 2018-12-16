@@ -2,52 +2,52 @@ package com.beanframework.menu.converter;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuLang;
-import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupService;
 
-@Component
 public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
-
+	
 	@Autowired
-	private MenuService menuService;
-
-	@Autowired
-	private LanguageService languageService;
-
-	@Autowired
-	private UserGroupService userGroupService;
+	private ModelService modelService;
 
 	@Override
 	public Menu convert(Menu source) {
 
-		Optional<Menu> prototype = Optional.of(menuService.create());
+		Menu prototype = modelService.create(Menu.class);
 		if (source.getUuid() != null) {
-			Optional<Menu> exists = menuService.findEntityByUuid(source.getUuid());
-			if (exists.isPresent()) {
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Menu.UUID, source.getUuid());
+			
+			Menu exists = modelService.findOneEntityByProperties(properties, Menu.class);
+			
+			if (exists != null) {
 				prototype = exists;
 			}
 		} else if (StringUtils.isNotEmpty(source.getId())) {
-			Optional<Menu> exists = menuService.findEntityById(source.getId());
-			if (exists.isPresent()) {
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Menu.ID, source.getId());
+			
+			Menu exists = modelService.findOneEntityByProperties(properties, Menu.class);
+			if (exists != null) {
 				prototype = exists;
 			}
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	public List<Menu> convert(List<Menu> sources) {
@@ -70,11 +70,21 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 
 		if (source.getParent() != null) {
 			if (source.getParent().getUuid() != null) {
-				Optional<Menu> parent = menuService.findEntityByUuid(source.getParent().getUuid());
-				prototype.setParent(parent.isPresent() ? parent.get() : null);
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Menu.UUID, source.getParent().getUuid());
+				
+				Menu parent = modelService.findOneEntityByProperties(properties, Menu.class);
+				
+				prototype.setParent(parent == null ? null : parent);
 			} else if (StringUtils.isNotEmpty(source.getParent().getId())) {
-				Optional<Menu> parent = menuService.findEntityById(source.getParent().getId());
-				prototype.setParent(parent.isPresent() ? parent.get() : null);
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Menu.ID, source.getParent().getId());
+				
+				Menu parent = modelService.findOneEntityByProperties(properties, Menu.class);
+				
+				prototype.setParent(parent == null ? null : parent);
 			}
 		} else {
 			prototype.setParent(null);
@@ -83,16 +93,26 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 		prototype.getMenuLangs().clear();
 		for (MenuLang menuLang : source.getMenuLangs()) {
 			if (menuLang.getLanguage().getUuid() != null) {
-				Optional<Language> language = languageService.findEntityByUuid(menuLang.getLanguage().getUuid());
-				if (language.isPresent()) {
-					menuLang.setLanguage(language.get());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Language.UUID, menuLang.getLanguage().getUuid());
+				
+				Language language = modelService.findOneEntityByProperties(properties, Language.class);
+				
+				if (language != null) {
+					menuLang.setLanguage(language);
 					menuLang.setMenu(prototype);
 					prototype.getMenuLangs().add(menuLang);
 				}
 			} else if (StringUtils.isNotEmpty(menuLang.getLanguage().getId())) {
-				Optional<Language> language = languageService.findEntityById(menuLang.getLanguage().getId());
-				if (language.isPresent()) {
-					menuLang.setLanguage(language.get());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Language.ID, menuLang.getLanguage().getId());
+				
+				Language language = modelService.findOneEntityByProperties(properties, Language.class);
+				
+				if (language != null) {
+					menuLang.setLanguage(language);
 					menuLang.setMenu(prototype);
 					prototype.getMenuLangs().add(menuLang);
 				}
@@ -103,15 +123,23 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 		prototype.getUserGroups().clear();
 		for (UserGroup userGroup : source.getUserGroups()) {
 			if(userGroup.getUuid() != null) {
-				Optional<UserGroup> existingUserGroup = userGroupService.findEntityByUuid(userGroup.getUuid());
-				if (existingUserGroup.isPresent()) {
-					prototype.getUserGroups().add(existingUserGroup.get());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserGroup.UUID, source.getUuid());
+				UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+				
+				if (existingUserGroup != null) {
+					prototype.getUserGroups().add(existingUserGroup);
 				}
 			}
 			else if(StringUtils.isNotEmpty(userGroup.getId())) {
-				Optional<UserGroup> existingUserGroup = userGroupService.findEntityById(userGroup.getId());
-				if (existingUserGroup.isPresent()) {
-					prototype.getUserGroups().add(existingUserGroup.get());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserGroup.ID, source.getId());
+				UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+				
+				if (existingUserGroup != null) {
+					prototype.getUserGroups().add(existingUserGroup);
 				}
 			}
 		}

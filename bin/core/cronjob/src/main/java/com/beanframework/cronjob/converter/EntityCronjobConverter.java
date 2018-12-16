@@ -1,40 +1,46 @@
 package com.beanframework.cronjob.converter;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.service.CronjobService;
 
-@Component
 public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob> {
 
 	@Autowired
-	private CronjobService cronjobService;
+	private ModelService modelService;
 
 	@Override
 	public Cronjob convert(Cronjob source) {
 
-		Optional<Cronjob> prototype = Optional.of(cronjobService.create());
+		Cronjob prototype = modelService.create(Cronjob.class);
 		if (source.getUuid() != null) {
-			Optional<Cronjob> exists = cronjobService.findEntityByUuid(source.getUuid());
-			if(exists.isPresent()) {
+
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, source.getUuid());
+
+			Cronjob exists = modelService.findOneEntityByProperties(properties, Cronjob.class);
+
+			if (exists != null) {
 				prototype = exists;
 			}
-		}
-		else if (StringUtils.isNotEmpty(source.getId())) {
-			Optional<Cronjob> exists = cronjobService.findEntityById(source.getId());
-			if(exists.isPresent()) {
+		} else if (StringUtils.isNotEmpty(source.getId())) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.ID, source.getId());
+
+			Cronjob exists = modelService.findOneEntityByProperties(properties, Cronjob.class);
+			if (exists != null) {
 				prototype = exists;
 			}
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	private Cronjob convert(Cronjob source, Cronjob prototype) {
@@ -45,7 +51,7 @@ public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob>
 		prototype.setJobName(source.getJobName());
 		prototype.setDescription(source.getDescription());
 		prototype.setCronExpression(source.getCronExpression());
-		prototype.setStartup(source.getStartup());
+		prototype.setStartup(source.isStartup());
 		prototype.setLastModifiedDate(new Date());
 
 		prototype.getCronjobDatas().clear();

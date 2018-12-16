@@ -7,14 +7,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.Initializer;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
-import com.beanframework.cronjob.service.CronjobFacade;
+import com.beanframework.console.WebPlatformConstants.Initialize.Cronjob;
 
 public class CronjobInitialize extends Initializer {
 	protected final Logger logger = LoggerFactory.getLogger(CronjobInitialize.class);
 
 	@Autowired
-	private CronjobFacade cronjobFacade;
+	private ModelService modelService;
 
 	@PostConstruct
 	public void initializer() {
@@ -26,7 +27,7 @@ public class CronjobInitialize extends Initializer {
 
 	@Override
 	public void initialize() {
-		cronjobFacade.deleteAll();
+		modelService.removeAll(Cronjob.class);
 	}
 
 }

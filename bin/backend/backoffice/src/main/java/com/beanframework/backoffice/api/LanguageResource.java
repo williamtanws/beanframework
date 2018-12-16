@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.api;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,21 +14,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebLanguageConstants;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageFacade;
 
 @RestController
 public class LanguageResource {
 	@Autowired
-	private LanguageFacade languageFacade;
+	private ModelService modelService;
 
 	@PreAuthorize(WebLanguageConstants.PreAuthorize.READ)
 	@RequestMapping(WebLanguageConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
-		Language language = languageFacade.findById(id);
-
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Language.ID, id);
+		
+		Language language = modelService.findOneDtoByProperties(properties, Language.class);
+		
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 		if (StringUtils.isNotEmpty(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);

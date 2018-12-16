@@ -2,8 +2,9 @@ package com.beanframework.menu.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,13 +18,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.MenuConstants;
-import com.beanframework.menu.converter.DtoMenuConverter;
-import com.beanframework.menu.converter.EntityMenuConverter;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.repository.MenuRepository;
 import com.beanframework.user.domain.UserGroup;
@@ -35,73 +36,63 @@ public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private MenuRepository menuRepository;
-
+	
 	@Autowired
-	private EntityMenuConverter entityMenuConverter;
-
-	@Autowired
-	private DtoMenuConverter dtoMenuConverter;
-
-	@Override
-	public Menu create() {
-		return initDefaults(new Menu());
-	}
-
-	@Override
-	public Menu initDefaults(Menu menu) {
-		menu.setSort(-1);
-		return menu;
-	}
-
-	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
-			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
-	@Transactional(readOnly = false)
-	@Override
-	public Menu save(Menu menu) {
-		menu = entityMenuConverter.convert(menu);
-		menu = menuRepository.save(menu);
-		menu = dtoMenuConverter.convert(menu);
-
-		return menu;
-	}
+	private ModelService modelService;
 	
 	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
 			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
-	@Transactional(readOnly = false)
-	@Override
-	public List<Menu> save(List<Menu> menus) {
-		menus = entityMenuConverter.convert(menus);
-		menus = menuRepository.saveAll(menus);
-		menus = dtoMenuConverter.convert(menus);
-
-		return menus;
-	}
-	
-	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
-			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
-	@Transactional(readOnly = false)
+	@Transactional
 	@Override
 	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) {
 		
 		if(toUuid == null) {
-			menuRepository.setParentNullByUuid(fromUuid);
 			
-			menuRepository.updateSortByUuid(fromUuid, toIndex);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Menu.UUID, fromUuid);
+			Menu fromMenu = modelService.findOneEntityByProperties(properties, Menu.class);
+			fromMenu.setParent(null);
+			fromMenu.setSort(toIndex);
 			
-			List<Menu> toMenuChilds = menuRepository.findByParentNullOrderBySort();
+			modelService.save(fromMenu);
 			
+			properties = new HashMap<String, Object>();
+			properties.put(Menu.PARENT, null);
+			
+			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+			sorts.put(Menu.SORT, Sort.Direction.ASC);
+			List<Menu> toMenuChilds = modelService.findByPropertiesAndSorts(properties, sorts, Menu.class);
+
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
-			menuRepository.saveAll(menus);
+			for (Menu menu : menus) {
+				modelService.save(menu);
+			}
 		}
 		else {
-			menuRepository.updateParentByUuid(fromUuid, toUuid);
 			
-			menuRepository.updateSortByUuid(fromUuid, toIndex);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Menu.UUID, toUuid);
+			Menu toMenu = modelService.findOneEntityByProperties(properties, Menu.class);
 			
-			List<Menu> toMenuChilds = menuRepository.findByParentUuidOrderBySort(toUuid);
+			properties = new HashMap<String, Object>();
+			properties.put(Menu.UUID, fromUuid);
+			Menu fromMenu = modelService.findOneEntityByProperties(properties, Menu.class);
+			fromMenu.setParent(toMenu);
+			fromMenu.setSort(toIndex);
+			
+			modelService.save(fromMenu);
+			
+			properties = new HashMap<String, Object>();
+			properties.put(Menu.PARENT, toUuid);
+			
+			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+			sorts.put(Menu.SORT, Sort.Direction.ASC);
+			List<Menu> toMenuChilds = modelService.findByPropertiesAndSorts(properties, sorts, Menu.class);
 			
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
-			menuRepository.saveAll(menus);
+			for (Menu menu : menus) {
+				modelService.save(menu);
+			}
 		}
 	}
 	
@@ -148,95 +139,20 @@ public class MenuServiceImpl implements MenuService {
 		return menuList;
 	}
 
-	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
-			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
-	@Transactional(readOnly = false)
-	@Override
-	public void delete(UUID uuid) {
-		menuRepository.deleteById(uuid);
-	}
-
-	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
-			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
-	@Transactional(readOnly = false)
-	@Override
-	public void deleteAll() {
-		menuRepository.deleteAll();
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public Optional<Menu> findEntityByUuid(UUID uuid) {
-		return menuRepository.findByUuid(uuid);
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public Optional<Menu> findEntityById(String id) {
-		return menuRepository.findById(id);
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public Menu findByUuid(UUID uuid) {
-		Optional<Menu> menu = menuRepository.findByUuid(uuid);
-
-		if (menu.isPresent()) {
-			return dtoMenuConverter.convert(menu.get());
-		} else {
-			return null;
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public Menu findById(String id) {
-		Optional<Menu> menu = menuRepository.findById(id);
-
-		if (menu.isPresent()) {
-			return dtoMenuConverter.convert(menu.get());
-		} else {
-			return null;
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public Menu findByPath(String path) {
-		Optional<Menu> menu = menuRepository.findByPath(path);
-
-		if (menu.isPresent()) {
-			return dtoMenuConverter.convert(menu.get());
-		} else {
-			return null;
-		}
-	}
-
 	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findMenuTree() {
-
-		// Find all root parents
-		Specification<Menu> spec = new Specification<Menu>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-				List<Predicate> predicates = new ArrayList<Predicate>();
-
-				predicates.add(cb.and(root.get(Menu.PARENT).isNull()));
-
-				query.orderBy(cb.asc(root.get(Menu.SORT)));
-
-				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-			}
-		};
-		List<Menu> rootParents = menuRepository.findAll(spec);
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Menu.PARENT, null);
+		
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Menu.SORT, Sort.Direction.ASC);
+		List<Menu> rootParents = modelService.findByPropertiesAndSorts(properties, sorts, Menu.class);
 
 		initializeChilds(rootParents);
 
-		return dtoMenuConverter.convert(rootParents);
+		return rootParents;
 	}
 
 	private void initializeChilds(List<Menu> parents) {
@@ -296,7 +212,7 @@ public class MenuServiceImpl implements MenuService {
 
 		initializeChildsByUserGroup(rootParents, userGroupUuids);
 
-		return dtoMenuConverter.convert(rootParents);
+		return rootParents;
 	}
 
 	private void initializeChildsByUserGroup(List<Menu> parents, List<UUID> userGroupUuids) {

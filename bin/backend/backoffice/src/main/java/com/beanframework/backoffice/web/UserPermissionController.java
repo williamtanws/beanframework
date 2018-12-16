@@ -1,6 +1,6 @@
 package com.beanframework.backoffice.web;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,13 +26,19 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserPermissionConstants;
 import com.beanframework.backoffice.domain.UserPermissionSearch;
 import com.beanframework.backoffice.service.BackofficeModuleFacade;
+import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.exception.ModelSavingException;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.service.UserPermissionFacade;
 
 @Controller
-public class UserPermissionController {
+public class UserPermissionController extends AbstractCommonController {
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private UserPermissionFacade userpermissionFacade;
@@ -108,12 +113,12 @@ public class UserPermissionController {
 
 	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.CREATE)
 	public UserPermission populateUserPermissionCreate(HttpServletRequest request) {
-		return userpermissionFacade.create();
+		return modelService.create(UserPermission.class);
 	}
 
 	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE)
 	public UserPermission populateUserPermissionForm(HttpServletRequest request) {
-		return userpermissionFacade.create();
+		return modelService.create(UserPermission.class);
 	}
 
 	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH)
@@ -131,7 +136,12 @@ public class UserPermissionController {
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (userpermissionUpdate.getUuid() != null) {
-			UserPermission existingUserPermission = userpermissionFacade.findByUuid(userpermissionUpdate.getUuid());
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(UserPermission.UUID, userpermissionUpdate.getUuid());
+
+			UserPermission existingUserPermission = modelService.findOneDtoByProperties(properties, UserPermission.class);
+			
 			if (existingUserPermission != null) {
 				model.addAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE, existingUserPermission);
 			} else {
@@ -156,24 +166,13 @@ public class UserPermissionController {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
-			userpermissionCreate = userpermissionFacade.save(userpermissionCreate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			
+			try {
+				modelService.save(userpermissionCreate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -198,24 +197,12 @@ public class UserPermissionController {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
-			userpermissionUpdate = userpermissionFacade.save(userpermissionUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(userpermissionUpdate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -236,29 +223,15 @@ public class UserPermissionController {
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		backofficeModuleFacade.deleteAllModuleUserPermissionByUserPermissionUuid(userpermissionUpdate.getUuid(), bindingResult);
+		try {
+			backofficeModuleFacade.deleteAllModuleUserPermissionByUserPermissionUuid(userpermissionUpdate.getUuid(), bindingResult);
 
-		if (bindingResult.hasErrors() == false) {
-			userpermissionFacade.delete(userpermissionUpdate.getUuid(), bindingResult);
-		}
-
-		if (bindingResult.hasErrors()) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
+			modelService.remove(userpermissionUpdate.getUuid(), UserPermission.class);
+			
+			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+		} catch (Exception e) {
+			addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE, userpermissionUpdate);
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebBackofficeConstants.Locale.DELETE_SUCCESS));
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, userpermissionSearch);

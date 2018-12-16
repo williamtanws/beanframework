@@ -5,17 +5,16 @@ import java.util.List;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserAuthority;
-import com.beanframework.user.service.UserAuthorityService;
 
-@Component
+
 public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, UserAuthority> {
 
 	@Autowired
-	private UserAuthorityService userAuthorityService;
+	private ModelService modelService;
 	
 	@Autowired
 	private DtoUserPermissionConverter dtoUserPermissionConverter;
@@ -25,7 +24,7 @@ public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, Us
 
 	@Override
 	public UserAuthority convert(UserAuthority source) {
-		return convert(source, userAuthorityService.create());
+		return convert(source, modelService.create(UserAuthority.class));
 	}
 
 	public List<UserAuthority> convert(List<UserAuthority> sources) {

@@ -1,28 +1,25 @@
 package com.beanframework.menu.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Sort;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuLang;
-import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.converter.DtoUserGroupConverter;
 
-@Component
 public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
-
+	
 	@Autowired
-	private MenuService menuService;
-
-	@Autowired
-	private LanguageService languageService;
+	private ModelService modelService;
 
 	@Autowired
 	private DtoMenuLangConverter dtoMenuLangConverter;
@@ -32,7 +29,7 @@ public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 
 	@Override
 	public Menu convert(Menu source) {
-		return convert(source, menuService.create());
+		return convert(source, modelService.create(Menu.class));
 	}
 
 	public List<Menu> convert(List<Menu> sources) {
@@ -62,7 +59,12 @@ public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 
 		// Process Menu Lang
 		prototype.setMenuLangs(dtoMenuLangConverter.convert(source.getMenuLangs()));
-		List<Language> languages = languageService.findByOrderBySortAsc();
+		
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Language.SORT, Sort.Direction.ASC);
+		
+		List<Language> languages = modelService.findBySorts(sorts, Language.class);
+		
 		for (Language language : languages) {
 			boolean addNewLanguage = true;
 			for (MenuLang menuLang : source.getMenuLangs()) {

@@ -42,7 +42,7 @@ public class HistoryServiceImpl implements HistoryService {
 	}
 
 	@CacheEvict(value = { HistoryConstants.Cache.HISTORY,  HistoryConstants.Cache.HISTORIES}, allEntries = true)
-	@Transactional(readOnly = false)
+	@Transactional
 	@Override
 	public History save(History history) {
 
@@ -54,14 +54,14 @@ public class HistoryServiceImpl implements HistoryService {
 	}
 
 	@CacheEvict(value = { HistoryConstants.Cache.HISTORY,  HistoryConstants.Cache.HISTORIES}, allEntries = true)
-	@Transactional(readOnly = false)
+	@Transactional
 	@Override
 	public void delete(UUID uuid) {
 		historyRepository.deleteById(uuid);
 	}
 
 	@CacheEvict(value = { HistoryConstants.Cache.HISTORY,  HistoryConstants.Cache.HISTORIES}, allEntries = true)
-	@Transactional(readOnly = false)
+	@Transactional
 	@Override
 	public void deleteAll() {
 		historyRepository.deleteAll();

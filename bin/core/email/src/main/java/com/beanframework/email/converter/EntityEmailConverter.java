@@ -1,37 +1,39 @@
 package com.beanframework.email.converter;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.domain.EmailEnum.Status;
-import com.beanframework.email.service.EmailService;
 
-@Component
 public class EntityEmailConverter implements EntityConverter<Email, Email> {
 
 	@Autowired
-	private EmailService emailService;
+	private ModelService modelService;
 
 	@Override
 	public Email convert(Email source) {
 
-		Optional<Email> prototype = null;
+		Email prototype = null;
 		if (source.getUuid() != null) {
-			prototype = emailService.findEntityByUuid(source.getUuid());
-			if (prototype.isPresent() == false) {
-				prototype = Optional.of(emailService.create());
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Email.UUID, source.getUuid());
+			prototype = modelService.findOneEntityByProperties(properties, Email.class);
+			
+			if (prototype == null) {
+				prototype = modelService.create(Email.class);
 			}
 		}
 		else {
-			prototype = Optional.of(emailService.create());
+			prototype = modelService.create(Email.class);
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	private Email convert(Email source, Email prototype) {

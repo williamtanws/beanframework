@@ -22,8 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -32,27 +30,20 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserAuthorityCsv;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserGroupFacade;
-import com.beanframework.user.service.UserPermissionFacade;
-import com.beanframework.user.service.UserRightFacade;
 
 public class UserAuthorityUpdate extends Updater {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
-
+	
 	@Autowired
-	private UserGroupFacade userGroupFacade;
-
-	@Autowired
-	private UserPermissionFacade userPermissionFacade;
-
-	@Autowired
-	private UserRightFacade userRightFacade;
+	private ModelService modelService;
 
 	@Value("${module.console.import.update.userauthority}")
 	private String USERAUTHORITY_IMPORT_UPDATE;
@@ -91,11 +82,22 @@ public class UserAuthorityUpdate extends Updater {
 	}
 
 	public void save(List<UserAuthorityCsv> userAuthorityCsvList) {
-
-		UserRight create = userRightFacade.findById("create");
-		UserRight read = userRightFacade.findById("read");
-		UserRight update = userRightFacade.findById("update");
-		UserRight delete = userRightFacade.findById("delete");
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(UserRight.ID, "create");
+		UserRight create = modelService.findOneDtoByProperties(properties, UserRight.class);
+		
+		properties = new HashMap<String, Object>();
+		properties.put(UserRight.ID, "read");
+		UserRight read = modelService.findOneDtoByProperties(properties, UserRight.class);
+		
+		properties = new HashMap<String, Object>();
+		properties.put(UserRight.ID, "update");
+		UserRight update = modelService.findOneDtoByProperties(properties, UserRight.class);
+		
+		properties = new HashMap<String, Object>();
+		properties.put(UserRight.ID, "delete");
+		UserRight delete = modelService.findOneDtoByProperties(properties, UserRight.class);
 
 		if (create == null) {
 			logger.error("User Right not exists: create");
@@ -124,8 +126,11 @@ public class UserAuthorityUpdate extends Updater {
 			for (Map.Entry<String, List<UserAuthorityCsv>> entry : userGroupMap.entrySet()) {
 				String userGroupId = entry.getKey();
 				List<UserAuthorityCsv> userGroupAuthorityList = entry.getValue();
+				
+				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+				userGroupProperties.put(UserGroup.ID, userGroupId);
+				UserGroup userGroup = modelService.findOneDtoByProperties(userGroupProperties, UserGroup.class);
 
-				UserGroup userGroup = userGroupFacade.findById(userGroupId);
 				if (userGroup == null) {
 					logger.warn("userGroupId not exists: " + userGroupId);
 				} else {
@@ -134,7 +139,10 @@ public class UserAuthorityUpdate extends Updater {
 					for (UserAuthorityCsv userAuthorityCsv : userGroupAuthorityList) {
 
 						String userPermissionId = userAuthorityCsv.getUserPermissionId();
-						UserPermission userPermission = userPermissionFacade.findById(userPermissionId);
+						
+						Map<String, Object> userPermissionProperties = new HashMap<String, Object>();
+						userPermissionProperties.put(UserPermission.ID, userPermissionId);
+						UserPermission userPermission = modelService.findOneDtoByProperties(userPermissionProperties, UserPermission.class);
 
 						if (userPermission == null) {
 							logger.warn("userPermissionId not exists: " + userPermissionId);
@@ -179,16 +187,12 @@ public class UserAuthorityUpdate extends Updater {
 					}
 					
 					userGroup.getUserAuthorities().addAll(newUserAuthorities);
-
-					MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),UserGroup.class.getName());
-					userGroupFacade.save(userGroup, bindingResult);
-
-					if (bindingResult.hasErrors()) {
-						for (ObjectError objectError : bindingResult.getAllErrors()) {
-							logger.error(objectError.toString());
-						}
+					
+					try {
+						modelService.save(userGroup);
+					} catch (ModelSavingException e) {
+						logger.error(e.getMessage());
 					}
-
 				}
 
 			}

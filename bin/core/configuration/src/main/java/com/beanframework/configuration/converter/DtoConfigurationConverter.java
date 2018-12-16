@@ -4,21 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationService;
 
-@Component
 public class DtoConfigurationConverter implements DtoConverter<Configuration, Configuration> {
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ModelService modelService;
 
 	@Override
 	public Configuration convert(Configuration source) {
-		return convert(source, configurationService.create());
+		return convert(source, modelService.create(Configuration.class));
 	}
 
 	public List<Configuration> convert(List<Configuration> sources) {

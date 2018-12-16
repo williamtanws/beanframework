@@ -10,6 +10,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -20,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
@@ -29,16 +28,17 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Remover;
+import com.beanframework.common.exception.ModelRemovalException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.CustomerCsv;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerFacade;
 
 public class CustomerRemove extends Remover {
 	protected final Logger logger = LoggerFactory.getLogger(CustomerRemove.class);
-
+	
 	@Autowired
-	private CustomerFacade customerFacade;
+	private ModelService modelService;
 
 	@Value("${module.console.import.remove.customer}")
 	private String IMPORT_REMOVE_EMPLOYEE_PATH;
@@ -65,7 +65,7 @@ public class CustomerRemove extends Remover {
 					BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
 					List<CustomerCsv> customerCsvList = readCSVFile(reader);
-					save(customerCsvList);
+					remove(customerCsvList);
 
 				} catch (IOException ex) {
 					logger.error("Error reading the resource file: " + ex);
@@ -76,18 +76,18 @@ public class CustomerRemove extends Remover {
 		}
 	}
 
-	public void save(List<CustomerCsv> customerCsvList) {
+	public void remove(List<CustomerCsv> customerCsvList) {
 
 		for (CustomerCsv customerCsv : customerCsvList) {
-
-			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),
-					Customer.class.getName());
-			customerFacade.delete(customerCsv.getId(), bindingResult);
-
-			if (bindingResult.hasErrors()) {
-				for (ObjectError objectError : bindingResult.getAllErrors()) {
-					logger.error(objectError.toString());
-				}
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Customer.ID, customerCsv.getId());
+			
+			Customer customer = modelService.findOneDtoByProperties(properties, Customer.class);
+			try {
+				modelService.remove(customer);
+			} catch (ModelRemovalException e) {
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}

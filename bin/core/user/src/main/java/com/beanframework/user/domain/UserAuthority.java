@@ -24,6 +24,7 @@ public class UserAuthority extends GenericDomain {
 	private static final long serialVersionUID = -5421555853972873801L;
 	public static final String USER_GROUP = "userGroup";
 	public static final String USER_PERMISSION = "userPermission";
+	public static final String USER_PERMISSION_UUID = "userPermission.uuid";
 	public static final String USER_RIGHT = "userRight";
 
 	@NotNull

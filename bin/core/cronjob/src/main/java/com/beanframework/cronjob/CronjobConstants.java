@@ -16,6 +16,8 @@ public final class CronjobConstants {
 		public static final String CRONJOB_GROUP_REQUIRED = "module.cronjob.jobgroup.name.required";
 		public static final String CRONJOB_NAME_GROUP_EXISTS = "module.cronjob.jobgroup.name.exists";
 		public static final String CRONJOB_DATA_NAME_EXISTS = "module.cronjob.jobdata.name.exists";
+		public static final String ID_REQUIRED = "module.cronjob.id.required";
+		public static final String ID_EXISTS = "module.cronjob.id.exists";
 	}
 	
 	public static interface Cache {

@@ -1,5 +1,8 @@
 package com.beanframework.user.validator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -7,15 +10,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.UserConstants;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.service.UserPermissionService;
 
 @Component
 public class SaveUserPermissionValidator implements Validator {
 
 	@Autowired
-	private UserPermissionService userPermissionService;
+	private ModelService modelService;
 
 	@Autowired
 	private LocaleMessageService localMessageService;
@@ -27,15 +30,20 @@ public class SaveUserPermissionValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		final UserPermission group = (UserPermission) target;
+		final UserPermission userPermission = (UserPermission) target;
 
-		if (group.getUuid() == null) {
+		if (userPermission.getUuid() == null) {
 			// Save new
-			if (StringUtils.isEmpty(group.getId())) {
+			if (StringUtils.isEmpty(userPermission.getId())) {
 				errors.reject(UserPermission.ID,
 						localMessageService.getMessage(UserConstants.Locale.UserPermission.ID_REQUIRED));
 			} else {
-				boolean existsPermission = userPermissionService.isIdExists(group.getId());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserPermission.ID, userPermission.getId());
+				
+				boolean existsPermission = modelService.existsByProperties(properties, UserPermission.class);
+				
 				if (existsPermission) {
 					errors.reject(UserPermission.ID,
 							localMessageService.getMessage(UserConstants.Locale.UserPermission.ID_EXISTS));
@@ -44,10 +52,15 @@ public class SaveUserPermissionValidator implements Validator {
 
 		} else {
 			// Update exists
-			if (StringUtils.isNotEmpty(group.getId())) {
-				UserPermission existsPermission = userPermissionService.findById(group.getId());
+			if (StringUtils.isNotEmpty(userPermission.getId())) {
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserPermission.ID, userPermission.getId());
+				
+				UserPermission existsPermission = modelService.findOneEntityByProperties(properties, UserPermission.class);
+				
 				if (existsPermission != null) {
-					if (!group.getUuid().equals(existsPermission.getUuid())) {
+					if (!userPermission.getUuid().equals(existsPermission.getUuid())) {
 						errors.reject(UserPermission.ID,
 								localMessageService.getMessage(UserConstants.Locale.UserPermission.ID_EXISTS));
 					}

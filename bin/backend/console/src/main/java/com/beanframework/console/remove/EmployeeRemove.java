@@ -10,6 +10,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -29,16 +30,18 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Remover;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.EmployeeCsv;
+import com.beanframework.customer.domain.Customer;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeFacade;
 
 public class EmployeeRemove extends Remover {
 	protected final Logger logger = LoggerFactory.getLogger(EmployeeRemove.class);
-
+	
 	@Autowired
-	private EmployeeFacade employeeFacade;
+	private ModelService modelService;
 
 	@Value("${module.console.import.remove.employee}")
 	private String IMPORT_REMOVE_EMPLOYEE_PATH;
@@ -82,12 +85,14 @@ public class EmployeeRemove extends Remover {
 
 			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),
 					Employee.class.getName());
-			employeeFacade.delete(employeeCsv.getId(), bindingResult);
-
-			if (bindingResult.hasErrors()) {
-				for (ObjectError objectError : bindingResult.getAllErrors()) {
-					logger.error(objectError.toString());
-				}
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Employee.ID, employeeCsv.getId());
+			
+			try {
+				Employee employee = modelService.findOneDtoByProperties(properties, Employee.class);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
 			}
 		}
 	}

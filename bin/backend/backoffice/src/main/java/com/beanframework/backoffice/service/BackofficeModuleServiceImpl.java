@@ -1,11 +1,16 @@
 package com.beanframework.backoffice.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.beanframework.user.service.UserAuthorityService;
+import com.beanframework.common.service.ModelService;
+import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserGroupService;
 import com.beanframework.user.service.UserPermissionService;
 import com.beanframework.user.service.UserRightService;
@@ -23,7 +28,7 @@ public class BackofficeModuleServiceImpl implements BackofficeModuleService {
 	private UserGroupService userGroupService;
 	
 	@Autowired
-	private UserAuthorityService userAuthorityService;
+	private ModelService modelService;
 
 	@Override
 	public void deleteAllModuleLanguageByLanguageUuid(UUID uuid) {
@@ -34,36 +39,18 @@ public class BackofficeModuleServiceImpl implements BackofficeModuleService {
 	
 	@Override
 	public void deleteAllModuleUserRightByUserRightUuid(UUID uuid) {
-		userAuthorityService.deleteUserRightByUserRightUuid(uuid);
+		
+		modelService.remove(uuid, UserAuthority.class);
 	}
 
 	@Override
-	public void deleteAllModuleUserPermissionByUserPermissionUuid(UUID uuid) {
-		userAuthorityService.deleteUserRightByUserPermissionUuid(uuid);
-	}
-
-	public UserRightService getUserRightService() {
-		return userRightService;
-	}
-
-	public void setUserRightService(UserRightService userRightService) {
-		this.userRightService = userRightService;
-	}
-
-	public UserPermissionService getUserPermissionService() {
-		return userPermissionService;
-	}
-
-	public void setUserPermissionService(UserPermissionService userPermissionService) {
-		this.userPermissionService = userPermissionService;
-	}
-
-	public UserGroupService getUserGroupService() {
-		return userGroupService;
-	}
-
-	public void setUserGroupService(UserGroupService userGroupService) {
-		this.userGroupService = userGroupService;
+	public void deleteAllModuleUserPermissionByUserPermissionUuid(UUID uuid) {		
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(UserAuthority.USER_PERMISSION_UUID, uuid);
+		
+		List<UserAuthority> userAuthorities = modelService.findByProperties(properties, UserAuthority.class);
+		modelService.remove(userAuthorities);
 	}
 
 }

@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,24 +26,23 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebMenuConstants;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.exception.ModelRemovalException;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuFacade;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupFacade;
 
 @Controller
-public class MenuController {
+public class MenuController extends AbstractCommonController {
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private MenuFacade menuFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
-	
-	@Autowired
-	private UserGroupFacade userGroupFacade;
 
 	@Value(WebMenuConstants.Path.MENU)
 	private String PATH_MENU;
@@ -56,12 +55,12 @@ public class MenuController {
 
 	@ModelAttribute(WebMenuConstants.ModelAttribute.CREATE)
 	public Menu populateMenuCreate(HttpServletRequest request) {
-		return menuFacade.create();
+		return modelService.create(Menu.class);
 	}
 
 	@ModelAttribute(WebMenuConstants.ModelAttribute.UPDATE)
 	public Menu populateMenuForm(HttpServletRequest request) {
-		return menuFacade.create();
+		return modelService.create(Menu.class);
 	}
 
 	@PreAuthorize(WebMenuConstants.PreAuthorize.READ)
@@ -72,10 +71,18 @@ public class MenuController {
 		model.addAttribute("menus", menuFacade.findMenuTree());
 
 		if (menuUpdate.getUuid() != null) {
-			Menu existingMenu = menuFacade.findByUuid(menuUpdate.getUuid());
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Menu.UUID, menuUpdate.getUuid());
+			
+			Menu existingMenu = modelService.findOneEntityByProperties(properties, Menu.class);
 			if (existingMenu != null) {
 				
-				List<UserGroup> userGroups = userGroupFacade.findByOrderByCreatedDate();
+				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
+				
+				List<UserGroup> userGroups = modelService.findBySorts(sorts, UserGroup.class);
+				
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingMenu.getUserGroups()) {
 						if(userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
@@ -88,8 +95,7 @@ public class MenuController {
 				model.addAttribute(WebMenuConstants.ModelAttribute.UPDATE, existingMenu);
 			} else {
 				menuUpdate.setUuid(null);
-				model.addAttribute(WebBackofficeConstants.Model.ERROR,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND));
+				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 		
@@ -117,24 +123,12 @@ public class MenuController {
 			}
 			menuCreate.setUserGroups(userGroups);
 			
-			menuCreate = menuFacade.save(menuCreate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(menuCreate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -157,26 +151,11 @@ public class MenuController {
 
 		MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(), Menu.class.getName());
 
-		menuFacade.changePosition(UUID.fromString(fromUuid),
-				StringUtils.isNotEmpty(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex),
-				bindingResult);
-		if (bindingResult.hasErrors()) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+		try {
+			menuFacade.changePosition(UUID.fromString(fromUuid), StringUtils.isNotEmpty(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex));
+			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+		} catch (Exception e) {
+			addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
 		}
 
 		redirectAttributes.addAttribute("menuSelectedUuid", fromUuid);
@@ -206,24 +185,12 @@ public class MenuController {
 			}
 			menuUpdate.setUserGroups(userGroups);
 			
-			menuUpdate = menuFacade.save(menuUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(menuUpdate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -241,25 +208,13 @@ public class MenuController {
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		menuFacade.delete(menuUpdate.getUuid(), bindingResult);
-
-		if (bindingResult.hasErrors()) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
+		try {
+			modelService.remove(menuUpdate.getUuid(), Menu.class);
+			
+			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+		} catch (ModelRemovalException e) {
+			addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebMenuConstants.ModelAttribute.UPDATE, menuUpdate);
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebBackofficeConstants.Locale.DELETE_SUCCESS));
 		}
 
 		RedirectView redirectView = new RedirectView();

@@ -1,47 +1,42 @@
 package com.beanframework.customer.converter;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerService;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupService;
 import com.beanframework.user.utils.PasswordUtils;
 
-@Component
 public class EntityCustomerConverter implements EntityConverter<Customer, Customer> {
 
 	@Autowired
-	private CustomerService customerService;
-	
-	@Autowired
-	private UserGroupService userGroupService;
+	private ModelService modelService;
 
 	@Override
 	public Customer convert(Customer source) {
 
-		Optional<Customer> prototype = Optional.of(customerService.create());
+		Customer prototype = null;
 		if (source.getUuid() != null) {
-			Optional<Customer> exists = customerService.findEntityByUuid(source.getUuid());
-			if(exists.isPresent()) {
-				prototype = exists;
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Customer.UUID, source.getUuid());
+			prototype = modelService.findOneEntityByProperties(properties, Customer.class);
+			
+			if (prototype == null) {
+				prototype = modelService.create(Customer.class);
 			}
 		}
-		else if (StringUtils.isNotEmpty(source.getId())) {
-			Optional<Customer> exists = customerService.findEntityById(source.getId());
-			if(exists.isPresent()) {
-				prototype = exists;
-			}
+		else {
+			prototype = modelService.create(Customer.class);
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	private Customer convert(Customer source, Customer prototype) {
@@ -61,15 +56,23 @@ public class EntityCustomerConverter implements EntityConverter<Customer, Custom
 		prototype.getUserGroups().clear();
 		for (UserGroup userGroup : source.getUserGroups()) {
 			if(userGroup.getUuid() != null) {
-				Optional<UserGroup> existingUserGroup = userGroupService.findEntityByUuid(userGroup.getUuid());
-				if (existingUserGroup.isPresent()) {
-					prototype.getUserGroups().add(existingUserGroup.get());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserGroup.UUID, source.getUuid());
+				UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+				
+				if (existingUserGroup != null) {
+					prototype.getUserGroups().add(existingUserGroup);
 				}
 			}
 			else if(StringUtils.isNotEmpty(userGroup.getId())) {
-				Optional<UserGroup> existingUserGroup = userGroupService.findEntityById(userGroup.getId());
-				if (existingUserGroup.isPresent()) {
-					prototype.getUserGroups().add(existingUserGroup.get());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserGroup.ID, source.getId());
+				UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+				
+				if (existingUserGroup != null) {
+					prototype.getUserGroups().add(existingUserGroup);
 				}
 			}
 		}

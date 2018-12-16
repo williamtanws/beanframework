@@ -1,6 +1,8 @@
 package com.beanframework.admin.converter;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,10 @@ public class EntityAdminConverter implements EntityConverter<Admin, Admin> {
 
 		Admin prototype = null;
 		if (source.getUuid() != null) {
-			prototype = modelService.findByUuid(source.getUuid(), Admin.class);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Admin.UUID, source.getUuid());
+			prototype = modelService.findOneEntityByProperties(properties, Admin.class);
+			
 			if (prototype == null) {
 				prototype = modelService.create(Admin.class);
 			}

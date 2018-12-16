@@ -7,18 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 
 @Component
 public class DtoLanguageConverter implements DtoConverter<Language, Language> {
 
 	@Autowired
-	private LanguageService languageService;
+	private ModelService modelService;
 
 	@Override
 	public Language convert(Language source) {
-		return convert(source, languageService.create());
+		return convert(source, modelService.create(Language.class));
 	}
 
 	public List<Language> convert(List<Language> sources) {

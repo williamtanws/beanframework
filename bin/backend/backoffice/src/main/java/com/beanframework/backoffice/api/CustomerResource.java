@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.api;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,20 +14,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCustomerConstants;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerFacade;
 
 @RestController
 public class CustomerResource {
 	@Autowired
-	private CustomerFacade customerFacade;
+	private ModelService modelService;
 
 	@PreAuthorize(WebCustomerConstants.PreAuthorize.READ)
 	@RequestMapping(WebCustomerConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
-		Customer customer = customerFacade.findById(id);
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Customer.ID, id);
+
+		Customer customer = modelService.findOneDtoByProperties(properties, Customer.class);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 		if (StringUtils.isNotEmpty(uuidStr)) {

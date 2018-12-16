@@ -1,19 +1,22 @@
 package com.beanframework.admin.interceptor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.admin.AdminConstants;
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminFacade;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.ValidateInterceptor;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
 
 public class AdminValidateInterceptor implements ValidateInterceptor<Admin> {
 	
 	@Autowired
-	private AdminFacade adminFacade;
+	private ModelService modelService;
 
 	@Autowired
 	private LocaleMessageService localMessageService;
@@ -29,8 +32,10 @@ public class AdminValidateInterceptor implements ValidateInterceptor<Admin> {
 				throw new InterceptorException(localMessageService.getMessage(AdminConstants.Locale.PASSWORD_REQUIRED),
 						this);
 			} else {
-				Admin existsAdmin = adminFacade.findById(model.getId());
-				if (existsAdmin != null) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Admin.ID, model.getId());
+				boolean exists = modelService.existsByProperties(properties, Admin.class);
+				if (exists == false) {
 					throw new InterceptorException(localMessageService.getMessage(AdminConstants.Locale.ID_EXISTS),
 							this);
 				}
@@ -39,9 +44,11 @@ public class AdminValidateInterceptor implements ValidateInterceptor<Admin> {
 		} else {
 			// Update exists
 			if (StringUtils.isNotEmpty(model.getId())) {
-				Admin existsAdmin = adminFacade.findById(model.getId());
-				if (existsAdmin != null) {
-					if (!model.getUuid().equals(existsAdmin.getUuid())) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Admin.ID, model.getId());
+				Admin admin = modelService.findOneEntityByProperties(properties, Admin.class);
+				if (admin != null) {
+					if (!model.getUuid().equals(admin.getUuid())) {
 						throw new InterceptorException(localMessageService.getMessage(AdminConstants.Locale.ID_EXISTS),
 								this);
 					}
