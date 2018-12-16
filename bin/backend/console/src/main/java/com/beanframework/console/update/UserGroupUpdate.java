@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -138,6 +137,8 @@ public class UserGroupUpdate extends Updater {
 			if (userGroup == null) {
 				userGroup = modelService.create(UserGroup.class);
 				userGroup.setId(csv.getId());
+				modelService.save(userGroup);
+				modelService.saveAll();
 			}
 
 			// UserGroup Field

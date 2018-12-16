@@ -138,6 +138,8 @@ public class UserPermissionUpdate extends Updater {
 			if (userPermission == null) {
 				userPermission = modelService.create(UserPermission.class);
 				userPermission.setId(csv.getId());
+				modelService.save(userPermission);
+				modelService.saveAll();
 			}
 			userPermission.setSort(csv.getSort());
 
