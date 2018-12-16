@@ -138,6 +138,8 @@ public class UserRightUpdate extends Updater {
 			if (userRight == null) {
 				userRight = modelService.create(UserRight.class);
 				userRight.setId(csv.getId());
+				modelService.save(userRight);
+				modelService.saveAll();
 			}
 			userRight.setSort(csv.getSort());
 
