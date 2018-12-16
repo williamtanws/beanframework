@@ -10,18 +10,18 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
@@ -31,18 +31,18 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.EmployeeCsv;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeFacade;
-import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 
 public class EmployeeUpdate extends Updater {
 	protected final Logger logger = LoggerFactory.getLogger(EmployeeUpdate.class);
 
 	@Autowired
-	private EmployeeFacade employeeFacade;
+	private ModelService modelService;
 
 	@Value("${module.console.import.update.employee}")
 	private String IMPORT_UPDATE_EMPLOYEE_PATH;
@@ -81,35 +81,51 @@ public class EmployeeUpdate extends Updater {
 	}
 
 	public void save(List<EmployeeCsv> employeeCsvList) {
-		
-		UserField userField = new UserField();
 
-		for (EmployeeCsv employeeCsv : employeeCsvList) {
-			Employee employee = employeeFacade.create();
-			employee.setId(employeeCsv.getId());
-//			employee.setName(employeeCsv.getName());
-			employee.setPassword(employeeCsv.getPassword());
-			employee.setAccountNonExpired(employeeCsv.isAccountNonExpired());
-			employee.setAccountNonLocked(employeeCsv.isAccountNonLocked());
-			employee.setCredentialsNonExpired(employeeCsv.isCredentialsNonExpired());
-			employee.setEnabled(employeeCsv.isEnabled());
+		for (EmployeeCsv csv : employeeCsvList) {
 
-			employee.getUserGroups().clear();
-			String[] userGroupIds = employeeCsv.getUserGroupIds().split(SPLITTER);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Employee.ID, csv.getId());
+
+			Employee employee = modelService.findOneEntityByProperties(properties, Employee.class);
+
+			if (employee == null) {
+				employee = modelService.create(Employee.class);
+				employee.setId(csv.getId());
+			}
+			employee.setPassword(csv.getPassword());
+			employee.setAccountNonExpired(csv.isAccountNonExpired());
+			employee.setAccountNonLocked(csv.isAccountNonLocked());
+			employee.setCredentialsNonExpired(csv.isCredentialsNonExpired());
+			employee.setEnabled(csv.isEnabled());
+
+			Hibernate.initialize(employee.getUserGroups());
+
+			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
 			for (int i = 0; i < userGroupIds.length; i++) {
-				UserGroup userGroup = new UserGroup();
-				userGroup.setId(userGroupIds[i]);
-				employee.getUserGroups().add(userGroup);
+
+				boolean addUserGroup = true;
+				for (UserGroup userGroup : employee.getUserGroups()) {
+					if (userGroup.getId().equals(userGroupIds[i])) {
+						addUserGroup = false;
+					}
+				}
+
+				if (addUserGroup) {
+
+					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+
+					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+
+					employee.getUserGroups().add(userGroup);
+				}
 			}
 
-			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),
-					Employee.class.getName());
-			employeeFacade.save(employee, bindingResult);
-
-			if (bindingResult.hasErrors()) {
-				for (ObjectError objectError : bindingResult.getAllErrors()) {
-					logger.error(objectError.toString());
-				}
+			try {
+				modelService.save(employee);
+			} catch (ModelSavingException e) {
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}
@@ -152,8 +168,7 @@ public class EmployeeUpdate extends Updater {
 	}
 
 	public CellProcessor[] getProcessors() {
-		final CellProcessor[] processors = new CellProcessor[] { 
-				new UniqueHashCode(), // id
+		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
 				new NotNull(), // name
 				new NotNull(), // password
 				new ParseBool(), // accountNonExpired

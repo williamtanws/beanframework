@@ -7,12 +7,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.Initializer;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
+import com.beanframework.console.WebPlatformConstants.Initialize.Employee;
 import com.beanframework.employee.service.EmployeeFacade;
 
 public class EmployeeInitialize extends Initializer {
 	protected final Logger logger = LoggerFactory.getLogger(EmployeeInitialize.class);
 
+	@Autowired
+	private ModelService modelService;
+	
 	@Autowired
 	private EmployeeFacade employeeFacade;
 
@@ -26,7 +31,8 @@ public class EmployeeInitialize extends Initializer {
 
 	@Override
 	public void initialize() {
-		employeeFacade.deleteAll();
+		modelService.removeAll(Employee.class);
+		employeeFacade.deleteAllEmployeeProfilePicture();
 	}
 
 }

@@ -1,7 +1,9 @@
 package com.beanframework.backoffice.interceptor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,8 +20,9 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.language.service.LanguageFacade;
+import com.beanframework.language.domain.Language;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuFacade;
 import com.beanframework.user.domain.UserGroup;
@@ -33,7 +37,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 	private MenuFacade menuFacade;
 	
 	@Autowired
-	private LanguageFacade languageFacade;
+	private ModelService modelService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -70,6 +74,10 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 	}
 	
 	protected void getLanguage(ModelAndView modelAndView) {
-		modelAndView.getModelMap().addAttribute(WebBackofficeConstants.Model.MODULE_LANGUAGES, languageFacade.findByOrderBySortAsc());
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Language.SORT, Sort.Direction.ASC);
+		
+		List<Language> languages = modelService.findBySorts(sorts, Language.class);
+		modelAndView.getModelMap().addAttribute(WebBackofficeConstants.Model.MODULE_LANGUAGES, languages);
 	}
 }

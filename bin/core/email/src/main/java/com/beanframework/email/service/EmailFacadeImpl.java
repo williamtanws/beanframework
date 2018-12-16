@@ -1,86 +1,47 @@
 package com.beanframework.email.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.email.domain.Email;
-import com.beanframework.email.validator.DeleteEmailValidator;
-import com.beanframework.email.validator.SaveEmailValidator;
+import com.beanframework.email.domain.EmailSpecification;
 
 @Component
 public class EmailFacadeImpl implements EmailFacade {
 	
 	Logger logger = LoggerFactory.getLogger(EmailFacadeImpl.class);
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private EmailService emailService;
-
-	@Autowired
-	private SaveEmailValidator saveEmailValidator;
 	
-	@Autowired
-	private DeleteEmailValidator deleteEmailValidator;
-
 	@Override
-	public Email create() {
-		return emailService.create();
-	}
-
-	@Override
-	public Email initDefaults(Email email) {
-		return emailService.initDefaults(email);
-	}
-
-	@Override
-	public Email save(Email email, Errors bindingResult) {
-		saveEmailValidator.validate(email, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return email;
-		}
-
-		return emailService.save(email);
+	public void saveAttachment(Email email, MultipartFile[] attachments) throws IOException {
+		emailService.saveAttachment(email, attachments);
 	}
 	
 	@Override
-	public void saveAttachment(Email email, MultipartFile[] attachments, Errors bindingResult) {
-		try {
-			emailService.saveAttachment(email, attachments);
-		} catch (IOException e) {
-			bindingResult.reject("email", e.toString());
-		}
-	}
-	
-	@Override
-	public void deleteAttachment(UUID uuid, String filename, Errors bindingResult) {
-		try {
-			emailService.deleteAttachment(uuid, filename);
-		} catch (IOException e) {
-			bindingResult.reject("email", e.toString());
-		}
+	public void deleteAttachment(UUID uuid, String filename) throws IOException {
+		emailService.deleteAttachment(uuid, filename);
 	}
 
 	@Override
-	public void delete(UUID uuid, Errors bindingResult) {
-		deleteEmailValidator.validate(uuid, bindingResult);
-		
-		if (bindingResult.hasErrors() == false) {
-			try {
-				emailService.delete(uuid);
-			} catch (IOException e) {
-				bindingResult.reject("email", e.toString());
-			}
-		}
+	public void delete(UUID uuid) throws IOException {
+		emailService.delete(uuid);
 	}
 
 	@Override
@@ -93,12 +54,7 @@ public class EmailFacadeImpl implements EmailFacade {
 	}
 
 	@Override
-	public Email findByUuid(UUID uuid) {
-		return emailService.findByUuid(uuid);
-	}
-
-	@Override
-	public Page<Email> page(Email email, int page, int size, Direction direction, String... properties) {
+	public Page<Email> page(Email Email, int page, int size, Direction direction, String... properties) {
 
 		// Change page to index's page
 		page = page <= 0 ? 0 : page - 1;
@@ -106,25 +62,10 @@ public class EmailFacadeImpl implements EmailFacade {
 
 		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
 
-		return emailService.page(email, pageRequest);
+		Page<Email> EmailPage = modelService.findPage(EmailSpecification.findByCriteria(Email), pageRequest,
+				Email.class);
+
+		List<Email> content = modelService.getDto(EmailPage.getContent());
+		return new PageImpl<Email>(content, EmailPage.getPageable(), EmailPage.getTotalElements());
 	}
-
-	public EmailService getEmailService() {
-		return emailService;
-	}
-
-	public void setEmailService(EmailService emailService) {
-		this.emailService = emailService;
-	}
-
-	public SaveEmailValidator getSaveEmailValidator() {
-		return saveEmailValidator;
-	}
-
-	public void setSaveEmailValidator(SaveEmailValidator saveEmailValidator) {
-		this.saveEmailValidator = saveEmailValidator;
-	}
-
-
-
 }

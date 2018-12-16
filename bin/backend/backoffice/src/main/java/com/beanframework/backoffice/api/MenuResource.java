@@ -1,6 +1,7 @@
 package com.beanframework.backoffice.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebMenuConstants;
 import com.beanframework.backoffice.domain.TreeJson;
 import com.beanframework.backoffice.domain.TreeJsonState;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuLang;
 import com.beanframework.menu.service.MenuFacade;
@@ -26,14 +28,20 @@ import com.beanframework.menu.service.MenuFacade;
 @RestController
 public class MenuResource {
 	@Autowired
+	private ModelService modelService;
+	
+	@Autowired
 	private MenuFacade menuFacade;
 
 	@PreAuthorize(WebMenuConstants.PreAuthorize.READ)
 	@RequestMapping(WebMenuConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
-
+		
 		String id = (String) requestParams.get(WebBackofficeConstants.Param.ID);
-		Menu menu = menuFacade.findById(id);
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Menu.ID, id);
+		Menu menu = modelService.findOneDtoByProperties(properties, Menu.class);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 		if (StringUtils.isNotEmpty(uuidStr)) {

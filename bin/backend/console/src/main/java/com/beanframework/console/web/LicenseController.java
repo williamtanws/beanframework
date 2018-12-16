@@ -1,5 +1,6 @@
 package com.beanframework.console.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,21 +17,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.WebLicenseConstants;
 
 @Controller
-public class LicenseController {
-
-	@Autowired
-	private ConfigurationFacade configurationFacade;
+public class LicenseController extends AbstractCommonController {
 	
 	@Autowired
-	private LocaleMessageService localeMessageService;
+	private ModelService modelService;
 	
 	@Value(WebLicenseConstants.Path.LICENSE)
 	private String PATH_LICENSE;
@@ -39,8 +37,12 @@ public class LicenseController {
 	private String VIEW_LICENSE;
 
 	public boolean isLicenseAccepted() {
-		Configuration configuration = configurationFacade.findById(WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
-
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+		
+		Configuration configuration = modelService.findOneDtoByProperties(properties, Configuration.class);
+		
 		if (configuration == null) {
 			return false;
 		} else if (Boolean.parseBoolean(configuration.getValue())) {
@@ -54,9 +56,12 @@ public class LicenseController {
 	public String view(@ModelAttribute(WebLicenseConstants.ModelAttribute.LICENSE) Configuration configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 		try {
-			configuration = configurationFacade.findById(WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Configuration.ID, WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+			
+			configuration = modelService.findOneDtoByProperties(properties, Configuration.class);
 			if(configuration == null) {
-				configuration = configurationFacade.create();
+				configuration = modelService.create(Configuration.class);
 			}
 
 			model.addAttribute(WebLicenseConstants.Model.LICENSE, configuration);
@@ -72,10 +77,13 @@ public class LicenseController {
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 
 		try {
-			Configuration existingConfiguration = configurationFacade.findById(WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Configuration.ID, WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			
+			Configuration existingConfiguration = modelService.findOneDtoByProperties(properties, Configuration.class);
+						
 			if(existingConfiguration == null) {
-				existingConfiguration = configurationFacade.create();
+				existingConfiguration = modelService.create(Configuration.class);
 				existingConfiguration.setId(WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			}
 			
@@ -86,10 +94,10 @@ public class LicenseController {
 				existingConfiguration.setValue("false");
 			}
 			
-			configuration = configurationFacade.save(existingConfiguration, bindingResult);
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS, localeMessageService.getMessage(WebLicenseConstants.Locale.ACCEPT_SUCCESS));
+			modelService.save(existingConfiguration);
+			addSuccessMessage(redirectAttributes, WebLicenseConstants.Locale.ACCEPT_SUCCESS);
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, e.getMessage());
+			addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 		}
 		
 		RedirectView redirectView = new RedirectView();

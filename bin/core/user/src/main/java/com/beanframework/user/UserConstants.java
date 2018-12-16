@@ -41,7 +41,8 @@ public final class UserConstants{
 		public interface User {
 			public static final String ID_REQUIRED = "module.user.id.required";
 			public static final String ID_EXISTS = "module.user.id.exists";
-			public static final String UUID_NOT_EXISTS = "module.user.uuid.notexists";;
+			public static final String UUID_NOT_EXISTS = "module.user.uuid.notexists";
+			public static final String PASSWORD_REQUIRED = "module.user.password.required";;
 		}
 		
 		public interface UserPermission {

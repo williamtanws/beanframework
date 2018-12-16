@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 
@@ -16,39 +17,54 @@ import com.beanframework.common.exception.ModelSavingException;
 @SuppressWarnings("rawtypes")
 public interface ModelService {
 
-	void attach(Object object);
+	void attach(Object model);
 
-	void detach(Object object);
+	void detach(Object model);
 
 	void detachAll();
 
-	<T> T create(Class objectClass);
-
-	<T> T findOneByFields(Map<String, String> parameters, Class objectClass);
+	<T> T create(Class modelClass);
 	
-	<T> T findByUuid(UUID uuid, Class objectClass);
+	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass);
 
-	<T extends Collection> T findByParameters(Map<String, String> parameters, Class objectClass);
+	<T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass);
+	
+	<T extends Collection> T findByProperties(Map<String, Object> properties, Class modelClass);
+	
+	<T extends Collection> T findBySorts(Map<String, Sort.Direction> sorts, Class modelClass);
+	
+	<T extends Collection> T findByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Class modelClass);
+		
+	boolean existsByProperties(Map<String, Object> properties, Class modelClass);
 
 	<T extends Collection> T findAll();
 
-	<T> Page<T> findPage(@Nullable Specification spec, Pageable pageable, Class objectClass);
+	<T> Page<T> findPage(@Nullable Specification spec, Pageable pageable, Class modelClass);
 	
-	void refresh(Object object);
+	void refresh(Object model);
 
-	void save(Object object) throws ModelSavingException;
+	void save(Object model) throws ModelSavingException;
 
 	void saveAll() throws ModelSavingException;
 
-	void remove(Object object) throws ModelRemovalException;
-
-	void remove(UUID uuid, Class objectClass) throws ModelRemovalException;
+	void remove(Object model) throws ModelRemovalException;
 	
-	void removeAll() throws ModelRemovalException;
+	void remove(Collection<? extends Object> models) throws ModelRemovalException;
 
-	<T> T getEntity(Object object);
+	void remove(UUID uuid, Class modelClass) throws ModelRemovalException;
+	
+	int removeAll(Class modelClass) throws ModelRemovalException;
 
-	<T> T getDto(Object object);
+	<T> T getEntity(Object model);
+	
+	<T extends Collection> T getEntity(Collection<? extends Object> model);
 
-	void initDefaults(Object object) throws ModelInitializationException;
+	<T> T getDto(Object model);
+	
+	<T extends Collection> T getDto(Collection<? extends Object> models);
+
+	void initDefaults(Object model) throws ModelInitializationException;
+
+
+
 }

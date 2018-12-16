@@ -1,6 +1,6 @@
 package com.beanframework.backoffice.web;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,19 +26,22 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebLanguageConstants;
 import com.beanframework.backoffice.domain.LanguageSearch;
 import com.beanframework.backoffice.service.BackofficeModuleFacade;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.exception.ModelRemovalException;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.service.LanguageFacade;
 
 @Controller
-public class LanguageController {
+public class LanguageController extends AbstractCommonController{
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private LanguageFacade languageFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@Autowired
 	private BackofficeModuleFacade backofficeModuleFacade;
@@ -107,12 +109,12 @@ public class LanguageController {
 
 	@ModelAttribute(WebLanguageConstants.ModelAttribute.CREATE)
 	public Language populateLanguageCreate(HttpServletRequest request) {
-		return languageFacade.create();
+		return modelService.create(Language.class);
 	}
 
 	@ModelAttribute(WebLanguageConstants.ModelAttribute.UPDATE)
 	public Language populateLanguageForm(HttpServletRequest request) {
-		return languageFacade.create();
+		return modelService.create(Language.class);
 	}
 
 	@ModelAttribute(WebLanguageConstants.ModelAttribute.SEARCH)
@@ -129,13 +131,17 @@ public class LanguageController {
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (languageUpdate.getUuid() != null) {
-			Language existingLanguage = languageFacade.findByUuid(languageUpdate.getUuid());
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Language.UUID, languageUpdate.getUuid());
+			
+			Language existingLanguage = modelService.findOneDtoByProperties(properties, Language.class);
+			
 			if (existingLanguage != null) {
 				model.addAttribute(WebLanguageConstants.ModelAttribute.UPDATE, existingLanguage);
 			} else {
 				languageUpdate.setUuid(null);
-				model.addAttribute(WebBackofficeConstants.Model.ERROR,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND));
+				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 
@@ -154,24 +160,13 @@ public class LanguageController {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
-			languageCreate = languageFacade.save(languageCreate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			
+			try {
+				modelService.save(languageCreate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Language.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -196,24 +191,13 @@ public class LanguageController {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
-			languageUpdate = languageFacade.save(languageUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			
+			try {
+				modelService.save(languageUpdate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Language.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -234,29 +218,14 @@ public class LanguageController {
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		backofficeModuleFacade.deleteAllModuleLanguageByLanguageUuid(languageUpdate.getUuid(), bindingResult);
-
-		if (bindingResult.hasErrors() == false) {
-			languageFacade.delete(languageUpdate.getUuid(), bindingResult);
-		}
-
-		if (bindingResult.hasErrors()) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
+		try {
+			backofficeModuleFacade.deleteAllModuleLanguageByLanguageUuid(languageUpdate.getUuid(), bindingResult);
+			modelService.remove(languageUpdate.getUuid(), Language.class);
+			
+			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+		} catch (ModelRemovalException e) {
+			addErrorMessage(Language.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addAttribute(Language.UUID, languageUpdate.getUuid());
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebBackofficeConstants.Locale.DELETE_SUCCESS));
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, languageSearch);

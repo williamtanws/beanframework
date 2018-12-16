@@ -17,7 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobEnum;
@@ -26,6 +28,9 @@ import com.beanframework.cronjob.domain.CronjobEnum;
 public class CronjobManagerServiceImpl implements CronjobManagerService {
 
 	Logger logger = LoggerFactory.getLogger(CronjobManagerServiceImpl.class);
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
@@ -49,8 +54,11 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 	}
 	
 	private void initStartupJobIsTrue() {
-		List<Cronjob> jobList = cronjobService.findByStartupJobIsTrue();
-
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Cronjob.STARTUP, true);
+		
+		List<Cronjob> jobList = modelService.findByProperties(properties, Cronjob.class);
+		
 		for (Cronjob cronjob : jobList) {
 			cronjob.setJobTrigger(CronjobEnum.JobTrigger.START);
 			updateJobAndSaveTrigger(cronjob);
@@ -65,7 +73,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 			cronjob.setStatus(CronjobEnum.Status.ABORTED);
 			cronjob.setResult(null);
 			
-			cronjobService.save(cronjob);
+			modelService.save(cronjob);
 		}
 	}
 
@@ -118,10 +126,15 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 	}
 
 	@CacheEvict(value = { CronjobConstants.Cache.CRONJOB,  CronjobConstants.Cache.CRONJOBS}, allEntries = true)
+	@Transactional
 	@Override
 	public void trigger(Cronjob cronjob) {
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Cronjob.UUID, cronjob.getUuid());
+		
+		Cronjob updateCronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
 
-		Cronjob updateCronjob = cronjobService.findByUuid(cronjob.getUuid());
 		updateCronjob.setJobTrigger(cronjob.getJobTrigger());
 		updateCronjob.setTriggerStartDate(cronjob.getTriggerStartDate());
 		updateCronjob.setLastTriggeredDate(new Date());
@@ -208,14 +221,25 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 
 	@Override
 	public void deleteJobByUuid(UUID uuid) throws SchedulerException {
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Cronjob.UUID, uuid);
+		
+		Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
 
-		Cronjob cronjob = cronjobService.findByUuid(uuid);
 		quartzManager.deleteJob(cronjob);
+
+		modelService.remove(cronjob.getUuid(), Cronjob.class);
 	}
 
 	@Override
 	public Cronjob findByUuid(UUID uuid) {
-		Cronjob cronjob = cronjobService.findByUuid(uuid);
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Cronjob.UUID, uuid);
+		
+		Cronjob cronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
+
 		return cronjob;
 	}
 }

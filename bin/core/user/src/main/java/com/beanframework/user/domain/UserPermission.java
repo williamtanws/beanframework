@@ -26,12 +26,13 @@ public class UserPermission extends GenericDomain {
 	private static final long serialVersionUID = 5923500001897510869L;
 	public static final String DOMAIN = "UserPermission";
 	public static final String USER_PERMISSIONS = "userPermissions";
+	public static final String SORT = "sort";
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserPermissionLang.USER_PERMISSION, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<UserPermissionLang> userPermissionLangs = new ArrayList<UserPermissionLang>();
 
-	private Integer sort;
+	private int sort;
 
 	public List<UserPermissionLang> getUserPermissionLangs() {
 		return userPermissionLangs;
@@ -41,11 +42,11 @@ public class UserPermission extends GenericDomain {
 		this.userPermissionLangs = userPermissionLangs;
 	}
 
-	public Integer getSort() {
+	public int getSort() {
 		return sort;
 	}
 
-	public void setSort(Integer sort) {
+	public void setSort(int sort) {
 		this.sort = sort;
 	}
 

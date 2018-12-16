@@ -7,14 +7,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.Initializer;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
-import com.beanframework.user.service.UserPermissionFacade;
+import com.beanframework.console.WebPlatformConstants.Initialize.UserPermission;
 
 public class UserPermissionInitialize extends Initializer {
 	protected final Logger logger = LoggerFactory.getLogger(UserPermissionInitialize.class);
 
 	@Autowired
-	private UserPermissionFacade userPermissionFacade;
+	private ModelService modelService;
 
 	@PostConstruct
 	public void initializer() {
@@ -26,7 +27,7 @@ public class UserPermissionInitialize extends Initializer {
 
 	@Override
 	public void initialize() {
-		userPermissionFacade.deleteAll();
+		modelService.removeAll(UserPermission.class);
 	}
 
 }

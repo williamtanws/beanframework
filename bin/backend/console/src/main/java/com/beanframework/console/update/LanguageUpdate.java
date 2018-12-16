@@ -10,6 +10,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -20,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
@@ -32,16 +31,17 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.LanguageCsv;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageFacade;
 
 public class LanguageUpdate extends Updater {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
-
+	
 	@Autowired
-	private LanguageFacade languageFacade;
+	private ModelService modelService;
 
 	@Value("${module.console.import.update.language}")
 	private String LANGUAGE_IMPORT_UPDATE;
@@ -81,21 +81,25 @@ public class LanguageUpdate extends Updater {
 
 	public void save(List<LanguageCsv> languageCsvList) {
 
-		for (LanguageCsv languageCsv : languageCsvList) {
-			Language language = languageFacade.create();
-			language.setId(languageCsv.getId());
-			language.setName(languageCsv.getName());
-			language.setActive(languageCsv.isActive());
-			language.setSort(languageCsv.getSort());
+		for (LanguageCsv csv : languageCsvList) {
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Language.ID, csv.getId());
+			
+			Language language = modelService.findOneEntityByProperties(properties, Language.class);
+			
+			if(language == null) {
+				language = modelService.create(Language.class);
+				language.setId(csv.getId());
+			}
+			language.setName(csv.getName());
+			language.setActive(csv.isActive());
+			language.setSort(csv.getSort());
 
-			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),
-					Language.class.getName());
-			languageFacade.save(language, bindingResult);
-
-			if (bindingResult.hasErrors()) {
-				for (ObjectError objectError : bindingResult.getAllErrors()) {
-					logger.error(objectError.toString());
-				}
+			try {
+				modelService.save(language);
+			} catch (ModelSavingException e) {
+				logger.error(e.getMessage());
 			}
 		}
 	}

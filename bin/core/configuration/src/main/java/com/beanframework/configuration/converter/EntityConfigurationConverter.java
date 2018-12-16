@@ -1,36 +1,40 @@
 package com.beanframework.configuration.converter;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationService;
 
-@Component
 public class EntityConfigurationConverter implements EntityConverter<Configuration, Configuration> {
-
+	
 	@Autowired
-	private ConfigurationService configurationService;
+	private ModelService modelService;
 
 	@Override
 	public Configuration convert(Configuration source) {
 
-		Optional<Configuration> prototype = null;
+		Configuration prototype = null;
 		if (source.getUuid() != null) {
-			prototype = configurationService.findEntityByUuid(source.getUuid());
-			if (prototype.isPresent() == false) {
-				prototype = Optional.of(configurationService.create());
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Configuration.UUID, source.getUuid());
+			
+			prototype = modelService.findOneEntityByProperties(properties, Configuration.class);
+			
+			if (prototype == null) {
+				prototype = modelService.create(Configuration.class);
 			}
 		}
 		else {
-			prototype = Optional.of(configurationService.create());
+			prototype = modelService.create(Configuration.class);
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	private Configuration convert(Configuration source, Configuration prototype) {

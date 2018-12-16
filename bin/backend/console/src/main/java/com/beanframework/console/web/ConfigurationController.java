@@ -1,6 +1,6 @@
 package com.beanframework.console.web;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.exception.ModelRemovalException;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationFacade;
@@ -31,13 +33,13 @@ import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.domain.ConfigurationSearch;
 
 @Controller
-public class ConfigurationController {
+public class ConfigurationController extends AbstractCommonController {
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private ConfigurationFacade configurationFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@Value(WebConfigurationConstants.Path.CONFIGURATION)
 	private String PATH_CONFIGURATION;
@@ -103,12 +105,12 @@ public class ConfigurationController {
 
 	@ModelAttribute(WebConfigurationConstants.ModelAttribute.CREATE)
 	public Configuration populateConfigurationCreate(HttpServletRequest request) {
-		return configurationFacade.create();
+		return modelService.create(Configuration.class);
 	}
 
 	@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE)
 	public Configuration populateConfigurationForm(HttpServletRequest request) {
-		return configurationFacade.create();
+		return modelService.create(Configuration.class);
 	}
 
 	@ModelAttribute(WebConfigurationConstants.ModelAttribute.SEARCH)
@@ -125,13 +127,17 @@ public class ConfigurationController {
 		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (configurationUpdate.getUuid() != null) {
-			Configuration existingConfiguration = configurationFacade.findByUuid(configurationUpdate.getUuid());
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Configuration.UUID, configurationUpdate.getUuid());
+			Configuration existingConfiguration = modelService.findOneDtoByProperties(properties, Configuration.class);
+			existingConfiguration = modelService.getDto(existingConfiguration);
+			
 			if (existingConfiguration != null) {
 				model.addAttribute(WebConfigurationConstants.ModelAttribute.UPDATE, existingConfiguration);
 			} else {
 				configurationUpdate.setUuid(null);
-				model.addAttribute(WebConsoleConstants.Model.ERROR,
-						localeMessageService.getMessage(WebConsoleConstants.Locale.RECORD_UUID_NOT_FOUND));
+				addErrorMessage(model, WebConsoleConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 
@@ -149,24 +155,12 @@ public class ConfigurationController {
 			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
-			configurationCreate = configurationFacade.save(configurationCreate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebConsoleConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(configurationCreate);
+				
+				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -190,24 +184,12 @@ public class ConfigurationController {
 			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
-			configurationUpdate = configurationFacade.save(configurationUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebConsoleConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(configurationUpdate);
+				
+				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -226,26 +208,14 @@ public class ConfigurationController {
 			@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
-
-		configurationFacade.delete(configurationUpdate.getUuid(), bindingResult);
-
-		if (bindingResult.hasErrors()) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
+		
+		try {
+			modelService.remove(configurationUpdate.getUuid(), Configuration.class);
+			
+			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
+		} catch (ModelRemovalException e) {
+			addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebConfigurationConstants.ModelAttribute.UPDATE, configurationUpdate);
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebConsoleConstants.Locale.DELETE_SUCCESS));
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, configurationSearch);

@@ -1,6 +1,6 @@
 package com.beanframework.console.web;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.service.AdminFacade;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.console.WebAdminConstants;
@@ -32,16 +31,13 @@ import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.domain.AdminSearch;
 
 @Controller
-public class AdminController {
+public class AdminController extends AbstractCommonController {
 	
 	@Autowired
 	private ModelService modelService;
 
 	@Autowired
 	private AdminFacade adminFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@Value(WebAdminConstants.Path.ADMIN)
 	private String PATH_ADMIN;
@@ -127,13 +123,15 @@ public class AdminController {
 		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (adminUpdate.getUuid() != null) {
-			Admin existingAdmin = adminFacade.findByUuid(adminUpdate.getUuid());
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Admin.UUID, adminUpdate.getUuid());
+			Admin existingAdmin = modelService.findOneDtoByProperties(properties, Admin.class);
+			
 			if (existingAdmin != null) {
 				model.addAttribute(WebAdminConstants.ModelAttribute.UPDATE, existingAdmin);
 			} else {
 				adminUpdate.setUuid(null);
-				model.addAttribute(WebConsoleConstants.Model.ERROR,
-						localeMessageService.getMessage(WebConsoleConstants.Locale.RECORD_UUID_NOT_FOUND));
+				addErrorMessage(model, WebConsoleConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 
@@ -151,23 +149,11 @@ public class AdminController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				adminCreate = adminFacade.save(adminCreate);
+				modelService.save(adminCreate);
 				
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebConsoleConstants.Locale.SAVE_SUCCESS));
+				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (Exception e) {
-				bindingResult.reject(Admin.class.getSimpleName(), e.getMessage());
-				
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
+				addErrorMessage(Admin.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -191,23 +177,11 @@ public class AdminController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				adminUpdate = adminFacade.save(adminUpdate);
+				modelService.save(adminUpdate);
 				
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
+				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (Exception e) {
-				bindingResult.reject(Admin.class.getSimpleName(), e.getMessage());
-				
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebConsoleConstants.Locale.SAVE_SUCCESS));
+				addErrorMessage(Admin.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -227,26 +201,12 @@ public class AdminController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			adminFacade.delete(adminUpdate.getUuid());
+			modelService.remove(adminUpdate.getUuid());
 			
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebConsoleConstants.Locale.DELETE_SUCCESS));
+			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
 		} catch (Exception e) {
-			bindingResult.reject(Admin.class.getSimpleName(), e.getMessage());
-			
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
+			addErrorMessage(Admin.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebAdminConstants.ModelAttribute.UPDATE, adminUpdate);
-			
-			
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, adminSearch);

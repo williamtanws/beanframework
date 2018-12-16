@@ -1,33 +1,31 @@
 package com.beanframework.user.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Sort;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserPermissionLang;
-import com.beanframework.user.service.UserPermissionService;
 
-@Component
+
 public class DtoUserPermissionConverter implements DtoConverter<UserPermission, UserPermission> {
 
 	@Autowired
-	private UserPermissionService userPermissionService;
-
-	@Autowired
-	private LanguageService languageService;
+	private ModelService modelService;
 	
 	@Autowired
 	private DtoUserPermissionLangConverter dtoUserPermissionLangConverter;
 
 	@Override
 	public UserPermission convert(UserPermission source) {
-		return convert(source, userPermissionService.create());
+		return convert(source, modelService.create(UserPermission.class));
 	}
 
 	public List<UserPermission> convert(List<UserPermission> sources) {
@@ -50,7 +48,12 @@ public class DtoUserPermissionConverter implements DtoConverter<UserPermission, 
 
 		// Process User Permission Lang
 		prototype.setUserPermissionLangs(dtoUserPermissionLangConverter.convert(source.getUserPermissionLangs()));
-		List<Language> languages = languageService.findByOrderBySortAsc();
+		
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Language.SORT, Sort.Direction.ASC);
+		
+		List<Language> languages = modelService.findBySorts(sorts, Language.class);
+		
 		for (Language language : languages) {
 			boolean addNewLanguage = true;
 			for (UserPermissionLang userPermissionLang : source.getUserPermissionLangs()) {

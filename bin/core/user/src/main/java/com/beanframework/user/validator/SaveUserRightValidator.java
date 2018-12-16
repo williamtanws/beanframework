@@ -1,5 +1,8 @@
 package com.beanframework.user.validator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -7,15 +10,16 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.UserConstants;
+import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserRightService;
 
 @Component
 public class SaveUserRightValidator implements Validator {
 
 	@Autowired
-	private UserRightService userRightService;
+	private ModelService modelService;
 
 	@Autowired
 	private LocaleMessageService localMessageService;
@@ -34,8 +38,13 @@ public class SaveUserRightValidator implements Validator {
 			if (StringUtils.isEmpty(userRight.getId())) {
 				errors.reject(UserRight.ID, localMessageService.getMessage(UserConstants.Locale.UserRight.ID_REQUIRED));
 			} else {
-				UserRight existsUserRight = userRightService.findById(userRight.getId());
-				if (existsUserRight != null) {
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserPermission.ID, userRight.getId());
+				
+				boolean existsUserRight = modelService.existsByProperties(properties, UserRight.class);
+				
+				if (existsUserRight) {
 					errors.reject(UserRight.ID, localMessageService.getMessage(UserConstants.Locale.UserRight.ID_EXISTS));
 				}
 			}
@@ -43,7 +52,12 @@ public class SaveUserRightValidator implements Validator {
 		} else {
 			// Update exists
 			if (StringUtils.isNotEmpty(userRight.getId())) {
-				UserRight existsUserRight = userRightService.findById(userRight.getId());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserRight.ID, userRight.getId());
+				
+				UserRight existsUserRight = modelService.findOneEntityByProperties(properties, UserRight.class);
+								
 				if (existsUserRight != null) {
 					if (!userRight.getUuid().equals(existsUserRight.getUuid())) {
 						errors.reject(UserRight.ID, localMessageService.getMessage(UserConstants.Locale.UserRight.ID_EXISTS));

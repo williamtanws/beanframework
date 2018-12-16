@@ -10,6 +10,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -20,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
 import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
@@ -31,21 +30,22 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserPermissionCsv;
 import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserPermissionLang;
-import com.beanframework.user.service.UserPermissionFacade;
 
 public class UserPermissionUpdate extends Updater {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private UserPermissionFacade userPermissionFacade;
+	private ModelService modelService;
 
 	@Value("${module.console.import.update.userpermission}")
-	private String USERPERMISSION_IMPORT_UPDATE;
+	private String USERRIGHT_IMPORT_UPDATE;
 
 	@PostConstruct
 	public void updater() {
@@ -60,7 +60,7 @@ public class UserPermissionUpdate extends Updater {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = null;
 		try {
-			resources = loader.getResources(USERPERMISSION_IMPORT_UPDATE);
+			resources = loader.getResources(USERRIGHT_IMPORT_UPDATE);
 			for (Resource resource : resources) {
 				try {
 					InputStream in = resource.getInputStream();
@@ -81,34 +81,68 @@ public class UserPermissionUpdate extends Updater {
 	}
 
 	public void save(List<UserPermissionCsv> userPermissionCsvList) {
-
-		for (UserPermissionCsv userPermissionCsv : userPermissionCsvList) {
-			UserPermission userPermission = userPermissionFacade.create();
-			userPermission.setId(userPermissionCsv.getId());
-			userPermission.setSort(userPermissionCsv.getSort());
+		
+		for (UserPermissionCsv csv : userPermissionCsvList) {
 			
-			Language language = new Language();
-			language.setId("en");
-			UserPermissionLang userPermissionLang = new UserPermissionLang();
-			userPermissionLang.setLanguage(language);
-			userPermissionLang.setName(userPermissionCsv.getName_en());
-			userPermission.getUserPermissionLangs().add(userPermissionLang);
+			Map<String, Object> userPermissionProperties = new HashMap<String, Object>();
+			userPermissionProperties.put(UserPermission.ID, csv.getId());
 			
-			language = new Language();
-			language.setId("cn");
-			userPermissionLang = new UserPermissionLang();
-			userPermissionLang.setLanguage(language);
-			userPermissionLang.setName(userPermissionCsv.getName_cn());
-			userPermission.getUserPermissionLangs().add(userPermissionLang);
-
-			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),
-					UserPermission.class.getName());
-			userPermissionFacade.save(userPermission, bindingResult);
-
-			if (bindingResult.hasErrors()) {
-				for (ObjectError objectError : bindingResult.getAllErrors()) {
-					logger.error(objectError.toString());
+			UserPermission userPermission = modelService.findOneEntityByProperties(userPermissionProperties, UserPermission.class);
+			
+			if(userPermission == null) {
+				userPermission = modelService.create(UserPermission.class);
+				userPermission.setId(csv.getId());
+			}
+			userPermission.setSort(csv.getSort());
+			
+			Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
+			enlanguageProperties.put(Language.ID, "en");
+			
+			Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
+			
+			if(enLanguage != null) {
+				boolean create = true;
+				for (int i = 0; i < userPermission.getUserPermissionLangs().size(); i++) {
+					if (userPermission.getUserPermissionLangs().get(i).getLanguage().getId().equals("en")) {
+						userPermission.getUserPermissionLangs().get(i).setName(csv.getName_en());
+						create = false;
+					}
 				}
+				
+				if(create) {
+					UserPermissionLang userPermissionLang = modelService.create(UserPermissionLang.class);
+					userPermissionLang.setLanguage(enLanguage);
+					userPermissionLang.setName(csv.getName_en());
+					userPermission.getUserPermissionLangs().add(userPermissionLang);
+				}
+			}
+			
+			Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
+			cnlanguageProperties.put(Language.ID, "cn");
+			
+			Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
+			
+			if(cnLanguage != null) {
+				boolean create = true;
+				for (int i = 0; i < userPermission.getUserPermissionLangs().size(); i++) {
+					if (userPermission.getUserPermissionLangs().get(i).getLanguage().getId().equals("cn")) {
+						userPermission.getUserPermissionLangs().get(i).setName(csv.getName_cn());
+						create = false;
+					}
+				}
+				
+				if(create) {
+					UserPermissionLang userPermissionLang = modelService.create(UserPermissionLang.class);
+					userPermissionLang.setLanguage(cnLanguage);
+					userPermissionLang.setName(csv.getName_cn());
+					userPermission.getUserPermissionLangs().add(userPermissionLang);
+				}
+			}
+			
+			try {
+				modelService.save(userPermission);
+			} catch (ModelSavingException e) {
+				logger.error(e.getMessage());
 			}
 		}
 	}
@@ -127,13 +161,13 @@ public class UserPermissionUpdate extends Updater {
 			final CellProcessor[] processors = getProcessors();
 
 			UserPermissionCsv permissionCsv;
-			logger.info("Start import Permission Csv.");
+			logger.info("Start import UserPermission Csv.");
 			while ((permissionCsv = beanReader.read(UserPermissionCsv.class, header, processors)) != null) {
 				logger.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
 						permissionCsv);
 				permissionCsvList.add(permissionCsv);
 			}
-			logger.info("Finished import Permission Csv.");
+			logger.info("Finished import UserPermission Csv.");
 		} catch (FileNotFoundException ex) {
 			logger.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

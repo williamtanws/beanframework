@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.api;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -14,20 +15,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCronjobConstants;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.service.CronjobFacade;
 
 @RestController
 public class CronjobResource {
+	
 	@Autowired
-	private CronjobFacade cronjobFacade;
+	private ModelService modelService;
 
 	@PreAuthorize(WebCronjobConstants.PreAuthorize.READ)
 	@RequestMapping(WebCronjobConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
-		Cronjob cronjob = cronjobFacade.findById(id);
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Cronjob.ID, id);
+		
+		Cronjob cronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 		if (StringUtils.isNotEmpty(uuidStr)) {
@@ -47,7 +53,12 @@ public class CronjobResource {
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 		String jobGroup = (String) requestParams.get("jobGroup");
 		String jobName = (String) requestParams.get("jobName");
-		Cronjob cronjob = cronjobFacade.findByJobGroupAndJobName(jobGroup, jobName);
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Cronjob.JOB_GROUP, jobGroup);
+		properties.put(Cronjob.JOB_NAME, jobName);
+		
+		Cronjob cronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
 
 		if (StringUtils.isNotEmpty(uuidStr) && cronjob != null && cronjob.getUuid().equals(UUID.fromString(uuidStr))) {
 			return "true";

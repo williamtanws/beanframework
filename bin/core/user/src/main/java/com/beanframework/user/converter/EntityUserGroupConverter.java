@@ -2,59 +2,56 @@ package com.beanframework.user.converter;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Sort;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupLang;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserGroupService;
-import com.beanframework.user.service.UserPermissionService;
-import com.beanframework.user.service.UserRightService;
 
-@Component
+
 public class EntityUserGroupConverter implements EntityConverter<UserGroup, UserGroup> {
-
+	
 	@Autowired
-	private UserGroupService userGroupService;
-
-	@Autowired
-	private LanguageService languageService;
-
-	@Autowired
-	private UserPermissionService userPermissionService;
-
-	@Autowired
-	private UserRightService userRightService;
+	private ModelService modelService;
 
 	@Override
 	public UserGroup convert(UserGroup source) {
 
-		Optional<UserGroup> prototype = Optional.of(userGroupService.create());
+		UserGroup prototype = modelService.create(UserGroup.class);
 		if (source.getUuid() != null) {
-			Optional<UserGroup> exists = userGroupService.findEntityByUuid(source.getUuid());
-			if(exists.isPresent()) {
-				prototype = exists;
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(UserGroup.UUID, source.getUuid());
+			UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+			
+			if(existingUserGroup != null) {
+				prototype = existingUserGroup;
 			}
 		}
 		else if (StringUtils.isNotEmpty(source.getId())) {
-			Optional<UserGroup> exists = userGroupService.findEntityById(source.getId());
-			if(exists.isPresent()) {
-				prototype = exists;
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(UserGroup.ID, source.getId());
+			UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+			
+			if(existingUserGroup != null) {
+				prototype = existingUserGroup;
 			}
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	private UserGroup convert(UserGroup source, UserGroup prototype) {
@@ -65,16 +62,26 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 		prototype.getUserGroupLangs().clear();
 		for (UserGroupLang userGroupLang : source.getUserGroupLangs()) {
 			if (userGroupLang.getLanguage().getUuid() != null) {
-				Optional<Language> language = languageService.findEntityByUuid(userGroupLang.getLanguage().getUuid());
-				if (language.isPresent()) {
-					userGroupLang.setLanguage(language.get());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Language.UUID, userGroupLang.getLanguage().getUuid());
+				
+				Language language = modelService.findOneEntityByProperties(properties, Language.class);
+				
+				if (language != null) {
+					userGroupLang.setLanguage(language);
 					userGroupLang.setUserGroup(prototype);
 					prototype.getUserGroupLangs().add(userGroupLang);
 				}
 			} else if (StringUtils.isNotEmpty(userGroupLang.getLanguage().getId())) {
-				Optional<Language> language = languageService.findEntityById(userGroupLang.getLanguage().getId());
-				if (language.isPresent()) {
-					userGroupLang.setLanguage(language.get());
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Language.ID, userGroupLang.getLanguage().getId());
+				
+				Language language = modelService.findOneEntityByProperties(properties, Language.class);
+				
+				if (language != null) {
+					userGroupLang.setLanguage(language);
 					userGroupLang.setUserGroup(prototype);
 					prototype.getUserGroupLangs().add(userGroupLang);
 				}
@@ -88,8 +95,12 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 			Hibernate.initialize(userAuthority.getUserRight());
 		}
 		if (prototype.getUserAuthorities().isEmpty()) {
-			List<UserPermission> userPermissions = userPermissionService.findEntityAllByOrderBySortAsc();
-			List<UserRight> userRights = userRightService.findEntityAllByOrderBySortAsc();
+			
+			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+			sorts.put(UserPermission.SORT, Sort.Direction.ASC);
+			
+			List<UserPermission> userPermissions = modelService.findBySorts(sorts, UserGroup.class);
+			List<UserRight> userRights = modelService.findBySorts(sorts, UserRight.class);
 
 			for (UserPermission userPermission : userPermissions) {
 				for (UserRight userRight : userRights) {
@@ -119,13 +130,18 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 			
 			if (addNewAuthority) {
 				
-				Optional<UserPermission> userPermission = userPermissionService.findEntityByUuid(sourceUserAuthority.getUserPermission().getUuid());
-				Optional<UserRight> userRight = userRightService.findEntityByUuid(sourceUserAuthority.getUserRight().getUuid());
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserPermission.UUID, sourceUserAuthority.getUserPermission().getUuid());
+				UserPermission userPermission = modelService.findOneEntityByProperties(properties, UserPermission.class);
+				
+				properties = new HashMap<String, Object>();
+				properties.put(UserPermission.UUID, sourceUserAuthority.getUserRight().getUuid());
+				UserRight userRight = modelService.findOneEntityByProperties(properties, UserRight.class);
 				
 				UserAuthority userAuthority = new UserAuthority();
 				userAuthority.setUserGroup(prototype);
-				userAuthority.setUserPermission(userPermission.get());
-				userAuthority.setUserRight(userRight.get());
+				userAuthority.setUserPermission(userPermission);
+				userAuthority.setUserRight(userRight);
 				userAuthority.setEnabled(sourceUserAuthority.getEnabled());
 
 				newAuthorities.add(userAuthority);

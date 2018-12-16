@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.api;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,20 +14,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserGroupConstants;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupFacade;
 
 @RestController
 public class UserGroupResource {
+
 	@Autowired
-	private UserGroupFacade userGroupFacade;
+	private ModelService modelService;
 
 	@PreAuthorize(WebUserGroupConstants.PreAuthorize.READ)
 	@RequestMapping(WebUserGroupConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
-		UserGroup userGroup = userGroupFacade.findById(id);
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(UserGroup.ID, id);
+
+		UserGroup userGroup = modelService.findOneDtoByProperties(properties, UserGroup.class);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 		if (StringUtils.isNotEmpty(uuidStr)) {

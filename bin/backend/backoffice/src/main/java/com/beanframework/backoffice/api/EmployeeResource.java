@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.api;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,20 +14,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebEmployeeConstants;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeFacade;
 
 @RestController
 public class EmployeeResource {
 	@Autowired
-	private EmployeeFacade employeeFacade;
+	private ModelService modelService;
 
 	@PreAuthorize(WebEmployeeConstants.PreAuthorize.READ)
 	@RequestMapping(WebEmployeeConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
-		Employee employee = employeeFacade.findById(id);
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Employee.ID, id);
+
+		Employee employee = modelService.findOneDtoByProperties(properties, Employee.class);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 		if (StringUtils.isNotEmpty(uuidStr)) {

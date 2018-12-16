@@ -1,5 +1,7 @@
 package com.beanframework.user.validator;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +10,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.UserConstants;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserRightService;
 
 @Component
 public class DeleteUserRightValidator implements Validator {
 
 	@Autowired
-	private UserRightService userRightService;
+	private ModelService modelService;
 
 	@Autowired
 	private LocaleMessageService localMessageService;
@@ -30,8 +32,12 @@ public class DeleteUserRightValidator implements Validator {
 	public void validate(final Object target, final Errors errors) {
 		
 		UUID uuid = (UUID) target;
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(UserRight.UUID, uuid);
+		
+		UserRight userRight = modelService.findOneEntityByProperties(properties, UserRight.class);
 
-		UserRight userRight = userRightService.findByUuid(uuid);
 		if(userRight == null) {
 			errors.reject(UserRight.ID, localMessageService.getMessage(UserConstants.Locale.User.UUID_NOT_EXISTS));
 		}

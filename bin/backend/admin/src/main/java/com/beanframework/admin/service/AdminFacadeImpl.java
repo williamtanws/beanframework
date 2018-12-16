@@ -1,11 +1,10 @@
 package com.beanframework.admin.service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -18,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.admin.domain.AdminSpecification;
 import com.beanframework.common.service.ModelService;
 
 @Component
@@ -25,41 +25,9 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private AdminService adminService;
-
-	@Override
-	public Admin save(Admin admin) {
-		modelService.save(admin);
-		return modelService.getDto(admin);
-	}
-
-	@Override
-	public void delete(UUID uuid) {
-		modelService.remove(uuid, Admin.class);
-	}
-
-	@Override
-	public void deleteAll() {
-		modelService.removeAll();
-	}
-
-	@Override
-	public Admin findByUuid(UUID uuid) {
-		Admin admin = modelService.findByUuid(uuid, Admin.class);
-		
-		return admin == null ? null : modelService.getDto(admin);
-	}
-
-	@Override
-	public Admin findById(String id) {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put(Admin.ID, id);
-		Admin admin = modelService.findOneByFields(map, Admin.class);
-
-		return admin == null ? null : modelService.getDto(admin);
-	}
 
 	@Override
 	public Page<Admin> page(Admin admin, int page, int size, Direction direction, String... properties) {
@@ -70,7 +38,10 @@ public class AdminFacadeImpl implements AdminFacade {
 
 		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
 
-		return adminService.page(admin, pageRequest);
+		Page<Admin> adminPage = modelService.findPage(AdminSpecification.findByCriteria(admin), pageRequest, Admin.class);
+
+		List<Admin> content = modelService.getDto(adminPage.getContent());
+		return new PageImpl<Admin>(content, adminPage.getPageable(), adminPage.getTotalElements());
 	}
 
 	@Override
@@ -108,6 +79,6 @@ public class AdminFacadeImpl implements AdminFacade {
 		if (admin.isCredentialsNonExpired() == false) {
 			throw new CredentialsExpiredException("Password Expired");
 		}
-		return admin;
+		return modelService.getDto(admin);
 	}
 }

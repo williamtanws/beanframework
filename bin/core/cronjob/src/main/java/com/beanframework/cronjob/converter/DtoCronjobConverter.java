@@ -4,24 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.service.CronjobService;
 
-@Component
 public class DtoCronjobConverter implements DtoConverter<Cronjob, Cronjob> {
-
+	
 	@Autowired
-	private CronjobService cronjobService;
+	private ModelService modelService;
 	
 	@Autowired
 	private DtoCronjobDataConverter dtoCronjobDataConverter;
 
 	@Override
 	public Cronjob convert(Cronjob source) {
-		return convert(source, cronjobService.create());
+		return convert(source, modelService.create(Cronjob.class));
 	}
 
 	public List<Cronjob> convert(List<Cronjob> sources) {
@@ -42,7 +40,7 @@ public class DtoCronjobConverter implements DtoConverter<Cronjob, Cronjob> {
 		
 		prototype.setDescription(source.getDescription());
 		prototype.setCronExpression(source.getCronExpression());
-		prototype.setStartup(source.getStartup());
+		prototype.setStartup(source.isStartup());
 		prototype.setStatus(source.getStatus());
 		prototype.setResult(source.getResult());
 		prototype.setMessage(source.getMessage());

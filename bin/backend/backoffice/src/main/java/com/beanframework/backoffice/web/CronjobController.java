@@ -3,7 +3,7 @@ package com.beanframework.backoffice.web;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,7 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,20 +29,26 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCronjobConstants;
 import com.beanframework.backoffice.domain.CronjobSearch;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.cronjob.service.CronjobFacade;
+import com.beanframework.cronjob.service.CronjobManagerService;
 
 @Controller
-public class CronjobController {
+public class CronjobController extends AbstractCommonController {
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private CronjobFacade cronjobFacade;
-
+	
 	@Autowired
-	private LocaleMessageService localeMessageService;
+	private CronjobManagerService cronjobManagerService;
 
 	@Value(WebCronjobConstants.Path.CRONJOB)
 	private String PATH_CRONJOB;
@@ -108,12 +113,12 @@ public class CronjobController {
 
 	@ModelAttribute(WebCronjobConstants.ModelAttribute.CREATE)
 	public Cronjob populateCronjobCreate(HttpServletRequest request) {
-		return cronjobFacade.create();
+		return modelService.create(Cronjob.class);
 	}
 
 	@ModelAttribute(WebCronjobConstants.ModelAttribute.UPDATE)
 	public Cronjob populateCronjobForm(HttpServletRequest request) {
-		return cronjobFacade.create();
+		return modelService.create(Cronjob.class);
 	}
 
 	@ModelAttribute(WebCronjobConstants.ModelAttribute.SEARCH)
@@ -130,13 +135,17 @@ public class CronjobController {
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (cronjobUpdate.getUuid() != null) {
-			Cronjob existingCronjob = cronjobFacade.findByUuid(cronjobUpdate.getUuid());
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, cronjobUpdate.getUuid());
+			
+			Cronjob existingCronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
+			
 			if (existingCronjob != null) {
 				model.addAttribute(WebCronjobConstants.ModelAttribute.UPDATE, existingCronjob);
 			} else {
 				cronjobUpdate.setUuid(null);
-				model.addAttribute(WebBackofficeConstants.Model.ERROR,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND));
+				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 
@@ -155,24 +164,12 @@ public class CronjobController {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
-			cronjobCreate = cronjobFacade.save(cronjobCreate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(cronjobCreate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -198,27 +195,19 @@ public class CronjobController {
 					"Update record needed existing UUID.");
 		} else {
 			
-			Cronjob cronjob = cronjobFacade.findByUuid(cronjobUpdate.getUuid());
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, cronjobUpdate.getUuid());
+			
+			Cronjob cronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
+			
 			cronjobUpdate.setCronjobDatas(cronjob.getCronjobDatas());
 			
-			cronjobUpdate = cronjobFacade.save(cronjobUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(cronjobUpdate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -250,24 +239,12 @@ public class CronjobController {
 				 cronjobUpdate.setTriggerStartDate(date);
 			}
 			
-			cronjobFacade.trigger(cronjobUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				cronjobFacade.trigger(cronjobUpdate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (Exception e) {
+				addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -300,27 +277,19 @@ public class CronjobController {
 			cronjobData.setName(cronjobDataName);
 			cronjobData.setValue(cronjobDataValue);
 			
-			cronjobUpdate = cronjobFacade.findByUuid(cronjobUpdate.getUuid());
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, cronjobUpdate.getUuid());
+			
+			cronjobUpdate = modelService.findOneDtoByProperties(properties, Cronjob.class);
+			
 			cronjobUpdate.getCronjobDatas().add(cronjobData);
 			
-			cronjobUpdate = cronjobFacade.save(cronjobUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(cronjobUpdate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -348,7 +317,11 @@ public class CronjobController {
 			
 			UUID jobDataUuidToDelete = UUID.fromString((String) requestParams.get("jobDataUuid"));
 			
-			cronjobUpdate = cronjobFacade.findByUuid(cronjobUpdate.getUuid());
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, cronjobUpdate.getUuid());
+			
+			cronjobUpdate = modelService.findOneDtoByProperties(properties, Cronjob.class);
+			
 			for (int i = 0; i < cronjobUpdate.getCronjobDatas().size(); i++) {
 				if(cronjobUpdate.getCronjobDatas().get(i).getUuid().equals(jobDataUuidToDelete)) {
 					cronjobUpdate.getCronjobDatas().remove(i);
@@ -356,24 +329,12 @@ public class CronjobController {
 				}
 			}
 			
-			cronjobUpdate = cronjobFacade.save(cronjobUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(cronjobUpdate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (ModelSavingException e) {
+				addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -395,25 +356,13 @@ public class CronjobController {
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 		
-		cronjobFacade.delete(cronjobUpdate.getUuid(), bindingResult);
-
-		if (bindingResult.hasErrors()) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
+		try {
+			cronjobManagerService.deleteJobByUuid(cronjobUpdate.getUuid());
+			
+			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+		} catch (Exception e) {
+			addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebCronjobConstants.ModelAttribute.UPDATE, cronjobUpdate);
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebBackofficeConstants.Locale.DELETE_SUCCESS));
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, cronjobSearch);

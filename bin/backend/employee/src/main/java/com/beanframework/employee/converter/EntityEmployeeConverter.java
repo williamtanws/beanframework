@@ -1,47 +1,47 @@
 package com.beanframework.employee.converter;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeService;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupService;
 import com.beanframework.user.utils.PasswordUtils;
 
-@Component
 public class EntityEmployeeConverter implements EntityConverter<Employee, Employee> {
 
 	@Autowired
-	private EmployeeService employeeService;
-
-	@Autowired
-	private UserGroupService userGroupService;
+	private ModelService modelService;
 
 	@Override
 	public Employee convert(Employee source) {
 
-		Optional<Employee> prototype = Optional.of(employeeService.create());
+		Employee prototype = modelService.create(Employee.class);
 		if (source.getUuid() != null) {
-			Optional<Employee> exists = employeeService.findEntityByUuid(source.getUuid());
-			if(exists.isPresent()) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Employee.UUID, source.getUuid());
+			Employee exists = modelService.findOneEntityByProperties(properties, Employee.class);
+
+			if (exists != null) {
 				prototype = exists;
 			}
-		}
-		else if (StringUtils.isNotEmpty(source.getId())) {
-			Optional<Employee> exists = employeeService.findEntityById(source.getId());
-			if(exists.isPresent()) {
+		} else if (StringUtils.isNotEmpty(source.getId())) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Employee.ID, source.getId());
+			Employee exists = modelService.findOneEntityByProperties(properties, Employee.class);
+
+			if (exists != null) {
 				prototype = exists;
 			}
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	private Employee convert(Employee source, Employee prototype) {
@@ -60,16 +60,23 @@ public class EntityEmployeeConverter implements EntityConverter<Employee, Employ
 		Hibernate.initialize(prototype.getUserGroups());
 		prototype.getUserGroups().clear();
 		for (UserGroup userGroup : source.getUserGroups()) {
-			if(userGroup.getUuid() != null) {
-				Optional<UserGroup> existingUserGroup = userGroupService.findEntityByUuid(userGroup.getUuid());
-				if (existingUserGroup.isPresent()) {
-					prototype.getUserGroups().add(existingUserGroup.get());
+			if (userGroup.getUuid() != null) {
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserGroup.UUID, source.getUuid());
+				UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+				
+				if (existingUserGroup != null) {
+					prototype.getUserGroups().add(existingUserGroup);
 				}
-			}
-			else if(StringUtils.isNotEmpty(userGroup.getId())) {
-				Optional<UserGroup> existingUserGroup = userGroupService.findEntityById(userGroup.getId());
-				if (existingUserGroup.isPresent()) {
-					prototype.getUserGroups().add(existingUserGroup.get());
+			} else if (StringUtils.isNotEmpty(userGroup.getId())) {
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserGroup.ID, source.getId());
+				UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+				
+				if (existingUserGroup != null) {
+					prototype.getUserGroups().add(existingUserGroup);
 				}
 			}
 		}

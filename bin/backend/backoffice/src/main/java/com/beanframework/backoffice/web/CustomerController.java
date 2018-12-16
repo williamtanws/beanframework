@@ -1,6 +1,7 @@
 package com.beanframework.backoffice.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,26 +27,23 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCustomerConstants;
 import com.beanframework.backoffice.domain.CustomerSearch;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerFacade;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupFacade;
 
 @Controller
-public class CustomerController {
+public class CustomerController extends AbstractCommonController {
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private CustomerFacade customerFacade;
 	
-	@Autowired
-	private UserGroupFacade userGroupFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
-
 	@Value(WebCustomerConstants.Path.CUSTOMER)
 	private String PATH_CUSTOMER;
 
@@ -110,12 +107,12 @@ public class CustomerController {
 
 	@ModelAttribute(WebCustomerConstants.ModelAttribute.CREATE)
 	public Customer populateCustomerCreate(HttpServletRequest request) {
-		return customerFacade.create();
+		return modelService.create(Customer.class);
 	}
 
 	@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE)
 	public Customer populateCustomerForm(HttpServletRequest request) {
-		return customerFacade.create();
+		return modelService.create(Customer.class);
 	}
 
 	@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH)
@@ -132,10 +129,17 @@ public class CustomerController {
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (customerUpdate.getUuid() != null) {
-			Customer existingCustomer = customerFacade.findByUuid(customerUpdate.getUuid());
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Customer.UUID, customerUpdate.getUuid());
+			Customer existingCustomer= modelService.findOneEntityByProperties(properties, Customer.class);
+			
 			if (existingCustomer != null) {
 				
-				List<UserGroup> userGroups = userGroupFacade.findByOrderByCreatedDate();
+				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
+				
+				List<UserGroup> userGroups = modelService.findBySorts(sorts, UserGroup.class);
+				
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingCustomer.getUserGroups()) {
 						if(userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
@@ -148,8 +152,7 @@ public class CustomerController {
 				model.addAttribute(WebCustomerConstants.ModelAttribute.UPDATE, existingCustomer);
 			} else {
 				customerUpdate.setUuid(null);
-				model.addAttribute(WebBackofficeConstants.Model.ERROR,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND));
+				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 		
@@ -175,24 +178,12 @@ public class CustomerController {
 			}
 			customerCreate.setUserGroups(userGroups);
 			
-			customerCreate = customerFacade.save(customerCreate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(customerCreate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (Exception e) {
+				addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -224,24 +215,12 @@ public class CustomerController {
 			}
 			customerUpdate.setUserGroups(userGroups);
 			
-			customerUpdate = customerFacade.save(customerUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
-
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			try {
+				modelService.save(customerUpdate);
+				
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (Exception e) {
+				addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -261,25 +240,13 @@ public class CustomerController {
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		customerFacade.delete(customerUpdate.getUuid(), bindingResult);
+		try {
+			modelService.remove(customerUpdate.getUuid());
 
-		if (bindingResult.hasErrors()) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
+			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+		} catch (Exception e) {
+			addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebCustomerConstants.ModelAttribute.UPDATE, customerUpdate);
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebBackofficeConstants.Locale.DELETE_SUCCESS));
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, customerSearch);

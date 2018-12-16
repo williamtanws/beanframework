@@ -1,33 +1,31 @@
 package com.beanframework.user.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Sort;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightLang;
-import com.beanframework.user.service.UserRightService;
 
-@Component
+
 public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight> {
-
+	
 	@Autowired
-	private UserRightService userRightService;
-
-	@Autowired
-	private LanguageService languageService;
+	private ModelService modelService;
 	
 	@Autowired
 	private DtoUserRightLangConverter dtoUserRightLangConverter;
 
 	@Override
 	public UserRight convert(UserRight source) {
-		return convert(source, userRightService.create());
+		return convert(source, modelService.create(UserRight.class));
 	}
 
 	public List<UserRight> convert(List<UserRight> sources) {
@@ -50,7 +48,12 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 
 		// Process User Right Lang
 		prototype.setUserRightLangs(dtoUserRightLangConverter.convert(source.getUserRightLangs()));
-		List<Language> languages = languageService.findByOrderBySortAsc();
+		
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Language.SORT, Sort.Direction.ASC);
+		
+		List<Language> languages = modelService.findBySorts(sorts, Language.class);
+		
 		for (Language language : languages) {
 			boolean addNewLanguage = true;
 			for (UserRightLang userRightLang : source.getUserRightLangs()) {

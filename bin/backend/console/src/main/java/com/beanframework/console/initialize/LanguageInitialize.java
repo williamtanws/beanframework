@@ -7,14 +7,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.Initializer;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
+import com.beanframework.console.WebPlatformConstants.Initialize.Language;
 import com.beanframework.language.service.LanguageFacade;
 
 public class LanguageInitialize extends Initializer {
 	protected final Logger logger = LoggerFactory.getLogger(LanguageInitialize.class);
 
 	@Autowired
-	private LanguageFacade languageFacade;
+	private ModelService modelService;
 
 	@PostConstruct
 	public void initializer() {
@@ -26,7 +28,7 @@ public class LanguageInitialize extends Initializer {
 
 	@Override
 	public void initialize() {
-		languageFacade.deleteAll();
+		modelService.removeAll(Language.class);
 	}
 
 }
