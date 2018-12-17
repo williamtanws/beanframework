@@ -26,7 +26,7 @@
 							<div class="col-md-12" th:each="update : ${updates}">
 								<div class="form-group checkbox icheck">
 									<label>
-										<input type="checkbox" th:name="${update.key}">
+										<input type="checkbox" th:name="${update.key}">&nbsp;
 										<span th:text="${update.value.name}"></span>
 										<br>
 										<span style="padding-left: 40px" th:text="${update.value.description}"></span>

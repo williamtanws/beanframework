@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,6 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
-import com.beanframework.common.exception.ModelSavingException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserPermissionCsv;
@@ -99,7 +99,7 @@ public class UserPermissionUpdate extends Updater {
 		enNameDynamicField.setRule(null);
 		enNameDynamicField.setSort(0);
 		enNameDynamicField.setType(DynamicFieldType.TEXT);
-		modelService.save(enNameDynamicField);
+		modelService.saveEntity(enNameDynamicField);
 
 		Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
 		cnNameDynamicFieldProperties.put(DynamicField.ID, "userpermission_name_cn");
@@ -114,7 +114,7 @@ public class UserPermissionUpdate extends Updater {
 		cnNameDynamicField.setRule(null);
 		cnNameDynamicField.setSort(1);
 		cnNameDynamicField.setType(DynamicFieldType.TEXT);
-		modelService.save(cnNameDynamicField);
+		modelService.saveEntity(cnNameDynamicField);
 
 		// Language
 
@@ -138,65 +138,67 @@ public class UserPermissionUpdate extends Updater {
 			if (userPermission == null) {
 				userPermission = modelService.create(UserPermission.class);
 				userPermission.setId(csv.getId());
-				modelService.save(userPermission);
-				modelService.saveAll();
+			}
+			else {
+				Hibernate.initialize(userPermission.getUserPermissionFields());
 			}
 			userPermission.setSort(csv.getSort());
-
-			// UserPermission Field
+			
+			boolean enCreate = true;
+			boolean cnCreate = true;
 
 			if (enLanguage != null) {
-				boolean create = true;
 				for (int i = 0; i < userPermission.getUserPermissionFields().size(); i++) {
 					if (userPermission.getUserPermissionFields().get(i).getId().equals(csv.getId() + "_name_en")
 							&& userPermission.getUserPermissionFields().get(i).getLanguage().getId().equals("en")) {
 						userPermission.getUserPermissionFields().get(i).setLabel("Name");
 						userPermission.getUserPermissionFields().get(i).setValue(csv.getName_en());
-						create = false;
+						enCreate = false;
 					}
 				}
-
-				if (create) {
-					UserPermissionField userPermissionField = modelService.create(UserPermissionField.class);
-					userPermissionField.setId(csv.getId() + "_name_en");
-					userPermissionField.setDynamicField(enNameDynamicField);
-					userPermissionField.setLanguage(enLanguage);
-					userPermissionField.setLabel("Name");
-					userPermissionField.setValue(csv.getName_en());
-					userPermissionField.setUserPermission(userPermission);
-					userPermission.getUserPermissionFields().add(userPermissionField);
-				}
 			}
-
 			if (cnLanguage != null) {
-				boolean create = true;
 				for (int i = 0; i < userPermission.getUserPermissionFields().size(); i++) {
 					if (userPermission.getUserPermissionFields().get(i).getId().equals(csv.getId() + "_name_cn")
 							&& userPermission.getUserPermissionFields().get(i).getLanguage().getId().equals("cn")) {
 						userPermission.getUserPermissionFields().get(i).setLabel("名称");
 						userPermission.getUserPermissionFields().get(i).setValue(csv.getName_cn());
-						create = false;
+						cnCreate = false;
 					}
 				}
-
-				if (create) {
-					UserPermissionField userPermissionField = modelService.create(UserPermissionField.class);
-					userPermissionField.setId(csv.getId() + "_name_cn");
-					userPermissionField.setDynamicField(enNameDynamicField);
-					userPermissionField.setLanguage(cnLanguage);
-					userPermissionField.setLabel("名称");
-					userPermissionField.setValue(csv.getName_cn());
-					userPermissionField.setUserPermission(userPermission);
-					userPermission.getUserPermissionFields().add(userPermissionField);
-				}
 			}
 
-			try {
-				modelService.save(userPermission);
-			} catch (ModelSavingException e) {
-				logger.error(e.getMessage());
+			modelService.saveEntity(userPermission);
+			
+			// UserPermission Field
+			
+			if (enCreate) {
+				UserPermissionField userPermissionField = modelService.create(UserPermissionField.class);
+				userPermissionField.setId(csv.getId() + "_name_en");
+				userPermissionField.setDynamicField(enNameDynamicField);
+				userPermissionField.setLanguage(enLanguage);
+				userPermissionField.setLabel("Name");
+				userPermissionField.setValue(csv.getName_en());
+				userPermissionField.setUserPermission(userPermission);
+				userPermission.getUserPermissionFields().add(userPermissionField);
+				
+				modelService.saveEntity(userPermissionField);
+			}
+			if (cnCreate) {
+				UserPermissionField userPermissionField = modelService.create(UserPermissionField.class);
+				userPermissionField.setId(csv.getId() + "_name_cn");
+				userPermissionField.setDynamicField(cnNameDynamicField);
+				userPermissionField.setLanguage(cnLanguage);
+				userPermissionField.setLabel("名称");
+				userPermissionField.setValue(csv.getName_cn());
+				userPermissionField.setUserPermission(userPermission);
+				userPermission.getUserPermissionFields().add(userPermissionField);
+				
+				modelService.saveEntity(userPermissionField);
 			}
 		}
+		
+		modelService.saveAll();
 	}
 
 	public List<UserPermissionCsv> readCSVFile(Reader reader) {

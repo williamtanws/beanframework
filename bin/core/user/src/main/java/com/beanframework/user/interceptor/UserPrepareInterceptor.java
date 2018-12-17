@@ -8,7 +8,6 @@ public class UserPrepareInterceptor implements PrepareInterceptor<User> {
 
 	@Override
 	public void onPrepare(User model) throws InterceptorException {
-		
 	}
 
 }

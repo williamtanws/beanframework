@@ -38,6 +38,11 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 
 		prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
+		
+		prototype.setRequired(source.getRequired());
+		prototype.setRule(source.getRule());
+		prototype.setSort(source.getSort());
+		prototype.setType(source.getType());
 
 		return prototype;
 	}

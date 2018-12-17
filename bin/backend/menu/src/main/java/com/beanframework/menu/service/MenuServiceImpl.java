@@ -54,7 +54,7 @@ public class MenuServiceImpl implements MenuService {
 			fromMenu.setParent(null);
 			fromMenu.setSort(toIndex);
 			
-			modelService.save(fromMenu);
+			modelService.saveEntity(fromMenu);
 			
 			properties = new HashMap<String, Object>();
 			properties.put(Menu.PARENT, null);
@@ -65,7 +65,7 @@ public class MenuServiceImpl implements MenuService {
 
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
 			for (Menu menu : menus) {
-				modelService.save(menu);
+				modelService.saveEntity(menu);
 			}
 		}
 		else {
@@ -80,7 +80,7 @@ public class MenuServiceImpl implements MenuService {
 			fromMenu.setParent(toMenu);
 			fromMenu.setSort(toIndex);
 			
-			modelService.save(fromMenu);
+			modelService.saveEntity(fromMenu);
 			
 			properties = new HashMap<String, Object>();
 			properties.put(Menu.PARENT, toUuid);
@@ -91,7 +91,7 @@ public class MenuServiceImpl implements MenuService {
 			
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
 			for (Menu menu : menus) {
-				modelService.save(menu);
+				modelService.saveEntity(menu);
 			}
 		}
 	}

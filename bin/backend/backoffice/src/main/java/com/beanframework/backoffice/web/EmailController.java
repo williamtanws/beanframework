@@ -162,7 +162,7 @@ public class EmailController extends AbstractCommonController{
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				modelService.save(emailCreate);
+				modelService.saveDto(emailCreate);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
@@ -192,7 +192,7 @@ public class EmailController extends AbstractCommonController{
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.save(emailUpdate);
+				modelService.saveDto(emailUpdate);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {

@@ -28,6 +28,6 @@ public class UserRightServiceImpl implements UserRightService {
 				}
 			}
 		}
-		modelService.save(userRights);
+		modelService.saveEntity(userRights);
 	}
 }

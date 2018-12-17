@@ -31,6 +31,6 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 				}
 			}
 		}
-		modelService.save(userPermissions);
+		modelService.saveEntity(userPermissions);
 	}
 }

@@ -1,6 +1,7 @@
 package com.beanframework.user.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -8,6 +9,7 @@ import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.dynamicfield.domain.DynamicField;
@@ -16,6 +18,7 @@ import com.beanframework.user.UserRightConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = UserRightConstants.Table.USER_RIGHT_FIELD)
 public class UserRightField extends GenericDomain {

@@ -25,46 +25,49 @@ public interface ModelService {
 
 	<T> T create(Class modelClass);
 	
+	<T> T findOneEntityByUuid(UUID uuid, Class modelClass);
+
 	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass);
 
 	<T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass);
-	
+
 	<T extends Collection> T findByProperties(Map<String, Object> properties, Class modelClass);
-	
+
 	<T extends Collection> T findBySorts(Map<String, Sort.Direction> sorts, Class modelClass);
-	
-	<T extends Collection> T findByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Class modelClass);
-		
+
+	<T extends Collection> T findByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts,
+			Class modelClass);
+
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass);
 
 	<T extends Collection> T findAll();
 
 	<T> Page<T> findPage(@Nullable Specification spec, Pageable pageable, Class modelClass);
-	
+
 	void refresh(Object model);
 
-	void save(Object model) throws ModelSavingException;
+	void saveEntity(Object model) throws ModelSavingException;
+
+	void saveDto(Object model) throws ModelSavingException;
 
 	void saveAll() throws ModelSavingException;
 
 	void remove(Object model) throws ModelRemovalException;
-	
+
 	void remove(Collection<? extends Object> models) throws ModelRemovalException;
 
 	void remove(UUID uuid, Class modelClass) throws ModelRemovalException;
-	
+
 	int removeAll(Class modelClass) throws ModelRemovalException;
 
 	<T> T getEntity(Object model);
-	
+
 	<T extends Collection> T getEntity(Collection<? extends Object> model);
 
 	<T> T getDto(Object model);
-	
+
 	<T extends Collection> T getDto(Collection<? extends Object> models);
 
 	void initDefaults(Object model) throws ModelInitializationException;
-
-
 
 }

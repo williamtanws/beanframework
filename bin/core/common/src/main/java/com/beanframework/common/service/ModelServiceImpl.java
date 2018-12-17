@@ -64,6 +64,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		initialDefaultsInterceptor(model);
 		return (T) model;
 	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public <T> T findOneEntityByUuid(UUID uuid, Class modelClass) {
+		
+		return (T) entityManager.getReference(modelClass, uuid);
+	}
 
 	@Transactional(readOnly = true)
 	@Override
@@ -275,7 +282,17 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional
 	@Override
-	public void save(Object model) throws ModelSavingException {
+	public void saveEntity(Object model) throws ModelSavingException {
+
+		validateInterceptor(model);
+		prepareInterceptor(model);
+
+		modelRepository.save(model);
+	}
+	
+	@Transactional
+	@Override
+	public void saveDto(Object model) throws ModelSavingException {
 
 		validateInterceptor(model);
 		prepareInterceptor(model);

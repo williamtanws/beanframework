@@ -31,7 +31,6 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
-import com.beanframework.common.exception.ModelSavingException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.LanguageCsv;
@@ -96,12 +95,10 @@ public class LanguageUpdate extends Updater {
 			language.setActive(csv.isActive());
 			language.setSort(csv.getSort());
 
-			try {
-				modelService.save(language);
-			} catch (ModelSavingException e) {
-				logger.error(e.getMessage());
-			}
+			modelService.saveEntity(language);
 		}
+
+		modelService.saveAll();
 	}
 
 	public List<LanguageCsv> readCSVFile(Reader reader) {

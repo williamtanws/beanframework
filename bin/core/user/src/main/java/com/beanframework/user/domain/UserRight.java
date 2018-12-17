@@ -28,16 +28,16 @@ public class UserRight extends GenericDomain {
 	public static final String USER_RIGHT_FIELDS = "userRightFields";
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<UserRightField> userRightFields = new ArrayList<UserRightField>();
 
-	private int sort;
+	private Integer sort;
 
-	public int getSort() {
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(int sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 

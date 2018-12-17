@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -31,12 +32,15 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
-import com.beanframework.common.exception.ModelSavingException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.EmployeeCsv;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldType;
 import com.beanframework.employee.domain.Employee;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.utils.PasswordUtils;
 
 public class EmployeeUpdate extends Updater {
 	protected final Logger logger = LoggerFactory.getLogger(EmployeeUpdate.class);
@@ -82,6 +86,23 @@ public class EmployeeUpdate extends Updater {
 
 	public void save(List<EmployeeCsv> employeeCsvList) {
 
+		// Dynamic Field
+
+		Map<String, Object> nameDynamicFieldProperties = new HashMap<String, Object>();
+		nameDynamicFieldProperties.put(DynamicField.ID, "employee_name");
+		DynamicField nameDynamicField = modelService.findOneEntityByProperties(nameDynamicFieldProperties,
+				DynamicField.class);
+
+		if (nameDynamicField == null) {
+			nameDynamicField = modelService.create(DynamicField.class);
+			nameDynamicField.setId("employee_name");
+		}
+		nameDynamicField.setRequired(true);
+		nameDynamicField.setRule(null);
+		nameDynamicField.setSort(0);
+		nameDynamicField.setType(DynamicFieldType.TEXT);
+		modelService.saveEntity(nameDynamicField);
+
 		for (EmployeeCsv csv : employeeCsvList) {
 
 			Map<String, Object> properties = new HashMap<String, Object>();
@@ -92,42 +113,62 @@ public class EmployeeUpdate extends Updater {
 			if (employee == null) {
 				employee = modelService.create(Employee.class);
 				employee.setId(csv.getId());
+			} else {
+				Hibernate.initialize(employee.getUserFields());
 			}
-			employee.setPassword(csv.getPassword());
+			
+			if (StringUtils.isNotEmpty(csv.getPassword())) {
+				employee.setPassword(PasswordUtils.encode(csv.getPassword()));
+			}
 			employee.setAccountNonExpired(csv.isAccountNonExpired());
 			employee.setAccountNonLocked(csv.isAccountNonLocked());
 			employee.setCredentialsNonExpired(csv.isCredentialsNonExpired());
 			employee.setEnabled(csv.isEnabled());
+			
+			boolean createName = true;
 
-			Hibernate.initialize(employee.getUserGroups());
+			for (int i = 0; i < employee.getUserFields().size(); i++) {
+				if (employee.getUserFields().get(i).getId().equals(csv.getId() + "_name")) {
+					employee.getUserFields().get(i).setLabel("Name");
+					employee.getUserFields().get(i).setValue(csv.getName());
+					createName = false;
+				}
+			}
+
+			modelService.saveEntity(employee);
+
+			// User Group
 
 			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
 			for (int i = 0; i < userGroupIds.length; i++) {
+				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 
-				boolean addUserGroup = true;
-				for (UserGroup userGroup : employee.getUserGroups()) {
-					if (userGroup.getId().equals(userGroupIds[i])) {
-						addUserGroup = false;
-					}
-				}
-
-				if (addUserGroup) {
-
-					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-
-					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-
+				if (userGroup == null) {
+					logger.error("UserGroup not exists: " + userGroupIds[i]);
+				} else {
 					employee.getUserGroups().add(userGroup);
+
+					modelService.saveEntity(userGroup);
 				}
 			}
 
-			try {
-				modelService.save(employee);
-			} catch (ModelSavingException e) {
-				logger.error(e.getMessage(), e);
+			// Employee Field
+
+			if (createName) {
+				UserField employeeField = modelService.create(UserField.class);
+				employeeField.setId(csv.getId() + "_name");
+				employeeField.setDynamicField(nameDynamicField);
+				employeeField.setLabel("Name");
+				employeeField.setValue(csv.getName());
+				employeeField.setUser(employee);
+				employee.getUserFields().add(employeeField);
+
+				modelService.saveEntity(employeeField);
 			}
 		}
+		modelService.saveAll();
 	}
 
 	public List<EmployeeCsv> readCSVFile(Reader reader) {

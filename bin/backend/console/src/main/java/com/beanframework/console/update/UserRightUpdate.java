@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,6 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
-import com.beanframework.common.exception.ModelSavingException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserRightCsv;
@@ -99,7 +99,7 @@ public class UserRightUpdate extends Updater {
 		enNameDynamicField.setRule(null);
 		enNameDynamicField.setSort(0);
 		enNameDynamicField.setType(DynamicFieldType.TEXT);
-		modelService.save(enNameDynamicField);
+		modelService.saveEntity(enNameDynamicField);
 
 		Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
 		cnNameDynamicFieldProperties.put(DynamicField.ID, "userright_name_cn");
@@ -114,7 +114,7 @@ public class UserRightUpdate extends Updater {
 		cnNameDynamicField.setRule(null);
 		cnNameDynamicField.setSort(1);
 		cnNameDynamicField.setType(DynamicFieldType.TEXT);
-		modelService.save(cnNameDynamicField);
+		modelService.saveEntity(cnNameDynamicField);
 
 		// Language
 
@@ -138,65 +138,67 @@ public class UserRightUpdate extends Updater {
 			if (userRight == null) {
 				userRight = modelService.create(UserRight.class);
 				userRight.setId(csv.getId());
-				modelService.save(userRight);
-				modelService.saveAll();
+			}
+			else {
+				Hibernate.initialize(userRight.getUserRightFields());
 			}
 			userRight.setSort(csv.getSort());
-
-			// UserRight Field
+			
+			boolean enCreate = true;
+			boolean cnCreate = true;
 
 			if (enLanguage != null) {
-				boolean create = true;
 				for (int i = 0; i < userRight.getUserRightFields().size(); i++) {
 					if (userRight.getUserRightFields().get(i).getId().equals(csv.getId() + "_name_en")
 							&& userRight.getUserRightFields().get(i).getLanguage().getId().equals("en")) {
 						userRight.getUserRightFields().get(i).setLabel("Name");
 						userRight.getUserRightFields().get(i).setValue(csv.getName_en());
-						create = false;
+						enCreate = false;
 					}
 				}
-
-				if (create) {
-					UserRightField userRightField = modelService.create(UserRightField.class);
-					userRightField.setId(csv.getId() + "_name_en");
-					userRightField.setDynamicField(enNameDynamicField);
-					userRightField.setLanguage(enLanguage);
-					userRightField.setLabel("Name");
-					userRightField.setValue(csv.getName_en());
-					userRightField.setUserRight(userRight);
-					userRight.getUserRightFields().add(userRightField);
-				}
 			}
-
 			if (cnLanguage != null) {
-				boolean create = true;
 				for (int i = 0; i < userRight.getUserRightFields().size(); i++) {
 					if (userRight.getUserRightFields().get(i).getId().equals(csv.getId() + "_name_cn")
 							&& userRight.getUserRightFields().get(i).getLanguage().getId().equals("cn")) {
 						userRight.getUserRightFields().get(i).setLabel("名称");
 						userRight.getUserRightFields().get(i).setValue(csv.getName_cn());
-						create = false;
+						cnCreate = false;
 					}
 				}
-
-				if (create) {
-					UserRightField userRightField = modelService.create(UserRightField.class);
-					userRightField.setId(csv.getId() + "_name_cn");
-					userRightField.setDynamicField(enNameDynamicField);
-					userRightField.setLanguage(cnLanguage);
-					userRightField.setLabel("名称");
-					userRightField.setValue(csv.getName_cn());
-					userRightField.setUserRight(userRight);
-					userRight.getUserRightFields().add(userRightField);
-				}
 			}
 
-			try {
-				modelService.save(userRight);
-			} catch (ModelSavingException e) {
-				logger.error(e.getMessage());
+			modelService.saveEntity(userRight);
+			
+			// UserRight Field
+			
+			if (enCreate) {
+				UserRightField userRightField = modelService.create(UserRightField.class);
+				userRightField.setId(csv.getId() + "_name_en");
+				userRightField.setDynamicField(enNameDynamicField);
+				userRightField.setLanguage(enLanguage);
+				userRightField.setLabel("Name");
+				userRightField.setValue(csv.getName_en());
+				userRightField.setUserRight(userRight);
+				userRight.getUserRightFields().add(userRightField);
+				
+				modelService.saveEntity(userRightField);
+			}
+			if (cnCreate) {
+				UserRightField userRightField = modelService.create(UserRightField.class);
+				userRightField.setId(csv.getId() + "_name_cn");
+				userRightField.setDynamicField(cnNameDynamicField);
+				userRightField.setLanguage(cnLanguage);
+				userRightField.setLabel("名称");
+				userRightField.setValue(csv.getName_cn());
+				userRightField.setUserRight(userRight);
+				userRight.getUserRightFields().add(userRightField);
+				
+				modelService.saveEntity(userRightField);
 			}
 		}
+		
+		modelService.saveAll();
 	}
 
 	public List<UserRightCsv> readCSVFile(Reader reader) {

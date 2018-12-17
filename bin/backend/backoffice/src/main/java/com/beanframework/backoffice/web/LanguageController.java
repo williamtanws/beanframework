@@ -162,7 +162,7 @@ public class LanguageController extends AbstractCommonController{
 		} else {
 			
 			try {
-				modelService.save(languageCreate);
+				modelService.saveDto(languageCreate);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
@@ -193,7 +193,7 @@ public class LanguageController extends AbstractCommonController{
 		} else {
 			
 			try {
-				modelService.save(languageUpdate);
+				modelService.saveDto(languageUpdate);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {

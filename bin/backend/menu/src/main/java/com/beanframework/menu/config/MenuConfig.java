@@ -6,8 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.menu.converter.DtoMenuConverter;
+import com.beanframework.menu.converter.DtoMenuFieldConverter;
 import com.beanframework.menu.converter.EntityMenuConverter;
+import com.beanframework.menu.converter.EntityMenuFieldConverter;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.interceptor.MenuInitialDefaultsInterceptor;
 import com.beanframework.menu.interceptor.MenuLoadInterceptor;
 import com.beanframework.menu.interceptor.MenuPrepareInterceptor;
@@ -32,6 +35,20 @@ public class MenuConfig {
 	} 
 	
 	@Bean
+	public DtoMenuFieldConverter dtoMenuFieldConverter() {
+		return new DtoMenuFieldConverter();
+	}
+	
+	@Bean
+	public ConverterMapping dtoMenuFieldConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dtoMenuFieldConverter());
+		mapping.setTypeCode(MenuField.class.getSimpleName());
+
+		return mapping;
+	} 
+	
+	@Bean
 	public EntityMenuConverter entityMenuConverter() {
 		return new EntityMenuConverter();
 	}
@@ -41,6 +58,20 @@ public class MenuConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(entityMenuConverter());
 		mapping.setTypeCode(Menu.class.getSimpleName());
+
+		return mapping;
+	} 
+	
+	@Bean
+	public EntityMenuFieldConverter entityMenuFieldConverter() {
+		return new EntityMenuFieldConverter();
+	}
+	
+	@Bean
+	public ConverterMapping entityMenuFieldConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(entityMenuFieldConverter());
+		mapping.setTypeCode(MenuField.class.getSimpleName());
 
 		return mapping;
 	} 

@@ -124,7 +124,7 @@ public class MenuController extends AbstractCommonController {
 			menuCreate.setUserGroups(userGroups);
 			
 			try {
-				modelService.save(menuCreate);
+				modelService.saveDto(menuCreate);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
@@ -186,7 +186,7 @@ public class MenuController extends AbstractCommonController {
 			menuUpdate.setUserGroups(userGroups);
 			
 			try {
-				modelService.save(menuUpdate);
+				modelService.saveDto(menuUpdate);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {

@@ -3,6 +3,17 @@
 	layout:decorate="/console/adminlte/common/layout/layoutConsole">
 <head>
 <title th:text="#{module.console.platform.license}"></title>
+<style>
+.license {
+    height: auto;
+    max-height: 350px;
+    overflow: auto;
+    background-color: #eeeeee;
+    word-break: normal !important;
+    word-wrap: normal !important;
+    white-space: pre !important;
+}​
+</style>
 </head>
 <body>
 	<th:block layout:fragment="content">
@@ -34,7 +45,7 @@
 									<input type="hidden" name="uuid" th:value="*{uuid}">
 									<input type="hidden" name="id" th:value="*{id}">
 									<div class="col-xs-12" style="text-align: center;">
-										<pre>
+										<pre class="license">
 MIT License
 								
 Copyright 2018 <strong>Beanframework</strong>
