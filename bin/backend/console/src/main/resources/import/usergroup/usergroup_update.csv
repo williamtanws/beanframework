@@ -1,4 +1,5 @@
-id,name_en,name_cn
-employeegroup,Employee Group,雇员组
-customergroup,Customer Group,顾客组
-generalcustomer,General Customer,一般顾客
+id,parent,name_en,name_cn
+employeegroup,,Employee Group,雇员组
+customergroup,,Customer Group,客户组
+generalcustomer,customergroup,General Customer,一般客户
+vipcustomer,customergroup,VIP Customer,VIP客户

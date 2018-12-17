@@ -57,7 +57,7 @@
 								<!-- User image -->
 								<li class="user-header">
 									<img th:src="@{${@environment.getProperty('path.employee.profile.picture')}(type='thumbnail')}" class="img-circle" alt="User Image">
-									<p th:text="${#authentication.principal.name}"></p>
+									<p th:text="${#authentication.principal.id}"></p>
 								</li>
 								<!-- Menu Footer-->
 								<li class="user-footer">

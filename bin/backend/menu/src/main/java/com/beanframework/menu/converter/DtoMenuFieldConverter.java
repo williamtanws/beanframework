@@ -33,6 +33,13 @@ public class DtoMenuFieldConverter  implements DtoConverter<MenuField, MenuField
 	}
 	
 	public MenuField convert(MenuField source, MenuField prototype) {
+		prototype.setCreatedBy(source.getCreatedBy());
+		prototype.setCreatedDate(source.getCreatedDate());
+		prototype.setId(source.getId());
+		prototype.setLastModifiedBy(source.getLastModifiedBy());
+		prototype.setLastModifiedDate(source.getLastModifiedDate());
+		prototype.setUuid(source.getUuid());
+		
 		prototype.setLabel(source.getLabel());
 		prototype.setValue(source.getValue());
 		prototype.setLanguage(dtoLanguageConverter.convert(source.getLanguage()));

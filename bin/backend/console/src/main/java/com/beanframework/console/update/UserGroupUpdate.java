@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -137,11 +139,22 @@ public class UserGroupUpdate extends Updater {
 			if (userGroup == null) {
 				userGroup = modelService.create(UserGroup.class);
 				userGroup.setId(csv.getId());
-			}
-			else {
+			} else {
 				Hibernate.initialize(userGroup.getUserGroupFields());
 			}
-			
+
+			if (StringUtils.isNotEmpty(csv.getParent())) {
+				Map<String, Object> parentProperties = new HashMap<String, Object>();
+				parentProperties.put(UserGroup.ID, csv.getId());
+				UserGroup parent = modelService.findOneEntityByProperties(parentProperties, UserGroup.class);
+
+				if (parent == null) {
+					logger.error("Parent not exists: " + csv.getParent());
+				} else {
+					userGroup.setParent(parent);
+				}
+			}
+
 			boolean enCreate = true;
 			boolean cnCreate = true;
 
@@ -167,9 +180,9 @@ public class UserGroupUpdate extends Updater {
 			}
 
 			modelService.saveEntity(userGroup);
-			
+
 			// UserGroup Field
-			
+
 			if (enCreate) {
 				UserGroupField userGroupField = modelService.create(UserGroupField.class);
 				userGroupField.setId(csv.getId() + "_name_en");
@@ -179,7 +192,7 @@ public class UserGroupUpdate extends Updater {
 				userGroupField.setValue(csv.getName_en());
 				userGroupField.setUserGroup(userGroup);
 				userGroup.getUserGroupFields().add(userGroupField);
-				
+
 				modelService.saveEntity(userGroupField);
 			}
 			if (cnCreate) {
@@ -191,11 +204,11 @@ public class UserGroupUpdate extends Updater {
 				userGroupField.setValue(csv.getName_cn());
 				userGroupField.setUserGroup(userGroup);
 				userGroup.getUserGroupFields().add(userGroupField);
-				
+
 				modelService.saveEntity(userGroupField);
 			}
 		}
-		
+
 		modelService.saveAll();
 	}
 
@@ -238,6 +251,7 @@ public class UserGroupUpdate extends Updater {
 
 	public CellProcessor[] getProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
+				new Optional(), // parent
 				new NotNull(), // name_en
 				new NotNull() // name_cn
 		};

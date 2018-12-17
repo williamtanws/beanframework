@@ -44,6 +44,7 @@ public class Menu extends GenericDomain {
 	public static final String PARENT = "parent";
 	public static final String CHILDS = "childs";
 	public static final String USER_GROUPS = "userGroups";
+	public static final String USER_GROUPS_UUID = "userGroups.uuid";
 	public static final String MENU_FIELDS = "menuFields";
 
 	@NotNull
@@ -65,7 +66,7 @@ public class Menu extends GenericDomain {
 	private Menu parent;
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = PARENT, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = PARENT, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy(SORT + " ASC")
 	private List<Menu> childs = new ArrayList<Menu>();
 

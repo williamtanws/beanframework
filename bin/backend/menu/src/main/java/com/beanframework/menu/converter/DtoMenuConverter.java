@@ -52,8 +52,9 @@ public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 		prototype.setSort(source.getSort());
 		prototype.setTarget(source.getTarget());
 		prototype.setEnabled(source.getEnabled());
-		prototype.setParent(this.convert(source.getParent()));
-		prototype.setChilds(this.convert(source.getChilds()));
+		if(source.getChilds() != null && source.getChilds().isEmpty() == false) {
+			prototype.setChilds(this.convert(source.getChilds()));
+		}
 		Hibernate.initialize(source.getUserGroups());
 		prototype.setUserGroups(dtoUserGroupConverter.convert(source.getUserGroups()));
 		Hibernate.initialize(source.getMenuFields());
