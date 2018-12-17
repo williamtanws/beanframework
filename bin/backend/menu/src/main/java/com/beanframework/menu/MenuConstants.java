@@ -4,7 +4,7 @@ public interface MenuConstants {
 	
 	public interface Table{
 		public static final String MENU = "menu";
-		public static final String MENU_LANG = "menulang";
+		public static final String MENU_FIELD = "menufield";
 		
 		public static final String MENU_USER_GROUP_REL = "menuusergrouprel";
 	}

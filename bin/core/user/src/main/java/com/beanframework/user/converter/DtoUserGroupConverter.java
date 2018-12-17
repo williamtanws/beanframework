@@ -3,6 +3,7 @@ package com.beanframework.user.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
@@ -43,7 +44,9 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
+		Hibernate.initialize(source.getUserAuthorities());
 		prototype.setUserAuthorities(dtoUserAuthorityConverter.convert(source.getUserAuthorities()));
+		Hibernate.initialize(source.getUserGroupFields());
 		prototype.setUserGroupFields(dtoUserGroupLangConverter.convert(source.getUserGroupFields()));
 		
 		

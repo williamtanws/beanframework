@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -42,6 +44,7 @@ public class Menu extends GenericDomain {
 	public static final String PARENT = "parent";
 	public static final String CHILDS = "childs";
 	public static final String USER_GROUPS = "userGroups";
+	public static final String MENU_FIELDS = "menuFields";
 
 	@NotNull
 	private Integer sort;
@@ -50,7 +53,9 @@ public class Menu extends GenericDomain {
 
 	private String path;
 
-	private String target;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private MenuTargetType target;
 
 	@NotNull
 	private Boolean enabled;
@@ -59,22 +64,22 @@ public class Menu extends GenericDomain {
 	@JoinColumn(name = "parent_uuid")
 	private Menu parent;
 
-	@Cascade({CascadeType.ALL})
+	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = PARENT, fetch = FetchType.EAGER)
 	@OrderBy(SORT + " ASC")
 	private List<Menu> childs = new ArrayList<Menu>();
 
-	@Cascade({CascadeType.REFRESH})
+	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = MenuConstants.Table.MENU_USER_GROUP_REL, joinColumns = @JoinColumn(name = "menu_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
-	@Cascade({CascadeType.ALL})
-	@OneToMany(mappedBy = MenuLang.MENU, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<MenuLang> menuLangs = new ArrayList<MenuLang>();
-	
+	@Cascade({ CascadeType.ALL })
+	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<MenuField> menuFields = new ArrayList<MenuField>();
+
 	@Transient
-	private boolean active;
+	private Boolean active;
 
 	public Integer getSort() {
 		return sort;
@@ -100,19 +105,19 @@ public class Menu extends GenericDomain {
 		this.path = path;
 	}
 
-	public String getTarget() {
+	public MenuTargetType getTarget() {
 		return target;
 	}
 
-	public void setTarget(String target) {
+	public void setTarget(MenuTargetType target) {
 		this.target = target;
 	}
 
-	public boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -140,19 +145,20 @@ public class Menu extends GenericDomain {
 		this.userGroups = userGroups;
 	}
 
-	public List<MenuLang> getMenuLangs() {
-		return menuLangs;
+	public List<MenuField> getMenuFields() {
+		return menuFields;
 	}
 
-	public void setMenuLangs(List<MenuLang> menuLangs) {
-		this.menuLangs = menuLangs;
+	public void setMenuFields(List<MenuField> menuFields) {
+		this.menuFields = menuFields;
 	}
 
-	public Boolean getEnabled() {
-		return enabled;
+	public Boolean getActive() {
+		return active;
 	}
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
+
 }

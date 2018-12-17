@@ -3,6 +3,7 @@ package com.beanframework.user.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
@@ -41,6 +42,7 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 		
 		prototype.setSort(source.getSort());
+		Hibernate.initialize(source.getUserRightFields());
 		prototype.setUserRightFields(dtoUserRightFieldConverter.convert(source.getUserRightFields()));
 		
 //		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();

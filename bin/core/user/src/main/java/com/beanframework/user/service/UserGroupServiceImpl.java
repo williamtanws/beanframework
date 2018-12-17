@@ -32,7 +32,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 				}
 			}
 		}
-		modelService.save(userGroups);
+		modelService.saveEntity(userGroups);
 	}
 
 	@Transactional(readOnly = true)

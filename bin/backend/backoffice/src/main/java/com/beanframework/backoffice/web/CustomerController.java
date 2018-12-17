@@ -179,7 +179,7 @@ public class CustomerController extends AbstractCommonController {
 			customerCreate.setUserGroups(userGroups);
 			
 			try {
-				modelService.save(customerCreate);
+				modelService.saveDto(customerCreate);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (Exception e) {
@@ -216,7 +216,7 @@ public class CustomerController extends AbstractCommonController {
 			customerUpdate.setUserGroups(userGroups);
 			
 			try {
-				modelService.save(customerUpdate);
+				modelService.saveDto(customerUpdate);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (Exception e) {

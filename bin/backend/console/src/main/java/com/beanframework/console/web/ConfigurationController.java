@@ -1,6 +1,5 @@
 package com.beanframework.console.web;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -128,9 +127,7 @@ public class ConfigurationController extends AbstractCommonController {
 
 		if (configurationUpdate.getUuid() != null) {
 			
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Configuration.UUID, configurationUpdate.getUuid());
-			Configuration existingConfiguration = modelService.findOneDtoByProperties(properties, Configuration.class);
+			Configuration existingConfiguration = modelService.findOneEntityByUuid(configurationUpdate.getUuid(), Configuration.class);
 			existingConfiguration = modelService.getDto(existingConfiguration);
 			
 			if (existingConfiguration != null) {
@@ -156,7 +153,7 @@ public class ConfigurationController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				modelService.save(configurationCreate);
+				modelService.saveDto(configurationCreate);
 				
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
@@ -185,7 +182,7 @@ public class ConfigurationController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.save(configurationUpdate);
+				modelService.saveDto(configurationUpdate);
 				
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {

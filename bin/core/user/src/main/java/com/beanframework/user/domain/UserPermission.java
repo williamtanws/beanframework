@@ -29,10 +29,10 @@ public class UserPermission extends GenericDomain {
 	public static final String SORT = "sort";
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserPermissionField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = UserPermissionField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<UserPermissionField> userPermissionFields = new ArrayList<UserPermissionField>();
 
-	private int sort;
+	private Integer sort;
 
 	public List<UserPermissionField> getUserPermissionFields() {
 		return userPermissionFields;
@@ -42,11 +42,11 @@ public class UserPermission extends GenericDomain {
 		this.userPermissionFields = userPermissionFields;
 	}
 
-	public int getSort() {
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(int sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 

@@ -32,8 +32,8 @@ public class DynamicField extends GenericDomain {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private DynamicFieldType type;
-	private int sort;
-	private boolean required;
+	private Integer sort;
+	private Boolean required;
 	private String rule;
 
 	public DynamicFieldType getType() {
@@ -44,19 +44,19 @@ public class DynamicField extends GenericDomain {
 		this.type = type;
 	}
 
-	public int getSort() {
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(int sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 
-	public boolean isRequired() {
+	public Boolean getRequired() {
 		return required;
 	}
 
-	public void setRequired(boolean required) {
+	public void setRequired(Boolean required) {
 		this.required = required;
 	}
 

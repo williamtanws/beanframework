@@ -1,6 +1,5 @@
 package com.beanframework.console.web;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -123,9 +122,7 @@ public class AdminController extends AbstractCommonController {
 		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (adminUpdate.getUuid() != null) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Admin.UUID, adminUpdate.getUuid());
-			Admin existingAdmin = modelService.findOneDtoByProperties(properties, Admin.class);
+			Admin existingAdmin = modelService.findOneEntityByUuid(adminUpdate.getUuid(), Admin.class);
 			
 			if (existingAdmin != null) {
 				model.addAttribute(WebAdminConstants.ModelAttribute.UPDATE, existingAdmin);
@@ -149,7 +146,7 @@ public class AdminController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				modelService.save(adminCreate);
+				modelService.saveDto(adminCreate);
 				
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (Exception e) {
@@ -177,7 +174,7 @@ public class AdminController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.save(adminUpdate);
+				modelService.saveDto(adminUpdate);
 				
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (Exception e) {

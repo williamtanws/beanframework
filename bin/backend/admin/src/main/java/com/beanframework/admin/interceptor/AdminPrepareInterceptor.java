@@ -8,6 +8,7 @@ public class AdminPrepareInterceptor implements PrepareInterceptor<Admin> {
 
 	@Override
 	public void onPrepare(Admin model) throws InterceptorException {
+		
 	}
 
 }

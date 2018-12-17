@@ -26,7 +26,7 @@
 							<div class="col-md-12" th:each="initialize : ${initializes}">
 								<div class="form-group checkbox icheck">
 									<label>
-										<input type="checkbox" th:name="${initialize.key}">
+										<input type="checkbox" th:name="${initialize.key}">&nbsp;
 										<span th:text="${initialize.value.name}"></span>
 										<br>
 										<span style="padding-left: 40px" th:text="${initialize.value.description}"></span>

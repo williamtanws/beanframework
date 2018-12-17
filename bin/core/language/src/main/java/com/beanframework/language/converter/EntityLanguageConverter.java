@@ -38,10 +38,15 @@ public class EntityLanguageConverter implements EntityConverter<Language, Langua
 
 		prototype.setLastModifiedDate(new Date());
 		prototype.setId(source.getId());
+		
 		prototype.setName(source.getName());
-		prototype.setSort(source.getSort());
-		prototype.setActive(source.getActive());
-
+		if(source.getSort() != null) {
+			prototype.setSort(source.getSort());
+		}
+		if(source.getActive() != null) {
+			prototype.setActive(source.getActive());
+		}
+		
 		return prototype;
 	}
 

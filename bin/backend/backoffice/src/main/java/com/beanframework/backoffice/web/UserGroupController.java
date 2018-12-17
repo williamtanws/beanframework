@@ -179,7 +179,7 @@ public class UserGroupController extends AbstractCommonController {
 				}
 			}
 			try {
-				modelService.save(usergroupCreate);
+				modelService.saveDto(usergroupCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
@@ -218,7 +218,7 @@ public class UserGroupController extends AbstractCommonController {
 			}
 
 			try {
-				modelService.save(usergroupUpdate);
+				modelService.saveDto(usergroupUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {

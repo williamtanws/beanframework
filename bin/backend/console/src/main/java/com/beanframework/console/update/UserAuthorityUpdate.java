@@ -16,6 +16,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,6 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Updater;
-import com.beanframework.common.exception.ModelSavingException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserAuthorityCsv;
@@ -85,19 +85,19 @@ public class UserAuthorityUpdate extends Updater {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(UserRight.ID, "create");
-		UserRight create = modelService.findOneDtoByProperties(properties, UserRight.class);
+		UserRight create = modelService.findOneEntityByProperties(properties, UserRight.class);
 		
 		properties = new HashMap<String, Object>();
 		properties.put(UserRight.ID, "read");
-		UserRight read = modelService.findOneDtoByProperties(properties, UserRight.class);
+		UserRight read = modelService.findOneEntityByProperties(properties, UserRight.class);
 		
 		properties = new HashMap<String, Object>();
 		properties.put(UserRight.ID, "update");
-		UserRight update = modelService.findOneDtoByProperties(properties, UserRight.class);
+		UserRight update = modelService.findOneEntityByProperties(properties, UserRight.class);
 		
 		properties = new HashMap<String, Object>();
 		properties.put(UserRight.ID, "delete");
-		UserRight delete = modelService.findOneDtoByProperties(properties, UserRight.class);
+		UserRight delete = modelService.findOneEntityByProperties(properties, UserRight.class);
 
 		if (create == null) {
 			logger.error("User Right not exists: create");
@@ -109,6 +109,7 @@ public class UserAuthorityUpdate extends Updater {
 			logger.error("User Right not exists: delete");
 		} else {
 
+			// Group permissions by userGroupId
 			Map<String, List<UserAuthorityCsv>> userGroupMap = new HashMap<String, List<UserAuthorityCsv>>();
 			for (UserAuthorityCsv userAuthorityCsv : userAuthorityCsvList) {
 				String userGroupId = userAuthorityCsv.getUserGroupId();
@@ -129,74 +130,126 @@ public class UserAuthorityUpdate extends Updater {
 				
 				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 				userGroupProperties.put(UserGroup.ID, userGroupId);
-				UserGroup userGroup = modelService.findOneDtoByProperties(userGroupProperties, UserGroup.class);
+				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 
 				if (userGroup == null) {
-					logger.warn("userGroupId not exists: " + userGroupId);
+					logger.error("userGroupId not exists: " + userGroupId);
 				} else {
-					userGroup.getUserAuthorities().clear();
-					List<UserAuthority> newUserAuthorities = new ArrayList<UserAuthority>();
+
+					Hibernate.initialize(userGroup.getUserAuthorities());
+					
 					for (UserAuthorityCsv userAuthorityCsv : userGroupAuthorityList) {
 
 						String userPermissionId = userAuthorityCsv.getUserPermissionId();
 						
 						Map<String, Object> userPermissionProperties = new HashMap<String, Object>();
 						userPermissionProperties.put(UserPermission.ID, userPermissionId);
-						UserPermission userPermission = modelService.findOneDtoByProperties(userPermissionProperties, UserPermission.class);
+						UserPermission userPermission = modelService.findOneEntityByProperties(userPermissionProperties, UserPermission.class);
 
 						if (userPermission == null) {
-							logger.warn("userPermissionId not exists: " + userPermissionId);
+							logger.error("userPermissionId not exists: " + userPermissionId);
 						} else {
+							
+							// UserGroup
+							
+							boolean createAuthority = true;
+							boolean readAuthority = true;
+							boolean updateAuthority = true;
+							boolean deleteAuthority = true;
 
 							if(StringUtils.isNotEmpty(userAuthorityCsv.getCreate())) {
+								
+								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
+									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_create")) {
+										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getCreate().equals(POSITIVE) ? true : false);
+										createAuthority = false;
+									}
+								}
+							}
+							if(StringUtils.isNotEmpty(userAuthorityCsv.getRead())) {
+								
+								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
+									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_read")) {
+										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getRead().equals(POSITIVE) ? true : false);
+										readAuthority = false;
+									}
+								}
+							}
+							if(StringUtils.isNotEmpty(userAuthorityCsv.getUpdate())) {
+								
+								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
+									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_update")) {
+										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getUpdate().equals(POSITIVE) ? true : false);
+										updateAuthority = false;
+									}
+								}
+							}
+							if(StringUtils.isNotEmpty(userAuthorityCsv.getDelete())) {
+								
+								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
+									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_delete")) {
+										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getDelete().equals(POSITIVE) ? true : false);
+										deleteAuthority = false;
+									}
+								}
+							}
+							
+							modelService.saveEntity(userGroup);
+							
+							// UserAuthority
+							
+							if(createAuthority && userAuthorityCsv.getCreate() != null) {
 								UserAuthority createRight = new UserAuthority();
+								createRight.setId(userGroup.getId() + "_create");
 								createRight.setUserGroup(userGroup);
 								createRight.setUserPermission(userPermission);
 								createRight.setUserRight(create);
 								createRight.setEnabled(userAuthorityCsv.getCreate().equals(POSITIVE) ? true : false);
-								newUserAuthorities.add(createRight);
+								userGroup.getUserAuthorities().add(createRight);
+								
+								modelService.saveEntity(createRight);
 							}
-
-							if(StringUtils.isNotEmpty(userAuthorityCsv.getRead())) {
+							if(readAuthority && userAuthorityCsv.getRead() != null) {
 								UserAuthority readRight = new UserAuthority();
+								readRight.setId(userGroup.getId() + "_read");
 								readRight.setUserGroup(userGroup);
 								readRight.setUserPermission(userPermission);
 								readRight.setUserRight(read);
 								readRight.setEnabled(userAuthorityCsv.getRead().equals(POSITIVE) ? true : false);
-								newUserAuthorities.add(readRight);
+								userGroup.getUserAuthorities().add(readRight);
+								
+								modelService.saveEntity(readRight);
 							}
-
-							if(StringUtils.isNotEmpty(userAuthorityCsv.getUpdate())) {
+							if(updateAuthority && userAuthorityCsv.getUpdate() != null) {
 								UserAuthority updateRight = new UserAuthority();
+								updateRight.setId(userGroup.getId() + "_update");
 								updateRight.setUserGroup(userGroup);
 								updateRight.setUserPermission(userPermission);
 								updateRight.setUserRight(update);
 								updateRight.setEnabled(userAuthorityCsv.getUpdate().equals(POSITIVE) ? true : false);
-								newUserAuthorities.add(updateRight);
+								userGroup.getUserAuthorities().add(updateRight);
+								
+								modelService.saveEntity(updateRight);
 							}
-							
-							if(StringUtils.isNotEmpty(userAuthorityCsv.getDelete())) {
+							if(deleteAuthority && userAuthorityCsv.getDelete() != null) {
 								UserAuthority deleteRight = new UserAuthority();
+								deleteRight.setId(userGroup.getId() + "_delete");
 								deleteRight.setUserGroup(userGroup);
 								deleteRight.setUserPermission(userPermission);
 								deleteRight.setUserRight(delete);
 								deleteRight.setEnabled(userAuthorityCsv.getDelete().equals(POSITIVE) ? true : false);
-								newUserAuthorities.add(deleteRight);
+								userGroup.getUserAuthorities().add(deleteRight);
+								
+								modelService.saveEntity(deleteRight);
 							}
 						}
-					}
-					
-					userGroup.getUserAuthorities().addAll(newUserAuthorities);
-					
-					try {
-						modelService.save(userGroup);
-					} catch (ModelSavingException e) {
-						logger.error(e.getMessage());
-					}
+					}					
 				}
 
 			}
 		}
+		
+		modelService.saveAll();
 	}
 
 	public List<UserAuthorityCsv> readCSVFile(Reader reader) {

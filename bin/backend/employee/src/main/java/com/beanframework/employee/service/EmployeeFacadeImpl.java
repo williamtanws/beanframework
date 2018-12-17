@@ -56,7 +56,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			}
 		}
 		
-		modelService.save(employee);
+		modelService.saveEntity(employee);
 		employeeService.saveProfilePicture(employee, picture);
 		
 		return employee;

@@ -34,7 +34,7 @@ public class UserGroup extends GenericDomain {
 	private List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<UserGroupField> userGroupFields = new ArrayList<UserGroupField>();
 
 	@Transient

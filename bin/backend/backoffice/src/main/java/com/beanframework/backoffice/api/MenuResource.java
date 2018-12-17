@@ -22,7 +22,7 @@ import com.beanframework.backoffice.domain.TreeJson;
 import com.beanframework.backoffice.domain.TreeJsonState;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuLang;
+import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.service.MenuFacade;
 
 @RestController
@@ -103,12 +103,12 @@ public class MenuResource {
 
 		Locale locale = LocaleContextHolder.getLocale();
 
-		for (MenuLang menuLang : menu.getMenuLangs()) {
-			if (menuLang.getLanguage().getId().equals(locale.toString())) {
+		for (MenuField menuField : menu.getMenuFields()) {
+			if (menuField.getId().equals(menu.getId()+"_name_"+locale.toString())) {
 
-				String name = menuLang.getName();
+				String name = menuField.getValue();
 				
-				if (menu.isEnabled() == false) {
+				if (menu.getEnabled() == false) {
 					name = "<span class=\"text-muted\">"+name + "</span>";
 				}
 

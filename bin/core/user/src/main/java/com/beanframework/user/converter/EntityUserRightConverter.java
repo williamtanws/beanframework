@@ -39,9 +39,14 @@ public class EntityUserRightConverter implements EntityConverter<UserRight, User
 
 		prototype.setLastModifiedDate(new Date());
 		prototype.setId(source.getId());
-		prototype.setSort(source.getSort());
-		prototype.setUserRightFields(source.getUserRightFields());
-
+		
+		if(source.getSort() != null) {
+			prototype.setSort(source.getSort());
+		}
+		if(source.getUserRightFields() != null) {
+			prototype.setUserRightFields(source.getUserRightFields());
+		}
+		
 //		prototype.getUserRightFields().clear();
 //		for (UserRightField userRightField : source.getUserRightFields()) {
 //			if (userRightField.getLanguage().getUuid() != null) {
