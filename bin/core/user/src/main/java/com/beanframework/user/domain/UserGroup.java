@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -26,8 +28,18 @@ public class UserGroup extends GenericDomain {
 
 	private static final long serialVersionUID = 8938920413700273352L;
 	public static final String DOMAIN = "UserGroup";
+	public static final String PARENT = "parent";
+	public static final String CHILDS = "childs";
 	public static final String USER_AUTHORITIES = "userAuthorities";
 	public static final String USER_GROUP_FIELDS = "userGroupFields";
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "parent_uuid")
+	private UserGroup parent;
+
+	@Cascade({ CascadeType.ALL })
+	@OneToMany(mappedBy = PARENT, fetch = FetchType.EAGER)
+	private List<UserGroup> childs = new ArrayList<UserGroup>();
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserAuthority.USER_GROUP, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -39,6 +51,22 @@ public class UserGroup extends GenericDomain {
 
 	@Transient
 	private String selected;
+
+	public UserGroup getParent() {
+		return parent;
+	}
+
+	public void setParent(UserGroup parent) {
+		this.parent = parent;
+	}
+
+	public List<UserGroup> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(List<UserGroup> childs) {
+		this.childs = childs;
+	}
 
 	public List<UserAuthority> getUserAuthorities() {
 		return userAuthorities;

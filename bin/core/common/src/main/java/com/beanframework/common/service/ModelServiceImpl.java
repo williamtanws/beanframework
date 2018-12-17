@@ -223,9 +223,14 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
 			if (propertiesBuilder.length() == 0) {
-				propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey());
+				if(entry.getValue() == null) {
+					propertiesBuilder.append("o." + entry.getKey() + " IS NULL");
+				}
+				else {
+					propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey().replace(".", "_"));
+				}
 			} else {
-				propertiesBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey());
+				propertiesBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey().replace(".", "_"));
 			}
 		}
 
@@ -242,7 +247,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				+ propertiesBuilder.toString() + " " + sortsBuilder.toString());
 
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
-			query.setParameter(entry.getKey(), entry.getValue());
+			if(entry.getValue() != null) {
+				query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());
+			}
 		}
 
 		Collection models = query.getResultList();

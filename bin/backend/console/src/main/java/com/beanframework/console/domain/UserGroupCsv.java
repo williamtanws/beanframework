@@ -2,9 +2,17 @@ package com.beanframework.console.domain;
 
 public class UserGroupCsv extends AbstractCsv {
 
+	private String parent;
 	private String name_en;
 	private String name_cn;
-	private String permissionIds;
+
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
 
 	public String getName_en() {
 		return name_en;
@@ -20,14 +28,6 @@ public class UserGroupCsv extends AbstractCsv {
 
 	public void setName_cn(String name_cn) {
 		this.name_cn = name_cn;
-	}
-
-	public String getPermissionIds() {
-		return permissionIds;
-	}
-
-	public void setPermissionIds(String permissionIds) {
-		this.permissionIds = permissionIds;
 	}
 
 }

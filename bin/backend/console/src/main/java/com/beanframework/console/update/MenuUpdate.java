@@ -160,7 +160,7 @@ public class MenuUpdate extends Updater {
 
 			if (StringUtils.isNotEmpty(csv.getParent())) {
 				Map<String, Object> parentProperties = new HashMap<String, Object>();
-				parentProperties.put(Menu.ID, csv.getId());
+				parentProperties.put(Menu.ID, csv.getParent());
 				Menu parent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
 
 				if (parent == null) {

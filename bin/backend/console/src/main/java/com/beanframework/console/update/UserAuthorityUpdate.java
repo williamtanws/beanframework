@@ -160,7 +160,7 @@ public class UserAuthorityUpdate extends Updater {
 							if(StringUtils.isNotEmpty(userAuthorityCsv.getCreate())) {
 								
 								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
-									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_create")) {
+									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_" + userPermission.getId()+"_create")) {
 										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getCreate().equals(POSITIVE) ? true : false);
 										createAuthority = false;
 									}
@@ -169,7 +169,7 @@ public class UserAuthorityUpdate extends Updater {
 							if(StringUtils.isNotEmpty(userAuthorityCsv.getRead())) {
 								
 								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
-									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_read")) {
+									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_" + userPermission.getId()+"_read")) {
 										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getRead().equals(POSITIVE) ? true : false);
 										readAuthority = false;
 									}
@@ -178,7 +178,7 @@ public class UserAuthorityUpdate extends Updater {
 							if(StringUtils.isNotEmpty(userAuthorityCsv.getUpdate())) {
 								
 								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
-									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_update")) {
+									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_" + userPermission.getId()+"_update")) {
 										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getUpdate().equals(POSITIVE) ? true : false);
 										updateAuthority = false;
 									}
@@ -187,7 +187,7 @@ public class UserAuthorityUpdate extends Updater {
 							if(StringUtils.isNotEmpty(userAuthorityCsv.getDelete())) {
 								
 								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
-									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_delete")) {
+									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_" + userPermission.getId()+"_delete")) {
 										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getDelete().equals(POSITIVE) ? true : false);
 										deleteAuthority = false;
 									}
@@ -200,7 +200,7 @@ public class UserAuthorityUpdate extends Updater {
 							
 							if(createAuthority && userAuthorityCsv.getCreate() != null) {
 								UserAuthority createRight = new UserAuthority();
-								createRight.setId(userGroup.getId() + "_create");
+								createRight.setId(userGroup.getId() + "_" + userPermission.getId()+"_create");
 								createRight.setUserGroup(userGroup);
 								createRight.setUserPermission(userPermission);
 								createRight.setUserRight(create);
@@ -211,7 +211,7 @@ public class UserAuthorityUpdate extends Updater {
 							}
 							if(readAuthority && userAuthorityCsv.getRead() != null) {
 								UserAuthority readRight = new UserAuthority();
-								readRight.setId(userGroup.getId() + "_read");
+								readRight.setId(userGroup.getId() + "_" + userPermission.getId()+"_read");
 								readRight.setUserGroup(userGroup);
 								readRight.setUserPermission(userPermission);
 								readRight.setUserRight(read);
@@ -222,7 +222,7 @@ public class UserAuthorityUpdate extends Updater {
 							}
 							if(updateAuthority && userAuthorityCsv.getUpdate() != null) {
 								UserAuthority updateRight = new UserAuthority();
-								updateRight.setId(userGroup.getId() + "_update");
+								updateRight.setId(userGroup.getId() + "_" + userPermission.getId()+"_update");
 								updateRight.setUserGroup(userGroup);
 								updateRight.setUserPermission(userPermission);
 								updateRight.setUserRight(update);
@@ -233,7 +233,7 @@ public class UserAuthorityUpdate extends Updater {
 							}
 							if(deleteAuthority && userAuthorityCsv.getDelete() != null) {
 								UserAuthority deleteRight = new UserAuthority();
-								deleteRight.setId(userGroup.getId() + "_delete");
+								deleteRight.setId(userGroup.getId() + "_" + userPermission.getId()+"_delete");
 								deleteRight.setUserGroup(userGroup);
 								deleteRight.setUserPermission(userPermission);
 								deleteRight.setUserRight(delete);
