@@ -23,7 +23,7 @@ public class ConfigurationResource {
 	private ModelService modelService;
 
 	@GetMapping(WebConfigurationConstants.Path.Api.CHECKID)
-	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(WebConsoleConstants.Param.ID).toString();
 		

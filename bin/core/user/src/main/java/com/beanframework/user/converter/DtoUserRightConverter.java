@@ -7,21 +7,16 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserRight;
 
-
 public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight> {
-	
-	@Autowired
-	private ModelService modelService;
-	
+
 	@Autowired
 	private DtoUserRightFieldConverter dtoUserRightFieldConverter;
 
 	@Override
 	public UserRight convert(UserRight source) {
-		return convert(source, modelService.create(UserRight.class));
+		return convert(source, new UserRight());
 	}
 
 	public List<UserRight> convert(List<UserRight> sources) {
@@ -40,11 +35,11 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
-		
+
 		prototype.setSort(source.getSort());
 		Hibernate.initialize(source.getUserRightFields());
 		prototype.setUserRightFields(dtoUserRightFieldConverter.convert(source.getUserRightFields()));
-		
+
 //		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 //		sorts.put(Language.SORT, Sort.Direction.ASC);
 //		
@@ -66,7 +61,7 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 //				prototype.getUserRightFields().add(userRightField);
 //			}
 //		}
-		
+
 		return prototype;
 	}
 

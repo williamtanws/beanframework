@@ -25,7 +25,7 @@ public class UserPermissionResource {
 
 	@PreAuthorize(WebUserPermissionConstants.PreAuthorize.READ)
 	@RequestMapping(WebUserPermissionConstants.Path.Api.CHECKID)
-	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
 

@@ -3,22 +3,17 @@ package com.beanframework.language.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
 
 @Component
 public class DtoLanguageConverter implements DtoConverter<Language, Language> {
 
-	@Autowired
-	private ModelService modelService;
-
 	@Override
 	public Language convert(Language source) {
-		return convert(source, modelService.create(Language.class));
+		return convert(source, new Language());
 	}
 
 	public List<Language> convert(List<Language> sources) {

@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 
 @Component
@@ -36,7 +37,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	}
 
 	@Override
-	public Admin authenticate(String id, String password) {
+	public Admin authenticate(String id, String password) throws Exception {
 		Admin admin = adminService.authenticate(id, password);
 
 		if (admin == null) {

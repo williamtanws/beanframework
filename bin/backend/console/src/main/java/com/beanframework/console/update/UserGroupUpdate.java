@@ -74,7 +74,7 @@ public class UserGroupUpdate extends Updater {
 					List<UserGroupCsv> userGroupCsvList = readCSVFile(reader);
 					save(userGroupCsvList);
 
-				} catch (IOException ex) {
+				} catch (Exception ex) {
 					logger.error("Error reading the resource file: " + ex);
 				}
 			}
@@ -83,7 +83,7 @@ public class UserGroupUpdate extends Updater {
 		}
 	}
 
-	public void save(List<UserGroupCsv> userGroupCsvList) {
+	public void save(List<UserGroupCsv> userGroupCsvList) throws Exception {
 
 		// Dynamic Field
 

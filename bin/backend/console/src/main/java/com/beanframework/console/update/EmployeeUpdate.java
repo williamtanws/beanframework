@@ -75,7 +75,7 @@ public class EmployeeUpdate extends Updater {
 					List<EmployeeCsv> employeeCsvList = readCSVFile(reader);
 					save(employeeCsvList);
 
-				} catch (IOException ex) {
+				} catch (Exception ex) {
 					logger.error("Error reading the resource file: " + ex);
 				}
 			}
@@ -84,7 +84,7 @@ public class EmployeeUpdate extends Updater {
 		}
 	}
 
-	public void save(List<EmployeeCsv> employeeCsvList) {
+	public void save(List<EmployeeCsv> employeeCsvList) throws Exception {
 
 		// Dynamic Field
 

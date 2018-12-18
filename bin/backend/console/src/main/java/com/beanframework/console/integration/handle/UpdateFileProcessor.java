@@ -53,7 +53,7 @@ public class UpdateFileProcessor {
 	@Autowired
 	private UserRightUpdate userRightUpdate;
     
-    public void process(Message<String> msg) throws IOException {
+    public void process(Message<String> msg) throws Exception {
         String fileName = (String) msg.getHeaders().get(FileHeaders.FILENAME);
         File fileOriginalFile = (File) msg.getHeaders().get(FileHeaders.ORIGINAL_FILE);
 

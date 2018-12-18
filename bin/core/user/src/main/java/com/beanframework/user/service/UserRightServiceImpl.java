@@ -18,7 +18,7 @@ public class UserRightServiceImpl implements UserRightService {
 	
 	@Transactional
 	@Override
-	public void deleteLanguageByLanguageUuid(UUID uuid) {
+	public void deleteLanguageByLanguageUuid(UUID uuid) throws Exception {
 		List<UserRight> userRights = modelService.findAll(UserRight.class);
 		for (UserRight userRight : userRights) {
 			for (int i = 0; i < userRight.getUserRightFields().size(); i++) {

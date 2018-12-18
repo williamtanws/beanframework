@@ -29,6 +29,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebEmployeeConstants;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
@@ -57,7 +58,7 @@ public class EmployeeProfileController {
 	public String PROFILE_PICTURE_LOCATION;
 
 	@ModelAttribute(WebEmployeeConstants.ModelAttribute.PROFILE)
-	public Employee populateEmployeeForm(HttpServletRequest request) {
+	public Employee populateEmployeeForm(HttpServletRequest request) throws Exception {
 		return modelService.create(Employee.class);
 	}
 
@@ -106,7 +107,7 @@ public class EmployeeProfileController {
 			
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
 					localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
-		} catch (Exception e) {
+		} catch (BusinessException e) {
 			bindingResult.reject(Employee.class.getSimpleName(), e.getMessage());
 			
 			StringBuilder errorMessage = new StringBuilder();

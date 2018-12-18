@@ -14,7 +14,7 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 
 public class AdminValidateInterceptor implements ValidateInterceptor<Admin> {
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -23,37 +23,43 @@ public class AdminValidateInterceptor implements ValidateInterceptor<Admin> {
 
 	@Override
 	public void onValidate(Admin model) throws InterceptorException {
-		
-		if (model.getUuid() == null) {
-			// Save new
-			if (StringUtils.isEmpty(model.getId())) {
-				throw new InterceptorException(localMessageService.getMessage(AdminConstants.Locale.ID_REQUIRED), this);
-			} else if (StringUtils.isEmpty(model.getPassword())) {
-				throw new InterceptorException(localMessageService.getMessage(AdminConstants.Locale.PASSWORD_REQUIRED),
-						this);
-			} else {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Admin.ID, model.getId());
-				boolean exists = modelService.existsByProperties(properties, Admin.class);
-				if (exists == false) {
-					throw new InterceptorException(localMessageService.getMessage(AdminConstants.Locale.ID_EXISTS),
+		try {
+			if (model.getUuid() == null) {
+				// Save new
+				if (StringUtils.isEmpty(model.getId())) {
+					throw new InterceptorException(localMessageService.getMessage(AdminConstants.Locale.ID_REQUIRED),
 							this);
-				}
-			}
-
-		} else {
-			// Update exists
-			if (StringUtils.isNotEmpty(model.getId())) {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Admin.ID, model.getId());
-				Admin admin = modelService.findOneEntityByProperties(properties, Admin.class);
-				if (admin != null) {
-					if (!model.getUuid().equals(admin.getUuid())) {
+				} else if (StringUtils.isEmpty(model.getPassword())) {
+					throw new InterceptorException(
+							localMessageService.getMessage(AdminConstants.Locale.PASSWORD_REQUIRED), this);
+				} else {
+					Map<String, Object> properties = new HashMap<String, Object>();
+					properties.put(Admin.ID, model.getId());
+					boolean exists = modelService.existsByProperties(properties, Admin.class);
+					if (exists) {
 						throw new InterceptorException(localMessageService.getMessage(AdminConstants.Locale.ID_EXISTS),
 								this);
 					}
 				}
+
+			} else {
+				// Update exists
+				if (StringUtils.isNotEmpty(model.getId())) {
+					Map<String, Object> properties = new HashMap<String, Object>();
+					properties.put(Admin.ID, model.getId());
+					Admin exists = modelService.findOneEntityByProperties(properties, Admin.class);
+
+					if (exists != null) {
+						if (!model.getUuid().equals(exists.getUuid())) {
+							throw new InterceptorException(
+									localMessageService.getMessage(AdminConstants.Locale.ID_EXISTS), this);
+						}
+					}
+				}
 			}
+
+		} catch (Exception e) {
+			throw new InterceptorException(e.getMessage(), this);
 		}
 	}
 

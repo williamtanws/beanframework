@@ -20,6 +20,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.language.domain.Language;
@@ -61,7 +62,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 		}
 	}
 
-	protected void getNavigationTree(HttpServletRequest request, ModelAndView modelAndView, Employee employee) {
+	protected void getNavigationTree(HttpServletRequest request, ModelAndView modelAndView, Employee employee) throws BusinessException {
 		if(employee.getUserGroups().isEmpty() == false) {
 			List<UUID> userGroupUuids = new ArrayList<UUID>();
 			for (UserGroup userGroup : employee.getUserGroups()) {
@@ -73,7 +74,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 		}
 	}
 	
-	protected void getLanguage(ModelAndView modelAndView) {
+	protected void getLanguage(ModelAndView modelAndView) throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Language.SORT, Sort.Direction.ASC);
 		

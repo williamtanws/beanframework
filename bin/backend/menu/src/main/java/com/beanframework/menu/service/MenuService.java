@@ -7,9 +7,9 @@ import com.beanframework.menu.domain.Menu;
 
 public interface MenuService {
 
-	void savePosition(UUID fromUuid, UUID toUuid, int toIndex);
+	void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception;
 
-	List<Menu> findMenuTree();
+	List<Menu> findMenuTree() throws Exception;
 
-	List<Menu> findNavigationTreeByUserGroup(List<UUID> userGroupUuids);
+	List<Menu> findNavigationTreeByUserGroup(List<UUID> userGroupUuids) throws Exception;
 }

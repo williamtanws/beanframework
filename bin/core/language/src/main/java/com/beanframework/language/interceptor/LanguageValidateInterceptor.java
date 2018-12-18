@@ -23,35 +23,39 @@ public class LanguageValidateInterceptor implements ValidateInterceptor<Language
 	@Override
 	public void onValidate(Language model) throws InterceptorException {
 
-		if (model.getUuid() == null) {
-			// Save new
-			if (StringUtils.isEmpty(model.getId())) {
-				throw new InterceptorException(localMessageService.getMessage("module.language.id.required"));
-			} else {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Language.ID, model.getId());
+		try {
+			if (model.getUuid() == null) {
+				// Save new
+				if (StringUtils.isEmpty(model.getId())) {
+					throw new InterceptorException(localMessageService.getMessage("module.language.id.required"));
+				} else {
+					Map<String, Object> properties = new HashMap<String, Object>();
+					properties.put(Language.ID, model.getId());
 
-				boolean existsLanguage = modelService.existsByProperties(properties, Language.class);
+					boolean exists = modelService.existsByProperties(properties, Language.class);
 
-				if (existsLanguage) {
-					throw new InterceptorException(localMessageService.getMessage("module.language.id.exists"));
-				}
-			}
-
-		} else {
-			// Update exists
-			if (StringUtils.isNotEmpty(model.getId())) {
-
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Language.ID, model.getId());
-
-				Language existsLanguage = modelService.findOneEntityByProperties(properties, Language.class);
-				if (existsLanguage != null) {
-					if (!model.getUuid().equals(existsLanguage.getUuid())) {
+					if (exists) {
 						throw new InterceptorException(localMessageService.getMessage("module.language.id.exists"));
 					}
 				}
+
+			} else {
+				// Update exists
+				if (StringUtils.isNotEmpty(model.getId())) {
+
+					Map<String, Object> properties = new HashMap<String, Object>();
+					properties.put(Language.ID, model.getId());
+
+					Language exists = modelService.findOneEntityByProperties(properties, Language.class);
+					if (exists != null) {
+						if (!model.getUuid().equals(exists.getUuid())) {
+							throw new InterceptorException(localMessageService.getMessage("module.language.id.exists"));
+						}
+					}
+				}
 			}
+		} catch (Exception e) {
+			throw new InterceptorException(e.getMessage(), e);
 		}
 	}
 }

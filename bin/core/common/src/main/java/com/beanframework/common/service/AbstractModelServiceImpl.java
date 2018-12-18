@@ -60,7 +60,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	@Autowired
 	protected CacheManager cacheManager;
 
-	protected void initialDefaultsInterceptor(Collection<? extends Object> models) {
+	protected void initialDefaultsInterceptor(Collection<? extends Object> models) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -69,23 +69,19 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void initialDefaultsInterceptor(Object model) {
+	protected void initialDefaultsInterceptor(Object model) throws InterceptorException {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof InitialDefaultsInterceptor) {
 				InitialDefaultsInterceptor<Object> interceptor = (InitialDefaultsInterceptor<Object>) interceptorMapping
 						.getInterceptor();
-				try {
-					if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						interceptor.onInitialDefaults(model);
-					}
-				} catch (InterceptorException e) {
-					e.printStackTrace();
+				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+					interceptor.onInitialDefaults(model);
 				}
 			}
 		}
 	}
 
-	protected void loadInterceptor(Collection<? extends Object> models) {
+	protected void loadInterceptor(Collection<? extends Object> models) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -94,22 +90,18 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void loadInterceptor(Object model) {
+	protected void loadInterceptor(Object model) throws InterceptorException {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof LoadInterceptor) {
 				LoadInterceptor<Object> interceptor = (LoadInterceptor<Object>) interceptorMapping.getInterceptor();
-				try {
-					if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						interceptor.onLoad(model);
-					}
-				} catch (InterceptorException e) {
-					e.printStackTrace();
+				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+					interceptor.onLoad(model);
 				}
 			}
 		}
 	}
 
-	protected void prepareInterceptor(Collection<? extends Object> models) {
+	protected void prepareInterceptor(Collection<? extends Object> models) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -118,23 +110,19 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void prepareInterceptor(Object model) {
+	protected void prepareInterceptor(Object model) throws InterceptorException {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof PrepareInterceptor) {
 				PrepareInterceptor<Object> interceptor = (PrepareInterceptor<Object>) interceptorMapping
 						.getInterceptor();
-				try {
-					if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						interceptor.onPrepare(model);
-					}
-				} catch (InterceptorException e) {
-					e.printStackTrace();
+				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+					interceptor.onPrepare(model);
 				}
 			}
 		}
 	}
 
-	protected void removeInterceptor(Collection<? extends Object> models) {
+	protected void removeInterceptor(Collection<? extends Object> models) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -143,22 +131,18 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void removeInterceptor(Object model) {
+	protected void removeInterceptor(Object model) throws InterceptorException {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof RemoveInterceptor) {
 				RemoveInterceptor<Object> interceptor = (RemoveInterceptor<Object>) interceptorMapping.getInterceptor();
-				try {
-					if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						interceptor.onRemove(model);
-					}
-				} catch (InterceptorException e) {
-					e.printStackTrace();
+				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+					interceptor.onRemove(model);
 				}
 			}
 		}
 	}
 
-	protected void validateInterceptor(Collection<? extends Object> models) {
+	protected void validateInterceptor(Collection<? extends Object> models) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -167,23 +151,19 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void validateInterceptor(Object model) {
+	protected void validateInterceptor(Object model) throws InterceptorException {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof ValidateInterceptor) {
 				ValidateInterceptor<Object> interceptor = (ValidateInterceptor<Object>) interceptorMapping
 						.getInterceptor();
-				try {
-					if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						interceptor.onValidate(model);
-					}
-				} catch (InterceptorException e) {
-					e.printStackTrace();
+				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+					interceptor.onValidate(model);
 				}
 			}
 		}
 	}
 
-	protected void entityConverter(Collection<? extends Object> models) {
+	protected void entityConverter(Collection<? extends Object> models) throws ConverterException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -192,16 +172,12 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected Object entityConverter(Object model) {
+	protected Object entityConverter(Object model) throws ConverterException {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof EntityConverter) {
 				EntityConverter interceptor = (EntityConverter) interceptorMapping.getConverter();
-				try {
-					if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						return interceptor.convert(model);
-					}
-				} catch (ConverterException e) {
-					e.printStackTrace();
+				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+					return interceptor.convert(model);
 				}
 			}
 		}
@@ -209,7 +185,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return model;
 	}
 
-	protected void dtoConverter(Collection<? extends Object> models) {
+	protected void dtoConverter(Collection<? extends Object> models) throws ConverterException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -218,16 +194,12 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected Object dtoConverter(Object model) {
+	protected Object dtoConverter(Object model) throws ConverterException {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof DtoConverter) {
 				DtoConverter interceptor = (DtoConverter) interceptorMapping.getConverter();
-				try {
-					if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						return interceptor.convert(model);
-					}
-				} catch (ConverterException e) {
-					e.printStackTrace();
+				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+					return interceptor.convert(model);
 				}
 			}
 		}

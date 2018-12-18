@@ -6,5 +6,5 @@ public interface CustomerFacade {
 
 	Customer getCurrentCustomer();
 
-	Customer authenticate(String id, String password);
+	Customer authenticate(String id, String password) throws Exception;
 }

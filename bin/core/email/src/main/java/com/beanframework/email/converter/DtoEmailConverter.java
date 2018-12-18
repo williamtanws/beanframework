@@ -4,25 +4,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.Email;
 
 public class DtoEmailConverter implements DtoConverter<Email, Email> {
-
-	@Autowired
-	private ModelService modelService;
 	
 	@Value(EmailConstants.EMAIL_ATTACHMENT_LOCATION)
 	public String EMAIL_ATTACHMENT_LOCATION;
 
 	@Override
 	public Email convert(Email source) {
-		return convert(source, modelService.create(Email.class));
+		return convert(source, new Email());
 	}
 
 	public List<Email> convert(List<Email> sources) {

@@ -28,8 +28,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserGroupConstants;
 import com.beanframework.backoffice.domain.UserGroupSearch;
 import com.beanframework.common.controller.AbstractCommonController;
-import com.beanframework.common.exception.ModelRemovalException;
-import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
@@ -53,7 +52,7 @@ public class UserGroupController extends AbstractCommonController {
 	@Value(WebUserGroupConstants.LIST_SIZE)
 	private int MODULE_USERGROUP_LIST_SIZE;
 
-	private Page<UserGroup> getPagination(Model model, @RequestParam Map<String, Object> requestParams) {
+	private Page<UserGroup> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -108,12 +107,12 @@ public class UserGroupController extends AbstractCommonController {
 	}
 
 	@ModelAttribute(WebUserGroupConstants.ModelAttribute.CREATE)
-	public UserGroup populateUserGroupCreate(HttpServletRequest request) {
+	public UserGroup populateUserGroupCreate(HttpServletRequest request) throws Exception {
 		return modelService.create(UserGroup.class);
 	}
 
 	@ModelAttribute(WebUserGroupConstants.ModelAttribute.UPDATE)
-	public UserGroup populateUserGroupForm(HttpServletRequest request) {
+	public UserGroup populateUserGroupForm(HttpServletRequest request) throws Exception {
 		return modelService.create(UserGroup.class);
 	}
 
@@ -126,7 +125,7 @@ public class UserGroupController extends AbstractCommonController {
 	@GetMapping(value = WebUserGroupConstants.Path.USERGROUP)
 	public String list(@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
 			@ModelAttribute(WebUserGroupConstants.ModelAttribute.UPDATE) UserGroup usergroupUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) {
+			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
@@ -181,7 +180,7 @@ public class UserGroupController extends AbstractCommonController {
 				modelService.saveDto(usergroupCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(UserGroup.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -220,7 +219,7 @@ public class UserGroupController extends AbstractCommonController {
 				modelService.saveDto(usergroupUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(UserGroup.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -246,7 +245,7 @@ public class UserGroupController extends AbstractCommonController {
 			modelService.remove(usergroupUpdate.getUuid(), UserGroup.class);
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
-		} catch (ModelRemovalException e) {
+		} catch (BusinessException e) {
 			addErrorMessage(UserGroup.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebUserGroupConstants.ModelAttribute.UPDATE, usergroupUpdate);
 		}

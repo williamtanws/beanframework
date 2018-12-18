@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.email.domain.Email;
 
 public interface EmailService {
@@ -13,7 +14,7 @@ public interface EmailService {
 
 	void deleteAttachment(UUID uuid, String filename) throws IOException;
 
-	void delete(UUID uuid) throws IOException;
+	void delete(UUID uuid) throws IOException, BusinessException;
 
-	void deleteAll() throws IOException;
+	void deleteAll() throws IOException, BusinessException;
 }

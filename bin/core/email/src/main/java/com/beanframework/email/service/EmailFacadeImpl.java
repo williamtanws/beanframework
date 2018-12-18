@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.email.domain.Email;
 
 @Component
@@ -20,12 +21,20 @@ public class EmailFacadeImpl implements EmailFacade {
 	private EmailService emailService;
 	
 	@Override
-	public void saveAttachment(Email email, MultipartFile[] attachments) throws IOException {
-		emailService.saveAttachment(email, attachments);
+	public void saveAttachment(Email email, MultipartFile[] attachments) throws BusinessException {
+		try {
+			emailService.saveAttachment(email, attachments);
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 	
 	@Override
-	public void deleteAttachment(UUID uuid, String filename) throws IOException {
-		emailService.deleteAttachment(uuid, filename);
+	public void deleteAttachment(UUID uuid, String filename) throws BusinessException {
+		try {
+			emailService.deleteAttachment(uuid, filename);
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 }

@@ -6,21 +6,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserPermission;
-
 
 public class DtoUserPermissionConverter implements DtoConverter<UserPermission, UserPermission> {
 
-	@Autowired
-	private ModelService modelService;
-	
 	@Autowired
 	private DtoUserPermissionFieldConverter dtoUserPermissionLangConverter;
 
 	@Override
 	public UserPermission convert(UserPermission source) {
-		return convert(source, modelService.create(UserPermission.class));
+		return convert(source, new UserPermission());
 	}
 
 	public List<UserPermission> convert(List<UserPermission> sources) {
@@ -38,11 +33,11 @@ public class DtoUserPermissionConverter implements DtoConverter<UserPermission, 
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
-		prototype.setLastModifiedDate(source.getLastModifiedDate());	
-		
+		prototype.setLastModifiedDate(source.getLastModifiedDate());
+
 		prototype.setSort(source.getSort());
 		prototype.setUserPermissionFields(dtoUserPermissionLangConverter.convert(source.getUserPermissionFields()));
-		
+
 //		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 //		sorts.put(Language.SORT, Sort.Direction.ASC);
 //		

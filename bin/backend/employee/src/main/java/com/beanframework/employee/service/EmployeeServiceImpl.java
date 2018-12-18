@@ -130,7 +130,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public Employee authenticate(String id, String password) {
+	public Employee authenticate(String id, String password) throws Exception {
 
 		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(password)) {
 			return null;

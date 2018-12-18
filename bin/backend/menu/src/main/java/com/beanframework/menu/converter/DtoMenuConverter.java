@@ -7,14 +7,10 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.converter.DtoUserGroupConverter;
 
 public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
-
-	@Autowired
-	private ModelService modelService;
 
 	@Autowired
 	private DtoUserGroupConverter dtoUserGroupConverter;
@@ -24,7 +20,7 @@ public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 
 	@Override
 	public Menu convert(Menu source) {
-		return convert(source, modelService.create(Menu.class));
+		return convert(source, new Menu());
 	}
 
 	public List<Menu> convert(List<Menu> sources) {
@@ -52,7 +48,7 @@ public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 		prototype.setSort(source.getSort());
 		prototype.setTarget(source.getTarget());
 		prototype.setEnabled(source.getEnabled());
-		if(source.getChilds() != null && source.getChilds().isEmpty() == false) {
+		if (source.getChilds() != null && source.getChilds().isEmpty() == false) {
 			prototype.setChilds(this.convert(source.getChilds()));
 		}
 		Hibernate.initialize(source.getUserGroups());

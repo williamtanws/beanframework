@@ -3,22 +3,17 @@ package com.beanframework.dynamicfield.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.service.DynamicFieldService;
 
 @Component
 public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, DynamicField> {
 
-	@Autowired
-	private DynamicFieldService dynamicFieldService;
-
 	@Override
 	public DynamicField convert(DynamicField source) {
-		return convert(source, dynamicFieldService.create());
+		return convert(source, new DynamicField());
 	}
 
 	public List<DynamicField> convert(List<DynamicField> sources) {

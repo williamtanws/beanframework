@@ -7,9 +7,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserPermission;
-
 
 public class EntityUserPermissionConverter implements EntityConverter<UserPermission, UserPermission> {
 
@@ -17,19 +17,28 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 	private ModelService modelService;
 
 	@Override
-	public UserPermission convert(UserPermission source) {
+	public UserPermission convert(UserPermission source) throws ConverterException {
 
-		UserPermission prototype = modelService.create(UserPermission.class);
-		if (source.getUuid() != null) {
-			
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(UserPermission.UUID, source.getUuid());
-			
-			UserPermission exists = modelService.findOneEntityByProperties(properties, UserPermission.class);
-			
-			if (exists != null) {
-				prototype = exists;
+		UserPermission prototype;
+		try {
+
+			if (source.getUuid() != null) {
+
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserPermission.UUID, source.getUuid());
+
+				UserPermission exists = modelService.findOneEntityByProperties(properties, UserPermission.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(UserPermission.class);
+				}
+			} else {
+				prototype = modelService.create(UserPermission.class);
 			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
 		return convert(source, prototype);
@@ -39,11 +48,11 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 
 		prototype.setLastModifiedDate(new Date());
 		prototype.setId(source.getId());
-		
-		if(source.getSort() != null) {
+
+		if (source.getSort() != null) {
 			prototype.setSort(source.getSort());
 		}
-		if(source.getUserPermissionFields() != null) {
+		if (source.getUserPermissionFields() != null) {
 			prototype.setUserPermissionFields(source.getUserPermissionFields());
 		}
 //		prototype.getUserPermissionFields().clear();

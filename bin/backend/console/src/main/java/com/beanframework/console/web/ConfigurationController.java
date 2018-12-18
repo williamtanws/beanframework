@@ -22,8 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.common.controller.AbstractCommonController;
-import com.beanframework.common.exception.ModelRemovalException;
-import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.configuration.domain.Configuration;
@@ -47,7 +46,7 @@ public class ConfigurationController extends AbstractCommonController {
 	@Value(WebConfigurationConstants.LIST_SIZE)
 	private int MODULE_CONFIGURATION_LIST_SIZE;
 
-	private Page<Configuration> getPagination(Model model, @RequestParam Map<String, Object> requestParams) {
+	private Page<Configuration> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
@@ -103,12 +102,12 @@ public class ConfigurationController extends AbstractCommonController {
 	}
 
 	@ModelAttribute(WebConfigurationConstants.ModelAttribute.CREATE)
-	public Configuration populateConfigurationCreate(HttpServletRequest request) {
+	public Configuration populateConfigurationCreate(HttpServletRequest request) throws Exception {
 		return modelService.create(Configuration.class);
 	}
 
 	@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE)
-	public Configuration populateConfigurationForm(HttpServletRequest request) {
+	public Configuration populateConfigurationForm(HttpServletRequest request) throws Exception {
 		return modelService.create(Configuration.class);
 	}
 
@@ -121,7 +120,7 @@ public class ConfigurationController extends AbstractCommonController {
 	public String list(
 			@ModelAttribute(WebConfigurationConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
 			@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
-			Model model, @RequestParam Map<String, Object> requestParams) {
+			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(model, requestParams));
 
@@ -157,7 +156,7 @@ public class ConfigurationController extends AbstractCommonController {
 				modelService.saveDto(configurationCreate);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -186,7 +185,7 @@ public class ConfigurationController extends AbstractCommonController {
 				modelService.saveDto(configurationUpdate);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -211,7 +210,7 @@ public class ConfigurationController extends AbstractCommonController {
 			modelService.remove(configurationUpdate.getUuid(), Configuration.class);
 
 			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
-		} catch (ModelRemovalException e) {
+		} catch (BusinessException e) {
 			addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebConfigurationConstants.ModelAttribute.UPDATE, configurationUpdate);
 		}

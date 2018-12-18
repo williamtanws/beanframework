@@ -19,6 +19,7 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
@@ -41,18 +42,22 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	private LocaleMessageService localeMessageService;
 
 	@Override
-	public Employee saveProfile(Employee employee, MultipartFile picture) throws Exception {
+	public Employee saveProfile(Employee employee, MultipartFile picture) throws BusinessException {
 		
-		if (picture != null && picture.isEmpty() == false) {
-			String mimetype = picture.getContentType();
-			String type = mimetype.split("/")[0];
-			if (type.equals("image") == false) {
-				throw new Exception(localeMessageService.getMessage(EmployeeConstants.Locale.PICTURE_WRONGFORMAT));
+		try {
+			if (picture != null && picture.isEmpty() == false) {
+				String mimetype = picture.getContentType();
+				String type = mimetype.split("/")[0];
+				if (type.equals("image") == false) {
+					throw new Exception(localeMessageService.getMessage(EmployeeConstants.Locale.PICTURE_WRONGFORMAT));
+				}
 			}
+			
+			modelService.saveEntity(employee);
+			employeeService.saveProfilePicture(employee, picture);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
 		}
-		
-		modelService.saveEntity(employee);
-		employeeService.saveProfilePicture(employee, picture);
 		
 		return employee;
 	}
@@ -140,7 +145,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	}
 
 	@Override
-	public Employee authenticate(String id, String password) {
+	public Employee authenticate(String id, String password) throws Exception {
 		Employee employee = employeeService.authenticate(id, password);
 
 		if (employee == null) {

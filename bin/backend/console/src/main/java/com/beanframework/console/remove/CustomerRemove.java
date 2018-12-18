@@ -28,7 +28,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Remover;
-import com.beanframework.common.exception.ModelRemovalException;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.CustomerCsv;
@@ -67,7 +67,7 @@ public class CustomerRemove extends Remover {
 					List<CustomerCsv> customerCsvList = readCSVFile(reader);
 					remove(customerCsvList);
 
-				} catch (IOException ex) {
+				} catch (Exception ex) {
 					logger.error("Error reading the resource file: " + ex);
 				}
 			}
@@ -76,7 +76,7 @@ public class CustomerRemove extends Remover {
 		}
 	}
 
-	public void remove(List<CustomerCsv> customerCsvList) {
+	public void remove(List<CustomerCsv> customerCsvList) throws Exception {
 
 		for (CustomerCsv customerCsv : customerCsvList) {
 			
@@ -86,7 +86,7 @@ public class CustomerRemove extends Remover {
 			Customer customer = modelService.findOneDtoByProperties(properties, Customer.class);
 			try {
 				modelService.remove(customer);
-			} catch (ModelRemovalException e) {
+			} catch (BusinessException e) {
 				logger.error(e.getMessage(), e);
 			}
 		}

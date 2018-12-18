@@ -24,36 +24,40 @@ public class EmployeeValidateInterceptor implements ValidateInterceptor<Employee
 	@Override
 	public void onValidate(Employee model) throws InterceptorException {
 		
-		if (model.getUuid() == null) {
-			// Save new
-			if (StringUtils.isEmpty(model.getId())) {
-				throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.ID_REQUIRED), this);
-			} else if (StringUtils.isEmpty(model.getPassword())) {
-				throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.PASSWORD_REQUIRED),
-						this);
-			} else {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Employee.ID, model.getId());
-				boolean exists = modelService.existsByProperties(properties, Employee.class);
-				if (exists == false) {
-					throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.ID_EXISTS),
+		try {
+			if (model.getUuid() == null) {
+				// Save new
+				if (StringUtils.isEmpty(model.getId())) {
+					throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.ID_REQUIRED), this);
+				} else if (StringUtils.isEmpty(model.getPassword())) {
+					throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.PASSWORD_REQUIRED),
 							this);
-				}
-			}
-
-		} else {
-			// Update exists
-			if (StringUtils.isNotEmpty(model.getId())) {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Employee.ID, model.getId());
-				Employee employee = modelService.findOneEntityByProperties(properties, Employee.class);
-				if (employee != null) {
-					if (!model.getUuid().equals(employee.getUuid())) {
+				} else {
+					Map<String, Object> properties = new HashMap<String, Object>();
+					properties.put(Employee.ID, model.getId());
+					boolean exists = modelService.existsByProperties(properties, Employee.class);
+					if (exists) {
 						throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.ID_EXISTS),
 								this);
 					}
 				}
+
+			} else {
+				// Update exists
+				if (StringUtils.isNotEmpty(model.getId())) {
+					Map<String, Object> properties = new HashMap<String, Object>();
+					properties.put(Employee.ID, model.getId());
+					Employee exists = modelService.findOneEntityByProperties(properties, Employee.class);
+					if (exists != null) {
+						if (!model.getUuid().equals(exists.getUuid())) {
+							throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.ID_EXISTS),
+									this);
+						}
+					}
+				}
 			}
+		} catch (Exception e) {
+			throw new InterceptorException(e.getMessage(), e);
 		}
 	}
 

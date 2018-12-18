@@ -3,26 +3,26 @@ package com.beanframework.configuration.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.service.ModelService;
+import com.beanframework.common.exception.ConverterException;
 import com.beanframework.configuration.domain.Configuration;
 
 public class DtoConfigurationConverter implements DtoConverter<Configuration, Configuration> {
 
-	@Autowired
-	private ModelService modelService;
-
 	@Override
-	public Configuration convert(Configuration source) {
-		return convert(source, modelService.create(Configuration.class));
+	public Configuration convert(Configuration source) throws ConverterException {
+		return convert(source, new Configuration());
 	}
 
-	public List<Configuration> convert(List<Configuration> sources) {
+	public List<Configuration> convert(List<Configuration> sources) throws ConverterException {
+
 		List<Configuration> convertedList = new ArrayList<Configuration>();
-		for (Configuration source : sources) {
-			convertedList.add(convert(source));
+		try {
+			for (Configuration source : sources) {
+				convertedList.add(convert(source));
+			}
+		} catch (ConverterException e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 		return convertedList;
 	}

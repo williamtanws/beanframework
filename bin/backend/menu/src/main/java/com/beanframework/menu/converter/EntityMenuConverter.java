@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.converter.EntityUserGroupConverter;
@@ -15,30 +16,39 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private EntityUserGroupConverter entityUserGroupConverter;
-	
+
 	@Autowired
 	private EntityMenuFieldConverter entityMenuFieldConverter;
 
 	@Override
-	public Menu convert(Menu source) {
+	public Menu convert(Menu source) throws ConverterException {
 
-		Menu prototype = modelService.create(Menu.class);
-		if (source.getUuid() != null) {
+		Menu prototype;
+		try {
 
-			Menu exists = modelService.findOneEntityByUuid(source.getUuid(), Menu.class);
+			if (source.getUuid() != null) {
 
-			if (exists != null) {
-				prototype = exists;
+				Menu exists = modelService.findOneEntityByUuid(source.getUuid(), Menu.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(Menu.class);
+				}
+			} else {
+				prototype = modelService.create(Menu.class);
 			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
 		return convert(source, prototype);
 	}
 
-	public List<Menu> convert(List<Menu> sources) {
+	public List<Menu> convert(List<Menu> sources) throws ConverterException {
 		List<Menu> convertedList = new ArrayList<Menu>();
 		for (Menu source : sources) {
 			convertedList.add(convert(source));
@@ -46,7 +56,7 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 		return convertedList;
 	}
 
-	private Menu convert(Menu source, Menu prototype) {
+	private Menu convert(Menu source, Menu prototype) throws ConverterException {
 
 		prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());

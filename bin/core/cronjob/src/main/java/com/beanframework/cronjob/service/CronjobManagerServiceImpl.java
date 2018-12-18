@@ -18,8 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobEnum;
 
@@ -46,13 +46,13 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 	}
 	
 	@Override
-	public void initCronJob() {
+	public void initCronJob() throws BusinessException, Exception {
 
 		initStartupJobIsTrue();
 		initStartupJobIsFalseWithQueueJob();
 	}
 	
-	private void initStartupJobIsTrue() {
+	private void initStartupJobIsTrue() throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.STARTUP, true);
 		
@@ -64,7 +64,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		}
 	}
 	
-	private void initStartupJobIsFalseWithQueueJob() {
+	private void initStartupJobIsFalseWithQueueJob() throws BusinessException {
 		List<Cronjob> jobList = cronjobService.findStartupJobIsFalseWithQueueJob();
 
 		for (Cronjob cronjob : jobList) {
@@ -125,7 +125,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 
 	@Transactional
 	@Override
-	public void trigger(Cronjob cronjob) {
+	public void trigger(Cronjob cronjob) throws Exception {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.UUID, cronjob.getUuid());
@@ -217,20 +217,24 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 	}
 
 	@Override
-	public void deleteJobByUuid(UUID uuid) throws SchedulerException {
+	public void deleteJobByUuid(UUID uuid) throws BusinessException {
 		
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Cronjob.UUID, uuid);
-		
-		Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, uuid);
+			
+			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
 
-		quartzManager.deleteJob(cronjob);
+			quartzManager.deleteJob(cronjob);
 
-		modelService.remove(cronjob.getUuid(), Cronjob.class);
+			modelService.remove(cronjob.getUuid(), Cronjob.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@Override
-	public Cronjob findByUuid(UUID uuid) {
+	public Cronjob findByUuid(UUID uuid) throws Exception {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.UUID, uuid);

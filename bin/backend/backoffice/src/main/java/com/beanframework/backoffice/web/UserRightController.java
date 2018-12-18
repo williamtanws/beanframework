@@ -26,9 +26,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserRightConstants;
 import com.beanframework.backoffice.domain.UserRightSearch;
-import com.beanframework.backoffice.service.BackofficeModuleFacade;
 import com.beanframework.common.controller.AbstractCommonController;
-import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
@@ -44,8 +43,8 @@ public class UserRightController extends AbstractCommonController {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-	@Autowired
-	private BackofficeModuleFacade backofficeModuleFacade;
+//	@Autowired
+//	private BackofficeModuleFacade backofficeModuleFacade;
 
 	@Value(WebUserRightConstants.Path.USERRIGHT)
 	private String PATH_USERRIGHT;
@@ -56,7 +55,8 @@ public class UserRightController extends AbstractCommonController {
 	@Value(WebUserRightConstants.LIST_SIZE)
 	private int MODULE_USERRIGHT_LIST_SIZE;
 
-	private Page<UserRight> getPagination(Model model, @RequestParam Map<String, Object> requestParams) {
+	private Page<UserRight> getPagination(Model model, @RequestParam Map<String, Object> requestParams)
+			throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -111,12 +111,12 @@ public class UserRightController extends AbstractCommonController {
 	}
 
 	@ModelAttribute(WebUserRightConstants.ModelAttribute.CREATE)
-	public UserRight populateUserRightCreate(HttpServletRequest request) {
+	public UserRight populateUserRightCreate(HttpServletRequest request) throws Exception {
 		return modelService.create(UserRight.class);
 	}
 
 	@ModelAttribute(WebUserRightConstants.ModelAttribute.UPDATE)
-	public UserRight populateUserRightForm(HttpServletRequest request) {
+	public UserRight populateUserRightForm(HttpServletRequest request) throws Exception {
 		return modelService.create(UserRight.class);
 	}
 
@@ -129,7 +129,7 @@ public class UserRightController extends AbstractCommonController {
 	@GetMapping(value = WebUserRightConstants.Path.USERRIGHT)
 	public String list(@ModelAttribute(WebUserRightConstants.ModelAttribute.SEARCH) UserRightSearch userrightSearch,
 			@ModelAttribute(WebUserRightConstants.ModelAttribute.UPDATE) UserRight userrightUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) {
+			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
@@ -169,7 +169,7 @@ public class UserRightController extends AbstractCommonController {
 				modelService.saveDto(userrightCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(UserRight.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -199,7 +199,7 @@ public class UserRightController extends AbstractCommonController {
 				modelService.saveDto(userrightUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(UserRight.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -222,12 +222,12 @@ public class UserRightController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			backofficeModuleFacade.deleteAllModuleUserRightByUserRightUuid(userrightUpdate.getUuid(), bindingResult);
+//			backofficeModuleFacade.deleteAllModuleUserRightByUserRightUuid(userrightUpdate.getUuid(), bindingResult);
 
 			modelService.remove(userrightUpdate.getUuid(), UserRight.class);
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
-		} catch (Exception e) {
+		} catch (BusinessException e) {
 			addErrorMessage(UserRight.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebUserRightConstants.ModelAttribute.UPDATE, userrightUpdate);
 		}

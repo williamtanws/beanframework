@@ -10,12 +10,11 @@ import com.beanframework.dynamicfield.converter.DtoDynamicFieldConverter;
 import com.beanframework.language.converter.DtoLanguageConverter;
 import com.beanframework.menu.domain.MenuField;
 
+public class DtoMenuFieldConverter implements DtoConverter<MenuField, MenuField> {
 
-public class DtoMenuFieldConverter  implements DtoConverter<MenuField, MenuField>{
-	
 	@Autowired
 	private DtoLanguageConverter dtoLanguageConverter;
-	
+
 	@Autowired
 	private DtoDynamicFieldConverter dtoDynamicFieldConverter;
 
@@ -23,7 +22,7 @@ public class DtoMenuFieldConverter  implements DtoConverter<MenuField, MenuField
 	public MenuField convert(MenuField source) {
 		return convert(source, new MenuField());
 	}
-	
+
 	public List<MenuField> convert(List<MenuField> sources) {
 		List<MenuField> convertedList = new ArrayList<MenuField>();
 		for (MenuField source : sources) {
@@ -31,7 +30,7 @@ public class DtoMenuFieldConverter  implements DtoConverter<MenuField, MenuField
 		}
 		return convertedList;
 	}
-	
+
 	public MenuField convert(MenuField source, MenuField prototype) {
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
@@ -39,12 +38,12 @@ public class DtoMenuFieldConverter  implements DtoConverter<MenuField, MenuField
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 		prototype.setUuid(source.getUuid());
-		
+
 		prototype.setLabel(source.getLabel());
 		prototype.setValue(source.getValue());
 		prototype.setLanguage(dtoLanguageConverter.convert(source.getLanguage()));
 		prototype.setDynamicField(dtoDynamicFieldConverter.convert(source.getDynamicField()));
-		
+
 		return prototype;
 	}
 
