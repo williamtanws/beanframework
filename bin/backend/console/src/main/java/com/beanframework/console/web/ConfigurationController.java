@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
@@ -26,19 +27,16 @@ import com.beanframework.common.exception.ModelSavingException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationFacade;
+import com.beanframework.configuration.domain.ConfigurationSpecification;
 import com.beanframework.console.WebConfigurationConstants;
 import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.domain.ConfigurationSearch;
 
 @Controller
 public class ConfigurationController extends AbstractCommonController {
-	
-	@Autowired
-	private ModelService modelService;
 
 	@Autowired
-	private ConfigurationFacade configurationFacade;
+	private ModelService modelService;
 
 	@Value(WebConfigurationConstants.Path.CONFIGURATION)
 	private String PATH_CONFIGURATION;
@@ -74,7 +72,9 @@ public class ConfigurationController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Configuration> pagination = configurationFacade.page(configuration, page, size, direction, properties);
+		Page<Configuration> pagination = modelService.findPage(ConfigurationSpecification.findByCriteria(configuration),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties),
+				Configuration.class);
 
 		model.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
@@ -126,10 +126,11 @@ public class ConfigurationController extends AbstractCommonController {
 		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (configurationUpdate.getUuid() != null) {
-			
-			Configuration existingConfiguration = modelService.findOneEntityByUuid(configurationUpdate.getUuid(), Configuration.class);
+
+			Configuration existingConfiguration = modelService.findOneEntityByUuid(configurationUpdate.getUuid(),
+					Configuration.class);
 			existingConfiguration = modelService.getDto(existingConfiguration);
-			
+
 			if (existingConfiguration != null) {
 				model.addAttribute(WebConfigurationConstants.ModelAttribute.UPDATE, existingConfiguration);
 			} else {
@@ -154,7 +155,7 @@ public class ConfigurationController extends AbstractCommonController {
 		} else {
 			try {
 				modelService.saveDto(configurationCreate);
-				
+
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -183,7 +184,7 @@ public class ConfigurationController extends AbstractCommonController {
 		} else {
 			try {
 				modelService.saveDto(configurationUpdate);
-				
+
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -205,10 +206,10 @@ public class ConfigurationController extends AbstractCommonController {
 			@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
-		
+
 		try {
 			modelService.remove(configurationUpdate.getUuid(), Configuration.class);
-			
+
 			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
 		} catch (ModelRemovalException e) {
 			addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);

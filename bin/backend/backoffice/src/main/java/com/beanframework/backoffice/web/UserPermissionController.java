@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,20 +33,17 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.service.UserPermissionFacade;
+import com.beanframework.user.domain.UserPermissionSpecification;
 
 @Controller
 public class UserPermissionController extends AbstractCommonController {
-	
+
 	@Autowired
 	private ModelService modelService;
 
 	@Autowired
-	private UserPermissionFacade userpermissionFacade;
-
-	@Autowired
 	private LocaleMessageService localeMessageService;
-	
+
 	@Autowired
 	private BackofficeModuleFacade backofficeModuleFacade;
 
@@ -74,8 +72,8 @@ public class UserPermissionController extends AbstractCommonController {
 		UserPermissionSearch userpermissionSearch = (UserPermissionSearch) model.asMap()
 				.get(WebUserPermissionConstants.ModelAttribute.SEARCH);
 
-		UserPermission userpermission = new UserPermission();
-		userpermission.setId(userpermissionSearch.getIdSearch());
+		UserPermission userPermission = new UserPermission();
+		userPermission.setId(userpermissionSearch.getIdSearch());
 
 		if (properties == null) {
 			properties = new String[1];
@@ -83,7 +81,10 @@ public class UserPermissionController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<UserPermission> pagination = userpermissionFacade.page(userpermission, page, size, direction, properties);
+		Page<UserPermission> pagination = modelService.findPage(
+				UserPermissionSpecification.findByCriteria(userPermission),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties),
+				UserPermission.class);
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -136,12 +137,13 @@ public class UserPermissionController extends AbstractCommonController {
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (userpermissionUpdate.getUuid() != null) {
-			
+
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(UserPermission.UUID, userpermissionUpdate.getUuid());
 
-			UserPermission existingUserPermission = modelService.findOneDtoByProperties(properties, UserPermission.class);
-			
+			UserPermission existingUserPermission = modelService.findOneDtoByProperties(properties,
+					UserPermission.class);
+
 			if (existingUserPermission != null) {
 				model.addAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE, existingUserPermission);
 			} else {
@@ -166,10 +168,10 @@ public class UserPermissionController extends AbstractCommonController {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
-			
+
 			try {
 				modelService.saveDto(userpermissionCreate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -199,7 +201,7 @@ public class UserPermissionController extends AbstractCommonController {
 		} else {
 			try {
 				modelService.saveDto(userpermissionUpdate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -224,14 +226,16 @@ public class UserPermissionController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			backofficeModuleFacade.deleteAllModuleUserPermissionByUserPermissionUuid(userpermissionUpdate.getUuid(), bindingResult);
+			backofficeModuleFacade.deleteAllModuleUserPermissionByUserPermissionUuid(userpermissionUpdate.getUuid(),
+					bindingResult);
 
 			modelService.remove(userpermissionUpdate.getUuid(), UserPermission.class);
-			
+
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (Exception e) {
 			addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE, userpermissionUpdate);
+			redirectAttributes.addFlashAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE,
+					userpermissionUpdate);
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, userpermissionSearch);

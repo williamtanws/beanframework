@@ -2,26 +2,29 @@ package com.beanframework.common.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.common.exception.ModelInitializationException;
 import com.beanframework.common.exception.ModelRemovalException;
 import com.beanframework.common.exception.ModelSavingException;
@@ -33,9 +36,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Autowired
 	private ModelRepository modelRepository;
-
-	@Autowired
-	private CacheManager cacheManager;
 
 	@Transactional
 	@Override
@@ -75,14 +75,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(uuid, "uuid was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
-		Object model = cacheManager.getCache(modelClass.getName()).get(uuid);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(GenericDomain.UUID, uuid);
 
-		if (model == null) {
-			model = (T) entityManager.getReference(modelClass, uuid);
-			cacheManager.getCache(modelClass.getName()).put(uuid, model);
-		}
-
-		return (T) model;
+		return (T) findOneEntityByProperties(properties, modelClass);
 	}
 
 	@Transactional(readOnly = true)
@@ -108,26 +104,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
-		StringBuilder propertiesBuilder = new StringBuilder();
-		for (Map.Entry<String, Object> entry : properties.entrySet()) {
-			if (propertiesBuilder.length() == 0) {
-				propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
-			} else {
-				propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
-			}
-		}
-
-		String qlString = "select o from " + modelClass.getName() + " o where " + propertiesBuilder.toString();
-
-		Object model = cacheManager.getCache(modelClass.getName()).get(qlString);
+		Object model = getCachedSingleResult(properties, null, null, modelClass);
 
 		if (model == null) {
-			Query query = entityManager.createQuery(qlString);
-
 			try {
-				model = query.getSingleResult();
+				model = createQuery(properties, null, null, modelClass).getSingleResult();
 
-				cacheManager.getCache(modelClass.getName()).put(qlString, model);
+				setCachedSingleResult(properties, null, null, modelClass, model);
 
 				if (dto) {
 					dtoConverter(model);
@@ -151,25 +134,15 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Transactional(readOnly = true)
 	@Override
 	public boolean existsByProperties(Map<String, Object> properties, Class modelClass) {
-		StringBuilder propertiesBuilder = new StringBuilder();
-		for (Map.Entry<String, Object> entry : properties.entrySet()) {
-			if (propertiesBuilder.length() == 0) {
-				propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
-			} else {
-				propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
-			}
-		}
+		Assert.notNull(properties, "properties was null");
+		Assert.notNull(modelClass, "modelClass was null");
 
-		String qlString = "select count(o) from " + modelClass.getName() + " o where " + propertiesBuilder.toString();
-
-		Long count = cacheManager.getCache(modelClass.getName()).get(qlString, Long.class);
+		Long count = getCachedSingleResult(properties, null, "count(o)", modelClass);
 
 		if (count == null) {
-			Query query = entityManager.createQuery(qlString);
+			count = (Long) createQuery(properties, null, "count(o)", modelClass).getSingleResult();
 
-			count = (Long) query.getSingleResult();
-
-			cacheManager.getCache(modelClass.getName()).put(qlString, count);
+			setCachedSingleResult(properties, null, "count(o)", modelClass, count);
 		}
 
 		return count.equals(0L) ? false : true;
@@ -177,30 +150,17 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findByProperties(Map<String, Object> properties, Class modelClass) {
+	public <T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass) {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
-		StringBuilder propertiesBuilder = new StringBuilder();
-		for (Map.Entry<String, Object> entry : properties.entrySet()) {
-
-			if (propertiesBuilder.length() == 0) {
-				propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
-			} else {
-				propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
-			}
-		}
-
-		String qlString = "select o from " + modelClass.getName() + " o where " + propertiesBuilder.toString();
-
-		List<Object> models = (List<Object>) cacheManager.getCache(modelClass.getName()).get(qlString);
+		List<Object> models = getCachedResultList(properties, null, null, modelClass);
 
 		if (models == null) {
-			Query query = entityManager.createQuery(qlString);
 
-			models = query.getResultList();
+			models = createQuery(properties, null, null, modelClass).getResultList();
 
-			cacheManager.getCache(modelClass.getName()).put(qlString, models);
+			setCachedResultList(properties, null, null, modelClass, models);
 		}
 
 		dtoConverter(models);
@@ -212,29 +172,16 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findBySorts(Map<String, Sort.Direction> sorts, Class modelClass) {
+	public <T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass) {
 		Assert.notNull(sorts, "sorts was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
-		StringBuilder sortsBuilder = new StringBuilder();
-		for (Entry<String, Direction> entry : sorts.entrySet()) {
-			if (sortsBuilder.length() == 0) {
-				sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getValue().toString());
-			} else {
-				sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
-			}
-		}
-
-		String qlString = "select o from " + modelClass.getName() + " o " + sortsBuilder.toString();
-
-		List<Object> models = (List<Object>) cacheManager.getCache(modelClass.getName()).get(qlString);
+		List<Object> models = getCachedResultList(null, sorts, null, modelClass);
 
 		if (models == null) {
-			Query query = entityManager.createQuery(qlString);
+			models = createQuery(null, sorts, null, modelClass).getResultList();
 
-			models = query.getResultList();
-
-			cacheManager.getCache(modelClass.getName()).put(qlString, models);
+			setCachedResultList(null, sorts, null, modelClass, models);
 		}
 
 		dtoConverter(models);
@@ -245,44 +192,20 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findByPropertiesAndSorts(Map<String, Object> properties,
+	public <T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties,
 			Map<String, Sort.Direction> sorts, Class modelClass) {
-		Assert.notNull(properties, "properties was null");
-		Assert.notNull(sorts, "sorts was null");
+		if (properties == null && sorts == null) {
+			Assert.notNull(properties, "properties was null");
+			Assert.notNull(sorts, "sorts was null");
+		}
 		Assert.notNull(modelClass, "modelClass was null");
 
-		StringBuilder propertiesBuilder = new StringBuilder();
-		for (Map.Entry<String, Object> entry : properties.entrySet()) {
-			if (propertiesBuilder.length() == 0) {
-				if (entry.getValue() == null) {
-					propertiesBuilder.append("o." + entry.getKey() + " IS NULL");
-				} else {
-					propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
-				}
-			} else {
-				propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
-			}
-		}
+		List<Object> models = getCachedResultList(properties, sorts, null, modelClass);
 
-		StringBuilder sortsBuilder = new StringBuilder();
-		for (Entry<String, Direction> entry : sorts.entrySet()) {
-			if (sortsBuilder.length() == 0) {
-				sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getValue().toString());
-			} else {
-				sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
-			}
-		}
-		
-		String qlString = "select o from " + modelClass.getName() + " o where "+ propertiesBuilder.toString() + " " + sortsBuilder.toString();
-		
-		List<Object> models = (List<Object>) cacheManager.getCache(modelClass.getName()).get(qlString);
-		
-		if(models == null) {
-			Query query = entityManager.createQuery(qlString);
+		if (models == null) {
+			models = createQuery(properties, sorts, null, modelClass).getResultList();
 
-			models = query.getResultList();
-			
-			cacheManager.getCache(modelClass.getName()).put(qlString, models);
+			setCachedResultList(properties, sorts, null, modelClass, models);
 		}
 
 		dtoConverter(models);
@@ -294,13 +217,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Transactional(readOnly = true)
 	@Override
 	public <T extends Collection> T findAll(Class modelClass) {
-		
-		List<Object> models = (List<Object>) cacheManager.getCache(modelClass.getName()).get(modelClass.getName());
-		
-		if(models == null) {
-			models = (List<Object>) modelRepository.findAll();
-			
-			cacheManager.getCache(modelClass.getName()).put(modelClass.getName(), models);
+
+		List<Object> models = getCachedResultList(null, null, null, modelClass);
+
+		if (models == null) {
+			models = createQuery(null, null, null, modelClass).getResultList();
+
+			setCachedResultList(null, null, null, modelClass, models);
 		}
 
 		dtoConverter(models);
@@ -311,14 +234,37 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> Page<T> findPage(@Nullable Specification spec, Pageable pageable, Class modelClass) {
+	public <T extends Collection> T findAll(Specification specification, Class modelClass) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(modelClass);
+		Root<T> root = criteriaQuery.from(modelClass);
 		
+		Predicate predicate = specification.toPredicate(root, criteriaQuery, criteriaBuilder);
+		
+		System.out.println(predicate.toString());
+
+		criteriaQuery.where(predicate);
+		List<Object> models = (List<Object>) entityManager.createQuery(criteriaQuery).getResultList();
+
+		dtoConverter(models);
+		loadInterceptor(models);
+
+		return (T) models;
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public <T> Page<T> findPage(Specification spec, Pageable pageable, Class modelClass) {
 		Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
 		dtoConverter(page.getContent());
 		loadInterceptor(page.getContent());
 
-		return page;
+		List<T> content = getDto(page.getContent());
+		PageImpl<T> pageImpl = new PageImpl<T>(content, page.getPageable(), page.getTotalElements());
+
+		return pageImpl;
 	}
 
 	@Override
@@ -329,12 +275,12 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Transactional
 	@Override
 	public void saveEntity(Object model) throws ModelSavingException {
-				
+
 		validateInterceptor(model);
 		prepareInterceptor(model);
 
 		modelRepository.save(model);
-		
+
 		cacheManager.getCache(model.getClass().getName()).clear();
 	}
 
@@ -348,7 +294,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		model = entityConverter(model);
 
 		modelRepository.save(model);
-		
+
 		cacheManager.getCache(model.getClass().getName()).clear();
 
 		dtoConverter(model);
@@ -364,9 +310,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public void remove(Object model) throws ModelRemovalException {
 		modelRepository.delete(model);
-		
+
 		cacheManager.getCache(model.getClass().getName()).clear();
-		
+
 		removeInterceptor(model);
 	}
 
@@ -375,9 +321,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void remove(Collection<? extends Object> models) throws ModelRemovalException {
 		for (Object model : models) {
 			modelRepository.delete(model);
-			
+
 			cacheManager.getCache(model.getClass().getName()).clear();
-			
+
 			removeInterceptor(model);
 		}
 	}
@@ -392,9 +338,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 
 		modelRepository.delete(model);
-		
+
 		cacheManager.getCache(model.getClass().getName()).clear();
-		
+
 		removeInterceptor(model);
 	}
 
@@ -403,9 +349,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public int removeAll(Class modelClass) throws ModelRemovalException {
 		Query query = entityManager.createQuery("delete from " + modelClass.getName());
 		int count = query.executeUpdate();
-		
+
 		cacheManager.getCache(modelClass.getName()).clear();
-		
+
 		return count;
 	}
 

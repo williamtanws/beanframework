@@ -81,7 +81,7 @@ public class MenuController extends AbstractCommonController {
 				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 				
-				List<UserGroup> userGroups = modelService.findBySorts(sorts, UserGroup.class);
+				List<UserGroup> userGroups = modelService.findDtoBySorts(sorts, UserGroup.class);
 				
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingMenu.getUserGroups()) {

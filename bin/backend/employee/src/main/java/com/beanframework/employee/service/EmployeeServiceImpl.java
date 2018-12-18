@@ -18,8 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,7 +30,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.converter.DtoEmployeeConverter;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.domain.EmployeeSpecification;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;
@@ -115,13 +112,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
 		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public Page<Employee> page(Employee employee, Pageable pageable) {
-		Page<Employee> page = modelService.findPage(EmployeeSpecification.findByCriteria(employee), pageable, Employee.class);
-		return page;
 	}
 
 	@Transactional(readOnly = true)

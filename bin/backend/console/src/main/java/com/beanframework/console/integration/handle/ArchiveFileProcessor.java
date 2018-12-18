@@ -1,4 +1,4 @@
-package com.beanframework.integration.handle;
+package com.beanframework.console.integration.handle;
 
 import java.io.File;
 import java.io.FileInputStream;

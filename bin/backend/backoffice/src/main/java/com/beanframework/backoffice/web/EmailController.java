@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,11 +35,12 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.domain.EmailEnum.Status;
+import com.beanframework.email.domain.EmailSpecification;
 import com.beanframework.email.service.EmailFacade;
 
 @Controller
-public class EmailController extends AbstractCommonController{
-	
+public class EmailController extends AbstractCommonController {
+
 	@Autowired
 	private ModelService modelService;
 
@@ -80,7 +82,8 @@ public class EmailController extends AbstractCommonController{
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Email> pagination = emailFacade.page(email, page, size, direction, properties);
+		Page<Email> pagination = modelService.findPage(EmailSpecification.findByCriteria(email),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Email.class);
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -102,7 +105,7 @@ public class EmailController extends AbstractCommonController{
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute("emailSearch",emailSearch.getEmailSearch());
+		redirectAttributes.addAttribute("emailSearch", emailSearch.getEmailSearch());
 		redirectAttributes.addFlashAttribute(WebEmailConstants.ModelAttribute.SEARCH, emailSearch);
 
 		return redirectAttributes;
@@ -132,12 +135,12 @@ public class EmailController extends AbstractCommonController{
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (emailUpdate.getUuid() != null) {
-			
+
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Email.UUID, emailUpdate.getUuid());
-			
+
 			Email existingEmail = modelService.findOneDtoByProperties(properties, Email.class);
-			
+
 			if (existingEmail != null) {
 				model.addAttribute(WebEmailConstants.ModelAttribute.UPDATE, existingEmail);
 			} else {
@@ -151,8 +154,7 @@ public class EmailController extends AbstractCommonController{
 
 	@PreAuthorize(WebEmailConstants.PreAuthorize.CREATE)
 	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "create")
-	public RedirectView create(
-			@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
+	public RedirectView create(@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
 			@ModelAttribute(WebEmailConstants.ModelAttribute.CREATE) Email emailCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
@@ -163,7 +165,7 @@ public class EmailController extends AbstractCommonController{
 		} else {
 			try {
 				modelService.saveDto(emailCreate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(Email.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -181,8 +183,7 @@ public class EmailController extends AbstractCommonController{
 
 	@PreAuthorize(WebEmailConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "update")
-	public RedirectView update(
-			@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
+	public RedirectView update(@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
 			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
@@ -193,7 +194,7 @@ public class EmailController extends AbstractCommonController{
 		} else {
 			try {
 				modelService.saveDto(emailUpdate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(Email.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -208,14 +209,15 @@ public class EmailController extends AbstractCommonController{
 		redirectView.setUrl(PATH_EMAIL);
 		return redirectView;
 	}
-	
+
 	@PreAuthorize(WebEmailConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "createattachment")
 	public RedirectView createAttachment(
 			@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
 			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes, @RequestParam("uploadAttachments") MultipartFile[] uploadAttachments) {
+			RedirectAttributes redirectAttributes,
+			@RequestParam("uploadAttachments") MultipartFile[] uploadAttachments) {
 
 		if (emailUpdate.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
@@ -223,7 +225,7 @@ public class EmailController extends AbstractCommonController{
 		} else {
 			try {
 				emailFacade.saveAttachment(emailUpdate, uploadAttachments);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (IOException e) {
 				addErrorMessage(Email.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -238,7 +240,7 @@ public class EmailController extends AbstractCommonController{
 		redirectView.setUrl(PATH_EMAIL);
 		return redirectView;
 	}
-	
+
 	@PreAuthorize(WebEmailConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "deleteattachment")
 	public RedirectView deleteAttachment(
@@ -253,7 +255,7 @@ public class EmailController extends AbstractCommonController{
 		} else {
 			try {
 				emailFacade.deleteAttachment(emailUpdate.getUuid(), filename);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (IOException e) {
 				addErrorMessage(Email.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -271,15 +273,14 @@ public class EmailController extends AbstractCommonController{
 
 	@PreAuthorize(WebEmailConstants.PreAuthorize.DELETE)
 	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "delete")
-	public RedirectView delete(
-			@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
+	public RedirectView delete(@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
 			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
 			modelService.remove(emailUpdate.getUuid(), Email.class);
-			
+
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (ModelRemovalException e) {
 			addErrorMessage(Email.class, e.getMessage(), bindingResult, redirectAttributes);

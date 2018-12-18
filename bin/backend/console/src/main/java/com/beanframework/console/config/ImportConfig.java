@@ -6,15 +6,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.beanframework.console.initialize.CronjobInitialize;
-import com.beanframework.console.initialize.CustomerInitialize;
-import com.beanframework.console.initialize.EmployeeInitialize;
-import com.beanframework.console.initialize.LanguageInitialize;
-import com.beanframework.console.initialize.MenuInitialize;
-import com.beanframework.console.initialize.UserGroupInitialize;
-import com.beanframework.console.initialize.UserPermissionInitialize;
-import com.beanframework.console.initialize.UserRightInitialize;
-import com.beanframework.console.registry.InitializerRegistry;
 import com.beanframework.console.registry.RemoverRegistry;
 import com.beanframework.console.registry.UpdaterRegistry;
 import com.beanframework.console.remove.CustomerRemove;
@@ -31,54 +22,12 @@ import com.beanframework.console.update.UserRightUpdate;
 @Configuration
 public class ImportConfig implements ApplicationListener<ApplicationReadyEvent> {
 
-	@Autowired
-	private InitializerRegistry initializerRegistry;
 
 	@Autowired
 	private UpdaterRegistry updaterRegistry;
 	
 	@Autowired
 	private RemoverRegistry removerRegistry;
-
-	@Bean
-	public EmployeeInitialize employeeInitialize() {
-		return new EmployeeInitialize();
-	}
-
-	@Bean
-	public LanguageInitialize languageInitialize() {
-		return new LanguageInitialize();
-	}
-
-	@Bean
-	public MenuInitialize menuInitialize() {
-		return new MenuInitialize();
-	}
-
-	@Bean
-	public UserPermissionInitialize permissionInitialize() {
-		return new UserPermissionInitialize();
-	}
-
-	@Bean
-	public UserGroupInitialize userGroupInitialize() {
-		return new UserGroupInitialize();
-	}
-
-	@Bean
-	public UserRightInitialize userRightInitialize() {
-		return new UserRightInitialize();
-	}
-	
-	@Bean
-	public CustomerInitialize customerInitialize() {
-		return new CustomerInitialize();
-	}
-	
-	@Bean
-	public CronjobInitialize cronjobInitialize() {
-		return new CronjobInitialize();
-	}
 
 	@Bean
 	public EmployeeUpdate employeeUpdate() {
@@ -132,14 +81,6 @@ public class ImportConfig implements ApplicationListener<ApplicationReadyEvent> 
 
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent event) {
-		initializerRegistry.addInitializer(languageInitialize());
-		initializerRegistry.addInitializer(userRightInitialize());
-		initializerRegistry.addInitializer(permissionInitialize());
-		initializerRegistry.addInitializer(userGroupInitialize());
-		initializerRegistry.addInitializer(menuInitialize());
-		initializerRegistry.addInitializer(employeeInitialize());
-		initializerRegistry.addInitializer(customerInitialize());
-		initializerRegistry.addInitializer(cronjobInitialize());
 
 		updaterRegistry.addUpdater(languageUpdate());
 		updaterRegistry.addUpdater(userRightUpdate());

@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.Nullable;
 
 import com.beanframework.common.exception.ModelInitializationException;
 import com.beanframework.common.exception.ModelRemovalException;
@@ -24,25 +23,27 @@ public interface ModelService {
 	void detachAll();
 
 	<T> T create(Class modelClass);
-	
+
 	<T> T findOneEntityByUuid(UUID uuid, Class modelClass);
 
 	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass);
 
 	<T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass);
 
-	<T extends Collection> T findByProperties(Map<String, Object> properties, Class modelClass);
+	<T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass);
 
-	<T extends Collection> T findBySorts(Map<String, Sort.Direction> sorts, Class modelClass);
+	<T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass);
 
-	<T extends Collection> T findByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts,
+	<T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts,
 			Class modelClass);
 
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass);
 
 	<T extends Collection> T findAll(Class modelClass);
 
-	<T> Page<T> findPage(@Nullable Specification spec, Pageable pageable, Class modelClass);
+	<T extends Collection> T findAll(Specification specification, Class modelClass);
+
+	<T> Page<T> findPage(Specification specification, Pageable pageable, Class modelClass);
 
 	void refresh(Object model);
 

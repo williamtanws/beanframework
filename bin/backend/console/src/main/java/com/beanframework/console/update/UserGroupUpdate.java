@@ -36,7 +36,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserGroupCsv;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldType;
+import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
 import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupField;
@@ -99,7 +99,7 @@ public class UserGroupUpdate extends Updater {
 		enNameDynamicField.setRequired(true);
 		enNameDynamicField.setRule(null);
 		enNameDynamicField.setSort(0);
-		enNameDynamicField.setType(DynamicFieldType.TEXT);
+		enNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
 		modelService.saveEntity(enNameDynamicField);
 
 		Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
@@ -114,7 +114,7 @@ public class UserGroupUpdate extends Updater {
 		cnNameDynamicField.setRequired(true);
 		cnNameDynamicField.setRule(null);
 		cnNameDynamicField.setSort(1);
-		cnNameDynamicField.setType(DynamicFieldType.TEXT);
+		cnNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
 		modelService.saveEntity(cnNameDynamicField);
 
 		// Language

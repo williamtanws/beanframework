@@ -64,9 +64,6 @@
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.configuration') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.configuration')}}" th:text="#{module.configuration}"></a>
 									</li>
-									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.initialize') ? 'active':''}">
-										<a th:href="@{${@environment.getProperty('path.console.platform.initialize')}}" th:text="#{module.console.platform.initialize}"></a>
-									</li>
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.update') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.console.platform.update')}}" th:text="#{module.console.platform.update}"></a>
 									</li>

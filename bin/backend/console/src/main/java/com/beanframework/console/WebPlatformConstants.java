@@ -3,14 +3,12 @@ package com.beanframework.console;
 public interface WebPlatformConstants {
 
 	public interface Path {
-		public static final String INITIALIZE = "${path.console.platform.initialize}";
 		public static final String UPDATE = "${path.console.platform.update}";
 		public static final String REMOVE = "${path.console.platform.remove}";
 	}
 
 	public interface View {
 
-		public static final String INITIALIZE = "${view.console.platform.initialize}";
 		public static final String UPDATE = "${view.console.platform.update}";
 		public static final String REMOVE = "${view.console.platform.remove}";
 	}

@@ -1,4 +1,4 @@
-package com.beanframework.integration.file;
+package com.beanframework.console.integration.file;
 
 import java.io.File;
 import java.util.Arrays;
@@ -29,9 +29,9 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.beanframework.integration.IntegrationConfig;
-import com.beanframework.integration.handle.ArchiveFileProcessor;
-import com.beanframework.integration.handle.UpdateFileProcessor;
+import com.beanframework.console.config.IntegrationConfig;
+import com.beanframework.console.integration.handle.ArchiveFileProcessor;
+import com.beanframework.console.integration.handle.UpdateFileProcessor;
 
 /**
  * Inbound File Adapter looks for files that match the given regular expression
