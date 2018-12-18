@@ -19,7 +19,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 
 	@Transactional
 	@Override
-	public void deleteLanguageByLanguageUuid(UUID uuid) {
+	public void deleteLanguageByLanguageUuid(UUID uuid) throws Exception {
 		List<UserPermission> userPermissions = modelService.findAll(UserPermission.class);
 		for (UserPermission userPermission : userPermissions) {
 			Hibernate.initialize(userPermission.getUserPermissionFields());

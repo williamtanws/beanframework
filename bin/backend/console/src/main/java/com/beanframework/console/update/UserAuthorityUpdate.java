@@ -72,7 +72,7 @@ public class UserAuthorityUpdate extends Updater {
 					List<UserAuthorityCsv> userAuthorityCsvList = readCSVFile(reader);
 					save(userAuthorityCsvList);
 
-				} catch (IOException ex) {
+				} catch (Exception ex) {
 					logger.error("Error reading the resource file: " + ex);
 				}
 			}
@@ -81,7 +81,7 @@ public class UserAuthorityUpdate extends Updater {
 		}
 	}
 
-	public void save(List<UserAuthorityCsv> userAuthorityCsvList) {
+	public void save(List<UserAuthorityCsv> userAuthorityCsvList) throws Exception {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(UserRight.ID, "create");

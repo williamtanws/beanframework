@@ -21,7 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
 	private ModelService modelService;
 
 	@Override
-	public Customer authenticate(String id, String password) {
+	public Customer authenticate(String id, String password) throws Exception {
 
 		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(password)) {
 			return null;

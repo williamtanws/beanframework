@@ -19,7 +19,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Transactional
 	@Override
-	public void deleteLanguageByLanguageUuid(UUID uuid) {
+	public void deleteLanguageByLanguageUuid(UUID uuid) throws Exception {
 		List<UserGroup> userGroups = modelService.findAll(UserGroup.class);
 		for (UserGroup userGroup : userGroups) {
 			for (int i = 0; i < userGroup.getUserGroupFields().size(); i++) {

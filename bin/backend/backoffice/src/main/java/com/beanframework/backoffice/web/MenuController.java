@@ -27,8 +27,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebMenuConstants;
 import com.beanframework.common.controller.AbstractCommonController;
-import com.beanframework.common.exception.ModelRemovalException;
-import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.menu.domain.Menu;
@@ -54,19 +53,19 @@ public class MenuController extends AbstractCommonController {
 	private int MODULE_MENU_LIST_SIZE;
 
 	@ModelAttribute(WebMenuConstants.ModelAttribute.CREATE)
-	public Menu populateMenuCreate(HttpServletRequest request) {
+	public Menu populateMenuCreate(HttpServletRequest request) throws Exception {
 		return modelService.create(Menu.class);
 	}
 
 	@ModelAttribute(WebMenuConstants.ModelAttribute.UPDATE)
-	public Menu populateMenuForm(HttpServletRequest request) {
+	public Menu populateMenuForm(HttpServletRequest request) throws Exception {
 		return modelService.create(Menu.class);
 	}
 
 	@PreAuthorize(WebMenuConstants.PreAuthorize.READ)
 	@GetMapping(value = WebMenuConstants.Path.MENU)
 	public String list(@ModelAttribute(WebMenuConstants.ModelAttribute.UPDATE) Menu menuUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) {
+			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute("menus", menuFacade.findMenuTree());
 
@@ -127,7 +126,7 @@ public class MenuController extends AbstractCommonController {
 				modelService.saveDto(menuCreate);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -143,7 +142,7 @@ public class MenuController extends AbstractCommonController {
 	@PreAuthorize(WebMenuConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebMenuConstants.Path.MENU, params = "move")
 	public RedirectView move(Model model, @RequestParam Map<String, Object> requestParams,
-			final RedirectAttributes redirectAttributes) throws Exception {
+			final RedirectAttributes redirectAttributes) {
 
 		String fromUuid = (String) requestParams.get("fromUuid");
 		String toUuid = (String) requestParams.get("toUuid");
@@ -154,7 +153,7 @@ public class MenuController extends AbstractCommonController {
 		try {
 			menuFacade.changePosition(UUID.fromString(fromUuid), StringUtils.isNotEmpty(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex));
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-		} catch (Exception e) {
+		} catch (BusinessException e) {
 			addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
 		}
 
@@ -189,7 +188,7 @@ public class MenuController extends AbstractCommonController {
 				modelService.saveDto(menuUpdate);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -212,7 +211,7 @@ public class MenuController extends AbstractCommonController {
 			modelService.remove(menuUpdate.getUuid(), Menu.class);
 			
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
-		} catch (ModelRemovalException e) {
+		} catch (BusinessException e) {
 			addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebMenuConstants.ModelAttribute.UPDATE, menuUpdate);
 		}

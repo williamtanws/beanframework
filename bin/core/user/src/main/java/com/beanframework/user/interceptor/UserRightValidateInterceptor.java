@@ -1,4 +1,4 @@
-package com.beanframework.configuration.interceptor;
+package com.beanframework.user.interceptor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,10 +10,10 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.ValidateInterceptor;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.configuration.ConfigurationConstants;
-import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.user.UserRightConstants;
+import com.beanframework.user.domain.UserRight;
 
-public class ConfigurationValidateInterceptor implements ValidateInterceptor<Configuration> {
+public class UserRightValidateInterceptor implements ValidateInterceptor<UserRight> {
 
 	@Autowired
 	private ModelService modelService;
@@ -22,21 +22,21 @@ public class ConfigurationValidateInterceptor implements ValidateInterceptor<Con
 	private LocaleMessageService localMessageService;
 
 	@Override
-	public void onValidate(Configuration model) throws InterceptorException {
+	public void onValidate(UserRight model) throws InterceptorException {
 
 		try {
 			if (model.getUuid() == null) {
 				// Save new
 				if (StringUtils.isEmpty(model.getId())) {
 					throw new InterceptorException(
-							localMessageService.getMessage(ConfigurationConstants.Locale.ID_REQUIRED), this);
+							localMessageService.getMessage(UserRightConstants.Locale.ID_REQUIRED), this);
 				} else {
 					Map<String, Object> properties = new HashMap<String, Object>();
-					properties.put(Configuration.ID, model.getId());
-					boolean exists = modelService.existsByProperties(properties, Configuration.class);
+					properties.put(UserRight.ID, model.getId());
+					boolean exists = modelService.existsByProperties(properties, UserRight.class);
 					if (exists) {
 						throw new InterceptorException(
-								localMessageService.getMessage(ConfigurationConstants.Locale.ID_EXISTS), this);
+								localMessageService.getMessage(UserRightConstants.Locale.ID_EXISTS), this);
 					}
 				}
 
@@ -44,18 +44,18 @@ public class ConfigurationValidateInterceptor implements ValidateInterceptor<Con
 				// Update exists
 				if (StringUtils.isNotEmpty(model.getId())) {
 					Map<String, Object> properties = new HashMap<String, Object>();
-					properties.put(Configuration.ID, model.getId());
-					Configuration exists = modelService.findOneEntityByProperties(properties, Configuration.class);
+					properties.put(UserRight.ID, model.getId());
+					UserRight exists = modelService.findOneEntityByProperties(properties, UserRight.class);
 					if (exists != null) {
 						if (!model.getUuid().equals(exists.getUuid())) {
 							throw new InterceptorException(
-									localMessageService.getMessage(ConfigurationConstants.Locale.ID_EXISTS), this);
+									localMessageService.getMessage(UserRightConstants.Locale.ID_EXISTS), this);
 						}
 					}
 				}
 			}
 		} catch (Exception e) {
-			throw new InterceptorException(e.getMessage(), this);
+			throw new InterceptorException(e.getMessage(), e);
 		}
 	}
 

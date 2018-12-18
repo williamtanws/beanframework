@@ -69,7 +69,7 @@ public class LanguageUpdate extends Updater {
 					List<LanguageCsv> languageCsvList = readCSVFile(reader);
 					save(languageCsvList);
 
-				} catch (IOException ex) {
+				} catch (Exception ex) {
 					logger.error("Error reading the resource file: " + ex);
 				}
 			}
@@ -78,7 +78,7 @@ public class LanguageUpdate extends Updater {
 		}
 	}
 
-	public void save(List<LanguageCsv> languageCsvList) {
+	public void save(List<LanguageCsv> languageCsvList) throws Exception {
 
 		for (LanguageCsv csv : languageCsvList) {
 			

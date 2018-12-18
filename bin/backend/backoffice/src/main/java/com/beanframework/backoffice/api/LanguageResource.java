@@ -24,7 +24,7 @@ public class LanguageResource {
 
 	@PreAuthorize(WebLanguageConstants.PreAuthorize.READ)
 	@RequestMapping(WebLanguageConstants.Path.Api.CHECKID)
-	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
 		

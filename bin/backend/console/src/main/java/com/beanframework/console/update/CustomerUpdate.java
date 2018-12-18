@@ -35,9 +35,9 @@ import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.CustomerCsv;
+import com.beanframework.customer.domain.Customer;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
-import com.beanframework.customer.domain.Customer;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;
@@ -75,7 +75,7 @@ public class CustomerUpdate extends Updater {
 					List<CustomerCsv> customerCsvList = readCSVFile(reader);
 					save(customerCsvList);
 
-				} catch (IOException ex) {
+				} catch (Exception ex) {
 					logger.error("Error reading the resource file: " + ex);
 				}
 			}
@@ -84,7 +84,7 @@ public class CustomerUpdate extends Updater {
 		}
 	}
 
-	public void save(List<CustomerCsv> customerCsvList) {
+	public void save(List<CustomerCsv> customerCsvList) throws Exception {
 
 		// Dynamic Field
 

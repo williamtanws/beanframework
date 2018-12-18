@@ -9,9 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.beanframework.common.exception.ModelInitializationException;
-import com.beanframework.common.exception.ModelRemovalException;
-import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.exception.BusinessException;
 
 @SuppressWarnings("rawtypes")
 public interface ModelService {
@@ -22,53 +20,53 @@ public interface ModelService {
 
 	void detachAll();
 
-	<T> T create(Class modelClass);
+	<T> T create(Class modelClass) throws Exception;
 
-	<T> T findOneEntityByUuid(UUID uuid, Class modelClass);
+	<T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception;
 
-	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass);
+	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
-	<T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass);
+	<T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
-	<T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass);
+	<T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
-	<T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass);
+	<T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
 
 	<T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts,
-			Class modelClass);
+			Class modelClass) throws Exception;
 
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass);
 
-	<T extends Collection> T findAll(Class modelClass);
+	<T extends Collection> T findAll(Class modelClass) throws Exception;
 
-	<T extends Collection> T findAll(Specification specification, Class modelClass);
+	<T extends Collection> T findAll(Specification specification, Class modelClass) throws Exception;
 
-	<T> Page<T> findPage(Specification specification, Pageable pageable, Class modelClass);
+	<T> Page<T> findPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
 
 	void refresh(Object model);
 
-	void saveEntity(Object model) throws ModelSavingException;
+	void saveEntity(Object model) throws BusinessException;
 
-	void saveDto(Object model) throws ModelSavingException;
+	void saveDto(Object model) throws BusinessException;
 
-	void saveAll() throws ModelSavingException;
+	void saveAll() throws BusinessException;
 
-	void remove(Object model) throws ModelRemovalException;
+	void remove(Object model) throws BusinessException;
 
-	void remove(Collection<? extends Object> models) throws ModelRemovalException;
+	void remove(Collection<? extends Object> models) throws BusinessException;
 
-	void remove(UUID uuid, Class modelClass) throws ModelRemovalException;
+	void remove(UUID uuid, Class modelClass) throws BusinessException;
 
-	int removeAll(Class modelClass) throws ModelRemovalException;
+	int removeAll(Class modelClass) throws BusinessException;
 
-	<T> T getEntity(Object model);
+	<T> T getEntity(Object model) throws Exception;
 
-	<T extends Collection> T getEntity(Collection<? extends Object> model);
+	<T extends Collection> T getEntity(Collection<? extends Object> model) throws Exception;
 
-	<T> T getDto(Object model);
+	<T> T getDto(Object model) throws Exception;
 
-	<T extends Collection> T getDto(Collection<? extends Object> models);
+	<T extends Collection> T getDto(Collection<? extends Object> models) throws Exception;
 
-	void initDefaults(Object model) throws ModelInitializationException;
+	void initDefaults(Object model) throws Exception;
 
 }

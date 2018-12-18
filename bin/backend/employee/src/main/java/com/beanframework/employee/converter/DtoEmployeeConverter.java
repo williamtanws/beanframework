@@ -7,21 +7,17 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.converter.DtoUserGroupConverter;
 
 public class DtoEmployeeConverter implements DtoConverter<Employee, Employee> {
-	
-	@Autowired
-	private ModelService modelService;
-	
+
 	@Autowired
 	private DtoUserGroupConverter dtoUserGroupConverter;
 
 	@Override
 	public Employee convert(Employee source) {
-		return convert(source, modelService.create(Employee.class));
+		return convert(source, new Employee());
 	}
 
 	public List<Employee> convert(List<Employee> sources) {
@@ -44,7 +40,7 @@ public class DtoEmployeeConverter implements DtoConverter<Employee, Employee> {
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
-		
+
 		Hibernate.initialize(source.getUserGroups());
 		prototype.setUserGroups(dtoUserGroupConverter.convert(source.getUserGroups()));
 

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.Email;
@@ -55,7 +56,7 @@ public class EmailServiceImpl implements EmailService {
 
 	@Transactional
 	@Override
-	public void delete(UUID uuid) throws IOException {
+	public void delete(UUID uuid) throws IOException, BusinessException {
 		modelService.remove(uuid, Email.class);
 
 		File emailAttachmentFolder = new File(EMAIL_ATTACHMENT_LOCATION + File.separator + uuid);
@@ -64,7 +65,7 @@ public class EmailServiceImpl implements EmailService {
 
 	@Transactional
 	@Override
-	public void deleteAll() throws IOException {
+	public void deleteAll() throws IOException, BusinessException {
 		modelService.removeAll(Email.class);
 
 		File emailAttachmentFolder = new File(EMAIL_ATTACHMENT_LOCATION);

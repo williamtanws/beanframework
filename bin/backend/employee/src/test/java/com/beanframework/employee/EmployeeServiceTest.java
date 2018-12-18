@@ -36,7 +36,7 @@ public class EmployeeServiceTest {
 	private EmployeeService employeeService = new EmployeeServiceImpl();
 	
 	@Test
-	public void testFindEmployeeById() {
+	public void testFindEmployeeById() throws Exception {
 		Employee employee = modelService.create(Employee.class);
 		employee.setId("employee");
 		

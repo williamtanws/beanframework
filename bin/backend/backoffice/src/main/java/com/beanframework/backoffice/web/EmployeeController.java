@@ -29,8 +29,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebEmployeeConstants;
 import com.beanframework.backoffice.domain.EmployeeSearch;
 import com.beanframework.common.controller.AbstractCommonController;
-import com.beanframework.common.exception.ModelRemovalException;
-import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
@@ -57,7 +56,7 @@ public class EmployeeController extends AbstractCommonController {
 	@Value(WebEmployeeConstants.LIST_SIZE)
 	private int MODULE_EMPLOYEE_LIST_SIZE;
 
-	private Page<Employee> getPagination(Model model, @RequestParam Map<String, Object> requestParams) {
+	private Page<Employee> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -111,12 +110,12 @@ public class EmployeeController extends AbstractCommonController {
 	}
 
 	@ModelAttribute(WebEmployeeConstants.ModelAttribute.CREATE)
-	public Employee populateEmployeeCreate(HttpServletRequest request) {
+	public Employee populateEmployeeCreate(HttpServletRequest request) throws Exception {
 		return modelService.create(Employee.class);
 	}
 
 	@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE)
-	public Employee populateEmployeeForm(HttpServletRequest request) {
+	public Employee populateEmployeeForm(HttpServletRequest request) throws Exception {
 		return modelService.create(Employee.class);
 	}
 
@@ -129,7 +128,7 @@ public class EmployeeController extends AbstractCommonController {
 	@GetMapping(value = WebEmployeeConstants.Path.EMPLOYEE)
 	public String list(@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) {
+			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
@@ -170,7 +169,7 @@ public class EmployeeController extends AbstractCommonController {
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.CREATE) Employee employeeCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (employeeCreate.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
@@ -189,7 +188,7 @@ public class EmployeeController extends AbstractCommonController {
 				modelService.saveDto(employeeCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -209,7 +208,7 @@ public class EmployeeController extends AbstractCommonController {
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (employeeUpdate.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
@@ -228,7 +227,7 @@ public class EmployeeController extends AbstractCommonController {
 				modelService.saveDto(employeeUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
 
 			}
@@ -256,7 +255,7 @@ public class EmployeeController extends AbstractCommonController {
 			employeeFacade.deleteEmployeeProfilePictureByUuid(employeeUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
-		} catch (ModelRemovalException e) {
+		} catch (BusinessException e) {
 			addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebEmployeeConstants.ModelAttribute.UPDATE, employeeUpdate);
 		}

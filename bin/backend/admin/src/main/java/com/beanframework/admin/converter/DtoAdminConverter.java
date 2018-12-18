@@ -3,26 +3,25 @@ package com.beanframework.admin.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.service.ModelService;
+import com.beanframework.common.exception.ConverterException;
 
 public class DtoAdminConverter implements DtoConverter<Admin, Admin> {
-	
-	@Autowired
-	private ModelService modelService;
 
 	@Override
-	public Admin convert(Admin source) {
-		return convert(source, modelService.create(Admin.class));
+	public Admin convert(Admin source) throws ConverterException {
+		return convert(source, new Admin());
 	}
 
-	public List<Admin> convert(List<Admin> sources) {
+	public List<Admin> convert(List<Admin> sources) throws ConverterException {
 		List<Admin> convertedList = new ArrayList<Admin>();
-		for (Admin source : sources) {
-			convertedList.add(convert(source));
+		try {
+			for (Admin source : sources) {
+				convertedList.add(convert(source));
+			}
+		} catch (ConverterException e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 		return convertedList;
 	}

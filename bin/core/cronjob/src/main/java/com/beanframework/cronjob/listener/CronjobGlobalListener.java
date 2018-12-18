@@ -53,36 +53,41 @@ public class CronjobGlobalListener implements JobListener {
 
 		UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
 
-		Cronjob cronjob = cronjobManagerService.findByUuid(uuid);
+		Cronjob cronjob = null;
+		try {
+			cronjob = cronjobManagerService.findByUuid(uuid);
 
-		String message = null;
-		CronjobEnum.Status status = null;
-		CronjobEnum.Result result = null;
+			String message = null;
+			CronjobEnum.Status status = null;
+			CronjobEnum.Result result = null;
 
-		if (cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)) {
-			status = CronjobEnum.Status.FINISHED;
+			if (cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)) {
+				status = CronjobEnum.Status.FINISHED;
 
-			if (jobException == null) {
-				result = CronjobEnum.Result.SUCCESS;
-				message = context.getResult() != null ? context.getResult().toString() : null;
+				if (jobException == null) {
+					result = CronjobEnum.Result.SUCCESS;
+					message = context.getResult() != null ? context.getResult().toString() : null;
+				} else {
+					result = CronjobEnum.Result.ERROR;
+					message = jobException.getMessage();
+				}
+
 			} else {
-				result = CronjobEnum.Result.ERROR;
-				message = jobException.getMessage();
+				status = CronjobEnum.Status.RUNNING;
+
+				if (jobException == null) {
+					result = CronjobEnum.Result.SUCCESS;
+					message = context.getResult() != null ? context.getResult().toString() : null;
+				} else {
+					result = CronjobEnum.Result.ERROR;
+					message = jobException.getMessage();
+				}
 			}
 
-		} else {
-			status = CronjobEnum.Status.RUNNING;
-			
-			if (jobException == null) {
-				result = CronjobEnum.Result.SUCCESS;
-				message = context.getResult() != null ? context.getResult().toString() : null;
-			} else {
-				result = CronjobEnum.Result.ERROR;
-				message = jobException.getMessage();
-			}
+			cronjobManagerService.updateStatus(uuid, status, result, message, null, new Date());
+
+		} catch (Exception e) {
+			jobException.addSuppressed(e);
 		}
-
-		cronjobManagerService.updateStatus(uuid, status, result, message, null, new Date());
-
 	}
 }

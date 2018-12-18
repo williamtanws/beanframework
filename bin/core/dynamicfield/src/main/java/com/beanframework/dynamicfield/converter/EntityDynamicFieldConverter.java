@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
 
@@ -18,17 +19,26 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 	private ModelService modelService;
 
 	@Override
-	public DynamicField convert(DynamicField source) {
+	public DynamicField convert(DynamicField source) throws ConverterException {
 
-		DynamicField prototype = modelService.create(DynamicField.class);
-		if (source.getUuid() != null) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(DynamicField.UUID, source.getUuid());
-			DynamicField exists = modelService.findOneEntityByProperties(properties, DynamicField.class);
-			
-			if (exists != null) {
-				prototype = exists;
+		DynamicField prototype;
+		try {
+
+			if (source.getUuid() != null) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(DynamicField.UUID, source.getUuid());
+				DynamicField exists = modelService.findOneEntityByProperties(properties, DynamicField.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(DynamicField.class);
+				}
+			} else {
+				prototype = modelService.create(DynamicField.class);
 			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
 		return convert(source, prototype);
@@ -38,7 +48,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 
 		prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
-		
+
 		prototype.setRequired(source.getRequired());
 		prototype.setRule(source.getRule());
 		prototype.setSort(source.getSort());

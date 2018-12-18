@@ -32,7 +32,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	}
 
 	@Override
-	public Customer authenticate(String id, String password) {
+	public Customer authenticate(String id, String password) throws Exception {
 		Customer customer = customerService.authenticate(id, password);
 
 		if (customer == null) {

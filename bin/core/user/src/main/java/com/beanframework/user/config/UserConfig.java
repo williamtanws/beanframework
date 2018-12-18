@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.user.converter.DtoUserAuthorityConverter;
-import com.beanframework.user.converter.DtoUserConverter;
 import com.beanframework.user.converter.DtoUserGroupConverter;
 import com.beanframework.user.converter.DtoUserGroupLangConverter;
 import com.beanframework.user.converter.DtoUserPermissionConverter;
@@ -25,10 +24,14 @@ import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserPermissionField;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.interceptor.UserAuthorityValidateInterceptor;
+import com.beanframework.user.interceptor.UserGroupValidateInterceptor;
 import com.beanframework.user.interceptor.UserInitialDefaultsInterceptor;
 import com.beanframework.user.interceptor.UserLoadInterceptor;
+import com.beanframework.user.interceptor.UserPermissionValidateInterceptor;
 import com.beanframework.user.interceptor.UserPrepareInterceptor;
 import com.beanframework.user.interceptor.UserRemoveInterceptor;
+import com.beanframework.user.interceptor.UserRightValidateInterceptor;
 import com.beanframework.user.interceptor.UserValidateInterceptor;
 
 @Configuration
@@ -44,20 +47,6 @@ public class UserConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoUserAuthorityConverter());
 		mapping.setTypeCode(UserAuthority.class.getSimpleName());
-
-		return mapping;
-	}
-
-	@Bean
-	public DtoUserConverter dtoUserConverter() {
-		return new DtoUserConverter();
-	}
-
-	@Bean
-	public ConverterMapping dtoUserConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoUserConverter());
-		mapping.setTypeCode(User.class.getSimpleName());
 
 		return mapping;
 	}
@@ -211,6 +200,62 @@ public class UserConfig {
 	public InterceptorMapping userInitialDefaultsInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(userInitialDefaultsInterceptor());
+		interceptorMapping.setTypeCode(User.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	@Bean
+	public UserAuthorityValidateInterceptor userAuthorityValidateInterceptor() {
+		return new UserAuthorityValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userAuthorityValidateInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userAuthorityValidateInterceptor());
+		interceptorMapping.setTypeCode(User.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	@Bean
+	public UserGroupValidateInterceptor userGroupValidateInterceptor() {
+		return new UserGroupValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userGroupValidateInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userGroupValidateInterceptor());
+		interceptorMapping.setTypeCode(User.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	@Bean
+	public UserPermissionValidateInterceptor userPermissionValidateInterceptor() {
+		return new UserPermissionValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userPermissionValidateInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userPermissionValidateInterceptor());
+		interceptorMapping.setTypeCode(User.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	@Bean
+	public UserRightValidateInterceptor userRightValidateInterceptor() {
+		return new UserRightValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userRightValidateInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userRightValidateInterceptor());
 		interceptorMapping.setTypeCode(User.class.getSimpleName());
 
 		return interceptorMapping;

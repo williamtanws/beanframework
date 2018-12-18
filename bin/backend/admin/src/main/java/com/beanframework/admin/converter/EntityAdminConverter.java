@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.utils.PasswordUtils;
 
@@ -18,17 +19,26 @@ public class EntityAdminConverter implements EntityConverter<Admin, Admin> {
 	private ModelService modelService;
 
 	@Override
-	public Admin convert(Admin source) {
+	public Admin convert(Admin source) throws ConverterException {
 
-		Admin prototype = modelService.create(Admin.class);
-		if (source.getUuid() != null) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Admin.UUID, source.getUuid());
-			Admin exists = modelService.findOneEntityByProperties(properties, Admin.class);
-			
-			if (exists != null) {
-				prototype = exists;
+		Admin prototype;
+		try {
+			prototype = modelService.create(Admin.class);
+			if (source.getUuid() != null) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Admin.UUID, source.getUuid());
+				Admin exists = modelService.findOneEntityByProperties(properties, Admin.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(Admin.class);
+				}
+			} else {
+				prototype = modelService.create(Admin.class);
 			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
 		return convert(source, prototype);
@@ -42,7 +52,7 @@ public class EntityAdminConverter implements EntityConverter<Admin, Admin> {
 		prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
 		prototype.setEnabled(source.isEnabled());
 		prototype.setLastModifiedDate(new Date());
-		
+
 		if (StringUtils.isNotEmpty(source.getPassword())) {
 			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
 		}

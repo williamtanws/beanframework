@@ -31,7 +31,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCronjobConstants;
 import com.beanframework.backoffice.domain.CronjobSearch;
 import com.beanframework.common.controller.AbstractCommonController;
-import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.cronjob.domain.Cronjob;
@@ -61,7 +61,7 @@ public class CronjobController extends AbstractCommonController {
 	@Value(WebCronjobConstants.LIST_SIZE)
 	private int MODULE_CRONJOB_LIST_SIZE;
 
-	private Page<Cronjob> getPagination(Model model, @RequestParam Map<String, Object> requestParams) {
+	private Page<Cronjob> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -115,12 +115,12 @@ public class CronjobController extends AbstractCommonController {
 	}
 
 	@ModelAttribute(WebCronjobConstants.ModelAttribute.CREATE)
-	public Cronjob populateCronjobCreate(HttpServletRequest request) {
+	public Cronjob populateCronjobCreate(HttpServletRequest request) throws Exception {
 		return modelService.create(Cronjob.class);
 	}
 
 	@ModelAttribute(WebCronjobConstants.ModelAttribute.UPDATE)
-	public Cronjob populateCronjobForm(HttpServletRequest request) {
+	public Cronjob populateCronjobForm(HttpServletRequest request) throws Exception {
 		return modelService.create(Cronjob.class);
 	}
 
@@ -133,7 +133,7 @@ public class CronjobController extends AbstractCommonController {
 	@GetMapping(value = WebCronjobConstants.Path.CRONJOB)
 	public String list(@ModelAttribute(WebCronjobConstants.ModelAttribute.SEARCH) CronjobSearch cronjobSearch,
 			@ModelAttribute(WebCronjobConstants.ModelAttribute.UPDATE) Cronjob cronjobUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) {
+			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
@@ -170,7 +170,7 @@ public class CronjobController extends AbstractCommonController {
 				modelService.saveDto(cronjobCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -189,7 +189,7 @@ public class CronjobController extends AbstractCommonController {
 	public RedirectView update(@ModelAttribute(WebCronjobConstants.ModelAttribute.SEARCH) CronjobSearch cronjobSearch,
 			@ModelAttribute(WebCronjobConstants.ModelAttribute.UPDATE) Cronjob cronjobUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (cronjobUpdate.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
@@ -207,7 +207,7 @@ public class CronjobController extends AbstractCommonController {
 				modelService.saveDto(cronjobUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -243,7 +243,7 @@ public class CronjobController extends AbstractCommonController {
 				cronjobFacade.trigger(cronjobUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (Exception e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -263,7 +263,7 @@ public class CronjobController extends AbstractCommonController {
 			@ModelAttribute(WebCronjobConstants.ModelAttribute.SEARCH) CronjobSearch cronjobSearch,
 			@ModelAttribute(WebCronjobConstants.ModelAttribute.UPDATE) Cronjob cronjobUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (cronjobUpdate.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
@@ -288,7 +288,7 @@ public class CronjobController extends AbstractCommonController {
 				modelService.saveDto(cronjobUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -308,7 +308,7 @@ public class CronjobController extends AbstractCommonController {
 			@ModelAttribute(WebCronjobConstants.ModelAttribute.SEARCH) CronjobSearch cronjobSearch,
 			@ModelAttribute(WebCronjobConstants.ModelAttribute.CREATE) Cronjob cronjobUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (cronjobUpdate.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
@@ -333,7 +333,7 @@ public class CronjobController extends AbstractCommonController {
 				modelService.saveDto(cronjobUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -358,7 +358,7 @@ public class CronjobController extends AbstractCommonController {
 			cronjobManagerService.deleteJobByUuid(cronjobUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
-		} catch (Exception e) {
+		} catch (BusinessException e) {
 			addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebCronjobConstants.ModelAttribute.UPDATE, cronjobUpdate);
 		}

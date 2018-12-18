@@ -36,7 +36,7 @@ public class LicenseController extends AbstractCommonController {
 	@Value(WebLicenseConstants.View.LICENSE)
 	private String VIEW_LICENSE;
 
-	public boolean isLicenseAccepted() {
+	public boolean isLicenseAccepted() throws Exception {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);

@@ -20,19 +20,19 @@ import com.beanframework.cronjob.domain.Cronjob;
 
 @RestController
 public class CronjobResource {
-	
+
 	@Autowired
 	private ModelService modelService;
 
 	@PreAuthorize(WebCronjobConstants.PreAuthorize.READ)
 	@RequestMapping(WebCronjobConstants.Path.Api.CHECKID)
-	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
-		
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.ID, id);
-		
+
 		Cronjob cronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
@@ -48,7 +48,7 @@ public class CronjobResource {
 
 	@PreAuthorize(WebCronjobConstants.PreAuthorize.READ)
 	@RequestMapping(WebCronjobConstants.Path.Api.CHECKJOBGROUPNAME)
-	public String checkName(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkName(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 		String jobGroup = (String) requestParams.get("jobGroup");
@@ -57,7 +57,7 @@ public class CronjobResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.JOB_GROUP, jobGroup);
 		properties.put(Cronjob.JOB_NAME, jobName);
-		
+
 		Cronjob cronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
 
 		if (StringUtils.isNotEmpty(uuidStr) && cronjob != null && cronjob.getUuid().equals(UUID.fromString(uuidStr))) {
@@ -90,11 +90,10 @@ public class CronjobResource {
 
 		String conExpression = (String) requestParams.get("conExpression");
 
-		if(StringUtils.isNotEmpty(conExpression)) {
+		if (StringUtils.isNotEmpty(conExpression)) {
 			boolean isValid = CronExpression.isValidExpression(conExpression);
 			return isValid ? "true" : "false";
-		}
-		else {
+		} else {
 			return "true";
 		}
 	}

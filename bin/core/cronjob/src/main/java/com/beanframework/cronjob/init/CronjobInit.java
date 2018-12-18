@@ -1,6 +1,5 @@
 package com.beanframework.cronjob.init;
 
-import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class CronjobInit implements ApplicationListener<ApplicationReadyEvent> {
 			cronjobManagerService.clearAllScheduler();
 			logger.info("Initialize cronjob based on job exists in database.");
 			cronjobManagerService.initCronJob();
-		} catch (SchedulerException e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 	}

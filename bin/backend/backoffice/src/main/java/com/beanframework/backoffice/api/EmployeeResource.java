@@ -24,7 +24,7 @@ public class EmployeeResource {
 
 	@PreAuthorize(WebEmployeeConstants.PreAuthorize.READ)
 	@RequestMapping(WebEmployeeConstants.Path.Api.CHECKID)
-	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
 

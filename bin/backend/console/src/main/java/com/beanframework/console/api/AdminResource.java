@@ -23,7 +23,7 @@ public class AdminResource {
 	private ModelService modelService;
 
 	@GetMapping(WebAdminConstants.Path.Api.CHECKID)
-	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(WebConsoleConstants.Param.ID).toString();
 		

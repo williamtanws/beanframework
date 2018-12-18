@@ -25,9 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.beanframework.common.domain.GenericDomain;
-import com.beanframework.common.exception.ModelInitializationException;
-import com.beanframework.common.exception.ModelRemovalException;
-import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.repository.ModelRepository;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -56,7 +54,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T> T create(Class modelClass) {
+	public <T> T create(Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		Object model = null;
@@ -71,7 +69,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> T findOneEntityByUuid(UUID uuid, Class modelClass) {
+	public <T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception {
 		Assert.notNull(uuid, "uuid was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -83,7 +81,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) {
+	public <T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -92,7 +90,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) {
+	public <T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -100,7 +98,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Transactional(readOnly = true)
-	private <T> T findOneByProperties(Map<String, Object> properties, Class modelClass, boolean dto) {
+	private <T> T findOneByProperties(Map<String, Object> properties, Class modelClass, boolean dto) throws Exception {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -150,7 +148,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass) {
+	public <T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -172,7 +170,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass) {
+	public <T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass) throws Exception {
 		Assert.notNull(sorts, "sorts was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -193,7 +191,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Transactional(readOnly = true)
 	@Override
 	public <T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties,
-			Map<String, Sort.Direction> sorts, Class modelClass) {
+			Map<String, Sort.Direction> sorts, Class modelClass) throws Exception {
 		if (properties == null && sorts == null) {
 			Assert.notNull(properties, "properties was null");
 			Assert.notNull(sorts, "sorts was null");
@@ -216,7 +214,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findAll(Class modelClass) {
+	public <T extends Collection> T findAll(Class modelClass) throws Exception {
 
 		List<Object> models = getCachedResultList(null, null, null, modelClass);
 
@@ -234,7 +232,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findAll(Specification specification, Class modelClass) {
+	public <T extends Collection> T findAll(Specification specification, Class modelClass) throws Exception {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(modelClass);
@@ -255,7 +253,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> Page<T> findPage(Specification spec, Pageable pageable, Class modelClass) {
+	public <T> Page<T> findPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
 		Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
 		dtoConverter(page.getContent());
@@ -274,7 +272,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional
 	@Override
-	public void saveEntity(Object model) throws ModelSavingException {
+	public void saveEntity(Object model) throws BusinessException {
 
 		validateInterceptor(model);
 		prepareInterceptor(model);
@@ -286,7 +284,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional
 	@Override
-	public void saveDto(Object model) throws ModelSavingException {
+	public void saveDto(Object model) throws BusinessException {
 
 		validateInterceptor(model);
 		prepareInterceptor(model);
@@ -302,13 +300,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional
 	@Override
-	public void saveAll() throws ModelSavingException {
+	public void saveAll() throws BusinessException {
 		modelRepository.flush();
 	}
 
 	@Transactional
 	@Override
-	public void remove(Object model) throws ModelRemovalException {
+	public void remove(Object model) throws BusinessException {
 		modelRepository.delete(model);
 
 		cacheManager.getCache(model.getClass().getName()).clear();
@@ -318,7 +316,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional
 	@Override
-	public void remove(Collection<? extends Object> models) throws ModelRemovalException {
+	public void remove(Collection<? extends Object> models) throws BusinessException {
 		for (Object model : models) {
 			modelRepository.delete(model);
 
@@ -330,11 +328,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional
 	@Override
-	public void remove(UUID uuid, Class modelClass) throws ModelRemovalException {
+	public void remove(UUID uuid, Class modelClass) throws BusinessException {
 		Object model = entityManager.find(modelClass, uuid);
 
 		if (model == null) {
-			throw new ModelRemovalException("UUID not exists.", new Exception());
+			throw new BusinessException("UUID not exists.", new Exception());
 		}
 
 		modelRepository.delete(model);
@@ -346,7 +344,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional
 	@Override
-	public int removeAll(Class modelClass) throws ModelRemovalException {
+	public int removeAll(Class modelClass) throws BusinessException {
 		Query query = entityManager.createQuery("delete from " + modelClass.getName());
 		int count = query.executeUpdate();
 
@@ -356,13 +354,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T> T getEntity(Object model) {
+	public <T> T getEntity(Object model) throws Exception {
 		model = entityConverter(model);
 		return (T) model;
 	}
 
 	@Override
-	public <T extends Collection> T getEntity(Collection<? extends Object> models) {
+	public <T extends Collection> T getEntity(Collection<? extends Object> models) throws Exception {
 		List<Object> entityObjects = new ArrayList<Object>();
 		for (Object model : models) {
 			entityObjects.add(entityConverter(model));
@@ -371,13 +369,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T> T getDto(Object model) {
+	public <T> T getDto(Object model) throws Exception {
 		dtoConverter(model);
 		return (T) model;
 	}
 
 	@Override
-	public <T extends Collection> T getDto(Collection<? extends Object> models) {
+	public <T extends Collection> T getDto(Collection<? extends Object> models) throws Exception {
 		List<Object> dtoObjects = new ArrayList<Object>();
 		for (Object model : models) {
 			dtoObjects.add(dtoConverter(model));
@@ -386,7 +384,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public void initDefaults(Object model) throws ModelInitializationException {
+	public void initDefaults(Object model) throws Exception {
 		initialDefaultsInterceptor(model);
 	}
 }

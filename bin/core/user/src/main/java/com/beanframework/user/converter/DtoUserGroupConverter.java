@@ -7,24 +7,19 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserGroup;
 
-
 public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup> {
-	
-	@Autowired
-	private ModelService modelService;
-	
+
 	@Autowired
 	private DtoUserAuthorityConverter dtoUserAuthorityConverter;
-	
+
 	@Autowired
 	private DtoUserGroupLangConverter dtoUserGroupLangConverter;
 
 	@Override
 	public UserGroup convert(UserGroup source) {
-		return convert(source, modelService.create(UserGroup.class));
+		return convert(source, new UserGroup());
 	}
 
 	public List<UserGroup> convert(List<UserGroup> sources) {
@@ -48,8 +43,7 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 		prototype.setUserAuthorities(dtoUserAuthorityConverter.convert(source.getUserAuthorities()));
 		Hibernate.initialize(source.getUserGroupFields());
 		prototype.setUserGroupFields(dtoUserGroupLangConverter.convert(source.getUserGroupFields()));
-		
-		
+
 //		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 //		sorts.put(Language.SORT, Sort.Direction.ASC);
 //		

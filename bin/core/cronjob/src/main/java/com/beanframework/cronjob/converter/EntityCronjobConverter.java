@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
 
@@ -16,19 +17,28 @@ public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob>
 	private ModelService modelService;
 
 	@Override
-	public Cronjob convert(Cronjob source) {
+	public Cronjob convert(Cronjob source) throws ConverterException {
 
-		Cronjob prototype = modelService.create(Cronjob.class);
-		if (source.getUuid() != null) {
+		Cronjob prototype;
+		try {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.UUID, source.getUuid());
+			if (source.getUuid() != null) {
 
-			Cronjob exists = modelService.findOneEntityByProperties(properties, Cronjob.class);
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Cronjob.UUID, source.getUuid());
 
-			if (exists != null) {
-				prototype = exists;
+				Cronjob exists = modelService.findOneEntityByProperties(properties, Cronjob.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(Cronjob.class);
+				}
+			} else {
+				prototype = modelService.create(Cronjob.class);
 			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
 		return convert(source, prototype);

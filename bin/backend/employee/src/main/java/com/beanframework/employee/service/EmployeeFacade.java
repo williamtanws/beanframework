@@ -5,12 +5,13 @@ import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 
 public interface EmployeeFacade {
 
-	Employee saveProfile(Employee employee, MultipartFile picture) throws Exception;
+	Employee saveProfile(Employee employee, MultipartFile picture) throws BusinessException;
 
 	Employee updatePrincipal(Employee employee);
 
@@ -22,7 +23,7 @@ public interface EmployeeFacade {
 
 	Employee getCurrentEmployee();
 
-	Employee authenticate(String id, String password);
+	Employee authenticate(String id, String password) throws BusinessException, Exception;
 	
 	void deleteEmployeeProfilePictureByUuid(UUID uuid);
 

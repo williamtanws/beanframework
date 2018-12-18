@@ -78,7 +78,7 @@ public class CronjobUpdate extends Updater {
 					List<CronjobCsv> cronjobCsvList = readCSVFile(reader);
 					save(cronjobCsvList);
 
-				} catch (IOException ex) {
+				} catch (Exception ex) {
 					logger.error("Error reading the resource file: " + ex);
 				}
 			}
@@ -87,7 +87,7 @@ public class CronjobUpdate extends Updater {
 		}
 	}
 
-	public void save(List<CronjobCsv> cronjobCsvList) {
+	public void save(List<CronjobCsv> cronjobCsvList) throws Exception {
 
 		for (CronjobCsv csv : cronjobCsvList) {
 			

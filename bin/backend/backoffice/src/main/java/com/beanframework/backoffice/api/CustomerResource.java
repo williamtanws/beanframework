@@ -24,7 +24,7 @@ public class CustomerResource {
 
 	@PreAuthorize(WebCustomerConstants.PreAuthorize.READ)
 	@RequestMapping(WebCustomerConstants.Path.Api.CHECKID)
-	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
 

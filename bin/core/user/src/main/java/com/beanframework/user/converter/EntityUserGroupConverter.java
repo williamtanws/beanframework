@@ -7,35 +7,50 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserGroup;
 
-
 public class EntityUserGroupConverter implements EntityConverter<UserGroup, UserGroup> {
-	
+
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public UserGroup convert(UserGroup source) {
+	public UserGroup convert(UserGroup source) throws ConverterException {
 
-		UserGroup prototype = modelService.create(UserGroup.class);
-		if (source.getUuid() != null) {
+		UserGroup prototype;
+		try {
 			
-			UserGroup exists = modelService.findOneEntityByUuid(source.getUuid(), UserGroup.class);
-			
-			if(exists != null) {
-				prototype = exists;
+			if (source.getUuid() != null) {
+
+				UserGroup exists = modelService.findOneEntityByUuid(source.getUuid(), UserGroup.class);
+
+				if (exists != null) {
+					prototype = exists;
+				}
+				else {
+					prototype = modelService.create(UserGroup.class);
+				}
 			}
+			else {
+				prototype = modelService.create(UserGroup.class);
+			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
 		return convert(source, prototype);
 	}
-	
-	public List<UserGroup> convert(List<UserGroup> sources) {
+
+	public List<UserGroup> convert(List<UserGroup> sources) throws ConverterException {
 		List<UserGroup> convertedList = new ArrayList<UserGroup>();
-		for (UserGroup source : sources) {
-			convertedList.add(convert(source));
+		try {
+			for (UserGroup source : sources) {
+				convertedList.add(convert(source));
+			}
+		} catch (ConverterException e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 		return convertedList;
 	}
@@ -44,12 +59,12 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 
 		prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
-		
-		if(source.getUserAuthorities() != null) {
+
+		if (source.getUserAuthorities() != null) {
 			prototype.setUserAuthorities(source.getUserAuthorities());
 		}
-		
-		if(source.getUserGroupFields() != null) {
+
+		if (source.getUserGroupFields() != null) {
 			prototype.setUserGroupFields(source.getUserGroupFields());
 		}
 

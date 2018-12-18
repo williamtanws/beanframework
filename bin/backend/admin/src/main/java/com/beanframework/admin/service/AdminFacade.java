@@ -6,5 +6,5 @@ public interface AdminFacade {
 
 	Admin getCurrentAdmin();
 
-	Admin authenticate(String id, String password);
+	Admin authenticate(String id, String password) throws Exception;
 }

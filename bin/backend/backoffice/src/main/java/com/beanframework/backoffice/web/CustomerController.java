@@ -29,6 +29,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCustomerConstants;
 import com.beanframework.backoffice.domain.CustomerSearch;
 import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
@@ -51,7 +52,8 @@ public class CustomerController extends AbstractCommonController {
 	@Value(WebCustomerConstants.LIST_SIZE)
 	private int MODULE_CUSTOMER_LIST_SIZE;
 
-	private Page<Customer> getPagination(Model model, @RequestParam Map<String, Object> requestParams) {
+	private Page<Customer> getPagination(Model model, @RequestParam Map<String, Object> requestParams)
+			throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -105,12 +107,12 @@ public class CustomerController extends AbstractCommonController {
 	}
 
 	@ModelAttribute(WebCustomerConstants.ModelAttribute.CREATE)
-	public Customer populateCustomerCreate(HttpServletRequest request) {
+	public Customer populateCustomerCreate(HttpServletRequest request) throws Exception {
 		return modelService.create(Customer.class);
 	}
 
 	@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE)
-	public Customer populateCustomerForm(HttpServletRequest request) {
+	public Customer populateCustomerForm(HttpServletRequest request) throws Exception {
 		return modelService.create(Customer.class);
 	}
 
@@ -123,7 +125,7 @@ public class CustomerController extends AbstractCommonController {
 	@GetMapping(value = WebCustomerConstants.Path.CUSTOMER)
 	public String list(@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) {
+			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
@@ -183,7 +185,7 @@ public class CustomerController extends AbstractCommonController {
 				modelService.saveDto(customerCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (Exception e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -222,7 +224,7 @@ public class CustomerController extends AbstractCommonController {
 				modelService.saveDto(customerUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (Exception e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -248,7 +250,7 @@ public class CustomerController extends AbstractCommonController {
 			modelService.remove(customerUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
-		} catch (Exception e) {
+		} catch (BusinessException e) {
 			addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebCustomerConstants.ModelAttribute.UPDATE, customerUpdate);
 		}

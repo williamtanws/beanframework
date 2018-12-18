@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.domain.EmailEnum.Status;
@@ -17,17 +18,25 @@ public class EntityEmailConverter implements EntityConverter<Email, Email> {
 	private ModelService modelService;
 
 	@Override
-	public Email convert(Email source) {
+	public Email convert(Email source) throws ConverterException {
 
-		Email prototype = null;
-		if (source.getUuid() != null) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Email.UUID, source.getUuid());
-			Email exists = modelService.findOneEntityByProperties(properties, Email.class);
-			
-			if (exists != null) {
-				prototype = exists;
+		Email prototype;
+		try {
+			if (source.getUuid() != null) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Email.UUID, source.getUuid());
+				Email exists = modelService.findOneEntityByProperties(properties, Email.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(Email.class);
+				}
+			} else {
+				prototype = modelService.create(Email.class);
 			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
 		return convert(source, prototype);
@@ -41,10 +50,9 @@ public class EntityEmailConverter implements EntityConverter<Email, Email> {
 		prototype.setSubject(source.getSubject());
 		prototype.setText(source.getText());
 		prototype.setHtml(source.getHtml());
-		if(source.getStatus() == null) {
+		if (source.getStatus() == null) {
 			prototype.setStatus(Status.DRAFT);
-		}
-		else {
+		} else {
 			prototype.setStatus(source.getStatus());
 		}
 		prototype.setLastModifiedDate(new Date());

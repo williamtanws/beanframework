@@ -24,33 +24,37 @@ public class MenuValidateInterceptor implements ValidateInterceptor<Menu> {
 	@Override
 	public void onValidate(Menu model) throws InterceptorException {
 		
-		if (model.getUuid() == null) {
-			// Save new
-			if (StringUtils.isEmpty(model.getId())) {
-				throw new InterceptorException(localMessageService.getMessage(MenuConstants.Locale.ID_REQUIRED), this);
-			} else {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Menu.ID, model.getId());
-				boolean exists = modelService.existsByProperties(properties, Menu.class);
-				if (exists == false) {
-					throw new InterceptorException(localMessageService.getMessage(MenuConstants.Locale.ID_EXISTS),
-							this);
-				}
-			}
-
-		} else {
-			// Update exists
-			if (StringUtils.isNotEmpty(model.getId())) {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Menu.ID, model.getId());
-				Menu menu = modelService.findOneEntityByProperties(properties, Menu.class);
-				if (menu != null) {
-					if (!model.getUuid().equals(menu.getUuid())) {
+		try {
+			if (model.getUuid() == null) {
+				// Save new
+				if (StringUtils.isEmpty(model.getId())) {
+					throw new InterceptorException(localMessageService.getMessage(MenuConstants.Locale.ID_REQUIRED), this);
+				} else {
+					Map<String, Object> properties = new HashMap<String, Object>();
+					properties.put(Menu.ID, model.getId());
+					boolean exists = modelService.existsByProperties(properties, Menu.class);
+					if (exists) {
 						throw new InterceptorException(localMessageService.getMessage(MenuConstants.Locale.ID_EXISTS),
 								this);
 					}
 				}
+
+			} else {
+				// Update exists
+				if (StringUtils.isNotEmpty(model.getId())) {
+					Map<String, Object> properties = new HashMap<String, Object>();
+					properties.put(Menu.ID, model.getId());
+					Menu exists = modelService.findOneEntityByProperties(properties, Menu.class);
+					if (exists != null) {
+						if (!model.getUuid().equals(exists.getUuid())) {
+							throw new InterceptorException(localMessageService.getMessage(MenuConstants.Locale.ID_EXISTS),
+									this);
+						}
+					}
+				}
 			}
+		} catch (Exception e) {
+			throw new InterceptorException(e.getMessage(), e);
 		}
 	}
 

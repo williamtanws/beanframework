@@ -4,5 +4,5 @@ import java.util.UUID;
 
 public interface UserRightService {
 	
-	void deleteLanguageByLanguageUuid(UUID uuid);
+	void deleteLanguageByLanguageUuid(UUID uuid) throws Exception;
 }

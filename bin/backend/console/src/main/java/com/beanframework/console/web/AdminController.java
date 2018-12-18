@@ -24,6 +24,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.domain.AdminSpecification;
 import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.console.WebAdminConstants;
@@ -45,7 +46,7 @@ public class AdminController extends AbstractCommonController {
 	@Value(WebAdminConstants.LIST_SIZE)
 	private int MODULE_ADMIN_LIST_SIZE;
 
-	private Page<Admin> getPagination(Model model, @RequestParam Map<String, Object> requestParams) {
+	private Page<Admin> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
@@ -69,7 +70,8 @@ public class AdminController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Admin> pagination = modelService.findPage(AdminSpecification.findByCriteria(admin), PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Admin.class);
+		Page<Admin> pagination = modelService.findPage(AdminSpecification.findByCriteria(admin),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Admin.class);
 
 		model.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
@@ -98,12 +100,12 @@ public class AdminController extends AbstractCommonController {
 	}
 
 	@ModelAttribute(WebAdminConstants.ModelAttribute.CREATE)
-	public Admin populateAdminCreate(HttpServletRequest request) {
+	public Admin populateAdminCreate(HttpServletRequest request) throws Exception {
 		return modelService.create(Admin.class);
 	}
 
 	@ModelAttribute(WebAdminConstants.ModelAttribute.UPDATE)
-	public Admin populateAdminForm(HttpServletRequest request) {
+	public Admin populateAdminForm(HttpServletRequest request) throws Exception {
 		return modelService.create(Admin.class);
 	}
 
@@ -115,7 +117,7 @@ public class AdminController extends AbstractCommonController {
 	@GetMapping(value = WebAdminConstants.Path.ADMIN)
 	public String list(@ModelAttribute(WebAdminConstants.ModelAttribute.SEARCH) AdminSearch adminSearch,
 			@ModelAttribute(WebAdminConstants.ModelAttribute.UPDATE) Admin adminUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) {
+			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(model, requestParams));
 
@@ -147,7 +149,7 @@ public class AdminController extends AbstractCommonController {
 				modelService.saveDto(adminCreate);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
-			} catch (Exception e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Admin.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -175,7 +177,7 @@ public class AdminController extends AbstractCommonController {
 				modelService.saveDto(adminUpdate);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
-			} catch (Exception e) {
+			} catch (BusinessException e) {
 				addErrorMessage(Admin.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -199,7 +201,7 @@ public class AdminController extends AbstractCommonController {
 			modelService.remove(adminUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
-		} catch (Exception e) {
+		} catch (BusinessException e) {
 			addErrorMessage(Admin.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebAdminConstants.ModelAttribute.UPDATE, adminUpdate);
 		}

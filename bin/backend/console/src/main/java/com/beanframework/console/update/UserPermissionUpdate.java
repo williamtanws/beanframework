@@ -73,7 +73,7 @@ public class UserPermissionUpdate extends Updater {
 					List<UserPermissionCsv> userPermissionCsvList = readCSVFile(reader);
 					save(userPermissionCsvList);
 
-				} catch (IOException ex) {
+				} catch (Exception ex) {
 					logger.error("Error reading the resource file: " + ex);
 				}
 			}
@@ -82,7 +82,7 @@ public class UserPermissionUpdate extends Updater {
 		}
 	}
 
-	public void save(List<UserPermissionCsv> userPermissionCsvList) {
+	public void save(List<UserPermissionCsv> userPermissionCsvList) throws Exception {
 
 		// Dynamic Field
 

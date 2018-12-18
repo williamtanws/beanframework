@@ -6,24 +6,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserAuthority;
-
 
 public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, UserAuthority> {
 
 	@Autowired
-	private ModelService modelService;
-	
-	@Autowired
 	private DtoUserPermissionConverter dtoUserPermissionConverter;
-	
+
 	@Autowired
 	private DtoUserRightConverter dtoUserRightConverter;
 
 	@Override
 	public UserAuthority convert(UserAuthority source) {
-		return convert(source, modelService.create(UserAuthority.class));
+		return convert(source, new UserAuthority());
 	}
 
 	public List<UserAuthority> convert(List<UserAuthority> sources) {
@@ -37,7 +32,7 @@ public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, Us
 	private UserAuthority convert(UserAuthority source, UserAuthority prototype) {
 
 		prototype.setUuid(source.getUuid());
-		
+
 		prototype.setEnabled(source.getEnabled());
 //		Hibernate.initialize(source.getUserPermission());
 		prototype.setUserPermission(dtoUserPermissionConverter.convert(source.getUserPermission()));

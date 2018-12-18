@@ -26,9 +26,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserPermissionConstants;
 import com.beanframework.backoffice.domain.UserPermissionSearch;
-import com.beanframework.backoffice.service.BackofficeModuleFacade;
 import com.beanframework.common.controller.AbstractCommonController;
-import com.beanframework.common.exception.ModelSavingException;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
@@ -44,8 +43,8 @@ public class UserPermissionController extends AbstractCommonController {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-	@Autowired
-	private BackofficeModuleFacade backofficeModuleFacade;
+//	@Autowired
+//	private BackofficeModuleFacade backofficeModuleFacade;
 
 	@Value(WebUserPermissionConstants.Path.USERPERMISSION)
 	private String PATH_USERPERMISSION;
@@ -56,7 +55,7 @@ public class UserPermissionController extends AbstractCommonController {
 	@Value(WebUserPermissionConstants.LIST_SIZE)
 	private int MODULE_USERPERMISSION_LIST_SIZE;
 
-	private Page<UserPermission> getPagination(Model model, @RequestParam Map<String, Object> requestParams) {
+	private Page<UserPermission> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -113,12 +112,12 @@ public class UserPermissionController extends AbstractCommonController {
 	}
 
 	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.CREATE)
-	public UserPermission populateUserPermissionCreate(HttpServletRequest request) {
+	public UserPermission populateUserPermissionCreate(HttpServletRequest request) throws Exception {
 		return modelService.create(UserPermission.class);
 	}
 
 	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE)
-	public UserPermission populateUserPermissionForm(HttpServletRequest request) {
+	public UserPermission populateUserPermissionForm(HttpServletRequest request) throws Exception {
 		return modelService.create(UserPermission.class);
 	}
 
@@ -132,7 +131,7 @@ public class UserPermissionController extends AbstractCommonController {
 	public String list(
 			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
 			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE) UserPermission userpermissionUpdate,
-			Model model, @RequestParam Map<String, Object> requestParams) {
+			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
@@ -173,7 +172,7 @@ public class UserPermissionController extends AbstractCommonController {
 				modelService.saveDto(userpermissionCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -203,7 +202,7 @@ public class UserPermissionController extends AbstractCommonController {
 				modelService.saveDto(userpermissionUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (ModelSavingException e) {
+			} catch (BusinessException e) {
 				addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
@@ -226,13 +225,13 @@ public class UserPermissionController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			backofficeModuleFacade.deleteAllModuleUserPermissionByUserPermissionUuid(userpermissionUpdate.getUuid(),
-					bindingResult);
+//			backofficeModuleFacade.deleteAllModuleUserPermissionByUserPermissionUuid(userpermissionUpdate.getUuid(),
+//					bindingResult);
 
 			modelService.remove(userpermissionUpdate.getUuid(), UserPermission.class);
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
-		} catch (Exception e) {
+		} catch (BusinessException e) {
 			addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE,
 					userpermissionUpdate);

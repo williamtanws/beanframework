@@ -35,7 +35,7 @@ public class MenuServiceImpl implements MenuService {
 	
 	@Transactional
 	@Override
-	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) {
+	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
 		
 		if(toUuid == null) {
 			
@@ -132,7 +132,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<Menu> findMenuTree() {
+	public List<Menu> findMenuTree() throws Exception {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.PARENT, null);
@@ -146,7 +146,7 @@ public class MenuServiceImpl implements MenuService {
 		return rootParents;
 	}
 
-	private void initializeChilds(List<Menu> parents) {
+	private void initializeChilds(List<Menu> parents) throws Exception {
 
 		for (Menu parent : parents) {
 
@@ -177,7 +177,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<Menu> findNavigationTreeByUserGroup(List<UUID> userGroupUuids) {
+	public List<Menu> findNavigationTreeByUserGroup(List<UUID> userGroupUuids) throws Exception {
 
 		// Find all root parents
 		Specification<Menu> spec = new Specification<Menu>() {
@@ -205,7 +205,7 @@ public class MenuServiceImpl implements MenuService {
 		return rootParents;
 	}
 
-	private void initializeChildsByUserGroup(List<Menu> parents, List<UUID> userGroupUuids) {
+	private void initializeChildsByUserGroup(List<Menu> parents, List<UUID> userGroupUuids) throws Exception {
 
 		for (Menu parent : parents) {
 

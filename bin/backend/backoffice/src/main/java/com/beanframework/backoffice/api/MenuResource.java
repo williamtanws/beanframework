@@ -20,6 +20,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebMenuConstants;
 import com.beanframework.backoffice.domain.TreeJson;
 import com.beanframework.backoffice.domain.TreeJsonState;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
@@ -35,7 +36,7 @@ public class MenuResource {
 
 	@PreAuthorize(WebMenuConstants.PreAuthorize.READ)
 	@RequestMapping(WebMenuConstants.Path.Api.CHECKID)
-	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		
 		String id = (String) requestParams.get(WebBackofficeConstants.Param.ID);
 		
@@ -55,7 +56,7 @@ public class MenuResource {
 	}
 
 	@RequestMapping(WebMenuConstants.Path.Api.TREE)
-	public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams) {
+	public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams) throws BusinessException {
 		String uuid = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 
 		List<Menu> rootMenu = menuFacade.findMenuTree();
