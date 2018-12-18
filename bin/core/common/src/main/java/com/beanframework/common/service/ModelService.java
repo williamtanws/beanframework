@@ -39,8 +39,6 @@ public interface ModelService {
 
 	<T extends Collection> T findAll(Class modelClass) throws Exception;
 
-	<T extends Collection> T findAll(Specification specification, Class modelClass) throws Exception;
-
 	<T> Page<T> findPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
 
 	void refresh(Object model);
@@ -50,10 +48,6 @@ public interface ModelService {
 	void saveDto(Object model) throws BusinessException;
 
 	void saveAll() throws BusinessException;
-
-	void remove(Object model) throws BusinessException;
-
-	void remove(Collection<? extends Object> models) throws BusinessException;
 
 	void remove(UUID uuid, Class modelClass) throws BusinessException;
 

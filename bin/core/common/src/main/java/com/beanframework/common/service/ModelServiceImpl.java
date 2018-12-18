@@ -9,10 +9,6 @@ import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -148,7 +144,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
+	public <T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass)
+			throws Exception {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -170,7 +167,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass) throws Exception {
+	public <T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass)
+			throws Exception {
 		Assert.notNull(sorts, "sorts was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -232,27 +230,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findAll(Specification specification, Class modelClass) throws Exception {
-
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(modelClass);
-		Root<T> root = criteriaQuery.from(modelClass);
-		
-		Predicate predicate = specification.toPredicate(root, criteriaQuery, criteriaBuilder);
-		
-		System.out.println(predicate.toString());
-
-		criteriaQuery.where(predicate);
-		List<Object> models = (List<Object>) entityManager.createQuery(criteriaQuery).getResultList();
-
-		dtoConverter(models);
-		loadInterceptor(models);
-
-		return (T) models;
-	}
-
-	@Transactional(readOnly = true)
-	@Override
 	public <T> Page<T> findPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
 		Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
@@ -270,7 +247,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		entityManager.refresh(model);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void saveEntity(Object model) throws BusinessException {
 
@@ -282,7 +259,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		cacheManager.getCache(model.getClass().getName()).clear();
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void saveDto(Object model) throws BusinessException {
 
@@ -298,51 +275,41 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		dtoConverter(model);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void saveAll() throws BusinessException {
 		modelRepository.flush();
 	}
 
-	@Transactional
-	@Override
-	public void remove(Object model) throws BusinessException {
-		modelRepository.delete(model);
-
-		cacheManager.getCache(model.getClass().getName()).clear();
-
-		removeInterceptor(model);
-	}
-
-	@Transactional
-	@Override
-	public void remove(Collection<? extends Object> models) throws BusinessException {
-		for (Object model : models) {
-			modelRepository.delete(model);
-
-			cacheManager.getCache(model.getClass().getName()).clear();
-
-			removeInterceptor(model);
-		}
-	}
-
-	@Transactional
+	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void remove(UUID uuid, Class modelClass) throws BusinessException {
-		Object model = entityManager.find(modelClass, uuid);
 
-		if (model == null) {
-			throw new BusinessException("UUID not exists.", new Exception());
+		Object model;
+		try {
+			model = findOneEntityByUuid(uuid, modelClass);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
 		}
 
-		modelRepository.delete(model);
+		Query query = entityManager.createQuery("delete from " + modelClass.getName() + " o where o.uuid = :uuid");
+		query.setParameter("uuid", uuid);
+		try {
+			int count = query.executeUpdate();
 
-		cacheManager.getCache(model.getClass().getName()).clear();
+			if (count == 0) {
+				throw new BusinessException("UUID not exists.");
+			}
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+
+		cacheManager.getCache(modelClass.getName()).clear();
 
 		removeInterceptor(model);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public int removeAll(Class modelClass) throws BusinessException {
 		Query query = entityManager.createQuery("delete from " + modelClass.getName());

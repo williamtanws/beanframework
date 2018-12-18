@@ -38,9 +38,6 @@ public class LanguageController extends AbstractCommonController {
 
 	@Autowired
 	private ModelService modelService;
-	
-//	@Autowired
-//	private BackofficeModuleFacade backofficeModuleFacade;
 
 	@Value(WebLanguageConstants.Path.LANGUAGE)
 	private String PATH_LANGUAGE;
@@ -216,7 +213,6 @@ public class LanguageController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-//			backofficeModuleFacade.deleteAllModuleLanguageByLanguageUuid(languageUpdate.getUuid(), bindingResult);
 			modelService.remove(languageUpdate.getUuid(), Language.class);
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);

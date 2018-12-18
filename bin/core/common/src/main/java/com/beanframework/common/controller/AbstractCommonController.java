@@ -21,6 +21,7 @@ public class AbstractCommonController {
 	@SuppressWarnings("rawtypes")
 	public void addErrorMessage(Class objectClass, String message, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
+		
 		bindingResult.reject(objectClass.getSimpleName(), message);
 
 		StringBuilder errorMessage = new StringBuilder();
@@ -29,7 +30,7 @@ public class AbstractCommonController {
 			if (errorMessage.length() != 0) {
 				errorMessage.append("<br>");
 			}
-			errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
+			errorMessage.append(error.getCode() + ": " + error.getDefaultMessage());
 		}
 
 		redirectAttributes.addFlashAttribute(ERROR, errorMessage.toString());

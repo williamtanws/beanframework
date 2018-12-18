@@ -198,7 +198,7 @@ public class AdminController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.remove(adminUpdate.getUuid());
+			modelService.remove(adminUpdate.getUuid(), Admin.class);
 
 			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

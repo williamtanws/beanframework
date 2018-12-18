@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 
 @Component
