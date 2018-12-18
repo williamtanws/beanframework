@@ -19,7 +19,7 @@ public class UserRightServiceImpl implements UserRightService {
 	@Transactional
 	@Override
 	public void deleteLanguageByLanguageUuid(UUID uuid) {
-		List<UserRight> userRights = modelService.findAll();
+		List<UserRight> userRights = modelService.findAll(UserRight.class);
 		for (UserRight userRight : userRights) {
 			for (int i = 0; i < userRight.getUserRightFields().size(); i++) {
 				if(userRight.getUserRightFields().get(i).getLanguage().getUuid().equals(uuid)) {

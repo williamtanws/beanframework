@@ -11,6 +11,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,6 +33,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Autowired
 	private ModelRepository modelRepository;
+
+	@Autowired
+	private CacheManager cacheManager;
 
 	@Transactional
 	@Override
@@ -64,12 +68,21 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		initialDefaultsInterceptor(model);
 		return (T) model;
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
 	public <T> T findOneEntityByUuid(UUID uuid, Class modelClass) {
-		
-		return (T) entityManager.getReference(modelClass, uuid);
+		Assert.notNull(uuid, "uuid was null");
+		Assert.notNull(modelClass, "modelClass was null");
+
+		Object model = cacheManager.getCache(modelClass.getName()).get(uuid);
+
+		if (model == null) {
+			model = (T) entityManager.getReference(modelClass, uuid);
+			cacheManager.getCache(modelClass.getName()).put(uuid, model);
+		}
+
+		return (T) model;
 	}
 
 	@Transactional(readOnly = true)
@@ -98,32 +111,41 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
 			if (propertiesBuilder.length() == 0) {
-				propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey());
+				propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
 			} else {
-				propertiesBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey());
+				propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
 			}
 		}
 
-		Query query = entityManager
-				.createQuery("select o from " + modelClass.getName() + " o where " + propertiesBuilder.toString());
+		String qlString = "select o from " + modelClass.getName() + " o where " + propertiesBuilder.toString();
 
-		for (Map.Entry<String, Object> entry : properties.entrySet()) {
-			query.setParameter(entry.getKey(), entry.getValue());
-		}
+		Object model = cacheManager.getCache(modelClass.getName()).get(qlString);
 
-		Object model;
-		try {
-			model = query.getSingleResult();
+		if (model == null) {
+			Query query = entityManager.createQuery(qlString);
 
-			if (dto) {
-				dtoConverter(model);
+			try {
+				model = query.getSingleResult();
+
+				cacheManager.getCache(modelClass.getName()).put(qlString, model);
+
+				if (dto) {
+					dtoConverter(model);
+				}
+				loadInterceptor(model);
+
+				return (T) model;
+			} catch (NoResultException e) {
+				return null;
 			}
-			loadInterceptor(model);
-
-			return (T) model;
-		} catch (NoResultException e) {
-			return null;
 		}
+
+		if (dto) {
+			dtoConverter(model);
+		}
+		loadInterceptor(model);
+
+		return (T) model;
 	}
 
 	@Transactional(readOnly = true)
@@ -132,26 +154,25 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
 			if (propertiesBuilder.length() == 0) {
-				propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey());
+				propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
 			} else {
-				propertiesBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey());
+				propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
 			}
 		}
 
-		Query query = entityManager.createQuery(
-				"select count(o) from " + modelClass.getName() + " o where " + propertiesBuilder.toString());
+		String qlString = "select count(o) from " + modelClass.getName() + " o where " + propertiesBuilder.toString();
 
-		for (Map.Entry<String, Object> entry : properties.entrySet()) {
-			query.setParameter(entry.getKey(), entry.getValue());
+		Long count = cacheManager.getCache(modelClass.getName()).get(qlString, Long.class);
+
+		if (count == null) {
+			Query query = entityManager.createQuery(qlString);
+
+			count = (Long) query.getSingleResult();
+
+			cacheManager.getCache(modelClass.getName()).put(qlString, count);
 		}
 
-		Collection models = query.getResultList();
-
-		if (models.isEmpty()) {
-			return false;
-		} else {
-			return true;
-		}
+		return count.equals(0L) ? false : true;
 	}
 
 	@Transactional(readOnly = true)
@@ -164,20 +185,23 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
 
 			if (propertiesBuilder.length() == 0) {
-				propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey());
+				propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
 			} else {
-				propertiesBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey());
+				propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
 			}
 		}
 
-		Query query = entityManager
-				.createQuery("select o from " + modelClass.getName() + " o where " + propertiesBuilder.toString());
+		String qlString = "select o from " + modelClass.getName() + " o where " + propertiesBuilder.toString();
 
-		for (Map.Entry<String, Object> entry : properties.entrySet()) {
-			query.setParameter(entry.getKey(), entry.getValue());
+		List<Object> models = (List<Object>) cacheManager.getCache(modelClass.getName()).get(qlString);
+
+		if (models == null) {
+			Query query = entityManager.createQuery(qlString);
+
+			models = query.getResultList();
+
+			cacheManager.getCache(modelClass.getName()).put(qlString, models);
 		}
-
-		Collection models = query.getResultList();
 
 		dtoConverter(models);
 
@@ -201,10 +225,17 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 		}
 
-		Query query = entityManager
-				.createQuery("select o from " + modelClass.getName() + " o " + sortsBuilder.toString());
+		String qlString = "select o from " + modelClass.getName() + " o " + sortsBuilder.toString();
 
-		Collection models = query.getResultList();
+		List<Object> models = (List<Object>) cacheManager.getCache(modelClass.getName()).get(qlString);
+
+		if (models == null) {
+			Query query = entityManager.createQuery(qlString);
+
+			models = query.getResultList();
+
+			cacheManager.getCache(modelClass.getName()).put(qlString, models);
+		}
 
 		dtoConverter(models);
 		loadInterceptor(models);
@@ -223,14 +254,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
 			if (propertiesBuilder.length() == 0) {
-				if(entry.getValue() == null) {
+				if (entry.getValue() == null) {
 					propertiesBuilder.append("o." + entry.getKey() + " IS NULL");
-				}
-				else {
-					propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey().replace(".", "_"));
+				} else {
+					propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
 				}
 			} else {
-				propertiesBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey().replace(".", "_"));
+				propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
 			}
 		}
 
@@ -242,17 +272,18 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
 			}
 		}
+		
+		String qlString = "select o from " + modelClass.getName() + " o where "+ propertiesBuilder.toString() + " " + sortsBuilder.toString();
+		
+		List<Object> models = (List<Object>) cacheManager.getCache(modelClass.getName()).get(qlString);
+		
+		if(models == null) {
+			Query query = entityManager.createQuery(qlString);
 
-		Query query = entityManager.createQuery("select o from " + modelClass.getName() + " o where "
-				+ propertiesBuilder.toString() + " " + sortsBuilder.toString());
-
-		for (Map.Entry<String, Object> entry : properties.entrySet()) {
-			if(entry.getValue() != null) {
-				query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());
-			}
+			models = query.getResultList();
+			
+			cacheManager.getCache(modelClass.getName()).put(qlString, models);
 		}
-
-		Collection models = query.getResultList();
 
 		dtoConverter(models);
 		loadInterceptor(models);
@@ -262,8 +293,15 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findAll() {
-		Collection models = (T) modelRepository.findAll();
+	public <T extends Collection> T findAll(Class modelClass) {
+		
+		List<Object> models = (List<Object>) cacheManager.getCache(modelClass.getName()).get(modelClass.getName());
+		
+		if(models == null) {
+			models = (List<Object>) modelRepository.findAll();
+			
+			cacheManager.getCache(modelClass.getName()).put(modelClass.getName(), models);
+		}
 
 		dtoConverter(models);
 		loadInterceptor(models);
@@ -274,6 +312,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Transactional(readOnly = true)
 	@Override
 	public <T> Page<T> findPage(@Nullable Specification spec, Pageable pageable, Class modelClass) {
+		
 		Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
 		dtoConverter(page.getContent());
@@ -290,13 +329,15 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Transactional
 	@Override
 	public void saveEntity(Object model) throws ModelSavingException {
-
+				
 		validateInterceptor(model);
 		prepareInterceptor(model);
 
 		modelRepository.save(model);
+		
+		cacheManager.getCache(model.getClass().getName()).clear();
 	}
-	
+
 	@Transactional
 	@Override
 	public void saveDto(Object model) throws ModelSavingException {
@@ -307,6 +348,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		model = entityConverter(model);
 
 		modelRepository.save(model);
+		
+		cacheManager.getCache(model.getClass().getName()).clear();
 
 		dtoConverter(model);
 	}
@@ -321,6 +364,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public void remove(Object model) throws ModelRemovalException {
 		modelRepository.delete(model);
+		
+		cacheManager.getCache(model.getClass().getName()).clear();
+		
 		removeInterceptor(model);
 	}
 
@@ -329,6 +375,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void remove(Collection<? extends Object> models) throws ModelRemovalException {
 		for (Object model : models) {
 			modelRepository.delete(model);
+			
+			cacheManager.getCache(model.getClass().getName()).clear();
+			
 			removeInterceptor(model);
 		}
 	}
@@ -343,6 +392,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 
 		modelRepository.delete(model);
+		
+		cacheManager.getCache(model.getClass().getName()).clear();
+		
 		removeInterceptor(model);
 	}
 
@@ -350,7 +402,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public int removeAll(Class modelClass) throws ModelRemovalException {
 		Query query = entityManager.createQuery("delete from " + modelClass.getName());
-		return query.executeUpdate();
+		int count = query.executeUpdate();
+		
+		cacheManager.getCache(modelClass.getName()).clear();
+		
+		return count;
 	}
 
 	@Override
