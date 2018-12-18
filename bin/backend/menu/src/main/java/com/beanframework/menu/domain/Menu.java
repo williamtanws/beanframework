@@ -56,7 +56,7 @@ public class Menu extends GenericDomain {
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	private MenuTargetType target;
+	private MenuTargetTypeEnum target;
 
 	@NotNull
 	private Boolean enabled;
@@ -106,11 +106,11 @@ public class Menu extends GenericDomain {
 		this.path = path;
 	}
 
-	public MenuTargetType getTarget() {
+	public MenuTargetTypeEnum getTarget() {
 		return target;
 	}
 
-	public void setTarget(MenuTargetType target) {
+	public void setTarget(MenuTargetTypeEnum target) {
 		this.target = target;
 	}
 

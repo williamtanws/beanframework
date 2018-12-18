@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,20 +33,17 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserRightFacade;
+import com.beanframework.user.domain.UserRightSpecification;
 
 @Controller
 public class UserRightController extends AbstractCommonController {
-	
+
 	@Autowired
 	private ModelService modelService;
 
 	@Autowired
-	private UserRightFacade userrightFacade;
-
-	@Autowired
 	private LocaleMessageService localeMessageService;
-	
+
 	@Autowired
 	private BackofficeModuleFacade backofficeModuleFacade;
 
@@ -83,7 +81,8 @@ public class UserRightController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<UserRight> pagination = userrightFacade.page(userright, page, size, direction, properties);
+		Page<UserRight> pagination = modelService.findPage(UserRightSpecification.findByCriteria(userright),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), UserRight.class);
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -135,12 +134,12 @@ public class UserRightController extends AbstractCommonController {
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (userrightUpdate.getUuid() != null) {
-			
+
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(UserRight.UUID, userrightUpdate.getUuid());
 
 			UserRight existingUserRight = modelService.findOneDtoByProperties(properties, UserRight.class);
-			
+
 			if (existingUserRight != null) {
 				model.addAttribute(WebUserRightConstants.ModelAttribute.UPDATE, existingUserRight);
 			} else {
@@ -165,10 +164,10 @@ public class UserRightController extends AbstractCommonController {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
-			
+
 			try {
 				modelService.saveDto(userrightCreate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(UserRight.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -198,7 +197,7 @@ public class UserRightController extends AbstractCommonController {
 		} else {
 			try {
 				modelService.saveDto(userrightUpdate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(UserRight.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -221,12 +220,12 @@ public class UserRightController extends AbstractCommonController {
 			@ModelAttribute(WebUserRightConstants.ModelAttribute.UPDATE) UserRight userrightUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
-		
+
 		try {
 			backofficeModuleFacade.deleteAllModuleUserRightByUserRightUuid(userrightUpdate.getUuid(), bindingResult);
 
 			modelService.remove(userrightUpdate.getUuid(), UserRight.class);
-			
+
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (Exception e) {
 			addErrorMessage(UserRight.class, e.getMessage(), bindingResult, redirectAttributes);

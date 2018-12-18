@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,18 +33,15 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerFacade;
+import com.beanframework.customer.domain.CustomerSpecification;
 import com.beanframework.user.domain.UserGroup;
 
 @Controller
 public class CustomerController extends AbstractCommonController {
-	
+
 	@Autowired
 	private ModelService modelService;
 
-	@Autowired
-	private CustomerFacade customerFacade;
-	
 	@Value(WebCustomerConstants.Path.CUSTOMER)
 	private String PATH_CUSTOMER;
 
@@ -77,7 +75,8 @@ public class CustomerController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Customer> pagination = customerFacade.page(customer, page, size, direction, properties);
+		Page<Customer> pagination = modelService.findPage(CustomerSpecification.findByCriteria(customer),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Customer.class);
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -131,18 +130,18 @@ public class CustomerController extends AbstractCommonController {
 		if (customerUpdate.getUuid() != null) {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Customer.UUID, customerUpdate.getUuid());
-			Customer existingCustomer= modelService.findOneEntityByProperties(properties, Customer.class);
-			
+			Customer existingCustomer = modelService.findOneEntityByProperties(properties, Customer.class);
+
 			if (existingCustomer != null) {
-				
+
 				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
-				
-				List<UserGroup> userGroups = modelService.findBySorts(sorts, UserGroup.class);
-				
+
+				List<UserGroup> userGroups = modelService.findDtoBySorts(sorts, UserGroup.class);
+
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingCustomer.getUserGroups()) {
-						if(userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
+						if (userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
 							userGroups.get(i).setSelected("true");
 						}
 					}
@@ -155,32 +154,34 @@ public class CustomerController extends AbstractCommonController {
 				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
-		
+
 		return VIEW_CUSTOMER_LIST;
 	}
 
 	@PreAuthorize(WebCustomerConstants.PreAuthorize.CREATE)
-	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params="create")
-	public RedirectView create(@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
+	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "create")
+	public RedirectView create(
+			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.CREATE) Customer customerCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (customerCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, "Create new record doesn't need UUID.");
+			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+					"Create new record doesn't need UUID.");
 		} else {
-			
+
 			List<UserGroup> userGroups = new ArrayList<UserGroup>();
 			for (UserGroup userGroup : customerCreate.getUserGroups()) {
-				if(BooleanUtils.parseBoolean(userGroup.getSelected())) {
+				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
 					userGroups.add(userGroup);
 				}
 			}
 			customerCreate.setUserGroups(userGroups);
-			
+
 			try {
 				modelService.saveDto(customerCreate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (Exception e) {
 				addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -197,27 +198,29 @@ public class CustomerController extends AbstractCommonController {
 	}
 
 	@PreAuthorize(WebCustomerConstants.PreAuthorize.UPDATE)
-	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params="update")
-	public RedirectView update(@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
+	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "update")
+	public RedirectView update(
+			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (customerUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, "Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+					"Update record needed existing UUID.");
 		} else {
-			
+
 			List<UserGroup> userGroups = new ArrayList<UserGroup>();
 			for (UserGroup userGroup : customerUpdate.getUserGroups()) {
-				if(BooleanUtils.parseBoolean(userGroup.getSelected())) {
+				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
 					userGroups.add(userGroup);
 				}
 			}
 			customerUpdate.setUserGroups(userGroups);
-			
+
 			try {
 				modelService.saveDto(customerUpdate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (Exception e) {
 				addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -234,8 +237,9 @@ public class CustomerController extends AbstractCommonController {
 	}
 
 	@PreAuthorize(WebCustomerConstants.PreAuthorize.DELETE)
-	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params="delete")
-	public RedirectView delete(@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
+	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "delete")
+	public RedirectView delete(
+			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {

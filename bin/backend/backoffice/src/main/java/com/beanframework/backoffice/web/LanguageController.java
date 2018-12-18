@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,17 +33,13 @@ import com.beanframework.common.exception.ModelSavingException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageFacade;
+import com.beanframework.language.domain.LanguageSpecification;
 
 @Controller
-public class LanguageController extends AbstractCommonController{
-	
+public class LanguageController extends AbstractCommonController {
+
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private LanguageFacade languageFacade;
-
 	@Autowired
 	private BackofficeModuleFacade backofficeModuleFacade;
 
@@ -79,7 +76,8 @@ public class LanguageController extends AbstractCommonController{
 			direction = Sort.Direction.ASC;
 		}
 
-		Page<Language> pagination = languageFacade.page(language, page, size, direction, properties);
+		Page<Language> pagination = modelService.findPage(LanguageSpecification.findByCriteria(language),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Language.class);
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -131,12 +129,12 @@ public class LanguageController extends AbstractCommonController{
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (languageUpdate.getUuid() != null) {
-			
+
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Language.UUID, languageUpdate.getUuid());
-			
+
 			Language existingLanguage = modelService.findOneDtoByProperties(properties, Language.class);
-			
+
 			if (existingLanguage != null) {
 				model.addAttribute(WebLanguageConstants.ModelAttribute.UPDATE, existingLanguage);
 			} else {
@@ -160,10 +158,10 @@ public class LanguageController extends AbstractCommonController{
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
-			
+
 			try {
 				modelService.saveDto(languageCreate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(Language.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -191,10 +189,10 @@ public class LanguageController extends AbstractCommonController{
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
-			
+
 			try {
 				modelService.saveDto(languageUpdate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(Language.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -221,7 +219,7 @@ public class LanguageController extends AbstractCommonController{
 		try {
 			backofficeModuleFacade.deleteAllModuleLanguageByLanguageUuid(languageUpdate.getUuid(), bindingResult);
 			modelService.remove(languageUpdate.getUuid(), Language.class);
-			
+
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (ModelRemovalException e) {
 			addErrorMessage(Language.class, e.getMessage(), bindingResult, redirectAttributes);

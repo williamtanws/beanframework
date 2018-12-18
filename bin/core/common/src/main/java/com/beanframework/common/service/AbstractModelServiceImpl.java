@@ -6,9 +6,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,11 +19,15 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache.ValueWrapper;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.lang.Nullable;
@@ -45,12 +52,15 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	protected EntityManager entityManager;
 
 	@Autowired
-	private List<InterceptorMapping> interceptorMappings;
+	protected List<InterceptorMapping> interceptorMappings;
 
 	@Autowired
-	private List<ConverterMapping> converterMappings;
+	protected List<ConverterMapping> converterMappings;
 
-	public void initialDefaultsInterceptor(Collection<? extends Object> models) {
+	@Autowired
+	protected CacheManager cacheManager;
+
+	protected void initialDefaultsInterceptor(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -59,7 +69,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public void initialDefaultsInterceptor(Object model) {
+	protected void initialDefaultsInterceptor(Object model) {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof InitialDefaultsInterceptor) {
 				InitialDefaultsInterceptor<Object> interceptor = (InitialDefaultsInterceptor<Object>) interceptorMapping
@@ -75,7 +85,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public void loadInterceptor(Collection<? extends Object> models) {
+	protected void loadInterceptor(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -84,7 +94,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public void loadInterceptor(Object model) {
+	protected void loadInterceptor(Object model) {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof LoadInterceptor) {
 				LoadInterceptor<Object> interceptor = (LoadInterceptor<Object>) interceptorMapping.getInterceptor();
@@ -99,7 +109,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public void prepareInterceptor(Collection<? extends Object> models) {
+	protected void prepareInterceptor(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -108,7 +118,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public void prepareInterceptor(Object model) {
+	protected void prepareInterceptor(Object model) {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof PrepareInterceptor) {
 				PrepareInterceptor<Object> interceptor = (PrepareInterceptor<Object>) interceptorMapping
@@ -124,7 +134,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public void removeInterceptor(Collection<? extends Object> models) {
+	protected void removeInterceptor(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -133,7 +143,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public void removeInterceptor(Object model) {
+	protected void removeInterceptor(Object model) {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof RemoveInterceptor) {
 				RemoveInterceptor<Object> interceptor = (RemoveInterceptor<Object>) interceptorMapping.getInterceptor();
@@ -148,7 +158,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public void validateInterceptor(Collection<? extends Object> models) {
+	protected void validateInterceptor(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -157,7 +167,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public void validateInterceptor(Object model) {
+	protected void validateInterceptor(Object model) {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof ValidateInterceptor) {
 				ValidateInterceptor<Object> interceptor = (ValidateInterceptor<Object>) interceptorMapping
@@ -173,7 +183,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public void entityConverter(Collection<? extends Object> models) {
+	protected void entityConverter(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -182,7 +192,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public Object entityConverter(Object model) {
+	protected Object entityConverter(Object model) {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof EntityConverter) {
 				EntityConverter interceptor = (EntityConverter) interceptorMapping.getConverter();
@@ -199,7 +209,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return model;
 	}
 
-	public void dtoConverter(Collection<? extends Object> models) {
+	protected void dtoConverter(Collection<? extends Object> models) {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -208,7 +218,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	public Object dtoConverter(Object model) {
+	protected Object dtoConverter(Object model) {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof DtoConverter) {
 				DtoConverter interceptor = (DtoConverter) interceptorMapping.getConverter();
@@ -232,7 +242,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 				: readPage(query, objectClass, pageable, spec);
 	}
 
-	private <T> Page readPage(TypedQuery query, final Class domainClass, Pageable pageable,
+	protected <T> Page readPage(TypedQuery query, final Class domainClass, Pageable pageable,
 			@Nullable Specification spec) {
 
 		if (pageable.isPaged()) {
@@ -244,7 +254,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 				() -> executeCountQuery(getCountQuery(spec, domainClass)));
 	}
 
-	private <T> TypedQuery getCountQuery(@Nullable Specification spec, Class domainClass) {
+	protected <T> TypedQuery getCountQuery(@Nullable Specification spec, Class domainClass) {
 
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
@@ -263,13 +273,13 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return entityManager.createQuery(query);
 	}
 
-	private <T> TypedQuery getQuery(@Nullable Specification spec, Pageable pageable, Class objectClass) {
+	protected <T> TypedQuery getQuery(@Nullable Specification spec, Pageable pageable, Class objectClass) {
 
 		Sort sort = pageable.isPaged() ? pageable.getSort() : Sort.unsorted();
 		return getQuery(spec, objectClass, sort);
 	}
 
-	private <T> TypedQuery getQuery(@Nullable Specification spec, Class domainClass, Sort sort) {
+	protected <T> TypedQuery getQuery(@Nullable Specification spec, Class domainClass, Sort sort) {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery query = builder.createQuery(domainClass);
 
@@ -283,7 +293,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return entityManager.createQuery(query);
 	}
 
-	private <S, U extends T, T> Root<U> applySpecificationToCriteria(@Nullable Specification<U> spec,
+	protected <S, U extends T, T> Root<U> applySpecificationToCriteria(@Nullable Specification<U> spec,
 			Class<U> domainClass, CriteriaQuery<S> query) {
 
 		Assert.notNull(domainClass, "Domain class must not be null!");
@@ -305,7 +315,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return root;
 	}
 
-	private static long executeCountQuery(TypedQuery<Long> query) {
+	protected static long executeCountQuery(TypedQuery<Long> query) {
 
 		Assert.notNull(query, "TypedQuery must not be null!");
 
@@ -332,5 +342,242 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		} else {
 			return value;
 		}
+	}
+
+	protected <T> T getCachedSingleResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts,
+			String data, Class modelClass) {
+		StringBuilder propertiesBuilder = new StringBuilder();
+		if (properties != null) {
+			for (Map.Entry<String, Object> entry : properties.entrySet()) {
+				if (propertiesBuilder.length() == 0) {
+					if (entry.getValue() == null) {
+						propertiesBuilder.append("o." + entry.getKey() + " IS NULL");
+					} else {
+						propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
+					}
+				} else {
+					propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
+				}
+			}
+		}
+
+		StringBuilder sortsBuilder = new StringBuilder();
+		if (sorts != null) {
+			for (Entry<String, Direction> entry : sorts.entrySet()) {
+				if (sortsBuilder.length() == 0) {
+					sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getValue().toString());
+				} else {
+					sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
+				}
+			}
+		}
+
+		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
+
+		if (propertiesBuilder.length() > 0) {
+			qlString = qlString + " where " + propertiesBuilder.toString();
+		}
+		if (sortsBuilder.length() > 0) {
+			qlString = qlString + " " + sortsBuilder.toString();
+		}
+
+		ValueWrapper valueWrapper = cacheManager.getCache(modelClass.getName()).get(qlString);
+		if (valueWrapper == null) {
+			return null;
+		} else {
+			return (T) valueWrapper.get();
+		}
+	}
+
+	protected <T extends Collection> T getCachedResultList(Map<String, Object> properties,
+			Map<String, Sort.Direction> sorts, String data, Class modelClass) {
+
+		if (properties == null && sorts == null) {
+			return (T) cacheManager.getCache(modelClass.getName()).get("*");
+		}
+
+		StringBuilder propertiesBuilder = new StringBuilder();
+		if (properties != null) {
+			for (Map.Entry<String, Object> entry : properties.entrySet()) {
+				if (propertiesBuilder.length() == 0) {
+					if (entry.getValue() == null) {
+						propertiesBuilder.append("o." + entry.getKey() + " IS NULL");
+					} else {
+						propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
+					}
+				} else {
+					propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
+				}
+			}
+		}
+
+		StringBuilder sortsBuilder = new StringBuilder();
+		if (sorts != null) {
+			for (Entry<String, Direction> entry : sorts.entrySet()) {
+				if (sortsBuilder.length() == 0) {
+					sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getValue().toString());
+				} else {
+					sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
+				}
+			}
+		}
+
+		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
+
+		if (propertiesBuilder.length() > 0) {
+			qlString = qlString + " where " + propertiesBuilder.toString();
+		}
+		if (sortsBuilder.length() > 0) {
+			qlString = qlString + " " + sortsBuilder.toString();
+		}
+
+		ValueWrapper valueWrapper = cacheManager.getCache(modelClass.getName()).get(qlString);
+		if (valueWrapper == null) {
+			return null;
+		} else {
+			return (T) valueWrapper.get();
+		}
+	}
+
+	protected void setCachedSingleResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data,
+			Class modelClass, Object model) {
+		StringBuilder propertiesBuilder = new StringBuilder();
+		if (properties != null) {
+			for (Map.Entry<String, Object> entry : properties.entrySet()) {
+				if (propertiesBuilder.length() == 0) {
+					if (entry.getValue() == null) {
+						propertiesBuilder.append("o." + entry.getKey() + " IS NULL");
+					} else {
+						propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
+					}
+				} else {
+					propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
+				}
+			}
+		}
+
+		StringBuilder sortsBuilder = new StringBuilder();
+		if (sorts != null) {
+			for (Entry<String, Direction> entry : sorts.entrySet()) {
+				if (sortsBuilder.length() == 0) {
+					sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getValue().toString());
+				} else {
+					sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
+				}
+			}
+		}
+
+		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
+
+		if (propertiesBuilder.length() > 0) {
+			qlString = qlString + " where " + propertiesBuilder.toString();
+		}
+		if (sortsBuilder.length() > 0) {
+			qlString = qlString + " " + sortsBuilder.toString();
+		}
+
+		cacheManager.getCache(modelClass.getName()).put(qlString, model);
+	}
+
+	protected void setCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data,
+			Class modelClass, Collection<? extends Object> models) {
+
+		if (properties == null && sorts == null) {
+			cacheManager.getCache(modelClass.getName()).put("*", models);
+		} else {
+
+			StringBuilder propertiesBuilder = new StringBuilder();
+			if (properties != null) {
+				for (Map.Entry<String, Object> entry : properties.entrySet()) {
+					if (propertiesBuilder.length() == 0) {
+						if (entry.getValue() == null) {
+							propertiesBuilder.append("o." + entry.getKey() + " IS NULL");
+						} else {
+							propertiesBuilder.append("o." + entry.getKey() + " = " + entry.getValue());
+						}
+					} else {
+						propertiesBuilder.append(" and o." + entry.getKey() + " = " + entry.getValue());
+					}
+				}
+			}
+
+			StringBuilder sortsBuilder = new StringBuilder();
+			if (sorts != null) {
+				for (Entry<String, Direction> entry : sorts.entrySet()) {
+					if (sortsBuilder.length() == 0) {
+						sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getValue().toString());
+					} else {
+						sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
+					}
+				}
+			}
+
+			String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName()
+					+ " o";
+
+			if (propertiesBuilder.length() > 0) {
+				qlString = qlString + " where " + propertiesBuilder.toString();
+			}
+			if (sortsBuilder.length() > 0) {
+				qlString = qlString + " " + sortsBuilder.toString();
+			}
+
+			cacheManager.getCache(modelClass.getName()).put(qlString, models);
+		}
+	}
+
+	protected void clearAllCached(Object model) {
+		cacheManager.getCache(model.getClass().getName()).clear();
+	}
+
+	private String sqlProperties(Map<String, Object> properties) {
+		StringBuilder propertiesBuilder = new StringBuilder();
+		for (Map.Entry<String, Object> entry : properties.entrySet()) {
+			if (propertiesBuilder.length() == 0) {
+				if (entry.getValue() == null) {
+					propertiesBuilder.append("o." + entry.getKey() + " IS NULL");
+				} else {
+					propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey());
+				}
+			} else {
+				propertiesBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey());
+			}
+		}
+		return propertiesBuilder.toString();
+	}
+
+	private String sqlSorts(Map<String, Sort.Direction> sorts) {
+		StringBuilder sortsBuilder = new StringBuilder();
+		for (Entry<String, Direction> entry : sorts.entrySet()) {
+			if (sortsBuilder.length() == 0) {
+				sortsBuilder.append("order by o." + entry.getKey() + " " + entry.getValue().toString());
+			} else {
+				sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
+			}
+		}
+		return sortsBuilder.toString();
+	}
+
+	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data,
+			Class modelClass) {
+		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
+
+		if (properties != null && properties.isEmpty() == false) {
+			qlString = qlString + " where " + sqlProperties(properties);
+		}
+		if (sorts != null && sorts.isEmpty() == false) {
+			qlString = qlString + " " + sqlSorts(sorts);
+		}
+
+		Query query = entityManager.createQuery(qlString);
+		if (properties != null && properties.isEmpty() == false) {
+			for (Map.Entry<String, Object> entry : properties.entrySet()) {
+				if (entry.getValue() != null) {
+					query.setParameter(entry.getKey(), entry.getValue());
+				}
+			}
+		}
+
+		return query;
 	}
 }

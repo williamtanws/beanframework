@@ -31,16 +31,16 @@ public class DynamicField extends GenericDomain {
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	private DynamicFieldType type;
+	private DynamicFieldTypeEnum type;
 	private Integer sort;
 	private Boolean required;
 	private String rule;
 
-	public DynamicFieldType getType() {
+	public DynamicFieldTypeEnum getType() {
 		return type;
 	}
 
-	public void setType(DynamicFieldType type) {
+	public void setType(DynamicFieldTypeEnum type) {
 		this.type = type;
 	}
 

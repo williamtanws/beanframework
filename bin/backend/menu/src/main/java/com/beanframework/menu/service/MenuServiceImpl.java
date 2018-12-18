@@ -16,32 +16,23 @@ import javax.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.service.ModelService;
-import com.beanframework.menu.MenuConstants;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.repository.MenuRepository;
 import com.beanframework.user.domain.UserGroup;
 
 @Service
 public class MenuServiceImpl implements MenuService {
 
 	Logger logger = LoggerFactory.getLogger(MenuServiceImpl.class.getName());
-
-	@Autowired
-	private MenuRepository menuRepository;
 	
 	@Autowired
 	private ModelService modelService;
 	
-	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
-			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
 	@Transactional
 	@Override
 	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) {
@@ -61,7 +52,7 @@ public class MenuServiceImpl implements MenuService {
 			
 			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 			sorts.put(Menu.SORT, Sort.Direction.ASC);
-			List<Menu> toMenuChilds = modelService.findByPropertiesAndSorts(properties, sorts, Menu.class);
+			List<Menu> toMenuChilds = modelService.findDtoByPropertiesAndSorts(properties, sorts, Menu.class);
 
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
 			for (Menu menu : menus) {
@@ -87,7 +78,7 @@ public class MenuServiceImpl implements MenuService {
 			
 			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 			sorts.put(Menu.SORT, Sort.Direction.ASC);
-			List<Menu> toMenuChilds = modelService.findByPropertiesAndSorts(properties, sorts, Menu.class);
+			List<Menu> toMenuChilds = modelService.findDtoByPropertiesAndSorts(properties, sorts, Menu.class);
 			
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
 			for (Menu menu : menus) {
@@ -148,7 +139,7 @@ public class MenuServiceImpl implements MenuService {
 		
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
-		List<Menu> rootParents = modelService.findByPropertiesAndSorts(properties, sorts, Menu.class);
+		List<Menu> rootParents = modelService.findDtoByPropertiesAndSorts(properties, sorts, Menu.class);
 
 		initializeChilds(rootParents);
 
@@ -175,7 +166,7 @@ public class MenuServiceImpl implements MenuService {
 					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 				}
 			};
-			List<Menu> childs = menuRepository.findAll(spec);
+			List<Menu> childs = modelService.findAll(spec, Menu.class);
 			parent.setChilds(childs);
 
 			if (parent.getChilds().isEmpty() == false) {
@@ -184,7 +175,6 @@ public class MenuServiceImpl implements MenuService {
 		}
 	}
 
-	@Cacheable(cacheNames = MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP, key = "#userGroupUuids")
 	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findNavigationTreeByUserGroup(List<UUID> userGroupUuids) {
@@ -208,7 +198,7 @@ public class MenuServiceImpl implements MenuService {
 				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			}
 		};
-		List<Menu> rootParents = menuRepository.findAll(spec);
+		List<Menu> rootParents = modelService.findAll(spec, Menu.class);
 
 		initializeChildsByUserGroup(rootParents, userGroupUuids);
 
@@ -238,7 +228,7 @@ public class MenuServiceImpl implements MenuService {
 					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 				}
 			};
-			List<Menu> childs = menuRepository.findAll(spec);
+			List<Menu> childs = modelService.findAll(spec, Menu.class);
 			parent.setChilds(childs);
 
 			if (parent.getChilds().isEmpty() == false) {

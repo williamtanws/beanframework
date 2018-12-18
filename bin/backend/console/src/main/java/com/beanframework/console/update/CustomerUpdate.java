@@ -36,7 +36,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.CustomerCsv;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldType;
+import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
@@ -100,7 +100,7 @@ public class CustomerUpdate extends Updater {
 		nameDynamicField.setRequired(true);
 		nameDynamicField.setRule(null);
 		nameDynamicField.setSort(0);
-		nameDynamicField.setType(DynamicFieldType.TEXT);
+		nameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
 		modelService.saveEntity(nameDynamicField);
 
 		for (CustomerCsv csv : customerCsvList) {

@@ -15,7 +15,6 @@ import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +56,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.STARTUP, true);
 		
-		List<Cronjob> jobList = modelService.findByProperties(properties, Cronjob.class);
+		List<Cronjob> jobList = modelService.findDtoByProperties(properties, Cronjob.class);
 		
 		for (Cronjob cronjob : jobList) {
 			cronjob.setJobTrigger(CronjobEnum.JobTrigger.START);
@@ -77,7 +76,6 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		}
 	}
 
-	@CacheEvict(value = { CronjobConstants.Cache.CRONJOB,  CronjobConstants.Cache.CRONJOBS}, allEntries = true)
 	@Override
 	public void updateStatus(UUID uuid, CronjobEnum.Status status, CronjobEnum.Result result, String message,
 			Date lastStartExecutedDate, Date lastFinishExecutedDate) {
@@ -125,7 +123,6 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		}
 	}
 
-	@CacheEvict(value = { CronjobConstants.Cache.CRONJOB,  CronjobConstants.Cache.CRONJOBS}, allEntries = true)
 	@Transactional
 	@Override
 	public void trigger(Cronjob cronjob) {

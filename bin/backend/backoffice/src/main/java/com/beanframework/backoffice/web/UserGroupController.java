@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,18 +34,15 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.domain.UserGroupSpecification;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserGroupFacade;
 
 @Controller
 public class UserGroupController extends AbstractCommonController {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private UserGroupFacade usergroupFacade;
 
 	@Value(WebUserGroupConstants.Path.USERGROUP)
 	private String PATH_USERGROUP;
@@ -80,7 +78,8 @@ public class UserGroupController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<UserGroup> pagination = usergroupFacade.page(usergroup, page, size, direction, properties);
+		Page<UserGroup> pagination = modelService.findPage(UserGroupSpecification.findByCriteria(usergroup),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), UserGroup.class);
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -149,8 +148,8 @@ public class UserGroupController extends AbstractCommonController {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserRight.CREATED_DATE, Sort.Direction.DESC);
 
-		List<UserRight> userRights = modelService.findBySorts(sorts, UserRight.class);
-		List<UserPermission> userPermissions = modelService.findBySorts(sorts, UserPermission.class);
+		List<UserRight> userRights = modelService.findDtoBySorts(sorts, UserRight.class);
+		List<UserPermission> userPermissions = modelService.findDtoBySorts(sorts, UserPermission.class);
 
 		model.addAttribute("userRights", userRights);
 		model.addAttribute("userPermissions", userPermissions);

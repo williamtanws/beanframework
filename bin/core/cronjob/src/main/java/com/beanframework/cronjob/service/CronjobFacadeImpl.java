@@ -6,10 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.service.LocaleMessageService;
@@ -23,9 +19,6 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private CronjobService cronjobService;
 	
 	@Autowired
 	private CronjobManagerService cronjobManagerService;
@@ -64,20 +57,5 @@ public class CronjobFacadeImpl implements CronjobFacade {
 		modelService.saveEntity(updateCronjob);
 
 		return updateCronjob;
-	}
-
-	@Override
-	public Page<Cronjob> page(Cronjob cronjob, int page, int size, Direction direction, String... properties) {
-
-		// Change page to index's page
-		page = page <= 0 ? 0 : page - 1;
-		size = size <= 0 ? 1 : size;
-
-		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
-
-		Page<Cronjob> cronjobPage = cronjobService.page(cronjob, pageRequest);
-		
-		List<Cronjob> content = modelService.getDto(cronjobPage.getContent());
-		return new PageImpl<Cronjob>(content, cronjobPage.getPageable(), cronjobPage.getTotalElements());
 	}
 }

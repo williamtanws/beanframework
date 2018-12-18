@@ -49,7 +49,7 @@ public class BackofficeModuleServiceImpl implements BackofficeModuleService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(UserAuthority.USER_PERMISSION_UUID, uuid);
 		
-		List<UserAuthority> userAuthorities = modelService.findByProperties(properties, UserAuthority.class);
+		List<UserAuthority> userAuthorities = modelService.findDtoByProperties(properties, UserAuthority.class);
 		modelService.remove(userAuthorities);
 	}
 

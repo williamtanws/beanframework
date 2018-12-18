@@ -5,14 +5,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.beanframework.dynamicfield.DynamicFieldConstants;
 import com.beanframework.dynamicfield.converter.DtoDynamicFieldConverter;
 import com.beanframework.dynamicfield.converter.EntityDynamicFieldConverter;
 import com.beanframework.dynamicfield.domain.DynamicField;
@@ -41,7 +39,6 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 		return dynamicField;
 	}
 
-	@CacheEvict(value = { DynamicFieldConstants.Cache.DYNAMIC_FIELD,  DynamicFieldConstants.Cache.DYNAMIC_FIELDS}, allEntries = true)
 	@Transactional(readOnly = false)
 	@Override
 	public DynamicField save(DynamicField dynamicField) {
@@ -53,14 +50,12 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 		return dynamicField;
 	}
 
-	@CacheEvict(value = { DynamicFieldConstants.Cache.DYNAMIC_FIELD,  DynamicFieldConstants.Cache.DYNAMIC_FIELDS}, allEntries = true)
 	@Transactional(readOnly = false)
 	@Override
 	public void delete(UUID uuid) {
 		dynamicFieldRepository.deleteById(uuid);
 	}
 
-	@CacheEvict(value = { DynamicFieldConstants.Cache.DYNAMIC_FIELD,  DynamicFieldConstants.Cache.DYNAMIC_FIELDS}, allEntries = true)
 	@Transactional(readOnly = false)
 	@Override
 	public void deleteAll() {

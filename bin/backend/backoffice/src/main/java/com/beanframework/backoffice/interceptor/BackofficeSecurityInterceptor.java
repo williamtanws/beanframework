@@ -77,7 +77,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Language.SORT, Sort.Direction.ASC);
 		
-		List<Language> languages = modelService.findBySorts(sorts, Language.class);
+		List<Language> languages = modelService.findDtoBySorts(sorts, Language.class);
 		modelAndView.getModelMap().addAttribute(WebBackofficeConstants.Model.MODULE_LANGUAGES, languages);
 	}
 }

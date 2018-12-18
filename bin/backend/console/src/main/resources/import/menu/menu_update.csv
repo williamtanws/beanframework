@@ -6,7 +6,6 @@ userpermission,2,fa fa-key,/backoffice/userpermission,,true,system,User Permissi
 menu,4,fa fa-align-justify,/backoffice/menu,,true,system,Menu,菜单,employeegroup
 cronjob,5,fa fa-calendar,/backoffice/cronjob,,true,system,Cron Job,定时任务,employeegroup
 email,6,fa fa-envelope,/backoffice/email,,true,system,Email,电子邮件,employeegroup
-history,6,fa fa-history,/backoffice/history,,true,system,History,历史,employeegroup
 multimedia,2,fa fa-file-image-o,,,true,,Multimedia,多媒体,customergroup
 filemanager,1,fa fa-folder,/backoffice/filemanager,,true,multimedia,File Manager,文件管理器,employeegroup
 user,3,fa fa-user,,,true,,User,用户,employeegroup;customergroup

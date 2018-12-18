@@ -6,10 +6,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -28,7 +24,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.domain.EmployeeSpecification;
 
 @Component
 public class EmployeeFacadeImpl implements EmployeeFacade {
@@ -129,21 +124,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 				sessionInformation.expireNow();
 			}
 		}
-	}
-
-	@Override
-	public Page<Employee> page(Employee employee, int page, int size, Direction direction, String... properties) {
-
-		// Change page to index's page
-		page = page <= 0 ? 0 : page - 1;
-		size = size <= 0 ? 1 : size;
-
-		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
-
-		Page<Employee> employeePage = modelService.findPage(EmployeeSpecification.findByCriteria(employee), pageRequest, Employee.class);
-
-		List<Employee> content = modelService.getDto(employeePage.getContent());
-		return new PageImpl<Employee>(content, employeePage.getPageable(), employeePage.getTotalElements());
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,13 +35,13 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.employee.domain.Employee;
+import com.beanframework.employee.domain.EmployeeSpecification;
 import com.beanframework.employee.service.EmployeeFacade;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupFacade;
 
 @Controller
 public class EmployeeController extends AbstractCommonController {
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -80,7 +81,8 @@ public class EmployeeController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Employee> pagination = employeeFacade.page(employee, page, size, direction, properties);
+		Page<Employee> pagination = modelService.findPage(EmployeeSpecification.findByCriteria(employee),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Employee.class);
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -134,18 +136,18 @@ public class EmployeeController extends AbstractCommonController {
 		if (employeeUpdate.getUuid() != null) {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Employee.UUID, employeeUpdate.getUuid());
-			Employee existingEmployee= modelService.findOneEntityByProperties(properties, Employee.class);
-			
+			Employee existingEmployee = modelService.findOneEntityByProperties(properties, Employee.class);
+
 			if (existingEmployee != null) {
-				
+
 				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
-				
-				List<UserGroup> userGroups = modelService.findBySorts(sorts, UserGroup.class);
-				
+
+				List<UserGroup> userGroups = modelService.findDtoBySorts(sorts, UserGroup.class);
+
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingEmployee.getUserGroups()) {
-						if(userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
+						if (userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
 							userGroups.get(i).setSelected("true");
 						}
 					}
@@ -158,32 +160,34 @@ public class EmployeeController extends AbstractCommonController {
 				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
-		
+
 		return VIEW_EMPLOYEE_LIST;
 	}
 
 	@PreAuthorize(WebEmployeeConstants.PreAuthorize.CREATE)
-	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params="create")
-	public RedirectView create(@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
+	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params = "create")
+	public RedirectView create(
+			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.CREATE) Employee employeeCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (employeeCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, "Create new record doesn't need UUID.");
+			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+					"Create new record doesn't need UUID.");
 		} else {
-			
+
 			List<UserGroup> userGroups = new ArrayList<UserGroup>();
 			for (UserGroup userGroup : employeeCreate.getUserGroups()) {
-				if(BooleanUtils.parseBoolean(userGroup.getSelected())) {
+				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
 					userGroups.add(userGroup);
 				}
 			}
 			employeeCreate.setUserGroups(userGroups);
-			
+
 			try {
 				modelService.saveDto(employeeCreate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -200,31 +204,33 @@ public class EmployeeController extends AbstractCommonController {
 	}
 
 	@PreAuthorize(WebEmployeeConstants.PreAuthorize.UPDATE)
-	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params="update")
-	public RedirectView update(@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
+	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params = "update")
+	public RedirectView update(
+			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (employeeUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, "Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+					"Update record needed existing UUID.");
 		} else {
-			
+
 			List<UserGroup> userGroups = new ArrayList<UserGroup>();
 			for (UserGroup userGroup : employeeUpdate.getUserGroups()) {
-				if(BooleanUtils.parseBoolean(userGroup.getSelected())) {
+				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
 					userGroups.add(userGroup);
 				}
 			}
 			employeeUpdate.setUserGroups(userGroups);
-			
+
 			try {
 				modelService.saveDto(employeeUpdate);
-				
+
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (ModelSavingException e) {
 				addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
-				
+
 			}
 		}
 
@@ -238,8 +244,9 @@ public class EmployeeController extends AbstractCommonController {
 	}
 
 	@PreAuthorize(WebEmployeeConstants.PreAuthorize.DELETE)
-	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params="delete")
-	public RedirectView delete(@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
+	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params = "delete")
+	public RedirectView delete(
+			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
@@ -247,7 +254,7 @@ public class EmployeeController extends AbstractCommonController {
 		try {
 			modelService.remove(employeeUpdate.getUuid());
 			employeeFacade.deleteEmployeeProfilePictureByUuid(employeeUpdate.getUuid());
-			
+
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (ModelRemovalException e) {
 			addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
