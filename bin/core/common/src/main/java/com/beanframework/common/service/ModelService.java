@@ -40,7 +40,7 @@ public interface ModelService {
 
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass);
 
-	<T extends Collection> T findAll();
+	<T extends Collection> T findAll(Class modelClass);
 
 	<T> Page<T> findPage(@Nullable Specification spec, Pageable pageable, Class modelClass);
 
