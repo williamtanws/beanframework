@@ -21,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.validation.MapBindingResult;
-import org.springframework.validation.ObjectError;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
@@ -30,12 +28,11 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.Remover;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.EmployeeCsv;
-import com.beanframework.customer.domain.Customer;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeFacade;
 
 public class EmployeeRemove extends Remover {
 	protected final Logger logger = LoggerFactory.getLogger(EmployeeRemove.class);
@@ -43,7 +40,7 @@ public class EmployeeRemove extends Remover {
 	@Autowired
 	private ModelService modelService;
 
-	@Value("${module.console.import.remove.employee}")
+	@Value("${module.console.import.remove.Employee}")
 	private String IMPORT_REMOVE_EMPLOYEE_PATH;
 
 	@PostConstruct
@@ -67,10 +64,10 @@ public class EmployeeRemove extends Remover {
 					IOUtils.copy(in, baos);
 					BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-					List<EmployeeCsv> employeeCsvList = readCSVFile(reader);
-					save(employeeCsvList);
+					List<EmployeeCsv> EmployeeCsvList = readCSVFile(reader);
+					remove(EmployeeCsvList);
 
-				} catch (IOException ex) {
+				} catch (Exception ex) {
 					logger.error("Error reading the resource file: " + ex);
 				}
 			}
@@ -79,20 +76,18 @@ public class EmployeeRemove extends Remover {
 		}
 	}
 
-	public void save(List<EmployeeCsv> employeeCsvList) {
+	public void remove(List<EmployeeCsv> EmployeeCsvList) throws Exception {
 
-		for (EmployeeCsv employeeCsv : employeeCsvList) {
-
-			MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(),
-					Employee.class.getName());
+		for (EmployeeCsv csv : EmployeeCsvList) {
 			
 			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Employee.ID, employeeCsv.getId());
+			properties.put(Employee.ID, csv.getId());
 			
+			Employee Employee = modelService.findOneDtoByProperties(properties, Employee.class);
 			try {
-				Employee employee = modelService.findOneDtoByProperties(properties, Employee.class);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
+				modelService.remove(Employee.getUuid(), Employee.class);
+			} catch (BusinessException e) {
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}
@@ -100,7 +95,7 @@ public class EmployeeRemove extends Remover {
 	public List<EmployeeCsv> readCSVFile(Reader reader) {
 		ICsvBeanReader beanReader = null;
 
-		List<EmployeeCsv> employeeCsvList = new ArrayList<EmployeeCsv>();
+		List<EmployeeCsv> EmployeeCsvList = new ArrayList<EmployeeCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -110,12 +105,12 @@ public class EmployeeRemove extends Remover {
 			final String[] header = beanReader.getHeader(true);
 			final CellProcessor[] processors = getProcessors();
 
-			EmployeeCsv employeeCsv;
+			EmployeeCsv EmployeeCsv;
 			logger.info("Start import Employee Csv.");
-			while ((employeeCsv = beanReader.read(EmployeeCsv.class, header, processors)) != null) {
+			while ((EmployeeCsv = beanReader.read(EmployeeCsv.class, header, processors)) != null) {
 				logger.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
-						employeeCsv);
-				employeeCsvList.add(employeeCsv);
+						EmployeeCsv);
+				EmployeeCsvList.add(EmployeeCsv);
 			}
 			logger.info("Finished import Employee Csv.");
 		} catch (FileNotFoundException ex) {
@@ -131,7 +126,7 @@ public class EmployeeRemove extends Remover {
 				}
 			}
 		}
-		return employeeCsvList;
+		return EmployeeCsvList;
 	}
 
 	public CellProcessor[] getProcessors() {

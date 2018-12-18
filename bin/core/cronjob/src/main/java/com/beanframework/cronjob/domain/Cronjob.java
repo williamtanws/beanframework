@@ -21,9 +21,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.cronjob.CronjobConstants;
-import com.beanframework.cronjob.domain.CronjobEnum.Status;
 import com.beanframework.cronjob.domain.CronjobEnum.JobTrigger;
 import com.beanframework.cronjob.domain.CronjobEnum.Result;
+import com.beanframework.cronjob.domain.CronjobEnum.Status;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)

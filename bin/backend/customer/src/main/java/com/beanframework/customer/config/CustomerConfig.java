@@ -3,6 +3,8 @@ package com.beanframework.customer.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.beanframework.common.converter.ConverterMapping;
+import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.customer.converter.DtoCustomerConverter;
 import com.beanframework.customer.converter.EntityCustomerConverter;
 import com.beanframework.customer.domain.Customer;
@@ -11,8 +13,6 @@ import com.beanframework.customer.interceptor.CustomerLoadInterceptor;
 import com.beanframework.customer.interceptor.CustomerPrepareInterceptor;
 import com.beanframework.customer.interceptor.CustomerRemoveInterceptor;
 import com.beanframework.customer.interceptor.CustomerValidateInterceptor;
-import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.common.interceptor.InterceptorMapping;
 
 @Configuration
 public class CustomerConfig {

@@ -78,14 +78,14 @@ public class CustomerRemove extends Remover {
 
 	public void remove(List<CustomerCsv> customerCsvList) throws Exception {
 
-		for (CustomerCsv customerCsv : customerCsvList) {
+		for (CustomerCsv csv : customerCsvList) {
 			
 			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Customer.ID, customerCsv.getId());
+			properties.put(Customer.ID, csv.getId());
 			
 			Customer customer = modelService.findOneDtoByProperties(properties, Customer.class);
 			try {
-				modelService.remove(customer);
+				modelService.remove(customer.getUuid(), Customer.class);
 			} catch (BusinessException e) {
 				logger.error(e.getMessage(), e);
 			}

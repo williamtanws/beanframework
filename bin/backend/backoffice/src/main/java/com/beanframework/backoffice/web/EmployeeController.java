@@ -251,7 +251,7 @@ public class EmployeeController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.remove(employeeUpdate.getUuid());
+			modelService.remove(employeeUpdate.getUuid(), Employee.class);
 			employeeFacade.deleteEmployeeProfilePictureByUuid(employeeUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);

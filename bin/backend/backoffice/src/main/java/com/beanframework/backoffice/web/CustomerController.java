@@ -247,7 +247,7 @@ public class CustomerController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.remove(customerUpdate.getUuid());
+			modelService.remove(customerUpdate.getUuid(), Customer.class);
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

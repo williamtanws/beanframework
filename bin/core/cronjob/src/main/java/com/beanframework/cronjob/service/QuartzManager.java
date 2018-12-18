@@ -1,9 +1,5 @@
 package com.beanframework.cronjob.service;
 
-import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.domain.CronjobData;
-import com.beanframework.cronjob.domain.CronjobEnum;
-
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -19,6 +15,10 @@ import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
+
+import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.domain.CronjobData;
+import com.beanframework.cronjob.domain.CronjobEnum;
 
 @Component
 public class QuartzManager {

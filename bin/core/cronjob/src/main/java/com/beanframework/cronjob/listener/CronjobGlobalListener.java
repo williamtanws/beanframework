@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobEnum;
-import com.beanframework.cronjob.service.QuartzManager;
 import com.beanframework.cronjob.service.CronjobManagerService;
+import com.beanframework.cronjob.service.QuartzManager;
 
 @Component
 public class CronjobGlobalListener implements JobListener {

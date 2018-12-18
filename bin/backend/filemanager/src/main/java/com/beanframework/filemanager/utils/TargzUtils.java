@@ -1,8 +1,5 @@
 package com.beanframework.filemanager.utils;
 
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-
 import static com.beanframework.filemanager.utils.FileUtils.fileProber;
 
 import java.io.BufferedOutputStream;
@@ -10,6 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.zip.GZIPInputStream;
+
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 
 
 /**

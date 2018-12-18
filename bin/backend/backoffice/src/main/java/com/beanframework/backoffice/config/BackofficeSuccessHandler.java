@@ -32,7 +32,7 @@ public class BackofficeSuccessHandler extends SavedRequestAwareAuthenticationSuc
 
 		if (savedRequest != null && savedRequest.getMethod().equalsIgnoreCase("GET")) {
 			//super.onAuthenticationSuccess(request, response, authentication);
-			getRedirectStrategy().sendRedirect(request, response, PATH_BACKOFFICE);
+			getRedirectStrategy().sendRedirect(request, response, savedRequest.getRequestURL()+"?"+savedRequest.getQueryString());
 		} else {
 			getRedirectStrategy().sendRedirect(request, response, PATH_BACKOFFICE);
 		}
