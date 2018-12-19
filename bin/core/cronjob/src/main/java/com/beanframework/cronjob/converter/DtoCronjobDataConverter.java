@@ -3,14 +3,11 @@ package com.beanframework.cronjob.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.cronjob.domain.CronjobData;
 
-@Component
 public class DtoCronjobDataConverter implements DtoConverter<CronjobData, CronjobData> {
-
+	
 	@Override
 	public CronjobData convert(CronjobData source) {
 		return convert(source, new CronjobData());

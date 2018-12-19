@@ -31,17 +31,17 @@ public class UserRightField extends GenericDomain {
 	public static final String LANGUAGE = "language";
 	public static final String USER_RIGHT = "userRight";
 	public static final String DYNAMIC_FIELD = "dynamicField";
-
-	@NotAudited
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "language_uuid")
-	private Language language;
-
+	
 	@NotAudited
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userRight_uuid")
 	private UserRight userRight;
+
+	@NotAudited
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "language_uuid")
+	private Language language;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")

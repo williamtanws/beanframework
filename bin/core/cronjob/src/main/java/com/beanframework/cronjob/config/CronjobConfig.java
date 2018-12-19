@@ -20,8 +20,10 @@ import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.context.AutowiringSpringBeanJobFactory;
 import com.beanframework.cronjob.converter.DtoCronjobConverter;
+import com.beanframework.cronjob.converter.DtoCronjobDataConverter;
 import com.beanframework.cronjob.converter.EntityCronjobConverter;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.cronjob.interceptor.CronjobInitialDefaultsInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobLoadInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobPrepareInterceptor;
@@ -92,6 +94,20 @@ public class CronjobConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoCronjobConverter());
 		mapping.setTypeCode(Cronjob.class.getSimpleName());
+
+		return mapping;
+	} 
+	
+	@Bean
+	public DtoCronjobDataConverter dtoCronjobDataConverter() {
+		return new DtoCronjobDataConverter();
+	}
+	
+	@Bean
+	public ConverterMapping dtoCronjobDataConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dtoCronjobDataConverter());
+		mapping.setTypeCode(CronjobData.class.getSimpleName());
 
 		return mapping;
 	} 

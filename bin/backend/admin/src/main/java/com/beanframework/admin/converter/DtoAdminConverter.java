@@ -30,14 +30,15 @@ public class DtoAdminConverter implements DtoConverter<Admin, Admin> {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setAccountNonExpired(source.isAccountNonExpired());
-		prototype.setAccountNonLocked(source.isAccountNonLocked());
-		prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
-		prototype.setEnabled(source.isEnabled());
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
+		
+		prototype.setAccountNonExpired(source.getAccountNonExpired());
+		prototype.setAccountNonLocked(source.getAccountNonLocked());
+		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+		prototype.setEnabled(source.getEnabled());
 
 		return prototype;
 	}

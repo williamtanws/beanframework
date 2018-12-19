@@ -151,22 +151,22 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		if (employee == null) {
 			throw new BadCredentialsException("Bad Credentials");
 		}
-		if (employee.isEnabled() == false) {
+		if (employee.getEnabled() == false) {
 			throw new DisabledException("Account Disabled");
 		}
 
-		if (employee.isAccountNonExpired() == false) {
+		if (employee.getAccountNonExpired() == false) {
 			throw new AccountExpiredException("Account Expired");
 		}
 
-		if (employee.isAccountNonLocked() == false) {
+		if (employee.getAccountNonLocked() == false) {
 			throw new LockedException("Account Locked");
 		}
 
-		if (employee.isCredentialsNonExpired() == false) {
+		if (employee.getCredentialsNonExpired() == false) {
 			throw new CredentialsExpiredException("Passwrd Expired");
 		}
-		return employee;
+		return modelService.getDto(employee);
 	}
 
 	@Override

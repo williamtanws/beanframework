@@ -3,12 +3,9 @@ package com.beanframework.dynamicfield.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.dynamicfield.domain.DynamicField;
 
-@Component
 public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, DynamicField> {
 
 	@Override

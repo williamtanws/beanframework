@@ -5,14 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.User;
-import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;
 
 public class EntityUserConverter implements EntityConverter<User, User> {
@@ -48,45 +46,20 @@ public class EntityUserConverter implements EntityConverter<User, User> {
 
 	private User convert(User source, User prototype) throws ConverterException {
 
-		try {
-			if (source.getId() != null) {
-				prototype.setId(source.getId());
-			}
-			prototype.setAccountNonExpired(source.isAccountNonExpired());
-			prototype.setAccountNonLocked(source.isAccountNonLocked());
-			prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
-			prototype.setEnabled(source.isEnabled());
-			prototype.setLastModifiedDate(new Date());
+		if (source.getId() != null)
+			prototype.setId(source.getId());
+		prototype.setLastModifiedDate(new Date());
 
-			if (StringUtils.isNotEmpty(source.getPassword())) {
-				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-			}
-
-			Hibernate.initialize(prototype.getUserGroups());
-			prototype.getUserGroups().clear();
-			for (UserGroup userGroup : source.getUserGroups()) {
-				if (userGroup.getUuid() != null) {
-					Map<String, Object> properties = new HashMap<String, Object>();
-					properties.put(UserGroup.UUID, source.getUuid());
-					UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
-
-					if (existingUserGroup != null) {
-						prototype.getUserGroups().add(existingUserGroup);
-					}
-				} else if (StringUtils.isNotEmpty(userGroup.getId())) {
-
-					Map<String, Object> properties = new HashMap<String, Object>();
-					properties.put(UserGroup.ID, source.getId());
-					UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
-
-					if (existingUserGroup != null) {
-						prototype.getUserGroups().add(existingUserGroup);
-					}
-				}
-			}
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
-		}
+		if (source.getAccountNonExpired() != null)
+			prototype.setAccountNonExpired(source.getAccountNonExpired());
+		if (source.getAccountNonLocked() != null)
+			prototype.setAccountNonLocked(source.getAccountNonLocked());
+		if (source.getCredentialsNonExpired() != null)
+			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+		if (source.getEnabled() != null)
+			prototype.setEnabled(source.getEnabled());
+		if (StringUtils.isNotEmpty(source.getPassword()))
+			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
 
 		return prototype;
 	}

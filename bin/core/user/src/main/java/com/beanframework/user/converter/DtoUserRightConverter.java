@@ -3,23 +3,28 @@ package com.beanframework.user.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserRight;
 
 public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight> {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserRightConverter.class);
 
 	@Autowired
-	private DtoUserRightFieldConverter dtoUserRightFieldConverter;
+	private ModelService modelService;
 
 	@Override
-	public UserRight convert(UserRight source) {
+	public UserRight convert(UserRight source) throws ConverterException {
 		return convert(source, new UserRight());
 	}
 
-	public List<UserRight> convert(List<UserRight> sources) {
+	public List<UserRight> convert(List<UserRight> sources) throws ConverterException {
 		List<UserRight> convertedList = new ArrayList<UserRight>();
 		for (UserRight source : sources) {
 			convertedList.add(convert(source));
@@ -27,7 +32,7 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 		return convertedList;
 	}
 
-	private UserRight convert(UserRight source, UserRight prototype) {
+	private UserRight convert(UserRight source, UserRight prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -37,30 +42,12 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setSort(source.getSort());
-		Hibernate.initialize(source.getUserRightFields());
-		prototype.setUserRightFields(dtoUserRightFieldConverter.convert(source.getUserRightFields()));
-
-//		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-//		sorts.put(Language.SORT, Sort.Direction.ASC);
-//		
-//		List<Language> languages = modelService.findBySorts(sorts, Language.class);
-//		
-//		for (Language language : languages) {
-//			boolean addNewLanguage = true;
-//			for (UserRightField userRightField : source.getUserRightFields()) {
-//				if (userRightField.getLanguage().getUuid().equals(language.getUuid())) {
-//					addNewLanguage = false;
-//				}
-//			}
-//
-//			if (addNewLanguage) {
-//				UserRightField userRightField = new UserRightField();
-//				userRightField.setLanguage(language);
-//				userRightField.setUserRight(prototype);
-//
-//				prototype.getUserRightFields().add(userRightField);
-//			}
-//		}
+		try {
+			prototype.setUserRightFields(modelService.getDto(source.getUserRightFields()));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 
 		return prototype;
 	}

@@ -28,16 +28,15 @@ public class DtoConfigurationConverter implements DtoConverter<Configuration, Co
 	}
 
 	private Configuration convert(Configuration source, Configuration prototype) {
-
+	
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setValue(source.getValue());
-		prototype.setCreatedDate(source.getCreatedDate());
-		prototype.setLastModifiedDate(source.getLastModifiedDate());
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
+
+		prototype.setValue(source.getValue());
 
 		return prototype;
 	}

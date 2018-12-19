@@ -3,26 +3,28 @@ package com.beanframework.user.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserGroup;
 
 public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup> {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserGroupConverter.class);
 
 	@Autowired
-	private DtoUserAuthorityConverter dtoUserAuthorityConverter;
-
-	@Autowired
-	private DtoUserGroupLangConverter dtoUserGroupLangConverter;
+	private ModelService modelService;
 
 	@Override
-	public UserGroup convert(UserGroup source) {
+	public UserGroup convert(UserGroup source) throws ConverterException {
 		return convert(source, new UserGroup());
 	}
 
-	public List<UserGroup> convert(List<UserGroup> sources) {
+	public List<UserGroup> convert(List<UserGroup> sources) throws ConverterException {
 		List<UserGroup> convertedList = new ArrayList<UserGroup>();
 		for (UserGroup source : sources) {
 			convertedList.add(convert(source));
@@ -30,7 +32,7 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 		return convertedList;
 	}
 
-	private UserGroup convert(UserGroup source, UserGroup prototype) {
+	private UserGroup convert(UserGroup source, UserGroup prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -39,58 +41,14 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
-		Hibernate.initialize(source.getUserAuthorities());
-		prototype.setUserAuthorities(dtoUserAuthorityConverter.convert(source.getUserAuthorities()));
-		Hibernate.initialize(source.getUserGroupFields());
-		prototype.setUserGroupFields(dtoUserGroupLangConverter.convert(source.getUserGroupFields()));
-
-//		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-//		sorts.put(Language.SORT, Sort.Direction.ASC);
-//		
-//		List<Language> languages = modelService.findBySorts(sorts, Language.class);
-//		
-//		for (Language language : languages) {
-//			boolean addNewLanguage = true;
-//			for (UserGroupField userGroupLang : source.getUserGroupFields()) {
-//				if(userGroupLang.getLanguage().getUuid().equals(language.getUuid())) {
-//					addNewLanguage = false;
-//				}
-//			}
-//			
-//			if(addNewLanguage) {
-//				UserGroupField userGroupLang = new UserGroupField();
-//				userGroupLang.setLanguage(language);
-//				userGroupLang.setUserGroup(prototype);
-//				
-//				prototype.getUserGroupFields().add(userGroupLang);
-//			}
-//		}
-//		
-//		// Process User Authorities
-//		Hibernate.initialize(source.getUserAuthorities());
-//		prototype.setUserAuthorities(dtoUserAuthorityConverter.convert(source.getUserAuthorities()));
-//		if(prototype.getUserAuthorities().isEmpty()) {
-//			
-//			Map<String, Sort.Direction> permissionSorts = new HashMap<String, Sort.Direction>();
-//			permissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
-//			
-//			List<UserPermission> userPermissions = modelService.findBySorts(permissionSorts, UserPermission.class);
-//			
-//			List<UserRight> userRights = modelService.findBySorts(sorts, UserRight.class);
-//			
-//			for (UserPermission userPermission : userPermissions) {
-//				for (UserRight userRight : userRights) {
-//					UserAuthority userAuthority = new UserAuthority();
-//					userAuthority.setUserGroup(prototype);
-//					userAuthority.setUserPermission(userPermission);
-//					userAuthority.setUserRight(userRight);
-//					userAuthority.setEnabled(false);
-//					
-//					prototype.getUserAuthorities().add(userAuthority);
-//				}
-//			}
-//			
-//		}
+		try {
+			prototype.setChilds(modelService.getDto(source.getChilds()));
+			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities()));
+			prototype.setUserGroupFields(modelService.getDto(source.getUserGroupFields()));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 
 		return prototype;
 	}

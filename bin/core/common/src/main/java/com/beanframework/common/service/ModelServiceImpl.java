@@ -340,12 +340,16 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public <T> T getDto(Object model) throws Exception {
+		if (model == null)
+			return null;
 		model = dtoConverter(model);
 		return (T) model;
 	}
 
 	@Override
 	public <T extends Collection> T getDto(Collection<? extends Object> models) throws Exception {
+		if (models == null)
+			return null;
 		List<Object> dtoObjects = new ArrayList<Object>();
 		for (Object model : models) {
 			dtoObjects.add(dtoConverter(model));
@@ -357,7 +361,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void initDefaults(Object model) throws Exception {
 		initialDefaultsInterceptor(model);
 	}
-	
+
 	@Override
 	public void clearCache(String name) {
 		cacheManager.getCache(name).clear();
