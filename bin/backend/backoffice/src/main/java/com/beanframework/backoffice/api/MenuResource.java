@@ -59,7 +59,7 @@ public class MenuResource {
 	public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams) throws BusinessException {
 		String uuid = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 
-		List<Menu> rootMenu = menuFacade.findMenuTree();
+		List<Menu> rootMenu = menuFacade.findDtoMenuTree();
 		List<TreeJson> data = new ArrayList<TreeJson>();
 
 		for (Menu menu : rootMenu) {

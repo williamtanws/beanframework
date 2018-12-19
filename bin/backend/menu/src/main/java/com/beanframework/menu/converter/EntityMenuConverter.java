@@ -58,7 +58,9 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 
 	private Menu convert(Menu source, Menu prototype) throws ConverterException {
 
-		prototype.setId(source.getId());
+		if (source.getId() != null) {
+			prototype.setId(source.getId());
+		}
 		prototype.setLastModifiedDate(new Date());
 
 		prototype.setSort(source.getSort());

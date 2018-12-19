@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
-import com.beanframework.employee.converter.DtoEmployeeConverter;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
@@ -41,9 +40,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private DtoEmployeeConverter dtoEmployeeConverter;
 
 	@Value(EmployeeConstants.PROFILE_PICTURE_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
@@ -138,7 +134,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
-		Employee employee = modelService.findOneDtoByProperties(properties, Employee.class);
+		Employee employee = modelService.findOneEntityByProperties(properties, Employee.class);
 
 		if (employee != null) {
 			if (PasswordUtils.isMatch(password, employee.getPassword()) == false) {
@@ -151,8 +147,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return getAuthenticated(employee);
 	}
 
-	private Employee getAuthenticated(Employee employeeEntity) {
-		Employee employee = dtoEmployeeConverter.convert(employeeEntity);
+	private Employee getAuthenticated(Employee employee) {
 
 		for (UserGroup userGroup : employee.getUserGroups()) {
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {

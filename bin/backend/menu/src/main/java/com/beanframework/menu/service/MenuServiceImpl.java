@@ -181,10 +181,10 @@ public class MenuServiceImpl implements MenuService {
 		}
 	}
 
-	@Cacheable(cacheNames = "Menus", key = "#userGroupUuids")
+	@Cacheable(cacheNames = "com.beanframework.menu.domain.MenuNavigation", key = "#userGroupUuids")
 	@Transactional(readOnly = true)
 	@Override
-	public List<Menu> findNavigationTreeByUserGroup(List<UUID> userGroupUuids) throws Exception {
+	public List<Menu> findMenuTreeByUserGroup(List<UUID> userGroupUuids) throws Exception {
 
 		// Find all root parents
 		Specification<Menu> spec = new Specification<Menu>() {

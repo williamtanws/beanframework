@@ -12,15 +12,15 @@
 					<span th:text="#{module.backoffice.dashboard}"></span>
 				</a>
 			</li>
-			<th:block th:if="${navigationTree != null}">
-				<th:block th:each="menu : ${navigationTree}" th:id="${menu.uuid}">
+			<th:block th:if="${menuNavigation != null}">
+				<th:block th:each="menu : ${menuNavigation}" th:id="${menu.uuid}">
 					<th:block th:insert="backoffice/adminlte/common/fragment/menu :: tree-submenu" th:with="menu=${menu}"></th:block>
 				</th:block>
 			</th:block>
 		</ul>
 	</th:block>
 	<th:block th:fragment="tree-submenu">
-		<li th:class="${#httpServletRequest.requestURI == menu.path ? 'active':''}" th:if="${#lists.isEmpty(menu.childs)}" th:id="${menu.uuid}">
+		<li th:class="${#httpServletRequest.requestURI == menu.path ? 'active':''}" th:if="${#lists.isEmpty(menu.navigationChilds)}" th:id="${menu.uuid}">
 			<a th:href="${menu.path}" th:target="${menu.target.toString()}">
 				<i th:classappend="${menu.icon}"></i>
 				<th:block th:each="menuField: ${menu.menuFields}">
@@ -31,7 +31,7 @@
 				$('.active').parents().addClass("active menu-open");
 			</script>
 		</li>
-		<li class="treeview" th:if="${not #lists.isEmpty(menu.childs)}" th:id="${menu.uuid}">
+		<li class="treeview" th:if="${not #lists.isEmpty(menu.navigationChilds)}" th:id="${menu.uuid}">
 			<a href="#">
 				<i th:classappend="${menu.icon}"></i>
 				<th:block th:each="menuField: ${menu.menuFields}">
@@ -42,7 +42,7 @@
 				</span>
 			</a>
 			<ul class="treeview-menu">
-				<li class="treeview" th:each="child : ${menu.childs}" th:id="${child.uuid}">
+				<li class="treeview" th:each="child : ${menu.navigationChilds}" th:id="${child.uuid}">
 					<th:block th:insert="backoffice/adminlte/common/fragment/menu :: tree-submenu" th:with="menu=${child}"></th:block>
 				</li>
 			</ul>
@@ -54,14 +54,14 @@
 			<i class="fa fa-dashboard"></i>
 			<span th:text="#{module.backoffice.dashboard}"></span>
 		</a>
-		<th:block th:if="${navigationTree != null}">
-			<th:block th:each="menu : ${navigationTree}">
+		<th:block th:if="${menuNavigation != null}">
+			<th:block th:each="menu : ${menuNavigation}">
 				<th:block th:insert="backoffice/adminlte/common/fragment/menu :: button-submenu" th:with="menu=${menu}"></th:block>
 			</th:block>
 		</th:block>
 	</th:block>
 	<th:block th:fragment="button-submenu">
-		<th:block th:if="${#lists.isEmpty(menu.childs)}">
+		<th:block th:if="${#lists.isEmpty(menu.navigationChilds)}">
 			<a class="btn btn-app" th:href="${menu.path}" th:target="${menu.target.toString()}">
 				<i th:classappend="${menu.icon}"></i>
 				<th:block th:each="menuField: ${menu.menuFields}">
@@ -69,7 +69,7 @@
 				</th:block>
 			</a>
 		</th:block>
-		<th:block th:each="child : ${menu.childs}">
+		<th:block th:each="child : ${menu.navigationChilds}">
 			<th:block th:insert="backoffice/adminlte/common/fragment/menu :: button-submenu" th:with="menu=${child}"></th:block>
 		</th:block>
 	</th:block>

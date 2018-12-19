@@ -43,9 +43,6 @@ public class UserRightController extends AbstractCommonController {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-//	@Autowired
-//	private BackofficeModuleFacade backofficeModuleFacade;
-
 	@Value(WebUserRightConstants.Path.USERRIGHT)
 	private String PATH_USERRIGHT;
 
@@ -222,7 +219,6 @@ public class UserRightController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-//			backofficeModuleFacade.deleteAllModuleUserRightByUserRightUuid(userrightUpdate.getUuid(), bindingResult);
 
 			modelService.remove(userrightUpdate.getUuid(), UserRight.class);
 

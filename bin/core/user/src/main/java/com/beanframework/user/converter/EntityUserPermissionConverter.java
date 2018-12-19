@@ -15,6 +15,9 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EntityUserPermissionFieldConverter entityUserPermissionFieldConverter;
 
 	@Override
 	public UserPermission convert(UserPermission source) throws ConverterException {
@@ -44,45 +47,16 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 		return convert(source, prototype);
 	}
 
-	private UserPermission convert(UserPermission source, UserPermission prototype) {
+	private UserPermission convert(UserPermission source, UserPermission prototype) throws ConverterException {
 
 		prototype.setLastModifiedDate(new Date());
-		prototype.setId(source.getId());
+		if (source.getId() != null) 
+			prototype.setId(source.getId());
 
-		if (source.getSort() != null) {
+		if (source.getSort() != null) 
 			prototype.setSort(source.getSort());
-		}
-		if (source.getUserPermissionFields() != null) {
-			prototype.setUserPermissionFields(source.getUserPermissionFields());
-		}
-//		prototype.getUserPermissionFields().clear();
-//		for (UserPermissionField userPermissionLang : source.getUserPermissionFields()) {
-//			if (userPermissionLang.getLanguage().getUuid() != null) {
-//				
-//				Map<String, Object> properties = new HashMap<String, Object>();
-//				properties.put(Language.UUID, userPermissionLang.getLanguage().getUuid());
-//				
-//				Language language = modelService.findOneEntityByProperties(properties, Language.class);
-//				
-//				if (language != null) {
-//					userPermissionLang.setLanguage(language);
-//					userPermissionLang.setUserPermission(prototype);
-//					prototype.getUserPermissionFields().add(userPermissionLang);
-//				}
-//			} else if (StringUtils.isNotEmpty(userPermissionLang.getLanguage().getId())) {
-//				
-//				Map<String, Object> properties = new HashMap<String, Object>();
-//				properties.put(Language.ID, userPermissionLang.getLanguage().getId());
-//				
-//				Language language = modelService.findOneEntityByProperties(properties, Language.class);
-//				
-//				if (language != null) {
-//					userPermissionLang.setLanguage(language);
-//					userPermissionLang.setUserPermission(prototype);
-//					prototype.getUserPermissionFields().add(userPermissionLang);
-//				}
-//			}
-//		}
+		if (source.getUserPermissionFields() != null) 
+			prototype.setUserPermissionFields(entityUserPermissionFieldConverter.convert(source.getUserPermissionFields()));
 
 		return prototype;
 	}

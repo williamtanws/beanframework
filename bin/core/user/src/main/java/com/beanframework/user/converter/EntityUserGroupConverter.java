@@ -57,7 +57,9 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 
 	private UserGroup convert(UserGroup source, UserGroup prototype) {
 
-		prototype.setId(source.getId());
+		if (source.getId() != null) {
+			prototype.setId(source.getId());
+		}
 		prototype.setLastModifiedDate(new Date());
 
 		if (source.getUserAuthorities() != null) {

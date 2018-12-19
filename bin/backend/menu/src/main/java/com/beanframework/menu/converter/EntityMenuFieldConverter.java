@@ -59,7 +59,9 @@ public class EntityMenuFieldConverter implements EntityConverter<MenuField, Menu
 
 	private MenuField convert(MenuField source, MenuField prototype) throws ConverterException {
 
-		prototype.setId(source.getId());
+		if (source.getId() != null) {
+			prototype.setId(source.getId());
+		}
 		prototype.setLastModifiedDate(new Date());
 
 		prototype.setDynamicField(entityDynamicFieldConverter.convert(source.getDynamicField()));

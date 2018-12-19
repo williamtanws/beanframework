@@ -43,9 +43,6 @@ public class UserPermissionController extends AbstractCommonController {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-//	@Autowired
-//	private BackofficeModuleFacade backofficeModuleFacade;
-
 	@Value(WebUserPermissionConstants.Path.USERPERMISSION)
 	private String PATH_USERPERMISSION;
 
@@ -225,8 +222,6 @@ public class UserPermissionController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-//			backofficeModuleFacade.deleteAllModuleUserPermissionByUserPermissionUuid(userpermissionUpdate.getUuid(),
-//					bindingResult);
 
 			modelService.remove(userpermissionUpdate.getUuid(), UserPermission.class);
 

@@ -43,6 +43,11 @@ public class EntityEmailConverter implements EntityConverter<Email, Email> {
 	}
 
 	private Email convert(Email source, Email prototype) {
+		
+		if (source.getId() != null) {
+			prototype.setId(source.getId());
+		}
+		prototype.setLastModifiedDate(new Date());
 
 		prototype.setToRecipients(source.getToRecipients());
 		prototype.setCcRecipients(source.getCcRecipients());

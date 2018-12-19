@@ -13,20 +13,23 @@
 				<span class="help-block"></span>
 			</div>
 		</div>
+	</th:block>
+	<th:block layout:fragment="attribute">
 		<div class="col-md-6">
 			<div class="form-group" th:each="langActive : ${moduleLanguages}" th:if="*{uuid != null}">
-				<th:block th:each="lang,itrStat : *{userPermissionLangs}" th:if="${lang.language.id == langActive.id}">
-					<label for="name" th:text="#{module.userpermission.name}+'('+${lang.language.id}+')'"></label>
-					<input type="hidden" th:name="'userPermissionLangs['+${itrStat.index}+'].uuid'" th:value="${lang.uuid}">
-					<input type="hidden" th:name="'userPermissionLangs['+${itrStat.index}+'].language.uuid'" th:value="${lang.language.uuid}">
-					<input type="text" class="form-control" th:name="'userPermissionLangs['+${itrStat.index}+'].name'" th:value="${lang.name}">
+				<th:block th:each="field,itrStat : *{userPermissionFields}" th:if="${field.language.id == langActive.id}">
+					<label for="name" th:text="${field.dynamicField.name}+'('+${field.language.id}+')'"></label>
+					<input type="hidden" th:name="'userPermissionFields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
+					<input type="hidden" th:name="'userPermissionFields['+${itrStat.index}+'].language.uuid'" th:value="${field.language.uuid}">
+					<input type="hidden" th:name="'userPermissionFields['+${itrStat.index}+'].dynamicField.uuid'" th:value="${field.dynamicField.uuid}">
+					<input type="text" class="form-control" th:name="'userPermissionFields['+${itrStat.index}+'].value'" th:value="${field.value}" th:required="${field.dynamicField.required}">
 				</th:block>
 				<span class="help-block"></span>
 			</div>
 			<div class="form-group" th:each="langActive,itrStat : ${moduleLanguages}" th:if="*{uuid == null}">
 				<label for="name" th:text="#{module.userpermission.name}+'('+${langActive.id}+')'"></label>
-				<input type="hidden" th:name="'userPermissionLangs['+${itrStat.index}+'].language.uuid'" th:value="${langActive.uuid}">
-				<input type="text" class="form-control" th:name="'userPermissionLangs['+${itrStat.index}+'].name'">
+				<input type="hidden" th:name="'userPermissionFields['+${itrStat.index}+'].language.uuid'" th:value="${langActive.uuid}">
+				<input type="text" class="form-control" th:name="'userPermissionFields['+${itrStat.index}+'].name'">
 				<span class="help-block"></span>
 			</div>
 		</div>
@@ -135,8 +138,7 @@
 		</script>
 	</th:block>
 	<th:block layout:fragment="update">
-		<form id="userpermission-update-form" role="form" th:action="${@environment.getProperty('path.userpermission')}" method="post"
-			th:object="${userpermissionUpdate}">
+		<form id="userpermission-update-form" role="form" th:action="${@environment.getProperty('path.userpermission')}" method="post" th:object="${userpermissionUpdate}">
 			<input type="hidden" name="update">
 			<input type="hidden" name="uuid" th:value="${userpermissionUpdate.uuid}" />
 			<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
@@ -170,10 +172,13 @@
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
 							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}"></a>
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
 							</li>
-							<li th:if="${userpermissionUpdate.uuid != null}">
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}"></a>
+							<li>
+								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.backoffice.attribute}" onclick="changeTab('attribute')"></a>
+							</li>
+							<li>
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content">
@@ -183,8 +188,14 @@
 								</div>
 								<!-- /.box-body -->
 							</div>
+							<div class="tab-pane" id="tab_attribute">
+								<div class="box-body">
+									<th:block layout:insert="/backoffice/adminlte/user/userpermissionForm :: attribute"></th:block>
+								</div>
+								<!-- /.box-body -->
+							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_administration" th:if="${userpermissionUpdate.uuid != null}">
+							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
 									<th:block layout:insert="/backoffice/adminlte/user/userpermissionForm :: administration"></th:block>
 								</div>
@@ -198,7 +209,7 @@
 				<!-- /.col -->
 			</div>
 		</form>
-		<div class="modal fade" id="modal-delete" th:if="${userpermissionUpdate.uuid != null}">
+		<div class="modal fade" id="modal-delete">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">

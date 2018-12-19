@@ -44,7 +44,9 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 
 	private Configuration convert(Configuration source, Configuration prototype) {
 
-		prototype.setId(source.getId());
+		if (source.getId() != null) {
+			prototype.setId(source.getId());
+		}
 		prototype.setValue(source.getValue());
 		prototype.setLastModifiedDate(new Date());
 

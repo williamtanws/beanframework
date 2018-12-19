@@ -63,4 +63,6 @@ public interface ModelService {
 
 	void initDefaults(Object model) throws Exception;
 
+	void clearCache(String name);
+
 }
