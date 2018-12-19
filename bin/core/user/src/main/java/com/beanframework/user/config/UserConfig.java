@@ -7,7 +7,7 @@ import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.user.converter.DtoUserAuthorityConverter;
 import com.beanframework.user.converter.DtoUserGroupConverter;
-import com.beanframework.user.converter.DtoUserGroupLangConverter;
+import com.beanframework.user.converter.DtoUserGroupFieldConverter;
 import com.beanframework.user.converter.DtoUserPermissionConverter;
 import com.beanframework.user.converter.DtoUserPermissionFieldConverter;
 import com.beanframework.user.converter.DtoUserRightConverter;
@@ -68,8 +68,8 @@ public class UserConfig {
 	}
 
 	@Bean
-	public DtoUserGroupLangConverter dtoUserGroupLangConverter() {
-		return new DtoUserGroupLangConverter();
+	public DtoUserGroupFieldConverter dtoUserGroupLangConverter() {
+		return new DtoUserGroupFieldConverter();
 	}
 
 	@Bean

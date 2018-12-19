@@ -32,17 +32,17 @@ public class UserPermissionField extends GenericDomain {
 	public static final String LANGUAGE = "language";
 	public static final String USER_RIGHT = "userPermission";
 	public static final String DYNAMIC_FIELD = "dynamicField";
-
-	@NotAudited
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "language_uuid")
-	private Language language;
-
+	
 	@NotAudited
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userPermission_uuid")
 	private UserPermission userPermission;
+	
+	@NotAudited
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "language_uuid")
+	private Language language;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")

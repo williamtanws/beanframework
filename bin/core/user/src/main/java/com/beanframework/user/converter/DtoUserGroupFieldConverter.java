@@ -10,29 +10,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserGroupField;
 
-public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, UserAuthority> {
+public class DtoUserGroupFieldConverter implements DtoConverter<UserGroupField, UserGroupField> {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserAuthorityConverter.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserGroupFieldConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public UserAuthority convert(UserAuthority source) throws ConverterException {
-		return convert(source, new UserAuthority());
+	public UserGroupField convert(UserGroupField source) throws ConverterException {
+		return convert(source, new UserGroupField());
 	}
 
-	public List<UserAuthority> convert(List<UserAuthority> sources) throws ConverterException {
-		List<UserAuthority> convertedList = new ArrayList<UserAuthority>();
-		for (UserAuthority source : sources) {
+	public List<UserGroupField> convert(List<UserGroupField> sources) throws ConverterException {
+		List<UserGroupField> convertedList = new ArrayList<UserGroupField>();
+		for (UserGroupField source : sources) {
 			convertedList.add(convert(source));
 		}
 		return convertedList;
 	}
 
-	private UserAuthority convert(UserAuthority source, UserAuthority prototype) throws ConverterException {
+	public UserGroupField convert(UserGroupField source, UserGroupField prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -41,10 +41,11 @@ public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, Us
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
-		prototype.setEnabled(source.getEnabled());
+		prototype.setLabel(source.getLabel());
+		prototype.setValue(source.getValue());
 		try {
-			prototype.setUserPermission(modelService.getDto(source.getUserPermission()));
-			prototype.setUserRight(modelService.getDto(source.getUserRight()));
+			prototype.setLanguage(modelService.getDto(source.getLanguage()));
+			prototype.setDynamicField(modelService.getDto(source.getDynamicField()));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

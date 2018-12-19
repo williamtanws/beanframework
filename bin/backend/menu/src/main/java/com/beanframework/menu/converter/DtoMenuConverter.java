@@ -3,27 +3,29 @@ package com.beanframework.menu.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.user.converter.DtoUserGroupConverter;
+import com.beanframework.user.converter.DtoUserRightConverter;
 
 public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(DtoMenuConverter.class);
 
 	@Autowired
-	private DtoUserGroupConverter dtoUserGroupConverter;
-
-	@Autowired
-	private DtoMenuFieldConverter dtoMenuFieldConverter;
+	private ModelService modelService;
 
 	@Override
-	public Menu convert(Menu source) {
+	public Menu convert(Menu source) throws ConverterException {
 		return convert(source, new Menu());
 	}
 
-	public List<Menu> convert(List<Menu> sources) {
+	public List<Menu> convert(List<Menu> sources) throws ConverterException {
 		List<Menu> convertedList = new ArrayList<Menu>();
 		for (Menu source : sources) {
 			convertedList.add(convert(source));
@@ -31,11 +33,12 @@ public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 		return convertedList;
 	}
 
-	private Menu convert(Menu source, Menu prototype) {
+	private Menu convert(Menu source, Menu prototype) throws ConverterException {
 		return convert(source, prototype, true);
 	}
 
-	private Menu convert(Menu source, Menu prototype, boolean initializeParent) {
+	private Menu convert(Menu source, Menu prototype, boolean initializeParent) throws ConverterException {
+
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
 		prototype.setCreatedBy(source.getCreatedBy());
@@ -48,45 +51,14 @@ public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 		prototype.setSort(source.getSort());
 		prototype.setTarget(source.getTarget());
 		prototype.setEnabled(source.getEnabled());
-		if (source.getChilds() != null && source.getChilds().isEmpty() == false) {
-			prototype.setChilds(this.convert(source.getChilds()));
+		try {
+			prototype.setUserGroups(modelService.getDto(source.getUserGroups()));
+			prototype.setMenuFields(modelService.getDto(source.getMenuFields()));
+			prototype.setChilds(modelService.getDto((source.getChilds())));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
 		}
-		Hibernate.initialize(source.getUserGroups());
-		prototype.setUserGroups(dtoUserGroupConverter.convert(source.getUserGroups()));
-		Hibernate.initialize(source.getMenuFields());
-		prototype.setMenuFields(dtoMenuFieldConverter.convert(source.getMenuFields()));
-
-//		// Process Menu Lang
-//		prototype.setMenuFields(dtoMenuLangConverter.convert(source.getMenuFields()));
-//		
-//		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-//		sorts.put(Language.SORT, Sort.Direction.ASC);
-//		
-//		List<Language> languages = modelService.findBySorts(sorts, Language.class);
-//		
-//		for (Language language : languages) {
-//			boolean addNewLanguage = true;
-//			for (MenuField menuLang : source.getMenuFields()) {
-//				if (menuLang.getLanguage().getUuid().equals(language.getUuid())) {
-//					addNewLanguage = false;
-//				}
-//			}
-//
-//			if (addNewLanguage) {
-//				MenuField menuLang = new MenuField();
-//				menuLang.setLanguage(language);
-//				menuLang.setMenu(prototype);
-//
-//				prototype.getMenuFields().add(menuLang);
-//			}
-//		}
-//
-//		Hibernate.initialize(source.getUserGroups());
-//		prototype.setUserGroups(dtoUserGroupConverter.convert(source.getUserGroups()));
-//
-//		if (source.getChilds().isEmpty() == false) {
-//			prototype.setChilds(convert(source.getChilds()));
-//		}
 
 		return prototype;
 	}

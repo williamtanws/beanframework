@@ -46,18 +46,20 @@ public class EntityAdminConverter implements EntityConverter<Admin, Admin> {
 
 	private Admin convert(Admin source, Admin prototype) {
 
-		if (source.getId() != null) {
+		if (source.getId() != null)
 			prototype.setId(source.getId());
-		}
-		prototype.setAccountNonExpired(source.isAccountNonExpired());
-		prototype.setAccountNonLocked(source.isAccountNonLocked());
-		prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
-		prototype.setEnabled(source.isEnabled());
 		prototype.setLastModifiedDate(new Date());
 
-		if (StringUtils.isNotEmpty(source.getPassword())) {
+		if (source.getAccountNonExpired() != null)
+			prototype.setAccountNonExpired(source.getAccountNonExpired());
+		if (source.getAccountNonLocked() != null)
+			prototype.setAccountNonLocked(source.getAccountNonLocked());
+		if (source.getCredentialsNonExpired() != null)
+			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+		if (source.getEnabled() != null)
+			prototype.setEnabled(source.getEnabled());
+		if (StringUtils.isNotEmpty(source.getPassword()))
 			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-		}
 
 		return prototype;
 	}

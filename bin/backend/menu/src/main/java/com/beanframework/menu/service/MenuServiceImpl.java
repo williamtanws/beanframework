@@ -13,6 +13,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,6 +156,8 @@ public class MenuServiceImpl implements MenuService {
 	private void initializeChilds(List<Menu> parents) throws Exception {
 
 		for (Menu parent : parents) {
+			Hibernate.initialize(parent.getUserGroups());
+			Hibernate.initialize(parent.getMenuFields());
 
 			// Find all childs
 			Specification<Menu> spec = new Specification<Menu>() {
@@ -216,6 +219,8 @@ public class MenuServiceImpl implements MenuService {
 	private void initializeChildsByUserGroup(List<Menu> parents, List<UUID> userGroupUuids) throws Exception {
 
 		for (Menu parent : parents) {
+			Hibernate.initialize(parent.getUserGroups());
+			Hibernate.initialize(parent.getMenuFields());
 
 			// Find all childs
 			Specification<Menu> spec = new Specification<Menu>() {

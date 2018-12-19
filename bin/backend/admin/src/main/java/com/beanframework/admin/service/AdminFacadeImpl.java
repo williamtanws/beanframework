@@ -42,19 +42,19 @@ public class AdminFacadeImpl implements AdminFacade {
 		if (admin == null) {
 			throw new BadCredentialsException("Bad Credentials");
 		}
-		if (admin.isEnabled() == false) {
+		if (admin.getEnabled() == false) {
 			throw new DisabledException("Account Disabled");
 		}
 
-		if (admin.isAccountNonExpired() == false) {
+		if (admin.getAccountNonExpired() == false) {
 			throw new AccountExpiredException("Account Expired");
 		}
 
-		if (admin.isAccountNonLocked() == false) {
+		if (admin.getAccountNonLocked() == false) {
 			throw new LockedException("Account Locked");
 		}
 
-		if (admin.isCredentialsNonExpired() == false) {
+		if (admin.getCredentialsNonExpired() == false) {
 			throw new CredentialsExpiredException("Password Expired");
 		}
 		return modelService.getDto(admin);
