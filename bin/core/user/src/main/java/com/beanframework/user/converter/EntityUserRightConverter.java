@@ -16,6 +16,9 @@ public class EntityUserRightConverter implements EntityConverter<UserRight, User
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private EntityUserRightFieldConverter entityUserRightFieldConverter;
+
 	@Override
 	public UserRight convert(UserRight source) throws ConverterException {
 
@@ -44,46 +47,16 @@ public class EntityUserRightConverter implements EntityConverter<UserRight, User
 		return convert(source, prototype);
 	}
 
-	private UserRight convert(UserRight source, UserRight prototype) {
+	private UserRight convert(UserRight source, UserRight prototype) throws ConverterException {
 
+		if (source.getId() != null)
+			prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
-		prototype.setId(source.getId());
 
-		if (source.getSort() != null) {
+		if (source.getSort() != null)
 			prototype.setSort(source.getSort());
-		}
-		if (source.getUserRightFields() != null) {
-			prototype.setUserRightFields(source.getUserRightFields());
-		}
-
-//		prototype.getUserRightFields().clear();
-//		for (UserRightField userRightField : source.getUserRightFields()) {
-//			if (userRightField.getLanguage().getUuid() != null) {
-//				
-//				Map<String, Object> properties = new HashMap<String, Object>();
-//				properties.put(Language.UUID, userRightField.getLanguage().getUuid());
-//				
-//				Language language = modelService.findOneEntityByProperties(properties, Language.class);
-//				
-//				if (language != null) {
-//					userRightField.setLanguage(language);
-//					userRightField.setUserRight(prototype);
-//					prototype.getUserRightFields().add(userRightField);
-//				}
-//			} else if (StringUtils.isNotEmpty(userRightField.getLanguage().getId())) {
-//				
-//				Map<String, Object> properties = new HashMap<String, Object>();
-//				properties.put(Language.ID, userRightField.getLanguage().getId());
-//				
-//				Language language = modelService.findOneEntityByProperties(properties, Language.class);
-//				
-//				if (language != null) {
-//					userRightField.setLanguage(language);
-//					userRightField.setUserRight(prototype);
-//					prototype.getUserRightFields().add(userRightField);
-//				}
-//			}
-//		}
+		if (source.getUserRightFields() != null)
+			prototype.setUserRightFields(entityUserRightFieldConverter.convert(source.getUserRightFields()));
 
 		return prototype;
 	}

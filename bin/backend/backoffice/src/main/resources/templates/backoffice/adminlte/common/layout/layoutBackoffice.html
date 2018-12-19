@@ -141,7 +141,25 @@
 		    window.location.href = url;
 		}
 		
+		function changeTab(tab){			
+			//window.location.hash = tab;			
+			//window.history.pushState({path:document.location.href},'',document.location.href);
+			
+			var baseUrl = window.location.href.split('#')[0];
+			window.location.replace( baseUrl + '#tab_' + tab );
+		}
+		
 		$(document).ready(function() {
+			
+			$(document).ready(function(){
+			    activaTab(window.location.hash);
+			});
+
+			function activaTab(tab){console.log(tab);
+				if(tab != ''){
+				    $('.nav-tabs a[href="' + tab + '"]').tab('show');
+				}
+			};
 
 		    var timeout = /*[[@{${@environment.getProperty('server.servlet.session.timeout')}}]]*/ ;
 		    timeout = timeout * 1000;

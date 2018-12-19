@@ -2,6 +2,7 @@ package com.beanframework.common.service;
 
 import static org.springframework.data.jpa.repository.query.QueryUtils.toOrders;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -185,13 +186,12 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return model;
 	}
 
-	protected void dtoConverter(Collection<? extends Object> models) throws ConverterException {
-
-		Iterator iterator = models.iterator();
-		while (iterator.hasNext()) {
-			Object model = iterator.next();
-			dtoConverter(model);
+	protected List<Object> dtoConverter(Collection<? extends Object> models) throws ConverterException {
+		List<Object> dtos = new ArrayList<Object>();
+		for (Object model : models) {
+			dtos.add(dtoConverter(model));
 		}
+		return dtos;
 	}
 
 	protected Object dtoConverter(Object model) throws ConverterException {

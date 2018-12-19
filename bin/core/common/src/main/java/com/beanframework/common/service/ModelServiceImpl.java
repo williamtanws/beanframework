@@ -107,7 +107,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				setCachedSingleResult(properties, null, null, modelClass, model);
 
 				if (dto) {
-					dtoConverter(model);
+					model = getDto(model);
 				}
 				loadInterceptor(model);
 
@@ -118,7 +118,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 
 		if (dto) {
-			dtoConverter(model);
+			model = getDto(model);
 		}
 		loadInterceptor(model);
 
@@ -158,7 +158,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			setCachedResultList(properties, null, null, modelClass, models);
 		}
 
-		dtoConverter(models);
+		models = getDto(models);
 
 		loadInterceptor(models);
 
@@ -180,7 +180,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			setCachedResultList(null, sorts, null, modelClass, models);
 		}
 
-		dtoConverter(models);
+		models = getDto(models);
 		loadInterceptor(models);
 
 		return (T) models;
@@ -204,7 +204,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			setCachedResultList(properties, sorts, null, modelClass, models);
 		}
 
-		dtoConverter(models);
+		models = getDto(models);
 		loadInterceptor(models);
 
 		return (T) models;
@@ -222,7 +222,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			setCachedResultList(null, null, null, modelClass, models);
 		}
 
-		dtoConverter(models);
+		models = getDto(models);
 		loadInterceptor(models);
 
 		return (T) models;
@@ -233,7 +233,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public <T> Page<T> findPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
 		Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
-		dtoConverter(page.getContent());
 		loadInterceptor(page.getContent());
 
 		List<T> content = getDto(page.getContent());
@@ -272,7 +271,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 		cacheManager.getCache(model.getClass().getName()).clear();
 
-		dtoConverter(model);
+		try {
+			model = getDto(model);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@Transactional(rollbackFor = BusinessException.class)
@@ -337,7 +340,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public <T> T getDto(Object model) throws Exception {
-		dtoConverter(model);
+		model = dtoConverter(model);
 		return (T) model;
 	}
 
@@ -353,5 +356,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public void initDefaults(Object model) throws Exception {
 		initialDefaultsInterceptor(model);
+	}
+	
+	@Override
+	public void clearCache(String name) {
+		cacheManager.getCache(name).clear();
 	}
 }

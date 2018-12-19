@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.menu.converter.DtoMenuNavigationConverter;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuNavigation;
 
 @Component
 public class MenuFacadeImpl implements MenuFacade {
@@ -22,6 +24,9 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Autowired
 	private MenuService menuService;
+	
+	@Autowired
+	private DtoMenuNavigationConverter dtoMenuNavigationConverter;
 
 	@Override
 	public void changePosition(UUID fromUuid, UUID toUuid, int toIndex) throws BusinessException {
@@ -33,7 +38,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 
 	@Override
-	public List<Menu> findMenuTree() throws BusinessException {
+	public List<Menu> findDtoMenuTree() throws BusinessException {
 		try {
 			return modelService.getDto(menuService.findMenuTree());
 		} catch (Exception e) {
@@ -42,9 +47,9 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 
 	@Override
-	public List<Menu> findNavigationTreeByUserGroup(List<UUID> userGroupUuids) throws BusinessException {
+	public List<MenuNavigation> findDtoMenuNavigationByUserGroup(List<UUID> userGroupUuids) throws BusinessException {
 		try {
-			return modelService.getDto(menuService.findNavigationTreeByUserGroup(userGroupUuids));
+			return dtoMenuNavigationConverter.convert(menuService.findMenuTreeByUserGroup(userGroupUuids));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 

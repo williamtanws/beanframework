@@ -29,6 +29,7 @@ public class DynamicField extends GenericDomain {
 	public static final String REQUIRED = "required";
 	public static final String RULE = "rule";
 
+	private String name;
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private DynamicFieldTypeEnum type;
@@ -42,6 +43,14 @@ public class DynamicField extends GenericDomain {
 
 	public void setType(DynamicFieldTypeEnum type) {
 		this.type = type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Integer getSort() {

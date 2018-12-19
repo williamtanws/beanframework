@@ -31,6 +31,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuNavigation;
 import com.beanframework.menu.service.MenuFacade;
 import com.beanframework.user.domain.UserGroup;
 
@@ -67,7 +68,7 @@ public class MenuController extends AbstractCommonController {
 	public String list(@ModelAttribute(WebMenuConstants.ModelAttribute.UPDATE) Menu menuUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute("menus", menuFacade.findMenuTree());
+		model.addAttribute("menus", menuFacade.findDtoMenuTree());
 
 		if (menuUpdate.getUuid() != null) {
 			
@@ -152,6 +153,8 @@ public class MenuController extends AbstractCommonController {
 
 		try {
 			menuFacade.changePosition(UUID.fromString(fromUuid), StringUtils.isNotEmpty(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex));
+			modelService.clearCache(MenuNavigation.class.getName());
+			
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
@@ -186,6 +189,7 @@ public class MenuController extends AbstractCommonController {
 			
 			try {
 				modelService.saveDto(menuUpdate);
+				modelService.clearCache(MenuNavigation.class.getName());
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -209,6 +213,7 @@ public class MenuController extends AbstractCommonController {
 
 		try {
 			modelService.remove(menuUpdate.getUuid(), Menu.class);
+			modelService.clearCache(MenuNavigation.class.getName());
 			
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

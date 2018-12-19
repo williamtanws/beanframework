@@ -49,7 +49,9 @@ public class EntityUserConverter implements EntityConverter<User, User> {
 	private User convert(User source, User prototype) throws ConverterException {
 
 		try {
-			prototype.setId(source.getId());
+			if (source.getId() != null) {
+				prototype.setId(source.getId());
+			}
 			prototype.setAccountNonExpired(source.isAccountNonExpired());
 			prototype.setAccountNonLocked(source.isAccountNonLocked());
 			prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());

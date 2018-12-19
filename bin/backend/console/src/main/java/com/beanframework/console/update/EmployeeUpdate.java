@@ -97,6 +97,7 @@ public class EmployeeUpdate extends Updater {
 			nameDynamicField = modelService.create(DynamicField.class);
 			nameDynamicField.setId("employee_name");
 		}
+		nameDynamicField.setName("Name");
 		nameDynamicField.setRequired(true);
 		nameDynamicField.setRule(null);
 		nameDynamicField.setSort(0);

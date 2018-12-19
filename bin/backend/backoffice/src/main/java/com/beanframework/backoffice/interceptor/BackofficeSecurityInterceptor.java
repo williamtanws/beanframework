@@ -24,7 +24,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.language.domain.Language;
-import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuNavigation;
 import com.beanframework.menu.service.MenuFacade;
 import com.beanframework.user.domain.UserGroup;
 
@@ -56,21 +56,21 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 		if (auth != null && auth.getPrincipal() instanceof Employee && modelAndView != null) {
 			Employee employee = (Employee) auth.getPrincipal();
 
-			getNavigationTree(request, modelAndView, employee);
+			getMenuNavigation(request, modelAndView, employee);
 			
 			getLanguage(modelAndView);
 		}
 	}
 
-	protected void getNavigationTree(HttpServletRequest request, ModelAndView modelAndView, Employee employee) throws BusinessException {
+	protected void getMenuNavigation(HttpServletRequest request, ModelAndView modelAndView, Employee employee) throws BusinessException {
 		if(employee.getUserGroups().isEmpty() == false) {
 			List<UUID> userGroupUuids = new ArrayList<UUID>();
 			for (UserGroup userGroup : employee.getUserGroups()) {
 				userGroupUuids.add(userGroup.getUuid());
 			}
 						
-			List<Menu> navigationTree = menuFacade.findNavigationTreeByUserGroup(userGroupUuids);			
-			modelAndView.getModelMap().addAttribute(WebBackofficeConstants.Model.NAVIGATION_TREE, navigationTree);
+			List<MenuNavigation> menuNavigation = menuFacade.findDtoMenuNavigationByUserGroup(userGroupUuids);			
+			modelAndView.getModelMap().addAttribute(WebBackofficeConstants.Model.MENU_NAVIGATION, menuNavigation);
 		}
 	}
 	

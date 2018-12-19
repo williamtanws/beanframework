@@ -97,6 +97,7 @@ public class CustomerUpdate extends Updater {
 			nameDynamicField = modelService.create(DynamicField.class);
 			nameDynamicField.setId("customer_name");
 		}
+		nameDynamicField.setName("Name");
 		nameDynamicField.setRequired(true);
 		nameDynamicField.setRule(null);
 		nameDynamicField.setSort(0);

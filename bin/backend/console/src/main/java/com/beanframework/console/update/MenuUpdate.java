@@ -100,6 +100,7 @@ public class MenuUpdate extends Updater {
 			enNameDynamicField = modelService.create(DynamicField.class);
 			enNameDynamicField.setId("menu_name_en");
 		}
+		enNameDynamicField.setName("Name");
 		enNameDynamicField.setRequired(true);
 		enNameDynamicField.setRule(null);
 		enNameDynamicField.setSort(0);
@@ -115,6 +116,7 @@ public class MenuUpdate extends Updater {
 			cnNameDynamicField = modelService.create(DynamicField.class);
 			cnNameDynamicField.setId("menu_name_cn");
 		}
+		cnNameDynamicField.setName("Name");
 		cnNameDynamicField.setRequired(true);
 		cnNameDynamicField.setRule(null);
 		cnNameDynamicField.setSort(1);
