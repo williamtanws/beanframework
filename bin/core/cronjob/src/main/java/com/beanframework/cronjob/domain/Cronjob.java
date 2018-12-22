@@ -88,7 +88,7 @@ public class Cronjob extends GenericDomain {
 	private Date lastFinishExecutedDate;
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = CronjobData.CRONJOB, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = CronjobData.CRONJOB, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy("createdDate DESC")
 	private List<CronjobData> cronjobDatas = new ArrayList<CronjobData>(0);
 

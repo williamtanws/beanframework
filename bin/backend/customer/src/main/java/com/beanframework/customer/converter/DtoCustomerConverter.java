@@ -3,6 +3,7 @@ package com.beanframework.customer.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
+import com.beanframework.user.domain.UserGroup;
 
 public class DtoCustomerConverter implements DtoConverter<Customer, Customer> {
 	
@@ -21,7 +23,6 @@ public class DtoCustomerConverter implements DtoConverter<Customer, Customer> {
 
 	@Override
 	public Customer convert(Customer source) throws ConverterException {
-		modelService.detach(source);
 		return convert(source, new Customer());
 	}
 
@@ -49,7 +50,9 @@ public class DtoCustomerConverter implements DtoConverter<Customer, Customer> {
 		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 		prototype.setEnabled(source.getEnabled());
 		try {
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups()));
+			Hibernate.initialize(source.getUserGroups());
+			
+			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroup.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

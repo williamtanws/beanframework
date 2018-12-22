@@ -11,6 +11,7 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserRight;
+import com.beanframework.user.domain.UserRightField;
 
 public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight> {
 	
@@ -43,7 +44,7 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 
 		prototype.setSort(source.getSort());
 		try {
-			prototype.setUserRightFields(modelService.getDto(source.getUserRightFields()));
+			prototype.setUserRightFields(modelService.getDto(source.getUserRightFields(), UserRightField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

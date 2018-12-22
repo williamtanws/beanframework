@@ -43,7 +43,7 @@ import com.beanframework.cronjob.domain.CronjobEnum;
 import com.beanframework.cronjob.service.CronjobManagerService;
 
 public class CronjobUpdate extends Updater {
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	private static Logger LOGGER = LoggerFactory.getLogger(CronjobUpdate.class);
 
 	@Autowired
 	private ModelService modelService;
@@ -79,91 +79,96 @@ public class CronjobUpdate extends Updater {
 					save(cronjobCsvList);
 
 				} catch (Exception ex) {
-					logger.error("Error reading the resource file: " + ex);
+					LOGGER.error("Error reading the resource file: " + ex);
 				}
 			}
 		} catch (IOException ex) {
-			logger.error("Error reading the resource file: " + ex);
+			LOGGER.error("Error reading the resource file: " + ex);
 		}
 	}
 
 	public void save(List<CronjobCsv> cronjobCsvList) throws Exception {
 
-		for (CronjobCsv csv : cronjobCsvList) {
-			
-			// Cronjob
-			
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.ID, csv.getId());
+		try {
+			for (CronjobCsv csv : cronjobCsvList) {
+				
+				// Cronjob
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Cronjob.ID, csv.getId());
 
-			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
-			
-			if(cronjob == null) {
-				cronjob = modelService.create(Cronjob.class);
-				cronjob.setId(csv.getId());
-			}
-			
-			cronjob.setJobClass(csv.getJobClass());
-			cronjob.setJobGroup(csv.getJobGroup());
-			cronjob.setJobName(csv.getJobName());
-			cronjob.setDescription(csv.getDescription());
-			cronjob.setCronExpression(csv.getCronExpression());
-			cronjob.setStartup(csv.isStartup());
-			
-			boolean createData = true;
+				Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+				
+				if(cronjob == null) {
+					cronjob = modelService.create(Cronjob.class);
+					cronjob.setId(csv.getId());
+				}
+				
+				cronjob.setJobClass(csv.getJobClass());
+				cronjob.setJobGroup(csv.getJobGroup());
+				cronjob.setJobName(csv.getJobName());
+				cronjob.setDescription(csv.getDescription());
+				cronjob.setCronExpression(csv.getCronExpression());
+				cronjob.setStartup(csv.isStartup());
+				
+				boolean createData = true;
 
-			for (int i = 0; i < cronjob.getCronjobDatas().size(); i++) {
-				String[] cronjobDataList = csv.getCronjobData().split(SPLITTER);
+				for (int i = 0; i < cronjob.getCronjobDatas().size(); i++) {
+					String[] cronjobDataList = csv.getCronjobData().split(SPLITTER);
 
-				for (String cronjobDataString : cronjobDataList) {
-					String name = cronjobDataString.split(EQUALS)[0];
-					String value = cronjobDataString.split(EQUALS)[1];
+					for (String cronjobDataString : cronjobDataList) {
+						String name = cronjobDataString.split(EQUALS)[0];
+						String value = cronjobDataString.split(EQUALS)[1];
 
-					if(cronjob.getCronjobDatas().get(i).getId().equals(csv.getId()+"_"+name)) {
-						cronjob.getCronjobDatas().get(i).setValue(value);
-						createData = false;
+						if(cronjob.getCronjobDatas().get(i).getId().equals(csv.getId()+"_"+name)) {
+							cronjob.getCronjobDatas().get(i).setValue(value);
+							createData = false;
+						}
+					}
+				}
+				
+				modelService.saveEntity(cronjob, Cronjob.class);
+				
+				// CronjobData
+				
+				if(createData) {
+					String[] cronjobDataList = csv.getCronjobData().split(SPLITTER);
+
+					for (String cronjobDataString : cronjobDataList) {
+						String name = cronjobDataString.split(EQUALS)[0];
+						String value = cronjobDataString.split(EQUALS)[1];
+
+						CronjobData cronjobData = new CronjobData();
+						cronjobData.setId(csv.getId()+"_"+name);
+						cronjobData.setName(name);
+						cronjobData.setValue(value);
+						cronjobData.setCronjob(cronjob);
+						cronjob.getCronjobDatas().add(cronjobData);
+						
+						modelService.saveEntity(cronjobData, CronjobData.class);
 					}
 				}
 			}
+			modelService.saveAll();
 			
-			modelService.saveEntity(cronjob);
-			
-			// CronjobData
-			
-			if(createData) {
-				String[] cronjobDataList = csv.getCronjobData().split(SPLITTER);
+			for (CronjobCsv csv : cronjobCsvList) {
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Cronjob.ID, csv.getId());
 
-				for (String cronjobDataString : cronjobDataList) {
-					String name = cronjobDataString.split(EQUALS)[0];
-					String value = cronjobDataString.split(EQUALS)[1];
-
-					CronjobData cronjobData = new CronjobData();
-					cronjobData.setId(csv.getId()+"_"+name);
-					cronjobData.setName(name);
-					cronjobData.setValue(value);
-					cronjobData.setCronjob(cronjob);
-					cronjob.getCronjobDatas().add(cronjobData);
-					
-					modelService.saveEntity(cronjobData);
+				Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+				
+				if(cronjob != null) {
+					if (StringUtils.isNotEmpty(csv.getJobTrigger())) {
+						cronjob.setJobTrigger(CronjobEnum.JobTrigger.fromName(csv.getJobTrigger()));
+						cronjob.setTriggerStartDate(csv.getTriggerStartDate());
+						cronjobManagerService.trigger(cronjob);
+					}
 				}
 			}
-		}
-		modelService.saveAll();
-		
-		for (CronjobCsv csv : cronjobCsvList) {
-			
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.ID, csv.getId());
-
-			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
-			
-			if(cronjob != null) {
-				if (StringUtils.isNotEmpty(csv.getJobTrigger())) {
-					cronjob.setJobTrigger(CronjobEnum.JobTrigger.fromName(csv.getJobTrigger()));
-					cronjob.setTriggerStartDate(csv.getTriggerStartDate());
-					cronjobManagerService.trigger(cronjob);
-				}
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
@@ -181,23 +186,23 @@ public class CronjobUpdate extends Updater {
 			final CellProcessor[] processors = getProcessors();
 
 			CronjobCsv cronjobCsv;
-			logger.info("Start import Cronjob Csv.");
+			LOGGER.info("Start import Cronjob Csv.");
 			while ((cronjobCsv = beanReader.read(CronjobCsv.class, header, processors)) != null) {
-				logger.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
 						cronjobCsv);
 				cronjobCsvList.add(cronjobCsv);
 			}
-			logger.info("Finished import Cronjob Csv.");
+			LOGGER.info("Finished import Cronjob Csv.");
 		} catch (FileNotFoundException ex) {
-			logger.error("Could not find the CSV file: " + ex);
+			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
-			logger.error("Error reading the CSV file: " + ex);
+			LOGGER.error("Error reading the CSV file: " + ex);
 		} finally {
 			if (beanReader != null) {
 				try {
 					beanReader.close();
 				} catch (IOException ex) {
-					logger.error("Error closing the reader: " + ex);
+					LOGGER.error("Error closing the reader: " + ex);
 				}
 			}
 		}

@@ -128,7 +128,7 @@ public class ConfigurationController extends AbstractCommonController {
 
 			Configuration existingConfiguration = modelService.findOneEntityByUuid(configurationUpdate.getUuid(),
 					Configuration.class);
-			existingConfiguration = modelService.getDto(existingConfiguration);
+			existingConfiguration = modelService.getDto(existingConfiguration, Configuration.class);
 
 			if (existingConfiguration != null) {
 				model.addAttribute(WebConfigurationConstants.ModelAttribute.UPDATE, existingConfiguration);
@@ -153,7 +153,7 @@ public class ConfigurationController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				modelService.saveDto(configurationCreate);
+				modelService.saveDto(configurationCreate, Configuration.class);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -182,7 +182,7 @@ public class ConfigurationController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.saveDto(configurationUpdate);
+				modelService.saveDto(configurationUpdate, Configuration.class);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

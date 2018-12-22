@@ -43,7 +43,7 @@ import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;
 
 public class EmployeeUpdate extends Updater {
-	protected final Logger logger = LoggerFactory.getLogger(EmployeeUpdate.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(EmployeeUpdate.class);
 
 	@Autowired
 	private ModelService modelService;
@@ -76,100 +76,105 @@ public class EmployeeUpdate extends Updater {
 					save(employeeCsvList);
 
 				} catch (Exception ex) {
-					logger.error("Error reading the resource file: " + ex);
+					LOGGER.error("Error reading the resource file: " + ex);
 				}
 			}
 		} catch (IOException ex) {
-			logger.error("Error reading the resource file: " + ex);
+			LOGGER.error("Error reading the resource file: " + ex);
 		}
 	}
 
 	public void save(List<EmployeeCsv> employeeCsvList) throws Exception {
 
-		// Dynamic Field
+		try {
+			// Dynamic Field
 
-		Map<String, Object> nameDynamicFieldProperties = new HashMap<String, Object>();
-		nameDynamicFieldProperties.put(DynamicField.ID, "employee_name");
-		DynamicField nameDynamicField = modelService.findOneEntityByProperties(nameDynamicFieldProperties,
-				DynamicField.class);
+			Map<String, Object> nameDynamicFieldProperties = new HashMap<String, Object>();
+			nameDynamicFieldProperties.put(DynamicField.ID, "employee_name");
+			DynamicField nameDynamicField = modelService.findOneEntityByProperties(nameDynamicFieldProperties,
+					DynamicField.class);
 
-		if (nameDynamicField == null) {
-			nameDynamicField = modelService.create(DynamicField.class);
-			nameDynamicField.setId("employee_name");
-		}
-		nameDynamicField.setName("Name");
-		nameDynamicField.setRequired(true);
-		nameDynamicField.setRule(null);
-		nameDynamicField.setSort(0);
-		nameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(nameDynamicField);
-
-		for (EmployeeCsv csv : employeeCsvList) {
-
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Employee.ID, csv.getId());
-
-			Employee employee = modelService.findOneEntityByProperties(properties, Employee.class);
-
-			if (employee == null) {
-				employee = modelService.create(Employee.class);
-				employee.setId(csv.getId());
-			} else {
-				Hibernate.initialize(employee.getUserFields());
+			if (nameDynamicField == null) {
+				nameDynamicField = modelService.create(DynamicField.class);
+				nameDynamicField.setId("employee_name");
 			}
-			
-			if (StringUtils.isNotEmpty(csv.getPassword())) {
-				employee.setPassword(PasswordUtils.encode(csv.getPassword()));
-			}
-			employee.setAccountNonExpired(csv.isAccountNonExpired());
-			employee.setAccountNonLocked(csv.isAccountNonLocked());
-			employee.setCredentialsNonExpired(csv.isCredentialsNonExpired());
-			employee.setEnabled(csv.isEnabled());
-			
-			boolean createName = true;
+			nameDynamicField.setName("Name");
+			nameDynamicField.setRequired(true);
+			nameDynamicField.setRule(null);
+			nameDynamicField.setSort(0);
+			nameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
+			modelService.saveEntity(nameDynamicField, DynamicField.class);
 
-			for (int i = 0; i < employee.getUserFields().size(); i++) {
-				if (employee.getUserFields().get(i).getId().equals(csv.getId() + "_name")) {
-					employee.getUserFields().get(i).setLabel("Name");
-					employee.getUserFields().get(i).setValue(csv.getName());
-					createName = false;
-				}
-			}
+			for (EmployeeCsv csv : employeeCsvList) {
 
-			modelService.saveEntity(employee);
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Employee.ID, csv.getId());
 
-			// User Group
+				Employee employee = modelService.findOneEntityByProperties(properties, Employee.class);
 
-			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
-			for (int i = 0; i < userGroupIds.length; i++) {
-				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-
-				if (userGroup == null) {
-					logger.error("UserGroup not exists: " + userGroupIds[i]);
+				if (employee == null) {
+					employee = modelService.create(Employee.class);
+					employee.setId(csv.getId());
 				} else {
-					employee.getUserGroups().add(userGroup);
+					Hibernate.initialize(employee.getUserFields());
+				}
+				
+				if (StringUtils.isNotEmpty(csv.getPassword())) {
+					employee.setPassword(PasswordUtils.encode(csv.getPassword()));
+				}
+				employee.setAccountNonExpired(csv.isAccountNonExpired());
+				employee.setAccountNonLocked(csv.isAccountNonLocked());
+				employee.setCredentialsNonExpired(csv.isCredentialsNonExpired());
+				employee.setEnabled(csv.isEnabled());
+				
+				boolean createName = true;
 
-					modelService.saveEntity(userGroup);
+				for (int i = 0; i < employee.getUserFields().size(); i++) {
+					if (employee.getUserFields().get(i).getId().equals(csv.getId() + "_name")) {
+						employee.getUserFields().get(i).setLabel("Name");
+						employee.getUserFields().get(i).setValue(csv.getName());
+						createName = false;
+					}
+				}
+
+				modelService.saveEntity(employee, Employee.class);
+
+				// User Group
+
+				String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
+				for (int i = 0; i < userGroupIds.length; i++) {
+					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+
+					if (userGroup == null) {
+						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+					} else {
+						employee.getUserGroups().add(userGroup);
+
+						modelService.saveEntity(userGroup, UserGroup.class);
+					}
+				}
+
+				// Employee Field
+
+				if (createName) {
+					UserField employeeField = modelService.create(UserField.class);
+					employeeField.setId(csv.getId() + "_name");
+					employeeField.setDynamicField(nameDynamicField);
+					employeeField.setLabel("Name");
+					employeeField.setValue(csv.getName());
+					employeeField.setUser(employee);
+					employee.getUserFields().add(employeeField);
+
+					modelService.saveEntity(employeeField, UserField.class);
 				}
 			}
-
-			// Employee Field
-
-			if (createName) {
-				UserField employeeField = modelService.create(UserField.class);
-				employeeField.setId(csv.getId() + "_name");
-				employeeField.setDynamicField(nameDynamicField);
-				employeeField.setLabel("Name");
-				employeeField.setValue(csv.getName());
-				employeeField.setUser(employee);
-				employee.getUserFields().add(employeeField);
-
-				modelService.saveEntity(employeeField);
-			}
+			modelService.saveAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
-		modelService.saveAll();
 	}
 
 	public List<EmployeeCsv> readCSVFile(Reader reader) {
@@ -186,23 +191,23 @@ public class EmployeeUpdate extends Updater {
 			final CellProcessor[] processors = getProcessors();
 
 			EmployeeCsv employeeCsv;
-			logger.info("Start import Employee Csv.");
+			LOGGER.info("Start import Employee Csv.");
 			while ((employeeCsv = beanReader.read(EmployeeCsv.class, header, processors)) != null) {
-				logger.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
 						employeeCsv);
 				employeeCsvList.add(employeeCsv);
 			}
-			logger.info("Finished import Employee Csv.");
+			LOGGER.info("Finished import Employee Csv.");
 		} catch (FileNotFoundException ex) {
-			logger.error("Could not find the CSV file: " + ex);
+			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
-			logger.error("Error reading the CSV file: " + ex);
+			LOGGER.error("Error reading the CSV file: " + ex);
 		} finally {
 			if (beanReader != null) {
 				try {
 					beanReader.close();
 				} catch (IOException ex) {
-					logger.error("Error closing the reader: " + ex);
+					LOGGER.error("Error closing the reader: " + ex);
 				}
 			}
 		}

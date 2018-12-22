@@ -185,7 +185,7 @@ public class EmployeeController extends AbstractCommonController {
 			employeeCreate.setUserGroups(userGroups);
 
 			try {
-				modelService.saveDto(employeeCreate);
+				modelService.saveDto(employeeCreate, Employee.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -224,7 +224,7 @@ public class EmployeeController extends AbstractCommonController {
 			employeeUpdate.setUserGroups(userGroups);
 
 			try {
-				modelService.saveDto(employeeUpdate);
+				modelService.saveDto(employeeUpdate, Employee.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

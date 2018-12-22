@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.user.converter.DtoUserAuthorityConverter;
+import com.beanframework.user.converter.DtoUserFieldConverter;
 import com.beanframework.user.converter.DtoUserGroupConverter;
 import com.beanframework.user.converter.DtoUserGroupFieldConverter;
 import com.beanframework.user.converter.DtoUserPermissionConverter;
@@ -13,13 +14,16 @@ import com.beanframework.user.converter.DtoUserPermissionFieldConverter;
 import com.beanframework.user.converter.DtoUserRightConverter;
 import com.beanframework.user.converter.DtoUserRightFieldConverter;
 import com.beanframework.user.converter.EntityUserConverter;
+import com.beanframework.user.converter.EntityUserFieldConverter;
 import com.beanframework.user.converter.EntityUserGroupConverter;
+import com.beanframework.user.converter.EntityUserGroupFieldConverter;
 import com.beanframework.user.converter.EntityUserPermissionConverter;
 import com.beanframework.user.converter.EntityUserPermissionFieldConverter;
 import com.beanframework.user.converter.EntityUserRightConverter;
 import com.beanframework.user.converter.EntityUserRightFieldConverter;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupField;
 import com.beanframework.user.domain.UserPermission;
@@ -49,6 +53,20 @@ public class UserConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoUserAuthorityConverter());
 		mapping.setTypeCode(UserAuthority.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
+	public DtoUserFieldConverter dtoUserFieldConverter() {
+		return new DtoUserFieldConverter();
+	}
+
+	@Bean
+	public ConverterMapping dtoUserFieldConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dtoUserFieldConverter());
+		mapping.setTypeCode(UserField.class.getSimpleName());
 
 		return mapping;
 	}
@@ -152,6 +170,20 @@ public class UserConfig {
 	}
 	
 	@Bean
+	public EntityUserFieldConverter entityUserFieldConverter() {
+		return new EntityUserFieldConverter();
+	}
+
+	@Bean
+	public ConverterMapping entityUserFieldConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(entityUserFieldConverter());
+		mapping.setTypeCode(UserField.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
 	public EntityUserGroupConverter entityUserGroupConverter() {
 		return new EntityUserGroupConverter();
 	}
@@ -161,6 +193,20 @@ public class UserConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(entityUserGroupConverter());
 		mapping.setTypeCode(UserGroup.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
+	public EntityUserGroupFieldConverter entityUserGroupFieldConverter() {
+		return new EntityUserGroupFieldConverter();
+	}
+
+	@Bean
+	public ConverterMapping entityUserGroupFieldConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(entityUserGroupFieldConverter());
+		mapping.setTypeCode(UserGroupField.class.getSimpleName());
 
 		return mapping;
 	}

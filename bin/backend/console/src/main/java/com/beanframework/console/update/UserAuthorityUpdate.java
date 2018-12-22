@@ -40,8 +40,8 @@ import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 
 public class UserAuthorityUpdate extends Updater {
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
-	
+	private static Logger LOGGER = LoggerFactory.getLogger(UserAuthorityUpdate.class);
+
 	@Autowired
 	private ModelService modelService;
 
@@ -73,183 +73,203 @@ public class UserAuthorityUpdate extends Updater {
 					save(userAuthorityCsvList);
 
 				} catch (Exception ex) {
-					logger.error("Error reading the resource file: " + ex);
+					LOGGER.error("Error reading the resource file: " + ex);
 				}
 			}
 		} catch (IOException ex) {
-			logger.error("Error reading the resource file: " + ex);
+			LOGGER.error("Error reading the resource file: " + ex);
 		}
 	}
 
-	public void save(List<UserAuthorityCsv> userAuthorityCsvList) throws Exception {
-		
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(UserRight.ID, "create");
-		UserRight create = modelService.findOneEntityByProperties(properties, UserRight.class);
-		
-		properties = new HashMap<String, Object>();
-		properties.put(UserRight.ID, "read");
-		UserRight read = modelService.findOneEntityByProperties(properties, UserRight.class);
-		
-		properties = new HashMap<String, Object>();
-		properties.put(UserRight.ID, "update");
-		UserRight update = modelService.findOneEntityByProperties(properties, UserRight.class);
-		
-		properties = new HashMap<String, Object>();
-		properties.put(UserRight.ID, "delete");
-		UserRight delete = modelService.findOneEntityByProperties(properties, UserRight.class);
+	public void save(List<UserAuthorityCsv> userAuthorityCsvList) {
 
-		if (create == null) {
-			logger.error("User Right not exists: create");
-		} else if (read == null) {
-			logger.error("User Right not exists: read");
-		} else if (update == null) {
-			logger.error("User Right not exists: update");
-		} else if (delete == null) {
-			logger.error("User Right not exists: delete");
-		} else {
+		try {
 
-			// Group permissions by userGroupId
-			Map<String, List<UserAuthorityCsv>> userGroupMap = new HashMap<String, List<UserAuthorityCsv>>();
-			for (UserAuthorityCsv userAuthorityCsv : userAuthorityCsvList) {
-				String userGroupId = userAuthorityCsv.getUserGroupId();
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(UserRight.ID, "create");
+			UserRight create = modelService.findOneEntityByProperties(properties, UserRight.class);
 
-				if (userGroupMap.get(userGroupId) == null) {
-					userGroupMap.put(userGroupId, new ArrayList<UserAuthorityCsv>());
+			properties = new HashMap<String, Object>();
+			properties.put(UserRight.ID, "read");
+			UserRight read = modelService.findOneEntityByProperties(properties, UserRight.class);
+
+			properties = new HashMap<String, Object>();
+			properties.put(UserRight.ID, "update");
+			UserRight update = modelService.findOneEntityByProperties(properties, UserRight.class);
+
+			properties = new HashMap<String, Object>();
+			properties.put(UserRight.ID, "delete");
+			UserRight delete = modelService.findOneEntityByProperties(properties, UserRight.class);
+
+			if (create == null) {
+				LOGGER.error("User Right not exists: create");
+			} else if (read == null) {
+				LOGGER.error("User Right not exists: read");
+			} else if (update == null) {
+				LOGGER.error("User Right not exists: update");
+			} else if (delete == null) {
+				LOGGER.error("User Right not exists: delete");
+			} else {
+
+				// Group permissions by userGroupId
+				Map<String, List<UserAuthorityCsv>> userGroupMap = new HashMap<String, List<UserAuthorityCsv>>();
+				for (UserAuthorityCsv userAuthorityCsv : userAuthorityCsvList) {
+					String userGroupId = userAuthorityCsv.getUserGroupId();
+
+					if (userGroupMap.get(userGroupId) == null) {
+						userGroupMap.put(userGroupId, new ArrayList<UserAuthorityCsv>());
+					}
+
+					List<UserAuthorityCsv> userGroupUserAuthorityList = userGroupMap.get(userGroupId);
+					userGroupUserAuthorityList.add(userAuthorityCsv);
+
+					userGroupMap.put(userAuthorityCsv.getUserGroupId(), userGroupUserAuthorityList);
 				}
 
-				List<UserAuthorityCsv> userGroupUserAuthorityList = userGroupMap.get(userGroupId);
-				userGroupUserAuthorityList.add(userAuthorityCsv);
+				for (Map.Entry<String, List<UserAuthorityCsv>> entry : userGroupMap.entrySet()) {
+					String userGroupId = entry.getKey();
+					List<UserAuthorityCsv> userGroupAuthorityList = entry.getValue();
 
-				userGroupMap.put(userAuthorityCsv.getUserGroupId(), userGroupUserAuthorityList);
-			}
+					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+					userGroupProperties.put(UserGroup.ID, userGroupId);
+					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 
-			for (Map.Entry<String, List<UserAuthorityCsv>> entry : userGroupMap.entrySet()) {
-				String userGroupId = entry.getKey();
-				List<UserAuthorityCsv> userGroupAuthorityList = entry.getValue();
-				
-				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-				userGroupProperties.put(UserGroup.ID, userGroupId);
-				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+					if (userGroup == null) {
+						LOGGER.error("userGroupId not exists: " + userGroupId);
+					} else {
 
-				if (userGroup == null) {
-					logger.error("userGroupId not exists: " + userGroupId);
-				} else {
+						Hibernate.initialize(userGroup.getUserAuthorities());
 
-					Hibernate.initialize(userGroup.getUserAuthorities());
-					
-					for (UserAuthorityCsv userAuthorityCsv : userGroupAuthorityList) {
+						for (UserAuthorityCsv userAuthorityCsv : userGroupAuthorityList) {
 
-						String userPermissionId = userAuthorityCsv.getUserPermissionId();
-						
-						Map<String, Object> userPermissionProperties = new HashMap<String, Object>();
-						userPermissionProperties.put(UserPermission.ID, userPermissionId);
-						UserPermission userPermission = modelService.findOneEntityByProperties(userPermissionProperties, UserPermission.class);
+							String userPermissionId = userAuthorityCsv.getUserPermissionId();
 
-						if (userPermission == null) {
-							logger.error("userPermissionId not exists: " + userPermissionId);
-						} else {
-							
-							// UserGroup
-							
-							boolean createAuthority = true;
-							boolean readAuthority = true;
-							boolean updateAuthority = true;
-							boolean deleteAuthority = true;
+							Map<String, Object> userPermissionProperties = new HashMap<String, Object>();
+							userPermissionProperties.put(UserPermission.ID, userPermissionId);
+							UserPermission userPermission = modelService
+									.findOneEntityByProperties(userPermissionProperties, UserPermission.class);
 
-							if(StringUtils.isNotEmpty(userAuthorityCsv.getCreate())) {
-								
-								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
-									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_" + userPermission.getId()+"_create")) {
-										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getCreate().equals(POSITIVE) ? true : false);
-										createAuthority = false;
+							if (userPermission == null) {
+								LOGGER.error("userPermissionId not exists: " + userPermissionId);
+							} else {
+
+								// UserGroup
+
+								boolean createAuthority = true;
+								boolean readAuthority = true;
+								boolean updateAuthority = true;
+								boolean deleteAuthority = true;
+
+								if (StringUtils.isNotEmpty(userAuthorityCsv.getCreate())) {
+
+									for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
+										if (userGroup.getUserAuthorities().get(i).getId()
+												.equals(userGroup.getId() + "_" + userPermission.getId() + "_create")) {
+											userGroup.getUserAuthorities().get(i).setEnabled(
+													userAuthorityCsv.getCreate().equals(POSITIVE) ? true : false);
+											createAuthority = false;
+										}
 									}
 								}
-							}
-							if(StringUtils.isNotEmpty(userAuthorityCsv.getRead())) {
-								
-								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
-									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_" + userPermission.getId()+"_read")) {
-										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getRead().equals(POSITIVE) ? true : false);
-										readAuthority = false;
+								if (StringUtils.isNotEmpty(userAuthorityCsv.getRead())) {
+
+									for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
+										if (userGroup.getUserAuthorities().get(i).getId()
+												.equals(userGroup.getId() + "_" + userPermission.getId() + "_read")) {
+											userGroup.getUserAuthorities().get(i).setEnabled(
+													userAuthorityCsv.getRead().equals(POSITIVE) ? true : false);
+											readAuthority = false;
+										}
 									}
 								}
-							}
-							if(StringUtils.isNotEmpty(userAuthorityCsv.getUpdate())) {
-								
-								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
-									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_" + userPermission.getId()+"_update")) {
-										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getUpdate().equals(POSITIVE) ? true : false);
-										updateAuthority = false;
+								if (StringUtils.isNotEmpty(userAuthorityCsv.getUpdate())) {
+
+									for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
+										if (userGroup.getUserAuthorities().get(i).getId()
+												.equals(userGroup.getId() + "_" + userPermission.getId() + "_update")) {
+											userGroup.getUserAuthorities().get(i).setEnabled(
+													userAuthorityCsv.getUpdate().equals(POSITIVE) ? true : false);
+											updateAuthority = false;
+										}
 									}
 								}
-							}
-							if(StringUtils.isNotEmpty(userAuthorityCsv.getDelete())) {
-								
-								for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
-									if (userGroup.getUserAuthorities().get(i).getId().equals(userGroup.getId() + "_" + userPermission.getId()+"_delete")) {
-										userGroup.getUserAuthorities().get(i).setEnabled(userAuthorityCsv.getDelete().equals(POSITIVE) ? true : false);
-										deleteAuthority = false;
+								if (StringUtils.isNotEmpty(userAuthorityCsv.getDelete())) {
+
+									for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
+										if (userGroup.getUserAuthorities().get(i).getId()
+												.equals(userGroup.getId() + "_" + userPermission.getId() + "_delete")) {
+											userGroup.getUserAuthorities().get(i).setEnabled(
+													userAuthorityCsv.getDelete().equals(POSITIVE) ? true : false);
+											deleteAuthority = false;
+										}
 									}
 								}
-							}
-							
-							modelService.saveEntity(userGroup);
-							
-							// UserAuthority
-							
-							if(createAuthority && userAuthorityCsv.getCreate() != null) {
-								UserAuthority createRight = new UserAuthority();
-								createRight.setId(userGroup.getId() + "_" + userPermission.getId()+"_create");
-								createRight.setUserGroup(userGroup);
-								createRight.setUserPermission(userPermission);
-								createRight.setUserRight(create);
-								createRight.setEnabled(userAuthorityCsv.getCreate().equals(POSITIVE) ? true : false);
-								userGroup.getUserAuthorities().add(createRight);
-								
-								modelService.saveEntity(createRight);
-							}
-							if(readAuthority && userAuthorityCsv.getRead() != null) {
-								UserAuthority readRight = new UserAuthority();
-								readRight.setId(userGroup.getId() + "_" + userPermission.getId()+"_read");
-								readRight.setUserGroup(userGroup);
-								readRight.setUserPermission(userPermission);
-								readRight.setUserRight(read);
-								readRight.setEnabled(userAuthorityCsv.getRead().equals(POSITIVE) ? true : false);
-								userGroup.getUserAuthorities().add(readRight);
-								
-								modelService.saveEntity(readRight);
-							}
-							if(updateAuthority && userAuthorityCsv.getUpdate() != null) {
-								UserAuthority updateRight = new UserAuthority();
-								updateRight.setId(userGroup.getId() + "_" + userPermission.getId()+"_update");
-								updateRight.setUserGroup(userGroup);
-								updateRight.setUserPermission(userPermission);
-								updateRight.setUserRight(update);
-								updateRight.setEnabled(userAuthorityCsv.getUpdate().equals(POSITIVE) ? true : false);
-								userGroup.getUserAuthorities().add(updateRight);
-								
-								modelService.saveEntity(updateRight);
-							}
-							if(deleteAuthority && userAuthorityCsv.getDelete() != null) {
-								UserAuthority deleteRight = new UserAuthority();
-								deleteRight.setId(userGroup.getId() + "_" + userPermission.getId()+"_delete");
-								deleteRight.setUserGroup(userGroup);
-								deleteRight.setUserPermission(userPermission);
-								deleteRight.setUserRight(delete);
-								deleteRight.setEnabled(userAuthorityCsv.getDelete().equals(POSITIVE) ? true : false);
-								userGroup.getUserAuthorities().add(deleteRight);
-								
-								modelService.saveEntity(deleteRight);
+
+								modelService.saveEntity(userGroup, UserGroup.class);
+
+								// UserAuthority
+
+								if (createAuthority && userAuthorityCsv.getCreate() != null) {
+									UserAuthority createRight = new UserAuthority();
+									createRight.setId(userGroup.getId() + "_" + userPermission.getId() + "_create");
+									createRight.setUserGroup(userGroup);
+									createRight.setUserPermission(userPermission);
+									createRight.setUserRight(create);
+									createRight
+											.setEnabled(userAuthorityCsv.getCreate().equals(POSITIVE) ? true : false);
+									userGroup.getUserAuthorities().add(createRight);
+
+									modelService.saveEntity(createRight, UserAuthority.class);
+								}
+								if (readAuthority && userAuthorityCsv.getRead() != null) {
+									UserAuthority readRight = new UserAuthority();
+									readRight.setId(userGroup.getId() + "_" + userPermission.getId() + "_read");
+									readRight.setUserGroup(userGroup);
+									readRight.setUserPermission(userPermission);
+									readRight.setUserRight(read);
+									readRight.setEnabled(userAuthorityCsv.getRead().equals(POSITIVE) ? true : false);
+									userGroup.getUserAuthorities().add(readRight);
+
+									modelService.saveEntity(readRight, UserAuthority.class);
+								}
+								if (updateAuthority && userAuthorityCsv.getUpdate() != null) {
+									UserAuthority updateRight = new UserAuthority();
+									updateRight.setId(userGroup.getId() + "_" + userPermission.getId() + "_update");
+									updateRight.setUserGroup(userGroup);
+									updateRight.setUserPermission(userPermission);
+									updateRight.setUserRight(update);
+									updateRight
+											.setEnabled(userAuthorityCsv.getUpdate().equals(POSITIVE) ? true : false);
+									userGroup.getUserAuthorities().add(updateRight);
+
+									modelService.saveEntity(updateRight, UserAuthority.class);
+								}
+								if (deleteAuthority && userAuthorityCsv.getDelete() != null) {
+									UserAuthority deleteRight = new UserAuthority();
+									deleteRight.setId(userGroup.getId() + "_" + userPermission.getId() + "_delete");
+									deleteRight.setUserGroup(userGroup);
+									deleteRight.setUserPermission(userPermission);
+									deleteRight.setUserRight(delete);
+									deleteRight
+											.setEnabled(userAuthorityCsv.getDelete().equals(POSITIVE) ? true : false);
+									userGroup.getUserAuthorities().add(deleteRight);
+
+									modelService.saveEntity(deleteRight, UserAuthority.class);
+								}
+
 							}
 						}
-					}					
-				}
+					}
 
+				}
 			}
+
+			modelService.saveAll();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
-		
-		modelService.saveAll();
 	}
 
 	public List<UserAuthorityCsv> readCSVFile(Reader reader) {
@@ -266,23 +286,23 @@ public class UserAuthorityUpdate extends Updater {
 			final CellProcessor[] processors = getProcessors();
 
 			UserAuthorityCsv userAuthorityCsv;
-			logger.info("Start import UserAuthority Csv.");
+			LOGGER.info("Start import UserAuthority Csv.");
 			while ((userAuthorityCsv = beanReader.read(UserAuthorityCsv.class, header, processors)) != null) {
-				logger.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
 						userAuthorityCsv);
 				userAuthorityCsvList.add(userAuthorityCsv);
 			}
-			logger.info("Finished import UserAuthority Csv.");
+			LOGGER.info("Finished import UserAuthority Csv.");
 		} catch (FileNotFoundException ex) {
-			logger.error("Could not find the CSV file: " + ex);
+			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
-			logger.error("Error reading the CSV file: " + ex);
+			LOGGER.error("Error reading the CSV file: " + ex);
 		} finally {
 			if (beanReader != null) {
 				try {
 					beanReader.close();
 				} catch (IOException ex) {
-					logger.error("Error closing the reader: " + ex);
+					LOGGER.error("Error closing the reader: " + ex);
 				}
 			}
 		}

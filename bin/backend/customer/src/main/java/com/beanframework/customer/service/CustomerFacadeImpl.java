@@ -38,6 +38,6 @@ public class CustomerFacadeImpl implements CustomerFacade {
 		if (customer == null) {
 			throw new BadCredentialsException("Bad Credentials");
 		}
-		return modelService.getDto(customer);
+		return modelService.getDto(customer, Customer.class);
 	}
 }

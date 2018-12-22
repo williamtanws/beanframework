@@ -42,6 +42,7 @@ public class Menu extends GenericDomain {
 	public static final String TARGET = "target";
 	public static final String ENABLED = "enabled";
 	public static final String PARENT = "parent";
+	public static final String PARENT_UUID = "parent.uuid";
 	public static final String CHILDS = "childs";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_GROUPS_UUID = "userGroups.uuid";
@@ -54,19 +55,18 @@ public class Menu extends GenericDomain {
 
 	private String path;
 
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	private MenuTargetTypeEnum target;
 
 	@NotNull
 	private Boolean enabled;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_uuid")
 	private Menu parent;
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = PARENT, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = PARENT, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(SORT + " ASC")
 	private List<Menu> childs = new ArrayList<Menu>();
 
@@ -76,7 +76,7 @@ public class Menu extends GenericDomain {
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<MenuField> menuFields = new ArrayList<MenuField>();
 
 	@Transient

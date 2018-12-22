@@ -167,7 +167,7 @@ public class CronjobController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				modelService.saveDto(cronjobCreate);
+				modelService.saveDto(cronjobCreate, Cronjob.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -204,7 +204,7 @@ public class CronjobController extends AbstractCommonController {
 			cronjobUpdate.setCronjobDatas(cronjob.getCronjobDatas());
 
 			try {
-				modelService.saveDto(cronjobUpdate);
+				modelService.saveDto(cronjobUpdate, Cronjob.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -285,7 +285,7 @@ public class CronjobController extends AbstractCommonController {
 			cronjobUpdate.getCronjobDatas().add(cronjobData);
 
 			try {
-				modelService.saveDto(cronjobUpdate);
+				modelService.saveDto(cronjobUpdate, Cronjob.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -330,7 +330,7 @@ public class CronjobController extends AbstractCommonController {
 			}
 
 			try {
-				modelService.saveDto(cronjobUpdate);
+				modelService.saveDto(cronjobUpdate, Cronjob.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

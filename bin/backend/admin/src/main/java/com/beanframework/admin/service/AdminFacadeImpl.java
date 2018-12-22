@@ -57,6 +57,6 @@ public class AdminFacadeImpl implements AdminFacade {
 		if (admin.getCredentialsNonExpired() == false) {
 			throw new CredentialsExpiredException("Password Expired");
 		}
-		return modelService.getDto(admin);
+		return modelService.getDto(admin, Admin.class);
 	}
 }

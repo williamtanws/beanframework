@@ -12,6 +12,7 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.domain.MenuNavigation;
 
 @Component
@@ -50,9 +51,8 @@ public class DtoMenuNavigationConverter implements DtoConverter<Menu, MenuNaviga
 		prototype.setTarget(source.getTarget());
 		prototype.setEnabled(source.getEnabled());
 		try {
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups()));
-			prototype.setMenuFields(modelService.getDto(source.getMenuFields()));
-			prototype.setNavigationChilds(modelService.getDto(source.getChilds()));
+			prototype.setMenuFields(modelService.getDto(source.getMenuFields(), MenuField.class));
+			prototype.setNavigationChilds(this.convert(source.getChilds()));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

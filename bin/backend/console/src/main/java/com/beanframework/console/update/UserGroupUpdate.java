@@ -42,7 +42,7 @@ import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupField;
 
 public class UserGroupUpdate extends Updater {
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	private static Logger LOGGER = LoggerFactory.getLogger(UserGroupUpdate.class);
 
 	@Autowired
 	private ModelService modelService;
@@ -75,143 +75,148 @@ public class UserGroupUpdate extends Updater {
 					save(userGroupCsvList);
 
 				} catch (Exception ex) {
-					logger.error("Error reading the resource file: " + ex);
+					LOGGER.error("Error reading the resource file: " + ex);
 				}
 			}
 		} catch (IOException ex) {
-			logger.error("Error reading the resource file: " + ex);
+			LOGGER.error("Error reading the resource file: " + ex);
 		}
 	}
 
 	public void save(List<UserGroupCsv> userGroupCsvList) throws Exception {
 
-		// Dynamic Field
+		try {
+			// Dynamic Field
 
-		Map<String, Object> enNameDynamicFieldProperties = new HashMap<String, Object>();
-		enNameDynamicFieldProperties.put(DynamicField.ID, "usergroup_name_en");
-		DynamicField enNameDynamicField = modelService.findOneEntityByProperties(enNameDynamicFieldProperties,
-				DynamicField.class);
+			Map<String, Object> enNameDynamicFieldProperties = new HashMap<String, Object>();
+			enNameDynamicFieldProperties.put(DynamicField.ID, "usergroup_name_en");
+			DynamicField enNameDynamicField = modelService.findOneEntityByProperties(enNameDynamicFieldProperties,
+					DynamicField.class);
 
-		if (enNameDynamicField == null) {
-			enNameDynamicField = modelService.create(DynamicField.class);
-			enNameDynamicField.setId("usergroup_name_en");
-		}
-		enNameDynamicField.setName("Name");
-		enNameDynamicField.setRequired(true);
-		enNameDynamicField.setRule(null);
-		enNameDynamicField.setSort(0);
-		enNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(enNameDynamicField);
-
-		Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
-		cnNameDynamicFieldProperties.put(DynamicField.ID, "usergroup_name_cn");
-		DynamicField cnNameDynamicField = modelService.findOneEntityByProperties(cnNameDynamicFieldProperties,
-				DynamicField.class);
-
-		if (cnNameDynamicField == null) {
-			cnNameDynamicField = modelService.create(DynamicField.class);
-			cnNameDynamicField.setId("usergroup_name_cn");
-		}
-		cnNameDynamicField.setName("Name");
-		cnNameDynamicField.setRequired(true);
-		cnNameDynamicField.setRule(null);
-		cnNameDynamicField.setSort(1);
-		cnNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(cnNameDynamicField);
-
-		// Language
-
-		Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
-		enlanguageProperties.put(Language.ID, "en");
-		Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
-
-		Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
-		cnlanguageProperties.put(Language.ID, "cn");
-		Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
-
-		for (UserGroupCsv csv : userGroupCsvList) {
-
-			// UserGroup
-
-			Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-			userGroupProperties.put(UserGroup.ID, csv.getId());
-
-			UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-
-			if (userGroup == null) {
-				userGroup = modelService.create(UserGroup.class);
-				userGroup.setId(csv.getId());
-			} else {
-				Hibernate.initialize(userGroup.getUserGroupFields());
+			if (enNameDynamicField == null) {
+				enNameDynamicField = modelService.create(DynamicField.class);
+				enNameDynamicField.setId("usergroup_name_en");
 			}
+			enNameDynamicField.setName("Name");
+			enNameDynamicField.setRequired(true);
+			enNameDynamicField.setRule(null);
+			enNameDynamicField.setSort(0);
+			enNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
+			modelService.saveEntity(enNameDynamicField, DynamicField.class);
 
-			if (StringUtils.isNotEmpty(csv.getParent())) {
-				Map<String, Object> parentProperties = new HashMap<String, Object>();
-				parentProperties.put(UserGroup.ID, csv.getId());
-				UserGroup parent = modelService.findOneEntityByProperties(parentProperties, UserGroup.class);
+			Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
+			cnNameDynamicFieldProperties.put(DynamicField.ID, "usergroup_name_cn");
+			DynamicField cnNameDynamicField = modelService.findOneEntityByProperties(cnNameDynamicFieldProperties,
+					DynamicField.class);
 
-				if (parent == null) {
-					logger.error("Parent not exists: " + csv.getParent());
+			if (cnNameDynamicField == null) {
+				cnNameDynamicField = modelService.create(DynamicField.class);
+				cnNameDynamicField.setId("usergroup_name_cn");
+			}
+			cnNameDynamicField.setName("Name");
+			cnNameDynamicField.setRequired(true);
+			cnNameDynamicField.setRule(null);
+			cnNameDynamicField.setSort(1);
+			cnNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
+			modelService.saveEntity(cnNameDynamicField, DynamicField.class);
+
+			// Language
+
+			Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
+			enlanguageProperties.put(Language.ID, "en");
+			Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
+
+			Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
+			cnlanguageProperties.put(Language.ID, "cn");
+			Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
+
+			for (UserGroupCsv csv : userGroupCsvList) {
+
+				// UserGroup
+
+				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+				userGroupProperties.put(UserGroup.ID, csv.getId());
+
+				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+
+				if (userGroup == null) {
+					userGroup = modelService.create(UserGroup.class);
+					userGroup.setId(csv.getId());
 				} else {
-					userGroup.setParent(parent);
+					Hibernate.initialize(userGroup.getUserGroupFields());
 				}
-			}
 
-			boolean enCreate = true;
-			boolean cnCreate = true;
+				if (StringUtils.isNotEmpty(csv.getParent())) {
+					Map<String, Object> parentProperties = new HashMap<String, Object>();
+					parentProperties.put(UserGroup.ID, csv.getParent());
+					UserGroup parent = modelService.findOneEntityByProperties(parentProperties, UserGroup.class);
 
-			if (enLanguage != null) {
-				for (int i = 0; i < userGroup.getUserGroupFields().size(); i++) {
-					if (userGroup.getUserGroupFields().get(i).getId().equals(csv.getId() + "_name_en")
-							&& userGroup.getUserGroupFields().get(i).getLanguage().getId().equals("en")) {
-						userGroup.getUserGroupFields().get(i).setLabel("Name");
-						userGroup.getUserGroupFields().get(i).setValue(csv.getName_en());
-						enCreate = false;
+					if (parent == null) {
+						LOGGER.error("Parent not exists: " + csv.getParent());
+					} else {
+						userGroup.setParent(parent);
 					}
 				}
-			}
-			if (cnLanguage != null) {
-				for (int i = 0; i < userGroup.getUserGroupFields().size(); i++) {
-					if (userGroup.getUserGroupFields().get(i).getId().equals(csv.getId() + "_name_cn")
-							&& userGroup.getUserGroupFields().get(i).getLanguage().getId().equals("cn")) {
-						userGroup.getUserGroupFields().get(i).setLabel("名称");
-						userGroup.getUserGroupFields().get(i).setValue(csv.getName_cn());
-						cnCreate = false;
+
+				boolean enCreate = true;
+				boolean cnCreate = true;
+
+				if (enLanguage != null) {				
+					for (int i = 0; i < userGroup.getUserGroupFields().size(); i++) {
+						if (userGroup.getUserGroupFields().get(i).getId().equals(csv.getId() + "_name_en")
+								&& userGroup.getUserGroupFields().get(i).getLanguage().getId().equals("en")) {
+							userGroup.getUserGroupFields().get(i).setLabel("Name");
+							userGroup.getUserGroupFields().get(i).setValue(csv.getName_en());
+							enCreate = false;
+						}
 					}
+				}
+				if (cnLanguage != null) {
+					for (int i = 0; i < userGroup.getUserGroupFields().size(); i++) {
+						if (userGroup.getUserGroupFields().get(i).getId().equals(csv.getId() + "_name_cn")
+								&& userGroup.getUserGroupFields().get(i).getLanguage().getId().equals("cn")) {
+							userGroup.getUserGroupFields().get(i).setLabel("名称");
+							userGroup.getUserGroupFields().get(i).setValue(csv.getName_cn());
+							cnCreate = false;
+						}
+					}
+				}
+
+				modelService.saveEntity(userGroup, UserGroup.class);
+
+				// UserGroup Field
+
+				if (enCreate) {
+					UserGroupField userGroupField = modelService.create(UserGroupField.class);
+					userGroupField.setId(csv.getId() + "_name_en");
+					userGroupField.setDynamicField(enNameDynamicField);
+					userGroupField.setLanguage(enLanguage);
+					userGroupField.setLabel("Name");
+					userGroupField.setValue(csv.getName_en());
+					userGroupField.setUserGroup(userGroup);
+					userGroup.getUserGroupFields().add(userGroupField);
+
+					modelService.saveEntity(userGroupField, UserGroupField.class);
+				}
+				if (cnCreate) {
+					UserGroupField userGroupField = modelService.create(UserGroupField.class);
+					userGroupField.setId(csv.getId() + "_name_cn");
+					userGroupField.setDynamicField(cnNameDynamicField);
+					userGroupField.setLanguage(cnLanguage);
+					userGroupField.setLabel("名称");
+					userGroupField.setValue(csv.getName_cn());
+					userGroupField.setUserGroup(userGroup);
+					userGroup.getUserGroupFields().add(userGroupField);
+
+					modelService.saveEntity(userGroupField, UserGroupField.class);
 				}
 			}
 
-			modelService.saveEntity(userGroup);
-
-			// UserGroup Field
-
-			if (enCreate) {
-				UserGroupField userGroupField = modelService.create(UserGroupField.class);
-				userGroupField.setId(csv.getId() + "_name_en");
-				userGroupField.setDynamicField(enNameDynamicField);
-				userGroupField.setLanguage(enLanguage);
-				userGroupField.setLabel("Name");
-				userGroupField.setValue(csv.getName_en());
-				userGroupField.setUserGroup(userGroup);
-				userGroup.getUserGroupFields().add(userGroupField);
-
-				modelService.saveEntity(userGroupField);
-			}
-			if (cnCreate) {
-				UserGroupField userGroupField = modelService.create(UserGroupField.class);
-				userGroupField.setId(csv.getId() + "_name_cn");
-				userGroupField.setDynamicField(cnNameDynamicField);
-				userGroupField.setLanguage(cnLanguage);
-				userGroupField.setLabel("名称");
-				userGroupField.setValue(csv.getName_cn());
-				userGroupField.setUserGroup(userGroup);
-				userGroup.getUserGroupFields().add(userGroupField);
-
-				modelService.saveEntity(userGroupField);
-			}
+			modelService.saveAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
-
-		modelService.saveAll();
 	}
 
 	public List<UserGroupCsv> readCSVFile(Reader reader) {
@@ -228,23 +233,23 @@ public class UserGroupUpdate extends Updater {
 			final CellProcessor[] processors = getProcessors();
 
 			UserGroupCsv permissionCsv;
-			logger.info("Start import UserGroup Csv.");
+			LOGGER.info("Start import UserGroup Csv.");
 			while ((permissionCsv = beanReader.read(UserGroupCsv.class, header, processors)) != null) {
-				logger.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
 						permissionCsv);
 				permissionCsvList.add(permissionCsv);
 			}
-			logger.info("Finished import UserGroup Csv.");
+			LOGGER.info("Finished import UserGroup Csv.");
 		} catch (FileNotFoundException ex) {
-			logger.error("Could not find the CSV file: " + ex);
+			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
-			logger.error("Error reading the CSV file: " + ex);
+			LOGGER.error("Error reading the CSV file: " + ex);
 		} finally {
 			if (beanReader != null) {
 				try {
 					beanReader.close();
 				} catch (IOException ex) {
-					logger.error("Error closing the reader: " + ex);
+					LOGGER.error("Error closing the reader: " + ex);
 				}
 			}
 		}

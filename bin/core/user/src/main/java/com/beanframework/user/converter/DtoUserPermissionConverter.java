@@ -3,6 +3,7 @@ package com.beanframework.user.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserPermission;
+import com.beanframework.user.domain.UserPermissionField;
 
 public class DtoUserPermissionConverter implements DtoConverter<UserPermission, UserPermission> {
 	
@@ -43,7 +45,9 @@ public class DtoUserPermissionConverter implements DtoConverter<UserPermission, 
 
 		prototype.setSort(source.getSort());
 		try {
-			prototype.setUserPermissionFields(modelService.getDto(source.getUserPermissionFields()));
+			Hibernate.initialize(source.getUserPermissionFields());
+			
+			prototype.setUserPermissionFields(modelService.getDto(source.getUserPermissionFields(), UserPermissionField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

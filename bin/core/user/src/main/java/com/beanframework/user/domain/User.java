@@ -54,12 +54,12 @@ public abstract class User extends GenericDomain {
 	private Boolean enabled;
 
 	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = UserConstants.Table.USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<UserField> userFields = new ArrayList<UserField>();
 
 	@Transient

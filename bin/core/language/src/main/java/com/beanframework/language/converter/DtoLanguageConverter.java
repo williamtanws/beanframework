@@ -3,12 +3,9 @@ package com.beanframework.language.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.language.domain.Language;
 
-@Component
 public class DtoLanguageConverter implements DtoConverter<Language, Language> {
 
 	@Override

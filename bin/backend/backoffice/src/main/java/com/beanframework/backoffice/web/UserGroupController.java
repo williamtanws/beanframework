@@ -144,11 +144,13 @@ public class UserGroupController extends AbstractCommonController {
 			}
 		}
 
-		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(UserRight.CREATED_DATE, Sort.Direction.DESC);
-
-		List<UserRight> userRights = modelService.findDtoBySorts(sorts, UserRight.class);
-		List<UserPermission> userPermissions = modelService.findDtoBySorts(sorts, UserPermission.class);
+		Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
+		userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
+		List<UserRight> userRights = modelService.findDtoBySorts(userRightSorts, UserRight.class);
+		
+		Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
+		userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
+		List<UserPermission> userPermissions = modelService.findDtoBySorts(userPermissionSorts, UserPermission.class);
 
 		model.addAttribute("userRights", userRights);
 		model.addAttribute("userPermissions", userPermissions);
@@ -177,7 +179,7 @@ public class UserGroupController extends AbstractCommonController {
 				}
 			}
 			try {
-				modelService.saveDto(usergroupCreate);
+				modelService.saveDto(usergroupCreate, UserGroup.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -216,7 +218,7 @@ public class UserGroupController extends AbstractCommonController {
 			}
 
 			try {
-				modelService.saveDto(usergroupUpdate);
+				modelService.saveDto(usergroupUpdate, UserGroup.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

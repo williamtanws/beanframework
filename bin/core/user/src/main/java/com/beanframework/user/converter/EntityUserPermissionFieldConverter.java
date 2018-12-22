@@ -11,20 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.dynamicfield.converter.EntityDynamicFieldConverter;
-import com.beanframework.language.converter.EntityLanguageConverter;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserPermissionField;
 
 public class EntityUserPermissionFieldConverter implements EntityConverter<UserPermissionField, UserPermissionField> {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private EntityLanguageConverter entityLanguageConverter;
-
-	@Autowired
-	private EntityDynamicFieldConverter entityDynamicFieldConverter;
 
 	public List<UserPermissionField> convert(List<UserPermissionField> sources) throws ConverterException {
 		List<UserPermissionField> convertedList = new ArrayList<UserPermissionField>();
@@ -45,7 +39,8 @@ public class EntityUserPermissionFieldConverter implements EntityConverter<UserP
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserPermissionField.UUID, source.getUuid());
 
-				UserPermissionField exists = modelService.findOneEntityByProperties(properties, UserPermissionField.class);
+				UserPermissionField exists = modelService.findOneEntityByProperties(properties,
+						UserPermissionField.class);
 
 				if (exists != null) {
 					prototype = exists;
@@ -62,20 +57,32 @@ public class EntityUserPermissionFieldConverter implements EntityConverter<UserP
 		return convert(source, prototype);
 	}
 
-	private UserPermissionField convert(UserPermissionField source, UserPermissionField prototype) throws ConverterException {
+	private UserPermissionField convert(UserPermissionField source, UserPermissionField prototype)
+			throws ConverterException {
 
-		if (source.getId() != null)
-			prototype.setId(source.getId());
-		prototype.setLastModifiedDate(new Date());
+		try {
+			if (source.getId() != null)
+				prototype.setId(source.getId());
+			prototype.setLastModifiedDate(new Date());
 
-		if (source.getLanguage() != null)
-			prototype.setLanguage(entityLanguageConverter.convert(source.getLanguage()));
-		if (source.getDynamicField() != null)
-			prototype.setDynamicField(entityDynamicFieldConverter.convert(source.getDynamicField()));
-		if (source.getLabel() != null)
+			if (source.getLanguage() == null) {
+				prototype.setLanguage(null);
+			} else {
+				Language language = modelService.findOneEntityByUuid(source.getLanguage().getUuid(), Language.class);
+				prototype.setLanguage(language);
+			}
+			if (source.getDynamicField() == null) {
+				prototype.setDynamicField(null);
+			} else {
+				DynamicField dynamicField = modelService.findOneEntityByUuid(source.getDynamicField().getUuid(),
+						DynamicField.class);
+				prototype.setDynamicField(dynamicField);
+			}
 			prototype.setLabel(source.getLabel());
-		if (source.getValue() != null)
 			prototype.setValue(source.getValue());
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), e);
+		}
 
 		return prototype;
 	}

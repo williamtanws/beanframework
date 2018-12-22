@@ -2,8 +2,6 @@ package com.beanframework.menu.domain;
 
 import java.util.List;
 
-import com.beanframework.menu.domain.Menu;
-
 public class MenuNavigation extends Menu {
 
 	/**

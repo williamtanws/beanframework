@@ -53,7 +53,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 				}
 			}
 			
-			modelService.saveEntity(employee);
+			modelService.saveEntity(employee, Employee.class);
 			employeeService.saveProfilePicture(employee, picture);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -166,7 +166,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		if (employee.getCredentialsNonExpired() == false) {
 			throw new CredentialsExpiredException("Passwrd Expired");
 		}
-		return modelService.getDto(employee);
+		return modelService.getDto(employee, Employee.class);
 	}
 
 	@Override

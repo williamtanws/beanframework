@@ -13,20 +13,23 @@
 				<span class="help-block"></span>
 			</div>
 		</div>
+	</th:block>
+	<th:block layout:fragment="attribute">
 		<div class="col-md-6">
 			<div class="form-group" th:each="langActive : ${moduleLanguages}" th:if="*{uuid != null}">
-				<th:block th:each="lang,itrStat : *{userGroupLangs}" th:if="${lang.language.id == langActive.id}">
-					<label for="name" th:if="${lang.language.id == langActive.id}" th:text="#{module.usergroup.name}+'('+${lang.language.id}+')'"></label>
-					<input type="hidden" th:name="'userGroupLangs['+${itrStat.index}+'].uuid'" th:value="${lang.uuid}">
-					<input type="hidden" th:name="'userGroupLangs['+${itrStat.index}+'].language.uuid'" th:value="${lang.language.uuid}">
-					<input type="text" class="form-control" th:name="'userGroupLangs['+${itrStat.index}+'].name'" th:value="${lang.name}">
+				<th:block th:each="field,itrStat : *{userGroupFields}" th:if="${field.language.id == langActive.id}">
+					<label for="name" th:text="${field.dynamicField.name}+'('+${field.language.id}+')'"></label>
+					<input type="hidden" th:name="'userGroupFields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
+					<input type="hidden" th:name="'userGroupFields['+${itrStat.index}+'].language.uuid'" th:value="${field.language.uuid}">
+					<input type="hidden" th:name="'userGroupFields['+${itrStat.index}+'].dynamicField.uuid'" th:value="${field.dynamicField.uuid}">
+					<input type="text" class="form-control" th:name="'userGroupFields['+${itrStat.index}+'].value'" th:value="${field.value}" th:required="${field.dynamicField.required}">
 				</th:block>
 				<span class="help-block"></span>
 			</div>
 			<div class="form-group" th:each="langActive,itrStat : ${moduleLanguages}" th:if="*{uuid == null}">
-				<label for="name" th:text="#{module.usergroup.name}+'('+${langActive.id}+')'"></label>
-				<input type="hidden" th:name="'userGroupLangs['+${itrStat.index}+'].language.uuid'" th:value="${langActive.uuid}">
-				<input type="text" class="form-control" th:name="'userGroupLangs['+${itrStat.index}+'].name'">
+				<label for="name" th:text="#{module.userGroup.name}+'('+${langActive.id}+')'"></label>
+				<input type="hidden" th:name="'userGroupFields['+${itrStat.index}+'].language.uuid'" th:value="${langActive.uuid}">
+				<input type="text" class="form-control" th:name="'userGroupFields['+${itrStat.index}+'].name'">
 				<span class="help-block"></span>
 			</div>
 		</div>
@@ -38,14 +41,14 @@
 					<th th:text="#{module.userpermission}"></th>
 					
 					<th th:each="userRight: ${userRights}">
-						<th:block th:each="userRightLang : ${userRight.userRightLangs}">
-							<span th:if="(${userRightLang.language.id == #locale.toString()})" th:text="${userRightLang.name}"></span>
+						<th:block th:each="field : ${userRight.userRightFields}">
+							<span th:if="(${field.language.id == #locale.toString() and field.dynamicField.name == 'Name'})" th:text="${field.value}"></span>
 						</th:block>
 					</th>
 				</tr>
 				<tr th:each="userPermission: ${userPermissions}">
-					<th:block th:each="userPermissionLang : ${userPermission.userPermissionLangs}">
-						<th th:if="(${userPermissionLang.language.id == #locale.toString()})" th:text="${userPermissionLang.name}"></th>
+					<th:block th:each="field : ${userPermission.userPermissionFields}">
+						<th th:if="(${field.language.id == #locale.toString()} and field.dynamicField.name == 'Name')" th:text="${field.value}"></th>
 					</th:block>
 					<td th:each="userRight: ${userRights}">
 						<th:block th:each="userAuthority,itrStat : *{userAuthorities}">
@@ -107,7 +110,7 @@
 						<div class="modal-body">
 							<div class="container-fluid">
 								<div class="row">
-									<th:block layout:insert="/backoffice/adminlte/user/usergroupForm :: general"></th:block>
+									<th:block layout:replace="/backoffice/adminlte/user/usergroupForm :: general"></th:block>
 								</div>
 							</div>
 						</div>
@@ -202,6 +205,9 @@
 								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}"></a>
 							</li>
 							<li>
+								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.backoffice.attribute}"></a>
+							</li>
+							<li>
 								<a href="#tab_userauthority" data-toggle="tab" th:text="#{module.userauthority}"></a>
 							</li>
 							<li>
@@ -211,20 +217,26 @@
 						<div class="tab-content">
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/user/usergroupForm :: general"></th:block>
+									<th:block layout:replace="/backoffice/adminlte/user/usergroupForm :: general"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_attribute">
+								<div class="box-body">
+									<th:block layout:replace="/backoffice/adminlte/user/usergroupForm :: attribute"></th:block>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_userauthority">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/user/usergroupForm :: userauthority"></th:block>
+									<th:block layout:replace="/backoffice/adminlte/user/usergroupForm :: userauthority"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/user/usergroupForm :: administration"></th:block>
+									<th:block layout:replace="/backoffice/adminlte/user/usergroupForm :: administration"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->

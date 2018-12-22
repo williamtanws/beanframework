@@ -44,11 +44,11 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 
 	private Configuration convert(Configuration source, Configuration prototype) {
 
-		if (source.getId() != null) {
+		if (source.getId() != null)
 			prototype.setId(source.getId());
-		}
-		prototype.setValue(source.getValue());
 		prototype.setLastModifiedDate(new Date());
+
+		prototype.setValue(source.getValue());
 
 		return prototype;
 	}

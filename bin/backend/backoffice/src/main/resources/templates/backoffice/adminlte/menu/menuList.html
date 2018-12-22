@@ -10,7 +10,7 @@
 	<th:block layout:fragment="content">
 		<section class="content">
 			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/fragment/alert :: custom"></th:block>
+				<th:block layout:replace="/backoffice/adminlte/common/fragment/alert :: custom"></th:block>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -64,7 +64,7 @@
 								</div>
 								<div id="collapseTwo" th:class="'panel-collapse collapse '+${menuUpdate.uuid == null ? '':'in'}">
 									<div class="box-body">
-										<th:block layout:insert="/backoffice/adminlte/menu/menuForm :: update" th:if="${menuUpdate.uuid != null}"></th:block>
+										<th:block layout:replace="/backoffice/adminlte/menu/menuForm :: update" th:if="${menuUpdate.uuid != null}"></th:block>
 									</div>
 								</div>
 							</div>
@@ -73,7 +73,7 @@
 					</div>
 				</div>
 			</div>
-			<th:block layout:insert="/backoffice/adminlte/menu/menuForm :: create"></th:block>
+			<th:block layout:replace="/backoffice/adminlte/menu/menuForm :: create"></th:block>
 		</section>
 		<form id="change-form" style="display: none" th:action="@{${@environment.getProperty('path.menu')}}" method="post">
 			<input type="hidden" name="move">

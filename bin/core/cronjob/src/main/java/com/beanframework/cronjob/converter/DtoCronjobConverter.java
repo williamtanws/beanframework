@@ -3,6 +3,7 @@ package com.beanframework.cronjob.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.domain.CronjobData;
 
 public class DtoCronjobConverter implements DtoConverter<Cronjob, Cronjob> {
 	
@@ -63,7 +65,9 @@ public class DtoCronjobConverter implements DtoConverter<Cronjob, Cronjob> {
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		try {
-			prototype.setCronjobDatas(modelService.getDto(source.getCronjobDatas()));
+			Hibernate.initialize(source.getCronjobDatas());
+			
+			prototype.setCronjobDatas(modelService.getDto(source.getCronjobDatas(), CronjobData.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

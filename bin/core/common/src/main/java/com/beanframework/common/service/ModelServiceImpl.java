@@ -33,13 +33,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional
 	@Override
-	public void attach(Object model) {
+	public void attach(Object model, Class modelClass) {
 		entityManager.merge(model);
 	}
 
 	@Transactional
 	@Override
-	public void detach(Object model) {
+	public void detach(Object model, Class modelClass) {
 		entityManager.detach(model);
 	}
 
@@ -59,7 +59,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		initialDefaultsInterceptor(model);
+		initialDefaultsInterceptor(model, modelClass);
 		return (T) model;
 	}
 
@@ -86,6 +86,19 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
+	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties,
+			Map<String, Sort.Direction> sorts, Class modelClass) throws Exception {
+		if (properties == null && sorts == null) {
+			Assert.notNull(properties, "properties was null");
+			Assert.notNull(sorts, "sorts was null");
+		}
+		Assert.notNull(modelClass, "modelClass was null");
+
+		return (T) findyPropertiesAndSorts(properties, sorts, modelClass, false);
+	}
+
+	@Transactional(readOnly = true)
+	@Override
 	public <T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
@@ -106,23 +119,45 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 				setCachedSingleResult(properties, null, null, modelClass, model);
 
-				if (dto) {
-					model = getDto(model);
-				}
-				loadInterceptor(model);
-
-				return (T) model;
 			} catch (NoResultException e) {
 				return null;
 			}
 		}
 
-		if (dto) {
-			model = getDto(model);
+		if (model != null) {
+			if (dto) {
+				model = getDto(model, modelClass);
+			}
+			loadInterceptor(model, modelClass);
 		}
-		loadInterceptor(model);
 
 		return (T) model;
+	}
+
+	public <T extends Collection> T findyPropertiesAndSorts(Map<String, Object> properties,
+			Map<String, Sort.Direction> sorts, Class modelClass, boolean dto) throws Exception {
+		if (properties == null && sorts == null) {
+			Assert.notNull(properties, "properties was null");
+			Assert.notNull(sorts, "sorts was null");
+		}
+		Assert.notNull(modelClass, "modelClass was null");
+
+		List<Object> models = getCachedResultList(properties, sorts, null, modelClass);
+
+		if (models == null) {
+			models = createQuery(properties, sorts, null, modelClass).getResultList();
+
+			setCachedResultList(properties, sorts, null, modelClass, models);
+		}
+
+		if (models != null & models.isEmpty() == false) {
+			if (dto) {
+				models = getDto(models, modelClass);
+			}
+			loadInterceptor(models, modelClass);
+		}
+
+		return (T) models;
 	}
 
 	@Transactional(readOnly = true)
@@ -158,9 +193,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			setCachedResultList(properties, null, null, modelClass, models);
 		}
 
-		models = getDto(models);
-
-		loadInterceptor(models);
+		if (models != null & models.isEmpty() == false) {
+			models = getDto(models, modelClass);
+			loadInterceptor(models, modelClass);
+		}
 
 		return (T) models;
 	}
@@ -180,8 +216,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			setCachedResultList(null, sorts, null, modelClass, models);
 		}
 
-		models = getDto(models);
-		loadInterceptor(models);
+		if (models != null & models.isEmpty() == false) {
+			models = getDto(models, modelClass);
+			loadInterceptor(models, modelClass);
+		}
 
 		return (T) models;
 	}
@@ -196,18 +234,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 		Assert.notNull(modelClass, "modelClass was null");
 
-		List<Object> models = getCachedResultList(properties, sorts, null, modelClass);
-
-		if (models == null) {
-			models = createQuery(properties, sorts, null, modelClass).getResultList();
-
-			setCachedResultList(properties, sorts, null, modelClass, models);
-		}
-
-		models = getDto(models);
-		loadInterceptor(models);
-
-		return (T) models;
+		return (T) findyPropertiesAndSorts(properties, sorts, modelClass, true);
 	}
 
 	@Transactional(readOnly = true)
@@ -222,8 +249,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			setCachedResultList(null, null, null, modelClass, models);
 		}
 
-		models = getDto(models);
-		loadInterceptor(models);
+		if (models != null & models.isEmpty() == false) {
+			models = getDto(models, modelClass);
+			loadInterceptor(models, modelClass);
+		}
 
 		return (T) models;
 	}
@@ -233,9 +262,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public <T> Page<T> findPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
 		Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
-		loadInterceptor(page.getContent());
+		loadInterceptor(page.getContent(), modelClass);
 
-		List<T> content = getDto(page.getContent());
+		List<T> content = getDto(page.getContent(), modelClass);
 		PageImpl<T> pageImpl = new PageImpl<T>(content, page.getPageable(), page.getTotalElements());
 
 		return pageImpl;
@@ -248,31 +277,31 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(rollbackFor = BusinessException.class)
 	@Override
-	public void saveEntity(Object model) throws BusinessException {
+	public void saveEntity(Object model, Class modelClass) throws BusinessException {
 
-		validateInterceptor(model);
-		prepareInterceptor(model);
+		validateInterceptor(model, modelClass);
+		prepareInterceptor(model, modelClass);
 
 		modelRepository.save(model);
 
-		cacheManager.getCache(model.getClass().getName()).clear();
+		clearCache(modelClass);
 	}
 
 	@Transactional(rollbackFor = BusinessException.class)
 	@Override
-	public void saveDto(Object model) throws BusinessException {
+	public void saveDto(Object model, Class modelClass) throws BusinessException {
 
-		validateInterceptor(model);
-		prepareInterceptor(model);
+		validateInterceptor(model, modelClass);
+		prepareInterceptor(model, modelClass);
 
-		model = entityConverter(model);
+		model = entityConverter(model, modelClass);
 
 		modelRepository.save(model);
 
-		cacheManager.getCache(model.getClass().getName()).clear();
+		clearCache(modelClass);
 
 		try {
-			model = getDto(model);
+			model = getDto(model, modelClass);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -307,9 +336,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new BusinessException(e.getMessage(), e);
 		}
 
-		cacheManager.getCache(modelClass.getName()).clear();
+		clearCache(modelClass);
 
-		removeInterceptor(model);
+		removeInterceptor(model, modelClass);
 	}
 
 	@Transactional(rollbackFor = BusinessException.class)
@@ -318,52 +347,51 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Query query = entityManager.createQuery("delete from " + modelClass.getName());
 		int count = query.executeUpdate();
 
-		cacheManager.getCache(modelClass.getName()).clear();
+		clearCache(modelClass);
 
 		return count;
 	}
 
 	@Override
-	public <T> T getEntity(Object model) throws Exception {
-		model = entityConverter(model);
+	public <T> T getEntity(Object model, Class modelClass) throws Exception {
+		model = entityConverter(model, modelClass);
 		return (T) model;
 	}
 
 	@Override
-	public <T extends Collection> T getEntity(Collection<? extends Object> models) throws Exception {
+	public <T extends Collection> T getEntity(Collection models, Class modelClass) throws Exception {
 		List<Object> entityObjects = new ArrayList<Object>();
 		for (Object model : models) {
-			entityObjects.add(entityConverter(model));
+			entityObjects.add(entityConverter(model, modelClass));
 		}
 		return (T) entityObjects;
 	}
 
 	@Override
-	public <T> T getDto(Object model) throws Exception {
+	public <T> T getDto(Object model, Class modelClass) throws Exception {
 		if (model == null)
 			return null;
-		model = dtoConverter(model);
+		model = dtoConverter(model, modelClass);
 		return (T) model;
 	}
 
 	@Override
-	public <T extends Collection> T getDto(Collection<? extends Object> models) throws Exception {
+	public <T extends Collection> T getDto(Collection models, Class modelClass) throws Exception {
 		if (models == null)
 			return null;
-		List<Object> dtoObjects = new ArrayList<Object>();
-		for (Object model : models) {
-			dtoObjects.add(dtoConverter(model));
+		if (models.isEmpty()) {
+			return (T) models;
 		}
-		return (T) dtoObjects;
+		return (T) dtoConverter(models, modelClass);
 	}
 
 	@Override
-	public void initDefaults(Object model) throws Exception {
-		initialDefaultsInterceptor(model);
+	public void initDefaults(Object model, Class modelClass) throws Exception {
+		initialDefaultsInterceptor(model, modelClass);
 	}
 
 	@Override
-	public void clearCache(String name) {
-		cacheManager.getCache(name).clear();
+	public void clearCache(Class modelClass) {
+		cacheManager.getCache(modelClass.getName()).clear();
 	}
 }

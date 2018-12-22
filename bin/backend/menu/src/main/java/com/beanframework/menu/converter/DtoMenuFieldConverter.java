@@ -10,8 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.language.domain.Language;
 import com.beanframework.menu.domain.MenuField;
-import com.beanframework.user.converter.DtoUserRightConverter;
 
 public class DtoMenuFieldConverter implements DtoConverter<MenuField, MenuField> {
 	
@@ -45,8 +46,8 @@ public class DtoMenuFieldConverter implements DtoConverter<MenuField, MenuField>
 		prototype.setLabel(source.getLabel());
 		prototype.setValue(source.getValue());
 		try {
-			prototype.setLanguage(modelService.getDto(source.getLanguage()));
-			prototype.setDynamicField(modelService.getDto(source.getDynamicField()));
+			prototype.setLanguage(modelService.getDto(source.getLanguage(), Language.class));
+			prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

@@ -46,16 +46,16 @@ public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob>
 
 	private Cronjob convert(Cronjob source, Cronjob prototype) {
 
-		if (source.getId() != null) 
+		if (source.getId() != null)
 			prototype.setId(source.getId());
-		
+		prototype.setLastModifiedDate(new Date());
+
 		prototype.setJobClass(source.getJobClass());
 		prototype.setJobGroup(source.getJobGroup());
 		prototype.setJobName(source.getJobName());
 		prototype.setDescription(source.getDescription());
 		prototype.setCronExpression(source.getCronExpression());
 		prototype.setStartup(source.isStartup());
-		prototype.setLastModifiedDate(new Date());
 
 		prototype.getCronjobDatas().clear();
 		for (int i = 0; i < source.getCronjobDatas().size(); i++) {

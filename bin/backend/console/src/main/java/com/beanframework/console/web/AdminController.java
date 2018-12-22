@@ -146,7 +146,7 @@ public class AdminController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				modelService.saveDto(adminCreate);
+				modelService.saveDto(adminCreate, Admin.class);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -174,7 +174,7 @@ public class AdminController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.saveDto(adminUpdate);
+				modelService.saveDto(adminUpdate, Admin.class);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

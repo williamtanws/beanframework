@@ -89,7 +89,7 @@ public class MenuResource {
 		}
 
 		List<TreeJson> children = new ArrayList<TreeJson>();
-		if (menu.getChilds().isEmpty() == false) {
+		if (menu.getChilds() != null && menu.getChilds().isEmpty() == false) {
 
 			for (Menu child : menu.getChilds()) {
 				children.add(convertToJson(child, selectedUuid));

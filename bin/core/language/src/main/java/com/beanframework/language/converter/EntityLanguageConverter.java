@@ -5,14 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
 
-@Component
 public class EntityLanguageConverter implements EntityConverter<Language, Language> {
 
 	@Autowired
@@ -50,12 +48,9 @@ public class EntityLanguageConverter implements EntityConverter<Language, Langua
 			prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
 
-		if (source.getName() != null)
-			prototype.setName(source.getName());
-		if (source.getSort() != null)
-			prototype.setSort(source.getSort());
-		if (source.getActive() != null)
-			prototype.setActive(source.getActive());
+		prototype.setName(source.getName());
+		prototype.setSort(source.getSort());
+		prototype.setActive(source.getActive());
 
 		return prototype;
 	}

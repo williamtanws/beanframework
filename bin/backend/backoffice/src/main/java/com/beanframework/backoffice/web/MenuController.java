@@ -31,7 +31,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuNavigation;
 import com.beanframework.menu.service.MenuFacade;
 import com.beanframework.user.domain.UserGroup;
 
@@ -124,7 +123,7 @@ public class MenuController extends AbstractCommonController {
 			menuCreate.setUserGroups(userGroups);
 			
 			try {
-				modelService.saveDto(menuCreate);
+				modelService.saveDto(menuCreate, Menu.class);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -153,7 +152,6 @@ public class MenuController extends AbstractCommonController {
 
 		try {
 			menuFacade.changePosition(UUID.fromString(fromUuid), StringUtils.isNotEmpty(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex));
-			modelService.clearCache(MenuNavigation.class.getName());
 			
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 		} catch (BusinessException e) {
@@ -188,8 +186,7 @@ public class MenuController extends AbstractCommonController {
 			menuUpdate.setUserGroups(userGroups);
 			
 			try {
-				modelService.saveDto(menuUpdate);
-				modelService.clearCache(MenuNavigation.class.getName());
+				modelService.saveDto(menuUpdate, Menu.class);
 				
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -213,7 +210,6 @@ public class MenuController extends AbstractCommonController {
 
 		try {
 			modelService.remove(menuUpdate.getUuid(), Menu.class);
-			modelService.clearCache(MenuNavigation.class.getName());
 			
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

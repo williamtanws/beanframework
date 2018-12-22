@@ -12,7 +12,7 @@
 					<h3 class="box-title" th:text="#{module.console.platform.remove}+#{module.console.platform.modules}"></h3>
 				</div>
 				<div class="box-body">
-					<th:block layout:insert="/console/adminlte/common/fragment/alert :: custom"></th:block>
+					<th:block layout:replace="/console/adminlte/common/fragment/alert :: custom"></th:block>
 					<div class="col-md-9">
 						<div class="col-md-12">
 							<div class="form-group checkbox icheck">
