@@ -26,9 +26,10 @@ public class UserRight extends GenericDomain {
 	private static final long serialVersionUID = 8192305251381233446L;
 	public static final String DOMAIN = "UserRight";
 	public static final String USER_RIGHT_FIELDS = "userRightFields";
+	public static final String SORT = "sort";
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<UserRightField> userRightFields = new ArrayList<UserRightField>();
 
 	private Integer sort;

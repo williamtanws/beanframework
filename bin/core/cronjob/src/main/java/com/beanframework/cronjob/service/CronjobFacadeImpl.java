@@ -60,7 +60,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 			updateCronjob.getCronjobDatas().add(data);
 			
-			modelService.saveEntity(updateCronjob);
+			modelService.saveEntity(updateCronjob, Cronjob.class);
 
 			return updateCronjob;
 		} catch (Exception e) {

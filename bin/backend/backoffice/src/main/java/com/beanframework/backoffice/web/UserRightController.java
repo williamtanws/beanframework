@@ -163,7 +163,7 @@ public class UserRightController extends AbstractCommonController {
 		} else {
 
 			try {
-				modelService.saveDto(userrightCreate);
+				modelService.saveDto(userrightCreate, UserRight.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -193,7 +193,7 @@ public class UserRightController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.saveDto(userrightUpdate);
+				modelService.saveDto(userrightUpdate, UserRight.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

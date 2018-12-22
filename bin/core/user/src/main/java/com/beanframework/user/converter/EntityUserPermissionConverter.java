@@ -1,7 +1,9 @@
 package com.beanframework.user.converter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +12,12 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserPermission;
+import com.beanframework.user.domain.UserPermissionField;
 
 public class EntityUserPermissionConverter implements EntityConverter<UserPermission, UserPermission> {
 
 	@Autowired
 	private ModelService modelService;
-	
-	@Autowired
-	private EntityUserPermissionFieldConverter entityUserPermissionFieldConverter;
 
 	@Override
 	public UserPermission convert(UserPermission source) throws ConverterException {
@@ -49,15 +49,27 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 
 	private UserPermission convert(UserPermission source, UserPermission prototype) throws ConverterException {
 
-		prototype.setLastModifiedDate(new Date());
-		if (source.getId() != null) 
-			prototype.setId(source.getId());
+		try {
+			if (source.getId() != null)
+				prototype.setId(source.getId());
+			prototype.setLastModifiedDate(new Date());
 
-		if (source.getSort() != null) 
 			prototype.setSort(source.getSort());
-		if (source.getUserPermissionFields() != null) 
-			prototype.setUserPermissionFields(entityUserPermissionFieldConverter.convert(source.getUserPermissionFields()));
-
+			if (source.getUserPermissionFields() == null || source.getUserPermissionFields().isEmpty()) {
+				prototype.setUserPermissionFields(new ArrayList<UserPermissionField>());
+			} else {
+				List<UserPermissionField> userPermissionFields = new ArrayList<UserPermissionField>();
+				for (UserPermissionField userPermissionField : source.getUserPermissionFields()) {
+					UserPermissionField entityUserPermissionField = modelService
+							.findOneEntityByUuid(userPermissionField.getUuid(), UserPermissionField.class);
+					entityUserPermissionField.setValue(userPermissionField.getValue());
+					userPermissionFields.add(entityUserPermissionField);
+				}
+				prototype.setUserPermissionFields(userPermissionFields);
+			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), e);
+		}
 		return prototype;
 	}
 

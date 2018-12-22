@@ -37,7 +37,7 @@ import com.beanframework.console.domain.LanguageCsv;
 import com.beanframework.language.domain.Language;
 
 public class LanguageUpdate extends Updater {
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	private static Logger LOGGER = LoggerFactory.getLogger(LanguageUpdate.class);
 	
 	@Autowired
 	private ModelService modelService;
@@ -70,35 +70,40 @@ public class LanguageUpdate extends Updater {
 					save(languageCsvList);
 
 				} catch (Exception ex) {
-					logger.error("Error reading the resource file: " + ex);
+					LOGGER.error("Error reading the resource file: " + ex);
 				}
 			}
 		} catch (IOException ex) {
-			logger.error("Error reading the resource file: " + ex);
+			LOGGER.error("Error reading the resource file: " + ex);
 		}
 	}
 
 	public void save(List<LanguageCsv> languageCsvList) throws Exception {
 
-		for (LanguageCsv csv : languageCsvList) {
-			
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Language.ID, csv.getId());
-			
-			Language language = modelService.findOneEntityByProperties(properties, Language.class);
-			
-			if(language == null) {
-				language = modelService.create(Language.class);
-				language.setId(csv.getId());
+		try {
+			for (LanguageCsv csv : languageCsvList) {
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Language.ID, csv.getId());
+				
+				Language language = modelService.findOneEntityByProperties(properties, Language.class);
+				
+				if(language == null) {
+					language = modelService.create(Language.class);
+					language.setId(csv.getId());
+				}
+				language.setName(csv.getName());
+				language.setActive(csv.isActive());
+				language.setSort(csv.getSort());
+
+				modelService.saveEntity(language, Language.class);
 			}
-			language.setName(csv.getName());
-			language.setActive(csv.isActive());
-			language.setSort(csv.getSort());
 
-			modelService.saveEntity(language);
+			modelService.saveAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
-
-		modelService.saveAll();
 	}
 
 	public List<LanguageCsv> readCSVFile(Reader reader) {
@@ -115,23 +120,23 @@ public class LanguageUpdate extends Updater {
 			final CellProcessor[] processors = getProcessors();
 
 			LanguageCsv languageCsv;
-			logger.info("Start import Language Csv.");
+			LOGGER.info("Start import Language Csv.");
 			while ((languageCsv = beanReader.read(LanguageCsv.class, header, processors)) != null) {
-				logger.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
 						languageCsv);
 				languageCsvList.add(languageCsv);
 			}
-			logger.info("Finished import Language Csv.");
+			LOGGER.info("Finished import Language Csv.");
 		} catch (FileNotFoundException ex) {
-			logger.error("Could not find the CSV file: " + ex);
+			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
-			logger.error("Error reading the CSV file: " + ex);
+			LOGGER.error("Error reading the CSV file: " + ex);
 		} finally {
 			if (beanReader != null) {
 				try {
 					beanReader.close();
 				} catch (IOException ex) {
-					logger.error("Error closing the reader: " + ex);
+					LOGGER.error("Error closing the reader: " + ex);
 				}
 			}
 		}

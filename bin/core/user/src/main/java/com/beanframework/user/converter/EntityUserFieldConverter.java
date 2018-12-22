@@ -13,41 +13,41 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.language.domain.Language;
-import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.domain.UserField;
 
-public class EntityUserRightFieldConverter implements EntityConverter<UserRightField, UserRightField> {
+public class EntityUserFieldConverter implements EntityConverter<UserField, UserField> {
 
 	@Autowired
 	private ModelService modelService;
 
-	public List<UserRightField> convert(List<UserRightField> sources) throws ConverterException {
-		List<UserRightField> convertedList = new ArrayList<UserRightField>();
-		for (UserRightField source : sources) {
+	public List<UserField> convert(List<UserField> sources) throws ConverterException {
+		List<UserField> convertedList = new ArrayList<UserField>();
+		for (UserField source : sources) {
 			convertedList.add(convert(source));
 		}
 		return convertedList;
 	}
 
 	@Override
-	public UserRightField convert(UserRightField source) throws ConverterException {
+	public UserField convert(UserField source) throws ConverterException {
 
-		UserRightField prototype;
+		UserField prototype;
 		try {
 
 			if (source.getUuid() != null) {
 
 				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(UserRightField.UUID, source.getUuid());
+				properties.put(UserField.UUID, source.getUuid());
 
-				UserRightField exists = modelService.findOneEntityByProperties(properties, UserRightField.class);
+				UserField exists = modelService.findOneEntityByProperties(properties, UserField.class);
 
 				if (exists != null) {
 					prototype = exists;
 				} else {
-					prototype = modelService.create(UserRightField.class);
+					prototype = modelService.create(UserField.class);
 				}
 			} else {
-				prototype = modelService.create(UserRightField.class);
+				prototype = modelService.create(UserField.class);
 			}
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
@@ -56,7 +56,7 @@ public class EntityUserRightFieldConverter implements EntityConverter<UserRightF
 		return convert(source, prototype);
 	}
 
-	private UserRightField convert(UserRightField source, UserRightField prototype) throws ConverterException {
+	private UserField convert(UserField source, UserField prototype) throws ConverterException {
 
 		try {
 			if (source.getId() != null)

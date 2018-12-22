@@ -4,13 +4,17 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.hibernate.Hibernate;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
@@ -20,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -143,27 +148,42 @@ public class EmployeeServiceImpl implements EmployeeService {
 		} else {
 			return null;
 		}
-
-		return getAuthenticated(employee);
+		
+		Hibernate.initialize(employee.getUserGroups());
+		employee.setAuthorities(getAuthorities(employee.getUserGroups()));
+		
+		return employee;
 	}
 
-	private Employee getAuthenticated(Employee employee) {
+	private Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups) {
+		
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
-		for (UserGroup userGroup : employee.getUserGroups()) {
+		for (UserGroup userGroup : userGroups) {
+			
+			Hibernate.initialize(userGroup.getUserAuthorities());
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 
 				if (Boolean.TRUE.equals(userAuthority.getEnabled())) {
 					StringBuilder authority = new StringBuilder();
+					
+					Hibernate.initialize(userAuthority.getUserPermission());
 					authority.append(userAuthority.getUserPermission().getId());
 					authority.append("_");
+					Hibernate.initialize(userAuthority.getUserRight());
 					authority.append(userAuthority.getUserRight().getId());
 
-					employee.getAuthorities().add(new SimpleGrantedAuthority(authority.toString()));
+					authorities.add(new SimpleGrantedAuthority(authority.toString()));
 				}
 
 			}
+
+			Hibernate.initialize(userGroup.getChilds());
+			if(userGroup.getChilds() != null && userGroup.getChilds().isEmpty() == false) {
+				authorities.addAll(getAuthorities(userGroup.getChilds()));
+			}
 		}
 
-		return employee;
+		return authorities;
 	}
 }

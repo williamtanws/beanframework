@@ -195,6 +195,8 @@ public class PlatformConfig {
 		properties.put("hibernate.c3p0.preferredTestQuery", "SELECT 1");
 		properties.put("hibernate.c3p0.autoCommitOnClose", "true");
 		properties.put("hibernate.c3p0.testConnectionOnCheckout", "true");
+		//anti-pattern
+//		properties.put("hibernate.enable_lazy_load_no_trans", "true");
 		properties.put("current_session_context_class", "thread");
 		// Fix hibernate multiple merge problem
 //		properties.put("hibernate.event.merge.entity_copy_observer", "allow");

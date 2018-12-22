@@ -166,7 +166,7 @@ public class UserPermissionController extends AbstractCommonController {
 		} else {
 
 			try {
-				modelService.saveDto(userpermissionCreate);
+				modelService.saveDto(userpermissionCreate, UserPermission.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -196,7 +196,7 @@ public class UserPermissionController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.saveDto(userpermissionUpdate);
+				modelService.saveDto(userpermissionUpdate, UserPermission.class);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

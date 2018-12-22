@@ -72,7 +72,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 			cronjob.setStatus(CronjobEnum.Status.ABORTED);
 			cronjob.setResult(null);
 			
-			modelService.saveEntity(cronjob);
+			modelService.saveEntity(cronjob, Cronjob.class);
 		}
 	}
 

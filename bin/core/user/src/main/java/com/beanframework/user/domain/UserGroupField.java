@@ -29,18 +29,18 @@ public class UserGroupField extends GenericDomain {
 	public static final String LANGUAGE = "language";
 	public static final String USER_GROUP = "userGroup";
 	public static final String DYNAMIC_FIELD = "dynamicField";
-
-	@NotAudited
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "language_uuid")
-	private Language language;
-
+	
 	@NotAudited
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userGroup_uuid")
 	private UserGroup userGroup;
 
+	@NotAudited
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "language_uuid")
+	private Language language;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")
 	private DynamicField dynamicField;

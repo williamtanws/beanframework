@@ -94,7 +94,7 @@ public class LicenseController extends AbstractCommonController {
 				existingConfiguration.setValue("false");
 			}
 			
-			modelService.saveDto(existingConfiguration);
+			modelService.saveDto(existingConfiguration, Configuration.class);
 			addSuccessMessage(redirectAttributes, WebLicenseConstants.Locale.ACCEPT_SUCCESS);
 		} catch (Exception e) {
 			addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);

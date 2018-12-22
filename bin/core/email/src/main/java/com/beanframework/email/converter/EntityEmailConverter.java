@@ -60,7 +60,6 @@ public class EntityEmailConverter implements EntityConverter<Email, Email> {
 		} else {
 			prototype.setStatus(source.getStatus());
 		}
-		prototype.setLastModifiedDate(new Date());
 
 		return prototype;
 	}

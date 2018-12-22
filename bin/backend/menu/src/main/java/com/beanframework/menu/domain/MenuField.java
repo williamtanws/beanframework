@@ -33,15 +33,15 @@ public class MenuField extends GenericDomain {
 	public static final String DYNAMIC_FIELD = "dynamicField";
 
 	@NotAudited
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "language_uuid")
-	private Language language;
-
-	@NotAudited
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "menu_uuid")
 	private Menu menu;
+	
+	@NotAudited
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "language_uuid")
+	private Language language;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")

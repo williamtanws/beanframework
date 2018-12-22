@@ -4,24 +4,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.user.converter.EntityUserGroupConverter;
+import com.beanframework.menu.domain.MenuField;
+import com.beanframework.user.domain.UserGroup;
 
 public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private EntityUserGroupConverter entityUserGroupConverter;
-
-	@Autowired
-	private EntityMenuFieldConverter entityMenuFieldConverter;
 
 	@Override
 	public Menu convert(Menu source) throws ConverterException {
@@ -58,106 +54,64 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 
 	private Menu convert(Menu source, Menu prototype) throws ConverterException {
 
-		if (source.getId() != null) {
-			prototype.setId(source.getId());
-		}
-		prototype.setLastModifiedDate(new Date());
+		try {
+			if (source.getId() != null) {
+				prototype.setId(source.getId());
+			}
+			prototype.setLastModifiedDate(new Date());
 
-		prototype.setSort(source.getSort());
-		prototype.setIcon(source.getIcon());
-		prototype.setPath(source.getPath());
-		prototype.setTarget(source.getTarget());
-		prototype.setEnabled(source.getEnabled());
+			prototype.setSort(source.getSort());
+			prototype.setIcon(source.getIcon());
+			prototype.setPath(source.getPath());
+			prototype.setTarget(source.getTarget());
+			prototype.setEnabled(source.getEnabled());
 
-		if (source.getParent() != null) {
-			prototype.setParent(this.convert(source.getParent()));
-		}
-		if (source.getChilds() != null) {
-			prototype.setChilds(this.convert(source.getChilds()));
-		}
-		if (source.getUserGroups() != null) {
-			prototype.setUserGroups(entityUserGroupConverter.convert(source.getUserGroups()));
-		}
-		if (source.getMenuFields() != null) {
-			prototype.setMenuFields(entityMenuFieldConverter.convert(source.getMenuFields()));
-		}
+			Hibernate.initialize(source.getParent());
+			Hibernate.initialize(source.getChilds());
+			Hibernate.initialize(source.getUserGroups());
 
-//		if (source.getParent() != null) {
-//			if (source.getParent().getUuid() != null) {
-//				
-//				Map<String, Object> properties = new HashMap<String, Object>();
-//				properties.put(Menu.UUID, source.getParent().getUuid());
-//				
-//				Menu parent = modelService.findOneEntityByProperties(properties, Menu.class);
-//				
-//				prototype.setParent(parent == null ? null : parent);
-//			} else if (StringUtils.isNotEmpty(source.getParent().getId())) {
-//				
-//				Map<String, Object> properties = new HashMap<String, Object>();
-//				properties.put(Menu.ID, source.getParent().getId());
-//				
-//				Menu parent = modelService.findOneEntityByProperties(properties, Menu.class);
-//				
-//				prototype.setParent(parent == null ? null : parent);
-//			}
-//		} else {
-//			prototype.setParent(null);
-//		}
-//
-//		prototype.getMenuFields().clear();
-//		for (MenuField menuLang : source.getMenuFields()) {
-//			if (menuLang.getLanguage().getUuid() != null) {
-//				
-//				Map<String, Object> properties = new HashMap<String, Object>();
-//				properties.put(Language.UUID, menuLang.getLanguage().getUuid());
-//				
-//				Language language = modelService.findOneEntityByProperties(properties, Language.class);
-//				
-//				if (language != null) {
-//					menuLang.setLanguage(language);
-//					menuLang.setMenu(prototype);
-//					prototype.getMenuFields().add(menuLang);
-//				}
-//			} else if (StringUtils.isNotEmpty(menuLang.getLanguage().getId())) {
-//				
-//				Map<String, Object> properties = new HashMap<String, Object>();
-//				properties.put(Language.ID, menuLang.getLanguage().getId());
-//				
-//				Language language = modelService.findOneEntityByProperties(properties, Language.class);
-//				
-//				if (language != null) {
-//					menuLang.setLanguage(language);
-//					menuLang.setMenu(prototype);
-//					prototype.getMenuFields().add(menuLang);
-//				}
-//			}
-//		}
-//
-//		Hibernate.initialize(prototype.getUserGroups());
-//		prototype.getUserGroups().clear();
-//		for (UserGroup userGroup : source.getUserGroups()) {
-//			if(userGroup.getUuid() != null) {
-//				
-//				Map<String, Object> properties = new HashMap<String, Object>();
-//				properties.put(UserGroup.UUID, source.getUuid());
-//				UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
-//				
-//				if (existingUserGroup != null) {
-//					prototype.getUserGroups().add(existingUserGroup);
-//				}
-//			}
-//			else if(StringUtils.isNotEmpty(userGroup.getId())) {
-//				
-//				Map<String, Object> properties = new HashMap<String, Object>();
-//				properties.put(UserGroup.ID, source.getId());
-//				UserGroup existingUserGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
-//				
-//				if (existingUserGroup != null) {
-//					prototype.getUserGroups().add(existingUserGroup);
-//				}
-//			}
-//		}
-
+			if (source.getParent() == null || source.getParent().getUuid() == null) {
+				prototype.setParent(null);
+			} else {
+				Menu parent = modelService.findOneEntityByUuid(source.getParent().getUuid(), Menu.class);
+				prototype.setParent(parent);
+			}
+			if (source.getChilds() == null || source.getChilds().isEmpty()) {
+				prototype.setChilds(new ArrayList<Menu>());
+			} else {
+				List<Menu> childs = new ArrayList<Menu>();
+				for (Menu child : source.getChilds()) {
+					Menu entityMenu = modelService.findOneEntityByUuid(child.getUuid(), Menu.class);
+					if (entityMenu != null)
+						childs.add(entityMenu);
+				}
+				prototype.setChilds(childs);
+			}
+			if (source.getUserGroups() == null) {
+				prototype.setUserGroups(new ArrayList<UserGroup>());
+			} else {
+				List<UserGroup> userGroups = new ArrayList<UserGroup>();
+				for (UserGroup userGroup : source.getUserGroups()) {
+					UserGroup entityUserGroup = modelService.findOneEntityByUuid(userGroup.getUuid(), UserGroup.class);
+					if (entityUserGroup != null)
+						userGroups.add(entityUserGroup);
+				}
+				prototype.setUserGroups(userGroups);
+			}
+			if (source.getMenuFields() == null || source.getMenuFields().isEmpty()) {
+				prototype.setMenuFields(new ArrayList<MenuField>());
+			} else {
+				List<MenuField> menuFields = new ArrayList<MenuField>();
+				for (MenuField menuField : source.getMenuFields()) {
+					MenuField entityMenuField = modelService.findOneEntityByUuid(menuField.getUuid(), MenuField.class);
+					entityMenuField.setValue(menuField.getValue());
+					menuFields.add(entityMenuField);
+				}
+				prototype.setMenuFields(menuFields);
+			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), e);
+		}
 		return prototype;
 	}
 

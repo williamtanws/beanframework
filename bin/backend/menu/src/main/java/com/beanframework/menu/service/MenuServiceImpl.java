@@ -14,8 +14,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Hibernate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
@@ -25,73 +23,45 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuNavigation;
 import com.beanframework.menu.repository.MenuRepository;
 import com.beanframework.user.domain.UserGroup;
 
-@SuppressWarnings("unchecked")
 @Service
 public class MenuServiceImpl implements MenuService {
-
-	Logger logger = LoggerFactory.getLogger(MenuServiceImpl.class.getName());
-
+	
 	@Autowired
 	private ModelService modelService;
 
-	@SuppressWarnings("rawtypes")
 	@Autowired
 	private MenuRepository menuRepository;
 
 	@Transactional
 	@Override
-	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
+	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) {
 
 		if (toUuid == null) {
+			menuRepository.setParentNullByUuid(fromUuid);
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Menu.UUID, fromUuid);
-			Menu fromMenu = modelService.findOneEntityByProperties(properties, Menu.class);
-			fromMenu.setParent(null);
-			fromMenu.setSort(toIndex);
+			menuRepository.updateSortByUuid(fromUuid, toIndex);
 
-			modelService.saveEntity(fromMenu);
-
-			properties = new HashMap<String, Object>();
-			properties.put(Menu.PARENT, null);
-
-			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-			sorts.put(Menu.SORT, Sort.Direction.ASC);
-			List<Menu> toMenuChilds = modelService.findDtoByPropertiesAndSorts(properties, sorts, Menu.class);
+			List<Menu> toMenuChilds = menuRepository.findByParentNullOrderBySort();
 
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
-			for (Menu menu : menus) {
-				modelService.saveEntity(menu);
-			}
+			menuRepository.saveAll(menus);
 		} else {
+			menuRepository.updateParentByUuid(fromUuid, toUuid);
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Menu.UUID, toUuid);
-			Menu toMenu = modelService.findOneEntityByProperties(properties, Menu.class);
+			menuRepository.updateSortByUuid(fromUuid, toIndex);
 
-			properties = new HashMap<String, Object>();
-			properties.put(Menu.UUID, fromUuid);
-			Menu fromMenu = modelService.findOneEntityByProperties(properties, Menu.class);
-			fromMenu.setParent(toMenu);
-			fromMenu.setSort(toIndex);
-
-			modelService.saveEntity(fromMenu);
-
-			properties = new HashMap<String, Object>();
-			properties.put(Menu.PARENT, toUuid);
-
-			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-			sorts.put(Menu.SORT, Sort.Direction.ASC);
-			List<Menu> toMenuChilds = modelService.findDtoByPropertiesAndSorts(properties, sorts, Menu.class);
+			List<Menu> toMenuChilds = menuRepository.findByParentUuidOrderBySort(toUuid);
 
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
-			for (Menu menu : menus) {
-				modelService.saveEntity(menu);
-			}
+			menuRepository.saveAll(menus);
 		}
+
+		modelService.clearCache(Menu.class);
+		modelService.clearCache(MenuNavigation.class);
 	}
 
 	private List<Menu> changePosition(List<Menu> menuList, UUID fromId, int toIndex) {

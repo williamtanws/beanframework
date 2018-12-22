@@ -33,12 +33,12 @@ public class UserGroup extends GenericDomain {
 	public static final String USER_AUTHORITIES = "userAuthorities";
 	public static final String USER_GROUP_FIELDS = "userGroupFields";
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_uuid")
 	private UserGroup parent;
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = PARENT, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = PARENT, fetch = FetchType.LAZY)
 	private List<UserGroup> childs = new ArrayList<UserGroup>();
 
 	@Cascade({ CascadeType.ALL })
@@ -46,7 +46,7 @@ public class UserGroup extends GenericDomain {
 	private List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<UserGroupField> userGroupFields = new ArrayList<UserGroupField>();
 
 	@Transient

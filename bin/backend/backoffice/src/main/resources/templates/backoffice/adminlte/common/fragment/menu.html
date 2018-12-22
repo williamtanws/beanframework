@@ -21,7 +21,7 @@
 	</th:block>
 	<th:block th:fragment="tree-submenu">
 		<li th:class="${#httpServletRequest.requestURI == menu.path ? 'active':''}" th:if="${#lists.isEmpty(menu.navigationChilds)}" th:id="${menu.uuid}">
-			<a th:href="${menu.path}" th:target="${menu.target.toString()}">
+			<a th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}">
 				<i th:classappend="${menu.icon}"></i>
 				<th:block th:each="menuField: ${menu.menuFields}">
 					<span th:text="${menuField.value}" th:if="(${menuField.language.id} == ${#locale.toString()})"></span>
@@ -62,7 +62,7 @@
 	</th:block>
 	<th:block th:fragment="button-submenu">
 		<th:block th:if="${#lists.isEmpty(menu.navigationChilds)}">
-			<a class="btn btn-app" th:href="${menu.path}" th:target="${menu.target.toString()}">
+			<a class="btn btn-app" th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}">
 				<i th:classappend="${menu.icon}"></i>
 				<th:block th:each="menuField: ${menu.menuFields}">
 					<span th:text="${menuField.value}" th:if="(${menuField.language.id} == ${#locale.toString()})"></span>

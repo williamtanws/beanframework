@@ -36,12 +36,12 @@ public class UserAuthority extends GenericDomain {
 	private UserGroup userGroup;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userpermission_uuid")
 	private UserPermission userPermission;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userright_uuid")
 	private UserRight userRight;
 

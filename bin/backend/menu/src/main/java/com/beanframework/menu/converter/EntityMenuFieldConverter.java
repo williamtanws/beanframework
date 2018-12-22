@@ -2,14 +2,17 @@ package com.beanframework.menu.converter;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.dynamicfield.converter.EntityDynamicFieldConverter;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.language.domain.Language;
 import com.beanframework.menu.domain.MenuField;
 
 public class EntityMenuFieldConverter implements EntityConverter<MenuField, MenuField> {
@@ -17,8 +20,13 @@ public class EntityMenuFieldConverter implements EntityConverter<MenuField, Menu
 	@Autowired
 	private ModelService modelService;
 
-	@Autowired
-	private EntityDynamicFieldConverter entityDynamicFieldConverter;
+	public List<MenuField> convert(List<MenuField> sources) throws ConverterException {
+		List<MenuField> convertedList = new ArrayList<MenuField>();
+		for (MenuField source : sources) {
+			convertedList.add(convert(source));
+		}
+		return convertedList;
+	}
 
 	@Override
 	public MenuField convert(MenuField source) throws ConverterException {
@@ -28,7 +36,10 @@ public class EntityMenuFieldConverter implements EntityConverter<MenuField, Menu
 
 			if (source.getUuid() != null) {
 
-				MenuField exists = modelService.findOneEntityByUuid(source.getUuid(), MenuField.class);
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(MenuField.UUID, source.getUuid());
+
+				MenuField exists = modelService.findOneEntityByProperties(properties, MenuField.class);
 
 				if (exists != null) {
 					prototype = exists;
@@ -45,26 +56,32 @@ public class EntityMenuFieldConverter implements EntityConverter<MenuField, Menu
 		return convert(source, prototype);
 	}
 
-	public List<MenuField> convert(List<MenuField> sources) throws ConverterException {
-		List<MenuField> convertedList = new ArrayList<MenuField>();
-		try {
-			for (MenuField source : sources) {
-				convertedList.add(convert(source));
-			}
-		} catch (ConverterException e) {
-			throw new ConverterException(e.getMessage(), this);
-		}
-		return convertedList;
-	}
-
 	private MenuField convert(MenuField source, MenuField prototype) throws ConverterException {
 
-		if (source.getId() != null) {
-			prototype.setId(source.getId());
-		}
-		prototype.setLastModifiedDate(new Date());
+		try {
+			if (source.getId() != null)
+				prototype.setId(source.getId());
+			prototype.setLastModifiedDate(new Date());
 
-		prototype.setDynamicField(entityDynamicFieldConverter.convert(source.getDynamicField()));
+			if (source.getLanguage() == null) {
+				prototype.setLanguage(null);
+			} else {
+				Language language = modelService.findOneEntityByUuid(source.getLanguage().getUuid(), Language.class);
+				prototype.setLanguage(language);
+			}
+			if (source.getDynamicField() == null) {
+				prototype.setDynamicField(null);
+			} else {
+				DynamicField dynamicField = modelService.findOneEntityByUuid(source.getDynamicField().getUuid(),
+						DynamicField.class);
+				prototype.setDynamicField(dynamicField);
+			}
+			prototype.setLabel(source.getLabel());
+			prototype.setValue(source.getValue());
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), e);
+
+		}
 
 		return prototype;
 	}

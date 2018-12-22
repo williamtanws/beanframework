@@ -14,9 +14,9 @@ import com.beanframework.common.exception.BusinessException;
 @SuppressWarnings("rawtypes")
 public interface ModelService {
 
-	void attach(Object model);
+	void attach(Object model, Class modelClass);
 
-	void detach(Object model);
+	void detach(Object model, Class modelClass);
 
 	void detachAll();
 
@@ -28,12 +28,15 @@ public interface ModelService {
 
 	<T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
+	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties,
+			Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
+
 	<T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	<T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
 
-	<T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts,
-			Class modelClass) throws Exception;
+	<T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties,
+			Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
 
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass);
 
@@ -43,9 +46,9 @@ public interface ModelService {
 
 	void refresh(Object model);
 
-	void saveEntity(Object model) throws BusinessException;
+	void saveEntity(Object model, Class modelClass) throws BusinessException;
 
-	void saveDto(Object model) throws BusinessException;
+	void saveDto(Object model, Class modelClass) throws BusinessException;
 
 	void saveAll() throws BusinessException;
 
@@ -53,16 +56,15 @@ public interface ModelService {
 
 	int removeAll(Class modelClass) throws BusinessException;
 
-	<T> T getEntity(Object model) throws Exception;
+	<T> T getEntity(Object model, Class modelClass) throws Exception;
 
-	<T extends Collection> T getEntity(Collection<? extends Object> model) throws Exception;
+	<T extends Collection> T getEntity(Collection model, Class modelClass) throws Exception;
 
-	<T> T getDto(Object model) throws Exception;
+	<T> T getDto(Object model, Class modelClass) throws Exception;
 
-	<T extends Collection> T getDto(Collection<? extends Object> models) throws Exception;
+	<T extends Collection> T getDto(Collection models, Class modelClass) throws Exception;
 
-	void initDefaults(Object model) throws Exception;
+	void initDefaults(Object model, Class modelClass) throws Exception;
 
-	void clearCache(String name);
-
+	public void clearCache(Class modelClass);
 }

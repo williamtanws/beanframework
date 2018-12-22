@@ -50,14 +50,10 @@ public class EntityCustomerConverter implements EntityConverter<Customer, Custom
 			prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
 
-		if (source.getAccountNonExpired() != null)
-			prototype.setAccountNonExpired(source.getAccountNonExpired());
-		if (source.getAccountNonLocked() != null)
-			prototype.setAccountNonLocked(source.getAccountNonLocked());
-		if (source.getCredentialsNonExpired() != null)
-			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
-		if (source.getEnabled() != null)
-			prototype.setEnabled(source.getEnabled());
+		prototype.setAccountNonExpired(source.getAccountNonExpired());
+		prototype.setAccountNonLocked(source.getAccountNonLocked());
+		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+		prototype.setEnabled(source.getEnabled());
 		if (StringUtils.isNotEmpty(source.getPassword()))
 			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
 
