@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,16 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCronjobConstants;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.service.CronjobFacade;
 
 @RestController
 public class CronjobResource {
 
 	@Autowired
-	private ModelService modelService;
+	private CronjobFacade cronjobFacade;
 
-	@PreAuthorize(WebCronjobConstants.PreAuthorize.READ)
 	@RequestMapping(WebCronjobConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -33,7 +31,7 @@ public class CronjobResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.ID, id);
 
-		Cronjob cronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
+		Cronjob cronjob = cronjobFacade.findOneDtoByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 		if (StringUtils.isNotEmpty(uuidStr)) {
@@ -46,7 +44,6 @@ public class CronjobResource {
 		return cronjob != null ? "false" : "true";
 	}
 
-	@PreAuthorize(WebCronjobConstants.PreAuthorize.READ)
 	@RequestMapping(WebCronjobConstants.Path.Api.CHECKJOBGROUPNAME)
 	public String checkName(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -58,7 +55,7 @@ public class CronjobResource {
 		properties.put(Cronjob.JOB_GROUP, jobGroup);
 		properties.put(Cronjob.JOB_NAME, jobName);
 
-		Cronjob cronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
+		Cronjob cronjob = cronjobFacade.findOneDtoByProperties(properties);
 
 		if (StringUtils.isNotEmpty(uuidStr) && cronjob != null && cronjob.getUuid().equals(UUID.fromString(uuidStr))) {
 			return "true";
@@ -69,7 +66,6 @@ public class CronjobResource {
 		}
 	}
 
-	@PreAuthorize(WebCronjobConstants.PreAuthorize.READ)
 	@RequestMapping(WebCronjobConstants.Path.Api.CHECKJOBCLASS)
 	public String checkJobClass(Model model, @RequestParam Map<String, Object> requestParams) {
 
@@ -84,7 +80,6 @@ public class CronjobResource {
 		return "true";
 	}
 
-	@PreAuthorize(WebCronjobConstants.PreAuthorize.READ)
 	@RequestMapping(WebCronjobConstants.Path.Api.CHECKCRONEXPRESSION)
 	public String checkConExpression(Model model, @RequestParam Map<String, Object> requestParams) {
 

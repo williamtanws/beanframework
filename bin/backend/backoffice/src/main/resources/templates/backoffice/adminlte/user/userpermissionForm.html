@@ -13,6 +13,13 @@
 				<span class="help-block"></span>
 			</div>
 		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="sort" th:text="#{module.userpermission.sort}"></label>
+				<input type="text" class="form-control" name="sort" th:value="*{sort}">
+				<span class="help-block"></span>
+			</div>
+		</div>
 	</th:block>
 	<th:block layout:fragment="attribute">
 		<div class="col-md-6">
@@ -80,7 +87,7 @@
 						<div class="modal-body">
 							<div class="container-fluid">
 								<div class="row">
-									<th:block layout:replace="/backoffice/adminlte/user/userpermissionForm :: general"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/user/userpermissionForm :: general"></th:block>
 								</div>
 							</div>
 						</div>
@@ -184,20 +191,20 @@
 						<div class="tab-content">
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
-									<th:block layout:replace="/backoffice/adminlte/user/userpermissionForm :: general"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/user/userpermissionForm :: general"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
-									<th:block layout:replace="/backoffice/adminlte/user/userpermissionForm :: attribute"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/user/userpermissionForm :: attribute"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
-									<th:block layout:replace="/backoffice/adminlte/user/userpermissionForm :: administration"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/user/userpermissionForm :: administration"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -241,20 +248,24 @@
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
-		        
 		        $('#userpermission-update-form').validate({
 		            rules: {
+		                id: {
 		                    required: true,
 		                    remote: {
 		                        url: /*[[${@environment.getProperty('path.api.userpermission.checkid')}]]*/ ,
 		                        type: "get",
 		                        data: {
-		                            uuid: /*[[${userpermissionUpdate.uuid}]]*/ ,
+		                        	uuid: /*[[${userpermissionUpdate.uuid}]]*/ ,
 		                            id: function() {
 		                                return $("#userpermission-update-form input[name='id']").val();
 		                            }
 		                        }
 		                    }
+		                },
+		                name: {
+		                    required: true
+		                }
 		            },
 		            messages: {
 		                id: {
@@ -273,7 +284,6 @@
 		                element.closest('.form-group').find('.help-block').html(error.text());
 		            }
 		        });
-		
 		    });
 		    /*]]>*/
 		</script>

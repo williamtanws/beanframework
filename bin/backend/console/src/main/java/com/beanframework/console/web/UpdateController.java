@@ -85,6 +85,7 @@ public class UpdateController {
 						entry.getValue().update();
 						successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
 					} catch (Exception e) {
+						e.printStackTrace();
 						logger.error(e.getMessage(), e);
 						errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " <br>");
 					}

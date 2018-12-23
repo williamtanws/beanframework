@@ -12,4 +12,6 @@ public interface MenuService {
 	List<Menu> findMenuTree() throws Exception;
 
 	List<Menu> findMenuTreeByUserGroup(List<UUID> userGroupUuids) throws Exception;
+
+	void delete(UUID uuid) throws Exception;
 }

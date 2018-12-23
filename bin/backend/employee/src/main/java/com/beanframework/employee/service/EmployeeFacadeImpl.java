@@ -2,10 +2,14 @@ package com.beanframework.employee.service;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -177,5 +181,35 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public void deleteAllEmployeeProfilePicture() {
 		employeeService.deleteAllEmployeeProfilePicture();
+	}
+
+	@Override
+	public Page<Employee> findPage(Specification<Employee> specification, PageRequest pageRequest) throws Exception {
+		return modelService.findPage(specification, pageRequest, Employee.class);
+	}
+
+	@Override
+	public Employee findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, Employee.class);
+	}
+
+	@Override
+	public Employee create() throws Exception {
+		return modelService.create(Employee.class);
+	}
+
+	@Override
+	public void createDto(Employee model) throws BusinessException {
+		modelService.saveDto(model, Employee.class);
+	}
+
+	@Override
+	public void updateDto(Employee model) throws BusinessException {
+		modelService.saveDto(model, Employee.class);
+	}
+
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.delete(uuid, Employee.class);
 	}
 }

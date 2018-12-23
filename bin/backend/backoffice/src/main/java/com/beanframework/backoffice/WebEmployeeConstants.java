@@ -12,11 +12,6 @@ public interface WebEmployeeConstants {
 		public interface View {
 			public static final String SESSION_LIST = "${view.employee.session}";
 		}
-		
-		public static interface PreAuthorize {
-			public static final String READ = "hasAuthority('employeesession_read')";
-			public static final String DELETE = "hasAuthority('employeesession_delete')";
-		}
 	}
 
 	public interface Path {
@@ -41,13 +36,6 @@ public interface WebEmployeeConstants {
 		public static final String UPDATE = "employeeUpdate";
 		public static final String PROFILE = "employeeProfile";
 		public static final String SEARCH = "employeeSearch";
-	}
-	
-	public static interface PreAuthorize {
-		public static final String READ = "hasAuthority('employee_read')";
-		public static final String CREATE = "hasAuthority('employee_create')";
-		public static final String UPDATE = "hasAuthority('employee_update')";
-		public static final String DELETE = "hasAuthority('employee_delete')";
 	}
 	
 	public interface Locale {

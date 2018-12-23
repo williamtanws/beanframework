@@ -38,7 +38,7 @@ import com.beanframework.language.domain.Language;
 
 public class LanguageUpdate extends Updater {
 	private static Logger LOGGER = LoggerFactory.getLogger(LanguageUpdate.class);
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -54,56 +54,41 @@ public class LanguageUpdate extends Updater {
 	}
 
 	@Override
-	public void update() {
+	public void update() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = null;
-		try {
-			resources = loader.getResources(LANGUAGE_IMPORT_UPDATE);
-			for (Resource resource : resources) {
-				try {
-					InputStream in = resource.getInputStream();
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					IOUtils.copy(in, baos);
-					BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
+		Resource[] resources = loader.getResources(LANGUAGE_IMPORT_UPDATE);
+		for (Resource resource : resources) {
+			InputStream in = resource.getInputStream();
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			IOUtils.copy(in, baos);
+			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-					List<LanguageCsv> languageCsvList = readCSVFile(reader);
-					save(languageCsvList);
-
-				} catch (Exception ex) {
-					LOGGER.error("Error reading the resource file: " + ex);
-				}
-			}
-		} catch (IOException ex) {
-			LOGGER.error("Error reading the resource file: " + ex);
+			List<LanguageCsv> languageCsvList = readCSVFile(reader);
+			save(languageCsvList);
 		}
 	}
 
 	public void save(List<LanguageCsv> languageCsvList) throws Exception {
 
-		try {
-			for (LanguageCsv csv : languageCsvList) {
-				
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Language.ID, csv.getId());
-				
-				Language language = modelService.findOneEntityByProperties(properties, Language.class);
-				
-				if(language == null) {
-					language = modelService.create(Language.class);
-					language.setId(csv.getId());
-				}
-				language.setName(csv.getName());
-				language.setActive(csv.isActive());
-				language.setSort(csv.getSort());
+		for (LanguageCsv csv : languageCsvList) {
 
-				modelService.saveEntity(language, Language.class);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Language.ID, csv.getId());
+
+			Language language = modelService.findOneEntityByProperties(properties, Language.class);
+
+			if (language == null) {
+				language = modelService.create(Language.class);
+				language.setId(csv.getId());
 			}
+			language.setName(csv.getName());
+			language.setActive(csv.isActive());
+			language.setSort(csv.getSort());
 
-			modelService.saveAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-			LOGGER.error(e.getMessage(), e);
+			modelService.saveEntity(language, Language.class);
 		}
+
+		modelService.saveAll();
 	}
 
 	public List<LanguageCsv> readCSVFile(Reader reader) {
@@ -144,8 +129,7 @@ public class LanguageUpdate extends Updater {
 	}
 
 	public CellProcessor[] getProcessors() {
-		final CellProcessor[] processors = new CellProcessor[] { 
-				new UniqueHashCode(), // id
+		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
 				new NotNull(), // name
 				new ParseBool(), // active
 				new ParseInt() // sort

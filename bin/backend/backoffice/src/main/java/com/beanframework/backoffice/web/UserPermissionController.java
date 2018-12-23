@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,16 +28,16 @@ import com.beanframework.backoffice.domain.UserPermissionSearch;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserPermissionSpecification;
+import com.beanframework.user.service.UserPermissionFacade;
 
 @Controller
 public class UserPermissionController extends AbstractCommonController {
 
 	@Autowired
-	private ModelService modelService;
+	private UserPermissionFacade userPermissionFacade;
 
 	@Autowired
 	private LocaleMessageService localeMessageService;
@@ -52,7 +51,8 @@ public class UserPermissionController extends AbstractCommonController {
 	@Value(WebUserPermissionConstants.LIST_SIZE)
 	private int MODULE_USERPERMISSION_LIST_SIZE;
 
-	private Page<UserPermission> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<UserPermission> getPagination(Model model, @RequestParam Map<String, Object> requestParams)
+			throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -77,10 +77,9 @@ public class UserPermissionController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<UserPermission> pagination = modelService.findPage(
+		Page<UserPermission> pagination = userPermissionFacade.findPage(
 				UserPermissionSpecification.findByCriteria(userPermission),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties),
-				UserPermission.class);
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -110,12 +109,12 @@ public class UserPermissionController extends AbstractCommonController {
 
 	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.CREATE)
 	public UserPermission populateUserPermissionCreate(HttpServletRequest request) throws Exception {
-		return modelService.create(UserPermission.class);
+		return userPermissionFacade.create();
 	}
 
 	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE)
 	public UserPermission populateUserPermissionForm(HttpServletRequest request) throws Exception {
-		return modelService.create(UserPermission.class);
+		return userPermissionFacade.create();
 	}
 
 	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH)
@@ -123,7 +122,6 @@ public class UserPermissionController extends AbstractCommonController {
 		return new UserPermissionSearch();
 	}
 
-	@PreAuthorize(WebUserPermissionConstants.PreAuthorize.READ)
 	@GetMapping(value = WebUserPermissionConstants.Path.USERPERMISSION)
 	public String list(
 			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
@@ -137,8 +135,7 @@ public class UserPermissionController extends AbstractCommonController {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(UserPermission.UUID, userpermissionUpdate.getUuid());
 
-			UserPermission existingUserPermission = modelService.findOneDtoByProperties(properties,
-					UserPermission.class);
+			UserPermission existingUserPermission = userPermissionFacade.findOneDtoByProperties(properties);
 
 			if (existingUserPermission != null) {
 				model.addAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE, existingUserPermission);
@@ -152,7 +149,6 @@ public class UserPermissionController extends AbstractCommonController {
 		return VIEW_USERPERMISSION_LIST;
 	}
 
-	@PreAuthorize(WebUserPermissionConstants.PreAuthorize.CREATE)
 	@PostMapping(value = WebUserPermissionConstants.Path.USERPERMISSION, params = "create")
 	public RedirectView create(
 			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
@@ -166,7 +162,7 @@ public class UserPermissionController extends AbstractCommonController {
 		} else {
 
 			try {
-				modelService.saveDto(userpermissionCreate, UserPermission.class);
+				userPermissionFacade.createDto(userpermissionCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -183,7 +179,6 @@ public class UserPermissionController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebUserPermissionConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebUserPermissionConstants.Path.USERPERMISSION, params = "update")
 	public RedirectView update(
 			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
@@ -196,7 +191,7 @@ public class UserPermissionController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.saveDto(userpermissionUpdate, UserPermission.class);
+				userPermissionFacade.updateDto(userpermissionUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -213,7 +208,6 @@ public class UserPermissionController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebUserPermissionConstants.PreAuthorize.DELETE)
 	@PostMapping(value = WebUserPermissionConstants.Path.USERPERMISSION, params = "delete")
 	public RedirectView delete(
 			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
@@ -223,7 +217,7 @@ public class UserPermissionController extends AbstractCommonController {
 
 		try {
 
-			modelService.remove(userpermissionUpdate.getUuid(), UserPermission.class);
+			userPermissionFacade.delete(userpermissionUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

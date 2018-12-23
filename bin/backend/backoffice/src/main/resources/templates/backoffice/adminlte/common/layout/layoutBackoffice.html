@@ -149,30 +149,26 @@
 		
 		function activaTab(){
 			if(window.location.hash != ''){
+				var baseUrl = window.location.href.split('#')[0];
+				window.location.replace( baseUrl + window.location.hash );
+				
 			    $('.nav-tabs a[href="' + window.location.hash + '"]').tab('show');
 			}
-			else {
+			else{
 				var tabUrl = sessionStorage.getItem("tabUrl");
 				if(tabUrl !== null && tabUrl !== undefined && tabUrl !== 'null'){
 					var baseUrl = window.location.href.split('#')[0];
 					window.location.replace( baseUrl + tabUrl );
 					
 				    $('.nav-tabs a[href="' + tabUrl + '"]').tab('show');
-				    
-					sessionStorage.removeItem("tabUrl");
 				}
-			} 
+			}
 		}
 		
 		$(document).ready(function() {
 			
 			activaTab();
 			
-			$( ".btn.btn-success" ).click(function() {
-				sessionStorage.setItem("tabUrl", window.location.hash);
-				activaTab();
-			});
-
 		    var timeout = /*[[@{${@environment.getProperty('server.servlet.session.timeout')}}]]*/ ;
 		    timeout = timeout * 1000;
 		

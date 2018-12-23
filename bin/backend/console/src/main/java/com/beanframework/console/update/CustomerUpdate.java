@@ -60,121 +60,106 @@ public class CustomerUpdate extends Updater {
 	}
 
 	@Override
-	public void update() {
+	public void update() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = null;
-		try {
-			resources = loader.getResources(IMPORT_UPDATE_CUSTOMER_PATH);
-			for (Resource resource : resources) {
-				try {
-					InputStream in = resource.getInputStream();
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					IOUtils.copy(in, baos);
-					BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
+		Resource[] resources = loader.getResources(IMPORT_UPDATE_CUSTOMER_PATH);
+		for (Resource resource : resources) {
+			InputStream in = resource.getInputStream();
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			IOUtils.copy(in, baos);
+			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-					List<CustomerCsv> customerCsvList = readCSVFile(reader);
-					save(customerCsvList);
-
-				} catch (Exception ex) {
-					LOGGER.error("Error reading the resource file: " + ex);
-				}
-			}
-		} catch (IOException ex) {
-			LOGGER.error("Error reading the resource file: " + ex);
+			List<CustomerCsv> customerCsvList = readCSVFile(reader);
+			save(customerCsvList);
 		}
 	}
 
 	public void save(List<CustomerCsv> customerCsvList) throws Exception {
 
-		try {
-			// Dynamic Field
+		// Dynamic Field
 
-			Map<String, Object> nameDynamicFieldProperties = new HashMap<String, Object>();
-			nameDynamicFieldProperties.put(DynamicField.ID, "customer_name");
-			DynamicField nameDynamicField = modelService.findOneEntityByProperties(nameDynamicFieldProperties,
-					DynamicField.class);
+		Map<String, Object> nameDynamicFieldProperties = new HashMap<String, Object>();
+		nameDynamicFieldProperties.put(DynamicField.ID, "customer_name");
+		DynamicField nameDynamicField = modelService.findOneEntityByProperties(nameDynamicFieldProperties,
+				DynamicField.class);
 
-			if (nameDynamicField == null) {
-				nameDynamicField = modelService.create(DynamicField.class);
-				nameDynamicField.setId("customer_name");
-			}
-			nameDynamicField.setName("Name");
-			nameDynamicField.setRequired(true);
-			nameDynamicField.setRule(null);
-			nameDynamicField.setSort(0);
-			nameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-			modelService.saveEntity(nameDynamicField, DynamicField.class);
-
-			for (CustomerCsv csv : customerCsvList) {
-
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Customer.ID, csv.getId());
-
-				Customer customer = modelService.findOneEntityByProperties(properties, Customer.class);
-
-				if (customer == null) {
-					customer = modelService.create(Customer.class);
-					customer.setId(csv.getId());
-				} else {
-					Hibernate.initialize(customer.getUserFields());
-				}
-				
-				if (StringUtils.isNotEmpty(csv.getPassword())) {
-					customer.setPassword(PasswordUtils.encode(csv.getPassword()));
-				}
-				customer.setAccountNonExpired(csv.isAccountNonExpired());
-				customer.setAccountNonLocked(csv.isAccountNonLocked());
-				customer.setCredentialsNonExpired(csv.isCredentialsNonExpired());
-				customer.setEnabled(csv.isEnabled());
-				
-				boolean createName = true;
-
-				for (int i = 0; i < customer.getUserFields().size(); i++) {
-					if (customer.getUserFields().get(i).getId().equals(csv.getId() + "_name")) {
-						customer.getUserFields().get(i).setLabel("Name");
-						customer.getUserFields().get(i).setValue(csv.getName());
-						createName = false;
-					}
-				}
-
-				modelService.saveEntity(customer, Customer.class);
-
-				// User Group
-
-				String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
-				for (int i = 0; i < userGroupIds.length; i++) {
-					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-
-					if (userGroup == null) {
-						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-					} else {
-						customer.getUserGroups().add(userGroup);
-
-						modelService.saveEntity(userGroup, UserGroup.class);
-					}
-				}
-
-				// Customer Field
-
-				if (createName) {
-					UserField customerField = modelService.create(UserField.class);
-					customerField.setId(csv.getId() + "_name");
-					customerField.setDynamicField(nameDynamicField);
-					customerField.setLabel("Name");
-					customerField.setValue(csv.getName());
-					customerField.setUser(customer);
-					customer.getUserFields().add(customerField);
-
-					modelService.saveEntity(customerField, UserField.class);
-				}
-			}
-			modelService.saveAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-			LOGGER.error(e.getMessage(), e);
+		if (nameDynamicField == null) {
+			nameDynamicField = modelService.create(DynamicField.class);
+			nameDynamicField.setId("customer_name");
 		}
+		nameDynamicField.setName("Name");
+		nameDynamicField.setRequired(true);
+		nameDynamicField.setRule(null);
+		nameDynamicField.setSort(0);
+		nameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
+		modelService.saveEntity(nameDynamicField, DynamicField.class);
+
+		for (CustomerCsv csv : customerCsvList) {
+
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Customer.ID, csv.getId());
+
+			Customer customer = modelService.findOneEntityByProperties(properties, Customer.class);
+
+			if (customer == null) {
+				customer = modelService.create(Customer.class);
+				customer.setId(csv.getId());
+			} else {
+				Hibernate.initialize(customer.getUserFields());
+			}
+
+			if (StringUtils.isNotEmpty(csv.getPassword())) {
+				customer.setPassword(PasswordUtils.encode(csv.getPassword()));
+			}
+			customer.setAccountNonExpired(csv.isAccountNonExpired());
+			customer.setAccountNonLocked(csv.isAccountNonLocked());
+			customer.setCredentialsNonExpired(csv.isCredentialsNonExpired());
+			customer.setEnabled(csv.isEnabled());
+
+			boolean createName = true;
+
+			for (int i = 0; i < customer.getUserFields().size(); i++) {
+				if (customer.getUserFields().get(i).getId().equals(csv.getId() + "_name")) {
+					customer.getUserFields().get(i).setLabel("Name");
+					customer.getUserFields().get(i).setValue(csv.getName());
+					createName = false;
+				}
+			}
+
+			modelService.saveEntity(customer, Customer.class);
+
+			// User Group
+
+			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
+			for (int i = 0; i < userGroupIds.length; i++) {
+				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+
+				if (userGroup == null) {
+					LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+				} else {
+					customer.getUserGroups().add(userGroup);
+
+					modelService.saveEntity(userGroup, UserGroup.class);
+				}
+			}
+
+			// Customer Field
+
+			if (createName) {
+				UserField customerField = modelService.create(UserField.class);
+				customerField.setId(csv.getId() + "_name");
+				customerField.setDynamicField(nameDynamicField);
+				customerField.setLabel("Name");
+				customerField.setValue(csv.getName());
+				customerField.setUser(customer);
+				customer.getUserFields().add(customerField);
+
+				modelService.saveEntity(customerField, UserField.class);
+			}
+		}
+		modelService.saveAll();
 	}
 
 	public List<CustomerCsv> readCSVFile(Reader reader) {

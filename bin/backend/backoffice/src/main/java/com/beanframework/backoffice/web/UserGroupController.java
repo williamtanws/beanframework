@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,19 +28,27 @@ import com.beanframework.backoffice.WebUserGroupConstants;
 import com.beanframework.backoffice.domain.UserGroupSearch;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupSpecification;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
+import com.beanframework.user.service.UserGroupFacade;
+import com.beanframework.user.service.UserPermissionFacade;
+import com.beanframework.user.service.UserRightFacade;
 
 @Controller
 public class UserGroupController extends AbstractCommonController {
 
 	@Autowired
-	private ModelService modelService;
+	private UserGroupFacade userGroupFacade;
+	
+	@Autowired
+	private UserRightFacade userRightFacade;
+	
+	@Autowired
+	private UserPermissionFacade userPermissionFacade;
 
 	@Value(WebUserGroupConstants.Path.USERGROUP)
 	private String PATH_USERGROUP;
@@ -77,8 +84,8 @@ public class UserGroupController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<UserGroup> pagination = modelService.findPage(UserGroupSpecification.findByCriteria(usergroup),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), UserGroup.class);
+		Page<UserGroup> pagination = userGroupFacade.findPage(UserGroupSpecification.findByCriteria(usergroup),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -108,12 +115,12 @@ public class UserGroupController extends AbstractCommonController {
 
 	@ModelAttribute(WebUserGroupConstants.ModelAttribute.CREATE)
 	public UserGroup populateUserGroupCreate(HttpServletRequest request) throws Exception {
-		return modelService.create(UserGroup.class);
+		return userGroupFacade.create();
 	}
 
 	@ModelAttribute(WebUserGroupConstants.ModelAttribute.UPDATE)
 	public UserGroup populateUserGroupForm(HttpServletRequest request) throws Exception {
-		return modelService.create(UserGroup.class);
+		return userGroupFacade.create();
 	}
 
 	@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH)
@@ -121,7 +128,6 @@ public class UserGroupController extends AbstractCommonController {
 		return new UserGroupSearch();
 	}
 
-	@PreAuthorize(WebUserGroupConstants.PreAuthorize.READ)
 	@GetMapping(value = WebUserGroupConstants.Path.USERGROUP)
 	public String list(@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
 			@ModelAttribute(WebUserGroupConstants.ModelAttribute.UPDATE) UserGroup usergroupUpdate, Model model,
@@ -134,7 +140,7 @@ public class UserGroupController extends AbstractCommonController {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(UserGroup.UUID, usergroupUpdate.getUuid());
 
-			UserGroup existingUserGroup = modelService.findOneDtoByProperties(properties, UserGroup.class);
+			UserGroup existingUserGroup = userGroupFacade.findOneDtoByProperties(properties);
 
 			if (existingUserGroup != null) {
 				model.addAttribute(WebUserGroupConstants.ModelAttribute.UPDATE, existingUserGroup);
@@ -146,11 +152,11 @@ public class UserGroupController extends AbstractCommonController {
 
 		Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
 		userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
-		List<UserRight> userRights = modelService.findDtoBySorts(userRightSorts, UserRight.class);
+		List<UserRight> userRights = userRightFacade.findDtoBySorts(userRightSorts);
 		
 		Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
 		userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
-		List<UserPermission> userPermissions = modelService.findDtoBySorts(userPermissionSorts, UserPermission.class);
+		List<UserPermission> userPermissions = userPermissionFacade.findDtoBySorts(userPermissionSorts);
 
 		model.addAttribute("userRights", userRights);
 		model.addAttribute("userPermissions", userPermissions);
@@ -158,7 +164,6 @@ public class UserGroupController extends AbstractCommonController {
 		return VIEW_USERGROUP_LIST;
 	}
 
-	@PreAuthorize(WebUserGroupConstants.PreAuthorize.CREATE)
 	@PostMapping(value = WebUserGroupConstants.Path.USERGROUP, params = "create")
 	public RedirectView create(
 			@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
@@ -179,7 +184,7 @@ public class UserGroupController extends AbstractCommonController {
 				}
 			}
 			try {
-				modelService.saveDto(usergroupCreate, UserGroup.class);
+				userGroupFacade.createDto(usergroupCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -196,7 +201,6 @@ public class UserGroupController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebUserGroupConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebUserGroupConstants.Path.USERGROUP, params = "update")
 	public RedirectView update(
 			@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
@@ -218,7 +222,7 @@ public class UserGroupController extends AbstractCommonController {
 			}
 
 			try {
-				modelService.saveDto(usergroupUpdate, UserGroup.class);
+				userGroupFacade.updateDto(usergroupUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -235,7 +239,6 @@ public class UserGroupController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebUserGroupConstants.PreAuthorize.DELETE)
 	@PostMapping(value = WebUserGroupConstants.Path.USERGROUP, params = "delete")
 	public RedirectView delete(
 			@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
@@ -244,7 +247,7 @@ public class UserGroupController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.remove(usergroupUpdate.getUuid(), UserGroup.class);
+			userGroupFacade.delete(usergroupUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

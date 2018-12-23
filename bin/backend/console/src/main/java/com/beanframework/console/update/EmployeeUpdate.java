@@ -60,121 +60,105 @@ public class EmployeeUpdate extends Updater {
 	}
 
 	@Override
-	public void update() {
+	public void update() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = null;
-		try {
-			resources = loader.getResources(IMPORT_UPDATE_EMPLOYEE_PATH);
-			for (Resource resource : resources) {
-				try {
-					InputStream in = resource.getInputStream();
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					IOUtils.copy(in, baos);
-					BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
+		Resource[] resources = loader.getResources(IMPORT_UPDATE_EMPLOYEE_PATH);
+		for (Resource resource : resources) {
+			InputStream in = resource.getInputStream();
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			IOUtils.copy(in, baos);
+			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-					List<EmployeeCsv> employeeCsvList = readCSVFile(reader);
-					save(employeeCsvList);
-
-				} catch (Exception ex) {
-					LOGGER.error("Error reading the resource file: " + ex);
-				}
-			}
-		} catch (IOException ex) {
-			LOGGER.error("Error reading the resource file: " + ex);
+			List<EmployeeCsv> employeeCsvList = readCSVFile(reader);
+			save(employeeCsvList);
 		}
 	}
 
 	public void save(List<EmployeeCsv> employeeCsvList) throws Exception {
+		// Dynamic Field
 
-		try {
-			// Dynamic Field
+		Map<String, Object> nameDynamicFieldProperties = new HashMap<String, Object>();
+		nameDynamicFieldProperties.put(DynamicField.ID, "employee_name");
+		DynamicField nameDynamicField = modelService.findOneEntityByProperties(nameDynamicFieldProperties,
+				DynamicField.class);
 
-			Map<String, Object> nameDynamicFieldProperties = new HashMap<String, Object>();
-			nameDynamicFieldProperties.put(DynamicField.ID, "employee_name");
-			DynamicField nameDynamicField = modelService.findOneEntityByProperties(nameDynamicFieldProperties,
-					DynamicField.class);
-
-			if (nameDynamicField == null) {
-				nameDynamicField = modelService.create(DynamicField.class);
-				nameDynamicField.setId("employee_name");
-			}
-			nameDynamicField.setName("Name");
-			nameDynamicField.setRequired(true);
-			nameDynamicField.setRule(null);
-			nameDynamicField.setSort(0);
-			nameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-			modelService.saveEntity(nameDynamicField, DynamicField.class);
-
-			for (EmployeeCsv csv : employeeCsvList) {
-
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Employee.ID, csv.getId());
-
-				Employee employee = modelService.findOneEntityByProperties(properties, Employee.class);
-
-				if (employee == null) {
-					employee = modelService.create(Employee.class);
-					employee.setId(csv.getId());
-				} else {
-					Hibernate.initialize(employee.getUserFields());
-				}
-				
-				if (StringUtils.isNotEmpty(csv.getPassword())) {
-					employee.setPassword(PasswordUtils.encode(csv.getPassword()));
-				}
-				employee.setAccountNonExpired(csv.isAccountNonExpired());
-				employee.setAccountNonLocked(csv.isAccountNonLocked());
-				employee.setCredentialsNonExpired(csv.isCredentialsNonExpired());
-				employee.setEnabled(csv.isEnabled());
-				
-				boolean createName = true;
-
-				for (int i = 0; i < employee.getUserFields().size(); i++) {
-					if (employee.getUserFields().get(i).getId().equals(csv.getId() + "_name")) {
-						employee.getUserFields().get(i).setLabel("Name");
-						employee.getUserFields().get(i).setValue(csv.getName());
-						createName = false;
-					}
-				}
-
-				modelService.saveEntity(employee, Employee.class);
-
-				// User Group
-
-				String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
-				for (int i = 0; i < userGroupIds.length; i++) {
-					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-
-					if (userGroup == null) {
-						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-					} else {
-						employee.getUserGroups().add(userGroup);
-
-						modelService.saveEntity(userGroup, UserGroup.class);
-					}
-				}
-
-				// Employee Field
-
-				if (createName) {
-					UserField employeeField = modelService.create(UserField.class);
-					employeeField.setId(csv.getId() + "_name");
-					employeeField.setDynamicField(nameDynamicField);
-					employeeField.setLabel("Name");
-					employeeField.setValue(csv.getName());
-					employeeField.setUser(employee);
-					employee.getUserFields().add(employeeField);
-
-					modelService.saveEntity(employeeField, UserField.class);
-				}
-			}
-			modelService.saveAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-			LOGGER.error(e.getMessage(), e);
+		if (nameDynamicField == null) {
+			nameDynamicField = modelService.create(DynamicField.class);
+			nameDynamicField.setId("employee_name");
 		}
+		nameDynamicField.setName("Name");
+		nameDynamicField.setRequired(true);
+		nameDynamicField.setRule(null);
+		nameDynamicField.setSort(0);
+		nameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
+		modelService.saveEntity(nameDynamicField, DynamicField.class);
+
+		for (EmployeeCsv csv : employeeCsvList) {
+
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Employee.ID, csv.getId());
+
+			Employee employee = modelService.findOneEntityByProperties(properties, Employee.class);
+
+			if (employee == null) {
+				employee = modelService.create(Employee.class);
+				employee.setId(csv.getId());
+			} else {
+				Hibernate.initialize(employee.getUserFields());
+			}
+
+			if (StringUtils.isNotEmpty(csv.getPassword())) {
+				employee.setPassword(PasswordUtils.encode(csv.getPassword()));
+			}
+			employee.setAccountNonExpired(csv.isAccountNonExpired());
+			employee.setAccountNonLocked(csv.isAccountNonLocked());
+			employee.setCredentialsNonExpired(csv.isCredentialsNonExpired());
+			employee.setEnabled(csv.isEnabled());
+
+			boolean createName = true;
+
+			for (int i = 0; i < employee.getUserFields().size(); i++) {
+				if (employee.getUserFields().get(i).getId().equals(csv.getId() + "_name")) {
+					employee.getUserFields().get(i).setLabel("Name");
+					employee.getUserFields().get(i).setValue(csv.getName());
+					createName = false;
+				}
+			}
+
+			modelService.saveEntity(employee, Employee.class);
+
+			// User Group
+
+			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
+			for (int i = 0; i < userGroupIds.length; i++) {
+				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+
+				if (userGroup == null) {
+					LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+				} else {
+					employee.getUserGroups().add(userGroup);
+
+					modelService.saveEntity(userGroup, UserGroup.class);
+				}
+			}
+
+			// Employee Field
+
+			if (createName) {
+				UserField employeeField = modelService.create(UserField.class);
+				employeeField.setId(csv.getId() + "_name");
+				employeeField.setDynamicField(nameDynamicField);
+				employeeField.setLabel("Name");
+				employeeField.setValue(csv.getName());
+				employeeField.setUser(employee);
+				employee.getUserFields().add(employeeField);
+
+				modelService.saveEntity(employeeField, UserField.class);
+			}
+		}
+		modelService.saveAll();
 	}
 
 	public List<EmployeeCsv> readCSVFile(Reader reader) {

@@ -279,9 +279,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public void saveEntity(Object model, Class modelClass) throws BusinessException {
 
-		validateInterceptor(model, modelClass);
 		prepareInterceptor(model, modelClass);
-
+		validateInterceptor(model, modelClass);
 		modelRepository.save(model);
 
 		clearCache(modelClass);
@@ -290,12 +289,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void saveDto(Object model, Class modelClass) throws BusinessException {
-
-		validateInterceptor(model, modelClass);
-		prepareInterceptor(model, modelClass);
-
 		model = entityConverter(model, modelClass);
 
+		prepareInterceptor(model, modelClass);
+		validateInterceptor(model, modelClass);
 		modelRepository.save(model);
 
 		clearCache(modelClass);
@@ -315,7 +312,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(rollbackFor = BusinessException.class)
 	@Override
-	public void remove(UUID uuid, Class modelClass) throws BusinessException {
+	public void delete(UUID uuid, Class modelClass) throws BusinessException {
 
 		Object model;
 		try {

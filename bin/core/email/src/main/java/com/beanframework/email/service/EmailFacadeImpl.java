@@ -1,15 +1,20 @@
 package com.beanframework.email.service;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.email.domain.Email;
 
 @Component
@@ -19,6 +24,9 @@ public class EmailFacadeImpl implements EmailFacade {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private ModelService modelService;
 	
 	@Override
 	public void saveAttachment(Email email, MultipartFile[] attachments) throws BusinessException {
@@ -36,5 +44,35 @@ public class EmailFacadeImpl implements EmailFacade {
 		} catch (IOException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public Page<Email> findPage(Specification<Email> specification, PageRequest pageable) throws Exception {
+		return modelService.findPage(specification, pageable, Email.class);
+	}
+
+	@Override
+	public Email create() throws Exception {
+		return modelService.create(Email.class);
+	}
+
+	@Override
+	public Email findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, Email.class);
+	}
+
+	@Override
+	public void createDto(Email model) throws BusinessException {
+		modelService.saveDto(model, Email.class);
+	}
+
+	@Override
+	public void updateDto(Email model) throws BusinessException {
+		modelService.saveDto(model, Email.class);
+	}
+
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.delete(uuid, Email.class);
 	}
 }

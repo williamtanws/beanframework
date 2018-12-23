@@ -23,11 +23,4 @@ public interface WebUserGroupConstants {
 		public static final String UPDATE = "usergroupUpdate";
 		public static final String SEARCH = "usergroupSearch";
 	}
-	
-	public static interface PreAuthorize {
-		public static final String READ = "hasAuthority('usergroup_read')";
-		public static final String CREATE = "hasAuthority('usergroup_create')";
-		public static final String UPDATE = "hasAuthority('usergroup_update')";
-		public static final String DELETE = "hasAuthority('usergroup_delete')";
-	}
 }

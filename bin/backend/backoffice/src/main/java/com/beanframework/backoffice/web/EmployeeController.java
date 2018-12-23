@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,22 +29,22 @@ import com.beanframework.backoffice.WebEmployeeConstants;
 import com.beanframework.backoffice.domain.EmployeeSearch;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.domain.EmployeeSpecification;
 import com.beanframework.employee.service.EmployeeFacade;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.service.UserGroupFacade;
 
 @Controller
 public class EmployeeController extends AbstractCommonController {
 
 	@Autowired
-	private ModelService modelService;
-
-	@Autowired
 	private EmployeeFacade employeeFacade;
+	
+	@Autowired
+	private UserGroupFacade userGroupFacade;
 
 	@Value(WebEmployeeConstants.Path.EMPLOYEE)
 	private String PATH_EMPLOYEE;
@@ -80,8 +79,8 @@ public class EmployeeController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Employee> pagination = modelService.findPage(EmployeeSpecification.findByCriteria(employee),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Employee.class);
+		Page<Employee> pagination = employeeFacade.findPage(EmployeeSpecification.findByCriteria(employee),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -111,12 +110,12 @@ public class EmployeeController extends AbstractCommonController {
 
 	@ModelAttribute(WebEmployeeConstants.ModelAttribute.CREATE)
 	public Employee populateEmployeeCreate(HttpServletRequest request) throws Exception {
-		return modelService.create(Employee.class);
+		return employeeFacade.create();
 	}
 
 	@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE)
 	public Employee populateEmployeeForm(HttpServletRequest request) throws Exception {
-		return modelService.create(Employee.class);
+		return employeeFacade.create();
 	}
 
 	@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH)
@@ -124,7 +123,6 @@ public class EmployeeController extends AbstractCommonController {
 		return new EmployeeSearch();
 	}
 
-	@PreAuthorize(WebEmployeeConstants.PreAuthorize.READ)
 	@GetMapping(value = WebEmployeeConstants.Path.EMPLOYEE)
 	public String list(@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
@@ -135,14 +133,14 @@ public class EmployeeController extends AbstractCommonController {
 		if (employeeUpdate.getUuid() != null) {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Employee.UUID, employeeUpdate.getUuid());
-			Employee existingEmployee = modelService.findOneEntityByProperties(properties, Employee.class);
+			Employee existingEmployee = employeeFacade.findOneDtoByProperties(properties);
 
 			if (existingEmployee != null) {
 
 				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 
-				List<UserGroup> userGroups = modelService.findDtoBySorts(sorts, UserGroup.class);
+				List<UserGroup> userGroups = userGroupFacade.findDtoBySorts(sorts);
 
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingEmployee.getUserGroups()) {
@@ -163,7 +161,6 @@ public class EmployeeController extends AbstractCommonController {
 		return VIEW_EMPLOYEE_LIST;
 	}
 
-	@PreAuthorize(WebEmployeeConstants.PreAuthorize.CREATE)
 	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params = "create")
 	public RedirectView create(
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
@@ -185,7 +182,7 @@ public class EmployeeController extends AbstractCommonController {
 			employeeCreate.setUserGroups(userGroups);
 
 			try {
-				modelService.saveDto(employeeCreate, Employee.class);
+				employeeFacade.createDto(employeeCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -202,7 +199,6 @@ public class EmployeeController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebEmployeeConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params = "update")
 	public RedirectView update(
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
@@ -224,7 +220,7 @@ public class EmployeeController extends AbstractCommonController {
 			employeeUpdate.setUserGroups(userGroups);
 
 			try {
-				modelService.saveDto(employeeUpdate, Employee.class);
+				employeeFacade.updateDto(employeeUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -242,7 +238,6 @@ public class EmployeeController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebEmployeeConstants.PreAuthorize.DELETE)
 	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params = "delete")
 	public RedirectView delete(
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
@@ -251,7 +246,7 @@ public class EmployeeController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.remove(employeeUpdate.getUuid(), Employee.class);
+			employeeFacade.delete(employeeUpdate.getUuid());
 			employeeFacade.deleteEmployeeProfilePictureByUuid(employeeUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);

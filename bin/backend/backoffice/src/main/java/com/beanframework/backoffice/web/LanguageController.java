@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,16 +27,16 @@ import com.beanframework.backoffice.WebLanguageConstants;
 import com.beanframework.backoffice.domain.LanguageSearch;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.domain.LanguageSpecification;
+import com.beanframework.language.service.LanguageFacade;
 
 @Controller
 public class LanguageController extends AbstractCommonController {
 
 	@Autowired
-	private ModelService modelService;
+	private LanguageFacade languageFacade;
 
 	@Value(WebLanguageConstants.Path.LANGUAGE)
 	private String PATH_LANGUAGE;
@@ -72,8 +71,8 @@ public class LanguageController extends AbstractCommonController {
 			direction = Sort.Direction.ASC;
 		}
 
-		Page<Language> pagination = modelService.findPage(LanguageSpecification.findByCriteria(language),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Language.class);
+		Page<Language> pagination = languageFacade.findPage(LanguageSpecification.findByCriteria(language),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -103,12 +102,12 @@ public class LanguageController extends AbstractCommonController {
 
 	@ModelAttribute(WebLanguageConstants.ModelAttribute.CREATE)
 	public Language populateLanguageCreate(HttpServletRequest request) throws Exception {
-		return modelService.create(Language.class);
+		return languageFacade.create();
 	}
 
 	@ModelAttribute(WebLanguageConstants.ModelAttribute.UPDATE)
 	public Language populateLanguageForm(HttpServletRequest request) throws Exception {
-		return modelService.create(Language.class);
+		return languageFacade.create();
 	}
 
 	@ModelAttribute(WebLanguageConstants.ModelAttribute.SEARCH)
@@ -116,7 +115,6 @@ public class LanguageController extends AbstractCommonController {
 		return new LanguageSearch();
 	}
 
-	@PreAuthorize(WebLanguageConstants.PreAuthorize.READ)
 	@GetMapping(value = WebLanguageConstants.Path.LANGUAGE)
 	public String list(@ModelAttribute(WebLanguageConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
 			@ModelAttribute(WebLanguageConstants.ModelAttribute.UPDATE) Language languageUpdate, Model model,
@@ -129,7 +127,7 @@ public class LanguageController extends AbstractCommonController {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Language.UUID, languageUpdate.getUuid());
 
-			Language existingLanguage = modelService.findOneDtoByProperties(properties, Language.class);
+			Language existingLanguage = languageFacade.findOneDtoByProperties(properties);
 
 			if (existingLanguage != null) {
 				model.addAttribute(WebLanguageConstants.ModelAttribute.UPDATE, existingLanguage);
@@ -142,7 +140,6 @@ public class LanguageController extends AbstractCommonController {
 		return VIEW_LANGUAGE_LIST;
 	}
 
-	@PreAuthorize(WebLanguageConstants.PreAuthorize.CREATE)
 	@PostMapping(value = WebLanguageConstants.Path.LANGUAGE, params = "create")
 	public RedirectView create(
 			@ModelAttribute(WebLanguageConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
@@ -156,7 +153,7 @@ public class LanguageController extends AbstractCommonController {
 		} else {
 
 			try {
-				modelService.saveDto(languageCreate, Language.class);
+				languageFacade.createDto(languageCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -173,7 +170,6 @@ public class LanguageController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebLanguageConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebLanguageConstants.Path.LANGUAGE, params = "update")
 	public RedirectView update(
 			@ModelAttribute(WebLanguageConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
@@ -187,7 +183,7 @@ public class LanguageController extends AbstractCommonController {
 		} else {
 
 			try {
-				modelService.saveDto(languageUpdate, Language.class);
+				languageFacade.updateDto(languageUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -204,7 +200,6 @@ public class LanguageController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebLanguageConstants.PreAuthorize.DELETE)
 	@PostMapping(value = WebLanguageConstants.Path.LANGUAGE, params = "delete")
 	public RedirectView delete(
 			@ModelAttribute(WebLanguageConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
@@ -213,7 +208,7 @@ public class LanguageController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.remove(languageUpdate.getUuid(), Language.class);
+			languageFacade.delete(languageUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

@@ -8,10 +8,10 @@
 	<th:block layout:fragment="content">
 		<section class="content">
 			<div class="row">
-				<th:block layout:replace="/console/adminlte/admin/adminSearch :: search"></th:block>
+				<th:block layout:insert="/console/adminlte/admin/adminSearch :: search"></th:block>
 			</div>
 			<div class="row">
-				<th:block layout:replace="/console/adminlte/common/fragment/alert :: custom"></th:block>
+				<th:block layout:insert="/console/adminlte/common/fragment/alert :: custom"></th:block>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -43,7 +43,7 @@
 																</button>
 															</div>
 															<div class="col-xs-8" style="text-align: right">
-																<th:block layout:replace="/console/adminlte/common/fragment/pagination :: button"></th:block>
+																<th:block layout:insert="/console/adminlte/common/fragment/pagination :: button"></th:block>
 															</div>
 														</div>
 													</div>
@@ -85,7 +85,7 @@
 								</div>
 								<div id="collapseTwo" th:class="'panel-collapse collapse '+${adminUpdate.uuid == null ? '':'in'}">
 									<div class="box-body">
-										<th:block layout:replace="/console/adminlte/admin/adminForm :: update" th:if="${adminUpdate.uuid != null}"></th:block>
+										<th:block layout:insert="/console/adminlte/admin/adminForm :: update" th:if="${adminUpdate.uuid != null}"></th:block>
 									</div>
 								</div>
 							</div>
@@ -94,7 +94,7 @@
 					</div>
 				</div>
 			</div>
-			<th:block layout:replace="/console/adminlte/admin/adminForm :: create"></th:block>
+			<th:block layout:insert="/console/adminlte/admin/adminForm :: create"></th:block>
 			<form id="pagination-sort-form" th:action="@{${@environment.getProperty('path.admin')}}" method="get" th:object="${adminSearch}" style="display: none">
 				<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
 				<input type="hidden" name="size" th:value="${pagination.getSize()}">
@@ -102,7 +102,7 @@
 				<input type="hidden" name="properties" th:value="${properties}">
 				<input type="hidden" name="idSearch" th:value="${adminSearch.idSearch}">
 			</form>
-			<form id="get-admin-form" th:action="@{${@environment.getProperty('path.admin')}}" method="get" th:object="${adminSearch}" style="display: none">
+			<form id="get-admin-form" th:action="@{${@environment.getProperty('path.admin')}}+'#tab_general'" method="get" th:object="${adminSearch}" style="display: none">
 				<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
 				<input type="hidden" name="size" th:value="${pagination.getSize()}">
 				<input type="hidden" name="direction" th:value="${direction}">

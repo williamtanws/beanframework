@@ -85,7 +85,7 @@ public class CustomerRemove extends Remover {
 			
 			Customer customer = modelService.findOneDtoByProperties(properties, Customer.class);
 			try {
-				modelService.remove(customer.getUuid(), Customer.class);
+				modelService.delete(customer.getUuid(), Customer.class);
 			} catch (BusinessException e) {
 				logger.error(e.getMessage(), e);
 			}
