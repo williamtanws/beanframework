@@ -13,6 +13,13 @@
 				<span class="help-block"></span>
 			</div>
 		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="sort" th:text="#{module.userright.sort}"></label>
+				<input type="text" class="form-control" name="sort" th:value="*{sort}">
+				<span class="help-block"></span>
+			</div>
+		</div>
 	</th:block>
 	<th:block layout:fragment="attribute">
 		<div class="col-md-6">
@@ -80,7 +87,7 @@
 						<div class="modal-body">
 							<div class="container-fluid">
 								<div class="row">
-									<th:block layout:replace="/backoffice/adminlte/user/userrightForm :: general"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/user/userrightForm :: general"></th:block>
 								</div>
 							</div>
 						</div>
@@ -111,9 +118,6 @@
 		                            }
 		                        }
 		                    }
-		                },
-		                name: {
-		                    required: true
 		                }
 		            },
 		            messages: {
@@ -184,20 +188,20 @@
 						<div class="tab-content">
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
-									<th:block layout:replace="/backoffice/adminlte/user/userrightForm :: general"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/user/userrightForm :: general"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
-									<th:block layout:replace="/backoffice/adminlte/user/userrightForm :: attribute"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/user/userrightForm :: attribute"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
-									<th:block layout:replace="/backoffice/adminlte/user/userrightForm :: administration"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/user/userrightForm :: administration"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -241,20 +245,21 @@
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
-		        
 		        $('#userright-update-form').validate({
 		            rules: {
+		                id: {
 		                    required: true,
 		                    remote: {
 		                        url: /*[[${@environment.getProperty('path.api.userright.checkid')}]]*/ ,
 		                        type: "get",
 		                        data: {
-		                            uuid: /*[[${userrightUpdate.uuid}]]*/ ,
+		                        	uuid: /*[[${userrightUpdate.uuid}]]*/ ,
 		                            id: function() {
 		                                return $("#userright-update-form input[name='id']").val();
 		                            }
 		                        }
 		                    }
+		                }
 		            },
 		            messages: {
 		                id: {
@@ -273,7 +278,6 @@
 		                element.closest('.form-group').find('.help-block').html(error.text());
 		            }
 		        });
-		
 		    });
 		    /*]]>*/
 		</script>

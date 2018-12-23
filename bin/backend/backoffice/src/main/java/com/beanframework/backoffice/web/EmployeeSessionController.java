@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +33,6 @@ public class EmployeeSessionController {
 	@Value(WebEmployeeConstants.Session.View.SESSION_LIST)
 	private String VIEW_EMPLOYEE_SESSIONLIST;
 
-	@PreAuthorize(WebEmployeeConstants.Session.PreAuthorize.READ)
 	@GetMapping(value = WebEmployeeConstants.Session.Path.SESSION)
 	public String list(Model model, @RequestParam Map<String, Object> requestParams) {
 
@@ -43,7 +41,6 @@ public class EmployeeSessionController {
 		return VIEW_EMPLOYEE_SESSIONLIST;
 	}
 
-	@PreAuthorize(WebEmployeeConstants.PreAuthorize.DELETE)
 	@PostMapping(value = WebEmployeeConstants.Session.Path.SESSION, params = "delete")
 	public RedirectView delete(Model model, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
@@ -62,7 +59,6 @@ public class EmployeeSessionController {
 
 	}
 	
-	@PreAuthorize(WebEmployeeConstants.PreAuthorize.DELETE)
 	@PostMapping(value = WebEmployeeConstants.Session.Path.SESSION, params = "deleteall")
 	public RedirectView deleteall(Model model, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {

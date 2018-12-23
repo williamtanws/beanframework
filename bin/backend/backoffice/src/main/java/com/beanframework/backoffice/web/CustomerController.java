@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,18 +29,22 @@ import com.beanframework.backoffice.WebCustomerConstants;
 import com.beanframework.backoffice.domain.CustomerSearch;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.domain.CustomerSpecification;
+import com.beanframework.customer.service.CustomerFacade;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.service.UserGroupFacade;
 
 @Controller
 public class CustomerController extends AbstractCommonController {
 
 	@Autowired
-	private ModelService modelService;
+	private CustomerFacade customerFacade;
+	
+	@Autowired
+	private UserGroupFacade userGroupFacade;
 
 	@Value(WebCustomerConstants.Path.CUSTOMER)
 	private String PATH_CUSTOMER;
@@ -77,8 +80,8 @@ public class CustomerController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Customer> pagination = modelService.findPage(CustomerSpecification.findByCriteria(customer),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Customer.class);
+		Page<Customer> pagination = customerFacade.findPage(CustomerSpecification.findByCriteria(customer),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -108,12 +111,12 @@ public class CustomerController extends AbstractCommonController {
 
 	@ModelAttribute(WebCustomerConstants.ModelAttribute.CREATE)
 	public Customer populateCustomerCreate(HttpServletRequest request) throws Exception {
-		return modelService.create(Customer.class);
+		return customerFacade.create();
 	}
 
 	@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE)
 	public Customer populateCustomerForm(HttpServletRequest request) throws Exception {
-		return modelService.create(Customer.class);
+		return customerFacade.create();
 	}
 
 	@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH)
@@ -121,7 +124,6 @@ public class CustomerController extends AbstractCommonController {
 		return new CustomerSearch();
 	}
 
-	@PreAuthorize(WebCustomerConstants.PreAuthorize.READ)
 	@GetMapping(value = WebCustomerConstants.Path.CUSTOMER)
 	public String list(@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
@@ -132,14 +134,14 @@ public class CustomerController extends AbstractCommonController {
 		if (customerUpdate.getUuid() != null) {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Customer.UUID, customerUpdate.getUuid());
-			Customer existingCustomer = modelService.findOneEntityByProperties(properties, Customer.class);
+			Customer existingCustomer = customerFacade.findOneDtoByProperties(properties);
 
 			if (existingCustomer != null) {
 
 				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 
-				List<UserGroup> userGroups = modelService.findDtoBySorts(sorts, UserGroup.class);
+				List<UserGroup> userGroups = userGroupFacade.findDtoBySorts(sorts);
 
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingCustomer.getUserGroups()) {
@@ -160,7 +162,6 @@ public class CustomerController extends AbstractCommonController {
 		return VIEW_CUSTOMER_LIST;
 	}
 
-	@PreAuthorize(WebCustomerConstants.PreAuthorize.CREATE)
 	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "create")
 	public RedirectView create(
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
@@ -182,7 +183,7 @@ public class CustomerController extends AbstractCommonController {
 			customerCreate.setUserGroups(userGroups);
 
 			try {
-				modelService.saveDto(customerCreate, Customer.class);
+				customerFacade.createDto(customerCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -199,7 +200,6 @@ public class CustomerController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebCustomerConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "update")
 	public RedirectView update(
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
@@ -221,7 +221,7 @@ public class CustomerController extends AbstractCommonController {
 			customerUpdate.setUserGroups(userGroups);
 
 			try {
-				modelService.saveDto(customerUpdate, Customer.class);
+				customerFacade.updateDto(customerUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -238,7 +238,6 @@ public class CustomerController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebCustomerConstants.PreAuthorize.DELETE)
 	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "delete")
 	public RedirectView delete(
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
@@ -247,7 +246,7 @@ public class CustomerController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.remove(customerUpdate.getUuid(), Customer.class);
+			customerFacade.delete(customerUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

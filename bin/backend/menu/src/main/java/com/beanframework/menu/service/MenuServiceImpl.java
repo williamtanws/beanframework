@@ -23,13 +23,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.domain.MenuNavigation;
 import com.beanframework.menu.repository.MenuRepository;
 import com.beanframework.user.domain.UserGroup;
 
 @Service
 public class MenuServiceImpl implements MenuService {
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -219,5 +220,17 @@ public class MenuServiceImpl implements MenuService {
 				initializeChildsByUserGroup(parent.getChilds(), userGroupUuids);
 			}
 		}
+	}
+
+	@Override
+	public void delete(UUID uuid) throws Exception {
+		Menu menu = modelService.findOneEntityByUuid(uuid, Menu.class);
+		menu.setMenuFields(new ArrayList<MenuField>());
+		menu.setChilds(new ArrayList<Menu>());
+		modelService.saveEntity(menu, Menu.class);
+		
+		modelService.delete(uuid, Menu.class);
+		
+		modelService.clearCache(MenuNavigation.class);
 	}
 }

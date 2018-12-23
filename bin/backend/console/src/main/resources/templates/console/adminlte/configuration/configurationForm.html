@@ -68,7 +68,7 @@
 						<div class="modal-body">
 							<div class="container-fluid">
 								<div class="row">
-									<th:block layout:replace="/console/adminlte/configuration/configurationForm :: general"></th:block>
+									<th:block layout:insert="/console/adminlte/configuration/configurationForm :: general"></th:block>
 								</div>
 							</div>
 						</div>
@@ -172,14 +172,14 @@
 						<div class="tab-content">
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
-									<th:block layout:replace="/console/adminlte/configuration/configurationForm :: general"></th:block>
+									<th:block layout:insert="/console/adminlte/configuration/configurationForm :: general"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
-									<th:block layout:replace="/console/adminlte/configuration/configurationForm :: administration"></th:block>
+									<th:block layout:insert="/console/adminlte/configuration/configurationForm :: administration"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->

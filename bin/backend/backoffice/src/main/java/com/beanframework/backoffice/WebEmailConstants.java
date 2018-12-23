@@ -18,11 +18,4 @@ public interface WebEmailConstants {
 		public static final String UPDATE = "emailUpdate";
 		public static final String SEARCH = "emailSearch";
 	}
-	
-	public static interface PreAuthorize {
-		public static final String READ = "hasAuthority('email_read')";
-		public static final String CREATE = "hasAuthority('email_create')";
-		public static final String UPDATE = "hasAuthority('email_update')";
-		public static final String DELETE = "hasAuthority('email_delete')";
-	}
 }

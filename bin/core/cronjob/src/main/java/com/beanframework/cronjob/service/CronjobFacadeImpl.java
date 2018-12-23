@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.exception.BusinessException;
@@ -66,5 +69,36 @@ public class CronjobFacadeImpl implements CronjobFacade {
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public Page<Cronjob> findPage(Specification<Cronjob> specification, PageRequest pageable) throws Exception {
+		return modelService.findPage(specification, pageable, Cronjob.class);
+	}
+
+	@Override
+	public Cronjob create() throws Exception {
+		return modelService.create(Cronjob.class);
+	}
+
+	@Override
+	public Cronjob findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, Cronjob.class);
+	}
+
+	@Override
+	public void createDto(Cronjob model) throws BusinessException {
+		modelService.saveDto(model, Cronjob.class);
+	}
+
+	@Override
+	public void updateDto(Cronjob model) throws BusinessException {
+		modelService.saveDto(model, Cronjob.class);
+		
+	}
+
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.delete(uuid, Cronjob.class);
 	}
 }

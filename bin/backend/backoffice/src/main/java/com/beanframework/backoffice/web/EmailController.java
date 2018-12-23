@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,7 +28,6 @@ import com.beanframework.backoffice.WebEmailConstants;
 import com.beanframework.backoffice.domain.EmailSearch;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.domain.EmailEnum.Status;
@@ -38,9 +36,6 @@ import com.beanframework.email.service.EmailFacade;
 
 @Controller
 public class EmailController extends AbstractCommonController {
-
-	@Autowired
-	private ModelService modelService;
 
 	@Autowired
 	private EmailFacade emailFacade;
@@ -80,8 +75,8 @@ public class EmailController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Email> pagination = modelService.findPage(EmailSpecification.findByCriteria(email),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Email.class);
+		Page<Email> pagination = emailFacade.findPage(EmailSpecification.findByCriteria(email),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -111,12 +106,12 @@ public class EmailController extends AbstractCommonController {
 
 	@ModelAttribute(WebEmailConstants.ModelAttribute.CREATE)
 	public Email populateEmailCreate(HttpServletRequest request) throws Exception {
-		return modelService.create(Email.class);
+		return emailFacade.create();
 	}
 
 	@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE)
 	public Email populateEmailForm(HttpServletRequest request) throws Exception {
-		return modelService.create(Email.class);
+		return emailFacade.create();
 	}
 
 	@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH)
@@ -124,7 +119,6 @@ public class EmailController extends AbstractCommonController {
 		return new EmailSearch();
 	}
 
-	@PreAuthorize(WebEmailConstants.PreAuthorize.READ)
 	@GetMapping(value = WebEmailConstants.Path.EMAIL)
 	public String list(@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
 			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
@@ -137,7 +131,7 @@ public class EmailController extends AbstractCommonController {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Email.UUID, emailUpdate.getUuid());
 
-			Email existingEmail = modelService.findOneDtoByProperties(properties, Email.class);
+			Email existingEmail = emailFacade.findOneDtoByProperties(properties);
 
 			if (existingEmail != null) {
 				model.addAttribute(WebEmailConstants.ModelAttribute.UPDATE, existingEmail);
@@ -150,7 +144,6 @@ public class EmailController extends AbstractCommonController {
 		return VIEW_EMAIL_LIST;
 	}
 
-	@PreAuthorize(WebEmailConstants.PreAuthorize.CREATE)
 	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "create")
 	public RedirectView create(@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
 			@ModelAttribute(WebEmailConstants.ModelAttribute.CREATE) Email emailCreate, Model model,
@@ -162,7 +155,7 @@ public class EmailController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				modelService.saveDto(emailCreate, Email.class);
+				emailFacade.createDto(emailCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -179,7 +172,6 @@ public class EmailController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebEmailConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "update")
 	public RedirectView update(@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
 			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
@@ -191,7 +183,7 @@ public class EmailController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.saveDto(emailUpdate, Email.class);
+				emailFacade.updateDto(emailUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -208,7 +200,6 @@ public class EmailController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebEmailConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "createattachment")
 	public RedirectView createAttachment(
 			@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
@@ -239,7 +230,6 @@ public class EmailController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebEmailConstants.PreAuthorize.UPDATE)
 	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "deleteattachment")
 	public RedirectView deleteAttachment(
 			@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
@@ -269,7 +259,6 @@ public class EmailController extends AbstractCommonController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebEmailConstants.PreAuthorize.DELETE)
 	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "delete")
 	public RedirectView delete(@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
 			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
@@ -277,7 +266,7 @@ public class EmailController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.remove(emailUpdate.getUuid(), Email.class);
+			emailFacade.delete(emailUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

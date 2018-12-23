@@ -227,7 +227,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 
 			quartzManager.deleteJob(cronjob);
 
-			modelService.remove(cronjob.getUuid(), Cronjob.class);
+			
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}

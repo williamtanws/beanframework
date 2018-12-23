@@ -10,7 +10,6 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,28 +20,24 @@ import com.beanframework.backoffice.WebMenuConstants;
 import com.beanframework.backoffice.domain.TreeJson;
 import com.beanframework.backoffice.domain.TreeJsonState;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.service.MenuFacade;
 
 @RestController
 public class MenuResource {
-	@Autowired
-	private ModelService modelService;
-	
+
 	@Autowired
 	private MenuFacade menuFacade;
 
-	@PreAuthorize(WebMenuConstants.PreAuthorize.READ)
 	@RequestMapping(WebMenuConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		
+
 		String id = (String) requestParams.get(WebBackofficeConstants.Param.ID);
-		
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.ID, id);
-		Menu menu = modelService.findOneDtoByProperties(properties, Menu.class);
+		Menu menu = menuFacade.findOneDtoByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
 		if (StringUtils.isNotEmpty(uuidStr)) {
@@ -65,8 +60,7 @@ public class MenuResource {
 		for (Menu menu : rootMenu) {
 			if (StringUtils.isNotEmpty(uuid)) {
 				data.add(convertToJson(menu, UUID.fromString(uuid)));
-			}
-			else {
+			} else {
 				data.add(convertToJson(menu, null));
 			}
 		}
@@ -105,12 +99,12 @@ public class MenuResource {
 		Locale locale = LocaleContextHolder.getLocale();
 
 		for (MenuField menuField : menu.getMenuFields()) {
-			if (menuField.getId().equals(menu.getId()+"_name_"+locale.toString())) {
+			if (menuField.getId().equals(menu.getId() + "_name_" + locale.toString())) {
 
 				String name = menuField.getValue();
-				
+
 				if (menu.getEnabled() == false) {
-					name = "<span class=\"text-muted\">"+name + "</span>";
+					name = "<span class=\"text-muted\">" + name + "</span>";
 				}
 
 				return name;

@@ -85,7 +85,7 @@ public class EmployeeRemove extends Remover {
 			
 			Employee Employee = modelService.findOneDtoByProperties(properties, Employee.class);
 			try {
-				modelService.remove(Employee.getUuid(), Employee.class);
+				modelService.delete(Employee.getUuid(), Employee.class);
 			} catch (BusinessException e) {
 				logger.error(e.getMessage(), e);
 			}

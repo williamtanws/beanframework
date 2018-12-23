@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,7 @@ import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
 import com.beanframework.language.domain.Language;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
+import com.beanframework.menu.domain.MenuNavigation;
 import com.beanframework.menu.domain.MenuTargetTypeEnum;
 import com.beanframework.user.domain.UserGroup;
 
@@ -63,192 +65,210 @@ public class MenuUpdate extends Updater {
 	}
 
 	@Override
-	public void update() {
+	public void update() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = null;
-		try {
-			resources = loader.getResources(MENU_IMPORT_UPDATE);
-			for (Resource resource : resources) {
-				try {
-					InputStream in = resource.getInputStream();
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					IOUtils.copy(in, baos);
-					BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
+		Resource[] resources = loader.getResources(MENU_IMPORT_UPDATE);
+		for (Resource resource : resources) {
+			InputStream in = resource.getInputStream();
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			IOUtils.copy(in, baos);
+			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-					List<MenuCsv> menuCsvList = readCSVFile(reader);
-					save(menuCsvList);
-
-				} catch (Exception ex) {
-					LOGGER.error("Error reading the resource file: " + ex);
-				}
-			}
-		} catch (IOException ex) {
-			LOGGER.error("Error reading the resource file: " + ex);
+			List<MenuCsv> menuCsvList = readCSVFile(reader);
+			save(menuCsvList);
 		}
+		modelService.clearCache(MenuNavigation.class);
 	}
 
 	public void save(List<MenuCsv> menuCsvList) throws Exception {
 
-		try {
-			// Dynamic Field
+		// Dynamic Field
 
-			Map<String, Object> enNameDynamicFieldProperties = new HashMap<String, Object>();
-			enNameDynamicFieldProperties.put(DynamicField.ID, "menu_name_en");
-			DynamicField enNameDynamicField = modelService.findOneEntityByProperties(enNameDynamicFieldProperties,
-					DynamicField.class);
+		Map<String, Object> enNameDynamicFieldProperties = new HashMap<String, Object>();
+		enNameDynamicFieldProperties.put(DynamicField.ID, "menu_name_en");
+		DynamicField enNameDynamicField = modelService.findOneEntityByProperties(enNameDynamicFieldProperties,
+				DynamicField.class);
 
-			if (enNameDynamicField == null) {
-				enNameDynamicField = modelService.create(DynamicField.class);
-				enNameDynamicField.setId("menu_name_en");
-			}
-			enNameDynamicField.setName("Name");
-			enNameDynamicField.setRequired(true);
-			enNameDynamicField.setRule(null);
-			enNameDynamicField.setSort(0);
-			enNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-			modelService.saveEntity(enNameDynamicField, DynamicField.class);
-
-			Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
-			cnNameDynamicFieldProperties.put(DynamicField.ID, "menu_name_cn");
-			DynamicField cnNameDynamicField = modelService.findOneEntityByProperties(cnNameDynamicFieldProperties,
-					DynamicField.class);
-
-			if (cnNameDynamicField == null) {
-				cnNameDynamicField = modelService.create(DynamicField.class);
-				cnNameDynamicField.setId("menu_name_cn");
-			}
-			cnNameDynamicField.setName("Name");
-			cnNameDynamicField.setRequired(true);
-			cnNameDynamicField.setRule(null);
-			cnNameDynamicField.setSort(1);
-			cnNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-			modelService.saveEntity(cnNameDynamicField, DynamicField.class);
-
-			// Language
-
-			Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
-			enlanguageProperties.put(Language.ID, "en");
-			Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
-
-			Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
-			cnlanguageProperties.put(Language.ID, "cn");
-			Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
-
-			for (MenuCsv csv : menuCsvList) {
-
-				// Menu
-
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Menu.ID, csv.getId());
-				Menu menu = modelService.findOneEntityByProperties(properties, Menu.class);
-
-				if (menu == null) {
-					menu = modelService.create(Menu.class);
-					menu.setId(csv.getId());
-				} else {
-					Hibernate.initialize(menu.getUserGroups());
-					Hibernate.initialize(menu.getMenuFields());
-				}
-
-				menu.setSort(csv.getSort());
-				menu.setIcon(csv.getIcon());
-				menu.setPath(csv.getPath());
-				if(StringUtils.isEmpty(csv.getTarget())) {
-					menu.setTarget(MenuTargetTypeEnum.SELF);
-				}
-				else {
-					menu.setTarget(MenuTargetTypeEnum.valueOf(csv.getTarget()));
-				}
-				menu.setEnabled(csv.isEnabled());
-
-				if (StringUtils.isNotEmpty(csv.getParent())) {
-					Map<String, Object> parentProperties = new HashMap<String, Object>();
-					parentProperties.put(Menu.ID, csv.getParent());
-					Menu parent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
-
-					if (parent == null) {
-						LOGGER.error("Parent not exists: " + csv.getParent());
-					} else {
-						menu.setParent(parent);
-					}
-				}
-
-				boolean enCreate = true;
-				boolean cnCreate = true;
-
-				if (enLanguage != null) {
-					for (int i = 0; i < menu.getMenuFields().size(); i++) {
-						if (menu.getMenuFields().get(i).getId().equals(csv.getId() + "_name_en")
-								&& menu.getMenuFields().get(i).getLanguage().getId().equals("en")) {
-							menu.getMenuFields().get(i).setLabel("Name");
-							menu.getMenuFields().get(i).setValue(csv.getName_en());
-							enCreate = false;
-						}
-					}
-				}
-				if (cnLanguage != null) {
-					for (int i = 0; i < menu.getMenuFields().size(); i++) {
-						if (menu.getMenuFields().get(i).getId().equals(csv.getId() + "_name_cn")
-								&& menu.getMenuFields().get(i).getLanguage().getId().equals("cn")) {
-							menu.getMenuFields().get(i).setLabel("名称");
-							menu.getMenuFields().get(i).setValue(csv.getName_cn());
-							cnCreate = false;
-						}
-					}
-				}
-
-				modelService.saveEntity(menu, Menu.class);
-
-				// User Group
-
-				String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
-				for (int i = 0; i < userGroupIds.length; i++) {
-					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-
-					if (userGroup == null) {
-						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-					} else {
-						menu.getUserGroups().add(userGroup);
-
-						modelService.saveEntity(userGroup, UserGroup.class);
-					}
-				}
-
-				// Menu Field
-
-				if (enCreate) {
-					MenuField menuField = modelService.create(MenuField.class);
-					menuField.setId(csv.getId() + "_name_en");
-					menuField.setDynamicField(enNameDynamicField);
-					menuField.setLanguage(enLanguage);
-					menuField.setLabel("Name");
-					menuField.setValue(csv.getName_en());
-					menuField.setMenu(menu);
-					menu.getMenuFields().add(menuField);
-
-					modelService.saveEntity(menuField, MenuField.class);
-				}
-				if (cnCreate) {
-					MenuField menuField = modelService.create(MenuField.class);
-					menuField.setId(csv.getId() + "_name_cn");
-					menuField.setDynamicField(cnNameDynamicField);
-					menuField.setLanguage(cnLanguage);
-					menuField.setLabel("名称");
-					menuField.setValue(csv.getName_cn());
-					menuField.setMenu(menu);
-					menu.getMenuFields().add(menuField);
-
-					modelService.saveEntity(menuField, MenuField.class);
-				}
-			}
-
-			modelService.saveAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-			LOGGER.error(e.getMessage(), e);
+		if (enNameDynamicField == null) {
+			enNameDynamicField = modelService.create(DynamicField.class);
+			enNameDynamicField.setId("menu_name_en");
 		}
+		enNameDynamicField.setName("Name");
+		enNameDynamicField.setRequired(true);
+		enNameDynamicField.setRule(null);
+		enNameDynamicField.setSort(0);
+		enNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
+		modelService.saveEntity(enNameDynamicField, DynamicField.class);
+
+		Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
+		cnNameDynamicFieldProperties.put(DynamicField.ID, "menu_name_cn");
+		DynamicField cnNameDynamicField = modelService.findOneEntityByProperties(cnNameDynamicFieldProperties,
+				DynamicField.class);
+
+		if (cnNameDynamicField == null) {
+			cnNameDynamicField = modelService.create(DynamicField.class);
+			cnNameDynamicField.setId("menu_name_cn");
+		}
+		cnNameDynamicField.setName("Name");
+		cnNameDynamicField.setRequired(true);
+		cnNameDynamicField.setRule(null);
+		cnNameDynamicField.setSort(1);
+		cnNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
+		modelService.saveEntity(cnNameDynamicField, DynamicField.class);
+
+		// Language
+
+		Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
+		enlanguageProperties.put(Language.ID, "en");
+		Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
+
+		Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
+		cnlanguageProperties.put(Language.ID, "cn");
+		Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
+
+		for (MenuCsv csv : menuCsvList) {
+
+			// Menu
+
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Menu.ID, csv.getId());
+			Menu menu = modelService.findOneEntityByProperties(properties, Menu.class);
+
+			if (menu == null) {
+				menu = modelService.create(Menu.class);
+				menu.setId(csv.getId());
+			} else {
+				Hibernate.initialize(menu.getParent());
+				Hibernate.initialize(menu.getUserGroups());
+				Hibernate.initialize(menu.getMenuFields());
+			}
+
+			menu.setSort(csv.getSort());
+			menu.setIcon(csv.getIcon());
+			menu.setPath(csv.getPath());
+			if (StringUtils.isEmpty(csv.getTarget())) {
+				menu.setTarget(MenuTargetTypeEnum.SELF);
+			} else {
+				menu.setTarget(MenuTargetTypeEnum.valueOf(csv.getTarget()));
+			}
+			menu.setEnabled(csv.isEnabled());
+
+			boolean enCreate = true;
+			boolean cnCreate = true;
+
+			if (enLanguage != null) {
+				for (int i = 0; i < menu.getMenuFields().size(); i++) {
+					if (menu.getMenuFields().get(i).getId().equals(csv.getId() + "_name_en")
+							&& menu.getMenuFields().get(i).getLanguage().getId().equals("en")) {
+						menu.getMenuFields().get(i).setLabel("Name");
+						menu.getMenuFields().get(i).setValue(csv.getName_en());
+						enCreate = false;
+					}
+				}
+			}
+			if (cnLanguage != null) {
+				for (int i = 0; i < menu.getMenuFields().size(); i++) {
+					if (menu.getMenuFields().get(i).getId().equals(csv.getId() + "_name_cn")
+							&& menu.getMenuFields().get(i).getLanguage().getId().equals("cn")) {
+						menu.getMenuFields().get(i).setLabel("名称");
+						menu.getMenuFields().get(i).setValue(csv.getName_cn());
+						cnCreate = false;
+					}
+				}
+			}
+
+			modelService.saveEntity(menu, Menu.class);
+
+			// Old Parent
+
+			if (menu.getParent() != null) {
+				Map<String, Object> parentProperties = new HashMap<String, Object>();
+				parentProperties.put(Menu.UUID, menu.getParent().getUuid());
+				Menu oldParent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
+
+				if (oldParent != null) {
+
+					Iterator<Menu> iterator = oldParent.getChilds().iterator();
+
+					while (iterator.hasNext()) {
+						if (iterator.next().getUuid().equals(menu.getUuid())) {
+							iterator.remove();
+						}
+					}
+					modelService.saveEntity(oldParent, Menu.class);
+				}
+			}
+
+			// New Parent
+
+			if (StringUtils.isNotEmpty(csv.getParent())) {
+				Map<String, Object> parentProperties = new HashMap<String, Object>();
+				parentProperties.put(Menu.ID, csv.getParent());
+				Menu newParent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
+
+				if (newParent == null) {
+					LOGGER.error("Parent not exists: " + csv.getParent());
+				} else {
+					boolean addChild = true;
+					for (Menu child : newParent.getChilds()) {
+						if (child.getUuid().equals(menu.getUuid())) {
+							addChild = false;
+						}
+					}
+					if (addChild) {
+						menu.setParent(newParent);
+						newParent.getChilds().add(menu);
+						modelService.saveEntity(newParent, Menu.class);
+					}
+				}
+			}
+
+			// User Group
+
+			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
+			for (int i = 0; i < userGroupIds.length; i++) {
+				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+
+				if (userGroup == null) {
+					LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+				} else {
+					menu.getUserGroups().add(userGroup);
+
+					modelService.saveEntity(userGroup, UserGroup.class);
+				}
+			}
+
+			// Menu Field
+
+			if (enCreate) {
+				MenuField menuField = modelService.create(MenuField.class);
+				menuField.setId(csv.getId() + "_name_en");
+				menuField.setDynamicField(enNameDynamicField);
+				menuField.setLanguage(enLanguage);
+				menuField.setLabel("Name");
+				menuField.setValue(csv.getName_en());
+				menuField.setMenu(menu);
+				menu.getMenuFields().add(menuField);
+
+				modelService.saveEntity(menuField, MenuField.class);
+			}
+			if (cnCreate && csv.getName_cn() != null) {
+				MenuField menuField = modelService.create(MenuField.class);
+				menuField.setId(csv.getId() + "_name_cn");
+				menuField.setDynamicField(cnNameDynamicField);
+				menuField.setLanguage(cnLanguage);
+				menuField.setLabel("名称");
+				menuField.setValue(csv.getName_cn());
+				menuField.setMenu(menu);
+				menu.getMenuFields().add(menuField);
+
+				modelService.saveEntity(menuField, MenuField.class);
+			}
+		}
+
+		modelService.saveAll();
 	}
 
 	public List<MenuCsv> readCSVFile(Reader reader) {
@@ -296,11 +316,9 @@ public class MenuUpdate extends Updater {
 				new ParseBool(), // enabled
 				new Optional(), // parent
 				new NotNull(), // name_en
-				new NotNull(), // name_cn
+				new Optional(), // name_cn
 				new Optional() // userGroupIds
 		};
-
 		return processors;
 	}
-
 }

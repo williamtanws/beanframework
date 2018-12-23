@@ -25,11 +25,4 @@ public interface WebCustomerConstants {
 		public static final String PROFILE = "customerProfile";
 		public static final String SEARCH = "customerSearch";
 	}
-	
-	public static interface PreAuthorize {
-		public static final String READ = "hasAuthority('customer_read')";
-		public static final String CREATE = "hasAuthority('customer_create')";
-		public static final String UPDATE = "hasAuthority('customer_update')";
-		public static final String DELETE = "hasAuthority('customer_delete')";
-	}
 }

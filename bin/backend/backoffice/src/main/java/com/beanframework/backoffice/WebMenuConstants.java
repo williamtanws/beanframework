@@ -23,11 +23,4 @@ public interface WebMenuConstants {
 		public static final String UPDATE = "menuUpdate";
 		public static final String SEARCH = "menuSearch";
 	}
-	
-	public static interface PreAuthorize {
-		public static final String READ = "hasAuthority('menu_read')";
-		public static final String CREATE = "hasAuthority('menu_create')";
-		public static final String UPDATE = "hasAuthority('menu_update')";
-		public static final String DELETE = "hasAuthority('menu_delete')";
-	}
 }

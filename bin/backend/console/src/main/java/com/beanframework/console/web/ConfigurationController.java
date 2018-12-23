@@ -207,7 +207,7 @@ public class ConfigurationController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.remove(configurationUpdate.getUuid(), Configuration.class);
+			modelService.delete(configurationUpdate.getUuid(), Configuration.class);
 
 			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

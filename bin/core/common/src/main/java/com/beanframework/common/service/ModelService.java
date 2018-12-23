@@ -52,7 +52,7 @@ public interface ModelService {
 
 	void saveAll() throws BusinessException;
 
-	void remove(UUID uuid, Class modelClass) throws BusinessException;
+	void delete(UUID uuid, Class modelClass) throws BusinessException;
 
 	int removeAll(Class modelClass) throws BusinessException;
 
