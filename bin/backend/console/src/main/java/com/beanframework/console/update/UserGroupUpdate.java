@@ -14,7 +14,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -131,19 +130,8 @@ public class UserGroupUpdate extends Updater {
 				userGroup = modelService.create(UserGroup.class);
 				userGroup.setId(csv.getId());
 			} else {
+				Hibernate.initialize(userGroup.getUserGroups());
 				Hibernate.initialize(userGroup.getUserGroupFields());
-			}
-
-			if (StringUtils.isNotEmpty(csv.getParent())) {
-				Map<String, Object> parentProperties = new HashMap<String, Object>();
-				parentProperties.put(UserGroup.ID, csv.getParent());
-				UserGroup parent = modelService.findOneEntityByProperties(parentProperties, UserGroup.class);
-
-				if (parent == null) {
-					LOGGER.error("Parent not exists: " + csv.getParent());
-				} else {
-					userGroup.setParent(parent);
-				}
 			}
 
 			boolean enCreate = true;
@@ -171,6 +159,23 @@ public class UserGroupUpdate extends Updater {
 			}
 
 			modelService.saveEntity(userGroup, UserGroup.class);
+
+			// User Group
+
+			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
+			for (int i = 0; i < userGroupIds.length; i++) {
+				Map<String, Object> userGroupChildProperties = new HashMap<String, Object>();
+				userGroupChildProperties.put(UserGroup.ID, userGroupIds[i]);
+				UserGroup userGroupChild = modelService.findOneEntityByProperties(userGroupChildProperties, UserGroup.class);
+
+				if (userGroupChild == null) {
+					LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+				} else {
+					userGroup.getUserGroups().add(userGroupChild);
+
+					modelService.saveEntity(userGroupChild, UserGroup.class);
+				}
+			}
 
 			// UserGroup Field
 

@@ -16,11 +16,20 @@
 
 	<cache name="com.beanframework.menu.domain.Menu" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="com.beanframework.menu.domain.MenuField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="com.beanframework.menu.domain.MenuNavigation" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
 	<cache name="com.beanframework.configuration.domain.Configuration" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
 	<cache name="com.beanframework.cronjob.domain.Cronjob" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="com.beanframework.cronjob.domain.CronjobData" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
 	<cache name="com.beanframework.dynamicfield.domain.DynamicField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
@@ -41,18 +50,21 @@
 	<cache name="com.beanframework.user.domain.UserGroup" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
-	<cache name="com.beanframework.menu.domain.UserGroupField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+	<cache name="com.beanframework.user.domain.UserGroupField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
-	<cache name="com.beanframework.menu.domain.UserPermission" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+	<cache name="com.beanframework.user.domain.UserPermission" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
-	<cache name="com.beanframework.menu.domain.UserPermissionField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+	<cache name="com.beanframework.user.domain.UserPermissionField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
-	<cache name="com.beanframework.menu.domain.UserRight" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+	<cache name="com.beanframework.user.domain.UserRight" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
-	<cache name="com.beanframework.menu.domain.UserRightField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+	<cache name="com.beanframework.user.domain.UserRightField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="com.beanframework.user.domain.UserAuthority" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 </ehcache>

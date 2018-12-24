@@ -103,17 +103,20 @@ public class CronjobUpdate extends Updater {
 			boolean createData = true;
 
 			for (int i = 0; i < cronjob.getCronjobDatas().size(); i++) {
-				String[] cronjobDataList = csv.getCronjobData().split(SPLITTER);
+				if (csv.getCronjobData() != null) {
+					String[] cronjobDataList = csv.getCronjobData().split(SPLITTER);
 
-				for (String cronjobDataString : cronjobDataList) {
-					String name = cronjobDataString.split(EQUALS)[0];
-					String value = cronjobDataString.split(EQUALS)[1];
+					for (String cronjobDataString : cronjobDataList) {
+						String name = cronjobDataString.split(EQUALS)[0];
+						String value = cronjobDataString.split(EQUALS)[1];
 
-					if (cronjob.getCronjobDatas().get(i).getId().equals(csv.getId() + "_" + name)) {
-						cronjob.getCronjobDatas().get(i).setValue(value);
-						createData = false;
+						if (cronjob.getCronjobDatas().get(i).getId().equals(csv.getId() + "_" + name)) {
+							cronjob.getCronjobDatas().get(i).setValue(value);
+							createData = false;
+						}
 					}
 				}
+
 			}
 
 			modelService.saveEntity(cronjob, Cronjob.class);
@@ -121,20 +124,23 @@ public class CronjobUpdate extends Updater {
 			// CronjobData
 
 			if (createData) {
-				String[] cronjobDataList = csv.getCronjobData().split(SPLITTER);
+				if (csv.getCronjobData() != null) {
 
-				for (String cronjobDataString : cronjobDataList) {
-					String name = cronjobDataString.split(EQUALS)[0];
-					String value = cronjobDataString.split(EQUALS)[1];
+					String[] cronjobDataList = csv.getCronjobData().split(SPLITTER);
 
-					CronjobData cronjobData = new CronjobData();
-					cronjobData.setId(csv.getId() + "_" + name);
-					cronjobData.setName(name);
-					cronjobData.setValue(value);
-					cronjobData.setCronjob(cronjob);
-					cronjob.getCronjobDatas().add(cronjobData);
+					for (String cronjobDataString : cronjobDataList) {
+						String name = cronjobDataString.split(EQUALS)[0];
+						String value = cronjobDataString.split(EQUALS)[1];
 
-					modelService.saveEntity(cronjobData, CronjobData.class);
+						CronjobData cronjobData = new CronjobData();
+						cronjobData.setId(csv.getId() + "_" + name);
+						cronjobData.setName(name);
+						cronjobData.setValue(value);
+						cronjobData.setCronjob(cronjob);
+						cronjob.getCronjobDatas().add(cronjobData);
+
+						modelService.saveEntity(cronjobData, CronjobData.class);
+					}
 				}
 			}
 		}

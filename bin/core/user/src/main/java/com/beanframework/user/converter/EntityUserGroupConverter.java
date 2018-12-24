@@ -63,6 +63,17 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 			}
 			prototype.setLastModifiedDate(new Date());
 
+			if (source.getUserGroups() == null) {
+				prototype.setUserGroups(new ArrayList<UserGroup>());
+			} else {
+				List<UserGroup> childs = new ArrayList<UserGroup>();
+				for (UserGroup userGroup : source.getUserGroups()) {
+					UserGroup entityUserGroup = modelService.findOneEntityByUuid(userGroup.getUuid(), UserGroup.class);
+					if (entityUserGroup != null)
+						childs.add(entityUserGroup);
+				}
+				prototype.setUserGroups(childs);
+			}
 			if (source.getUserAuthorities() == null || source.getUserAuthorities().isEmpty()) {
 				prototype.setUserAuthorities(new ArrayList<UserAuthority>());
 			} else {

@@ -45,10 +45,10 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		try {
-			Hibernate.initialize(source.getChilds());
+			Hibernate.initialize(source.getUserGroups());
 			Hibernate.initialize(source.getUserAuthorities());
 
-			prototype.setChilds(modelService.getDto(source.getChilds(), UserGroup.class));
+			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroup.class));
 			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthority.class));
 			prototype.setUserGroupFields(modelService.getDto(source.getUserGroupFields(), UserGroupField.class));
 		} catch (Exception e) {

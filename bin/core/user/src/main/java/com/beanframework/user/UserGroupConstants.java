@@ -13,6 +13,7 @@ public final class UserGroupConstants {
 	public interface Table {
 		public static final String USER_GROUP = "usergroup";
 		public static final String USER_GROUP_FIELD = "usergroupfield";
+		public static final String USER_GROUP_REL = "usergrouprel";
 
 	}
 
