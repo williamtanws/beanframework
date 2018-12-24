@@ -178,9 +178,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 			}
 
-			Hibernate.initialize(userGroup.getChilds());
-			if(userGroup.getChilds() != null && userGroup.getChilds().isEmpty() == false) {
-				authorities.addAll(getAuthorities(userGroup.getChilds()));
+			Hibernate.initialize(userGroup.getUserGroups());
+			if(userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
+				authorities.addAll(getAuthorities(userGroup.getUserGroups()));
 			}
 		}
 

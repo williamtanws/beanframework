@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +144,21 @@ public class UserGroupController extends AbstractCommonController {
 			UserGroup existingUserGroup = userGroupFacade.findOneDtoByProperties(properties);
 
 			if (existingUserGroup != null) {
+				
+				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
+
+				List<UserGroup> userGroups = userGroupFacade.findDtoBySorts(sorts);
+
+				for (int i = 0; i < userGroups.size(); i++) {
+					for (UserGroup userGroup : existingUserGroup.getUserGroups()) {
+						if (userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
+							userGroups.get(i).setSelected("true");
+						}
+					}
+				}
+				existingUserGroup.setUserGroups(userGroups);
+				
 				model.addAttribute(WebUserGroupConstants.ModelAttribute.UPDATE, existingUserGroup);
 			} else {
 				usergroupUpdate.setUuid(null);
@@ -175,6 +191,14 @@ public class UserGroupController extends AbstractCommonController {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
+			
+			List<UserGroup> userGroups = new ArrayList<UserGroup>();
+			for (UserGroup userGroup : usergroupCreate.getUserGroups()) {
+				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
+					userGroups.add(userGroup);
+				}
+			}
+			usergroupCreate.setUserGroups(userGroups);
 
 			for (int i = 0; i < usergroupCreate.getUserAuthorities().size(); i++) {
 				if (BooleanUtils.parseBoolean(usergroupCreate.getUserAuthorities().get(i).getEnabledStr())) {
@@ -212,6 +236,14 @@ public class UserGroupController extends AbstractCommonController {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
+			
+			List<UserGroup> userGroups = new ArrayList<UserGroup>();
+			for (UserGroup userGroup : usergroupUpdate.getUserGroups()) {
+				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
+					userGroups.add(userGroup);
+				}
+			}
+			usergroupUpdate.setUserGroups(userGroups);
 
 			for (int i = 0; i < usergroupUpdate.getUserAuthorities().size(); i++) {
 				if (BooleanUtils.parseBoolean(usergroupUpdate.getUserAuthorities().get(i).getEnabledStr())) {

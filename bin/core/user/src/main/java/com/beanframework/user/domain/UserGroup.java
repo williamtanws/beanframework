@@ -7,7 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -33,13 +34,10 @@ public class UserGroup extends GenericDomain {
 	public static final String USER_AUTHORITIES = "userAuthorities";
 	public static final String USER_GROUP_FIELDS = "userGroupFields";
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parent_uuid")
-	private UserGroup parent;
-
-	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = PARENT, fetch = FetchType.LAZY)
-	private List<UserGroup> childs = new ArrayList<UserGroup>();
+	@Cascade({ CascadeType.REFRESH })
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = UserGroupConstants.Table.USER_GROUP_REL, joinColumns = @JoinColumn(name = "uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
+	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserAuthority.USER_GROUP, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -52,20 +50,12 @@ public class UserGroup extends GenericDomain {
 	@Transient
 	private String selected;
 
-	public UserGroup getParent() {
-		return parent;
+	public List<UserGroup> getUserGroups() {
+		return userGroups;
 	}
 
-	public void setParent(UserGroup parent) {
-		this.parent = parent;
-	}
-
-	public List<UserGroup> getChilds() {
-		return childs;
-	}
-
-	public void setChilds(List<UserGroup> childs) {
-		this.childs = childs;
+	public void setUserGroups(List<UserGroup> userGroups) {
+		this.userGroups = userGroups;
 	}
 
 	public List<UserAuthority> getUserAuthorities() {
