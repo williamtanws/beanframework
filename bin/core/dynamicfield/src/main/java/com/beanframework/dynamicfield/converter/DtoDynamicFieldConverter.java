@@ -34,7 +34,10 @@ public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, Dyna
 		prototype.setRequired(source.getRequired());
 		prototype.setRule(source.getRule());
 		prototype.setSort(source.getSort());
-		prototype.setType(source.getType());
+		prototype.setFieldType(source.getFieldType());
+		prototype.setFieldGroup(source.getFieldGroup());
+		prototype.setLabel(source.getLabel());
+		prototype.setLanguage(source.getLanguage());
 
 		return prototype;
 	}

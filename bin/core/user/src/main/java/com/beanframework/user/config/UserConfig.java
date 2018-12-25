@@ -30,18 +30,27 @@ import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserPermissionField;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.interceptor.UserAuthorityInitialDefaultsInterceptor;
 import com.beanframework.user.interceptor.UserAuthorityValidateInterceptor;
+import com.beanframework.user.interceptor.UserGroupLoadInterceptor;
+import com.beanframework.user.interceptor.UserGroupPrepareInterceptor;
 import com.beanframework.user.interceptor.UserGroupValidateInterceptor;
 import com.beanframework.user.interceptor.UserInitialDefaultsInterceptor;
 import com.beanframework.user.interceptor.UserLoadInterceptor;
+import com.beanframework.user.interceptor.UserPermissionPrepareInterceptor;
 import com.beanframework.user.interceptor.UserPermissionValidateInterceptor;
 import com.beanframework.user.interceptor.UserPrepareInterceptor;
 import com.beanframework.user.interceptor.UserRemoveInterceptor;
+import com.beanframework.user.interceptor.UserRightPrepareInterceptor;
 import com.beanframework.user.interceptor.UserRightValidateInterceptor;
 import com.beanframework.user.interceptor.UserValidateInterceptor;
 
 @Configuration
 public class UserConfig {
+
+	/////////////////////////
+	//    DTO Converter    //
+	/////////////////////////
 
 	@Bean
 	public DtoUserAuthorityConverter dtoUserAuthorityConverter() {
@@ -56,7 +65,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public DtoUserFieldConverter dtoUserFieldConverter() {
 		return new DtoUserFieldConverter();
@@ -98,7 +107,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public DtoUserPermissionConverter dtoUserPermissionConverter() {
 		return new DtoUserPermissionConverter();
@@ -112,7 +121,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public DtoUserPermissionFieldConverter dtoUserPermissionLangConverter() {
 		return new DtoUserPermissionFieldConverter();
@@ -126,7 +135,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public DtoUserRightConverter dtoUserRightConverter() {
 		return new DtoUserRightConverter();
@@ -140,7 +149,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public DtoUserRightFieldConverter dtoUserRightFieldConverter() {
 		return new DtoUserRightFieldConverter();
@@ -155,6 +164,10 @@ public class UserConfig {
 		return mapping;
 	}
 
+	////////////////////////////
+	//    ENTITY Converter    //
+	////////////////////////////
+
 	@Bean
 	public EntityUserConverter entityUserConverter() {
 		return new EntityUserConverter();
@@ -168,7 +181,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public EntityUserFieldConverter entityUserFieldConverter() {
 		return new EntityUserFieldConverter();
@@ -182,7 +195,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public EntityUserGroupConverter entityUserGroupConverter() {
 		return new EntityUserGroupConverter();
@@ -196,7 +209,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public EntityUserGroupFieldConverter entityUserGroupFieldConverter() {
 		return new EntityUserGroupFieldConverter();
@@ -210,7 +223,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public EntityUserPermissionConverter entityUserPermissionConverter() {
 		return new EntityUserPermissionConverter();
@@ -224,7 +237,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public EntityUserPermissionFieldConverter entityUserPermissionFieldConverter() {
 		return new EntityUserPermissionFieldConverter();
@@ -238,7 +251,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public EntityUserRightConverter entityUserRightConverter() {
 		return new EntityUserRightConverter();
@@ -252,7 +265,7 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public EntityUserRightFieldConverter entityUserRightFieldConverter() {
 		return new EntityUserRightFieldConverter();
@@ -266,6 +279,10 @@ public class UserConfig {
 
 		return mapping;
 	}
+	
+	////////////////////////////////////////
+	//    Initial Defaults Interceptor    //
+	////////////////////////////////////////
 
 	@Bean
 	public UserInitialDefaultsInterceptor userInitialDefaultsInterceptor() {
@@ -280,7 +297,25 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
+
+	@Bean
+	public UserAuthorityInitialDefaultsInterceptor userAuthorityInitialDefaultsInterceptor() {
+		return new UserAuthorityInitialDefaultsInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userAuthorityInitialDefaultsInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userAuthorityInitialDefaultsInterceptor());
+		interceptorMapping.setTypeCode(UserAuthority.class.getSimpleName());
+
+		return interceptorMapping;
+	}
 	
+	////////////////////////////////////////
+	//    Validate Defaults Interceptor    //
+	////////////////////////////////////////
+
 	@Bean
 	public UserAuthorityValidateInterceptor userAuthorityValidateInterceptor() {
 		return new UserAuthorityValidateInterceptor();
@@ -294,7 +329,7 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserGroupValidateInterceptor userGroupValidateInterceptor() {
 		return new UserGroupValidateInterceptor();
@@ -308,7 +343,7 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserPermissionValidateInterceptor userPermissionValidateInterceptor() {
 		return new UserPermissionValidateInterceptor();
@@ -322,7 +357,7 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserRightValidateInterceptor userRightValidateInterceptor() {
 		return new UserRightValidateInterceptor();
@@ -350,6 +385,10 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
+	
+	///////////////////////////////
+	//    Prepare Interceptor    //
+	///////////////////////////////
 
 	@Bean
 	public UserPrepareInterceptor userPrepareInterceptor() {
@@ -366,6 +405,52 @@ public class UserConfig {
 	}
 
 	@Bean
+	public UserGroupPrepareInterceptor userGroupPrepareInterceptor() {
+		return new UserGroupPrepareInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userGroupPrepareInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userGroupPrepareInterceptor());
+		interceptorMapping.setTypeCode(UserGroup.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	@Bean
+	public UserRightPrepareInterceptor userRightPrepareInterceptor() {
+		return new UserRightPrepareInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userRightPrepareInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userRightPrepareInterceptor());
+		interceptorMapping.setTypeCode(UserRight.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	@Bean
+	public UserPermissionPrepareInterceptor userPermissionPrepareInterceptor() {
+		return new UserPermissionPrepareInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userPermissionPrepareInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userPermissionPrepareInterceptor());
+		interceptorMapping.setTypeCode(UserPermission.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	////////////////////////////
+	//    Load Interceptor    //
+	////////////////////////////
+
+	@Bean
 	public UserLoadInterceptor userLoadInterceptor() {
 		return new UserLoadInterceptor();
 	}
@@ -378,6 +463,24 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
+	
+	@Bean
+	public UserGroupLoadInterceptor userGroupLoadInterceptor() {
+		return new UserGroupLoadInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userGroupLoadInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userGroupLoadInterceptor());
+		interceptorMapping.setTypeCode(UserGroup.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	//////////////////////////////
+	//    Remove Interceptor    //
+	//////////////////////////////
 
 	@Bean
 	public UserRemoveInterceptor userRemoveInterceptor() {

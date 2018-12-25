@@ -1,9 +1,7 @@
 package com.beanframework.user.converter;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,17 +53,14 @@ public class EntityUserRightConverter implements EntityConverter<UserRight, User
 			prototype.setLastModifiedDate(new Date());
 
 			prototype.setSort(source.getSort());
-			if (source.getUserRightFields() == null || source.getUserRightFields().isEmpty()) {
-				prototype.setUserRightFields(new ArrayList<UserRightField>());
-			} else {
-				List<UserRightField> userRightFields = new ArrayList<UserRightField>();
-				for (UserRightField userRightField : source.getUserRightFields()) {
-					UserRightField entityUserRightField = modelService.findOneEntityByUuid(userRightField.getUuid(),
-							UserRightField.class);
-					entityUserRightField.setValue(userRightField.getValue());
-					userRightFields.add(entityUserRightField);
+			if (source.getUserRightFields() != null && source.getUserRightFields().isEmpty() == false) {
+				for (int i = 0; i < prototype.getUserRightFields().size(); i++) {
+					for (UserRightField sourceUserRightField : source.getUserRightFields()) {
+						if (prototype.getUserRightFields().get(i).getUuid().equals(sourceUserRightField.getUuid())) {
+							prototype.getUserRightFields().get(i).setValue(sourceUserRightField.getValue());
+						}
+					}
 				}
-				prototype.setUserRightFields(userRightFields);
 			}
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

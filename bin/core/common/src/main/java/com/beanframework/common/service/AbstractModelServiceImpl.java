@@ -73,8 +73,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	protected void initialDefaultsInterceptor(Object model, Class modelClass) throws InterceptorException {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof InitialDefaultsInterceptor) {
-				InitialDefaultsInterceptor<Object> interceptor = (InitialDefaultsInterceptor<Object>) interceptorMapping
-						.getInterceptor();
+				InitialDefaultsInterceptor<Object> interceptor = (InitialDefaultsInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
 					interceptor.onInitialDefaults(model);
 				}
@@ -82,21 +81,14 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void loadInterceptor(Collection models, Class modelClass) throws InterceptorException {
-
-		Iterator iterator = models.iterator();
-		while (iterator.hasNext()) {
-			Object model = iterator.next();
-			loadInterceptor(model, modelClass);
-		}
-	}
-
 	protected void loadInterceptor(Object model, Class modelClass) throws InterceptorException {
-		for (InterceptorMapping interceptorMapping : interceptorMappings) {
-			if (interceptorMapping.getInterceptor() instanceof LoadInterceptor) {
-				LoadInterceptor<Object> interceptor = (LoadInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-					interceptor.onLoad(model);
+		if (model != null) {
+			for (InterceptorMapping interceptorMapping : interceptorMappings) {
+				if (interceptorMapping.getInterceptor() instanceof LoadInterceptor) {
+					LoadInterceptor<Object> interceptor = (LoadInterceptor<Object>) interceptorMapping.getInterceptor();
+					if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+						interceptor.onLoad(model);
+					}
 				}
 			}
 		}
@@ -114,8 +106,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	protected void prepareInterceptor(Object model, Class modelClass) throws InterceptorException {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof PrepareInterceptor) {
-				PrepareInterceptor<Object> interceptor = (PrepareInterceptor<Object>) interceptorMapping
-						.getInterceptor();
+				PrepareInterceptor<Object> interceptor = (PrepareInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
 					interceptor.onPrepare(model);
 				}
@@ -155,8 +146,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	protected void validateInterceptor(Object model, Class modelClass) throws InterceptorException {
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof ValidateInterceptor) {
-				ValidateInterceptor<Object> interceptor = (ValidateInterceptor<Object>) interceptorMapping
-						.getInterceptor();
+				ValidateInterceptor<Object> interceptor = (ValidateInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
 					interceptor.onValidate(model);
 				}
@@ -183,10 +173,10 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		throw new ConverterException("Cannot find any entity convert to convert target model: "+model.getClass());
+		throw new ConverterException("Cannot find any entity convert to convert target model: " + model.getClass());
 	}
 
-	protected <T extends Collection> T dtoConverter(Collection models, Class modelClass) throws ConverterException {
+	protected <T extends Collection> T dtoConverter(Collection models, Class modelClass) throws ConverterException, InterceptorException {
 		if (models instanceof List<?>) {
 			List<Object> listModels = new ArrayList<Object>();
 			Iterator iterator = models.iterator();
@@ -196,7 +186,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 			return (T) listModels;
 		}
-		throw new ConverterException("Cannot find available models type to convert target model: "+modelClass);
+		throw new ConverterException("Cannot find available models type to convert target model: " + modelClass);
 	}
 
 	protected Object dtoConverter(Object model, Class modelClass) throws ConverterException {
@@ -209,26 +199,23 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		throw new ConverterException("Cannot find any dto convert to convert target model: "+modelClass);
+		throw new ConverterException("Cannot find any dto convert to convert target model: " + modelClass);
 	}
 
 	protected <T> Page<T> page(@Nullable Specification spec, Pageable pageable, Class modelClass) {
 
 		TypedQuery<T> query = getQuery(spec, pageable, modelClass);
-		return pageable.isUnpaged() ? new PageImpl<T>(query.getResultList())
-				: readPage(query, modelClass, pageable, spec);
+		return pageable.isUnpaged() ? new PageImpl<T>(query.getResultList()) : readPage(query, modelClass, pageable, spec);
 	}
 
-	protected <T> Page readPage(TypedQuery query, final Class domainClass, Pageable pageable,
-			@Nullable Specification spec) {
+	protected <T> Page readPage(TypedQuery query, final Class domainClass, Pageable pageable, @Nullable Specification spec) {
 
 		if (pageable.isPaged()) {
 			query.setFirstResult((int) pageable.getOffset());
 			query.setMaxResults(pageable.getPageSize());
 		}
 
-		return PageableExecutionUtils.getPage(query.getResultList(), pageable,
-				() -> executeCountQuery(getCountQuery(spec, domainClass)));
+		return PageableExecutionUtils.getPage(query.getResultList(), pageable, () -> executeCountQuery(getCountQuery(spec, domainClass)));
 	}
 
 	protected <T> TypedQuery getCountQuery(@Nullable Specification spec, Class domainClass) {
@@ -270,8 +257,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return entityManager.createQuery(query);
 	}
 
-	protected <S, U extends T, T> Root<U> applySpecificationToCriteria(@Nullable Specification<U> spec,
-			Class<U> domainClass, CriteriaQuery<S> query) {
+	protected <S, U extends T, T> Root<U> applySpecificationToCriteria(@Nullable Specification<U> spec, Class<U> domainClass, CriteriaQuery<S> query) {
 
 		Assert.notNull(domainClass, "Domain class must not be null!");
 		Assert.notNull(query, "CriteriaQuery must not be null!");
@@ -321,8 +307,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected <T> T getCachedSingleResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts,
-			String data, Class modelClass) {
+	protected <T> T getCachedSingleResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Class modelClass) {
 		StringBuilder propertiesBuilder = new StringBuilder();
 		if (properties != null) {
 			for (Map.Entry<String, Object> entry : properties.entrySet()) {
@@ -366,8 +351,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected <T extends Collection> T getCachedResultList(Map<String, Object> properties,
-			Map<String, Sort.Direction> sorts, String data, Class modelClass) {
+	protected <T extends Collection> T getCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Class modelClass) {
 
 		if (properties == null && sorts == null) {
 			return (T) cacheManager.getCache(modelClass.getName()).get("*");
@@ -416,8 +400,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void setCachedSingleResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data,
-			Class modelClass, Object model) {
+	protected void setCachedSingleResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Class modelClass, Object model) {
 		StringBuilder propertiesBuilder = new StringBuilder();
 		if (properties != null) {
 			for (Map.Entry<String, Object> entry : properties.entrySet()) {
@@ -456,8 +439,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		cacheManager.getCache(modelClass.getName()).put(qlString, model);
 	}
 
-	protected void setCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data,
-			Class modelClass, Collection models) {
+	protected void setCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Class modelClass, Collection models) {
 
 		if (properties == null && sorts == null) {
 			cacheManager.getCache(modelClass.getName()).put("*", models);
@@ -489,8 +471,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 				}
 			}
 
-			String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName()
-					+ " o";
+			String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
 			if (propertiesBuilder.length() > 0) {
 				qlString = qlString + " where " + propertiesBuilder.toString();
@@ -502,7 +483,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			cacheManager.getCache(modelClass.getName()).put(qlString, models);
 		}
 	}
-	
+
 	protected void putCache(Class modelClass, Object key, Object value) {
 		cacheManager.getCache(modelClass.getName()).put(key, value);
 	}
@@ -535,8 +516,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return sortsBuilder.toString();
 	}
 
-	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data,
-			Class modelClass) {
+	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Class modelClass) {
 		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
 		if (properties != null && properties.isEmpty() == false) {

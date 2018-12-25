@@ -1,9 +1,10 @@
 package com.beanframework.backoffice.interceptor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,12 +32,12 @@ import com.beanframework.user.domain.UserGroup;
 public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 
 	Logger logger = LoggerFactory.getLogger(BackofficeSecurityInterceptor.class);
-	
+
 	UrlPathHelper urlPathHelper = new UrlPathHelper();
 
 	@Autowired
 	private MenuFacade menuFacade;
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -57,27 +58,35 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 			Employee employee = (Employee) auth.getPrincipal();
 
 			getMenuNavigation(request, modelAndView, employee);
-			
+
 			getLanguage(modelAndView);
 		}
 	}
 
-	protected void getMenuNavigation(HttpServletRequest request, ModelAndView modelAndView, Employee employee) throws BusinessException {
-		if(employee.getUserGroups().isEmpty() == false) {
-			List<UUID> userGroupUuids = new ArrayList<UUID>();
-			for (UserGroup userGroup : employee.getUserGroups()) {
-				userGroupUuids.add(userGroup.getUuid());
-			}
-						
-			List<MenuNavigation> menuNavigation = menuFacade.findDtoMenuNavigationByUserGroup(userGroupUuids);			
+	protected void getMenuNavigation(HttpServletRequest request, ModelAndView modelAndView, Employee employee)
+			throws BusinessException {
+		if (employee.getUserGroups().isEmpty() == false) {
+			List<MenuNavigation> menuNavigation = menuFacade
+					.findDtoMenuNavigationByUserGroup(collectUserGroupUuid(employee.getUserGroups()));
 			modelAndView.getModelMap().addAttribute(WebBackofficeConstants.Model.MENU_NAVIGATION, menuNavigation);
 		}
 	}
-	
+
+	private Set<UUID> collectUserGroupUuid(List<UserGroup> userGroups) {
+		Set<UUID> userGroupUuids = new LinkedHashSet<UUID>();
+		for (UserGroup userGroup : userGroups) {
+			userGroupUuids.add(userGroup.getUuid());
+			if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
+				userGroupUuids.addAll(collectUserGroupUuid(userGroup.getUserGroups()));
+			}
+		}
+		return userGroupUuids;
+	}
+
 	protected void getLanguage(ModelAndView modelAndView) throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Language.SORT, Sort.Direction.ASC);
-		
+
 		List<Language> languages = modelService.findDtoBySorts(sorts, Language.class);
 		modelAndView.getModelMap().addAttribute(WebBackofficeConstants.Model.MODULE_LANGUAGES, languages);
 	}

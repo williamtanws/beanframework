@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
@@ -36,9 +37,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.CustomerCsv;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
-import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;
 
@@ -76,24 +74,6 @@ public class CustomerUpdate extends Updater {
 
 	public void save(List<CustomerCsv> customerCsvList) throws Exception {
 
-		// Dynamic Field
-
-		Map<String, Object> nameDynamicFieldProperties = new HashMap<String, Object>();
-		nameDynamicFieldProperties.put(DynamicField.ID, "customer_name");
-		DynamicField nameDynamicField = modelService.findOneEntityByProperties(nameDynamicFieldProperties,
-				DynamicField.class);
-
-		if (nameDynamicField == null) {
-			nameDynamicField = modelService.create(DynamicField.class);
-			nameDynamicField.setId("customer_name");
-		}
-		nameDynamicField.setName("Name");
-		nameDynamicField.setRequired(true);
-		nameDynamicField.setRule(null);
-		nameDynamicField.setSort(0);
-		nameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(nameDynamicField, DynamicField.class);
-
 		for (CustomerCsv csv : customerCsvList) {
 
 			Map<String, Object> properties = new HashMap<String, Object>();
@@ -116,16 +96,37 @@ public class CustomerUpdate extends Updater {
 			customer.setCredentialsNonExpired(csv.isCredentialsNonExpired());
 			customer.setEnabled(csv.isEnabled());
 
-			boolean createName = true;
+			modelService.saveEntity(customer, Customer.class);
+			
+			// Employee Field
 
-			for (int i = 0; i < customer.getUserFields().size(); i++) {
-				if (customer.getUserFields().get(i).getId().equals(csv.getId() + "_name")) {
-					customer.getUserFields().get(i).setLabel("Name");
-					customer.getUserFields().get(i).setValue(csv.getName());
-					createName = false;
+			if (csv.getDynamicField() != null) {
+				String dynamicFieldId = csv.getDynamicField().split(";")[0];
+				String value = csv.getDynamicField().split(";")[1];
+				for (int i = 0; i < customer.getUserFields().size(); i++) {
+					if (customer.getUserFields().get(i).getId().equals(dynamicFieldId)) {
+						customer.getUserFields().get(i).setValue(value);
+					}
 				}
 			}
 
+			modelService.saveEntity(customer, Customer.class);
+			
+			// User Field
+
+			if (csv.getDynamicField() != null) {
+				String[] dynamicFields = csv.getDynamicField().split(";");
+				for (String dynamicField : dynamicFields) {
+					String dynamicFieldId = dynamicField.split("=")[0];
+					String value = dynamicField.split("=")[1];
+					for (int i = 0; i < customer.getUserFields().size(); i++) {
+						if (customer.getUserFields().get(i).getId().equals(customer.getId()+"_"+dynamicFieldId)) {
+							customer.getUserFields().get(i).setValue(value);
+						}
+					}
+				}
+			}
+			
 			modelService.saveEntity(customer, Customer.class);
 
 			// User Group
@@ -144,22 +145,7 @@ public class CustomerUpdate extends Updater {
 					modelService.saveEntity(userGroup, UserGroup.class);
 				}
 			}
-
-			// Customer Field
-
-			if (createName) {
-				UserField customerField = modelService.create(UserField.class);
-				customerField.setId(csv.getId() + "_name");
-				customerField.setDynamicField(nameDynamicField);
-				customerField.setLabel("Name");
-				customerField.setValue(csv.getName());
-				customerField.setUser(customer);
-				customer.getUserFields().add(customerField);
-
-				modelService.saveEntity(customerField, UserField.class);
-			}
 		}
-		modelService.saveAll();
 	}
 
 	public List<CustomerCsv> readCSVFile(Reader reader) {
@@ -178,8 +164,7 @@ public class CustomerUpdate extends Updater {
 			CustomerCsv customerCsv;
 			LOGGER.info("Start import Customer Csv.");
 			while ((customerCsv = beanReader.read(CustomerCsv.class, header, processors)) != null) {
-				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
-						customerCsv);
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), customerCsv);
 				customerCsvList.add(customerCsv);
 			}
 			LOGGER.info("Finished import Customer Csv.");
@@ -201,13 +186,13 @@ public class CustomerUpdate extends Updater {
 
 	public CellProcessor[] getProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
-				new NotNull(), // name
 				new NotNull(), // password
 				new ParseBool(), // accountNonExpired
 				new ParseBool(), // accountNonLocked
 				new ParseBool(), // credentialsNonExpired
 				new ParseBool(), // enabled
-				new org.supercsv.cellprocessor.Optional() // userGroupId
+				new org.supercsv.cellprocessor.Optional(), // userGroupId
+				new Optional() // dynamicField
 		};
 
 		return processors;

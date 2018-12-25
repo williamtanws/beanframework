@@ -66,7 +66,7 @@ public class EmailServiceImpl implements EmailService {
 	@Transactional
 	@Override
 	public void deleteAll() throws IOException, BusinessException {
-		modelService.removeAll(Email.class);
+		modelService.deleteAll(Email.class);
 
 		File emailAttachmentFolder = new File(EMAIL_ATTACHMENT_LOCATION);
 		FileUtils.deleteDirectory(emailAttachmentFolder);

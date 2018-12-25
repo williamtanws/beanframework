@@ -3,19 +3,19 @@ package com.beanframework.menu.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -117,7 +117,7 @@ public class MenuServiceImpl implements MenuService {
 
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
-		List<Menu> rootParents = modelService.findDtoByPropertiesAndSorts(properties, sorts, Menu.class);
+		List<Menu> rootParents = modelService.findEntityByPropertiesAndSorts(properties, sorts, Menu.class);
 
 		initializeChilds(rootParents);
 
@@ -155,72 +155,104 @@ public class MenuServiceImpl implements MenuService {
 		}
 	}
 
-	@Cacheable(cacheNames = "com.beanframework.menu.domain.MenuNavigation", key = "#userGroupUuids")
-	@Transactional(readOnly = true)
-	@Override
-	public List<Menu> findMenuTreeByUserGroup(List<UUID> userGroupUuids) throws Exception {
+	public List<Menu> findMenuNavigationByUserGroup(Set<UUID> userGroupUuids) throws Exception {
+		List<Menu> root = findMenuTree();
 
-		// Find all root parents
-		Specification<Menu> spec = new Specification<Menu>() {
-			private static final long serialVersionUID = 1L;
+		filterMenuNavigation(root, userGroupUuids);
 
-			@Override
-			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-				List<Predicate> predicates = new ArrayList<Predicate>();
-
-				predicates.add(cb.and(root.get(Menu.PARENT).isNull()));
-				predicates.add(cb.isTrue(root.get(Menu.ENABLED)));
-				predicates.add(cb.and(root.join(Menu.USER_GROUPS, JoinType.INNER).get("uuid").in(userGroupUuids)));
-
-				query.orderBy(cb.asc(root.get(Menu.SORT)));
-				query.distinct(true);
-
-				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-			}
-		};
-
-		List<Menu> rootParents = menuRepository.findAll(spec);
-
-		initializeChildsByUserGroup(rootParents, userGroupUuids);
-
-		return rootParents;
+		return root;
 	}
-
-	private void initializeChildsByUserGroup(List<Menu> parents, List<UUID> userGroupUuids) throws Exception {
-
-		for (Menu parent : parents) {
-			Hibernate.initialize(parent.getUserGroups());
-			Hibernate.initialize(parent.getMenuFields());
-
-			// Find all childs
-			Specification<Menu> spec = new Specification<Menu>() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-					List<Predicate> predicates = new ArrayList<Predicate>();
-
-					predicates.add(cb.and(root.get(Menu.PARENT).get(Menu.UUID).in(parent.getUuid())));
-					predicates.add(cb.isTrue(root.get(Menu.ENABLED)));
-					predicates.add(
-							cb.and(root.join(Menu.USER_GROUPS, JoinType.INNER).get(UserGroup.UUID).in(userGroupUuids)));
-
-					query.orderBy(cb.asc(root.get(Menu.SORT)));
-					query.distinct(true);
-
-					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+	
+	private void filterMenuNavigation(List<Menu> menu, Set<UUID> userGroupUuids) {
+		Iterator<Menu> parent = menu.iterator();
+		while (parent.hasNext()) {
+			Menu menuNext = parent.next();
+			if(menuNext.getEnabled() == false) {
+				parent.remove();
+			}
+			
+			boolean remove = true;
+			for (UserGroup userGroup : menuNext.getUserGroups()) {
+				if(userGroupUuids.contains(userGroup.getUuid())) {
+					remove = false;
 				}
-			};
-			List<Menu> childs = menuRepository.findAll(spec);
-			parent.setChilds(childs);
-
-			if (parent.getChilds().isEmpty() == false) {
-				initializeChildsByUserGroup(parent.getChilds(), userGroupUuids);
+			}
+			if(remove) {
+				parent.remove();
+			}
+			
+			if(menuNext.getChilds() != null && menuNext.getChilds().isEmpty() == false) {
+				filterMenuNavigation(menuNext.getChilds(), userGroupUuids);
 			}
 		}
 	}
+
+//	@Cacheable(cacheNames = "com.beanframework.menu.domain.MenuNavigation", key = "#userGroupUuids")
+//	@Transactional(readOnly = true)
+//	@Override
+//	public List<Menu> findMenuNavigationByUserGroup(List<UUID> userGroupUuids) throws Exception {
+//
+//		// Find all root parents
+//		Specification<Menu> spec = new Specification<Menu>() {
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+//
+//				List<Predicate> predicates = new ArrayList<Predicate>();
+//
+//				predicates.add(cb.and(root.get(Menu.PARENT).isNull()));
+//				predicates.add(cb.isTrue(root.get(Menu.ENABLED)));
+//				predicates.add(cb.and(root.join(Menu.USER_GROUPS, JoinType.INNER).get("uuid").in(userGroupUuids)));
+//
+//				query.orderBy(cb.asc(root.get(Menu.SORT)));
+//				query.distinct(true);
+//
+//				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+//			}
+//		};
+//
+//		List<Menu> rootParents = menuRepository.findAll(spec);
+//
+//		initializeChildsByUserGroup(rootParents, userGroupUuids);
+//
+//		return rootParents;
+//	}
+//
+//	private void initializeChildsByUserGroup(List<Menu> parents, List<UUID> userGroupUuids) throws Exception {
+//
+//		for (Menu parent : parents) {
+//			Hibernate.initialize(parent.getUserGroups());
+//			Hibernate.initialize(parent.getMenuFields());
+//
+//			// Find all childs
+//			Specification<Menu> spec = new Specification<Menu>() {
+//				private static final long serialVersionUID = 1L;
+//
+//				@Override
+//				public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+//
+//					List<Predicate> predicates = new ArrayList<Predicate>();
+//
+//					predicates.add(cb.and(root.get(Menu.PARENT).get(Menu.UUID).in(parent.getUuid())));
+//					predicates.add(cb.isTrue(root.get(Menu.ENABLED)));
+//					predicates.add(
+//							cb.and(root.join(Menu.USER_GROUPS, JoinType.INNER).get(UserGroup.UUID).in(userGroupUuids)));
+//
+//					query.orderBy(cb.asc(root.get(Menu.SORT)));
+//					query.distinct(true);
+//
+//					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+//				}
+//			};
+//			List<Menu> childs = menuRepository.findAll(spec);
+//			parent.setChilds(childs);
+//
+//			if (parent.getChilds().isEmpty() == false) {
+//				initializeChildsByUserGroup(parent.getChilds(), userGroupUuids);
+//			}
+//		}
+//	}
 
 	@Override
 	public void delete(UUID uuid) throws Exception {
@@ -228,9 +260,9 @@ public class MenuServiceImpl implements MenuService {
 		menu.setMenuFields(new ArrayList<MenuField>());
 		menu.setChilds(new ArrayList<Menu>());
 		modelService.saveEntity(menu, Menu.class);
-		
+
 		modelService.delete(uuid, Menu.class);
-		
+
 		modelService.clearCache(MenuNavigation.class);
 	}
 }

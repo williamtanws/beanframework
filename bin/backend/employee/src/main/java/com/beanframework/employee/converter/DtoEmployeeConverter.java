@@ -13,7 +13,6 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserField;
-import com.beanframework.user.domain.UserGroup;
 
 public class DtoEmployeeConverter implements DtoConverter<Employee, Employee> {
 
@@ -53,7 +52,7 @@ public class DtoEmployeeConverter implements DtoConverter<Employee, Employee> {
 		try {
 			Hibernate.initialize(source.getUserGroups());
 			
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroup.class));
+			prototype.setUserGroups(source.getUserGroups());
 			prototype.setUserFields(modelService.getDto(source.getUserFields(), UserField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

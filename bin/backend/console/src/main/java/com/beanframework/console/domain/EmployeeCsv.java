@@ -2,21 +2,13 @@ package com.beanframework.console.domain;
 
 public class EmployeeCsv extends AbstractCsv {
 
-	private String name;
 	private String password;
 	private boolean accountNonExpired;
 	private boolean accountNonLocked;
 	private boolean credentialsNonExpired;
 	private boolean enabled;
 	private String userGroupIds;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	private String dynamicField;
 
 	public String getPassword() {
 		return password;
@@ -64,5 +56,13 @@ public class EmployeeCsv extends AbstractCsv {
 
 	public void setUserGroupIds(String userGroupIds) {
 		this.userGroupIds = userGroupIds;
+	}
+
+	public String getDynamicField() {
+		return dynamicField;
+	}
+
+	public void setDynamicField(String dynamicField) {
+		this.dynamicField = dynamicField;
 	}
 }

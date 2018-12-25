@@ -1,2 +1,2 @@
-id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds
-employee,Employee,employee,true,true,true,true,employeegroup;customergroup
+id,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,dynamicField
+employee,employee,true,true,true,true,employeegroup;customergroup,employee_name_en=Employee;employee_name_cn=雇员

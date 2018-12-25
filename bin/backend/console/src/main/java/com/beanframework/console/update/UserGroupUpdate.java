@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.supercsv.cellprocessor.Optional;
-import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
@@ -34,11 +33,7 @@ import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserGroupCsv;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
-import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupField;
 
 public class UserGroupUpdate extends Updater {
 	private static Logger LOGGER = LoggerFactory.getLogger(UserGroupUpdate.class);
@@ -73,49 +68,6 @@ public class UserGroupUpdate extends Updater {
 	}
 
 	public void save(List<UserGroupCsv> userGroupCsvList) throws Exception {
-		// Dynamic Field
-
-		Map<String, Object> enNameDynamicFieldProperties = new HashMap<String, Object>();
-		enNameDynamicFieldProperties.put(DynamicField.ID, "usergroup_name_en");
-		DynamicField enNameDynamicField = modelService.findOneEntityByProperties(enNameDynamicFieldProperties,
-				DynamicField.class);
-
-		if (enNameDynamicField == null) {
-			enNameDynamicField = modelService.create(DynamicField.class);
-			enNameDynamicField.setId("usergroup_name_en");
-		}
-		enNameDynamicField.setName("Name");
-		enNameDynamicField.setRequired(true);
-		enNameDynamicField.setRule(null);
-		enNameDynamicField.setSort(0);
-		enNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(enNameDynamicField, DynamicField.class);
-
-		Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
-		cnNameDynamicFieldProperties.put(DynamicField.ID, "usergroup_name_cn");
-		DynamicField cnNameDynamicField = modelService.findOneEntityByProperties(cnNameDynamicFieldProperties,
-				DynamicField.class);
-
-		if (cnNameDynamicField == null) {
-			cnNameDynamicField = modelService.create(DynamicField.class);
-			cnNameDynamicField.setId("usergroup_name_cn");
-		}
-		cnNameDynamicField.setName("Name");
-		cnNameDynamicField.setRequired(true);
-		cnNameDynamicField.setRule(null);
-		cnNameDynamicField.setSort(1);
-		cnNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(cnNameDynamicField, DynamicField.class);
-
-		// Language
-
-		Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
-		enlanguageProperties.put(Language.ID, "en");
-		Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
-
-		Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
-		cnlanguageProperties.put(Language.ID, "cn");
-		Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
 
 		for (UserGroupCsv csv : userGroupCsvList) {
 
@@ -134,78 +86,55 @@ public class UserGroupUpdate extends Updater {
 				Hibernate.initialize(userGroup.getUserGroupFields());
 			}
 
-			boolean enCreate = true;
-			boolean cnCreate = true;
-
-			if (enLanguage != null) {
-				for (int i = 0; i < userGroup.getUserGroupFields().size(); i++) {
-					if (userGroup.getUserGroupFields().get(i).getId().equals(csv.getId() + "_name_en")
-							&& userGroup.getUserGroupFields().get(i).getLanguage().getId().equals("en")) {
-						userGroup.getUserGroupFields().get(i).setLabel("Name");
-						userGroup.getUserGroupFields().get(i).setValue(csv.getName_en());
-						enCreate = false;
-					}
-				}
-			}
-			if (cnLanguage != null) {
-				for (int i = 0; i < userGroup.getUserGroupFields().size(); i++) {
-					if (userGroup.getUserGroupFields().get(i).getId().equals(csv.getId() + "_name_cn")
-							&& userGroup.getUserGroupFields().get(i).getLanguage().getId().equals("cn")) {
-						userGroup.getUserGroupFields().get(i).setLabel("名称");
-						userGroup.getUserGroupFields().get(i).setValue(csv.getName_cn());
-						cnCreate = false;
-					}
-				}
-			}
-
 			modelService.saveEntity(userGroup, UserGroup.class);
-
-			// User Group
-
-			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
-			for (int i = 0; i < userGroupIds.length; i++) {
-				Map<String, Object> userGroupChildProperties = new HashMap<String, Object>();
-				userGroupChildProperties.put(UserGroup.ID, userGroupIds[i]);
-				UserGroup userGroupChild = modelService.findOneEntityByProperties(userGroupChildProperties, UserGroup.class);
-
-				if (userGroupChild == null) {
-					LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-				} else {
-					userGroup.getUserGroups().add(userGroupChild);
-
-					modelService.saveEntity(userGroupChild, UserGroup.class);
-				}
-			}
 
 			// UserGroup Field
 
-			if (enCreate) {
-				UserGroupField userGroupField = modelService.create(UserGroupField.class);
-				userGroupField.setId(csv.getId() + "_name_en");
-				userGroupField.setDynamicField(enNameDynamicField);
-				userGroupField.setLanguage(enLanguage);
-				userGroupField.setLabel("Name");
-				userGroupField.setValue(csv.getName_en());
-				userGroupField.setUserGroup(userGroup);
-				userGroup.getUserGroupFields().add(userGroupField);
-
-				modelService.saveEntity(userGroupField, UserGroupField.class);
+			if (csv.getDynamicField() != null) {
+				String[] dynamicFields = csv.getDynamicField().split(";");
+				for (String dynamicField : dynamicFields) {
+					String dynamicFieldId = dynamicField.split("=")[0];
+					String value = dynamicField.split("=")[1];
+					for (int i = 0; i < userGroup.getUserGroupFields().size(); i++) {
+						if (userGroup.getUserGroupFields().get(i).getId().equals(userGroup.getId()+"_"+dynamicFieldId)) {
+							userGroup.getUserGroupFields().get(i).setValue(value);
+						}
+					}
+				}
 			}
-			if (cnCreate && csv.getName_cn() != null) {
-				UserGroupField userGroupField = modelService.create(UserGroupField.class);
-				userGroupField.setId(csv.getId() + "_name_cn");
-				userGroupField.setDynamicField(cnNameDynamicField);
-				userGroupField.setLanguage(cnLanguage);
-				userGroupField.setLabel("名称");
-				userGroupField.setValue(csv.getName_cn());
-				userGroupField.setUserGroup(userGroup);
-				userGroup.getUserGroupFields().add(userGroupField);
 
-				modelService.saveEntity(userGroupField, UserGroupField.class);
+
+			modelService.saveEntity(userGroup, UserGroup.class);
+		}
+		
+		// User Group
+
+		for (UserGroupCsv csv : userGroupCsvList) {
+			
+			Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+			userGroupProperties.put(UserGroup.ID, csv.getId());
+
+			UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+			Hibernate.initialize(userGroup.getUserGroups());			
+
+			if (csv.getUserGroupIds() != null) {
+				String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
+				for (int i = 0; i < userGroupIds.length; i++) {
+					Map<String, Object> userGroupChildProperties = new HashMap<String, Object>();
+					userGroupChildProperties.put(UserGroup.ID, userGroupIds[i]);
+					UserGroup userGroupChild = modelService.findOneEntityByProperties(userGroupChildProperties,
+							UserGroup.class);
+
+					if (userGroupChild == null) {
+						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+					} else {
+						userGroup.getUserGroups().add(userGroupChild);
+
+						modelService.saveEntity(userGroupChild, UserGroup.class);
+					}
+				}
 			}
 		}
-
-		modelService.saveAll();
 	}
 
 	public List<UserGroupCsv> readCSVFile(Reader reader) {
@@ -248,8 +177,7 @@ public class UserGroupUpdate extends Updater {
 	public CellProcessor[] getProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
 				new Optional(), // parent
-				new NotNull(), // name_en
-				new Optional() // name_cn
+				new Optional() // dynamicField
 		};
 
 		return processors;

@@ -11,7 +11,6 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserGroupField;
 
 public class DtoUserGroupFieldConverter implements DtoConverter<UserGroupField, UserGroupField> {
@@ -43,10 +42,8 @@ public class DtoUserGroupFieldConverter implements DtoConverter<UserGroupField, 
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
-		prototype.setLabel(source.getLabel());
 		prototype.setValue(source.getValue());
 		try {			
-			prototype.setLanguage(modelService.getDto(source.getLanguage(), Language.class));
 			prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

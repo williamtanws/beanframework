@@ -38,11 +38,15 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public void createDto(UserGroup model) throws BusinessException {
-		modelService.saveDto(model, UserGroup.class);
+		save(model);
 	}
 
 	@Override
 	public void updateDto(UserGroup model) throws BusinessException {
+		save(model);
+	}
+
+	private void save(UserGroup model) throws BusinessException {
 		modelService.saveDto(model, UserGroup.class);
 	}
 

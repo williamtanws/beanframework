@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
@@ -33,68 +34,75 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
-import com.beanframework.console.domain.LanguageCsv;
+import com.beanframework.console.domain.DynamicFieldCsv;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
 import com.beanframework.language.domain.Language;
 
-public class LanguageUpdate extends Updater {
-	private static Logger LOGGER = LoggerFactory.getLogger(LanguageUpdate.class);
+public class DynamicFieldUpdate extends Updater {
+	private static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldUpdate.class);
 
 	@Autowired
 	private ModelService modelService;
 
-	@Value("${module.console.import.update.language}")
-	private String LANGUAGE_IMPORT_UPDATE;
+	@Value("${module.console.import.update.dynamicfield}")
+	private String IMPORT_UPDATE;
 
 	@PostConstruct
 	public void updater() {
-		setKey(WebPlatformConstants.Update.Language.KEY);
-		setName(WebPlatformConstants.Update.Language.NAME);
-		setSort(WebPlatformConstants.Update.Language.SORT);
-		setDescription(WebPlatformConstants.Update.Language.DESCRIPTION);
+		setKey(WebPlatformConstants.Update.DynamicField.KEY);
+		setName(WebPlatformConstants.Update.DynamicField.NAME);
+		setSort(WebPlatformConstants.Update.DynamicField.SORT);
+		setDescription(WebPlatformConstants.Update.DynamicField.DESCRIPTION);
 	}
 
 	@Override
 	public void update() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = loader.getResources(LANGUAGE_IMPORT_UPDATE);
+		Resource[] resources = loader.getResources(IMPORT_UPDATE);
 		for (Resource resource : resources) {
 			InputStream in = resource.getInputStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<LanguageCsv> languageCsvList = readCSVFile(reader);
-			save(languageCsvList);
+			List<DynamicFieldCsv> cronjobCsvList = readCSVFile(reader);
+			save(cronjobCsvList);
 		}
 	}
 
-	public void save(List<LanguageCsv> languageCsvList) throws Exception {
+	public void save(List<DynamicFieldCsv> cronjobCsvList) throws Exception {
 
-		for (LanguageCsv csv : languageCsvList) {
-
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Language.ID, csv.getId());
-
-			Language language = modelService.findOneEntityByProperties(properties, Language.class);
-
-			if (language == null) {
-				language = modelService.create(Language.class);
-				language.setId(csv.getId());
+		for (DynamicFieldCsv csv : cronjobCsvList) {
+			Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
+			dynamicFieldProperties.put(DynamicField.ID, csv.getId());
+			DynamicField model = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
+			
+			if(model == null) {
+				model = modelService.create(DynamicField.class);
+				model.setId(csv.getId());
 			}
-			language.setName(csv.getName());
-			language.setActive(csv.isActive());
-			language.setSort(csv.getSort());
-
-			modelService.saveEntity(language, Language.class);
+			model.setName(csv.getName());
+			model.setFieldType(DynamicFieldTypeEnum.valueOf(csv.getType()));
+			model.setSort(csv.getSort());
+			model.setRequired(csv.isRequired());
+			model.setRule(csv.getRule());
+			model.setFieldGroup(csv.getGroup());
+			model.setLabel(csv.getLabel());
+			
+			Map<String, Object> languageProperties = new HashMap<String, Object>();
+			languageProperties.put(Language.ID, csv.getLanguage());
+			Language modelLanguage = modelService.findOneEntityByProperties(languageProperties, Language.class);
+			model.setLanguage(modelLanguage);
+			
+			modelService.saveEntity(model, DynamicField.class);
 		}
-
-		//modelService.saveAll();
 	}
 
-	public List<LanguageCsv> readCSVFile(Reader reader) {
+	public List<DynamicFieldCsv> readCSVFile(Reader reader) {
 		ICsvBeanReader beanReader = null;
 
-		List<LanguageCsv> languageCsvList = new ArrayList<LanguageCsv>();
+		List<DynamicFieldCsv> cronjobCsvList = new ArrayList<DynamicFieldCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -104,14 +112,14 @@ public class LanguageUpdate extends Updater {
 			final String[] header = beanReader.getHeader(true);
 			final CellProcessor[] processors = getProcessors();
 
-			LanguageCsv languageCsv;
-			LOGGER.info("Start import Language Csv.");
-			while ((languageCsv = beanReader.read(LanguageCsv.class, header, processors)) != null) {
+			DynamicFieldCsv cronjobCsv;
+			LOGGER.info("Start import DynamicField Csv.");
+			while ((cronjobCsv = beanReader.read(DynamicFieldCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
-						languageCsv);
-				languageCsvList.add(languageCsv);
+						cronjobCsv);
+				cronjobCsvList.add(cronjobCsv);
 			}
-			LOGGER.info("Finished import Language Csv.");
+			LOGGER.info("Finished import DynamicField Csv.");
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -125,14 +133,20 @@ public class LanguageUpdate extends Updater {
 				}
 			}
 		}
-		return languageCsvList;
+		return cronjobCsvList;
 	}
 
 	public CellProcessor[] getProcessors() {
-		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
+		final CellProcessor[] processors = new CellProcessor[] { 
+				new UniqueHashCode(), // id
 				new NotNull(), // name
-				new ParseBool(), // active
-				new ParseInt() // sort
+				new NotNull(), // type
+				new ParseInt(), // sort
+				new ParseBool(), // required
+				new Optional(), // rule
+				new NotNull(), // group
+				new NotNull(), // label
+				new NotNull() // language
 		};
 
 		return processors;

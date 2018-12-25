@@ -3,8 +3,13 @@ package com.beanframework.console.domain;
 public class DynamicFieldCsv extends AbstractCsv {
 
 	private String name;
-	private boolean active;
+	private String type;
 	private int sort;
+	private boolean required;
+	private String rule;
+	private String group;
+	private String label;
+	private String language;
 
 	public String getName() {
 		return name;
@@ -14,12 +19,12 @@ public class DynamicFieldCsv extends AbstractCsv {
 		this.name = name;
 	}
 
-	public boolean isActive() {
-		return active;
+	public String getType() {
+		return type;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public int getSort() {
@@ -29,4 +34,45 @@ public class DynamicFieldCsv extends AbstractCsv {
 	public void setSort(int sort) {
 		this.sort = sort;
 	}
+
+	public boolean isRequired() {
+		return required;
+	}
+
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
+	public String getRule() {
+		return rule;
+	}
+
+	public void setRule(String rule) {
+		this.rule = rule;
+	}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 }

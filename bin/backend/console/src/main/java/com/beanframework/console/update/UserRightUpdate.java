@@ -22,8 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseInt;
-import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
@@ -34,14 +34,10 @@ import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserRightCsv;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
-import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightField;
 
 public class UserRightUpdate extends Updater {
-	private static Logger LOGGER = LoggerFactory.getLogger(UserAuthorityUpdate.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(UserRightUpdate.class);
 
 	@Autowired
 	private ModelService modelService;
@@ -74,50 +70,6 @@ public class UserRightUpdate extends Updater {
 
 	public void save(List<UserRightCsv> userRightCsvList) throws Exception {
 
-		// Dynamic Field
-
-		Map<String, Object> enNameDynamicFieldProperties = new HashMap<String, Object>();
-		enNameDynamicFieldProperties.put(DynamicField.ID, "userright_name_en");
-		DynamicField enNameDynamicField = modelService.findOneEntityByProperties(enNameDynamicFieldProperties,
-				DynamicField.class);
-
-		if (enNameDynamicField == null) {
-			enNameDynamicField = modelService.create(DynamicField.class);
-			enNameDynamicField.setId("userright_name_en");
-		}
-		enNameDynamicField.setName("Name");
-		enNameDynamicField.setRequired(true);
-		enNameDynamicField.setRule(null);
-		enNameDynamicField.setSort(0);
-		enNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(enNameDynamicField, DynamicField.class);
-
-		Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
-		cnNameDynamicFieldProperties.put(DynamicField.ID, "userright_name_cn");
-		DynamicField cnNameDynamicField = modelService.findOneEntityByProperties(cnNameDynamicFieldProperties,
-				DynamicField.class);
-
-		if (cnNameDynamicField == null) {
-			cnNameDynamicField = modelService.create(DynamicField.class);
-			cnNameDynamicField.setId("userright_name_cn");
-		}
-		cnNameDynamicField.setName("Name");
-		cnNameDynamicField.setRequired(true);
-		cnNameDynamicField.setRule(null);
-		cnNameDynamicField.setSort(1);
-		cnNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(cnNameDynamicField, DynamicField.class);
-
-		// Language
-
-		Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
-		enlanguageProperties.put(Language.ID, "en");
-		Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
-
-		Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
-		cnlanguageProperties.put(Language.ID, "cn");
-		Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
-
 		for (UserRightCsv csv : userRightCsvList) {
 
 			// UserRight
@@ -135,61 +87,25 @@ public class UserRightUpdate extends Updater {
 			}
 			userRight.setSort(csv.getSort());
 
-			boolean enCreate = true;
-			boolean cnCreate = true;
+			modelService.saveEntity(userRight, UserRight.class);
 
-			if (enLanguage != null) {
-				for (int i = 0; i < userRight.getUserRightFields().size(); i++) {
-					if (userRight.getUserRightFields().get(i).getId().equals(csv.getId() + "_name_en")
-							&& userRight.getUserRightFields().get(i).getLanguage().getId().equals("en")) {
-						userRight.getUserRightFields().get(i).setLabel("Name");
-						userRight.getUserRightFields().get(i).setValue(csv.getName_en());
-						enCreate = false;
-					}
-				}
-			}
-			if (cnLanguage != null) {
-				for (int i = 0; i < userRight.getUserRightFields().size(); i++) {
-					if (userRight.getUserRightFields().get(i).getId().equals(csv.getId() + "_name_cn")
-							&& userRight.getUserRightFields().get(i).getLanguage().getId().equals("cn")) {
-						userRight.getUserRightFields().get(i).setLabel("名称");
-						userRight.getUserRightFields().get(i).setValue(csv.getName_cn());
-						cnCreate = false;
+			// UserRight Field
+
+			if (csv.getDynamicField() != null) {
+				String[] dynamicFields = csv.getDynamicField().split(";");
+				for (String dynamicField : dynamicFields) {
+					String dynamicFieldId = dynamicField.split("=")[0];
+					String value = dynamicField.split("=")[1];
+					for (int i = 0; i < userRight.getUserRightFields().size(); i++) {
+						if (userRight.getUserRightFields().get(i).getId().equals(userRight.getId()+"_"+dynamicFieldId)) {
+							userRight.getUserRightFields().get(i).setValue(value);
+						}
 					}
 				}
 			}
 
 			modelService.saveEntity(userRight, UserRight.class);
-
-			// UserRight Field
-
-			if (enCreate) {
-				UserRightField userRightField = modelService.create(UserRightField.class);
-				userRightField.setId(csv.getId() + "_name_en");
-				userRightField.setDynamicField(enNameDynamicField);
-				userRightField.setLanguage(enLanguage);
-				userRightField.setLabel("Name");
-				userRightField.setValue(csv.getName_en());
-				userRightField.setUserRight(userRight);
-				userRight.getUserRightFields().add(userRightField);
-
-				modelService.saveEntity(userRightField, UserRightField.class);
-			}
-			if (cnCreate) {
-				UserRightField userRightField = modelService.create(UserRightField.class);
-				userRightField.setId(csv.getId() + "_name_cn");
-				userRightField.setDynamicField(cnNameDynamicField);
-				userRightField.setLanguage(cnLanguage);
-				userRightField.setLabel("名称");
-				userRightField.setValue(csv.getName_cn());
-				userRightField.setUserRight(userRight);
-				userRight.getUserRightFields().add(userRightField);
-
-				modelService.saveEntity(userRightField, UserRightField.class);
-			}
 		}
-
-		modelService.saveAll();
 	}
 
 	public List<UserRightCsv> readCSVFile(Reader reader) {
@@ -208,8 +124,7 @@ public class UserRightUpdate extends Updater {
 			UserRightCsv permissionCsv;
 			LOGGER.info("Start import UserRight Csv.");
 			while ((permissionCsv = beanReader.read(UserRightCsv.class, header, processors)) != null) {
-				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
-						permissionCsv);
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), permissionCsv);
 				permissionCsvList.add(permissionCsv);
 			}
 			LOGGER.info("Finished import UserRight Csv.");
@@ -232,8 +147,7 @@ public class UserRightUpdate extends Updater {
 	public CellProcessor[] getProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
 				new ParseInt(), // sort
-				new NotNull(), // name_en
-				new NotNull() // name_cn
+				new Optional() // dynamicField
 		};
 
 		return processors;

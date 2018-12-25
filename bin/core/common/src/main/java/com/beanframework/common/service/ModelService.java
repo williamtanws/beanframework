@@ -27,7 +27,11 @@ public interface ModelService {
 	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	<T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
+	
+	<T extends Collection> T findEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
+	<T extends Collection> T findEntityBySorts(Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
+	
 	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties,
 			Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
 
@@ -38,7 +42,7 @@ public interface ModelService {
 	<T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties,
 			Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
 
-	boolean existsByProperties(Map<String, Object> properties, Class modelClass);
+	boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	<T extends Collection> T findAll(Class modelClass) throws Exception;
 
@@ -54,7 +58,7 @@ public interface ModelService {
 
 	void delete(UUID uuid, Class modelClass) throws BusinessException;
 
-	int removeAll(Class modelClass) throws BusinessException;
+	void deleteAll(Class modelClass) throws BusinessException;
 
 	<T> T getEntity(Object model, Class modelClass) throws Exception;
 

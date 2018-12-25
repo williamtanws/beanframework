@@ -11,6 +11,7 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.User;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.utils.PasswordUtils;
 
 public class EntityUserConverter implements EntityConverter<User, User> {
@@ -56,6 +57,15 @@ public class EntityUserConverter implements EntityConverter<User, User> {
 		prototype.setEnabled(source.getEnabled());
 		if (StringUtils.isNotEmpty(source.getPassword()))
 			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+		if (source.getUserFields() != null && source.getUserFields().isEmpty() == false) {
+			for (int i = 0; i < prototype.getUserFields().size(); i++) {
+				for (UserField sourceUserField : source.getUserFields()) {
+					if (prototype.getUserFields().get(i).getUuid().equals(sourceUserField.getUuid())) {
+						prototype.getUserFields().get(i).setValue(sourceUserField.getValue());
+					}
+				}
+			}
+		}
 
 		return prototype;
 	}

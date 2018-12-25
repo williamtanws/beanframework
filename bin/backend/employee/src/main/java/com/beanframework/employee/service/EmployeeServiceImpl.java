@@ -150,10 +150,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 		
 		Hibernate.initialize(employee.getUserGroups());
+//		initializeUserGroup(employee.getUserGroups());
+		
 		employee.setAuthorities(getAuthorities(employee.getUserGroups()));
 		
 		return employee;
 	}
+	
+//	private void initializeUserGroup(List<UserGroup> userGroups) {
+//		
+//		for (UserGroup userGroup : userGroups) {
+//			Hibernate.initialize(userGroup.getUserGroups());
+//			Hibernate.initialize(userGroup.getUserAuthorities());
+//			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+//				Hibernate.initialize(userAuthority.getUserRight());
+//				Hibernate.initialize(userAuthority.getUserPermission());
+//			}
+//			if(userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
+//				initializeUserGroup(userGroup.getUserGroups());
+//			}
+//		}
+//	}
 
 	private Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups) {
 		

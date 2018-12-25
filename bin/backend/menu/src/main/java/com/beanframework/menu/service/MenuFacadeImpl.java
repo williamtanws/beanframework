@@ -2,6 +2,7 @@ package com.beanframework.menu.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -84,9 +85,9 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 
 	@Override
-	public List<MenuNavigation> findDtoMenuNavigationByUserGroup(List<UUID> userGroupUuids) throws BusinessException {
+	public List<MenuNavigation> findDtoMenuNavigationByUserGroup(Set<UUID> userGroupUuids) throws BusinessException {
 		try {
-			return dtoMenuNavigationConverter.convert(menuService.findMenuTreeByUserGroup(userGroupUuids));
+			return dtoMenuNavigationConverter.convert(menuService.findMenuNavigationByUserGroup(userGroupUuids));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}

@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.language.domain.Language;
 import com.beanframework.menu.MenuConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,26 +36,12 @@ public class MenuField extends GenericDomain {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "menu_uuid")
 	private Menu menu;
-	
-	@NotAudited
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "language_uuid")
-	private Language language;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")
 	private DynamicField dynamicField;
 
-	private String label;
 	private String value;
-
-	public Language getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(Language language) {
-		this.language = language;
-	}
 
 	public Menu getMenu() {
 		return menu;
@@ -72,14 +57,6 @@ public class MenuField extends GenericDomain {
 
 	public void setDynamicField(DynamicField dynamicField) {
 		this.dynamicField = dynamicField;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
 	}
 
 	public String getValue() {

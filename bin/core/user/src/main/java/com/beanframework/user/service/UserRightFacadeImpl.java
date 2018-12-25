@@ -20,6 +20,9 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private UserRightService userRightService;
 
 	@Override
 	public Page<UserRight> findPage(Specification<UserRight> specification, PageRequest pageRequest) throws Exception {
@@ -48,7 +51,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.delete(uuid, UserRight.class);
+		userRightService.delete(uuid);
 	}
 
 	@Override

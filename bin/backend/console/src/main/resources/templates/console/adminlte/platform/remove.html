@@ -23,6 +23,12 @@
 							</div>
 						</div>
 						<form method="post" id="createForm" th:action="@{${@environment.getProperty('path.console.remove')}}">
+							<div class="col-md-3">
+								<div class="form-group">
+									<br />
+									<button type="submit" class="btn btn-block btn-danger" th:text="#{module.console.platform.remove}"></button>
+								</div>
+							</div>
 							<div class="col-md-12" th:each="remove : ${removes}">
 								<div class="form-group checkbox icheck">
 									<label>
@@ -37,7 +43,7 @@
 							<div class="col-md-3">
 								<div class="form-group">
 									<br />
-									<button type="submit" class="btn btn-block btn-primary" th:text="#{module.console.platform.remove}"></button>
+									<button type="submit" class="btn btn-block btn-danger" th:text="#{module.console.platform.remove}"></button>
 								</div>
 							</div>
 						</form>
