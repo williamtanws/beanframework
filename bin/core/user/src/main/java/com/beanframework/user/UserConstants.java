@@ -15,7 +15,7 @@ public final class UserConstants {
 		public static final String USER_FIELD = "userfield";
 		public static final String USER_AUTHORITY = "userauthority";
 
-		public static final String USER_GROUP_REL = "usergrouprel";
+		public static final String USER_USER_GROUP_REL = "userusergrouprel";
 		public static final String USER_GROUP_LANG_DYNAMIC_FIELD_REL = "usergroupdynrel";
 
 	}

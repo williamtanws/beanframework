@@ -1,15 +1,15 @@
-id,sort,icon,path,target,enabled,parent,name_en,name_cn,userGroupIds
-system,0,fa fa-gears,,,true,,System,系统,employeegroup
-language,0,fa fa-language,/backoffice/language,,true,system,Language,语言,employeegroup
-userright,1,fa fa-user-plus,/backoffice/userright,,true,system,User Right,用户权利,employeegroup
-userpermission,2,fa fa-key,/backoffice/userpermission,,true,system,User Permission,用户权限,employeegroup
-menu,4,fa fa-align-justify,/backoffice/menu,,true,system,Menu,菜单,employeegroup
-cronjob,5,fa fa-calendar,/backoffice/cronjob,,true,system,Cron Job,定时任务,employeegroup
-email,6,fa fa-envelope,/backoffice/email,,true,system,Email,电子邮件,employeegroup
-multimedia,2,fa fa-file-image-o,,,true,,Multimedia,多媒体,customergroup
-filemanager,1,fa fa-folder,/backoffice/filemanager,,true,multimedia,File Manager,文件管理器,employeegroup
-user,3,fa fa-user,,,true,,User,用户,employeegroup;customergroup
-employeesession,0,fa fa-clock-o,/backoffice/employee/session,,true,user,Employee Session,雇员会话,employeegroup
-usergroup,1,fa fa-users,/backoffice/usergroup,,true,user,User Group,用户组,employeegroup
-employee,2,fa fa-user,/backoffice/employee,,true,user,Employee,雇员,employeegroup
-customer,3,fa fa-user,/backoffice/customer,,true,user,Customer,顾客,customergroup
+id,sort,icon,path,target,enabled,parent,userGroupIds,dynamicField
+system,0,fa fa-gears,,,true,,employeegroup,menu_name_en=System;menu_name_cn=系统
+language,0,fa fa-language,/backoffice/language,,true,system,employeegroup,menu_name_en=Language;menu_name_cn=语言
+userright,1,fa fa-user-plus,/backoffice/userright,,true,system,employeegroup,menu_name_en=User Right;menu_name_cn=用户权利
+userpermission,2,fa fa-key,/backoffice/userpermission,,true,system,employeegroup,menu_name_en=User Permission;menu_name_cn=用户权限
+menu,4,fa fa-align-justify,/backoffice/menu,,true,system,employeegroup,menu_name_en=Menu;menu_name_cn=菜单
+cronjob,5,fa fa-calendar,/backoffice/cronjob,,true,system,employeegroup,menu_name_en=Cron Job;menu_name_cn=定时任务
+email,6,fa fa-envelope,/backoffice/email,,true,system,employeegroup,menu_name_en=Email;menu_name_cn=电子邮件
+multimedia,2,fa fa-file-image-o,,,true,,customergroup,menu_name_en=Multimedia;menu_name_cn=多媒体
+filemanager,1,fa fa-folder,/backoffice/filemanager,,true,multimedia,employeegroup,menu_name_en=File Manager;menu_name_cn=文件管理器
+user,3,fa fa-user,,,true,,employeegroup;customergroup,menu_name_en=User;menu_name_cn=用户
+employeesession,0,fa fa-clock-o,/backoffice/employee/session,,true,user,employeegroup,menu_name_en=Employee Session;menu_name_cn=雇员会话
+usergroup,1,fa fa-users,/backoffice/usergroup,,true,user,employeegroup,menu_name_en=User Group;menu_name_cn=用户组
+employee,2,fa fa-user,/backoffice/employee,,true,user,employeegroup,menu_name_en=Employee;menu_name_cn=雇员
+customer,3,fa fa-user,/backoffice/customer,,true,user,customergroup,menu_name_en=Customer;menu_name_cn=顾客

@@ -12,7 +12,6 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserGroupField;
 
 public class EntityUserGroupFieldConverter implements EntityConverter<UserGroupField, UserGroupField> {
@@ -63,12 +62,6 @@ public class EntityUserGroupFieldConverter implements EntityConverter<UserGroupF
 				prototype.setId(source.getId());
 			prototype.setLastModifiedDate(new Date());
 
-			if (source.getLanguage() == null) {
-				prototype.setLanguage(null);
-			} else {
-				Language language = modelService.findOneEntityByUuid(source.getLanguage().getUuid(), Language.class);
-				prototype.setLanguage(language);
-			}
 			if (source.getDynamicField() == null) {
 				prototype.setDynamicField(null);
 			} else {
@@ -76,7 +69,6 @@ public class EntityUserGroupFieldConverter implements EntityConverter<UserGroupF
 						DynamicField.class);
 				prototype.setDynamicField(dynamicField);
 			}
-			prototype.setLabel(source.getLabel());
 			prototype.setValue(source.getValue());
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
@@ -35,10 +36,7 @@ import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.EmployeeCsv;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;
 
@@ -75,23 +73,6 @@ public class EmployeeUpdate extends Updater {
 	}
 
 	public void save(List<EmployeeCsv> employeeCsvList) throws Exception {
-		// Dynamic Field
-
-		Map<String, Object> nameDynamicFieldProperties = new HashMap<String, Object>();
-		nameDynamicFieldProperties.put(DynamicField.ID, "employee_name");
-		DynamicField nameDynamicField = modelService.findOneEntityByProperties(nameDynamicFieldProperties,
-				DynamicField.class);
-
-		if (nameDynamicField == null) {
-			nameDynamicField = modelService.create(DynamicField.class);
-			nameDynamicField.setId("employee_name");
-		}
-		nameDynamicField.setName("Name");
-		nameDynamicField.setRequired(true);
-		nameDynamicField.setRule(null);
-		nameDynamicField.setSort(0);
-		nameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(nameDynamicField, DynamicField.class);
 
 		for (EmployeeCsv csv : employeeCsvList) {
 
@@ -115,13 +96,20 @@ public class EmployeeUpdate extends Updater {
 			employee.setCredentialsNonExpired(csv.isCredentialsNonExpired());
 			employee.setEnabled(csv.isEnabled());
 
-			boolean createName = true;
+			modelService.saveEntity(employee, Employee.class);
 
-			for (int i = 0; i < employee.getUserFields().size(); i++) {
-				if (employee.getUserFields().get(i).getId().equals(csv.getId() + "_name")) {
-					employee.getUserFields().get(i).setLabel("Name");
-					employee.getUserFields().get(i).setValue(csv.getName());
-					createName = false;
+			// User Field
+
+			if (csv.getDynamicField() != null) {
+				String[] dynamicFields = csv.getDynamicField().split(";");
+				for (String dynamicField : dynamicFields) {
+					String dynamicFieldId = dynamicField.split("=")[0];
+					String value = dynamicField.split("=")[1];
+					for (int i = 0; i < employee.getUserFields().size(); i++) {
+						if (employee.getUserFields().get(i).getId().equals(employee.getId()+"_"+dynamicFieldId)) {
+							employee.getUserFields().get(i).setValue(value);
+						}
+					}
 				}
 			}
 
@@ -143,22 +131,7 @@ public class EmployeeUpdate extends Updater {
 					modelService.saveEntity(userGroup, UserGroup.class);
 				}
 			}
-
-			// Employee Field
-
-			if (createName) {
-				UserField employeeField = modelService.create(UserField.class);
-				employeeField.setId(csv.getId() + "_name");
-				employeeField.setDynamicField(nameDynamicField);
-				employeeField.setLabel("Name");
-				employeeField.setValue(csv.getName());
-				employeeField.setUser(employee);
-				employee.getUserFields().add(employeeField);
-
-				modelService.saveEntity(employeeField, UserField.class);
-			}
 		}
-		modelService.saveAll();
 	}
 
 	public List<EmployeeCsv> readCSVFile(Reader reader) {
@@ -177,8 +150,7 @@ public class EmployeeUpdate extends Updater {
 			EmployeeCsv employeeCsv;
 			LOGGER.info("Start import Employee Csv.");
 			while ((employeeCsv = beanReader.read(EmployeeCsv.class, header, processors)) != null) {
-				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
-						employeeCsv);
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), employeeCsv);
 				employeeCsvList.add(employeeCsv);
 			}
 			LOGGER.info("Finished import Employee Csv.");
@@ -200,13 +172,13 @@ public class EmployeeUpdate extends Updater {
 
 	public CellProcessor[] getProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
-				new NotNull(), // name
 				new NotNull(), // password
 				new ParseBool(), // accountNonExpired
 				new ParseBool(), // accountNonLocked
 				new ParseBool(), // credentialsNonExpired
 				new ParseBool(), // enabled
-				new org.supercsv.cellprocessor.Optional() // userGroupId
+				new org.supercsv.cellprocessor.Optional(), // userGroupId
+				new Optional() // dynamicField
 		};
 
 		return processors;

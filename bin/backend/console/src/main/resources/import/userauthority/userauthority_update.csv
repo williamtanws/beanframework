@@ -4,7 +4,7 @@ employeegroup,userpermission,+,+,+,+
 employeegroup,userright,+,+,+,+
 employeegroup,usergroup,+,+,+,+
 employeegroup,menu,+,+,+,+
-employeegroup,employeesession,,+,,+
+employeegroup,employeesession,-,+,-,+
 employeegroup,employee,+,+,+,+
 employeegroup,cronjob,+,+,+,+
 employeegroup,filemanager,+,+,+,+

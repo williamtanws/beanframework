@@ -48,7 +48,7 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 			Hibernate.initialize(source.getUserGroups());
 			Hibernate.initialize(source.getUserAuthorities());
 
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroup.class));
+			prototype.setUserGroups(source.getUserGroups());
 			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthority.class));
 			prototype.setUserGroupFields(modelService.getDto(source.getUserGroupFields(), UserGroupField.class));
 		} catch (Exception e) {

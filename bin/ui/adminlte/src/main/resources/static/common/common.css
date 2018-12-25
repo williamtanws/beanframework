@@ -61,3 +61,7 @@
 .nav-tabs-custom {
     margin-bottom: 10px;
 }
+
+.btn.btn-success{
+	min-width: 74px;
+}

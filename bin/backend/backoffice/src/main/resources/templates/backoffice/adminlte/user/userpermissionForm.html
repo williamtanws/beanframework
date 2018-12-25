@@ -24,11 +24,9 @@
 	<th:block layout:fragment="attribute">
 		<div class="col-md-6">
 			<div class="form-group" th:each="langActive : ${moduleLanguages}" th:if="*{uuid != null}">
-				<th:block th:each="field,itrStat : *{userPermissionFields}" th:if="${field.language.id == langActive.id}">
-					<label for="name" th:text="${field.dynamicField.name}+'('+${field.language.id}+')'"></label>
+				<th:block th:each="field,itrStat : *{userPermissionFields}" th:if="${field.dynamicField.language.id == langActive.id}">
+					<label for="name" th:text="${field.dynamicField.name}+'('+${field.dynamicField.language.id}+')'"></label>
 					<input type="hidden" th:name="'userPermissionFields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-					<input type="hidden" th:name="'userPermissionFields['+${itrStat.index}+'].language.uuid'" th:value="${field.language.uuid}">
-					<input type="hidden" th:name="'userPermissionFields['+${itrStat.index}+'].dynamicField.uuid'" th:value="${field.dynamicField.uuid}">
 					<input type="text" class="form-control" th:name="'userPermissionFields['+${itrStat.index}+'].value'" th:value="${field.value}" th:required="${field.dynamicField.required}">
 				</th:block>
 				<span class="help-block"></span>

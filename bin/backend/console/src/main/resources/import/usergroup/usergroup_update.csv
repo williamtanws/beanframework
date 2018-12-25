@@ -1,5 +1,5 @@
-id,parent,name_en,name_cn
-employeegroup,,Employee Group,雇员组
-customergroup,,Customer Group,客户组
-generalcustomer,customergroup,General Customer,一般客户
-vipcustomer,customergroup,VIP Customer,VIP客户
+id,userGroupIds,dynamicField
+employeegroup,,usergroup_name_en=Employee Group;usergroup_name_cn=雇员组
+customergroup,generalcustomer;vipcustomer,usergroup_name_en=Customer Group;usergroup_name_cn=客户组
+generalcustomer,,usergroup_name_en=General Customer;usergroup_name_cn=一般客户
+vipcustomer,,usergroup_name_en=VIP Customer;usergroup_name_cn=VIP客户

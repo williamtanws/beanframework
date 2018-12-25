@@ -74,22 +74,23 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 				}
 				prototype.setUserGroups(childs);
 			}
-			if (source.getUserAuthorities() == null || source.getUserAuthorities().isEmpty()) {
-				prototype.setUserAuthorities(new ArrayList<UserAuthority>());
-			} else {
-				prototype.setUserAuthorities(source.getUserAuthorities());
-			}
-			if (source.getUserGroupFields() == null || source.getUserGroupFields().isEmpty()) {
-				prototype.setUserGroupFields(new ArrayList<UserGroupField>());
-			} else {
-				List<UserGroupField> userGroupFields = new ArrayList<UserGroupField>();
-				for (UserGroupField userGroupField : source.getUserGroupFields()) {
-					UserGroupField entityUserGroupField = modelService.findOneEntityByUuid(userGroupField.getUuid(),
-							UserGroupField.class);
-					entityUserGroupField.setValue(userGroupField.getValue());
-					userGroupFields.add(entityUserGroupField);
+			if (source.getUserAuthorities() != null && source.getUserAuthorities().isEmpty() == false) {
+				for (int i = 0; i < prototype.getUserAuthorities().size(); i++) {
+					for (UserAuthority sourceUserAuthority : source.getUserAuthorities()) {
+						if (prototype.getUserAuthorities().get(i).getUuid().equals(sourceUserAuthority.getUuid())) {
+							prototype.getUserAuthorities().get(i).setEnabled(sourceUserAuthority.getEnabled());
+						}
+					}
 				}
-				prototype.setUserGroupFields(userGroupFields);
+			}
+			if (source.getUserGroupFields() != null && source.getUserGroupFields().isEmpty() == false) {
+				for (int i = 0; i < prototype.getUserGroupFields().size(); i++) {
+					for (UserGroupField sourceUserGroupField : source.getUserGroupFields()) {
+						if (prototype.getUserGroupFields().get(i).getUuid().equals(sourceUserGroupField.getUuid())) {
+							prototype.getUserGroupFields().get(i).setValue(sourceUserGroupField.getValue());
+						}
+					}
+				}
 			}
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

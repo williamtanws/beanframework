@@ -1,4 +1,4 @@
-package com.beanframework.menu.interceptor;
+package com.beanframework.user.interceptor;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,41 +10,41 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.PrepareInterceptor;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuField;
+import com.beanframework.user.domain.UserPermission;
+import com.beanframework.user.domain.UserPermissionField;
 
-public class MenuPrepareInterceptor implements PrepareInterceptor<Menu> {
+public class UserPermissionPrepareInterceptor implements PrepareInterceptor<UserPermission> {
 	
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public void onPrepare(Menu model) throws InterceptorException {
-		generateMenuField(model);
+	public void onPrepare(UserPermission model) throws InterceptorException {
+		generateUserPermissionField(model);
 	}
 	
-	private void generateMenuField(Menu model) throws InterceptorException {
+	private void generateUserPermissionField(UserPermission model) throws InterceptorException {
 		try {
 			Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
-			dynamicFieldProperties.put(DynamicField.FIELD_GROUP, Menu.class.getSimpleName());
+			dynamicFieldProperties.put(DynamicField.FIELD_GROUP, UserPermission.class.getSimpleName());
 			List<DynamicField> dynamicFields = modelService.findEntityByProperties(dynamicFieldProperties, DynamicField.class);
 
 			for (DynamicField dynamicField : dynamicFields) {
 
 				boolean add = true;
-				for (MenuField modelUserGroupField : model.getMenuFields()) {
+				for (UserPermissionField modelUserGroupField : model.getUserPermissionFields()) {
 					if (dynamicField.getUuid().equals(modelUserGroupField.getDynamicField().getUuid())) {
 						add = false;
 					}
 				}
 
 				if (add) {
-					MenuField userGroupField = modelService.create(MenuField.class);
+					UserPermissionField userGroupField = modelService.create(UserPermissionField.class);
 					userGroupField.setDynamicField(dynamicField);
 					userGroupField.setId(model.getId() + "_" + dynamicField.getId());
 
-					userGroupField.setMenu(model);
-					model.getMenuFields().add(userGroupField);
+					userGroupField.setUserPermission(model);
+					model.getUserPermissionFields().add(userGroupField);
 				}
 			}
 		} catch (Exception e) {

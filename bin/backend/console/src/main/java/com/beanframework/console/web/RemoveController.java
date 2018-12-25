@@ -27,6 +27,8 @@ import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.registry.RemoverRegistry;
 
+import net.sf.ehcache.CacheManager;
+
 @Controller
 public class RemoveController {
 	
@@ -40,6 +42,9 @@ public class RemoveController {
 
 	@Autowired
 	private RemoverRegistry removerRegistry;
+	
+	@Autowired
+	private CacheManager cacheManager;
 
 	@GetMapping(value = WebPlatformConstants.Path.REMOVE)
 	public String list(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
@@ -98,6 +103,8 @@ public class RemoveController {
 		if(errorMessages.length() != 0){
 			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessages.toString());
 		}
+		
+		cacheManager.clearAll();
 		
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);

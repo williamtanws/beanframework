@@ -27,6 +27,8 @@ import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.registry.UpdaterRegistry;
 
+import net.sf.ehcache.CacheManager;
+
 @Controller
 public class UpdateController {
 	
@@ -40,6 +42,9 @@ public class UpdateController {
 
 	@Autowired
 	private UpdaterRegistry updaterRegistry;
+	
+	@Autowired
+	private CacheManager cacheManager;
 
 	@GetMapping(value = WebPlatformConstants.Path.UPDATE)
 	public String list(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
@@ -99,6 +104,8 @@ public class UpdateController {
 		if(errorMessages.length() != 0){
 			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessages.toString());
 		}
+		
+		cacheManager.clearAll();
 		
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);

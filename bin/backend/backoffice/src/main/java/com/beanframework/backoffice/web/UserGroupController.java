@@ -145,6 +145,8 @@ public class UserGroupController extends AbstractCommonController {
 
 			if (existingUserGroup != null) {
 				
+				// UserGroups
+				
 				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 
@@ -159,24 +161,25 @@ public class UserGroupController extends AbstractCommonController {
 				}
 				existingUserGroup.setUserGroups(userGroups);
 				
+				// User Authority
+				
+				Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
+				userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
+				List<UserRight> userRights = userRightFacade.findDtoBySorts(userRightSorts);
+				
+				Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
+				userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
+				List<UserPermission> userPermissions = userPermissionFacade.findDtoBySorts(userPermissionSorts);
+
+				model.addAttribute("userRights", userRights);
+				model.addAttribute("userPermissions", userPermissions);
+				
 				model.addAttribute(WebUserGroupConstants.ModelAttribute.UPDATE, existingUserGroup);
 			} else {
 				usergroupUpdate.setUuid(null);
 				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
-
-		Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
-		userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
-		List<UserRight> userRights = userRightFacade.findDtoBySorts(userRightSorts);
-		
-		Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
-		userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
-		List<UserPermission> userPermissions = userPermissionFacade.findDtoBySorts(userPermissionSorts);
-
-		model.addAttribute("userRights", userRights);
-		model.addAttribute("userPermissions", userPermissions);
-
 		return VIEW_USERGROUP_LIST;
 	}
 
@@ -191,22 +194,6 @@ public class UserGroupController extends AbstractCommonController {
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
-			
-			List<UserGroup> userGroups = new ArrayList<UserGroup>();
-			for (UserGroup userGroup : usergroupCreate.getUserGroups()) {
-				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
-					userGroups.add(userGroup);
-				}
-			}
-			usergroupCreate.setUserGroups(userGroups);
-
-			for (int i = 0; i < usergroupCreate.getUserAuthorities().size(); i++) {
-				if (BooleanUtils.parseBoolean(usergroupCreate.getUserAuthorities().get(i).getEnabledStr())) {
-					usergroupCreate.getUserAuthorities().get(i).setEnabled(true);
-				} else {
-					usergroupCreate.getUserAuthorities().get(i).setEnabled(false);
-				}
-			}
 			try {
 				userGroupFacade.createDto(usergroupCreate);
 
@@ -244,14 +231,6 @@ public class UserGroupController extends AbstractCommonController {
 				}
 			}
 			usergroupUpdate.setUserGroups(userGroups);
-
-			for (int i = 0; i < usergroupUpdate.getUserAuthorities().size(); i++) {
-				if (BooleanUtils.parseBoolean(usergroupUpdate.getUserAuthorities().get(i).getEnabledStr())) {
-					usergroupUpdate.getUserAuthorities().get(i).setEnabled(true);
-				} else {
-					usergroupUpdate.getUserAuthorities().get(i).setEnabled(false);
-				}
-			}
 
 			try {
 				userGroupFacade.updateDto(usergroupUpdate);

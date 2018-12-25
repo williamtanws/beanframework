@@ -1,9 +1,7 @@
 package com.beanframework.user.converter;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,17 +53,14 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 			prototype.setLastModifiedDate(new Date());
 
 			prototype.setSort(source.getSort());
-			if (source.getUserPermissionFields() == null || source.getUserPermissionFields().isEmpty()) {
-				prototype.setUserPermissionFields(new ArrayList<UserPermissionField>());
-			} else {
-				List<UserPermissionField> userPermissionFields = new ArrayList<UserPermissionField>();
-				for (UserPermissionField userPermissionField : source.getUserPermissionFields()) {
-					UserPermissionField entityUserPermissionField = modelService
-							.findOneEntityByUuid(userPermissionField.getUuid(), UserPermissionField.class);
-					entityUserPermissionField.setValue(userPermissionField.getValue());
-					userPermissionFields.add(entityUserPermissionField);
+			if (source.getUserPermissionFields() != null && source.getUserPermissionFields().isEmpty() == false) {
+				for (int i = 0; i < prototype.getUserPermissionFields().size(); i++) {
+					for (UserPermissionField sourceUserPermissionField : source.getUserPermissionFields()) {
+						if (prototype.getUserPermissionFields().get(i).getUuid().equals(sourceUserPermissionField.getUuid())) {
+							prototype.getUserPermissionFields().get(i).setValue(sourceUserPermissionField.getValue());
+						}
+					}
 				}
-				prototype.setUserPermissionFields(userPermissionFields);
 			}
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

@@ -3,22 +3,13 @@ package com.beanframework.console.domain;
 public class MenuCsv extends AbstractCsv {
 
 	private int sort;
-
 	private String icon;
-
 	private String path;
-
 	private String target;
-
 	private boolean enabled;
-
 	private String parent;
-
-	private String name_en;
-
-	private String name_cn;
-
 	private String userGroupIds;
+	private String dynamicField;
 
 	public int getSort() {
 		return sort;
@@ -68,27 +59,19 @@ public class MenuCsv extends AbstractCsv {
 		this.parent = parent;
 	}
 
-	public String getName_en() {
-		return name_en;
-	}
-
-	public void setName_en(String name_en) {
-		this.name_en = name_en;
-	}
-
-	public String getName_cn() {
-		return name_cn;
-	}
-
-	public void setName_cn(String name_cn) {
-		this.name_cn = name_cn;
-	}
-
 	public String getUserGroupIds() {
 		return userGroupIds;
 	}
 
 	public void setUserGroupIds(String userGroupIds) {
 		this.userGroupIds = userGroupIds;
+	}
+
+	public String getDynamicField() {
+		return dynamicField;
+	}
+
+	public void setDynamicField(String dynamicField) {
+		this.dynamicField = dynamicField;
 	}
 }

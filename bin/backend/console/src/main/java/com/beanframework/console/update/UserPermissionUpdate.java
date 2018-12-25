@@ -22,8 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseInt;
-import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
@@ -34,11 +34,8 @@ import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.UserPermissionCsv;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
-import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserPermissionField;
+import com.beanframework.user.domain.UserRight;
 
 public class UserPermissionUpdate extends Updater {
 	private static Logger LOGGER = LoggerFactory.getLogger(UserPermissionUpdate.class);
@@ -74,50 +71,6 @@ public class UserPermissionUpdate extends Updater {
 
 	public void save(List<UserPermissionCsv> userPermissionCsvList) throws Exception {
 
-		// Dynamic Field
-
-		Map<String, Object> enNameDynamicFieldProperties = new HashMap<String, Object>();
-		enNameDynamicFieldProperties.put(DynamicField.ID, "userpermission_name_en");
-		DynamicField enNameDynamicField = modelService.findOneEntityByProperties(enNameDynamicFieldProperties,
-				DynamicField.class);
-
-		if (enNameDynamicField == null) {
-			enNameDynamicField = modelService.create(DynamicField.class);
-			enNameDynamicField.setId("userpermission_name_en");
-		}
-		enNameDynamicField.setName("Name");
-		enNameDynamicField.setRequired(true);
-		enNameDynamicField.setRule(null);
-		enNameDynamicField.setSort(0);
-		enNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(enNameDynamicField, DynamicField.class);
-
-		Map<String, Object> cnNameDynamicFieldProperties = new HashMap<String, Object>();
-		cnNameDynamicFieldProperties.put(DynamicField.ID, "userpermission_name_cn");
-		DynamicField cnNameDynamicField = modelService.findOneEntityByProperties(cnNameDynamicFieldProperties,
-				DynamicField.class);
-
-		if (cnNameDynamicField == null) {
-			cnNameDynamicField = modelService.create(DynamicField.class);
-			cnNameDynamicField.setId("userpermission_name_cn");
-		}
-		cnNameDynamicField.setName("Name");
-		cnNameDynamicField.setRequired(true);
-		cnNameDynamicField.setRule(null);
-		cnNameDynamicField.setSort(1);
-		cnNameDynamicField.setType(DynamicFieldTypeEnum.TEXT);
-		modelService.saveEntity(cnNameDynamicField, DynamicField.class);
-
-		// Language
-
-		Map<String, Object> enlanguageProperties = new HashMap<String, Object>();
-		enlanguageProperties.put(Language.ID, "en");
-		Language enLanguage = modelService.findOneEntityByProperties(enlanguageProperties, Language.class);
-
-		Map<String, Object> cnlanguageProperties = new HashMap<String, Object>();
-		cnlanguageProperties.put(Language.ID, "cn");
-		Language cnLanguage = modelService.findOneEntityByProperties(cnlanguageProperties, Language.class);
-
 		for (UserPermissionCsv csv : userPermissionCsvList) {
 
 			// UserPermission
@@ -125,8 +78,7 @@ public class UserPermissionUpdate extends Updater {
 			Map<String, Object> userPermissionProperties = new HashMap<String, Object>();
 			userPermissionProperties.put(UserPermission.ID, csv.getId());
 
-			UserPermission userPermission = modelService.findOneEntityByProperties(userPermissionProperties,
-					UserPermission.class);
+			UserPermission userPermission = modelService.findOneEntityByProperties(userPermissionProperties, UserPermission.class);
 
 			if (userPermission == null) {
 				userPermission = modelService.create(UserPermission.class);
@@ -136,61 +88,25 @@ public class UserPermissionUpdate extends Updater {
 			}
 			userPermission.setSort(csv.getSort());
 
-			boolean enCreate = true;
-			boolean cnCreate = true;
-
-			if (enLanguage != null) {
-				for (int i = 0; i < userPermission.getUserPermissionFields().size(); i++) {
-					if (userPermission.getUserPermissionFields().get(i).getId().equals(csv.getId() + "_name_en")
-							&& userPermission.getUserPermissionFields().get(i).getLanguage().getId().equals("en")) {
-						userPermission.getUserPermissionFields().get(i).setLabel("Name");
-						userPermission.getUserPermissionFields().get(i).setValue(csv.getName_en());
-						enCreate = false;
-					}
-				}
-			}
-			if (cnLanguage != null) {
-				for (int i = 0; i < userPermission.getUserPermissionFields().size(); i++) {
-					if (userPermission.getUserPermissionFields().get(i).getId().equals(csv.getId() + "_name_cn")
-							&& userPermission.getUserPermissionFields().get(i).getLanguage().getId().equals("cn")) {
-						userPermission.getUserPermissionFields().get(i).setLabel("名称");
-						userPermission.getUserPermissionFields().get(i).setValue(csv.getName_cn());
-						cnCreate = false;
-					}
-				}
-			}
-
 			modelService.saveEntity(userPermission, UserPermission.class);
 
 			// UserPermission Field
 
-			if (enCreate) {
-				UserPermissionField userPermissionField = modelService.create(UserPermissionField.class);
-				userPermissionField.setId(csv.getId() + "_name_en");
-				userPermissionField.setDynamicField(enNameDynamicField);
-				userPermissionField.setLanguage(enLanguage);
-				userPermissionField.setLabel("Name");
-				userPermissionField.setValue(csv.getName_en());
-				userPermissionField.setUserPermission(userPermission);
-				userPermission.getUserPermissionFields().add(userPermissionField);
-
-				modelService.saveEntity(userPermissionField, UserPermissionField.class);
+			if (csv.getDynamicField() != null) {
+				String[] dynamicFields = csv.getDynamicField().split(";");
+				for (String dynamicField : dynamicFields) {
+					String dynamicFieldId = dynamicField.split("=")[0];
+					String value = dynamicField.split("=")[1];
+					for (int i = 0; i < userPermission.getUserPermissionFields().size(); i++) {
+						if (userPermission.getUserPermissionFields().get(i).getId().equals(userPermission.getId()+"_"+dynamicFieldId)) {
+							userPermission.getUserPermissionFields().get(i).setValue(value);
+						}
+					}
+				}
 			}
-			if (cnCreate) {
-				UserPermissionField userPermissionField = modelService.create(UserPermissionField.class);
-				userPermissionField.setId(csv.getId() + "_name_cn");
-				userPermissionField.setDynamicField(cnNameDynamicField);
-				userPermissionField.setLanguage(cnLanguage);
-				userPermissionField.setLabel("名称");
-				userPermissionField.setValue(csv.getName_cn());
-				userPermissionField.setUserPermission(userPermission);
-				userPermission.getUserPermissionFields().add(userPermissionField);
 
-				modelService.saveEntity(userPermissionField, UserPermissionField.class);
-			}
+			modelService.saveEntity(userPermission, UserRight.class);
 		}
-
-		modelService.saveAll();
 	}
 
 	public List<UserPermissionCsv> readCSVFile(Reader reader) {
@@ -209,8 +125,7 @@ public class UserPermissionUpdate extends Updater {
 			UserPermissionCsv permissionCsv;
 			LOGGER.info("Start import UserPermission Csv.");
 			while ((permissionCsv = beanReader.read(UserPermissionCsv.class, header, processors)) != null) {
-				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
-						permissionCsv);
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), permissionCsv);
 				permissionCsvList.add(permissionCsv);
 			}
 			LOGGER.info("Finished import UserPermission Csv.");
@@ -233,8 +148,7 @@ public class UserPermissionUpdate extends Updater {
 	public CellProcessor[] getProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { new UniqueHashCode(), // id
 				new ParseInt(), // sort
-				new NotNull(), // name_en
-				new NotNull() // name_cn
+				new Optional() // dynamicField
 		};
 
 		return processors;

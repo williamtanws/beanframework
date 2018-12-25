@@ -6,7 +6,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.Audited;
@@ -48,9 +47,6 @@ public class UserAuthority extends GenericDomain {
 	@NotNull
 	private Boolean enabled;
 
-	@Transient
-	private String enabledStr;
-
 	public UserGroup getUserGroup() {
 		return userGroup;
 	}
@@ -81,13 +77,5 @@ public class UserAuthority extends GenericDomain {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
-	}
-
-	public String getEnabledStr() {
-		return enabledStr;
-	}
-
-	public void setEnabledStr(String enabledStr) {
-		this.enabledStr = enabledStr;
 	}
 }

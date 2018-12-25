@@ -14,7 +14,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,17 +38,12 @@ import com.beanframework.console.WebPlatformConstants;
 import com.beanframework.console.domain.CronjobCsv;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
-import com.beanframework.cronjob.domain.CronjobEnum;
-import com.beanframework.cronjob.service.CronjobManagerService;
 
 public class CronjobUpdate extends Updater {
 	private static Logger LOGGER = LoggerFactory.getLogger(CronjobUpdate.class);
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private CronjobManagerService cronjobManagerService;
 
 	@Value("${module.console.import.update.cronjob}")
 	private String LANGUAGE_IMPORT_UPDATE;
@@ -144,23 +138,22 @@ public class CronjobUpdate extends Updater {
 				}
 			}
 		}
-		modelService.saveAll();
 
-		for (CronjobCsv csv : cronjobCsvList) {
-
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.ID, csv.getId());
-
-			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
-
-			if (cronjob != null) {
-				if (StringUtils.isNotEmpty(csv.getJobTrigger())) {
-					cronjob.setJobTrigger(CronjobEnum.JobTrigger.fromName(csv.getJobTrigger()));
-					cronjob.setTriggerStartDate(csv.getTriggerStartDate());
-					cronjobManagerService.trigger(cronjob);
-				}
-			}
-		}
+//		for (CronjobCsv csv : cronjobCsvList) {
+//
+//			Map<String, Object> properties = new HashMap<String, Object>();
+//			properties.put(Cronjob.ID, csv.getId());
+//
+//			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+//
+//			if (cronjob != null) {
+//				if (StringUtils.isNotEmpty(csv.getJobTrigger())) {
+//					cronjob.setJobTrigger(CronjobEnum.JobTrigger.fromName(csv.getJobTrigger()));
+//					cronjob.setTriggerStartDate(csv.getTriggerStartDate());
+//					cronjobManagerService.trigger(cronjob);
+//				}
+//			}
+//		}
 	}
 
 	public List<CronjobCsv> readCSVFile(Reader reader) {

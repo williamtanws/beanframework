@@ -3,6 +3,7 @@ package com.beanframework.user.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,8 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 
 		prototype.setSort(source.getSort());
 		try {
+			Hibernate.initialize(source.getUserRightFields());
+			
 			prototype.setUserRightFields(modelService.getDto(source.getUserRightFields(), UserRightField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

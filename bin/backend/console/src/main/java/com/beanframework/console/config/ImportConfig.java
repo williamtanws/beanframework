@@ -11,6 +11,7 @@ import com.beanframework.console.registry.UpdaterRegistry;
 import com.beanframework.console.remove.CustomerRemove;
 import com.beanframework.console.update.CronjobUpdate;
 import com.beanframework.console.update.CustomerUpdate;
+import com.beanframework.console.update.DynamicFieldUpdate;
 import com.beanframework.console.update.EmployeeUpdate;
 import com.beanframework.console.update.LanguageUpdate;
 import com.beanframework.console.update.MenuUpdate;
@@ -28,6 +29,11 @@ public class ImportConfig implements ApplicationListener<ApplicationReadyEvent> 
 	
 	@Autowired
 	private RemoverRegistry removerRegistry;
+	
+	@Bean
+	public DynamicFieldUpdate dynamicFieldUpdate() {
+		return new DynamicFieldUpdate();
+	}
 
 	@Bean
 	public EmployeeUpdate employeeUpdate() {
@@ -82,6 +88,7 @@ public class ImportConfig implements ApplicationListener<ApplicationReadyEvent> 
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent event) {
 
+		updaterRegistry.addUpdater(dynamicFieldUpdate());
 		updaterRegistry.addUpdater(languageUpdate());
 		updaterRegistry.addUpdater(userRightUpdate());
 		updaterRegistry.addUpdater(permissionUpdate());

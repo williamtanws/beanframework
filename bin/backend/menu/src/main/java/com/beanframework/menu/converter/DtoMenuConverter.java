@@ -13,7 +13,6 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
-import com.beanframework.user.domain.UserGroup;
 
 public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 	
@@ -58,7 +57,7 @@ public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 			Hibernate.initialize(source.getUserGroups());
 			
 			prototype.setChilds(modelService.getDto(source.getChilds(), Menu.class));
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroup.class));
+			prototype.setUserGroups(source.getUserGroups());
 			prototype.setMenuFields(modelService.getDto(source.getMenuFields(), MenuField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
