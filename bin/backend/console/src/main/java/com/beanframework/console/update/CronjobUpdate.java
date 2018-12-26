@@ -35,7 +35,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
-import com.beanframework.console.domain.CronjobCsv;
+import com.beanframework.console.data.CronjobCsv;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 
@@ -133,7 +133,7 @@ public class CronjobUpdate extends Updater {
 						cronjobData.setCronjob(cronjob);
 						cronjob.getCronjobDatas().add(cronjobData);
 
-						modelService.saveEntity(cronjobData, CronjobData.class);
+						modelService.saveDto(cronjobData, CronjobData.class);
 					}
 				}
 			}

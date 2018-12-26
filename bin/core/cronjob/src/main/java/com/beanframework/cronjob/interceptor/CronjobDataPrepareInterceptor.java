@@ -1,17 +1,18 @@
-package com.beanframework.email.interceptor;
+package com.beanframework.cronjob.interceptor;
 
 import java.util.UUID;
 
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.PrepareInterceptor;
-import com.beanframework.email.domain.Email;
+import com.beanframework.cronjob.domain.CronjobData;
 
-public class EmailPrepareInterceptor implements PrepareInterceptor<Email> {
+public class CronjobDataPrepareInterceptor implements PrepareInterceptor<CronjobData> {
 
 	@Override
-	public void onPrepare(Email model) throws InterceptorException {
+	public void onPrepare(CronjobData model) throws InterceptorException {
 		if (model.getId() == null) {
 			model.setId(UUID.randomUUID().toString().replace("-", ""));
 		}
 	}
+
 }

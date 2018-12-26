@@ -63,7 +63,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 			}
 			prototype.setLastModifiedDate(new Date());
 
-			if (source.getUserGroups() == null) {
+			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
 				prototype.setUserGroups(new ArrayList<UserGroup>());
 			} else {
 				List<UserGroup> childs = new ArrayList<UserGroup>();

@@ -1,6 +1,6 @@
-package com.beanframework.console.domain;
+package com.beanframework.console.data;
 
-public class ConfigurationSearch {
+public class AdminSearch {
 	
 	public static final String ID_SEARCH = "idSearch";
 

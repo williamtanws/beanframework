@@ -33,7 +33,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
-import com.beanframework.console.domain.LanguageCsv;
+import com.beanframework.console.data.LanguageCsv;
 import com.beanframework.language.domain.Language;
 
 public class LanguageUpdate extends Updater {

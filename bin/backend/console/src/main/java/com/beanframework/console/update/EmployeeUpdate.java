@@ -35,7 +35,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
-import com.beanframework.console.domain.EmployeeCsv;
+import com.beanframework.console.data.EmployeeCsv;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;

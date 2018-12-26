@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.domain.CronjobData;
 
 public interface CronjobFacade {
 	
@@ -42,5 +43,11 @@ public interface CronjobFacade {
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
+
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	void updateDtoCronjobData(UUID cronjobUuid, CronjobData cronjobData) throws BusinessException;
+
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	void removeDtoCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException;
 
 }

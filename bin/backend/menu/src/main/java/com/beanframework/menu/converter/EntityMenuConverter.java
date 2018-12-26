@@ -87,7 +87,7 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 				}
 				prototype.setChilds(childs);
 			}
-			if (source.getUserGroups() == null) {
+			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
 				prototype.setUserGroups(new ArrayList<UserGroup>());
 			} else {
 				List<UserGroup> userGroups = new ArrayList<UserGroup>();

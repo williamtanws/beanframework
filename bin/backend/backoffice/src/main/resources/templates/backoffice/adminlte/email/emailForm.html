@@ -21,7 +21,17 @@
 		<div class="col-md-6" th:if="*{uuid != null}">
 			<div class="form-group">
 				<label for="exception" th:text="#{module.email.exception}+': '"></label>
-				<span class="form-control" th:value="*{exception}"></span>
+				<span class="form-control" th:text="*{exception}" disabled></span>
+			</div>
+		</div>
+		<div class="col-md-12" th:if="*{uuid != null}">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="exception" th:text="#{module.email.id}+': '"></label>
+						<span class="form-control" th:text="*{id}" disabled></span>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -225,10 +235,10 @@
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
 							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}"></a>
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li>
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}"></a>
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content">

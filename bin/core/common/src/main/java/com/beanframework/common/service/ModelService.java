@@ -34,6 +34,9 @@ public interface ModelService {
 	
 	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties,
 			Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
+	
+	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties,
+			Map<String, Sort.Direction> sorts, int maxResult, Class modelClass) throws Exception;
 
 	<T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 

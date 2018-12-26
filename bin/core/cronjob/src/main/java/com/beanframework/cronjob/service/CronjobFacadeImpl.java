@@ -1,6 +1,7 @@
 package com.beanframework.cronjob.service;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -20,10 +21,10 @@ import com.beanframework.cronjob.domain.CronjobData;
 
 @Component
 public class CronjobFacadeImpl implements CronjobFacade {
-	
+
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private CronjobManagerService cronjobManagerService;
 
@@ -41,11 +42,11 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Override
 	public Cronjob addCronjobData(UUID uuid, String name, String value) throws BusinessException {
-		
+
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Cronjob.UUID, uuid);
-			
+
 			Cronjob updateCronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
 
 			List<CronjobData> datas = updateCronjob.getCronjobDatas();
@@ -62,7 +63,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 			data.setCronjob(updateCronjob);
 
 			updateCronjob.getCronjobDatas().add(data);
-			
+
 			modelService.saveEntity(updateCronjob, Cronjob.class);
 
 			return updateCronjob;
@@ -94,11 +95,51 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	@Override
 	public void updateDto(Cronjob model) throws BusinessException {
 		modelService.saveDto(model, Cronjob.class);
-		
+
 	}
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		modelService.delete(uuid, Cronjob.class);
+	}
+
+	@Override
+	public void updateDtoCronjobData(UUID cronjobUuid, CronjobData cronjobData) throws BusinessException {
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, cronjobUuid);
+
+			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+
+			cronjobData.setCronjob(cronjob);
+			cronjob.getCronjobDatas().add(cronjobData);
+
+			modelService.saveEntity(cronjobData, CronjobData.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void removeDtoCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException {
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, cronjobUuid);
+
+			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+
+			Iterator<CronjobData> cronjobDatas = cronjob.getCronjobDatas().iterator();
+			while (cronjobDatas.hasNext()) {
+				if (cronjobDatas.next().getUuid().equals(cronjobDataUuid)) {
+					cronjobDatas.remove();
+				}
+			}
+
+			modelService.saveEntity(cronjob, Cronjob.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 }

@@ -29,7 +29,7 @@ import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.domain.ConfigurationSpecification;
 import com.beanframework.console.WebConfigurationConstants;
 import com.beanframework.console.WebConsoleConstants;
-import com.beanframework.console.domain.ConfigurationSearch;
+import com.beanframework.console.data.ConfigurationSearch;
 
 @Controller
 public class ConfigurationController extends AbstractCommonController {

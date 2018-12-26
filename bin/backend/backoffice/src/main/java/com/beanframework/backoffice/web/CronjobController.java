@@ -189,13 +189,6 @@ public class CronjobController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.UUID, cronjobUpdate.getUuid());
-
-			Cronjob cronjob = cronjobFacade.findOneDtoByProperties(properties);
-
-			cronjobUpdate.setCronjobDatas(cronjob.getCronjobDatas());
-
 			try {
 				cronjobFacade.updateDto(cronjobUpdate);
 
@@ -268,15 +261,8 @@ public class CronjobController extends AbstractCommonController {
 			cronjobData.setName(cronjobDataName);
 			cronjobData.setValue(cronjobDataValue);
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.UUID, cronjobUpdate.getUuid());
-
-			cronjobUpdate = cronjobFacade.findOneDtoByProperties(properties);
-
-			cronjobUpdate.getCronjobDatas().add(cronjobData);
-
 			try {
-				cronjobFacade.updateDto(cronjobUpdate);
+				cronjobFacade.updateDtoCronjobData(cronjobUpdate.getUuid(), cronjobData);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -307,20 +293,8 @@ public class CronjobController extends AbstractCommonController {
 
 			UUID jobDataUuidToDelete = UUID.fromString((String) requestParams.get("jobDataUuid"));
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.UUID, cronjobUpdate.getUuid());
-
-			cronjobUpdate = cronjobFacade.findOneDtoByProperties(properties);
-
-			for (int i = 0; i < cronjobUpdate.getCronjobDatas().size(); i++) {
-				if (cronjobUpdate.getCronjobDatas().get(i).getUuid().equals(jobDataUuidToDelete)) {
-					cronjobUpdate.getCronjobDatas().remove(i);
-					break;
-				}
-			}
-
 			try {
-				cronjobFacade.updateDto(cronjobUpdate);
+				cronjobFacade.removeDtoCronjobData(cronjobUpdate.getUuid(), jobDataUuidToDelete);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

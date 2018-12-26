@@ -351,7 +351,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected <T extends Collection> T getCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Class modelClass) {
+	protected <T extends Collection> T getCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer maxResult, Class modelClass) {
 
 		if (properties == null && sorts == null) {
 			return (T) cacheManager.getCache(modelClass.getName()).get("*");
@@ -390,6 +390,11 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 		if (sortsBuilder.length() > 0) {
 			qlString = qlString + " " + sortsBuilder.toString();
+		}
+		if(maxResult != null) {
+			if(maxResult > 0) {
+				qlString = qlString + " limit " + maxResult;
+			}
 		}
 
 		ValueWrapper valueWrapper = cacheManager.getCache(modelClass.getName()).get(qlString);
@@ -439,7 +444,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		cacheManager.getCache(modelClass.getName()).put(qlString, model);
 	}
 
-	protected void setCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Class modelClass, Collection models) {
+	protected void setCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer maxResult, Class modelClass, Collection models) {
 
 		if (properties == null && sorts == null) {
 			cacheManager.getCache(modelClass.getName()).put("*", models);
@@ -479,6 +484,11 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			if (sortsBuilder.length() > 0) {
 				qlString = qlString + " " + sortsBuilder.toString();
 			}
+			if(maxResult != null) {
+				if(maxResult > 0) {
+					qlString = qlString + " limit " + maxResult;
+				}
+			}
 
 			cacheManager.getCache(modelClass.getName()).put(qlString, models);
 		}
@@ -487,7 +497,34 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	protected void putCache(Class modelClass, Object key, Object value) {
 		cacheManager.getCache(modelClass.getName()).put(key, value);
 	}
+	
+	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer maxResult, Class modelClass) {
+		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
+		if (properties != null && properties.isEmpty() == false) {
+			qlString = qlString + " where " + sqlProperties(properties);
+		}
+		if (sorts != null && sorts.isEmpty() == false) {
+			qlString = qlString + " " + sqlSorts(sorts);
+		}
+
+		Query query = entityManager.createQuery(qlString);
+		if (properties != null && properties.isEmpty() == false) {
+			for (Map.Entry<String, Object> entry : properties.entrySet()) {
+				if (entry.getValue() != null) {
+					query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());
+				}
+			}
+		}
+		if(maxResult != null) {
+			if(maxResult > 0) {
+				query.setMaxResults(maxResult);
+			}
+		}
+
+		return query;
+	}
+	
 	private String sqlProperties(Map<String, Object> properties) {
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
@@ -514,27 +551,5 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 		return sortsBuilder.toString();
-	}
-
-	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Class modelClass) {
-		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
-
-		if (properties != null && properties.isEmpty() == false) {
-			qlString = qlString + " where " + sqlProperties(properties);
-		}
-		if (sorts != null && sorts.isEmpty() == false) {
-			qlString = qlString + " " + sqlSorts(sorts);
-		}
-
-		Query query = entityManager.createQuery(qlString);
-		if (properties != null && properties.isEmpty() == false) {
-			for (Map.Entry<String, Object> entry : properties.entrySet()) {
-				if (entry.getValue() != null) {
-					query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());
-				}
-			}
-		}
-
-		return query;
 	}
 }

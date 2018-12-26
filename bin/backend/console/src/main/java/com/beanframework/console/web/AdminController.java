@@ -29,7 +29,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.console.WebAdminConstants;
 import com.beanframework.console.WebConsoleConstants;
-import com.beanframework.console.domain.AdminSearch;
+import com.beanframework.console.data.AdminSearch;
 
 @Controller
 public class AdminController extends AbstractCommonController {

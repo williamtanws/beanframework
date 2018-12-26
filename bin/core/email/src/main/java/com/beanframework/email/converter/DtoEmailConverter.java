@@ -31,6 +31,7 @@ public class DtoEmailConverter implements DtoConverter<Email, Email> {
 	private Email convert(Email source, Email prototype) {
 
 		prototype.setUuid(source.getUuid());
+		prototype.setId(source.getId());
 		prototype.setToRecipients(source.getToRecipients());
 		prototype.setCcRecipients(source.getCcRecipients());
 		prototype.setBccRecipients(source.getBccRecipients());

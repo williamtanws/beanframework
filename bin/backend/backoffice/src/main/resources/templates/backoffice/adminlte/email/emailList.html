@@ -58,9 +58,8 @@
 														<thead>
 															<tr role="row">
 																<th th:text="#{module.backoffice.created.date}"></th>
-																<th th:text="#{module.email.torecipients}"></th>
-																<th th:text="#{module.email.ccrecipients}"></th>
-																<th th:text="#{module.email.bccrecipients}"></th>
+																<th th:text="#{module.email.subject}"></th>
+																<th th:text="#{module.email.exception}"></th>
 																<th th:text="#{module.email.status}"></th>
 															</tr>
 														</thead>
@@ -68,18 +67,16 @@
 															<th:block sec:authorize="hasAuthority('email_update')" th:each="row : ${pagination.content}">
 																<tr th:onclick="getForm([[${row.uuid}]])">
 																	<th scope="row" th:text="${#dates.format(row.createdDate, ' dd MMMM yyyy hh:mma')}"></th>
-																	<td scope="row" th:text="${#strings.abbreviate(row.toRecipients,30)}"></td>
-																	<td scope="row" th:text="${#strings.abbreviate(row.ccRecipients,30)}"></td>
-																	<td scope="row" th:text="${#strings.abbreviate(row.bccRecipients,30)}"></td>
+																	<td scope="row" th:text="${#strings.abbreviate(row.subject,50)}"></td>
+																	<td scope="row" th:text="${#strings.abbreviate(row.exception,50)}"></td>
 																	<td scope="row" th:text="${row.status}"></td>
 																</tr>
 															</th:block>
 															<th:block sec:authorize="!hasAuthority('email_update')" th:each="row : ${pagination.content}">
 																<tr>
 																	<th scope="row" th:text="${#dates.format(row.createdDate, ' dd MMMM yyyy hh:mma')}"></th>
-																	<td scope="row" th:text="${#strings.abbreviate(row.toRecipients,30)}"></td>
-																	<td scope="row" th:text="${#strings.abbreviate(row.ccRecipients,30)}"></td>
-																	<td scope="row" th:text="${#strings.abbreviate(row.bccRecipients,30)}"></td>
+																	<td scope="row" th:text="${#strings.abbreviate(row.subject,50)}"></td>
+																	<td scope="row" th:text="${#strings.abbreviate(row.exception,50)}"></td>
 																	<td scope="row" th:text="${row.status}"></td>
 																</tr>
 															</th:block>
@@ -95,7 +92,7 @@
 								<div class="box-header with-border">
 									<h4 class="box-title">
 										<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" th:aria-expanded="${emailUpdate.uuid == null ? 'false':'true'}" th:class="${emailUpdate.uuid == null ? 'collapsed':''}">
-											<span></span>
+											<span th:text="'ID: '+${emailUpdate.id}"></span>
 											<i class="fa fa-fw fa-angle-double-down"></i>
 										</a>
 									</h4>

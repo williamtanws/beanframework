@@ -1,11 +1,8 @@
 package com.beanframework.backoffice.interceptor;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,9 +22,8 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.language.domain.Language;
-import com.beanframework.menu.domain.MenuNavigation;
+import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuFacade;
-import com.beanframework.user.domain.UserGroup;
 
 public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 
@@ -66,21 +62,9 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 	protected void getMenuNavigation(HttpServletRequest request, ModelAndView modelAndView, Employee employee)
 			throws BusinessException {
 		if (employee.getUserGroups().isEmpty() == false) {
-			List<MenuNavigation> menuNavigation = menuFacade
-					.findDtoMenuNavigationByUserGroup(collectUserGroupUuid(employee.getUserGroups()));
+			List<Menu> menuNavigation = menuFacade.findDtoMenuTreeByCurrentUser();
 			modelAndView.getModelMap().addAttribute(WebBackofficeConstants.Model.MENU_NAVIGATION, menuNavigation);
 		}
-	}
-
-	private Set<UUID> collectUserGroupUuid(List<UserGroup> userGroups) {
-		Set<UUID> userGroupUuids = new LinkedHashSet<UUID>();
-		for (UserGroup userGroup : userGroups) {
-			userGroupUuids.add(userGroup.getUuid());
-			if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
-				userGroupUuids.addAll(collectUserGroupUuid(userGroup.getUserGroups()));
-			}
-		}
-		return userGroupUuids;
 	}
 
 	protected void getLanguage(ModelAndView modelAndView) throws Exception {
