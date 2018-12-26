@@ -1,4 +1,4 @@
-package com.beanframework.console.domain;
+package com.beanframework.console.data;
 
 public class UserGroupCsv extends AbstractCsv {
 

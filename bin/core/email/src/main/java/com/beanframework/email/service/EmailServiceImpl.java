@@ -31,12 +31,15 @@ public class EmailServiceImpl implements EmailService {
 
 	@Override
 	public void saveAttachment(Email email, MultipartFile[] attachments) throws IOException {
-		File emailAttachmentFolder = new File(EMAIL_ATTACHMENT_LOCATION + File.separator + email.getUuid());
+
+		String workingDir = System.getProperty("user.dir");
+
+		File emailAttachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + email.getUuid());
 		FileUtils.forceMkdir(emailAttachmentFolder);
 
 		for (int i = 0; i < attachments.length; i++) {
 			if (attachments[i].isEmpty() == false) {
-				File attachment = new File(EMAIL_ATTACHMENT_LOCATION + File.separator + email.getUuid() + File.separator + attachments[i].getOriginalFilename());
+				File attachment = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + email.getUuid() + File.separator + attachments[i].getOriginalFilename());
 				attachments[i].transferTo(attachment);
 			}
 		}
@@ -44,7 +47,10 @@ public class EmailServiceImpl implements EmailService {
 
 	@Override
 	public void deleteAttachment(UUID uuid, String filename) throws IOException {
-		File emailAttachmentFolder = new File(EMAIL_ATTACHMENT_LOCATION + File.separator + uuid);
+		
+		String workingDir = System.getProperty("user.dir");
+		
+		File emailAttachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + uuid);
 		File[] files = emailAttachmentFolder.listFiles();
 
 		for (int i = 0; i < files.length; i++) {
@@ -58,8 +64,10 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void delete(UUID uuid) throws IOException, BusinessException {
 		modelService.delete(uuid, Email.class);
+		
+		String workingDir = System.getProperty("user.dir");
 
-		File emailAttachmentFolder = new File(EMAIL_ATTACHMENT_LOCATION + File.separator + uuid);
+		File emailAttachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + uuid);
 		FileUtils.deleteDirectory(emailAttachmentFolder);
 	}
 
@@ -67,8 +75,10 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void deleteAll() throws IOException, BusinessException {
 		modelService.deleteAll(Email.class);
+		
+		String workingDir = System.getProperty("user.dir");
 
-		File emailAttachmentFolder = new File(EMAIL_ATTACHMENT_LOCATION);
+		File emailAttachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION);
 		FileUtils.deleteDirectory(emailAttachmentFolder);
 	}
 }

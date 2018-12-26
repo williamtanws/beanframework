@@ -2,7 +2,6 @@ package com.beanframework.menu.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.menu.converter.DtoMenuNavigationConverter;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuNavigation;
 
 @Component
 public class MenuFacadeImpl implements MenuFacade {
@@ -27,9 +24,6 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Autowired
 	private MenuService menuService;
 
-	@Autowired
-	private DtoMenuNavigationConverter dtoMenuNavigationConverter;
-
 	@Override
 	public Menu create() throws Exception {
 		return modelService.create(Menu.class);
@@ -39,7 +33,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.findOneEntityByProperties(properties, Menu.class);
 	}
-	
+
 	@Override
 	public Menu findOneDtoByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.findOneDtoByProperties(properties, Menu.class);
@@ -48,13 +42,11 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public void createDto(Menu model) throws BusinessException {
 		modelService.saveDto(model, Menu.class);
-		modelService.clearCache(MenuNavigation.class);
 	}
-	
+
 	@Override
 	public void updateDto(Menu model) throws BusinessException {
 		modelService.saveDto(model, Menu.class);
-		modelService.clearCache(MenuNavigation.class);
 	}
 
 	@Override
@@ -65,7 +57,7 @@ public class MenuFacadeImpl implements MenuFacade {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		try {
@@ -78,16 +70,16 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public List<Menu> findDtoMenuTree() throws BusinessException {
 		try {
-			return menuService.findMenuTree();
+			return menuService.findDtoMenuTree();
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
 
 	@Override
-	public List<MenuNavigation> findDtoMenuNavigationByUserGroup(Set<UUID> userGroupUuids) throws BusinessException {
+	public List<Menu> findDtoMenuTreeByCurrentUser() throws BusinessException {
 		try {
-			return dtoMenuNavigationConverter.convert(menuService.findMenuNavigationByUserGroup(userGroupUuids));
+			return menuService.findDtoMenuTreeByCurrentUser();
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}

@@ -70,7 +70,7 @@ public class EntityEmployeeConverter implements EntityConverter<Employee, Employ
 					}
 				}
 			}
-			if (source.getUserGroups() == null) {
+			if (source.getUserGroups() == null || source.getUserGroups() .isEmpty()) {
 				prototype.setUserGroups(new ArrayList<UserGroup>());
 			} else {
 				List<UserGroup> childs = new ArrayList<UserGroup>();

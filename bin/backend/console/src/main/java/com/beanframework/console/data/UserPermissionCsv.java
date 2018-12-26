@@ -1,6 +1,6 @@
-package com.beanframework.console.domain;
+package com.beanframework.console.data;
 
-public class UserRightCsv extends AbstractCsv {
+public class UserPermissionCsv extends AbstractCsv {
 
 	private int sort;
 	private String dynamicField;
@@ -20,5 +20,4 @@ public class UserRightCsv extends AbstractCsv {
 	public void setDynamicField(String dynamicField) {
 		this.dynamicField = dynamicField;
 	}
-
 }

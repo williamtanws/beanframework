@@ -34,7 +34,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
-import com.beanframework.console.domain.DynamicFieldCsv;
+import com.beanframework.console.data.DynamicFieldCsv;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
 import com.beanframework.language.domain.Language;

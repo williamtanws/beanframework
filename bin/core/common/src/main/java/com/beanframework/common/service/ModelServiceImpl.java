@@ -104,7 +104,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			return (T) findyPropertiesAndSorts(properties, null, modelClass, false);
+			return (T) findyPropertiesAndSorts(properties, null, null, modelClass, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -118,7 +118,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			return (T) findyPropertiesAndSorts(null, sorts, modelClass, false);
+			return (T) findyPropertiesAndSorts(null, sorts, null, modelClass, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -135,7 +135,24 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			return (T) findyPropertiesAndSorts(properties, sorts, modelClass, false);
+			return (T) findyPropertiesAndSorts(properties, sorts, null, modelClass, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage(), e);
+		}
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, int maxResult, Class modelClass) throws Exception {
+		if (properties == null && sorts == null) {
+			Assert.notNull(properties, "properties was null");
+			Assert.notNull(sorts, "sorts was null");
+		}
+		Assert.notNull(modelClass, "modelClass was null");
+
+		try {
+			return (T) findyPropertiesAndSorts(properties, sorts, maxResult, modelClass, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -166,7 +183,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			if (model == null) {
 				try {
-					model = createQuery(properties, null, null, modelClass).getSingleResult();
+					model = createQuery(properties, null, null, null, modelClass).getSingleResult();
 
 					setCachedSingleResult(properties, null, null, modelClass, model);
 
@@ -189,7 +206,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	private <T extends Collection> T findyPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Class modelClass, boolean dto) throws Exception {
+	private <T extends Collection> T findyPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer maxResult, Class modelClass, boolean dto) throws Exception {
 		if (properties == null && sorts == null) {
 			Assert.notNull(properties, "properties was null");
 			Assert.notNull(sorts, "sorts was null");
@@ -197,12 +214,12 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			List<Object> models = getCachedResultList(properties, sorts, null, modelClass);
+			List<Object> models = getCachedResultList(properties, sorts, null, maxResult, modelClass);
 
 			if (models == null) {
-				models = createQuery(properties, sorts, null, modelClass).getResultList();
+				models = createQuery(properties, sorts, null, maxResult, modelClass).getResultList();
 
-				setCachedResultList(properties, sorts, null, modelClass, models);
+				setCachedResultList(properties, sorts, null, maxResult, modelClass, models);
 			}
 
 			if (models != null & models.isEmpty() == false) {
@@ -229,7 +246,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Long count = getCachedSingleResult(properties, null, "count(o)", modelClass);
 
 			if (count == null) {
-				count = (Long) createQuery(properties, null, "count(o)", modelClass).getSingleResult();
+				count = (Long) createQuery(properties, null, "count(o)", null, modelClass).getSingleResult();
 
 				setCachedSingleResult(properties, null, "count(o)", modelClass, count);
 			}
@@ -248,13 +265,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			List<Object> models = getCachedResultList(properties, null, null, modelClass);
+			List<Object> models = getCachedResultList(properties, null, null, null, modelClass);
 
 			if (models == null) {
 
-				models = createQuery(properties, null, null, modelClass).getResultList();
+				models = createQuery(properties, null, null, null, modelClass).getResultList();
 
-				setCachedResultList(properties, null, null, modelClass, models);
+				setCachedResultList(properties, null, null, null, modelClass, models);
 			}
 
 			if (models != null & models.isEmpty() == false) {
@@ -276,12 +293,12 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			List<Object> models = getCachedResultList(null, sorts, null, modelClass);
+			List<Object> models = getCachedResultList(null, sorts, null, null, modelClass);
 
 			if (models == null) {
-				models = createQuery(null, sorts, null, modelClass).getResultList();
+				models = createQuery(null, sorts, null, null, modelClass).getResultList();
 
-				setCachedResultList(null, sorts, null, modelClass, models);
+				setCachedResultList(null, sorts, null, null, modelClass, models);
 			}
 
 			if (models != null & models.isEmpty() == false) {
@@ -306,7 +323,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			return (T) findyPropertiesAndSorts(properties, sorts, modelClass, true);
+			return (T) findyPropertiesAndSorts(properties, sorts, null, modelClass, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -318,12 +335,12 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public <T extends Collection> T findAll(Class modelClass) throws Exception {
 
 		try {
-			List<Object> models = getCachedResultList(null, null, null, modelClass);
+			List<Object> models = getCachedResultList(null, null, null, null, modelClass);
 
 			if (models == null) {
-				models = createQuery(null, null, null, modelClass).getResultList();
+				models = createQuery(null, null, null, null, modelClass).getResultList();
 
-				setCachedResultList(null, null, null, modelClass, models);
+				setCachedResultList(null, null, null, null, modelClass, models);
 			}
 
 			if (models != null & models.isEmpty() == false) {

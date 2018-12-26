@@ -2,14 +2,12 @@ package com.beanframework.menu.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuNavigation;
 
 public interface MenuFacade {
 
@@ -43,6 +41,6 @@ public interface MenuFacade {
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Menu> findDtoMenuTree() throws BusinessException;
 
-	List<MenuNavigation> findDtoMenuNavigationByUserGroup(Set<UUID> userGroupUuids) throws BusinessException;
+	List<Menu> findDtoMenuTreeByCurrentUser() throws BusinessException;
 
 }

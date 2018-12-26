@@ -32,7 +32,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
-import com.beanframework.console.domain.UserAuthorityCsv;
+import com.beanframework.console.data.UserAuthorityCsv;
 import com.beanframework.user.domain.UserGroup;
 
 public class UserAuthorityUpdate extends Updater {

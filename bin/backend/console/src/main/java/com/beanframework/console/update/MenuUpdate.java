@@ -36,9 +36,8 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.common.Updater;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
-import com.beanframework.console.domain.MenuCsv;
+import com.beanframework.console.data.MenuCsv;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuNavigation;
 import com.beanframework.menu.domain.MenuTargetTypeEnum;
 import com.beanframework.user.domain.UserGroup;
 
@@ -72,7 +71,7 @@ public class MenuUpdate extends Updater {
 			List<MenuCsv> menuCsvList = readCSVFile(reader);
 			save(menuCsvList);
 		}
-		modelService.clearCache(MenuNavigation.class);
+		modelService.clearCache(Menu.class);
 	}
 
 	public void save(List<MenuCsv> menuCsvList) throws Exception {

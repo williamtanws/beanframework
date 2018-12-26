@@ -22,8 +22,10 @@ import com.beanframework.cronjob.context.AutowiringSpringBeanJobFactory;
 import com.beanframework.cronjob.converter.DtoCronjobConverter;
 import com.beanframework.cronjob.converter.DtoCronjobDataConverter;
 import com.beanframework.cronjob.converter.EntityCronjobConverter;
+import com.beanframework.cronjob.converter.EntityCronjobDataConverter;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
+import com.beanframework.cronjob.interceptor.CronjobDataPrepareInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobInitialDefaultsInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobLoadInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobPrepareInterceptor;
@@ -127,6 +129,20 @@ public class CronjobConfig {
 	} 
 	
 	@Bean
+	public EntityCronjobDataConverter entityCronjobDataConverter() {
+		return new EntityCronjobDataConverter();
+	}
+	
+	@Bean
+	public ConverterMapping entityCronjobDataConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(entityCronjobDataConverter());
+		mapping.setTypeCode(CronjobData.class.getSimpleName());
+
+		return mapping;
+	} 
+	
+	@Bean
 	public CronjobInitialDefaultsInterceptor cronjobInitialDefaultsInterceptor() {
 		return new CronjobInitialDefaultsInterceptor();
 	}
@@ -164,6 +180,20 @@ public class CronjobConfig {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(cronjobPrepareInterceptor());
 		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	@Bean
+	public CronjobDataPrepareInterceptor cronjobDataPrepareInterceptor() {
+		return new CronjobDataPrepareInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping cronjobDataPrepareInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(cronjobDataPrepareInterceptor());
+		interceptorMapping.setTypeCode(CronjobData.class.getSimpleName());
 
 		return interceptorMapping;
 	}

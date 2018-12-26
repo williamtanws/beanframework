@@ -31,7 +31,7 @@ import com.beanframework.common.Remover;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformConstants;
-import com.beanframework.console.domain.EmployeeCsv;
+import com.beanframework.console.data.EmployeeCsv;
 import com.beanframework.employee.domain.Employee;
 
 public class EmployeeRemove extends Remover {

@@ -9,33 +9,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.domain.CronjobData;
 
-public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob> {
+public class EntityCronjobDataConverter implements EntityConverter<CronjobData, CronjobData> {
 
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public Cronjob convert(Cronjob source) throws ConverterException {
+	public CronjobData convert(CronjobData source) throws ConverterException {
 
-		Cronjob prototype;
+		CronjobData prototype;
 		try {
 
 			if (source.getUuid() != null) {
 
 				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Cronjob.UUID, source.getUuid());
+				properties.put(CronjobData.UUID, source.getUuid());
 
-				Cronjob exists = modelService.findOneEntityByProperties(properties, Cronjob.class);
+				CronjobData exists = modelService.findOneEntityByProperties(properties, CronjobData.class);
 
 				if (exists != null) {
 					prototype = exists;
 				} else {
-					prototype = modelService.create(Cronjob.class);
+					prototype = modelService.create(CronjobData.class);
 				}
 			} else {
-				prototype = modelService.create(Cronjob.class);
+				prototype = modelService.create(CronjobData.class);
 			}
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
@@ -44,19 +44,15 @@ public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob>
 		return convert(source, prototype);
 	}
 
-	private Cronjob convert(Cronjob source, Cronjob prototype) {
+	private CronjobData convert(CronjobData source, CronjobData prototype) {
 
 		if (source.getId() != null)
 			prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
 
-		prototype.setJobClass(source.getJobClass());
-		prototype.setJobGroup(source.getJobGroup());
-		prototype.setJobName(source.getJobName());
-		prototype.setDescription(source.getDescription());
-		prototype.setCronExpression(source.getCronExpression());
-		prototype.setStartup(source.isStartup());
-
+		prototype.setName(source.getName());
+		prototype.setValue(source.getValue());
+		
 		return prototype;
 	}
 
