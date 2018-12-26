@@ -46,7 +46,7 @@
 			</div>
 			<div class="form-group" sec:authorize="hasAuthority('employee_read')">
 				<label th:text="#{module.backoffice.lastmodified.by} + ':'"></label>
-				<a th:href="@{${@environment.getProperty('path.employee')}(uuid=*{lastModifiedBy})}" th:text="#{module.backoffice.find.user}" th:if="*{lastModifiedBy != null}"></a>
+				<a th:href="@{${@environment.getProperty('path.employee')}(uuid=*{lastModifiedBy})}+'#tab_general'" th:text="#{module.backoffice.find.user}" th:if="*{lastModifiedBy != null}"></a>
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -56,7 +56,7 @@
 			</div>
 			<div class="form-group" sec:authorize="hasAuthority('employee_read')">
 				<label th:text="#{module.backoffice.created.by} + ':'"></label>
-				<a th:href="@{${@environment.getProperty('path.employee')}(uuid=*{createdBy})}" th:text="#{module.backoffice.find.user}" th:if="*{createdBy != null}"></a>
+				<a th:href="@{${@environment.getProperty('path.employee')}(uuid=*{createdBy})}+'#tab_general'" th:text="#{module.backoffice.find.user}" th:if="*{createdBy != null}"></a>
 			</div>
 		</div>
 	</th:block>

@@ -65,8 +65,6 @@ public class MenuController extends AbstractCommonController {
 	public String list(@ModelAttribute(WebMenuConstants.ModelAttribute.UPDATE) Menu menuUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute("menus", menuFacade.findDtoMenuTree());
-
 		if (menuUpdate.getUuid() != null) {
 
 			Map<String, Object> properties = new HashMap<String, Object>();

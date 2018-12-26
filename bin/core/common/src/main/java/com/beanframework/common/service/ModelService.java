@@ -46,7 +46,7 @@ public interface ModelService {
 
 	<T extends Collection> T findAll(Class modelClass) throws Exception;
 
-	<T> Page<T> findPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
+	<T> Page<T> findDtoPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
 
 	void refresh(Object model);
 

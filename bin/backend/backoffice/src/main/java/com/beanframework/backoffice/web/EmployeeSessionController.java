@@ -45,9 +45,9 @@ public class EmployeeSessionController {
 	public RedirectView delete(Model model, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		UUID uuid = (UUID) requestParams.get("uuid");
+		String uuidStr = (String) requestParams.get("uuid");
 
-		employeeFacade.expireAllSessionsByUuid(uuid);
+		employeeFacade.expireAllSessionsByUuid(UUID.fromString(uuidStr));
 
 		redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
 				localeMessageService.getMessage(WebBackofficeConstants.Locale.DELETE_SUCCESS));

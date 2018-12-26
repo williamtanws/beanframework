@@ -114,6 +114,32 @@
 			window.location.href = url;
 		}
 		
+		function changeTab(tab){
+			var baseUrl = window.location.href.split('#')[0];
+			window.location.replace( baseUrl + '#tab_' + tab );
+			sessionStorage.setItem("tabUrl", '#tab_'+tab);
+		}
+		
+		function activaTab(){
+			if(window.location.hash != ''){
+				var baseUrl = window.location.href.split('#')[0];
+				window.location.replace( baseUrl + window.location.hash );
+				
+			    $('.nav-tabs a[href="' + window.location.hash + '"]').tab('show');
+			}
+			else{
+				var tabUrl = sessionStorage.getItem("tabUrl");
+				if(tabUrl !== null && tabUrl !== undefined && tabUrl !== 'null'){
+					var baseUrl = window.location.href.split('#')[0];
+					window.location.replace( baseUrl + tabUrl );
+					
+				    $('.nav-tabs a[href="' + tabUrl + '"]').tab('show');
+				}
+			}
+		}
+		
+		activaTab();
+		
 		$(document).ready(function() {
 			
 			var timeout = /*[[@{${@environment.getProperty('server.servlet.session.timeout')}}]]*/;

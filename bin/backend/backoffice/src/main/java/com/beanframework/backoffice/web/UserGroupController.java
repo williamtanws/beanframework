@@ -2,6 +2,7 @@ package com.beanframework.backoffice.web;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -151,6 +152,12 @@ public class UserGroupController extends AbstractCommonController {
 				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 
 				List<UserGroup> userGroups = userGroupFacade.findDtoBySorts(sorts);
+				
+				for (Iterator<UserGroup> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext(); ) {
+					if(userGroupsIterator.next().getUuid().equals(existingUserGroup.getUuid())) {
+						userGroupsIterator.remove();
+					}
+				}
 
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingUserGroup.getUserGroups()) {

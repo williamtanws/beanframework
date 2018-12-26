@@ -1,6 +1,7 @@
 package com.beanframework.user.interceptor;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,13 @@ public class UserGroupPrepareInterceptor implements PrepareInterceptor<UserGroup
 		
 		generateUserGroupField(model);
 		generateUserAuthority(model);
+		
+		Iterator<UserGroup> userGroups = model.getUserGroups().iterator();
+		while(userGroups.hasNext()) {
+			if(userGroups.next().getUuid().equals(model.getUuid())) {
+				userGroups.remove();
+			}
+		}
 	}
 	
 	private void generateUserGroupField(UserGroup model) throws InterceptorException {

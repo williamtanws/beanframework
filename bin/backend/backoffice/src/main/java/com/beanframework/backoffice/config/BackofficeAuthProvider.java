@@ -62,6 +62,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 		} catch (CredentialsExpiredException e) {
 			throw new CredentialsExpiredException(localeMessageService.getMessage(WebEmployeeConstants.Locale.ACCOUNT_PASSWORD_EXPIRED));
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
 

@@ -71,7 +71,7 @@ public class ConfigurationController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Configuration> pagination = modelService.findPage(ConfigurationSpecification.findByCriteria(configuration),
+		Page<Configuration> pagination = modelService.findDtoPage(ConfigurationSpecification.findByCriteria(configuration),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties),
 				Configuration.class);
 

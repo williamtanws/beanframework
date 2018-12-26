@@ -42,7 +42,7 @@ import com.beanframework.user.utils.PasswordUtils;
 public class EmployeeServiceImpl implements EmployeeService {
 
 	Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -65,16 +65,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 //			String mimetype = picture.getContentType();
 //			String extension = mimetype.split("/")[1];
 
-			File original = new File(
-					PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
+			File original = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
 			original = new File(original.getAbsolutePath());
 			picture.transferTo(original);
 
-			File thumbnail = new File(
-					PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "thumbnail.png");
+			File thumbnail = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "thumbnail.png");
 			BufferedImage img = ImageIO.read(original);
-			BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC,
-					PROFILE_PICTURE_THUMBNAIL_WEIGHT, PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
+			BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, PROFILE_PICTURE_THUMBNAIL_WEIGHT, PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
 			ImageIO.write(thumbImg, "png", thumbnail);
 		}
 	}
@@ -84,8 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Employee employeePrincipal = (Employee) auth.getPrincipal();
 
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal,
-				employeePrincipal.getPassword(), employeePrincipal.getAuthorities());
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal, employeePrincipal.getPassword(), employeePrincipal.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(token);
 
 		return employeePrincipal;
@@ -148,56 +144,44 @@ public class EmployeeServiceImpl implements EmployeeService {
 		} else {
 			return null;
 		}
-		
+
 		Hibernate.initialize(employee.getUserGroups());
-//		initializeUserGroup(employee.getUserGroups());
-		
-		employee.setAuthorities(getAuthorities(employee.getUserGroups()));
-		
+
+		employee.setAuthorities(getAuthorities(employee.getUserGroups(), new HashSet<String>()));
+
 		return employee;
 	}
-	
-//	private void initializeUserGroup(List<UserGroup> userGroups) {
-//		
-//		for (UserGroup userGroup : userGroups) {
-//			Hibernate.initialize(userGroup.getUserGroups());
-//			Hibernate.initialize(userGroup.getUserAuthorities());
-//			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-//				Hibernate.initialize(userAuthority.getUserRight());
-//				Hibernate.initialize(userAuthority.getUserPermission());
-//			}
-//			if(userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
-//				initializeUserGroup(userGroup.getUserGroups());
-//			}
-//		}
-//	}
 
-	private Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups) {
-		
+	//processedUserGroupUuids to prevent infinity loop
+	private Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids) {
+
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
 		for (UserGroup userGroup : userGroups) {
-			
-			Hibernate.initialize(userGroup.getUserAuthorities());
-			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+			if (processedUserGroupUuids.contains(userGroup.getUuid().toString()) == false) {
+				processedUserGroupUuids.add(userGroup.getUuid().toString());
 
-				if (Boolean.TRUE.equals(userAuthority.getEnabled())) {
-					StringBuilder authority = new StringBuilder();
-					
-					Hibernate.initialize(userAuthority.getUserPermission());
-					authority.append(userAuthority.getUserPermission().getId());
-					authority.append("_");
-					Hibernate.initialize(userAuthority.getUserRight());
-					authority.append(userAuthority.getUserRight().getId());
+				Hibernate.initialize(userGroup.getUserAuthorities());
+				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 
-					authorities.add(new SimpleGrantedAuthority(authority.toString()));
+					if (Boolean.TRUE.equals(userAuthority.getEnabled())) {
+						StringBuilder authority = new StringBuilder();
+
+						Hibernate.initialize(userAuthority.getUserPermission());
+						authority.append(userAuthority.getUserPermission().getId());
+						authority.append("_");
+						Hibernate.initialize(userAuthority.getUserRight());
+						authority.append(userAuthority.getUserRight().getId());
+
+						authorities.add(new SimpleGrantedAuthority(authority.toString()));
+					}
+
 				}
 
-			}
-
-			Hibernate.initialize(userGroup.getUserGroups());
-			if(userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
-				authorities.addAll(getAuthorities(userGroup.getUserGroups()));
+				Hibernate.initialize(userGroup.getUserGroups());
+				if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
+					authorities.addAll(getAuthorities(userGroup.getUserGroups(), processedUserGroupUuids));
+				}
 			}
 		}
 

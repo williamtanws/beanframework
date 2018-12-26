@@ -340,7 +340,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> Page<T> findPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
+	public <T> Page<T> findDtoPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
@@ -410,12 +410,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 		try {
 
-			Object model;
-			try {
-				model = findOneEntityByUuid(uuid, modelClass);
-			} catch (Exception e) {
-				throw new BusinessException(e.getMessage(), e);
-			}
+			Object model = findOneEntityByUuid(uuid, modelClass);
+			
+			modelRepository.delete(model);
 
 			removeInterceptor(model, modelClass);
 

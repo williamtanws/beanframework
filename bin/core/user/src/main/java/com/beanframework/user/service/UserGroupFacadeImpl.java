@@ -23,7 +23,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public Page<UserGroup> findPage(Specification<UserGroup> specification, PageRequest pageRequest) throws Exception {
-		return modelService.findPage(specification, pageRequest, UserGroup.class);
+		return modelService.findDtoPage(specification, pageRequest, UserGroup.class);
 	}
 
 	@Override
@@ -33,7 +33,8 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public UserGroup findOneDtoByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneDtoByProperties(properties, UserGroup.class);
+		UserGroup userGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
+		return modelService.getDto(userGroup, UserGroup.class);
 	}
 
 	@Override

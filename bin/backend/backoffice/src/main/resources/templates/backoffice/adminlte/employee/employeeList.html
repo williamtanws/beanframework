@@ -59,22 +59,17 @@
 																<th class="sorting" id="id"
 																	th:class="${pagination.getSort().getOrderFor('id') != null}? sorting_+${pagination.getSort().getOrderFor('id').getDirection().toString().toLowerCase()} : sorting"
 																	th:text="#{module.employee.id}"></th>
-																<th class="sorting" id="name"
-																	th:class="${pagination.getSort().getOrderFor('name') != null}? sorting_+${pagination.getSort().getOrderFor('name').getDirection().toString().toLowerCase()} : sorting"
-																	th:text="#{module.employee.name}"></th>
 															</tr>
 														</thead>
 														<tbody>
 															<th:block sec:authorize="hasAuthority('employee_update')" th:each="row : ${pagination.content}">
 																<tr th:onclick="getForm([[${row.uuid}]])">
 																	<th scope="row" th:text="${row.id}"></th>
-																	<th scope="row" th:text="${row.name}"></th>
 																</tr>
 															</th:block>
 															<th:block sec:authorize="!hasAuthority('employee_update')" th:each="row : ${pagination.content}">
 																<tr>
 																	<th scope="row" th:text="${row.id}"></th>
-																	<th scope="row" th:text="${row.name}"></th>
 																</tr>
 															</th:block>
 														</tbody>

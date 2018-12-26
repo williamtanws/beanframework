@@ -34,7 +34,7 @@
 			</div>
 			<div class="form-group">
 				<label th:text="#{module.console.lastmodified.by} + ':'"></label>
-				<a th:href="@{${@environment.getProperty('path.admin')}(uuid=*{lastModifiedBy})}" th:text="#{module.console.find.user}" th:if="*{lastModifiedBy != null}"></a>
+				<a th:href="@{${@environment.getProperty('path.admin')}(uuid=*{lastModifiedBy})}+'#tab_general'" th:text="#{module.console.find.user}" th:if="*{lastModifiedBy != null}"></a>
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -44,7 +44,7 @@
 			</div>
 			<div class="form-group">
 				<label th:text="#{module.console.created.by} + ':'"></label>
-				<a th:href="@{${@environment.getProperty('path.admin')}(uuid=*{createdBy})}" th:text="#{module.console.find.user}" th:if="*{createdBy != null}"></a>
+				<a th:href="@{${@environment.getProperty('path.admin')}(uuid=*{createdBy})}+'#tab_general'" th:text="#{module.console.find.user}" th:if="*{createdBy != null}"></a>
 			</div>
 		</div>
 	</th:block>

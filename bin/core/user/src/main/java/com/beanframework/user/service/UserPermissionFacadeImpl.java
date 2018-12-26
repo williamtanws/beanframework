@@ -23,7 +23,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Override
 	public Page<UserPermission> findPage(Specification<UserPermission> specification, PageRequest pageRequest) throws Exception {
-		return modelService.findPage(specification, pageRequest, UserPermission.class);
+		return modelService.findDtoPage(specification, pageRequest, UserPermission.class);
 	}
 
 	@Override
