@@ -70,7 +70,7 @@ public class AdminController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Admin> pagination = modelService.findPage(AdminSpecification.findByCriteria(admin),
+		Page<Admin> pagination = modelService.findDtoPage(AdminSpecification.findByCriteria(admin),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Admin.class);
 
 		model.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);

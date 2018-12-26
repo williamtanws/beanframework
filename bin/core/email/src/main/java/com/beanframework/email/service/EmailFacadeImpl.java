@@ -48,7 +48,7 @@ public class EmailFacadeImpl implements EmailFacade {
 
 	@Override
 	public Page<Email> findPage(Specification<Email> specification, PageRequest pageable) throws Exception {
-		return modelService.findPage(specification, pageable, Email.class);
+		return modelService.findDtoPage(specification, pageable, Email.class);
 	}
 
 	@Override

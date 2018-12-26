@@ -50,7 +50,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public Page<Customer> findPage(Specification<Customer> specification, PageRequest pageable) throws Exception {
-		return modelService.findPage(specification, pageable, Customer.class);
+		return modelService.findDtoPage(specification, pageable, Customer.class);
 	}
 
 	@Override

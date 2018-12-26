@@ -78,7 +78,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public List<Menu> findDtoMenuTree() throws BusinessException {
 		try {
-			return modelService.getDto(menuService.findMenuTree(), Menu.class);
+			return menuService.findMenuTree();
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}

@@ -1,7 +1,9 @@
 package com.beanframework.employee.converter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +14,7 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserField;
+import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;
 
 public class EntityEmployeeConverter implements EntityConverter<Employee, Employee> {
@@ -47,24 +50,39 @@ public class EntityEmployeeConverter implements EntityConverter<Employee, Employ
 
 	private Employee convert(Employee source, Employee prototype) throws ConverterException {
 
-		if (source.getId() != null)
-			prototype.setId(source.getId());
-		prototype.setLastModifiedDate(new Date());
+		try {
+			if (source.getId() != null)
+				prototype.setId(source.getId());
+			prototype.setLastModifiedDate(new Date());
 
-		prototype.setAccountNonExpired(source.getAccountNonExpired());
-		prototype.setAccountNonLocked(source.getAccountNonLocked());
-		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
-		prototype.setEnabled(source.getEnabled());
-		if (StringUtils.isNotEmpty(source.getPassword()))
-			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-		if (source.getUserFields() != null && source.getUserFields().isEmpty() == false) {
-			for (int i = 0; i < prototype.getUserFields().size(); i++) {
-				for (UserField sourceUserField : source.getUserFields()) {
-					if (prototype.getUserFields().get(i).getUuid().equals(sourceUserField.getUuid())) {
-						prototype.getUserFields().get(i).setValue(sourceUserField.getValue());
+			prototype.setAccountNonExpired(source.getAccountNonExpired());
+			prototype.setAccountNonLocked(source.getAccountNonLocked());
+			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+			prototype.setEnabled(source.getEnabled());
+			if (StringUtils.isNotEmpty(source.getPassword()))
+				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+			if (source.getUserFields() != null && source.getUserFields().isEmpty() == false) {
+				for (int i = 0; i < prototype.getUserFields().size(); i++) {
+					for (UserField sourceUserField : source.getUserFields()) {
+						if (prototype.getUserFields().get(i).getUuid().equals(sourceUserField.getUuid())) {
+							prototype.getUserFields().get(i).setValue(sourceUserField.getValue());
+						}
 					}
 				}
 			}
+			if (source.getUserGroups() == null) {
+				prototype.setUserGroups(new ArrayList<UserGroup>());
+			} else {
+				List<UserGroup> childs = new ArrayList<UserGroup>();
+				for (UserGroup userGroup : source.getUserGroups()) {
+					UserGroup entityUserGroup = modelService.findOneEntityByUuid(userGroup.getUuid(), UserGroup.class);
+					if (entityUserGroup != null)
+						childs.add(entityUserGroup);
+				}
+				prototype.setUserGroups(childs);
+			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 		return prototype;

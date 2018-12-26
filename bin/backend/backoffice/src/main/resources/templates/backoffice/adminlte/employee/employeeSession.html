@@ -70,7 +70,7 @@
 														<td>
 															<form role="form" th:action="@{${@environment.getProperty('path.employee.session')}}" method="post">
 																<input type="hidden" name="delete">
-																<input type="hidden" name="username" th:value="${row.principalEmployee.uuid}">
+																<input type="hidden" name="uuid" th:value="${row.principalEmployee.uuid}">
 																<button type="submit" class="btn btn-block btn-danger btn-sm" th:text="#{module.employee.expirenow}"></button>
 															</form>
 														</td>

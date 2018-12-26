@@ -26,7 +26,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public Page<UserRight> findPage(Specification<UserRight> specification, PageRequest pageRequest) throws Exception {
-		return modelService.findPage(specification, pageRequest, UserRight.class);
+		return modelService.findDtoPage(specification, pageRequest, UserRight.class);
 	}
 
 	@Override
