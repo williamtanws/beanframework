@@ -34,7 +34,6 @@ import com.beanframework.user.domain.UserGroup;
 public class Menu extends GenericDomain {
 
 	private static final long serialVersionUID = 8293422057240349702L;
-	public static final String DOMAIN = "menu";
 	public static final String SORT = "sort";
 	public static final String DESCRIPTION = "description";
 	public static final String ICON = "icon";

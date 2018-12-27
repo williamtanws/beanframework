@@ -17,7 +17,6 @@ import com.beanframework.language.LanguageConstants;
 public class Language extends GenericDomain {
 
 	private static final long serialVersionUID = 5992760081038782486L;
-	public static final String DOMAIN = "Language";
 	public static final String NAME = "name";
 	public static final String ACTIVE = "active";
 	public static final String SORT = "sort";

@@ -36,7 +36,6 @@ import com.beanframework.user.UserConstants;
 @DiscriminatorColumn(name = "type")
 public abstract class User extends GenericDomain {
 
-	public static final String DOMAIN = "User";
 	public static final String PASSWORD = "password";
 	public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";
 	public static final String ACCOUNT_NON_LOCKED = "accountNonLocked";

@@ -24,7 +24,6 @@ public class Email extends GenericDomain {
 
 	private static final long serialVersionUID = 2324052965289006873L;
 
-	public static final String DOMAIN = "Email";
 	public static final String TORECIPIENTS = "toRecipients";
 	public static final String CCRECIPIENTS = "ccRecipients";
 	public static final String BCCRECIPIENTS = "bccRecipients";

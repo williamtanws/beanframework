@@ -20,5 +20,4 @@ public class Employee extends User {
 	 * 
 	 */
 	private static final long serialVersionUID = -444547554032025L;
-	public static final String DOMAIN = "Employee";
 }

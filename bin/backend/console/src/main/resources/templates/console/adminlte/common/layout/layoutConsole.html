@@ -69,16 +69,16 @@
 	<!-- Site wrapper -->
 	<div class="wrapper">
 		<!-- Header -->
-		<th:block th:insert="console/adminlte/common/fragment/main-header :: header"></th:block>
+		<th:block th:insert="${@environment.getProperty('fragement.console.main.header')} :: header"></th:block>
 
 		<!-- Content Wrapper. Contains page content -->
-		<th:block th:insert="console/adminlte/common/fragment/content-wrapper :: wrapper"></th:block>
+		<th:block th:insert="${@environment.getProperty('fragement.console.content.wrapper')} :: wrapper"></th:block>
 
 		<!-- Footer -->
-		<th:block th:insert="console/adminlte/common/fragment/main-footer :: footer"></th:block>
+		<th:block th:insert="${@environment.getProperty('fragement.console.main.footer')} :: footer"></th:block>
 
 		<!-- Sidebar -->
-		<th:block th:insert="console/adminlte/common/fragment/control-sidebar :: sidebar"></th:block>
+		<th:block th:insert="${@environment.getProperty('fragement.console.control.sidebar')} :: sidebar"></th:block>
 	</div>
 	<!-- ./wrapper -->
 	<th:block layout:fragment="pace">
@@ -103,15 +103,16 @@
 	    });
 
 		function changeLocale(locale) {
-			var url = String(window.location.href.replace(
-					/&?locale=([^&]$|[^&]*)/i, ""));
-			if (window.location.href.indexOf('?') > -1) {
-				url = url + '&locale=' + locale;
-			} else {
-				url = url + '?locale=' + locale;
-			}
-
-			window.location.href = url;
+			var url = window.location.href.split('#')[0];
+		    url = String(url.replace(
+		        /&?locale=([^&]$|[^&]*)/i, ""));
+		    if (window.location.href.indexOf('?') > -1) {
+		        url = url + '&locale=' + locale;
+		    } else {
+		        url = url + '?locale=' + locale;
+		    }
+		
+		    window.location.href = url;
 		}
 		
 		function changeTab(tab){

@@ -15,7 +15,6 @@ import com.beanframework.configuration.ConfigurationConstants;
 public class Configuration extends GenericDomain {
 
 	private static final long serialVersionUID = 2129119893141952037L;
-	public static final String DOMAIN = "Configuration";
 	public static final String VALUE = "value";
 	
 	private String value;

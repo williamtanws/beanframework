@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="/backoffice/adminlte/common/layout/layoutBackoffice">
+	layout:decorate="${@environment.getProperty('layout.backoffice')}">
 <head>
 <title th:text="#{module.userpermission}"></title>
 </head>

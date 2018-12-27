@@ -30,8 +30,6 @@ import com.beanframework.cronjob.domain.CronjobEnum.Status;
 @Table(name = CronjobConstants.Table.CRONJOB)
 public class Cronjob extends GenericDomain {
 
-	public static final String DOMAIN = "cronjob";
-
 	/**
 	 * 
 	 */
