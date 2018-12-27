@@ -71,26 +71,26 @@
 	<!-- Site wrapper -->
 	<div class="wrapper">
 
-		<th:block th:insert="backoffice/adminlte/common/fragment/main-header :: header"></th:block>
+		<th:block th:insert="${@environment.getProperty('fragement.backoffice.main.header')} :: header"></th:block>
 
 		<!-- =============================================== -->
 
 		<!-- Left side column. contains the sidebar -->
-		<th:block th:insert="backoffice/adminlte/common/fragment/main-sidebar :: sidebar"></th:block>
+		<th:block th:insert="${@environment.getProperty('fragement.backoffice.main.sidebar')} :: sidebar"></th:block>
 
 		<!-- =============================================== -->
 
 		<!-- Content Wrapper. Contains page content -->
-		<th:block th:insert="backoffice/adminlte/common/fragment/content-wrapper :: wrapper"></th:block>
+		<th:block th:insert="${@environment.getProperty('fragement.backoffice.content.wrapper')} :: wrapper"></th:block>
 
 		<!-- =============================================== -->
 
 		<!-- Footer -->
-		<th:block th:insert="backoffice/adminlte/common/fragment/main-footer :: footer"></th:block>
+		<th:block th:insert="${@environment.getProperty('fragement.backoffice.main.footer')} :: footer"></th:block>
 
 		<!-- =============================================== -->
 
-		<th:block th:insert="backoffice/adminlte/common/fragment/control-sidebar :: sidebar"></th:block>
+		<th:block th:insert="${@environment.getProperty('fragement.backoffice.control.sidebar')} :: sidebar"></th:block>
 
 	</div>
 	<!-- ./wrapper -->
@@ -129,7 +129,8 @@
 	    });
 		
 		function changeLocale(locale) {
-		    var url = String(window.location.href.replace(
+			var url = window.location.href.split('#')[0];
+		    url = String(url.replace(
 		        /&?locale=([^&]$|[^&]*)/i, ""));
 		    if (window.location.href.indexOf('?') > -1) {
 		        url = url + '&locale=' + locale;

@@ -24,7 +24,6 @@ import com.beanframework.user.UserPermissionConstants;
 public class UserPermission extends GenericDomain {
 
 	private static final long serialVersionUID = 5923500001897510869L;
-	public static final String DOMAIN = "UserPermission";
 	public static final String USER_PERMISSION_FIELD = "userPermissionField";
 	public static final String SORT = "sort";
 

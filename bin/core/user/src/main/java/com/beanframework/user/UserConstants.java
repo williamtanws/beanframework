@@ -6,10 +6,6 @@ public final class UserConstants {
 		throw new AssertionError();
 	}
 
-	public interface Cache {
-		public static final String ALL_USERS = "allusers";
-	}
-
 	public interface Table {
 		public static final String USER = "user";
 		public static final String USER_FIELD = "userfield";

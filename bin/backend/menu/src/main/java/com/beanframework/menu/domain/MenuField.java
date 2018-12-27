@@ -26,7 +26,6 @@ public class MenuField extends GenericDomain {
 	 * 
 	 */
 	private static final long serialVersionUID = -7666190244677961254L;
-	public static final String DOMAIN = "MenuField";
 	public static final String MENU = "menu";
 	public static final String USER_RIGHT = "menu";
 	public static final String DYNAMIC_FIELD = "dynamicField";

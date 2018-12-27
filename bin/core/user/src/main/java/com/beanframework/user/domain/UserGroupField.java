@@ -24,7 +24,6 @@ public class UserGroupField extends GenericDomain {
 	 * 
 	 */
 	private static final long serialVersionUID = -115811375029158266L;
-	public static final String DOMAIN = "UserGroupField";
 	public static final String LANGUAGE = "language";
 	public static final String USER_GROUP = "userGroup";
 	public static final String DYNAMIC_FIELD = "dynamicField";

@@ -6,10 +6,6 @@ public final class UserPermissionConstants {
 		throw new AssertionError();
 	}
 
-	public interface Cache {
-		public static final String ALL_USER_PERMISSIONS = "alluserpermissions";
-	}
-
 	public interface Table {
 		public static final String USER_PERMISSION = "userpermission";
 		public static final String USER_PERMISSION_FIELD = "userpermissionfield";

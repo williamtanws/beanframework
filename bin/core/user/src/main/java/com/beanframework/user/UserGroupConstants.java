@@ -6,10 +6,6 @@ public final class UserGroupConstants {
 		throw new AssertionError();
 	}
 
-	public interface Cache {
-		public static final String ALL_USER_GROUPS = "allusergroups";
-	}
-
 	public interface Table {
 		public static final String USER_GROUP = "usergroup";
 		public static final String USER_GROUP_FIELD = "usergroupfield";

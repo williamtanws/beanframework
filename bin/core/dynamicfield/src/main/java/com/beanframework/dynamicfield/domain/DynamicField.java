@@ -28,7 +28,6 @@ public class DynamicField extends GenericDomain {
 	 * 
 	 */
 	private static final long serialVersionUID = 4733112810509713059L;
-	public static final String DOMAIN = "DynamicField";
 	public static final String FIELD_TYPE = "fieldType";
 	public static final String SORT = "sort";
 	public static final String REQUIRED = "required";

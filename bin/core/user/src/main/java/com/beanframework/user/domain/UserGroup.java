@@ -28,7 +28,6 @@ import com.beanframework.user.UserGroupConstants;
 public class UserGroup extends GenericDomain {
 
 	private static final long serialVersionUID = 8938920413700273352L;
-	public static final String DOMAIN = "UserGroup";
 	public static final String PARENT = "parent";
 	public static final String CHILDS = "childs";
 	public static final String USER_AUTHORITIES = "userAuthorities";
