@@ -1,4 +1,4 @@
-package com.beanframework.backoffice.domain;
+package com.beanframework.backoffice.data;
 
 public class CustomerSearch {
 

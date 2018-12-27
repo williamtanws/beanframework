@@ -26,7 +26,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebEmployeeConstants;
-import com.beanframework.backoffice.domain.EmployeeSearch;
+import com.beanframework.backoffice.data.EmployeeSearch;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;

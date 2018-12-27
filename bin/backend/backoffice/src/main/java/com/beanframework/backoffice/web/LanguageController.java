@@ -24,7 +24,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebLanguageConstants;
-import com.beanframework.backoffice.domain.LanguageSearch;
+import com.beanframework.backoffice.data.LanguageSearch;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;

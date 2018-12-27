@@ -1,6 +1,6 @@
-package com.beanframework.backoffice.domain;
+package com.beanframework.backoffice.data;
 
-public class LanguageSearch {
+public class UserPermissionSearch {
 	
 	public static final String ID_SEARCH = "idSearch";
 

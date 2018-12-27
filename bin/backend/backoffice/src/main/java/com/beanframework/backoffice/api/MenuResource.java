@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebMenuConstants;
-import com.beanframework.backoffice.domain.TreeJson;
-import com.beanframework.backoffice.domain.TreeJsonState;
+import com.beanframework.backoffice.data.TreeJson;
+import com.beanframework.backoffice.data.TreeJsonState;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
