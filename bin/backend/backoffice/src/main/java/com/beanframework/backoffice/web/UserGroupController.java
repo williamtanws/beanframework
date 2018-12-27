@@ -68,11 +68,11 @@ public class UserGroupController extends AbstractCommonController {
 		size = size <= 0 ? MODULE_USERGROUP_LIST_SIZE : size;
 
 		String propertiesStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.PROPERTIES));
-		String[] properties = StringUtils.isEmpty(propertiesStr) ? null
+		String[] properties = StringUtils.isBlank(propertiesStr) ? null
 				: propertiesStr.split(WebBackofficeConstants.Pagination.PROPERTIES_SPLIT);
 
 		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
-		Direction direction = StringUtils.isEmpty(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
+		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
 		UserGroupSearch usergroupSearch = (UserGroupSearch) model.asMap()
 				.get(WebUserGroupConstants.ModelAttribute.SEARCH);

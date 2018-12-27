@@ -123,7 +123,7 @@
 //		if (object == null) {
 //			return false;
 //		} else if (object instanceof String) {
-//			if (StringUtils.isEmpty(object.toString())) {
+//			if (StringUtils.isBlank(object.toString())) {
 //				return false;
 //			}
 //		}

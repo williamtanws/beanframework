@@ -27,7 +27,7 @@ public class ConfigurationValidateInterceptor implements ValidateInterceptor<Con
 		try {
 			if (model.getUuid() == null) {
 				// Save new
-				if (StringUtils.isEmpty(model.getId())) {
+				if (StringUtils.isBlank(model.getId())) {
 					throw new InterceptorException(
 							localMessageService.getMessage(ConfigurationConstants.Locale.ID_REQUIRED), this);
 				} else {

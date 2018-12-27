@@ -334,7 +334,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
+		String qlString = "select " + (StringUtils.isBlank(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
 		if (propertiesBuilder.length() > 0) {
 			qlString = qlString + " where " + propertiesBuilder.toString();
@@ -383,7 +383,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
+		String qlString = "select " + (StringUtils.isBlank(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
 		if (propertiesBuilder.length() > 0) {
 			qlString = qlString + " where " + propertiesBuilder.toString();
@@ -432,7 +432,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
+		String qlString = "select " + (StringUtils.isBlank(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
 		if (propertiesBuilder.length() > 0) {
 			qlString = qlString + " where " + propertiesBuilder.toString();
@@ -476,7 +476,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 				}
 			}
 
-			String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
+			String qlString = "select " + (StringUtils.isBlank(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
 			if (propertiesBuilder.length() > 0) {
 				qlString = qlString + " where " + propertiesBuilder.toString();
@@ -499,7 +499,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 	
 	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer maxResult, Class modelClass) {
-		String qlString = "select " + (StringUtils.isEmpty(data) ? "o" : data) + " from " + modelClass.getName() + " o";
+		String qlString = "select " + (StringUtils.isBlank(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
 		if (properties != null && properties.isEmpty() == false) {
 			qlString = qlString + " where " + sqlProperties(properties);

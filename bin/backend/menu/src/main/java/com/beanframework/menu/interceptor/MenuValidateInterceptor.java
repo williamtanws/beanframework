@@ -27,7 +27,7 @@ public class MenuValidateInterceptor implements ValidateInterceptor<Menu> {
 		try {
 			if (model.getUuid() == null) {
 				// Save new
-				if (StringUtils.isEmpty(model.getId())) {
+				if (StringUtils.isBlank(model.getId())) {
 					throw new InterceptorException(localMessageService.getMessage(MenuConstants.Locale.ID_REQUIRED), this);
 				} else {
 					Map<String, Object> properties = new HashMap<String, Object>();

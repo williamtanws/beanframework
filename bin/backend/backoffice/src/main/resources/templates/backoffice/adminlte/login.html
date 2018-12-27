@@ -40,6 +40,12 @@
 						<span th:utext="#{module.backoffice.login.error.sessionexpired}"></span>
 					</div>
 				</div>
+				<div th:if="${param.timeout}">
+					<div class="alert alert-danger">
+						<i class="icon fa fa-lock"></i>
+						<span th:utext="#{module.console.login.error.sessiontimeout}"></span>
+					</div>
+				</div>
 				<div th:if="${param.logout}">
 					<div class="alert alert-success">
 						<i class="icon fa fa-unlock"></i>

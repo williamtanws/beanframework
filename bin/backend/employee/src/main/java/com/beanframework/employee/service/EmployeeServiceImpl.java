@@ -129,7 +129,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public Employee authenticate(String id, String password) throws Exception {
 
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(password)) {
+		if (StringUtils.isBlank(id) || StringUtils.isBlank(password)) {
 			return null;
 		}
 

@@ -27,7 +27,7 @@ public class UserRightValidateInterceptor implements ValidateInterceptor<UserRig
 		try {
 			if (model.getUuid() == null) {
 				// Save new
-				if (StringUtils.isEmpty(model.getId())) {
+				if (StringUtils.isBlank(model.getId())) {
 					throw new InterceptorException(
 							localMessageService.getMessage(UserRightConstants.Locale.ID_REQUIRED), this);
 				} else {

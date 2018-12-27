@@ -6,11 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +25,6 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 	
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private EntityManagerFactory entityManagerFactory;
 
 	@Autowired
 	private QuartzManager quartzManager;
@@ -65,7 +57,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 	}
 	
 	private void initStartupJobIsFalseWithQueueJob() throws BusinessException {
-		List<Cronjob> jobList = cronjobService.findStartupJobIsFalseWithQueueJob();
+		List<Cronjob> jobList = cronjobService.findEntityStartupJobIsFalseWithQueueJob();
 
 		for (Cronjob cronjob : jobList) {
 			cronjob.setJobTrigger(CronjobEnum.JobTrigger.STOP);
@@ -73,53 +65,6 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 			cronjob.setResult(null);
 			
 			modelService.saveEntity(cronjob, Cronjob.class);
-		}
-	}
-
-	@Override
-	public void updateStatus(UUID uuid, CronjobEnum.Status status, CronjobEnum.Result result, String message,
-			Date lastStartExecutedDate, Date lastFinishExecutedDate) {
-
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		try {
-			entityTransaction.begin();
-
-			StringBuilder queryBuilder = new StringBuilder();
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			queryBuilder.append("update Cronjob c set c.status = :status");
-			parameters.put("status", status);
-			
-			queryBuilder.append(", result = :result");
-			parameters.put("result", result);
-			
-			queryBuilder.append(", message = :message");
-			parameters.put("message", message);
-			
-			if (lastStartExecutedDate != null) {
-				queryBuilder.append(", lastStartExecutedDate = :lastStartExecutedDate");
-				parameters.put("lastStartExecutedDate", lastStartExecutedDate);
-			}
-			if (lastFinishExecutedDate != null) {
-				queryBuilder.append(", lastFinishExecutedDate = :lastFinishExecutedDate");
-				parameters.put("lastFinishExecutedDate", lastFinishExecutedDate);
-			}
-			queryBuilder.append(" where c.uuid = :uuid");
-			parameters.put("uuid", uuid);
-
-			Query query = entityManager.createQuery(queryBuilder.toString());
-			for (Map.Entry<String, Object> entry : parameters.entrySet()) {
-				query.setParameter(entry.getKey(), entry.getValue());
-			}
-
-			query.executeUpdate();
-
-			entityTransaction.commit();
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-			entityTransaction.rollback();
-		} finally {
-			entityManager.close();
 		}
 	}
 
@@ -139,7 +84,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		updateJobAndSaveTrigger(updateCronjob);
 	}
 
-	private void updateJobAndSaveTrigger(Cronjob cronjob) {
+	private void updateJobAndSaveTrigger(Cronjob cronjob) throws Exception {
 		if (cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE) || cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.START)) {
 			try {
 				quartzManager.startOrUpdateJob(cronjob);
@@ -190,30 +135,19 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 				cronjob.setMessage(e.toString());
 			}
 		}
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Cronjob.UUID, cronjob.getUuid());
+		
+		Cronjob updateCronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+		updateCronjob.setStatus(cronjob.getStatus());
+		updateCronjob.setResult(cronjob.getResult());
+		updateCronjob.setMessage(cronjob.getMessage());
+		updateCronjob.setJobTrigger(cronjob.getJobTrigger());
+		updateCronjob.setLastStartExecutedDate(null);
+		updateCronjob.setLastFinishExecutedDate(null);
 
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		try {
-			entityTransaction.begin();
-			
-			Query query = entityManager.createQuery(
-					"update Cronjob c set c.status = :status, c.result = :result, c.message = :message, c.jobTrigger = :jobTrigger, c.lastStartExecutedDate = :lastStartExecutedDate, c.lastFinishExecutedDate = :lastFinishExecutedDate where c.uuid = :uuid");
-			query.setParameter("uuid", cronjob.getUuid());
-			query.setParameter("status", cronjob.getStatus());
-			query.setParameter("result", cronjob.getResult());
-			query.setParameter("message", cronjob.getMessage());
-			query.setParameter("jobTrigger", cronjob.getJobTrigger());
-			query.setParameter("lastStartExecutedDate", null);
-			query.setParameter("lastFinishExecutedDate", null);
-			query.executeUpdate();
-			
-			entityTransaction.commit();
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-			entityTransaction.rollback();
-		} finally {
-			entityManager.close();
-		}
+		modelService.saveEntity(updateCronjob, Cronjob.class);
 	}
 
 	@Override
@@ -242,5 +176,20 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Cronjob cronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
 
 		return cronjob;
+	}
+
+	@Override
+	public void stopAllCronjob() throws SchedulerException {
+		quartzManager.clearAllScheduler();
+	}
+
+	@Override
+	public void resumeAllCronjob() throws Exception {
+		List<Cronjob> jobList = cronjobService.findEntityStartupJobIsFalseWithQueueJob();
+
+		for (Cronjob cronjob : jobList) {
+			cronjob.setJobTrigger(CronjobEnum.JobTrigger.RESUME);
+			updateJobAndSaveTrigger(cronjob);
+		}
 	}
 }

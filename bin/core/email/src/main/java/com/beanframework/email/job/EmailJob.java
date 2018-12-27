@@ -127,7 +127,10 @@ public class EmailJob implements Job {
 						if (StringUtils.isNotEmpty(email.getBccRecipients())) {
 							bccRecipients = email.getBccRecipients().split(";");
 						}
-						File attachmentFolder = new File(EMAIL_ATTACHMENT_LOCATION+File.separator+email.getUuid());
+						
+						String workingDir = System.getProperty("user.dir");
+						
+						File attachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator+email.getUuid());
 						files = attachmentFolder.listFiles();
 						
 						sendEmail(toRecipients, ccRecipients, bccRecipients, email.getSubject(), email.getText(), email.getHtml(), files);
@@ -156,60 +159,6 @@ public class EmailJob implements Job {
 			throw new JobExecutionException(e.getMessage(), e);
 		}
 	}
-
-//	private List<Email> findEmailByStatus(Status status, int maxResults) {
-//		EntityManager entityManager = entityManagerFactory.createEntityManager();
-//		EntityTransaction entityTransaction = entityManager.getTransaction();
-//		try {
-//			entityTransaction.begin();
-//
-//			TypedQuery<Email> query = entityManager.createQuery(
-//					"select e from Email e where e.status = :status order by e.createdDate ASC", Email.class);
-//			query.setParameter("status", status);
-//			if (maxResults > 0) {
-//				query.setMaxResults(maxResults);
-//			}
-//
-//			List<Email> result = query.getResultList();
-//
-//			entityTransaction.commit();
-//			return result;
-//		} catch (Exception e) {
-//			logger.error(e.toString(), e);
-//			entityTransaction.rollback();
-//		} finally {
-//			entityManager.close();
-//		}
-//
-//		return null;
-//	}
-//
-//	private void updateEmail(UUID uuid, Status status, String exception) {
-//		EntityManager entityManager = entityManagerFactory.createEntityManager();
-//		EntityTransaction entityTransaction = entityManager.getTransaction();
-//		try {
-//			entityTransaction.begin();
-//
-//			Query query = entityManager.createQuery("Update Email set status = :status, exception = :exception where uuid = :uuid");
-//			query.setParameter("status", status);
-//			query.setParameter("uuid", uuid);
-//			if(status.equals(Status.FAILED)) {
-//				query.setParameter("exception", exception);
-//			}
-//			else {
-//				query.setParameter("exception", null);
-//			}
-//
-//			query.executeUpdate();
-//
-//			entityTransaction.commit();
-//		} catch (Exception e) {
-//			logger.error(e.toString(), e);
-//			entityTransaction.rollback();
-//		} finally {
-//			entityManager.close();
-//		}
-//	}
 
 	private void sendEmail(String[] to, String[] cc, String[] bcc, String subject, String text, String html,
 			File[] files) throws Exception {

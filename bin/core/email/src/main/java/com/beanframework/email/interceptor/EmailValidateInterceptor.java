@@ -17,8 +17,8 @@ public class EmailValidateInterceptor implements ValidateInterceptor<Email> {
 	@Override
 	public void onValidate(Email model) throws InterceptorException {
 		
-		if (StringUtils.isEmpty(model.getToRecipients()) && StringUtils.isEmpty(model.getCcRecipients())
-				&& StringUtils.isEmpty(model.getBccRecipients())) {
+		if (StringUtils.isBlank(model.getToRecipients()) && StringUtils.isBlank(model.getCcRecipients())
+				&& StringUtils.isBlank(model.getBccRecipients())) {
 			throw new InterceptorException("Please input recipient");
 		} else {
 			if (StringUtils.isNotEmpty(model.getToRecipients())) {

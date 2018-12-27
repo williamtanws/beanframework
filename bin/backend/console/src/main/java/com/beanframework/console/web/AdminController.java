@@ -53,11 +53,11 @@ public class AdminController extends AbstractCommonController {
 		size = size <= 0 ? MODULE_ADMIN_LIST_SIZE : size;
 
 		String propertiesStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.PROPERTIES));
-		String[] properties = StringUtils.isEmpty(propertiesStr) ? null
+		String[] properties = StringUtils.isBlank(propertiesStr) ? null
 				: propertiesStr.split(WebConsoleConstants.Pagination.PROPERTIES_SPLIT);
 
 		String directionStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.DIRECTION));
-		Direction direction = StringUtils.isEmpty(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
+		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
 		AdminSearch adminSearch = (AdminSearch) model.asMap().get(WebAdminConstants.ModelAttribute.SEARCH);
 

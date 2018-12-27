@@ -26,7 +26,7 @@ public class LanguageValidateInterceptor implements ValidateInterceptor<Language
 		try {
 			if (model.getUuid() == null) {
 				// Save new
-				if (StringUtils.isEmpty(model.getId())) {
+				if (StringUtils.isBlank(model.getId())) {
 					throw new InterceptorException(localMessageService.getMessage("module.language.id.required"));
 				} else {
 					Map<String, Object> properties = new HashMap<String, Object>();

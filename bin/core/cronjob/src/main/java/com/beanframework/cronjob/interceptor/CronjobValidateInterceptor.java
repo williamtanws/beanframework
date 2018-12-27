@@ -27,7 +27,7 @@ public class CronjobValidateInterceptor implements ValidateInterceptor<Cronjob> 
 		try {
 			if (model.getUuid() == null) {
 				// Save new
-				if (StringUtils.isEmpty(model.getId())) {
+				if (StringUtils.isBlank(model.getId())) {
 					throw new InterceptorException(localeMessageService.getMessage(CronjobConstants.Locale.ID_REQUIRED), this);
 				} else {
 					Map<String, Object> properties = new HashMap<String, Object>();
@@ -39,11 +39,11 @@ public class CronjobValidateInterceptor implements ValidateInterceptor<Cronjob> 
 					}
 				}
 				
-				if (StringUtils.isEmpty(model.getJobGroup())) {
+				if (StringUtils.isBlank(model.getJobGroup())) {
 					throw new InterceptorException(localeMessageService.getMessage(CronjobConstants.Locale.CRONJOB_GROUP_REQUIRED));
 				}
 
-				if (StringUtils.isEmpty(model.getJobName())) {
+				if (StringUtils.isBlank(model.getJobName())) {
 					throw new InterceptorException(localeMessageService.getMessage(CronjobConstants.Locale.CRONJOB_NAME_REQUIRED));
 				}
 				

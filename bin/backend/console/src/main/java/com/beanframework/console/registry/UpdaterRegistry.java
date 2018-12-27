@@ -23,13 +23,13 @@ public class UpdaterRegistry {
 
 	public void addUpdater(Updater updater) {
 
-		if (StringUtils.isEmpty(updater.getKey())) {
+		if (StringUtils.isBlank(updater.getKey())) {
 			throw new RuntimeException("Updater Key is missing");
 		}
-		if (StringUtils.isEmpty(updater.getName())) {
+		if (StringUtils.isBlank(updater.getName())) {
 			throw new RuntimeException("Updater Name is missing");
 		}
-		if (StringUtils.isEmpty(updater.getDescription())) {
+		if (StringUtils.isBlank(updater.getDescription())) {
 			throw new RuntimeException("Updater Description is missing");
 		}
 		
