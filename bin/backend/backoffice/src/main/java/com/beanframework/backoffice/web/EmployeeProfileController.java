@@ -79,7 +79,7 @@ public class EmployeeProfileController {
 		
 		String type = (String) requestParams.get("type");
 		
-		if(StringUtils.isEmpty(type) || (type.equals("original") == false && type.equals("thumbnail") == false)) {
+		if(StringUtils.isBlank(type) || (type.equals("original") == false && type.equals("thumbnail") == false)) {
 			type = "thumbnail";
 		}
 		

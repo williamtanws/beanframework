@@ -27,9 +27,9 @@ public class CustomerValidateInterceptor implements ValidateInterceptor<Customer
 		try {
 			if (model.getUuid() == null) {
 				// Save new
-				if (StringUtils.isEmpty(model.getId())) {
+				if (StringUtils.isBlank(model.getId())) {
 					throw new InterceptorException(localMessageService.getMessage(CustomerConstants.Locale.ID_REQUIRED), this);
-				} else if (StringUtils.isEmpty(model.getPassword())) {
+				} else if (StringUtils.isBlank(model.getPassword())) {
 					throw new InterceptorException(localMessageService.getMessage(CustomerConstants.Locale.PASSWORD_REQUIRED),
 							this);
 				} else {

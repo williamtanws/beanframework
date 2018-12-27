@@ -23,7 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Customer authenticate(String id, String password) throws Exception {
 
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(password)) {
+		if (StringUtils.isBlank(id) || StringUtils.isBlank(password)) {
 			return null;
 		}
 

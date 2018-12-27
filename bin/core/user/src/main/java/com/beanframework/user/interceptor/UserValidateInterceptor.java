@@ -27,9 +27,9 @@ public class UserValidateInterceptor implements ValidateInterceptor<User> {
 		try {
 			if (model.getUuid() == null) {
 				// Save new
-				if (StringUtils.isEmpty(model.getId())) {
+				if (StringUtils.isBlank(model.getId())) {
 					throw new InterceptorException(localMessageService.getMessage(UserConstants.Locale.ID_REQUIRED), this);
-				} else if (StringUtils.isEmpty(model.getPassword())) {
+				} else if (StringUtils.isBlank(model.getPassword())) {
 					throw new InterceptorException(localMessageService.getMessage(UserConstants.Locale.PASSWORD_REQUIRED),
 							this);
 				} else {

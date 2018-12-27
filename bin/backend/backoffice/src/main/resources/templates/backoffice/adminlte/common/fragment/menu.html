@@ -24,7 +24,7 @@
 			<a th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}">
 				<i th:classappend="${menu.icon}"></i>
 				<th:block th:each="menuField: ${menu.menuFields}">
-					<span th:text="${menuField.value}" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
+					<span th:text="${menuField.value != null and menuField.value != ''} ? ${menuField.value}:'['+${menu.id}+']'" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
 				</th:block>
 			</a>
 			<script th:inline="javascript">
@@ -35,7 +35,7 @@
 			<a href="#">
 				<i th:classappend="${menu.icon}"></i>
 				<th:block th:each="menuField: ${menu.menuFields}">
-					<span th:text="${menuField.value}" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
+					<span th:text="${menuField.value != null and menuField.value != ''} ? ${menuField.value}:'['+${menu.id}+']'" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
 				</th:block>
 				<span class="pull-right-container">
 					<i class="fa fa-angle-left pull-right"></i>
@@ -65,7 +65,7 @@
 			<a class="btn btn-app" th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}">
 				<i th:classappend="${menu.icon}"></i>
 				<th:block th:each="menuField: ${menu.menuFields}">
-					<span th:text="${menuField.value}" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
+					<span th:text="${menuField.value != null and menuField.value != ''} ? ${menuField.value}:'['+${menu.id}+']'" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
 				</th:block>
 			</a>
 		</th:block>

@@ -23,13 +23,13 @@ public class RemoverRegistry {
 
 	public void addRemover(Remover remover) {
 
-		if (StringUtils.isEmpty(remover.getKey())) {
+		if (StringUtils.isBlank(remover.getKey())) {
 			throw new RuntimeException("Remover Key is missing");
 		}
-		if (StringUtils.isEmpty(remover.getName())) {
+		if (StringUtils.isBlank(remover.getName())) {
 			throw new RuntimeException("Remover Name is missing");
 		}
-		if (StringUtils.isEmpty(remover.getDescription())) {
+		if (StringUtils.isBlank(remover.getDescription())) {
 			throw new RuntimeException("Remover Description is missing");
 		}
 		

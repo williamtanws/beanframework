@@ -96,7 +96,7 @@ public class MenuUpdate extends Updater {
 			menu.setSort(csv.getSort());
 			menu.setIcon(csv.getIcon());
 			menu.setPath(csv.getPath());
-			if (StringUtils.isEmpty(csv.getTarget())) {
+			if (StringUtils.isBlank(csv.getTarget())) {
 				menu.setTarget(MenuTargetTypeEnum.SELF);
 			} else {
 				menu.setTarget(MenuTargetTypeEnum.valueOf(csv.getTarget()));

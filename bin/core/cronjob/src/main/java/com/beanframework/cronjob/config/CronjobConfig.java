@@ -25,7 +25,7 @@ import com.beanframework.cronjob.converter.EntityCronjobConverter;
 import com.beanframework.cronjob.converter.EntityCronjobDataConverter;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
-import com.beanframework.cronjob.interceptor.CronjobDataPrepareInterceptor;
+import com.beanframework.cronjob.interceptor.CronjobDataInitialDefaultsInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobInitialDefaultsInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobLoadInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobPrepareInterceptor;
@@ -157,6 +157,20 @@ public class CronjobConfig {
 	}
 	
 	@Bean
+	public CronjobDataInitialDefaultsInterceptor cronjobDataInitialDefaultsInterceptor() {
+		return new CronjobDataInitialDefaultsInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping cronjobDataInitialDefaultsInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(cronjobDataInitialDefaultsInterceptor());
+		interceptorMapping.setTypeCode(CronjobData.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	@Bean
 	public CronjobValidateInterceptor cronjobValidateInterceptor() {
 		return new CronjobValidateInterceptor();
 	}
@@ -180,20 +194,6 @@ public class CronjobConfig {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(cronjobPrepareInterceptor());
 		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-	
-	@Bean
-	public CronjobDataPrepareInterceptor cronjobDataPrepareInterceptor() {
-		return new CronjobDataPrepareInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping cronjobDataPrepareInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobDataPrepareInterceptor());
-		interceptorMapping.setTypeCode(CronjobData.class.getSimpleName());
 
 		return interceptorMapping;
 	}

@@ -103,6 +103,10 @@ public class MenuResource {
 
 				String name = menuField.getValue();
 
+				if (StringUtils.isBlank(name)) {
+					name = "[" + menu.getId() + "]";
+				}
+				
 				if (menu.getEnabled() == false) {
 					name = "<span class=\"text-muted\">" + name + "</span>";
 				}
@@ -111,6 +115,6 @@ public class MenuResource {
 			}
 		}
 
-		return "[Unknown]";
+		return "[" + menu.getId() + "]";
 	}
 }

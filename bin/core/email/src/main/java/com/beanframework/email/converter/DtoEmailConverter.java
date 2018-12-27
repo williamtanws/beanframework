@@ -36,7 +36,6 @@ public class DtoEmailConverter implements DtoConverter<Email, Email> {
 		prototype.setCcRecipients(source.getCcRecipients());
 		prototype.setBccRecipients(source.getBccRecipients());
 		prototype.setSubject(source.getSubject());
-		prototype.setAttachments(source.getAttachments());
 		prototype.setText(source.getText());
 		prototype.setHtml(source.getHtml());
 		prototype.setStatus(source.getStatus());
@@ -47,7 +46,9 @@ public class DtoEmailConverter implements DtoConverter<Email, Email> {
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 		
-		File emailAttachmentFolder = new File(EMAIL_ATTACHMENT_LOCATION + File.separator + prototype.getUuid());
+		String workingDir = System.getProperty("user.dir");
+		
+		File emailAttachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + prototype.getUuid());
 		prototype.setAttachments(emailAttachmentFolder.listFiles());
 
 		return prototype;

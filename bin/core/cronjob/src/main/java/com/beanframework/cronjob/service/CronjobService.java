@@ -6,5 +6,5 @@ import com.beanframework.cronjob.domain.Cronjob;
 
 public interface CronjobService {
 
-	List<Cronjob> findStartupJobIsFalseWithQueueJob();
+	List<Cronjob> findEntityStartupJobIsFalseWithQueueJob();
 }

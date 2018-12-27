@@ -82,7 +82,7 @@ public interface WebPlatformConstants {
 			public static final String KEY = "cronjob";
 			public static final String NAME = "Cronjob";
 			public static final int SORT = 100;
-			public static final String DESCRIPTION = "Update Cronjob Data";
+			public static final String DESCRIPTION = "Update Cronjob Data. This would stop and resume all active cronjobs.";
 		}
 
 	}

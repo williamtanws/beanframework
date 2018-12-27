@@ -134,6 +134,8 @@
 					window.location.replace( baseUrl + tabUrl );
 					
 				    $('.nav-tabs a[href="' + tabUrl + '"]').tab('show');
+				    
+				    sessionStorage.removeItem("tabUrl");
 				}
 			}
 		}

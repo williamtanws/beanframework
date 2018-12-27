@@ -28,7 +28,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Admin authenticate(String id, String password) throws Exception {
 
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(password)) {
+		if (StringUtils.isBlank(id) || StringUtils.isBlank(password)) {
 			return null;
 		}
 
