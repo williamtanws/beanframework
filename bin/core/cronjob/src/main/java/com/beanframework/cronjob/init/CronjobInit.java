@@ -15,17 +15,16 @@ public class CronjobInit implements ApplicationListener<ApplicationReadyEvent> {
 	@Autowired
 	private CronjobManagerService cronjobManagerService;
 	
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(CronjobInit.class);
 
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 		try {
-			logger.info("Clear all cronjob scheduler instances.");
+			LOGGER.info("Clearing all cronjobs scheduler instances.");
 			cronjobManagerService.clearAllScheduler();
-			logger.info("Initialize cronjob based on job exists in database.");
 			cronjobManagerService.initCronJob();
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 

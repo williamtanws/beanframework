@@ -21,7 +21,7 @@ import com.beanframework.cronjob.domain.CronjobEnum;
 @Service
 public class CronjobManagerServiceImpl implements CronjobManagerService {
 
-	Logger logger = LoggerFactory.getLogger(CronjobManagerServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CronjobManagerServiceImpl.class);
 	
 	@Autowired
 	private ModelService modelService;
@@ -39,9 +39,10 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 	
 	@Override
 	public void initCronJob() throws BusinessException, Exception {
-
-		initStartupJobIsTrue();
+		LOGGER.info("Clearing existing cronjob from database");
 		initStartupJobIsFalseWithQueueJob();
+		LOGGER.info("Initializing startup cronjob from database");
+		initStartupJobIsTrue();
 	}
 	
 	private void initStartupJobIsTrue() throws Exception {
