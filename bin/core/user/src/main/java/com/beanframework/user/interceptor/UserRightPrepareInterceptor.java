@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.exception.InterceptorException;
@@ -21,6 +22,12 @@ public class UserRightPrepareInterceptor implements PrepareInterceptor<UserRight
 	@Override
 	public void onPrepare(UserRight model) throws InterceptorException {
 		generateUserRightField(model);
+		
+		for (int i = 0; i < model.getUserRightFields().size(); i++) {
+			if (StringUtils.isBlank(model.getUserRightFields().get(i).getValue())) {
+				model.getUserRightFields().get(i).setValue(null);
+			}
+		}
 	}
 	
 	private void generateUserRightField(UserRight model) throws InterceptorException {

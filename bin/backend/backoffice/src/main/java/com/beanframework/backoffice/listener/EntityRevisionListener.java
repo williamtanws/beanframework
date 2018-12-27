@@ -4,7 +4,7 @@ import org.hibernate.envers.RevisionListener;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.beanframework.backoffice.domain.RevisionsEntity;
+import com.beanframework.backoffice.data.RevisionsEntity;
 import com.beanframework.user.domain.User;
 
 public class EntityRevisionListener implements RevisionListener {

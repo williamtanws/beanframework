@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -41,6 +42,12 @@ public class UserGroupPrepareInterceptor implements PrepareInterceptor<UserGroup
 		while(userGroups.hasNext()) {
 			if(userGroups.next().getUuid().equals(model.getUuid())) {
 				userGroups.remove();
+			}
+		}
+		
+		for (int i = 0; i < model.getUserGroupFields().size(); i++) {
+			if (StringUtils.isBlank(model.getUserGroupFields().get(i).getValue())) {
+				model.getUserGroupFields().get(i).setValue(null);
 			}
 		}
 	}

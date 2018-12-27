@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.exception.InterceptorException;
@@ -21,6 +22,12 @@ public class CustomerPrepareInterceptor implements PrepareInterceptor<Customer> 
 	@Override
 	public void onPrepare(Customer model) throws InterceptorException {
 		generateCustomerField(model);
+		
+		for (int i = 0; i < model.getUserFields().size(); i++) {
+			if (StringUtils.isBlank(model.getUserFields().get(i).getValue())) {
+				model.getUserFields().get(i).setValue(null);
+			}
+		}
 	}
 	
 	private void generateCustomerField(Customer model) throws InterceptorException {

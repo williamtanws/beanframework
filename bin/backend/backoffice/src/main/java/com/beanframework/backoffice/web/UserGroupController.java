@@ -27,7 +27,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserGroupConstants;
-import com.beanframework.backoffice.domain.UserGroupSearch;
+import com.beanframework.backoffice.data.UserGroupSearch;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;

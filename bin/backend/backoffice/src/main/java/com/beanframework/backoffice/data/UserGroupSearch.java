@@ -1,6 +1,6 @@
-package com.beanframework.backoffice.domain;
+package com.beanframework.backoffice.data;
 
-public class UserRightSearch {
+public class UserGroupSearch {
 	
 	public static final String ID_SEARCH = "idSearch";
 

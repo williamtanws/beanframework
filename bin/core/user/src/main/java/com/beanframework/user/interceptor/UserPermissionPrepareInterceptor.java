@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.exception.InterceptorException;
@@ -21,6 +22,12 @@ public class UserPermissionPrepareInterceptor implements PrepareInterceptor<User
 	@Override
 	public void onPrepare(UserPermission model) throws InterceptorException {
 		generateUserPermissionField(model);
+		
+		for (int i = 0; i < model.getUserPermissionFields().size(); i++) {
+			if (StringUtils.isBlank(model.getUserPermissionFields().get(i).getValue())) {
+				model.getUserPermissionFields().get(i).setValue(null);
+			}
+		}
 	}
 	
 	private void generateUserPermissionField(UserPermission model) throws InterceptorException {

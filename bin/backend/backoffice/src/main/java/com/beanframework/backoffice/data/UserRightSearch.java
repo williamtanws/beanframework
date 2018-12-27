@@ -1,6 +1,6 @@
-package com.beanframework.backoffice.domain;
+package com.beanframework.backoffice.data;
 
-public class UserPermissionSearch {
+public class UserRightSearch {
 	
 	public static final String ID_SEARCH = "idSearch";
 
