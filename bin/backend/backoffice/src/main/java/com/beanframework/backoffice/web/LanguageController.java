@@ -1,6 +1,5 @@
 package com.beanframework.backoffice.web;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -124,10 +123,7 @@ public class LanguageController extends AbstractCommonController {
 
 		if (languageUpdate.getUuid() != null) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Language.UUID, languageUpdate.getUuid());
-
-			Language existingLanguage = languageFacade.findOneDtoByProperties(properties);
+			Language existingLanguage = languageFacade.findOneDtoByUuid(languageUpdate.getUuid());
 
 			if (existingLanguage != null) {
 				model.addAttribute(WebLanguageConstants.ModelAttribute.UPDATE, existingLanguage);
@@ -153,7 +149,7 @@ public class LanguageController extends AbstractCommonController {
 		} else {
 
 			try {
-				languageFacade.createDto(languageCreate);
+				languageCreate = languageFacade.createDto(languageCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -183,7 +179,7 @@ public class LanguageController extends AbstractCommonController {
 		} else {
 
 			try {
-				languageFacade.updateDto(languageUpdate);
+				languageUpdate = languageFacade.updateDto(languageUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

@@ -81,6 +81,12 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public Cronjob create() throws Exception {
 		return modelService.create(Cronjob.class);
 	}
+	
+
+	@Override
+	public Cronjob findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Cronjob.class);
+	}
 
 	@Override
 	public Cronjob findOneDtoByProperties(Map<String, Object> properties) throws Exception {
@@ -88,13 +94,13 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	}
 
 	@Override
-	public void createDto(Cronjob model) throws BusinessException {
-		modelService.saveDto(model, Cronjob.class);
+	public Cronjob createDto(Cronjob model) throws BusinessException {
+		return (Cronjob) modelService.saveDto(model, Cronjob.class);
 	}
 
 	@Override
-	public void updateDto(Cronjob model) throws BusinessException {
-		modelService.saveDto(model, Cronjob.class);
+	public Cronjob updateDto(Cronjob model) throws BusinessException {
+		return (Cronjob) modelService.saveDto(model, Cronjob.class);
 
 	}
 
@@ -142,4 +148,5 @@ public class CronjobFacadeImpl implements CronjobFacade {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
+
 }

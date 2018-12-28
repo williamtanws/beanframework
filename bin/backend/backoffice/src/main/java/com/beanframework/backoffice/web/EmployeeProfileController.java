@@ -66,7 +66,7 @@ public class EmployeeProfileController {
 	public String profile(@ModelAttribute(WebEmployeeConstants.ModelAttribute.PROFILE) Employee employeeProfile,
 			Model model, @RequestParam Map<String, Object> requestParams) {
 
-		employeeProfile = employeeFacade.getCurrentEmployee();
+		employeeProfile = employeeFacade.getCurrentUser();
 
 		model.addAttribute(WebEmployeeConstants.ModelAttribute.PROFILE, employeeProfile);
 
@@ -75,7 +75,7 @@ public class EmployeeProfileController {
 
 	@GetMapping(value = WebEmployeeConstants.Path.PROFILE_PICTURE)
 	public @ResponseBody byte[] getImage(@RequestParam Map<String, Object> requestParams) throws IOException {
-		Employee employee = employeeFacade.getCurrentEmployee();
+		Employee employee = employeeFacade.getCurrentUser();
 		
 		String type = (String) requestParams.get("type");
 		

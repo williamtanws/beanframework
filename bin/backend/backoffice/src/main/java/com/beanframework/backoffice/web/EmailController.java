@@ -1,6 +1,5 @@
 package com.beanframework.backoffice.web;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -128,10 +127,7 @@ public class EmailController extends AbstractCommonController {
 
 		if (emailUpdate.getUuid() != null) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Email.UUID, emailUpdate.getUuid());
-
-			Email existingEmail = emailFacade.findOneDtoByProperties(properties);
+			Email existingEmail = emailFacade.findOneDtoByUuid(emailUpdate.getUuid());
 
 			if (existingEmail != null) {
 				model.addAttribute(WebEmailConstants.ModelAttribute.UPDATE, existingEmail);
@@ -155,7 +151,7 @@ public class EmailController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				emailFacade.createDto(emailCreate);
+				emailCreate = emailFacade.createDto(emailCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -183,66 +179,7 @@ public class EmailController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				emailFacade.updateDto(emailUpdate);
-
-				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (BusinessException e) {
-				addErrorMessage(Email.class, e.getMessage(), bindingResult, redirectAttributes);
-			}
-		}
-
-		redirectAttributes.addAttribute(Email.UUID, emailUpdate.getUuid());
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, emailSearch);
-
-		RedirectView redirectView = new RedirectView();
-		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_EMAIL);
-		return redirectView;
-	}
-
-	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "createattachment")
-	public RedirectView createAttachment(
-			@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
-			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes,
-			@RequestParam("uploadAttachments") MultipartFile[] uploadAttachments) {
-
-		if (emailUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
-					"Update record needed existing UUID.");
-		} else {
-			try {
-				emailFacade.saveAttachment(emailUpdate, uploadAttachments);
-
-				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-			} catch (BusinessException e) {
-				addErrorMessage(Email.class, e.getMessage(), bindingResult, redirectAttributes);
-			}
-		}
-
-		redirectAttributes.addAttribute(Email.UUID, emailUpdate.getUuid());
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, emailSearch);
-
-		RedirectView redirectView = new RedirectView();
-		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_EMAIL);
-		return redirectView;
-	}
-
-	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "deleteattachment")
-	public RedirectView deleteAttachment(
-			@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
-			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes, @RequestParam("filename") String filename) {
-
-		if (emailUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
-					"Update record needed existing UUID.");
-		} else {
-			try {
-				emailFacade.deleteAttachment(emailUpdate.getUuid(), filename);
+				emailUpdate = emailFacade.updateDto(emailUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -281,5 +218,64 @@ public class EmailController extends AbstractCommonController {
 		redirectView.setUrl(PATH_EMAIL);
 		return redirectView;
 
+	}
+	
+	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "createattachment")
+	public RedirectView createAttachment(
+			@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
+			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
+			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+			RedirectAttributes redirectAttributes,
+			@RequestParam("uploadAttachments") MultipartFile[] uploadAttachments) {
+
+		if (emailUpdate.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+					"Update record needed existing UUID.");
+		} else {
+			try {
+				emailFacade.saveAttachment(emailUpdate, uploadAttachments);
+
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(Email.class, e.getMessage(), bindingResult, redirectAttributes);
+			}
+		}
+
+		redirectAttributes.addAttribute(Email.UUID, emailUpdate.getUuid());
+		setPaginationRedirectAttributes(redirectAttributes, requestParams, emailSearch);
+
+		RedirectView redirectView = new RedirectView();
+		redirectView.setContextRelative(true);
+		redirectView.setUrl(PATH_EMAIL);
+		return redirectView;
+	}
+	
+	@PostMapping(value = WebEmailConstants.Path.EMAIL, params = "deleteattachment")
+	public RedirectView deleteAttachment(
+			@ModelAttribute(WebEmailConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
+			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
+			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+			RedirectAttributes redirectAttributes, @RequestParam("filename") String filename) {
+
+		if (emailUpdate.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+					"Update record needed existing UUID.");
+		} else {
+			try {
+				emailFacade.deleteAttachment(emailUpdate.getUuid(), filename);
+
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(Email.class, e.getMessage(), bindingResult, redirectAttributes);
+			}
+		}
+
+		redirectAttributes.addAttribute(Email.UUID, emailUpdate.getUuid());
+		setPaginationRedirectAttributes(redirectAttributes, requestParams, emailSearch);
+
+		RedirectView redirectView = new RedirectView();
+		redirectView.setContextRelative(true);
+		redirectView.setUrl(PATH_EMAIL);
+		return redirectView;
 	}
 }

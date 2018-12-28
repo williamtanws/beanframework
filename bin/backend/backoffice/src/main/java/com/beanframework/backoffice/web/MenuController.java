@@ -66,11 +66,8 @@ public class MenuController extends AbstractCommonController {
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		if (menuUpdate.getUuid() != null) {
-
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Menu.UUID, menuUpdate.getUuid());
-
-			Menu existingMenu = menuFacade.findOneEntityByProperties(properties);
+			
+			Menu existingMenu = menuFacade.findOneDtoByUuid(menuUpdate.getUuid());
 			if (existingMenu != null) {
 
 				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
@@ -118,7 +115,7 @@ public class MenuController extends AbstractCommonController {
 			menuCreate.setUserGroups(userGroups);
 
 			try {
-				menuFacade.updateDto(menuCreate);
+				menuCreate = menuFacade.updateDto(menuCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -127,33 +124,6 @@ public class MenuController extends AbstractCommonController {
 		}
 
 		redirectAttributes.addAttribute(Menu.UUID, menuCreate.getUuid());
-
-		RedirectView redirectView = new RedirectView();
-		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_MENU);
-		return redirectView;
-	}
-
-	@PostMapping(value = WebMenuConstants.Path.MENU, params = "move")
-	public RedirectView move(Model model, @RequestParam Map<String, Object> requestParams,
-			final RedirectAttributes redirectAttributes) {
-
-		String fromUuid = (String) requestParams.get("fromUuid");
-		String toUuid = (String) requestParams.get("toUuid");
-		String toIndex = (String) requestParams.get("toIndex");
-
-		MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(), Menu.class.getName());
-
-		try {
-			menuFacade.changePosition(UUID.fromString(fromUuid),
-					StringUtils.isNotEmpty(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex));
-
-			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
-		} catch (BusinessException e) {
-			addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
-		}
-
-		redirectAttributes.addAttribute("menuSelectedUuid", fromUuid);
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -180,7 +150,7 @@ public class MenuController extends AbstractCommonController {
 			menuUpdate.setUserGroups(userGroups);
 
 			try {
-				menuFacade.updateDto(menuUpdate);
+				menuUpdate = menuFacade.updateDto(menuUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -215,5 +185,32 @@ public class MenuController extends AbstractCommonController {
 		redirectView.setUrl(PATH_MENU);
 		return redirectView;
 
+	}
+	
+	@PostMapping(value = WebMenuConstants.Path.MENU, params = "move")
+	public RedirectView move(Model model, @RequestParam Map<String, Object> requestParams,
+			final RedirectAttributes redirectAttributes) {
+
+		String fromUuid = (String) requestParams.get("fromUuid");
+		String toUuid = (String) requestParams.get("toUuid");
+		String toIndex = (String) requestParams.get("toIndex");
+
+		MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(), Menu.class.getName());
+
+		try {
+			menuFacade.changePosition(UUID.fromString(fromUuid),
+					StringUtils.isNotEmpty(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex));
+
+			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+		} catch (BusinessException e) {
+			addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
+		}
+
+		redirectAttributes.addAttribute("menuSelectedUuid", fromUuid);
+
+		RedirectView redirectView = new RedirectView();
+		redirectView.setContextRelative(true);
+		redirectView.setUrl(PATH_MENU);
+		return redirectView;
 	}
 }

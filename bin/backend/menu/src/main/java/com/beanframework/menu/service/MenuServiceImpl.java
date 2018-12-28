@@ -137,8 +137,6 @@ public class MenuServiceImpl implements MenuService {
 
 		menuTree = modelService.getDto(menuTree, Menu.class);
 
-		cacheManager.getCache(Menu.class.getName()).put("MenuTree", menuTree);
-
 		return menuTree;
 	}
 

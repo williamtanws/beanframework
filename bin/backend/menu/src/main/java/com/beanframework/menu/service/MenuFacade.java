@@ -21,16 +21,16 @@ public interface MenuFacade {
 	Menu create() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception;
+	Menu findOneDtoByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Menu findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
-	void createDto(Menu model) throws BusinessException;
+	Menu createDto(Menu model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
-	void updateDto(Menu model) throws BusinessException;
+	Menu updateDto(Menu model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
@@ -42,5 +42,4 @@ public interface MenuFacade {
 	List<Menu> findDtoMenuTree() throws BusinessException;
 
 	List<Menu> findDtoMenuTreeByCurrentUser() throws BusinessException;
-
 }

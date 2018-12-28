@@ -13,7 +13,7 @@ import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 
 public interface CronjobFacade {
-	
+
 	public static interface PreAuthorizeEnum {
 		public static final String READ = "hasAuthority('cronjob_read')";
 		public static final String CREATE = "hasAuthority('cronjob_create')";
@@ -33,13 +33,16 @@ public interface CronjobFacade {
 	Cronjob create() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
+	Cronjob findOneDtoByUuid(UUID uuid) throws Exception;
+
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	Cronjob findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
-	void createDto(Cronjob cronjobCreate) throws BusinessException;
+	Cronjob createDto(Cronjob cronjobCreate) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
-	void updateDto(Cronjob cronjobUpdate) throws BusinessException;
+	Cronjob updateDto(Cronjob cronjobUpdate) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;

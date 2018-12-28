@@ -28,13 +28,16 @@ public interface UserGroupFacade {
 	UserGroup create() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
+	UserGroup findOneDtoByUuid(UUID uuid) throws Exception;
+
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	UserGroup findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
-	void createDto(UserGroup model) throws BusinessException;
+	UserGroup createDto(UserGroup model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
-	void updateDto(UserGroup model) throws BusinessException;
+	UserGroup updateDto(UserGroup model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;

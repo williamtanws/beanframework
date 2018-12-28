@@ -33,6 +33,12 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public UserRight create() throws Exception {
 		return modelService.create(UserRight.class);
 	}
+	
+
+	@Override
+	public UserRight findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, UserRight.class);
+	}
 
 	@Override
 	public UserRight findOneDtoByProperties(Map<String, Object> properties) throws Exception {
@@ -40,13 +46,13 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	}
 
 	@Override
-	public void createDto(UserRight model) throws BusinessException {
-		modelService.saveDto(model, UserRight.class);
+	public UserRight createDto(UserRight model) throws BusinessException {
+		return (UserRight) modelService.saveDto(model, UserRight.class);
 	}
 
 	@Override
-	public void updateDto(UserRight model) throws BusinessException {
-		modelService.saveDto(model, UserRight.class);
+	public UserRight updateDto(UserRight model) throws BusinessException {
+		return (UserRight) modelService.saveDto(model, UserRight.class);
 	}
 
 	@Override
@@ -58,4 +64,5 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public List<UserRight> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
 		return modelService.findDtoBySorts(sorts, UserRight.class);
 	}
+
 }

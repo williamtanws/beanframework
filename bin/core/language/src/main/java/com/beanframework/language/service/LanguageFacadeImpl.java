@@ -28,6 +28,11 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public Language create() throws Exception {
 		return modelService.create(Language.class);
 	}
+	
+	@Override
+	public Language findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Language.class);
+	}
 
 	@Override
 	public Language findOneDtoByProperties(Map<String, Object> properties) throws Exception {
@@ -35,17 +40,18 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	}
 
 	@Override
-	public void createDto(Language model) throws BusinessException {
-		modelService.saveDto(model, Language.class);
+	public Language createDto(Language model) throws BusinessException {
+		return (Language) modelService.saveDto(model, Language.class);
 	}
 
 	@Override
-	public void updateDto(Language model) throws BusinessException {
-		modelService.saveDto(model, Language.class);
+	public Language updateDto(Language model) throws BusinessException {
+		return (Language) modelService.saveDto(model, Language.class);
 	}
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		modelService.delete(uuid, Language.class);
 	}
+
 }

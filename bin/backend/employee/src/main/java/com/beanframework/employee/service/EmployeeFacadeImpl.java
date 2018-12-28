@@ -70,7 +70,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public Employee updatePrincipal(Employee employee) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Employee employeePrincipal = (Employee) auth.getPrincipal();
-		employeePrincipal = dtoEmployeePrincipal(employee);
+		employeePrincipal = findDtoPrincipal(employee);
 
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal,
 				employeePrincipal.getPassword(), employeePrincipal.getAuthorities());
@@ -79,7 +79,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		return employeePrincipal;
 	}
 	
-	private Employee dtoEmployeePrincipal(Employee source) {
+	private Employee findDtoPrincipal(Employee source) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Employee employeePrincipal = (Employee) auth.getPrincipal();
@@ -136,7 +136,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	}
 
 	@Override
-	public Employee getCurrentEmployee() {
+	public Employee getCurrentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (auth != null && auth.getPrincipal() instanceof Employee) {
@@ -149,8 +149,8 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	}
 
 	@Override
-	public Employee authenticate(String id, String password) throws Exception {
-		Employee employee = employeeService.authenticate(id, password);
+	public Employee findDtoAuthenticate(String id, String password) throws Exception {
+		Employee employee = employeeService.findDtoAuthenticate(id, password);
 
 		if (employee == null) {
 			throw new BadCredentialsException("Bad Credentials");
@@ -170,7 +170,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		if (employee.getCredentialsNonExpired() == false) {
 			throw new CredentialsExpiredException("Passwrd Expired");
 		}
-		return modelService.getDto(employee, Employee.class);
+		return employee;
 	}
 
 	@Override
@@ -187,6 +187,12 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public Page<Employee> findPage(Specification<Employee> specification, PageRequest pageRequest) throws Exception {
 		return modelService.findDtoPage(specification, pageRequest, Employee.class);
 	}
+	
+
+	@Override
+	public Employee findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Employee.class);
+	}
 
 	@Override
 	public Employee findOneDtoByProperties(Map<String, Object> properties) throws Exception {
@@ -199,17 +205,18 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	}
 
 	@Override
-	public void createDto(Employee model) throws BusinessException {
-		modelService.saveDto(model, Employee.class);
+	public Employee createDto(Employee model) throws BusinessException {
+		return (Employee) modelService.saveDto(model, Employee.class);
 	}
 
 	@Override
-	public void updateDto(Employee model) throws BusinessException {
-		modelService.saveDto(model, Employee.class);
+	public Employee updateDto(Employee model) throws BusinessException {
+		return (Employee) modelService.saveDto(model, Employee.class);
 	}
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		modelService.delete(uuid, Employee.class);
 	}
+
 }

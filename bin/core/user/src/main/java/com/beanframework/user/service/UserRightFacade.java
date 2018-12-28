@@ -28,17 +28,19 @@ public interface UserRightFacade {
 	UserRight create() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	UserRight findOneDtoByProperties(Map<String, Object> properties) throws Exception;
+	UserRight findOneDtoByUuid(UUID uuid) throws Exception;
 
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	UserRight findOneDtoByProperties(Map<String, Object> properties) throws Exception;
+	
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
-	void createDto(UserRight model) throws BusinessException;
+	UserRight createDto(UserRight model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
-	void updateDto(UserRight model) throws BusinessException;
+	UserRight updateDto(UserRight model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
 	List<UserRight> findDtoBySorts(Map<String, Direction> sorts) throws Exception;
-
 }

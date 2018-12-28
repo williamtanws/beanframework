@@ -132,9 +132,8 @@ public class CustomerController extends AbstractCommonController {
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (customerUpdate.getUuid() != null) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Customer.UUID, customerUpdate.getUuid());
-			Customer existingCustomer = customerFacade.findOneDtoByProperties(properties);
+
+			Customer existingCustomer = customerFacade.findOneDtoByUuid(customerUpdate.getUuid());
 
 			if (existingCustomer != null) {
 
@@ -183,7 +182,7 @@ public class CustomerController extends AbstractCommonController {
 			customerCreate.setUserGroups(userGroups);
 
 			try {
-				customerFacade.createDto(customerCreate);
+				customerCreate = customerFacade.createDto(customerCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -221,7 +220,7 @@ public class CustomerController extends AbstractCommonController {
 			customerUpdate.setUserGroups(userGroups);
 
 			try {
-				customerFacade.updateDto(customerUpdate);
+				customerUpdate = customerFacade.updateDto(customerUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

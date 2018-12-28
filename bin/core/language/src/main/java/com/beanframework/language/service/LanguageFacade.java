@@ -26,14 +26,18 @@ public interface LanguageFacade {
 	public Language create() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
+	public Language findOneDtoByUuid(UUID uuid) throws Exception;
+
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	public Language findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
-	public void createDto(Language model) throws BusinessException;
+	public Language createDto(Language model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
-	public void updateDto(Language model) throws BusinessException;
+	public Language updateDto(Language model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	public void delete(UUID uuid) throws BusinessException;
+
 }

@@ -39,7 +39,7 @@ public class ConsoleAuthProvider implements AuthenticationProvider {
 
 		Admin admin;
 		try {
-			admin = adminFacade.authenticate(id, password);
+			admin = adminFacade.findDtoAuthenticate(id, password);
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException(localeMessageService.getMessage(WebConsoleConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		} catch (DisabledException e) {

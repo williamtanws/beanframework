@@ -26,7 +26,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	private CustomerService customerService;
 
 	@Override
-	public Customer getCurrentCustomer() {
+	public Customer getCurrentUser() {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -39,13 +39,13 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	}
 
 	@Override
-	public Customer authenticate(String id, String password) throws Exception {
-		Customer customer = customerService.authenticate(id, password);
+	public Customer findDtoAuthenticate(String id, String password) throws Exception {
+		Customer customer = customerService.findDtoAuthenticate(id, password);
 
 		if (customer == null) {
 			throw new BadCredentialsException("Bad Credentials");
 		}
-		return modelService.getDto(customer, Customer.class);
+		return customer;
 	}
 
 	@Override
@@ -57,6 +57,12 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public Customer create() throws Exception {
 		return modelService.create(Customer.class);
 	}
+	
+
+	@Override
+	public Customer findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Customer.class);
+	}
 
 	@Override
 	public Customer findOneDtoByProperties(Map<String, Object> properties) throws Exception {
@@ -64,17 +70,18 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	}
 
 	@Override
-	public void createDto(Customer model) throws BusinessException {
-		modelService.saveDto(model, Customer.class);
+	public Customer createDto(Customer model) throws BusinessException {
+		return (Customer) modelService.saveDto(model, Customer.class);
 	}
 
 	@Override
-	public void updateDto(Customer model) throws BusinessException {
-		modelService.saveDto(model, Customer.class);
+	public Customer updateDto(Customer model) throws BusinessException {
+		return (Customer) modelService.saveDto(model, Customer.class);
 	}
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		modelService.delete(uuid, Customer.class);
 	}
+
 }

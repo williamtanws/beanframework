@@ -31,15 +31,19 @@ public interface EmailFacade {
 	Email create() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	Email findOneDtoByProperties(Map<String, Object> properties) throws Exception;
+	Email findOneDtoByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
-	void createDto(Email emailCreate) throws BusinessException;
+	Email createDto(Email emailCreate) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
-	void updateDto(Email emailUpdate) throws BusinessException;
+	Email updateDto(Email emailUpdate) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
+
+	Email findOneDtoByProperties(Map<String, Object> properties) throws Exception;
+
+	
  
 }

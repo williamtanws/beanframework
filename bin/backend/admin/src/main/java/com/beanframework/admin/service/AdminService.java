@@ -4,6 +4,6 @@ import com.beanframework.admin.domain.Admin;
 
 public interface AdminService {
 
-	Admin authenticate(String id, String password) throws Exception;
+	Admin findDtoAuthenticate(String id, String password) throws Exception;
 
 }

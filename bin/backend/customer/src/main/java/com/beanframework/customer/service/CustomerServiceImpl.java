@@ -21,7 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
 	private ModelService modelService;
 
 	@Override
-	public Customer authenticate(String id, String password) throws Exception {
+	public Customer findDtoAuthenticate(String id, String password) throws Exception {
 
 		if (StringUtils.isBlank(id) || StringUtils.isBlank(password)) {
 			return null;
@@ -54,6 +54,6 @@ public class CustomerServiceImpl implements CustomerService {
 			}
 		}
 
-		return customer;
+		return modelService.getDto(customer, Customer.class);
 	}
 }

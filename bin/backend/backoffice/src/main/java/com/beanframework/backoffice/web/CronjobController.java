@@ -3,7 +3,6 @@ package com.beanframework.backoffice.web;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -134,10 +133,7 @@ public class CronjobController extends AbstractCommonController {
 
 		if (cronjobUpdate.getUuid() != null) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.UUID, cronjobUpdate.getUuid());
-
-			Cronjob existingCronjob = cronjobFacade.findOneDtoByProperties(properties);
+			Cronjob existingCronjob = cronjobFacade.findOneDtoByUuid(cronjobUpdate.getUuid());
 
 			if (existingCronjob != null) {
 				model.addAttribute(WebCronjobConstants.ModelAttribute.UPDATE, existingCronjob);
@@ -161,7 +157,7 @@ public class CronjobController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				cronjobFacade.createDto(cronjobCreate);
+				cronjobCreate = cronjobFacade.createDto(cronjobCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -190,7 +186,7 @@ public class CronjobController extends AbstractCommonController {
 		} else {
 
 			try {
-				cronjobFacade.updateDto(cronjobUpdate);
+				cronjobUpdate = cronjobFacade.updateDto(cronjobUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -205,6 +201,30 @@ public class CronjobController extends AbstractCommonController {
 		redirectView.setContextRelative(true);
 		redirectView.setUrl(PATH_CRONJOB);
 		return redirectView;
+	}
+	
+	@PostMapping(value = WebCronjobConstants.Path.CRONJOB, params = "delete")
+	public RedirectView delete(@ModelAttribute(WebCronjobConstants.ModelAttribute.SEARCH) CronjobSearch cronjobSearch,
+			@ModelAttribute(WebCronjobConstants.ModelAttribute.UPDATE) Cronjob cronjobUpdate, Model model,
+			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+			RedirectAttributes redirectAttributes) {
+
+		try {
+			cronjobManagerService.deleteJobByUuid(cronjobUpdate.getUuid());
+			cronjobFacade.delete(cronjobUpdate.getUuid());
+			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+		} catch (BusinessException e) {
+			addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
+			redirectAttributes.addFlashAttribute(WebCronjobConstants.ModelAttribute.UPDATE, cronjobUpdate);
+		}
+
+		setPaginationRedirectAttributes(redirectAttributes, requestParams, cronjobSearch);
+
+		RedirectView redirectView = new RedirectView();
+		redirectView.setContextRelative(true);
+		redirectView.setUrl(PATH_CRONJOB);
+		return redirectView;
+
 	}
 
 	@PostMapping(value = WebCronjobConstants.Path.CRONJOB, params = "trigger")
@@ -309,29 +329,5 @@ public class CronjobController extends AbstractCommonController {
 		redirectView.setContextRelative(true);
 		redirectView.setUrl(PATH_CRONJOB);
 		return redirectView;
-	}
-
-	@PostMapping(value = WebCronjobConstants.Path.CRONJOB, params = "delete")
-	public RedirectView delete(@ModelAttribute(WebCronjobConstants.ModelAttribute.SEARCH) CronjobSearch cronjobSearch,
-			@ModelAttribute(WebCronjobConstants.ModelAttribute.UPDATE) Cronjob cronjobUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
-
-		try {
-			cronjobManagerService.deleteJobByUuid(cronjobUpdate.getUuid());
-			cronjobFacade.delete(cronjobUpdate.getUuid());
-			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
-		} catch (BusinessException e) {
-			addErrorMessage(Cronjob.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(WebCronjobConstants.ModelAttribute.UPDATE, cronjobUpdate);
-		}
-
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, cronjobSearch);
-
-		RedirectView redirectView = new RedirectView();
-		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_CRONJOB);
-		return redirectView;
-
 	}
 }
