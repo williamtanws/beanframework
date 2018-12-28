@@ -23,6 +23,8 @@ public interface ModelService {
 	<T> T create(Class modelClass) throws Exception;
 
 	<T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception;
+	
+	<T> T findOneDtoByUuid(UUID uuid, Class modelClass) throws Exception;
 
 	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
@@ -53,9 +55,9 @@ public interface ModelService {
 
 	void refresh(Object model);
 
-	void saveEntity(Object model, Class modelClass) throws BusinessException;
+	Object saveEntity(Object model, Class modelClass) throws BusinessException;
 
-	void saveDto(Object model, Class modelClass) throws BusinessException;
+	Object saveDto(Object model, Class modelClass) throws BusinessException;
 
 	void saveAll() throws BusinessException;
 

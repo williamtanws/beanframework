@@ -23,9 +23,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.domain.AdminSpecification;
+import com.beanframework.admin.service.AdminFacade;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.console.WebAdminConstants;
 import com.beanframework.console.WebConsoleConstants;
@@ -35,7 +35,7 @@ import com.beanframework.console.data.AdminSearch;
 public class AdminController extends AbstractCommonController {
 
 	@Autowired
-	private ModelService modelService;
+	private AdminFacade adminFacade;
 
 	@Value(WebAdminConstants.Path.ADMIN)
 	private String PATH_ADMIN;
@@ -70,8 +70,8 @@ public class AdminController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Admin> pagination = modelService.findDtoPage(AdminSpecification.findByCriteria(admin),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties), Admin.class);
+		Page<Admin> pagination = adminFacade.findDtoPage(AdminSpecification.findByCriteria(admin),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
@@ -101,12 +101,12 @@ public class AdminController extends AbstractCommonController {
 
 	@ModelAttribute(WebAdminConstants.ModelAttribute.CREATE)
 	public Admin populateAdminCreate(HttpServletRequest request) throws Exception {
-		return modelService.create(Admin.class);
+		return adminFacade.create();
 	}
 
 	@ModelAttribute(WebAdminConstants.ModelAttribute.UPDATE)
 	public Admin populateAdminForm(HttpServletRequest request) throws Exception {
-		return modelService.create(Admin.class);
+		return adminFacade.create();
 	}
 
 	@ModelAttribute(WebAdminConstants.ModelAttribute.SEARCH)
@@ -122,7 +122,7 @@ public class AdminController extends AbstractCommonController {
 		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (adminUpdate.getUuid() != null) {
-			Admin existingAdmin = modelService.findOneEntityByUuid(adminUpdate.getUuid(), Admin.class);
+			Admin existingAdmin = adminFacade.findOneDtoByUuid(adminUpdate.getUuid());
 
 			if (existingAdmin != null) {
 				model.addAttribute(WebAdminConstants.ModelAttribute.UPDATE, existingAdmin);
@@ -146,7 +146,7 @@ public class AdminController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				modelService.saveDto(adminCreate, Admin.class);
+				adminCreate = adminFacade.createDto(adminCreate);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -174,7 +174,7 @@ public class AdminController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.saveDto(adminUpdate, Admin.class);
+				adminUpdate = adminFacade.saveDto(adminUpdate);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -198,7 +198,7 @@ public class AdminController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.delete(adminUpdate.getUuid(), Admin.class);
+			adminFacade.delete(adminUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

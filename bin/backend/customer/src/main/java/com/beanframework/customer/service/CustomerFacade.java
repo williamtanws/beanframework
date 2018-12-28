@@ -20,9 +20,9 @@ public interface CustomerFacade {
 		public static final String DELETE = "hasAuthority('customer_delete')";
 	}
 
-	Customer getCurrentCustomer();
+	Customer getCurrentUser();
 
-	Customer authenticate(String id, String password) throws Exception;
+	Customer findDtoAuthenticate(String id, String password) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Page<Customer> findPage(Specification<Customer> findByCriteria, PageRequest of) throws Exception;
@@ -30,14 +30,19 @@ public interface CustomerFacade {
 	Customer create() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
+	Customer findOneDtoByUuid(UUID uuid) throws Exception;
+
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	Customer findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
-	void createDto(Customer customerCreate) throws BusinessException;
+	Customer createDto(Customer customerCreate) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
-	void updateDto(Customer customerUpdate) throws BusinessException;
+	Customer updateDto(Customer customerUpdate) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
+
+
 }

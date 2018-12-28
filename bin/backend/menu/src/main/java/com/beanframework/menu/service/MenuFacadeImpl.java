@@ -30,8 +30,8 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 
 	@Override
-	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Menu.class);
+	public Menu findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Menu.class);
 	}
 
 	@Override
@@ -40,13 +40,13 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 
 	@Override
-	public void createDto(Menu model) throws BusinessException {
-		modelService.saveDto(model, Menu.class);
+	public Menu createDto(Menu model) throws BusinessException {
+		return (Menu) modelService.saveDto(model, Menu.class);
 	}
 
 	@Override
-	public void updateDto(Menu model) throws BusinessException {
-		modelService.saveDto(model, Menu.class);
+	public Menu updateDto(Menu model) throws BusinessException {
+		return (Menu) modelService.saveDto(model, Menu.class);
 	}
 
 	@Override

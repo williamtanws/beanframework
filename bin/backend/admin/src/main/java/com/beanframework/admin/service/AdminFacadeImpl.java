@@ -1,6 +1,11 @@
 package com.beanframework.admin.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -11,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 
 @Component
@@ -23,7 +29,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	private AdminService adminService;
 
 	@Override
-	public Admin getCurrentAdmin() {
+	public Admin getCurrentUser() {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -36,8 +42,8 @@ public class AdminFacadeImpl implements AdminFacade {
 	}
 
 	@Override
-	public Admin authenticate(String id, String password) throws Exception {
-		Admin admin = adminService.authenticate(id, password);
+	public Admin findDtoAuthenticate(String id, String password) throws Exception {
+		Admin admin = adminService.findDtoAuthenticate(id, password);
 
 		if (admin == null) {
 			throw new BadCredentialsException("Bad Credentials");
@@ -57,6 +63,37 @@ public class AdminFacadeImpl implements AdminFacade {
 		if (admin.getCredentialsNonExpired() == false) {
 			throw new CredentialsExpiredException("Password Expired");
 		}
-		return modelService.getDto(admin, Admin.class);
+		return admin;
+	}
+
+	@Override
+	public Page<Admin> findDtoPage(Specification<Admin> findByCriteria, PageRequest pageable) throws Exception {
+		return modelService.findDtoPage(findByCriteria, pageable, Admin.class);
+	}
+
+	@Override
+	public Admin create() throws Exception {
+		return modelService.create(Admin.class);
+	}
+
+	@Override
+	public Admin findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Admin.class);
+	}
+
+	@Override
+	public Admin createDto(Admin model) throws BusinessException {
+		return (Admin) modelService.saveDto(model, Admin.class);
+	}
+
+	@Override
+	public Admin saveDto(Admin model) throws BusinessException {
+		return (Admin) modelService.saveDto(model, Admin.class);
+
+	}
+
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.delete(uuid, Admin.class);
 	}
 }

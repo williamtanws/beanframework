@@ -127,7 +127,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public Employee authenticate(String id, String password) throws Exception {
+	public Employee findDtoAuthenticate(String id, String password) throws Exception {
 
 		if (StringUtils.isBlank(id) || StringUtils.isBlank(password)) {
 			return null;
@@ -149,7 +149,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		employee.setAuthorities(getAuthorities(employee.getUserGroups(), new HashSet<String>()));
 
-		return employee;
+		return modelService.getDto(employee, Employee.class);
 	}
 
 	//processedUserGroupUuids to prevent infinity loop

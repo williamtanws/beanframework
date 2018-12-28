@@ -30,25 +30,25 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public UserGroup create() throws Exception {
 		return modelService.create(UserGroup.class);
 	}
+	
+	@Override
+	public UserGroup findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, UserGroup.class);
+	}
 
 	@Override
 	public UserGroup findOneDtoByProperties(Map<String, Object> properties) throws Exception {
-		UserGroup userGroup = modelService.findOneEntityByProperties(properties, UserGroup.class);
-		return modelService.getDto(userGroup, UserGroup.class);
+		return modelService.findOneDtoByProperties(properties, UserGroup.class);
 	}
 
 	@Override
-	public void createDto(UserGroup model) throws BusinessException {
-		save(model);
+	public UserGroup createDto(UserGroup model) throws BusinessException {
+		return (UserGroup) modelService.saveDto(model, UserGroup.class);
 	}
 
 	@Override
-	public void updateDto(UserGroup model) throws BusinessException {
-		save(model);
-	}
-
-	private void save(UserGroup model) throws BusinessException {
-		modelService.saveDto(model, UserGroup.class);
+	public UserGroup updateDto(UserGroup model) throws BusinessException {
+		return (UserGroup) modelService.saveDto(model, UserGroup.class);
 	}
 
 	@Override
@@ -60,4 +60,5 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public List<UserGroup> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
 		return modelService.findDtoBySorts(sorts, UserGroup.class);
 	}
+
 }

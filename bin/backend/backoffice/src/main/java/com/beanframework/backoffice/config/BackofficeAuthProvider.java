@@ -50,7 +50,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 
 		Employee employee;
 		try {
-			employee = employeeFacade.authenticate(id, password);
+			employee = employeeFacade.findDtoAuthenticate(id, password);
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException(localeMessageService.getMessage(WebBackofficeConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		} catch (DisabledException e) {

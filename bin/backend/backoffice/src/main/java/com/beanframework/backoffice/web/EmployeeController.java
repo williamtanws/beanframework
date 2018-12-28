@@ -131,9 +131,8 @@ public class EmployeeController extends AbstractCommonController {
 		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
 
 		if (employeeUpdate.getUuid() != null) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Employee.UUID, employeeUpdate.getUuid());
-			Employee existingEmployee = employeeFacade.findOneDtoByProperties(properties);
+
+			Employee existingEmployee = employeeFacade.findOneDtoByUuid(employeeUpdate.getUuid());
 
 			if (existingEmployee != null) {
 
@@ -182,7 +181,7 @@ public class EmployeeController extends AbstractCommonController {
 			employeeCreate.setUserGroups(userGroups);
 
 			try {
-				employeeFacade.createDto(employeeCreate);
+				employeeCreate = employeeFacade.createDto(employeeCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -220,7 +219,7 @@ public class EmployeeController extends AbstractCommonController {
 			employeeUpdate.setUserGroups(userGroups);
 
 			try {
-				employeeFacade.updateDto(employeeUpdate);
+				employeeUpdate = employeeFacade.updateDto(employeeUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

@@ -23,10 +23,10 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.domain.ConfigurationSpecification;
+import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.console.WebConfigurationConstants;
 import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.data.ConfigurationSearch;
@@ -35,7 +35,7 @@ import com.beanframework.console.data.ConfigurationSearch;
 public class ConfigurationController extends AbstractCommonController {
 
 	@Autowired
-	private ModelService modelService;
+	private ConfigurationFacade configurationFacade;
 
 	@Value(WebConfigurationConstants.Path.CONFIGURATION)
 	private String PATH_CONFIGURATION;
@@ -71,9 +71,8 @@ public class ConfigurationController extends AbstractCommonController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Configuration> pagination = modelService.findDtoPage(ConfigurationSpecification.findByCriteria(configuration),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties),
-				Configuration.class);
+		Page<Configuration> pagination = configurationFacade.findDtoPage(ConfigurationSpecification.findByCriteria(configuration),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
@@ -103,12 +102,12 @@ public class ConfigurationController extends AbstractCommonController {
 
 	@ModelAttribute(WebConfigurationConstants.ModelAttribute.CREATE)
 	public Configuration populateConfigurationCreate(HttpServletRequest request) throws Exception {
-		return modelService.create(Configuration.class);
+		return configurationFacade.create();
 	}
 
 	@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE)
 	public Configuration populateConfigurationForm(HttpServletRequest request) throws Exception {
-		return modelService.create(Configuration.class);
+		return configurationFacade.create();
 	}
 
 	@ModelAttribute(WebConfigurationConstants.ModelAttribute.SEARCH)
@@ -126,10 +125,8 @@ public class ConfigurationController extends AbstractCommonController {
 
 		if (configurationUpdate.getUuid() != null) {
 
-			Configuration existingConfiguration = modelService.findOneEntityByUuid(configurationUpdate.getUuid(),
-					Configuration.class);
-			existingConfiguration = modelService.getDto(existingConfiguration, Configuration.class);
-
+			Configuration existingConfiguration = configurationFacade.findOneDtoByUuid(configurationUpdate.getUuid());
+			
 			if (existingConfiguration != null) {
 				model.addAttribute(WebConfigurationConstants.ModelAttribute.UPDATE, existingConfiguration);
 			} else {
@@ -153,7 +150,7 @@ public class ConfigurationController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				modelService.saveDto(configurationCreate, Configuration.class);
+				configurationCreate = configurationFacade.createDto(configurationCreate);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -182,7 +179,7 @@ public class ConfigurationController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				modelService.saveDto(configurationUpdate, Configuration.class);
+				configurationUpdate = configurationFacade.updateDto(configurationUpdate);
 
 				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -207,7 +204,7 @@ public class ConfigurationController extends AbstractCommonController {
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			modelService.delete(configurationUpdate.getUuid(), Configuration.class);
+			configurationFacade.delete(configurationUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {

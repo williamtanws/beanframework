@@ -82,6 +82,28 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public <T> T findOneDtoByUuid(UUID uuid, Class modelClass) throws Exception {
+		Assert.notNull(uuid, "uuid was null");
+		Assert.notNull(modelClass, "modelClass was null");
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(GenericDomain.UUID, uuid);
+
+			Object model = (T) findOneEntityByProperties(properties, modelClass);
+			loadInterceptor(model, modelClass);
+			
+			model = getDto(model, modelClass);
+
+			return (T) model;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage(), e);
+		}
+	}
 
 	@Transactional(readOnly = true)
 	@Override
@@ -383,13 +405,16 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(rollbackFor = BusinessException.class)
 	@Override
-	public void saveEntity(Object model, Class modelClass) throws BusinessException {
+	public Object saveEntity(Object model, Class modelClass) throws BusinessException {
 
 		try {
 			prepareInterceptor(model, modelClass);
 			validateInterceptor(model, modelClass);
 			modelRepository.save(model);
+			
 			clearCache(modelClass);
+			
+			return model;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage(), e);
@@ -398,7 +423,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(rollbackFor = BusinessException.class)
 	@Override
-	public void saveDto(Object model, Class modelClass) throws BusinessException {
+	public Object saveDto(Object model, Class modelClass) throws BusinessException {
 
 		try {
 			model = entityConverter(model, modelClass);
@@ -409,6 +434,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			clearCache(modelClass);
 
 			model = getDto(model, modelClass);
+			
+			return model;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage(), e);

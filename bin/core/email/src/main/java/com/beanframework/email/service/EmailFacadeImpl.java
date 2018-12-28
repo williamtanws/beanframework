@@ -57,18 +57,23 @@ public class EmailFacadeImpl implements EmailFacade {
 	}
 
 	@Override
+	public Email findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Email.class);
+	}
+
+	@Override
 	public Email findOneDtoByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.findOneDtoByProperties(properties, Email.class);
 	}
 
 	@Override
-	public void createDto(Email model) throws BusinessException {
-		modelService.saveDto(model, Email.class);
+	public Email createDto(Email model) throws BusinessException {
+		return (Email) modelService.saveDto(model, Email.class);
 	}
 
 	@Override
-	public void updateDto(Email model) throws BusinessException {
-		modelService.saveDto(model, Email.class);
+	public Email updateDto(Email model) throws BusinessException {
+		return (Email) modelService.saveDto(model, Email.class);
 	}
 
 	@Override

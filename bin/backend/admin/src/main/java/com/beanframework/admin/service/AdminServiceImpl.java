@@ -26,7 +26,7 @@ public class AdminServiceImpl implements AdminService {
 	private String defaultAdminPassword;
 
 	@Override
-	public Admin authenticate(String id, String password) throws Exception {
+	public Admin findDtoAuthenticate(String id, String password) throws Exception {
 
 		if (StringUtils.isBlank(id) || StringUtils.isBlank(password)) {
 			return null;
@@ -43,13 +43,13 @@ public class AdminServiceImpl implements AdminService {
 				admin = modelService.create(Admin.class);
 				admin.setId(defaultAdminId);
 
-				return admin;
+				return modelService.getDto(admin, Admin.class);
 			}
 		} else {
 			if (PasswordUtils.isMatch(password, admin.getPassword()) == false) {
 				return null;
 			} else {
-				return admin;
+				return modelService.getDto(admin, Admin.class);
 			}
 		}
 	}

@@ -139,10 +139,7 @@ public class UserGroupController extends AbstractCommonController {
 
 		if (usergroupUpdate.getUuid() != null) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(UserGroup.UUID, usergroupUpdate.getUuid());
-
-			UserGroup existingUserGroup = userGroupFacade.findOneDtoByProperties(properties);
+			UserGroup existingUserGroup = userGroupFacade.findOneDtoByUuid(usergroupUpdate.getUuid());
 
 			if (existingUserGroup != null) {
 				
@@ -202,7 +199,7 @@ public class UserGroupController extends AbstractCommonController {
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
-				userGroupFacade.createDto(usergroupCreate);
+				usergroupCreate = userGroupFacade.createDto(usergroupCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -240,7 +237,7 @@ public class UserGroupController extends AbstractCommonController {
 			usergroupUpdate.setUserGroups(userGroups);
 
 			try {
-				userGroupFacade.updateDto(usergroupUpdate);
+				usergroupUpdate = userGroupFacade.updateDto(usergroupUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

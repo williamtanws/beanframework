@@ -1,6 +1,5 @@
 package com.beanframework.backoffice.web;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -132,10 +131,7 @@ public class UserPermissionController extends AbstractCommonController {
 
 		if (userpermissionUpdate.getUuid() != null) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(UserPermission.UUID, userpermissionUpdate.getUuid());
-
-			UserPermission existingUserPermission = userPermissionFacade.findOneDtoByProperties(properties);
+			UserPermission existingUserPermission = userPermissionFacade.findOneDtoByUuid(userpermissionUpdate.getUuid());
 
 			if (existingUserPermission != null) {
 				model.addAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE, existingUserPermission);
@@ -162,7 +158,7 @@ public class UserPermissionController extends AbstractCommonController {
 		} else {
 
 			try {
-				userPermissionFacade.createDto(userpermissionCreate);
+				userpermissionCreate = userPermissionFacade.createDto(userpermissionCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -191,7 +187,7 @@ public class UserPermissionController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				userPermissionFacade.updateDto(userpermissionUpdate);
+				userpermissionUpdate = userPermissionFacade.updateDto(userpermissionUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

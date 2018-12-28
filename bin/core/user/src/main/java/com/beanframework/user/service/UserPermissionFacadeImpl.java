@@ -30,6 +30,12 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public UserPermission create() throws Exception {
 		return modelService.create(UserPermission.class);
 	}
+	
+
+	@Override
+	public UserPermission findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, UserPermission.class);
+	}
 
 	@Override
 	public UserPermission findOneDtoByProperties(Map<String, Object> properties) throws Exception {
@@ -37,13 +43,13 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	}
 
 	@Override
-	public void createDto(UserPermission model) throws BusinessException {
-		modelService.saveDto(model, UserPermission.class);
+	public UserPermission createDto(UserPermission model) throws BusinessException {
+		return (UserPermission) modelService.saveDto(model, UserPermission.class);
 	}
 
 	@Override
-	public void updateDto(UserPermission model) throws BusinessException {
-		modelService.saveDto(model, UserPermission.class);
+	public UserPermission updateDto(UserPermission model) throws BusinessException {
+		return (UserPermission) modelService.saveDto(model, UserPermission.class);
 	}
 
 	@Override
@@ -55,4 +61,5 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public List<UserPermission> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
 		return modelService.findDtoBySorts(sorts, UserPermission.class);
 	}
+
 }

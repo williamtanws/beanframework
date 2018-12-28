@@ -1,6 +1,5 @@
 package com.beanframework.backoffice.web;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -132,10 +131,7 @@ public class UserRightController extends AbstractCommonController {
 
 		if (userrightUpdate.getUuid() != null) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(UserRight.UUID, userrightUpdate.getUuid());
-
-			UserRight existingUserRight = userRightFacade.findOneDtoByProperties(properties);
+			UserRight existingUserRight = userRightFacade.findOneDtoByUuid(userrightUpdate.getUuid());
 
 			if (existingUserRight != null) {
 				model.addAttribute(WebUserRightConstants.ModelAttribute.UPDATE, existingUserRight);
@@ -162,7 +158,7 @@ public class UserRightController extends AbstractCommonController {
 		} else {
 
 			try {
-				userRightFacade.createDto(userrightCreate);
+				userrightCreate = userRightFacade.createDto(userrightCreate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -191,7 +187,7 @@ public class UserRightController extends AbstractCommonController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				userRightFacade.updateDto(userrightUpdate);
+				userrightUpdate = userRightFacade.updateDto(userrightUpdate);
 
 				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

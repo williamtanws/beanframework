@@ -11,7 +11,7 @@ public interface EmployeeService {
 
 	Employee updatePrincipal(Employee employee);
 
-	Employee authenticate(String id, String password) throws Exception;
+	Employee findDtoAuthenticate(String id, String password) throws Exception;
 
 	void saveProfilePicture(Employee employee, MultipartFile picture) throws IOException;
 
