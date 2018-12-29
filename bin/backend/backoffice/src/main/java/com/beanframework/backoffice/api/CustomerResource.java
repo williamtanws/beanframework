@@ -32,7 +32,7 @@ public class CustomerResource {
 		Customer customer = customerFacade.findOneDtoByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (customer != null && customer.getUuid().equals(uuid)) {
 				return "true";

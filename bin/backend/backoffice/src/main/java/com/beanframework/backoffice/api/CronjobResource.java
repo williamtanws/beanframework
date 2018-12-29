@@ -34,7 +34,7 @@ public class CronjobResource {
 		Cronjob cronjob = cronjobFacade.findOneDtoByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (cronjob != null && cronjob.getUuid().equals(uuid)) {
 				return "true";
@@ -57,7 +57,7 @@ public class CronjobResource {
 
 		Cronjob cronjob = cronjobFacade.findOneDtoByProperties(properties);
 
-		if (StringUtils.isNotEmpty(uuidStr) && cronjob != null && cronjob.getUuid().equals(UUID.fromString(uuidStr))) {
+		if (StringUtils.isNotBlank(uuidStr) && cronjob != null && cronjob.getUuid().equals(UUID.fromString(uuidStr))) {
 			return "true";
 		} else if (cronjob == null) {
 			return "true";
@@ -85,7 +85,7 @@ public class CronjobResource {
 
 		String conExpression = (String) requestParams.get("conExpression");
 
-		if (StringUtils.isNotEmpty(conExpression)) {
+		if (StringUtils.isNotBlank(conExpression)) {
 			boolean isValid = CronExpression.isValidExpression(conExpression);
 			return isValid ? "true" : "false";
 		} else {

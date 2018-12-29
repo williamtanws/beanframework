@@ -32,7 +32,7 @@ public class AdminResource {
 		Admin admin = modelService.findOneEntityByProperties(properties, Admin.class);
 		
 		String uuidStr = (String) requestParams.get(WebConsoleConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (admin != null && admin.getUuid().equals(uuid)) {
 				return "true";

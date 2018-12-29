@@ -26,7 +26,7 @@ public class DynamicFieldSpecification {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(dynamicField.getId())) {
+				if (StringUtils.isNotBlank(dynamicField.getId())) {
 					predicates.add(cb.or(cb.like(root.get(DynamicField.ID), "%" + dynamicField.getId() + "%")));
 				}
 

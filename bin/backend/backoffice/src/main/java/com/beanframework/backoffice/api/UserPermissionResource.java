@@ -33,7 +33,7 @@ public class UserPermissionResource {
 		UserPermission userPermission = userPermissionFacade.findOneDtoByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (userPermission != null && userPermission.getUuid().equals(uuid)) {
 				return "true";

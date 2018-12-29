@@ -41,7 +41,7 @@ public class MenuValidateInterceptor implements ValidateInterceptor<Menu> {
 
 			} else {
 				// Update exists
-				if (StringUtils.isNotEmpty(model.getId())) {
+				if (StringUtils.isNotBlank(model.getId())) {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(Menu.ID, model.getId());
 					Menu exists = modelService.findOneEntityByProperties(properties, Menu.class);

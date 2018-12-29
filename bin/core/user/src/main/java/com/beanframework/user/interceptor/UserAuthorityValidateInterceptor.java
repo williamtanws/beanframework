@@ -42,7 +42,7 @@ public class UserAuthorityValidateInterceptor implements ValidateInterceptor<Use
 
 			} else {
 				// Update exists
-				if (StringUtils.isNotEmpty(model.getId())) {
+				if (StringUtils.isNotBlank(model.getId())) {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(UserAuthority.ID, model.getId());
 					UserAuthority exists = modelService.findOneEntityByProperties(properties, UserAuthority.class);

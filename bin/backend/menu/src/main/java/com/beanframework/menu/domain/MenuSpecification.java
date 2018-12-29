@@ -26,7 +26,7 @@ public class MenuSpecification {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(menu.getId())) {
+				if (StringUtils.isNotBlank(menu.getId())) {
 					predicates.add(cb.or(cb.like(root.get(Menu.ID), "%" + menu.getId() + "%")));
 				}
 				

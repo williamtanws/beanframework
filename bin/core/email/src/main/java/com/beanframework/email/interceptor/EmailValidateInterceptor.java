@@ -21,13 +21,13 @@ public class EmailValidateInterceptor implements ValidateInterceptor<Email> {
 				&& StringUtils.isBlank(model.getBccRecipients())) {
 			throw new InterceptorException("Please input recipient");
 		} else {
-			if (StringUtils.isNotEmpty(model.getToRecipients())) {
+			if (StringUtils.isNotBlank(model.getToRecipients())) {
 				valiateRecipients(model.getToRecipients());
 			}
-			if (StringUtils.isNotEmpty(model.getCcRecipients())) {
+			if (StringUtils.isNotBlank(model.getCcRecipients())) {
 				valiateRecipients(model.getCcRecipients());
 			}
-			if (StringUtils.isNotEmpty(model.getBccRecipients())) {
+			if (StringUtils.isNotBlank(model.getBccRecipients())) {
 				valiateRecipients(model.getBccRecipients());
 			}
 		}

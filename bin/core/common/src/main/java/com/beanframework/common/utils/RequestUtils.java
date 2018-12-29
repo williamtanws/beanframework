@@ -16,7 +16,7 @@ public class RequestUtils extends CommonUtils {
      */
     public static String getValue(Map<String, String[]> parameterMap, String key) {
         String[] values = parameterMap.get(key);
-        if (isNotEmpty(values))
+        if (isNotBlank(values))
             return values[0];
         return null;
     }
@@ -71,7 +71,7 @@ public class RequestUtils extends CommonUtils {
      * @return
      */
     public static Cookie getCookie(Cookie[] cookies, String name) {
-        if (isNotEmpty(cookies)) {
+        if (isNotBlank(cookies)) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equalsIgnoreCase(name)) {
                     return cookie;

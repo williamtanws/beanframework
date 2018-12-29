@@ -75,7 +75,7 @@ public class QuartzManager {
 				}
 				scheduler.scheduleJob(jobDetail, runOnceTrigger);
 			}
-			else if(StringUtils.isNotEmpty(job.getCronExpression())){
+			else if(StringUtils.isNotBlank(job.getCronExpression())){
 				// Expression Builder Scheduler
 				CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
 	

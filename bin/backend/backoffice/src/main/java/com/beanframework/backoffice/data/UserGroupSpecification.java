@@ -1,4 +1,4 @@
-package com.beanframework.user.domain;
+package com.beanframework.backoffice.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
+
+import com.beanframework.user.domain.UserGroup;
 
 public class UserGroupSpecification {
 	public static Specification<UserGroup> findByCriteria(final UserGroup userGroup) {
@@ -26,7 +28,7 @@ public class UserGroupSpecification {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(userGroup.getId())) {
+				if (StringUtils.isNotBlank(userGroup.getId())) {
 					predicates.add(cb.or(cb.like(root.get(UserGroup.ID), "%" + userGroup.getId() + "%")));
 				}
 

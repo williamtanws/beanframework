@@ -118,13 +118,13 @@ public class EmailJob implements Job {
 						String[] bccRecipients = null;
 						File[] files = null;
 
-						if (StringUtils.isNotEmpty(email.getToRecipients())) {
+						if (StringUtils.isNotBlank(email.getToRecipients())) {
 							toRecipients = email.getToRecipients().split(";");
 						}
-						if (StringUtils.isNotEmpty(email.getCcRecipients())) {
+						if (StringUtils.isNotBlank(email.getCcRecipients())) {
 							ccRecipients = email.getCcRecipients().split(";");
 						}
-						if (StringUtils.isNotEmpty(email.getBccRecipients())) {
+						if (StringUtils.isNotBlank(email.getBccRecipients())) {
 							bccRecipients = email.getBccRecipients().split(";");
 						}
 						
@@ -175,17 +175,17 @@ public class EmailJob implements Job {
 		if(bcc != null) {
 			helper.setBcc(bcc);
 		}
-		if(StringUtils.isNotEmpty(subject)) {
+		if(StringUtils.isNotBlank(subject)) {
 			helper.setSubject(subject);
 		}
-		if(StringUtils.isNotEmpty(text) && StringUtils.isNotEmpty(html)) {
+		if(StringUtils.isNotBlank(text) && StringUtils.isNotBlank(html)) {
 			helper.setText(text, html);
 		}
 		else {
-			if(StringUtils.isNotEmpty(text)){
+			if(StringUtils.isNotBlank(text)){
 				helper.setText(text);
 			}
-			if(StringUtils.isNotEmpty(html)){
+			if(StringUtils.isNotBlank(html)){
 				helper.setText(html, true);
 			}
 		}

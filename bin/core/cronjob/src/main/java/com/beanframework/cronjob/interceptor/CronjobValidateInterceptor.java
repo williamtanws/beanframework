@@ -59,7 +59,7 @@ public class CronjobValidateInterceptor implements ValidateInterceptor<Cronjob> 
 
 			} else {
 				// Update exists
-				if (StringUtils.isNotEmpty(model.getId())) {
+				if (StringUtils.isNotBlank(model.getId())) {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(Cronjob.ID, model.getId());
 					Cronjob exists = modelService.findOneEntityByProperties(properties, Cronjob.class);

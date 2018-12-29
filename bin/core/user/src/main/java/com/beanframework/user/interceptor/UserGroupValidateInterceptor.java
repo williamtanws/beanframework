@@ -42,7 +42,7 @@ public class UserGroupValidateInterceptor implements ValidateInterceptor<UserGro
 
 			} else {
 				// Update exists
-				if (StringUtils.isNotEmpty(model.getId())) {
+				if (StringUtils.isNotBlank(model.getId())) {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(UserGroup.ID, model.getId());
 					UserGroup exists = modelService.findOneEntityByProperties(properties, UserGroup.class);

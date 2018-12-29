@@ -1,4 +1,4 @@
-package com.beanframework.cronjob.domain;
+package com.beanframework.backoffice.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
+
+import com.beanframework.cronjob.domain.Cronjob;
 
 public class CronjobSpecification {
 	public static Specification<Cronjob> findByCriteria(final Cronjob cronjob) {
@@ -26,13 +28,13 @@ public class CronjobSpecification {
 				
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(cronjob.getJobGroup())) {
+				if (StringUtils.isNotBlank(cronjob.getJobGroup())) {
 					predicates.add(cb.or(cb.like(root.get(Cronjob.JOB_GROUP), "%" + cronjob.getJobGroup() + "%")));
 				}
-				if (StringUtils.isNotEmpty(cronjob.getJobName())) {
+				if (StringUtils.isNotBlank(cronjob.getJobName())) {
 					predicates.add(cb.or(cb.like(root.get(Cronjob.JOB_NAME), "%" + cronjob.getJobName() + "%")));
 				}
-				if (StringUtils.isNotEmpty(cronjob.getDescription())) {
+				if (StringUtils.isNotBlank(cronjob.getDescription())) {
 					predicates.add(cb.or(cb.like(root.get(Cronjob.DESCRIPTION), "%" + cronjob.getDescription() + "%")));
 				}
 

@@ -88,7 +88,7 @@ public class CustomerUpdate extends Updater {
 				Hibernate.initialize(customer.getUserFields());
 			}
 
-			if (StringUtils.isNotEmpty(csv.getPassword())) {
+			if (StringUtils.isNotBlank(csv.getPassword())) {
 				customer.setPassword(PasswordUtils.encode(csv.getPassword()));
 			}
 			customer.setAccountNonExpired(csv.isAccountNonExpired());

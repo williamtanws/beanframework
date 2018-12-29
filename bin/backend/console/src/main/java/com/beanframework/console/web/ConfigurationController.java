@@ -46,7 +46,7 @@ public class ConfigurationController extends AbstractCommonController {
 	@Value(WebConfigurationConstants.LIST_SIZE)
 	private int MODULE_CONFIGURATION_LIST_SIZE;
 
-	private Page<Configuration> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<Configuration> getPagination(ConfigurationSearch configurationSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
@@ -59,19 +59,13 @@ public class ConfigurationController extends AbstractCommonController {
 		String directionStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
-		ConfigurationSearch configurationSearch = (ConfigurationSearch) model.asMap()
-				.get(WebConfigurationConstants.ModelAttribute.SEARCH);
-
-		Configuration configuration = new Configuration();
-		configuration.setId(configurationSearch.getIdSearch());
-
 		if (properties == null) {
 			properties = new String[1];
 			properties[0] = Configuration.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Configuration> pagination = configurationFacade.findDtoPage(ConfigurationSpecification.findByCriteria(configuration),
+		Page<Configuration> pagination = configurationFacade.findDtoPage(ConfigurationSpecification.findByCriteria(configurationSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
@@ -82,6 +76,10 @@ public class ConfigurationController extends AbstractCommonController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, ConfigurationSearch configurationSearch) {
+		
+		configurationSearch.setSearchAll((String)requestParams.get("configurationSearch.searchAll"));
+		configurationSearch.setId((String)requestParams.get("configurationSearch.id"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
@@ -94,8 +92,8 @@ public class ConfigurationController extends AbstractCommonController {
 		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute(ConfigurationSearch.ID_SEARCH, configurationSearch.getIdSearch());
-		redirectAttributes.addFlashAttribute(WebConfigurationConstants.ModelAttribute.SEARCH, configurationSearch);
+		redirectAttributes.addAttribute("searchAll", configurationSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", configurationSearch.getId());
 
 		return redirectAttributes;
 	}
@@ -121,7 +119,7 @@ public class ConfigurationController extends AbstractCommonController {
 			@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
 			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(configurationSearch, model, requestParams));
 
 		if (configurationUpdate.getUuid() != null) {
 

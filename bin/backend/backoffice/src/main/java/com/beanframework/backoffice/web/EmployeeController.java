@@ -27,13 +27,14 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebEmployeeConstants;
 import com.beanframework.backoffice.data.EmployeeSearch;
+import com.beanframework.backoffice.data.EmployeeSpecification;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.domain.EmployeeSpecification;
 import com.beanframework.employee.service.EmployeeFacade;
+import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupFacade;
 
@@ -55,7 +56,7 @@ public class EmployeeController extends AbstractCommonController {
 	@Value(WebEmployeeConstants.LIST_SIZE)
 	private int MODULE_EMPLOYEE_LIST_SIZE;
 
-	private Page<Employee> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<Employee> getPagination(EmployeeSearch employeeSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -67,19 +68,14 @@ public class EmployeeController extends AbstractCommonController {
 
 		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
-
-		EmployeeSearch employeeSearch = (EmployeeSearch) model.asMap().get(WebEmployeeConstants.ModelAttribute.SEARCH);
-
-		Employee employee = new Employee();
-		employee.setId(employeeSearch.getIdSearch());
-
+		
 		if (properties == null) {
 			properties = new String[1];
 			properties[0] = Employee.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Employee> pagination = employeeFacade.findPage(EmployeeSpecification.findByCriteria(employee),
+		Page<Employee> pagination = employeeFacade.findPage(EmployeeSpecification.findByCriteria(employeeSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
@@ -90,6 +86,10 @@ public class EmployeeController extends AbstractCommonController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, EmployeeSearch employeeSearch) {
+		
+		employeeSearch.setSearchAll((String)requestParams.get("employeeSearch.searchAll"));
+		employeeSearch.setId((String)requestParams.get("employeeSearch.id"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -102,8 +102,8 @@ public class EmployeeController extends AbstractCommonController {
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute(EmployeeSearch.ID_SEARCH, employeeSearch.getIdSearch());
-		redirectAttributes.addFlashAttribute(WebEmployeeConstants.ModelAttribute.SEARCH, employeeSearch);
+		redirectAttributes.addAttribute("searchAll", employeeSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", employeeSearch.getId());
 
 		return redirectAttributes;
 	}
@@ -128,7 +128,7 @@ public class EmployeeController extends AbstractCommonController {
 			@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(employeeSearch, model, requestParams));
 
 		if (employeeUpdate.getUuid() != null) {
 

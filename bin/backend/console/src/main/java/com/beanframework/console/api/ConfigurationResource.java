@@ -33,7 +33,7 @@ public class ConfigurationResource {
 		Configuration configuration = modelService.findOneEntityByProperties(properties, Configuration.class);
 
 		String uuidStr = (String) requestParams.get(WebConsoleConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (configuration != null && configuration.getUuid().equals(uuid)) {
 				return "true";

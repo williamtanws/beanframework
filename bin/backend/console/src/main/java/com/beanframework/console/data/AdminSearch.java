@@ -1,16 +1,20 @@
 package com.beanframework.console.data;
 
-public class AdminSearch {
-	
-	public static final String ID_SEARCH = "idSearch";
+import com.beanframework.admin.domain.Admin;
 
-	private String idSearch;
+public class AdminSearch extends Admin {
 
-	public String getIdSearch() {
-		return idSearch;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5636156261477339317L;
+	private String searchAll;
+
+	public String getSearchAll() {
+		return searchAll;
 	}
 
-	public void setIdSearch(String idSearch) {
-		this.idSearch = idSearch;
+	public void setSearchAll(String searchAll) {
+		this.searchAll = searchAll;
 	}
 }

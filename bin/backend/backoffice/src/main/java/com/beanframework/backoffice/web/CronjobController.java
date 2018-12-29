@@ -28,12 +28,12 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCronjobConstants;
 import com.beanframework.backoffice.data.CronjobSearch;
+import com.beanframework.backoffice.data.CronjobSpecification;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
-import com.beanframework.cronjob.domain.CronjobSpecification;
 import com.beanframework.cronjob.service.CronjobFacade;
 import com.beanframework.cronjob.service.CronjobManagerService;
 
@@ -55,7 +55,7 @@ public class CronjobController extends AbstractCommonController {
 	@Value(WebCronjobConstants.LIST_SIZE)
 	private int MODULE_CRONJOB_LIST_SIZE;
 
-	private Page<Cronjob> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<Cronjob> getPagination(CronjobSearch cronjobSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -68,18 +68,13 @@ public class CronjobController extends AbstractCommonController {
 		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
-		CronjobSearch cronjobSearch = (CronjobSearch) model.asMap().get(WebCronjobConstants.ModelAttribute.SEARCH);
-
-		Cronjob cronjob = new Cronjob();
-		cronjob.setId(cronjobSearch.getIdSearch());
-
 		if (properties == null) {
 			properties = new String[1];
 			properties[0] = Cronjob.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Cronjob> pagination = cronjobFacade.findPage(CronjobSpecification.findByCriteria(cronjob),
+		Page<Cronjob> pagination = cronjobFacade.findPage(CronjobSpecification.findByCriteria(cronjobSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
@@ -90,6 +85,10 @@ public class CronjobController extends AbstractCommonController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, CronjobSearch cronjobSearch) {
+		
+		cronjobSearch.setSearchAll((String)requestParams.get("cronjobSearch.searchAll"));
+		cronjobSearch.setId((String)requestParams.get("cronjobSearch.id"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -102,9 +101,9 @@ public class CronjobController extends AbstractCommonController {
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute(CronjobSearch.ID_SEARCH, cronjobSearch.getIdSearch());
-		redirectAttributes.addFlashAttribute(WebCronjobConstants.ModelAttribute.SEARCH, cronjobSearch);
-
+		redirectAttributes.addAttribute("searchAll", cronjobSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", cronjobSearch.getId());
+		
 		return redirectAttributes;
 	}
 
@@ -129,7 +128,7 @@ public class CronjobController extends AbstractCommonController {
 			@ModelAttribute(WebCronjobConstants.ModelAttribute.UPDATE) Cronjob cronjobUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(cronjobSearch, model, requestParams));
 
 		if (cronjobUpdate.getUuid() != null) {
 
@@ -239,7 +238,7 @@ public class CronjobController extends AbstractCommonController {
 		} else {
 
 			String triggerStartDate = (String) requestParams.get("jobTriggerStartDate");
-			if (StringUtils.isNotEmpty(triggerStartDate)) {
+			if (StringUtils.isNotBlank(triggerStartDate)) {
 				Date date = new SimpleDateFormat("MM/dd/yyyy h:mm a").parse(triggerStartDate);
 				cronjobUpdate.setTriggerStartDate(date);
 			}

@@ -46,7 +46,7 @@ public class AdminController extends AbstractCommonController {
 	@Value(WebAdminConstants.LIST_SIZE)
 	private int MODULE_ADMIN_LIST_SIZE;
 
-	private Page<Admin> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<Admin> getPagination(AdminSearch adminSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
@@ -59,18 +59,13 @@ public class AdminController extends AbstractCommonController {
 		String directionStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
-		AdminSearch adminSearch = (AdminSearch) model.asMap().get(WebAdminConstants.ModelAttribute.SEARCH);
-
-		Admin admin = new Admin();
-		admin.setId(adminSearch.getIdSearch());
-
 		if (properties == null) {
 			properties = new String[1];
 			properties[0] = Admin.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Admin> pagination = adminFacade.findDtoPage(AdminSpecification.findByCriteria(admin),
+		Page<Admin> pagination = adminFacade.findDtoPage(AdminSpecification.findByCriteria(adminSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
@@ -81,6 +76,10 @@ public class AdminController extends AbstractCommonController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, AdminSearch adminSearch) {
+		
+		adminSearch.setSearchAll((String)requestParams.get("adminSearch.searchAll"));
+		adminSearch.setId((String)requestParams.get("adminSearch.id"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
@@ -93,8 +92,8 @@ public class AdminController extends AbstractCommonController {
 		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute(AdminSearch.ID_SEARCH, adminSearch.getIdSearch());
-		redirectAttributes.addFlashAttribute(WebAdminConstants.ModelAttribute.SEARCH, adminSearch);
+		redirectAttributes.addAttribute("searchAll", adminSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", adminSearch.getId());
 
 		return redirectAttributes;
 	}
@@ -119,7 +118,7 @@ public class AdminController extends AbstractCommonController {
 			@ModelAttribute(WebAdminConstants.ModelAttribute.UPDATE) Admin adminUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(adminSearch, model, requestParams));
 
 		if (adminUpdate.getUuid() != null) {
 			Admin existingAdmin = adminFacade.findOneDtoByUuid(adminUpdate.getUuid());

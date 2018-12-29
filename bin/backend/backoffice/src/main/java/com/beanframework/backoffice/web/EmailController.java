@@ -25,12 +25,11 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebEmailConstants;
 import com.beanframework.backoffice.data.EmailSearch;
+import com.beanframework.backoffice.data.EmailSpecification;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.email.domain.Email;
-import com.beanframework.email.domain.EmailEnum.Status;
-import com.beanframework.email.domain.EmailSpecification;
 import com.beanframework.email.service.EmailFacade;
 
 @Controller
@@ -48,7 +47,7 @@ public class EmailController extends AbstractCommonController {
 	@Value(WebEmailConstants.LIST_SIZE)
 	private int MODULE_EMAIL_LIST_SIZE;
 
-	private Page<Email> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<Email> getPagination(EmailSearch emailSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -61,20 +60,13 @@ public class EmailController extends AbstractCommonController {
 		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
-		EmailSearch emailSearch = (EmailSearch) model.asMap().get(WebEmailConstants.ModelAttribute.SEARCH);
-
-		Email email = new Email();
-		email.setToRecipients(emailSearch.getEmailSearch());
-		email.setBccRecipients(emailSearch.getEmailSearch());
-		email.setStatus(Status.fromName(emailSearch.getEmailSearch()));
-
 		if (properties == null) {
 			properties = new String[1];
 			properties[0] = Email.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Email> pagination = emailFacade.findPage(EmailSpecification.findByCriteria(email),
+		Page<Email> pagination = emailFacade.findPage(EmailSpecification.findByCriteria(emailSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
@@ -85,6 +77,10 @@ public class EmailController extends AbstractCommonController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, EmailSearch emailSearch) {
+		
+		emailSearch.setSearchAll((String)requestParams.get("emailSearch.searchAll"));
+		emailSearch.setId((String)requestParams.get("emailSearch.id"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -97,8 +93,8 @@ public class EmailController extends AbstractCommonController {
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute("emailSearch", emailSearch.getEmailSearch());
-		redirectAttributes.addFlashAttribute(WebEmailConstants.ModelAttribute.SEARCH, emailSearch);
+		redirectAttributes.addAttribute("searchAll", emailSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", emailSearch.getId());
 
 		return redirectAttributes;
 	}
@@ -123,7 +119,7 @@ public class EmailController extends AbstractCommonController {
 			@ModelAttribute(WebEmailConstants.ModelAttribute.UPDATE) Email emailUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(emailSearch, model, requestParams));
 
 		if (emailUpdate.getUuid() != null) {
 

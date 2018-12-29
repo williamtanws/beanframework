@@ -199,7 +199,7 @@ public class MenuController extends AbstractCommonController {
 
 		try {
 			menuFacade.changePosition(UUID.fromString(fromUuid),
-					StringUtils.isNotEmpty(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex));
+					StringUtils.isNotBlank(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex));
 
 			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
 		} catch (BusinessException e) {

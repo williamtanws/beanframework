@@ -51,12 +51,12 @@ public class CronjobConfig {
 		
 		PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
 
-		if(StringUtils.isNotEmpty(QUARTZ_PROPERTIES_LOCATION)) {
+		if(StringUtils.isNotBlank(QUARTZ_PROPERTIES_LOCATION)) {
 			FileSystemResource fileSystemResource = new FileSystemResource(QUARTZ_PROPERTIES_LOCATION);
 			propertiesFactoryBean.setLocation(fileSystemResource);
 		}
 		
-		if(StringUtils.isNotEmpty(QUARTZ_PROPERTIES_CLASSPATH)) {
+		if(StringUtils.isNotBlank(QUARTZ_PROPERTIES_CLASSPATH)) {
 			propertiesFactoryBean.setLocation(new ClassPathResource(QUARTZ_PROPERTIES_CLASSPATH));
 		}
 		

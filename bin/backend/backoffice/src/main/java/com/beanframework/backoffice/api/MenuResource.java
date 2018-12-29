@@ -40,7 +40,7 @@ public class MenuResource {
 		Menu menu = menuFacade.findOneDtoByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (menu != null && menu.getUuid().equals(uuid)) {
 				return "true";
@@ -58,7 +58,7 @@ public class MenuResource {
 		List<TreeJson> data = new ArrayList<TreeJson>();
 
 		for (Menu menu : rootMenu) {
-			if (StringUtils.isNotEmpty(uuid)) {
+			if (StringUtils.isNotBlank(uuid)) {
 				data.add(convertToJson(menu, UUID.fromString(uuid)));
 			} else {
 				data.add(convertToJson(menu, null));
