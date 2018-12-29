@@ -10,7 +10,7 @@
 			<!-- Search Form-->
 			<div class="row">
 				<th:block
-					layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.cronjob')}}, objectSearch=${cronjobSearch}, searchFields=${ {'id', 'jobClass', 'jobName', 'jobGroup'} }, displayFields=${ {'id', 'jobClass', 'jobName', 'jobGroup', 'startup', 'status', 'result'} } ,searchForm='/backoffice/adminlte/cronjob/cronjobList' )"></th:block>
+					layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.cronjob')}}, objectSearch=${cronjobSearch}, searchFields=${ {'id', 'jobName'} }, displayFields=${ {'id', 'jobName', 'startup', 'status', 'result'} } ,searchForm='/backoffice/adminlte/cronjob/cronjobList' )"></th:block>
 			</div>
 			<!-- Alert Notification-->
 			<div class="row">
@@ -18,9 +18,9 @@
 			</div>
 			<!-- List Table-->
 			<div class="row"
-				th:with="jobClass=#{module.cronjob.jobclass}, jobGroup=#{module.cronjob.jobgroup}, jobName=#{module.cronjob.jobname}, status=#{module.cronjob.status}, result=#{module.cronjob.result}">
+				th:with="startup=#{module.cronjob.startup}, jobName=#{module.cronjob.jobname}, status=#{module.cronjob.status}, result=#{module.cronjob.result}">
 				<th:block
-					layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.cronjob}, objectUpdate=${cronjobUpdate}, objectSearch=${cronjobSearch}, icon=@{${@environment.getProperty('module.cronjob.icon')}}, createAuthority='cronjob_create', updateAuthority='cronjob_update', listFields=${ {{'jobClass', jobClass}, {'jobGroup', jobGroup}, {'jobName', jobName}, {'status', status}, {'result', result}} }, paginationAction=@{${@environment.getProperty('path.cronjob')}}, searchFields=${ {'id','jobClass', 'jobGroup', 'jobName', 'status', 'result'} }, updateForm='/backoffice/adminlte/cronjob/cronjobForm')"></th:block>
+					layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.cronjob}, objectUpdate=${cronjobUpdate}, objectSearch=${cronjobSearch}, icon=@{${@environment.getProperty('module.cronjob.icon')}}, createAuthority='cronjob_create', updateAuthority='cronjob_update', listFields=${ {{'jobName', jobName}, {'startup', startup}, {'status', status}, {'result', result}} }, paginationAction=@{${@environment.getProperty('path.cronjob')}}, searchFields=${ {'id', 'jobName', 'startup', 'status', 'result'} }, updateForm='/backoffice/adminlte/cronjob/cronjobForm')"></th:block>
 			</div>
 			<!-- Create Modal-->
 			<th:block sec:authorize="hasAuthority('cronjob_create')"

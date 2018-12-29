@@ -65,10 +65,10 @@ public class CronjobSpecification extends AbstractSpecification {
 		
 		if (startup != null) {
 			if(startup == Boolean.TRUE) {
-				predicates.add(cb.or(cb.isTrue(root.get(Cronjob.STATUS))));
+				predicates.add(cb.or(cb.equal(root.get(Cronjob.STARTUP), 1)));
 			}
 			if(startup == Boolean.FALSE) {
-				predicates.add(cb.or(cb.isFalse(root.get(Cronjob.STATUS))));
+				predicates.add(cb.or(cb.equal(root.get(Cronjob.STARTUP), 0)));
 			}
 		}
 

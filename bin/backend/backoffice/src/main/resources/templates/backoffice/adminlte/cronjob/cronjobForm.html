@@ -212,28 +212,30 @@
 			layout:insert="/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.cronjob')}}, objectSearch=${cronjobSearch}, deleteUuid=${cronjobUpdate.uuid})"></th:block>
 	</th:block>
 	<th:block layout:fragment="jobstatus">
-		<div class="col-md-6">
-			<div class="form-group">
-				<label for="status" th:text="#{module.cronjob.status} + ':'"></label>
-				<span class="text-block" th:text="*{status}"></span>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="status" th:text="#{module.cronjob.status} + ':'"></label>
+					<span class="text-block" th:text="*{status}"></span>
+				</div>
+				<div class="form-group">
+					<label for="result" th:text="#{module.cronjob.result} + ':'"></label>
+					<span class="text-block" th:text="*{result}"></span>
+				</div>
+				<div class="form-group">
+					<label for="result" th:text="#{module.cronjob.message} + ':'"></label>
+					<span class="text-block" th:text="*{message}"></span>
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="result" th:text="#{module.cronjob.result} + ':'"></label>
-				<span class="text-block" th:text="*{result}"></span>
-			</div>
-			<div class="form-group">
-				<label for="result" th:text="#{module.cronjob.message} + ':'"></label>
-				<span class="text-block" th:text="*{message}"></span>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label for="lastStartExecutedDate" th:text="#{module.cronjob.laststartexecuteddate} + ':'"></label>
-				<span class="text-block" th:text="*{lastStartExecutedDate != null} ? *{#dates.format(lastStartExecutedDate, ' dd MMMM yyyy hh:mma')}"></span>
-			</div>
-			<div class="form-group">
-				<label for="lastFinishExecutedDate" th:text="#{module.cronjob.lastfinishexecuteddate} + ':'"></label>
-				<span class="text-block" th:text="*{lastFinishExecutedDate != null} ? *{#dates.format(lastFinishExecutedDate, ' dd MMMM yyyy hh:mma')}"></span>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="lastStartExecutedDate" th:text="#{module.cronjob.laststartexecuteddate} + ':'"></label>
+					<span class="text-block" th:text="*{lastStartExecutedDate != null} ? *{#dates.format(lastStartExecutedDate, ' dd MMMM yyyy hh:mma')}"></span>
+				</div>
+				<div class="form-group">
+					<label for="lastFinishExecutedDate" th:text="#{module.cronjob.lastfinishexecuteddate} + ':'"></label>
+					<span class="text-block" th:text="*{lastFinishExecutedDate != null} ? *{#dates.format(lastFinishExecutedDate, ' dd MMMM yyyy hh:mma')}"></span>
+				</div>
 			</div>
 		</div>
 	</th:block>
