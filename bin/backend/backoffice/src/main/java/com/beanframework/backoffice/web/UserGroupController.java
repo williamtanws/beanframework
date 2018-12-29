@@ -29,7 +29,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserGroupConstants;
 import com.beanframework.backoffice.data.UserGroupSearch;
 import com.beanframework.backoffice.data.UserGroupSpecification;
-import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
@@ -41,7 +41,7 @@ import com.beanframework.user.service.UserPermissionFacade;
 import com.beanframework.user.service.UserRightFacade;
 
 @Controller
-public class UserGroupController extends AbstractCommonController {
+public class UserGroupController extends AbstractController {
 
 	@Autowired
 	private UserGroupFacade userGroupFacade;

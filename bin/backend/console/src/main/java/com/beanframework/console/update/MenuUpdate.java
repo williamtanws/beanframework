@@ -90,7 +90,7 @@ public class MenuUpdate extends Updater {
 			} else {
 				Hibernate.initialize(menu.getParent());
 				Hibernate.initialize(menu.getUserGroups());
-				Hibernate.initialize(menu.getMenuFields());
+				Hibernate.initialize(menu.getFields());
 			}
 
 			menu.setSort(csv.getSort());
@@ -114,9 +114,9 @@ public class MenuUpdate extends Updater {
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split("=")[0];
 					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < menu.getMenuFields().size(); i++) {
-						if (menu.getMenuFields().get(i).getId().equals(menu.getId() + "_" + dynamicFieldId)) {
-							menu.getMenuFields().get(i).setValue(value);
+					for (int i = 0; i < menu.getFields().size(); i++) {
+						if (menu.getFields().get(i).getId().equals(menu.getId() + "_" + dynamicFieldId)) {
+							menu.getFields().get(i).setValue(value);
 						}
 					}
 				}

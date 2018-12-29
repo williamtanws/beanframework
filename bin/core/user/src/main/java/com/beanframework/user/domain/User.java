@@ -43,7 +43,7 @@ public abstract class User extends GenericDomain {
 	public static final String ENABLED = "enabled";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_ROLES = "userRoles";
-	public static final String USER_FIELDS = "userFields";
+	public static final String FIELDS = "fields";
 
 	private static final long serialVersionUID = -7444894280894062710L;
 	@NotNull
@@ -60,7 +60,7 @@ public abstract class User extends GenericDomain {
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<UserField> userFields = new ArrayList<UserField>();
+	private List<UserField> fields = new ArrayList<UserField>();
 
 	@Transient
 	private Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
@@ -113,12 +113,12 @@ public abstract class User extends GenericDomain {
 		this.userGroups = userGroups;
 	}
 
-	public List<UserField> getUserFields() {
-		return userFields;
+	public List<UserField> getFields() {
+		return fields;
 	}
 
-	public void setUserFields(List<UserField> userFields) {
-		this.userFields = userFields;
+	public void setFields(List<UserField> fields) {
+		this.fields = fields;
 	}
 
 	public Set<GrantedAuthority> getAuthorities() {

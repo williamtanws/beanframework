@@ -11,9 +11,10 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.configuration.domain.Configuration;
 
-public class ConfigurationSpecification {
+public class ConfigurationSpecification extends AbstractSpecification {
 	public static Specification<Configuration> findByCriteria(final ConfigurationSearch data) {
 
 		return new Specification<Configuration>() {
@@ -45,17 +46,11 @@ public class ConfigurationSpecification {
 
 	public static void addPredicates(String id, String value, Root<Configuration> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
-			if (id.contains("%") == false && id.contains("_") == false) {
-				id = "%" + id + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Configuration.ID), id)));
+			predicates.add(cb.or(cb.like(root.get(Configuration.ID), convertToPattern(id))));
 		}
 
 		if (StringUtils.isNotEmpty(value)) {
-			if (value.contains("%") == false && value.contains("_") == false) {
-				value = "%" + value + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Configuration.VALUE), value)));
+			predicates.add(cb.or(cb.like(root.get(Configuration.VALUE), convertToPattern(value))));
 		}
 	}
 }

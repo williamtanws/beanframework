@@ -11,9 +11,10 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.language.domain.Language;
 
-public class LanguageSpecification {
+public class LanguageSpecification extends AbstractSpecification {
 	public static Specification<Language> findByCriteria(final LanguageSearch data) {
 
 		return new Specification<Language>() {
@@ -45,17 +46,11 @@ public class LanguageSpecification {
 
 	public static void addPredicates(String id, String name, Root<Language> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
-			if (id.contains("%") == false && id.contains("_") == false) {
-				id = "%" + id + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Language.ID), id)));
+			predicates.add(cb.or(cb.like(root.get(Language.ID), convertToPattern(id))));
 		}
 
 		if (StringUtils.isNotEmpty(name)) {
-			if (name.contains("%") == false && name.contains("_") == false) {
-				name = "%" + name + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Language.NAME), name)));
+			predicates.add(cb.or(cb.like(root.get(Language.NAME), convertToPattern(name))));
 		}
 	}
 }

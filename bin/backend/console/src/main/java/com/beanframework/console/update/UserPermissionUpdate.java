@@ -84,7 +84,7 @@ public class UserPermissionUpdate extends Updater {
 				userPermission = modelService.create(UserPermission.class);
 				userPermission.setId(csv.getId());
 			} else {
-				Hibernate.initialize(userPermission.getUserPermissionFields());
+				Hibernate.initialize(userPermission.getFields());
 			}
 			userPermission.setSort(csv.getSort());
 
@@ -97,9 +97,9 @@ public class UserPermissionUpdate extends Updater {
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split("=")[0];
 					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < userPermission.getUserPermissionFields().size(); i++) {
-						if (userPermission.getUserPermissionFields().get(i).getId().equals(userPermission.getId()+"_"+dynamicFieldId)) {
-							userPermission.getUserPermissionFields().get(i).setValue(value);
+					for (int i = 0; i < userPermission.getFields().size(); i++) {
+						if (userPermission.getFields().get(i).getId().equals(userPermission.getId()+"_"+dynamicFieldId)) {
+							userPermission.getFields().get(i).setValue(value);
 						}
 					}
 				}

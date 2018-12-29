@@ -29,7 +29,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCronjobConstants;
 import com.beanframework.backoffice.data.CronjobSearch;
 import com.beanframework.backoffice.data.CronjobSpecification;
-import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.cronjob.domain.Cronjob;
@@ -38,7 +38,7 @@ import com.beanframework.cronjob.service.CronjobFacade;
 import com.beanframework.cronjob.service.CronjobManagerService;
 
 @Controller
-public class CronjobController extends AbstractCommonController {
+public class CronjobController extends AbstractController {
 
 	@Autowired
 	private CronjobFacade cronjobFacade;

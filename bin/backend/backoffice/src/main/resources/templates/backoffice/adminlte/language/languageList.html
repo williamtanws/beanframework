@@ -9,7 +9,7 @@
 		<section class="content">
 			<!-- Search Form-->
 			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.language')}}, objectSearch=${languageSearch}, searchFields=${ {'id','name'} } )"></th:block>
+				<th:block layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.language')}}, objectSearch=${languageSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )"></th:block>
 			</div>
 			<!-- Alert Notification-->
 			<div class="row">

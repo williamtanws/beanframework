@@ -23,7 +23,7 @@
 		<li th:class="${#httpServletRequest.requestURI == menu.path ? 'active':''}" th:if="${#lists.isEmpty(menu.childs)}" th:id="${menu.uuid}">
 			<a th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}">
 				<i th:classappend="${menu.icon}"></i>
-				<th:block th:each="menuField: ${menu.menuFields}">
+				<th:block th:each="menuField: ${menu.fields}">
 					<span th:text="${menuField.value != null and menuField.value != ''} ? ${menuField.value}:'['+${menu.id}+']'" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
 				</th:block>
 			</a>
@@ -34,7 +34,7 @@
 		<li class="treeview" th:if="${not #lists.isEmpty(menu.childs)}" th:id="${menu.uuid}">
 			<a href="#">
 				<i th:classappend="${menu.icon}"></i>
-				<th:block th:each="menuField: ${menu.menuFields}">
+				<th:block th:each="menuField: ${menu.fields}">
 					<span th:text="${menuField.value != null and menuField.value != ''} ? ${menuField.value}:'['+${menu.id}+']'" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
 				</th:block>
 				<span class="pull-right-container">
@@ -64,7 +64,7 @@
 		<th:block th:if="${#lists.isEmpty(menu.childs)}">
 			<a class="btn btn-app" th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}">
 				<i th:classappend="${menu.icon}"></i>
-				<th:block th:each="menuField: ${menu.menuFields}">
+				<th:block th:each="menuField: ${menu.fields}">
 					<span th:text="${menuField.value != null and menuField.value != ''} ? ${menuField.value}:'['+${menu.id}+']'" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
 				</th:block>
 			</a>

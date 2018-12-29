@@ -23,9 +23,9 @@ public class CustomerPrepareInterceptor implements PrepareInterceptor<Customer> 
 	public void onPrepare(Customer model) throws InterceptorException {
 		generateCustomerField(model);
 		
-		for (int i = 0; i < model.getUserFields().size(); i++) {
-			if (StringUtils.isBlank(model.getUserFields().get(i).getValue())) {
-				model.getUserFields().get(i).setValue(null);
+		for (int i = 0; i < model.getFields().size(); i++) {
+			if (StringUtils.isBlank(model.getFields().get(i).getValue())) {
+				model.getFields().get(i).setValue(null);
 			}
 		}
 	}
@@ -39,7 +39,7 @@ public class CustomerPrepareInterceptor implements PrepareInterceptor<Customer> 
 			for (DynamicField dynamicField : dynamicFields) {
 				
 				boolean add = true;
-				for (UserField modelUserGroupField : model.getUserFields()) {
+				for (UserField modelUserGroupField : model.getFields()) {
 					if (dynamicField.getUuid().equals(modelUserGroupField.getDynamicField().getUuid())) {
 						add = false;
 					}
@@ -51,7 +51,7 @@ public class CustomerPrepareInterceptor implements PrepareInterceptor<Customer> 
 					userGroupField.setId(model.getId() + "_" + dynamicField.getId());
 
 					userGroupField.setUser(model);
-					model.getUserFields().add(userGroupField);
+					model.getFields().add(userGroupField);
 				}
 			}
 		} catch (Exception e) {

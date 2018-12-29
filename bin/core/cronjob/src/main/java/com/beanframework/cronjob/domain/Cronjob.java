@@ -48,6 +48,7 @@ public class Cronjob extends GenericDomain {
 	public static final String LAST_START_EXECUTED_DATE = "lastStartExecutedDate";
 	public static final String LAST_FINISH_EXECUTED_DATE = "lastFinishExecutedDate";
 	public static final String CRONJOB_DATAS = "cronjobDatas";
+	public static final String STATUS = "status";
 
 	private String jobClass;
 
@@ -62,7 +63,7 @@ public class Cronjob extends GenericDomain {
 	/** Task run time expression */
 	private String cronExpression;
 
-	private boolean startup;
+	private Boolean startup;
 
 	@Enumerated(EnumType.STRING)
 	private Status status;
@@ -130,11 +131,11 @@ public class Cronjob extends GenericDomain {
 		this.cronExpression = cronExpression;
 	}
 
-	public boolean isStartup() {
+	public Boolean getStartup() {
 		return startup;
 	}
 
-	public void setStartup(boolean startup) {
+	public void setStartup(Boolean startup) {
 		this.startup = startup;
 	}
 

@@ -5,184 +5,6 @@
 <title th:text="#{module.menu}"></title>
 </head>
 <body>
-	<th:block layout:fragment="general">
-		<input type="hidden" class="form-control" name="sort" th:value="*{sort}">
-		<input type="hidden" class="form-control" name="parent.uuid" th:if="*{parent != null}" th:value="*{parent.uuid}">
-		<th:block th:each="child,itrStat : *{childs}">
-			<input type="hidden" th:name="'childs['+${itrStat.index}+'].uuid'" th:value="${child.uuid}">
-		</th:block>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label for="id" th:text="#{module.menu.id}"></label>
-				<input type="text" class="form-control" name="id" th:value="*{id}">
-				<span class="help-block"></span>
-			</div>
-			<div class="form-group">
-				<label for="icon" th:text="#{module.menu.icon}"></label>
-				<input type="text" class="form-control" name="icon" th:value="*{icon}">
-				<span class="help-block"></span>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label for="path" th:text="#{module.menu.path}"></label>
-				<small th:text="#{module.menu.path.indicate}"></small>
-				<input type="text" class="form-control" name="path" th:value="*{path}">
-				<span class="help-block"></span>
-			</div>
-			<div class="form-group">
-				<label for="target" th:text="#{module.menu.target}"></label>
-				<small th:text="#{module.menu.target.indicate}"></small>
-				<select class="form-control" name="target">
-					<option th:each="targetEnum : ${T(com.beanframework.menu.domain.MenuTargetTypeEnum).values()}" th:value="${target}" th:selected="*{target} == ${targetEnum} ? true : false" th:text="${targetEnum.toString()}"></option>
-				</select>
-				<span class="help-block"></span>
-			</div>
-		</div>
-	</th:block>
-	<th:block layout:fragment="attribute">
-		<div class="col-md-6">
-			<div class="form-group" th:each="langActive : ${moduleLanguages}" th:if="*{uuid != null}">
-				<th:block th:each="field,itrStat : *{menuFields}" th:if="${field.dynamicField.language.id == langActive.id}">
-					<label for="name" th:text="${field.dynamicField.name}+'('+${field.dynamicField.language.id}+')'"></label>
-					<input type="hidden" th:name="'menuFields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-					<input type="hidden" th:name="'menuFields['+${itrStat.index}+'].language.uuid'" th:value="${field.dynamicField.language.uuid}">
-					<input type="hidden" th:name="'menuFields['+${itrStat.index}+'].dynamicField.uuid'" th:value="${field.dynamicField.uuid}">
-					<input type="text" class="form-control" th:name="'menuFields['+${itrStat.index}+'].value'" th:value="${field.value}" th:required="${field.dynamicField.required}">
-				</th:block>
-				<span class="help-block"></span>
-			</div>
-			<div class="form-group" th:each="langActive,itrStat : ${moduleLanguages}" th:if="*{uuid == null}">
-				<label for="name" th:text="#{module.userright.name}+'('+${langActive.id}+')'"></label>
-				<input type="hidden" th:name="'menuFields['+${itrStat.index}+'].language.uuid'" th:value="${langActive.uuid}">
-				<input type="text" class="form-control" th:name="'menuFields['+${itrStat.index}+'].name'">
-				<span class="help-block"></span>
-			</div>
-		</div>
-	</th:block>
-	<th:block layout:fragment="usergroup">
-		<table id="usergroupTable" class="table table-bordered table-hover">
-			<thead>
-				<tr>
-					<th th:text="#{module.usergroup.id}"></th>
-					<th th:text="#{module.backoffice.select}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="userGroup,itrStat : *{userGroups}">
-					<th:block th:each="userGroupField : ${userGroup.userGroupFields}">
-						<td th:if="(${userGroupField.dynamicField.language.id == #locale.toString()})" th:text="${userGroupField.value}"></td>
-					</th:block>
-					<td>
-						<input type="hidden" th:name="'userGroups['+${itrStat.index}+'].uuid'" th:value="${userGroup.uuid}">
-						<input type="checkbox" th:name="'userGroups['+${itrStat.index}+'].selected'" th:checked="${userGroup.selected}">
-						<script th:inline="javascript">
-						$('input').iCheck({
-						      checkboxClass: 'icheckbox_square-blue',
-						      radioClass: 'iradio_square-blue',
-						      increaseArea: '20%' // optional
-						    });
-						</script>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</th:block>
-	<th:block layout:fragment="administration">
-		<div class="col-md-6">
-			<div class="form-group">
-				<label th:text="#{module.backoffice.uuid} + ':'"></label>
-				<span class="text-block" th:text="*{uuid}"></span>
-			</div>
-			<div class="form-group">
-				<label th:text="#{module.backoffice.lastmodified.date} + ':'"></label>
-				<span class="text-block" th:text="*{lastModifiedDate != null} ? *{#dates.format(lastModifiedDate, ' dd MMMM yyyy hh:mma')}"></span>
-			</div>
-			<div class="form-group" sec:authorize="hasAuthority('employee_read')">
-				<label th:text="#{module.backoffice.lastmodified.by} + ':'"></label>
-				<a th:href="@{${@environment.getProperty('path.employee')}(uuid=*{lastModifiedBy})}+'#tab_general'" th:text="#{module.backoffice.find.user}" th:if="*{lastModifiedBy != null}"></a>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label th:text="#{module.backoffice.created.date} + ':'"></label>
-				<span class="text-block" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy hh:mma')}"></span>
-			</div>
-			<div class="form-group" sec:authorize="hasAuthority('employee_read')">
-				<label th:text="#{module.backoffice.created.by} + ':'"></label>
-				<a th:href="@{${@environment.getProperty('path.employee')}(uuid=*{createdBy})}+'#tab_general'" th:text="#{module.backoffice.find.user}" th:if="*{createdBy != null}"></a>
-			</div>
-		</div>
-	</th:block>
-	<th:block layout:fragment="create">
-		<div class="modal fade" id="modal-create" sec:authorize="hasAuthority('menu_create')">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" th:text="#{module.backoffice.record.new}"></h4>
-					</div>
-					<form id="menu-create-form" role="form" th:action="@{${@environment.getProperty('path.menu')}}" method="post" th:object="${menuCreate}">
-						<input type="hidden" name="create">
-						<div class="modal-body">
-							<div class="container-fluid">
-								<div class="row">
-									<th:block layout:insert="/backoffice/adminlte/menu/menuForm :: general"></th:block>
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
-							<button type="submit" class="btn btn-success" th:text="#{module.backoffice.save}"></button>
-						</div>
-					</form>
-				</div>
-				<!-- /.modal-content -->
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
-		<script th:inline="javascript">
-		    /*<![CDATA[*/
-		    $(document).ready(function() {
-		        $('#menu-create-form').validate({
-		            rules: {
-		                id: {
-		                    required: true,
-		                    remote: {
-		                        url: /*[[${@environment.getProperty('path.api.menu.checkid')}]]*/ ,
-		                        type: "get",
-		                        data: {
-		                            uuid: '' ,
-		                            id: function() {
-		                                return $("#menu-create-form input[name='id']").val();
-		                            }
-		                        }
-		                    }
-		                }
-		            },
-		            messages: {
-		                id: {
-		                    required: /*[[#{module.menu.id.required}]]*/ ,
-		                    remote: /*[[#{module.menu.id.exists}]]*/
-		                }
-		            },
-		            highlight: function(element) {
-		                $(element).closest('.form-group').addClass('has-error');
-		            },
-		            unhighlight: function(element) {
-		                $(element).closest('.form-group').removeClass('has-error');
-		                $(element).closest('.form-group').find('.help-block').html('');
-		            },
-		            errorPlacement: function(error, element) {
-		                element.closest('.form-group').find('.help-block').html(error.text());
-		            }
-		        });
-		    });
-		    /*]]>*/
-		</script>
-	</th:block>
 	<th:block layout:fragment="update">
 		<form id="menu-update-form" role="form" th:action="${@environment.getProperty('path.menu')}" method="post" th:object="${menuUpdate}">
 			<input type="hidden" name="update">
@@ -221,35 +43,63 @@
 							<li>
 								<a href="#tab_usergroup" data-toggle="tab" th:text="#{module.usergroup}" onclick="changeTab('usergroup')"></a>
 							</li>
-							<li th:if="${menuUpdate.uuid != null}">
+							<li>
 								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/menu/menuForm :: general"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="path" th:text="#{module.menu.path}"></label>
+												<small th:text="#{module.menu.path.indicate}"></small>
+												<input type="text" class="form-control" name="path" th:value="*{path}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="target" th:text="#{module.menu.target}"></label>
+												<small th:text="#{module.menu.target.indicate}"></small>
+												<select class="form-control" name="target">
+													<option th:each="targetEnum : ${T(com.beanframework.menu.domain.MenuTargetTypeEnum).values()}" th:value="${target}" th:selected="*{target} == ${targetEnum} ? true : false"
+														th:text="${targetEnum.toString()}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="icon" th:text="#{module.menu.icon}"></label>
+												<input type="text" class="form-control" name="icon" th:value="*{icon}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/menu/menuForm :: attribute"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/common/component/attribute :: attribute"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_usergroup">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/menu/menuForm :: usergroup"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/common/component/usergroup :: usergroup"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_administration" th:if="${menuUpdate.uuid != null}">
+							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/menu/menuForm :: administration"></th:block>
+									<th:block layout:insert="/backoffice/adminlte/common/component/administration :: administration"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -287,24 +137,9 @@
 		<!-- /.modal -->
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
-		    	
-		    var locale = /*[[${#locale}]]*/;
-		    	
+		    		    	
 		    $(document).ready(function() {
-		    	
-		    	$('#usergroupTable').DataTable({
-		    		  'language' : {
-				        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
-				      },
-		    	      'pageLength'  : 10,
-		    	      'paging'      : true,
-		    	      'lengthChange': false,
-		    	      'searching'   : true,
-		    	      'ordering'    : true,
-		    	      'info'        : false,
-		    	      'autoWidth'   : true
-		    	})
-		    	
+		    			    	
 		    	// Handle form submission event
 			   $('#menu-update-form').on('submit', function(e){
 			      var form = this;

@@ -11,9 +11,10 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.email.domain.Email;
 
-public class EmailSpecification {
+public class EmailSpecification extends AbstractSpecification {
 	public static Specification<Email> findByCriteria(final EmailSearch data) {
 
 		return new Specification<Email>() {
@@ -45,38 +46,23 @@ public class EmailSpecification {
 
 	public static void addPredicates(String to, String cc, String bcc, String subject, String text, String html, Root<Email> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(to)) {
-			if (to.contains("%") == false && to.contains("_") == false) {
-				to = "%" + to + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Email.TO_RECIPIENTS), to)));
+			predicates.add(cb.or(cb.like(root.get(Email.TO_RECIPIENTS), convertToPattern(to))));
 		}
 
 		if (StringUtils.isNotEmpty(cc)) {
-			if (cc.contains("%") == false && cc.contains("_") == false) {
-				cc = "%" + cc + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Email.CC_RECIPIENTS), cc)));
+			predicates.add(cb.or(cb.like(root.get(Email.CC_RECIPIENTS), convertToPattern(cc))));
 		}
 
 		if (StringUtils.isNotEmpty(bcc)) {
-			if (bcc.contains("%") == false && bcc.contains("_") == false) {
-				bcc = "%" + bcc + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Email.BCC_RECIPIENTS), bcc)));
+			predicates.add(cb.or(cb.like(root.get(Email.BCC_RECIPIENTS), convertToPattern(bcc))));
 		}
 
 		if (StringUtils.isNotEmpty(text)) {
-			if (text.contains("%") == false && text.contains("_") == false) {
-				text = "%" + text + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Email.TEXT), text)));
+			predicates.add(cb.or(cb.like(root.get(Email.TEXT), convertToPattern(text))));
 		}
 
 		if (StringUtils.isNotEmpty(html)) {
-			if (html.contains("%") == false && text.contains("_") == false) {
-				html = "%" + html + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Email.HTML), html)));
+			predicates.add(cb.or(cb.like(root.get(Email.HTML), convertToPattern(html))));
 		}
 	}
 }

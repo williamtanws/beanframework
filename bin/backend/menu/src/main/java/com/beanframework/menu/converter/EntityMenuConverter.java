@@ -98,16 +98,16 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 				}
 				prototype.setUserGroups(userGroups);
 			}
-			if (source.getMenuFields() == null || source.getMenuFields().isEmpty()) {
-				prototype.setMenuFields(new ArrayList<MenuField>());
+			if (source.getFields() == null || source.getFields().isEmpty()) {
+				prototype.setFields(new ArrayList<MenuField>());
 			} else {
 				List<MenuField> menuFields = new ArrayList<MenuField>();
-				for (MenuField menuField : source.getMenuFields()) {
+				for (MenuField menuField : source.getFields()) {
 					MenuField entityMenuField = modelService.findOneEntityByUuid(menuField.getUuid(), MenuField.class);
 					entityMenuField.setValue(menuField.getValue());
 					menuFields.add(entityMenuField);
 				}
-				prototype.setMenuFields(menuFields);
+				prototype.setFields(menuFields);
 			}
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

@@ -26,14 +26,14 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebEmailConstants;
 import com.beanframework.backoffice.data.EmailSearch;
 import com.beanframework.backoffice.data.EmailSpecification;
-import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.service.EmailFacade;
 
 @Controller
-public class EmailController extends AbstractCommonController {
+public class EmailController extends AbstractController {
 
 	@Autowired
 	private EmailFacade emailFacade;

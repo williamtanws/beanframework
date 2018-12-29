@@ -83,11 +83,11 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 					}
 				}
 			}
-			if (source.getUserGroupFields() != null && source.getUserGroupFields().isEmpty() == false) {
-				for (int i = 0; i < prototype.getUserGroupFields().size(); i++) {
-					for (UserGroupField sourceUserGroupField : source.getUserGroupFields()) {
-						if (prototype.getUserGroupFields().get(i).getUuid().equals(sourceUserGroupField.getUuid())) {
-							prototype.getUserGroupFields().get(i).setValue(sourceUserGroupField.getValue());
+			if (source.getFields() != null && source.getFields().isEmpty() == false) {
+				for (int i = 0; i < prototype.getFields().size(); i++) {
+					for (UserGroupField sourceUserGroupField : source.getFields()) {
+						if (prototype.getFields().get(i).getUuid().equals(sourceUserGroupField.getUuid())) {
+							prototype.getFields().get(i).setValue(sourceUserGroupField.getValue());
 						}
 					}
 				}

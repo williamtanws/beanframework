@@ -23,9 +23,9 @@ public class UserPermissionPrepareInterceptor implements PrepareInterceptor<User
 	public void onPrepare(UserPermission model) throws InterceptorException {
 		generateUserPermissionField(model);
 		
-		for (int i = 0; i < model.getUserPermissionFields().size(); i++) {
-			if (StringUtils.isBlank(model.getUserPermissionFields().get(i).getValue())) {
-				model.getUserPermissionFields().get(i).setValue(null);
+		for (int i = 0; i < model.getFields().size(); i++) {
+			if (StringUtils.isBlank(model.getFields().get(i).getValue())) {
+				model.getFields().get(i).setValue(null);
 			}
 		}
 	}
@@ -39,7 +39,7 @@ public class UserPermissionPrepareInterceptor implements PrepareInterceptor<User
 			for (DynamicField dynamicField : dynamicFields) {
 
 				boolean add = true;
-				for (UserPermissionField modelUserGroupField : model.getUserPermissionFields()) {
+				for (UserPermissionField modelUserGroupField : model.getFields()) {
 					if (dynamicField.getUuid().equals(modelUserGroupField.getDynamicField().getUuid())) {
 						add = false;
 					}
@@ -51,7 +51,7 @@ public class UserPermissionPrepareInterceptor implements PrepareInterceptor<User
 					userGroupField.setId(model.getId() + "_" + dynamicField.getId());
 
 					userGroupField.setUserPermission(model);
-					model.getUserPermissionFields().add(userGroupField);
+					model.getFields().add(userGroupField);
 				}
 			}
 		} catch (Exception e) {

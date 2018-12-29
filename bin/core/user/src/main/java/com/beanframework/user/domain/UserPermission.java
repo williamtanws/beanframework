@@ -26,19 +26,20 @@ public class UserPermission extends GenericDomain {
 	private static final long serialVersionUID = 5923500001897510869L;
 	public static final String USER_PERMISSION_FIELD = "userPermissionField";
 	public static final String SORT = "sort";
+	public static final String FIELDS = "fields";
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserPermissionField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<UserPermissionField> userPermissionFields = new ArrayList<UserPermissionField>();
+	private List<UserPermissionField> fields = new ArrayList<UserPermissionField>();
 
 	private Integer sort;
 
-	public List<UserPermissionField> getUserPermissionFields() {
-		return userPermissionFields;
+	public List<UserPermissionField> getFields() {
+		return fields;
 	}
 
-	public void setUserPermissionFields(List<UserPermissionField> userPermissionFields) {
-		this.userPermissionFields = userPermissionFields;
+	public void setFields(List<UserPermissionField> fields) {
+		this.fields = fields;
 	}
 
 	public Integer getSort() {

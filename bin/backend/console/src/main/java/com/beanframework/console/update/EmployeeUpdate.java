@@ -85,7 +85,7 @@ public class EmployeeUpdate extends Updater {
 				employee = modelService.create(Employee.class);
 				employee.setId(csv.getId());
 			} else {
-				Hibernate.initialize(employee.getUserFields());
+				Hibernate.initialize(employee.getFields());
 			}
 
 			if (StringUtils.isNotBlank(csv.getPassword())) {
@@ -105,9 +105,9 @@ public class EmployeeUpdate extends Updater {
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split("=")[0];
 					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < employee.getUserFields().size(); i++) {
-						if (employee.getUserFields().get(i).getId().equals(employee.getId()+"_"+dynamicFieldId)) {
-							employee.getUserFields().get(i).setValue(value);
+					for (int i = 0; i < employee.getFields().size(); i++) {
+						if (employee.getFields().get(i).getId().equals(employee.getId()+"_"+dynamicFieldId)) {
+							employee.getFields().get(i).setValue(value);
 						}
 					}
 				}

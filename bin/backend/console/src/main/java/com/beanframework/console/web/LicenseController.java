@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
@@ -25,7 +25,7 @@ import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.WebLicenseConstants;
 
 @Controller
-public class LicenseController extends AbstractCommonController {
+public class LicenseController extends AbstractController {
 	
 	@Autowired
 	private ModelService modelService;

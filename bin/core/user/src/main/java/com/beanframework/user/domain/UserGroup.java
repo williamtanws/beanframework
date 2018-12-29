@@ -31,7 +31,7 @@ public class UserGroup extends GenericDomain {
 	public static final String PARENT = "parent";
 	public static final String CHILDS = "childs";
 	public static final String USER_AUTHORITIES = "userAuthorities";
-	public static final String USER_GROUP_FIELDS = "userGroupFields";
+	public static final String FIELDS = "fields";
 
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -44,7 +44,7 @@ public class UserGroup extends GenericDomain {
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<UserGroupField> userGroupFields = new ArrayList<UserGroupField>();
+	private List<UserGroupField> fields = new ArrayList<UserGroupField>();
 
 	@Transient
 	private String selected;
@@ -65,12 +65,12 @@ public class UserGroup extends GenericDomain {
 		this.userAuthorities = userAuthorities;
 	}
 
-	public List<UserGroupField> getUserGroupFields() {
-		return userGroupFields;
+	public List<UserGroupField> getFields() {
+		return fields;
 	}
 
-	public void setUserGroupFields(List<UserGroupField> userGroupFields) {
-		this.userGroupFields = userGroupFields;
+	public void setFields(List<UserGroupField> fields) {
+		this.fields = fields;
 	}
 
 	public String getSelected() {

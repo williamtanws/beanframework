@@ -61,11 +61,11 @@ public class EntityEmployeeConverter implements EntityConverter<Employee, Employ
 			prototype.setEnabled(source.getEnabled());
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-			if (source.getUserFields() != null && source.getUserFields().isEmpty() == false) {
-				for (int i = 0; i < prototype.getUserFields().size(); i++) {
-					for (UserField sourceUserField : source.getUserFields()) {
-						if (prototype.getUserFields().get(i).getUuid().equals(sourceUserField.getUuid())) {
-							prototype.getUserFields().get(i).setValue(sourceUserField.getValue());
+			if (source.getFields() != null && source.getFields().isEmpty() == false) {
+				for (int i = 0; i < prototype.getFields().size(); i++) {
+					for (UserField sourceUserField : source.getFields()) {
+						if (prototype.getFields().get(i).getUuid().equals(sourceUserField.getUuid())) {
+							prototype.getFields().get(i).setValue(sourceUserField.getValue());
 						}
 					}
 				}

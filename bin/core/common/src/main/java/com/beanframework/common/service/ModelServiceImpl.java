@@ -1,5 +1,6 @@
 package com.beanframework.common.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -82,7 +83,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
 	public <T> T findOneDtoByUuid(UUID uuid, Class modelClass) throws Exception {
@@ -95,7 +96,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			Object model = (T) findOneEntityByProperties(properties, modelClass);
 			loadInterceptor(model, modelClass);
-			
+
 			model = getDto(model, modelClass);
 
 			return (T) model;
@@ -163,7 +164,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
 	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, int maxResult, Class modelClass) throws Exception {
@@ -411,9 +412,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			prepareInterceptor(model, modelClass);
 			validateInterceptor(model, modelClass);
 			modelRepository.save(model);
-			
+
 			clearCache(modelClass);
-			
+
 			return model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -434,7 +435,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			clearCache(modelClass);
 
 			model = getDto(model, modelClass);
-			
+
 			return model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -448,40 +449,48 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		modelRepository.flush();
 	}
 
-	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void delete(UUID uuid, Class modelClass) throws BusinessException {
-
 		try {
 
 			Object model = findOneEntityByUuid(uuid, modelClass);
-			
-			modelRepository.delete(model);
+
+			delete(model);
 
 			removeInterceptor(model, modelClass);
 
 			clearCache(modelClass);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
 
-	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void deleteAll(Class modelClass) throws BusinessException {
 		try {
 			List<Object> models = findAll(modelClass);
 			for (Object model : models) {
-				modelRepository.delete(model);
+				delete(model);
 			}
 
 			clearCache(modelClass);
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
+
+	@Transactional(rollbackFor = SQLException.class)
+	private void delete(Object model) throws SQLException {
+		modelRepository.delete(model);
 	}
 
 	@Override

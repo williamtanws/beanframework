@@ -45,9 +45,9 @@ public class DtoUserPermissionConverter implements DtoConverter<UserPermission, 
 
 		prototype.setSort(source.getSort());
 		try {
-			Hibernate.initialize(source.getUserPermissionFields());
+			Hibernate.initialize(source.getFields());
 			
-			prototype.setUserPermissionFields(modelService.getDto(source.getUserPermissionFields(), UserPermissionField.class));
+			prototype.setFields(modelService.getDto(source.getFields(), UserPermissionField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

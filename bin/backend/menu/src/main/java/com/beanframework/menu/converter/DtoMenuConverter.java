@@ -58,7 +58,7 @@ public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 			
 			prototype.setChilds(modelService.getDto(source.getChilds(), Menu.class));
 			prototype.setUserGroups(source.getUserGroups());
-			prototype.setMenuFields(modelService.getDto(source.getMenuFields(), MenuField.class));
+			prototype.setFields(modelService.getDto(source.getFields(), MenuField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

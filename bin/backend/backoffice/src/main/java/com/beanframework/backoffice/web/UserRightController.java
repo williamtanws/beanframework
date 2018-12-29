@@ -25,7 +25,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserRightConstants;
 import com.beanframework.backoffice.data.UserRightSearch;
 import com.beanframework.backoffice.data.UserRightSpecification;
-import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.utils.ParamUtils;
@@ -33,7 +33,7 @@ import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserRightFacade;
 
 @Controller
-public class UserRightController extends AbstractCommonController {
+public class UserRightController extends AbstractController {
 
 	@Autowired
 	private UserRightFacade userRightFacade;

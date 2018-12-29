@@ -83,7 +83,7 @@ public class UserRightUpdate extends Updater {
 				userRight = modelService.create(UserRight.class);
 				userRight.setId(csv.getId());
 			} else {
-				Hibernate.initialize(userRight.getUserRightFields());
+				Hibernate.initialize(userRight.getFields());
 			}
 			userRight.setSort(csv.getSort());
 
@@ -96,9 +96,9 @@ public class UserRightUpdate extends Updater {
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split("=")[0];
 					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < userRight.getUserRightFields().size(); i++) {
-						if (userRight.getUserRightFields().get(i).getId().equals(userRight.getId()+"_"+dynamicFieldId)) {
-							userRight.getUserRightFields().get(i).setValue(value);
+					for (int i = 0; i < userRight.getFields().size(); i++) {
+						if (userRight.getFields().get(i).getId().equals(userRight.getId()+"_"+dynamicFieldId)) {
+							userRight.getFields().get(i).setValue(value);
 						}
 					}
 				}

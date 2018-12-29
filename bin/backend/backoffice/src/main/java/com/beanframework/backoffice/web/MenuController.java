@@ -25,7 +25,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebMenuConstants;
-import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.menu.domain.Menu;
@@ -34,7 +34,7 @@ import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupFacade;
 
 @Controller
-public class MenuController extends AbstractCommonController {
+public class MenuController extends AbstractController {
 
 	@Autowired
 	private MenuFacade menuFacade;

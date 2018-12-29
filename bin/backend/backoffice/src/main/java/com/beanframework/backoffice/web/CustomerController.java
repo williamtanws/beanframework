@@ -28,7 +28,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCustomerConstants;
 import com.beanframework.backoffice.data.CustomerSearch;
 import com.beanframework.backoffice.data.CustomerSpecification;
-import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
@@ -38,7 +38,7 @@ import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupFacade;
 
 @Controller
-public class CustomerController extends AbstractCommonController {
+public class CustomerController extends AbstractController {
 
 	@Autowired
 	private CustomerFacade customerFacade;

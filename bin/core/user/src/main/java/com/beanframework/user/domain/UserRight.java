@@ -24,12 +24,12 @@ import com.beanframework.user.UserRightConstants;
 public class UserRight extends GenericDomain {
 
 	private static final long serialVersionUID = 8192305251381233446L;
-	public static final String USER_RIGHT_FIELDS = "userRightFields";
+	public static final String FIELDS = "fields";
 	public static final String SORT = "sort";
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<UserRightField> userRightFields = new ArrayList<UserRightField>();
+	private List<UserRightField> fields = new ArrayList<UserRightField>();
 
 	private Integer sort;
 
@@ -41,12 +41,12 @@ public class UserRight extends GenericDomain {
 		this.sort = sort;
 	}
 
-	public List<UserRightField> getUserRightFields() {
-		return userRightFields;
+	public List<UserRightField> getFields() {
+		return fields;
 	}
 
-	public void setUserRightFields(List<UserRightField> userRightFields) {
-		this.userRightFields = userRightFields;
+	public void setFields(List<UserRightField> fields) {
+		this.fields = fields;
 	}
 
 }
