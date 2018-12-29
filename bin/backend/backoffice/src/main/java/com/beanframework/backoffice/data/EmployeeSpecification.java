@@ -1,4 +1,4 @@
-package com.beanframework.user.domain;
+package com.beanframework.backoffice.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,23 +11,25 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
-public class UserRightSpecification {
-	public static Specification<UserRight> findByCriteria(final UserRight userRight) {
+import com.beanframework.employee.domain.Employee;
 
-		return new Specification<UserRight>() {
+public class EmployeeSpecification {
+	public static Specification<Employee> findByCriteria(final Employee employee) {
+
+		return new Specification<Employee>() {
 
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = 9019750522524126629L;
+			private static final long serialVersionUID = 6060970738788715423L;
 
 			@Override
-			public Predicate toPredicate(Root<UserRight> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<Employee> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(userRight.getId())) {
-					predicates.add(cb.or(cb.like(root.get(UserRight.ID), "%" + userRight.getId() + "%")));
+				if (StringUtils.isNotBlank(employee.getId())) {
+					predicates.add(cb.or(cb.like(root.get(Employee.ID), "%" + employee.getId() + "%")));
 				}
 				
 				if(predicates.isEmpty()) {

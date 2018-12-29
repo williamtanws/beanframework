@@ -28,12 +28,13 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserGroupConstants;
 import com.beanframework.backoffice.data.UserGroupSearch;
+import com.beanframework.backoffice.data.UserGroupSpecification;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
+import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupSpecification;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserGroupFacade;
@@ -61,7 +62,7 @@ public class UserGroupController extends AbstractCommonController {
 	@Value(WebUserGroupConstants.LIST_SIZE)
 	private int MODULE_USERGROUP_LIST_SIZE;
 
-	private Page<UserGroup> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<UserGroup> getPagination(UserGroupSearch userGroupSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -73,20 +74,14 @@ public class UserGroupController extends AbstractCommonController {
 
 		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
-
-		UserGroupSearch usergroupSearch = (UserGroupSearch) model.asMap()
-				.get(WebUserGroupConstants.ModelAttribute.SEARCH);
-
-		UserGroup usergroup = new UserGroup();
-		usergroup.setId(usergroupSearch.getIdSearch());
-
+		
 		if (properties == null) {
 			properties = new String[1];
 			properties[0] = UserGroup.CREATED_DATE;
-			direction = Sort.Direction.DESC;
+			direction = Sort.Direction.ASC;
 		}
 
-		Page<UserGroup> pagination = userGroupFacade.findPage(UserGroupSpecification.findByCriteria(usergroup),
+		Page<UserGroup> pagination = userGroupFacade.findPage(UserGroupSpecification.findByCriteria(userGroupSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
@@ -97,6 +92,10 @@ public class UserGroupController extends AbstractCommonController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, UserGroupSearch usergroupSearch) {
+		
+		usergroupSearch.setSearchAll((String)requestParams.get("usergroupSearch.searchAll"));
+		usergroupSearch.setId((String)requestParams.get("usergroupSearch.id"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -109,8 +108,8 @@ public class UserGroupController extends AbstractCommonController {
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute(UserGroupSearch.ID_SEARCH, usergroupSearch.getIdSearch());
-		redirectAttributes.addFlashAttribute(WebUserGroupConstants.ModelAttribute.SEARCH, usergroupSearch);
+		redirectAttributes.addAttribute("searchAll", usergroupSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", usergroupSearch.getId());
 
 		return redirectAttributes;
 	}
@@ -135,7 +134,7 @@ public class UserGroupController extends AbstractCommonController {
 			@ModelAttribute(WebUserGroupConstants.ModelAttribute.UPDATE) UserGroup usergroupUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(usergroupSearch, model, requestParams));
 
 		if (usergroupUpdate.getUuid() != null) {
 

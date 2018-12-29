@@ -44,7 +44,7 @@ public class CustomerValidateInterceptor implements ValidateInterceptor<Customer
 
 			} else {
 				// Update exists
-				if (StringUtils.isNotEmpty(model.getId())) {
+				if (StringUtils.isNotBlank(model.getId())) {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(Customer.ID, model.getId());
 					Customer exists = modelService.findOneEntityByProperties(properties, Customer.class);

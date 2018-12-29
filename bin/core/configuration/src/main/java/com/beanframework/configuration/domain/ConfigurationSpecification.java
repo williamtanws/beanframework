@@ -23,11 +23,11 @@ public class ConfigurationSpecification {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(configuration.getId())) {
+				if (StringUtils.isNotBlank(configuration.getId())) {
 					predicates.add(cb.or(cb.like(root.get(Configuration.ID), "%" + configuration.getId() + "%")));
 				}
 				
-				if (StringUtils.isNotEmpty(configuration.getValue())) {
+				if (StringUtils.isNotBlank(configuration.getValue())) {
 					predicates.add(cb.or(cb.like(root.get(Configuration.VALUE), "%" + configuration.getId() + "%")));
 				}
 				

@@ -1,16 +1,20 @@
 package com.beanframework.backoffice.data;
 
-public class UserGroupSearch {
-	
-	public static final String ID_SEARCH = "idSearch";
+import com.beanframework.user.domain.UserGroup;
 
-	private String idSearch;
+public class UserGroupSearch extends UserGroup {
 
-	public String getIdSearch() {
-		return idSearch;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7214778984728422853L;
+	private String searchAll;
+
+	public String getSearchAll() {
+		return searchAll;
 	}
 
-	public void setIdSearch(String idSearch) {
-		this.idSearch = idSearch;
+	public void setSearchAll(String searchAll) {
+		this.searchAll = searchAll;
 	}
 }

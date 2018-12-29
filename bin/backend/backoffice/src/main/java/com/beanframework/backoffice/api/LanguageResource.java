@@ -32,7 +32,7 @@ public class LanguageResource {
 		Language language = languageFacade.findOneDtoByProperties(properties);
 		
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (language != null && language.getUuid().equals(uuid)) {
 				return "true";

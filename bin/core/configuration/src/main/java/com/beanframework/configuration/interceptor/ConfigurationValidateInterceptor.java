@@ -42,7 +42,7 @@ public class ConfigurationValidateInterceptor implements ValidateInterceptor<Con
 
 			} else {
 				// Update exists
-				if (StringUtils.isNotEmpty(model.getId())) {
+				if (StringUtils.isNotBlank(model.getId())) {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(Configuration.ID, model.getId());
 					Configuration exists = modelService.findOneEntityByProperties(properties, Configuration.class);

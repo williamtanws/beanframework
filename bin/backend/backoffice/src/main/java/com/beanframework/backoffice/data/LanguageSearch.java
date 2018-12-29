@@ -1,16 +1,20 @@
 package com.beanframework.backoffice.data;
 
-public class LanguageSearch {
-	
-	public static final String ID_SEARCH = "idSearch";
+import com.beanframework.language.domain.Language;
 
-	private String idSearch;
+public class LanguageSearch extends Language {
 
-	public String getIdSearch() {
-		return idSearch;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8780777783489567799L;
+	private String searchAll;
+
+	public String getSearchAll() {
+		return searchAll;
 	}
 
-	public void setIdSearch(String idSearch) {
-		this.idSearch = idSearch;
+	public void setSearchAll(String searchAll) {
+		this.searchAll = searchAll;
 	}
 }

@@ -1,4 +1,4 @@
-package com.beanframework.email.domain;
+package com.beanframework.backoffice.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
+
+import com.beanframework.email.domain.Email;
 
 public class EmailSpecification {
 	public static Specification<Email> findByCriteria(final Email email) {
@@ -26,13 +28,13 @@ public class EmailSpecification {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(email.getToRecipients())) {
+				if (StringUtils.isNotBlank(email.getToRecipients())) {
 					predicates.add(cb.or(cb.like(root.get(Email.TORECIPIENTS), "%" + email.getToRecipients() + "%")));
 				}
-				if (StringUtils.isNotEmpty(email.getCcRecipients())) {
+				if (StringUtils.isNotBlank(email.getCcRecipients())) {
 					predicates.add(cb.or(cb.like(root.get(Email.CCRECIPIENTS), "%" + email.getCcRecipients() + "%")));
 				}
-				if (StringUtils.isNotEmpty(email.getBccRecipients())) {
+				if (StringUtils.isNotBlank(email.getBccRecipients())) {
 					predicates.add(cb.or(cb.like(root.get(Email.BCCRECIPIENTS), "%" + email.getBccRecipients() + "%")));
 				}
 

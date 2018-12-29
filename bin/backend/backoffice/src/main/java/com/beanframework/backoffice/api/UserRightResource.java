@@ -33,7 +33,7 @@ public class UserRightResource {
 		UserRight userRight = userRightFacade.findOneDtoByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (userRight != null && userRight.getUuid().equals(uuid)) {
 				return "true";

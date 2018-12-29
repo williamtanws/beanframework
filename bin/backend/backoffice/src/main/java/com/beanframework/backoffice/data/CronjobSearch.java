@@ -1,16 +1,20 @@
 package com.beanframework.backoffice.data;
 
-public class CronjobSearch {
-	
-	public static final String ID_SEARCH = "idSearch";
+import com.beanframework.cronjob.domain.Cronjob;
 
-	private String idSearch;
+public class CronjobSearch extends Cronjob {
 
-	public String getIdSearch() {
-		return idSearch;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7307826294746220674L;
+	private String searchAll;
+
+	public String getSearchAll() {
+		return searchAll;
 	}
 
-	public void setIdSearch(String idSearch) {
-		this.idSearch = idSearch;
+	public void setSearchAll(String searchAll) {
+		this.searchAll = searchAll;
 	}
 }

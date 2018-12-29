@@ -1,27 +1,21 @@
 package com.beanframework.backoffice.data;
 
-public class CustomerSearch {
+import com.beanframework.customer.domain.Customer;
 
-	public static final String ID_SEARCH = "idSearch";
-	public static final String NAME_SEARCH = "nameSearch";
+public class CustomerSearch extends Customer {
 
-	private String idSearch;
-	private String nameSearch;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3994276317460096414L;
+	private String searchAll;
 
-	public String getIdSearch() {
-		return idSearch;
+	public String getSearchAll() {
+		return searchAll;
 	}
 
-	public void setIdSearch(String idSearch) {
-		this.idSearch = idSearch;
-	}
-
-	public String getNameSearch() {
-		return nameSearch;
-	}
-
-	public void setNameSearch(String nameSearch) {
-		this.nameSearch = nameSearch;
+	public void setSearchAll(String searchAll) {
+		this.searchAll = searchAll;
 	}
 
 }

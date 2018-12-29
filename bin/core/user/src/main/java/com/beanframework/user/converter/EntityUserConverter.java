@@ -55,7 +55,7 @@ public class EntityUserConverter implements EntityConverter<User, User> {
 		prototype.setAccountNonLocked(source.getAccountNonLocked());
 		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 		prototype.setEnabled(source.getEnabled());
-		if (StringUtils.isNotEmpty(source.getPassword()))
+		if (StringUtils.isNotBlank(source.getPassword()))
 			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
 		if (source.getUserFields() != null && source.getUserFields().isEmpty() == false) {
 			for (int i = 0; i < prototype.getUserFields().size(); i++) {

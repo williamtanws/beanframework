@@ -32,7 +32,7 @@ public class BackofficeSuccessHandler extends SavedRequestAwareAuthenticationSuc
 		DefaultSavedRequest savedRequest = (DefaultSavedRequest) requestCache.getRequest(request, response);
 
 		if (savedRequest != null && savedRequest.getMethod().equalsIgnoreCase("GET")) {
-			if(StringUtils.isNotEmpty(savedRequest.getQueryString())) {
+			if(StringUtils.isNotBlank(savedRequest.getQueryString())) {
 				getRedirectStrategy().sendRedirect(request, response, savedRequest.getRequestURL()+"?"+savedRequest.getQueryString());
 			}
 			else {

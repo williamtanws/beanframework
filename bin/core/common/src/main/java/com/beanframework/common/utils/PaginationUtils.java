@@ -29,10 +29,10 @@
 //	public static Map<String, Object> getPaginationParam(Model model, @RequestParam Map<String, Object> requestParams) {
 //		Map<String, Object> params = new HashMap<String, Object>();
 //
-//		int page = isNotEmpty(requestParams.get(PARAM_PAGE)) ? Integer.valueOf(requestParams.get(PARAM_PAGE).toString()) - 1 : 0;
-//		int size = isNotEmpty(requestParams.get(PARAM_SIZE)) ? Integer.valueOf(requestParams.get(PARAM_SIZE).toString()) : DEFAULT_SIZE;
-//		Direction direction = isNotEmpty(requestParams.get(PARAM_DIRECTION)) ? Direction.valueOf(requestParams.get(PARAM_DIRECTION).toString().toUpperCase()) : null;
-//		String properties = isNotEmpty(requestParams.get(PARAM_PROPERTIES)) ? String.valueOf(requestParams.get(PARAM_PROPERTIES).toString().toUpperCase()) : null;
+//		int page = isNotBlank(requestParams.get(PARAM_PAGE)) ? Integer.valueOf(requestParams.get(PARAM_PAGE).toString()) - 1 : 0;
+//		int size = isNotBlank(requestParams.get(PARAM_SIZE)) ? Integer.valueOf(requestParams.get(PARAM_SIZE).toString()) : DEFAULT_SIZE;
+//		Direction direction = isNotBlank(requestParams.get(PARAM_DIRECTION)) ? Direction.valueOf(requestParams.get(PARAM_DIRECTION).toString().toUpperCase()) : null;
+//		String properties = isNotBlank(requestParams.get(PARAM_PROPERTIES)) ? String.valueOf(requestParams.get(PARAM_PROPERTIES).toString().toUpperCase()) : null;
 //		
 //		params.put(PARAM_PAGE, page);
 //		params.put(PARAM_SIZE, size);
@@ -44,10 +44,10 @@
 //
 //	public static String getPaginationPath(String path, @RequestParam Map<String, Object> requestParams) {
 //
-//		int page = isNotEmpty(requestParams.get(PARAM_PAGE)) ? Integer.valueOf(requestParams.get(PARAM_PAGE).toString()) - 1 : 0;
-//		int size = isNotEmpty(requestParams.get(PARAM_SIZE)) ? Integer.valueOf(requestParams.get(PARAM_SIZE).toString()) : DEFAULT_SIZE;
-//		String properties = isNotEmpty(requestParams.get(PARAM_PROPERTIES)) ? String.valueOf(requestParams.get(PARAM_PROPERTIES).toString().toUpperCase()) : null;
-//		Direction direction = isNotEmpty(requestParams.get(PARAM_DIRECTION)) ? Direction.valueOf(requestParams.get(PARAM_DIRECTION).toString().toUpperCase()) : null;
+//		int page = isNotBlank(requestParams.get(PARAM_PAGE)) ? Integer.valueOf(requestParams.get(PARAM_PAGE).toString()) - 1 : 0;
+//		int size = isNotBlank(requestParams.get(PARAM_SIZE)) ? Integer.valueOf(requestParams.get(PARAM_SIZE).toString()) : DEFAULT_SIZE;
+//		String properties = isNotBlank(requestParams.get(PARAM_PROPERTIES)) ? String.valueOf(requestParams.get(PARAM_PROPERTIES).toString().toUpperCase()) : null;
+//		Direction direction = isNotBlank(requestParams.get(PARAM_DIRECTION)) ? Direction.valueOf(requestParams.get(PARAM_DIRECTION).toString().toUpperCase()) : null;
 //		
 //		MultiValueMap<String, String> paginationParams = new LinkedMultiValueMap<String, String>();
 //		paginationParams.set(PARAM_PAGE, String.valueOf(page));
@@ -62,10 +62,10 @@
 //
 //	public static String generatePath(String path, Map<String, String> additionalParams, @RequestParam Map<String, Object> requestParams) {
 //
-//		int page = isNotEmpty(requestParams.get(PARAM_PAGE)) ? Integer.valueOf(requestParams.get(PARAM_PAGE).toString()) - 1 : 0;
-//		int size = isNotEmpty(requestParams.get(PARAM_SIZE)) ? Integer.valueOf(requestParams.get(PARAM_SIZE).toString()) : DEFAULT_SIZE;
-//		String properties = isNotEmpty(requestParams.get(PARAM_PROPERTIES)) ? String.valueOf(requestParams.get(PARAM_PROPERTIES).toString().toUpperCase()) : null;
-//		Direction direction = isNotEmpty(requestParams.get(PARAM_DIRECTION)) ? Direction.valueOf(requestParams.get(PARAM_DIRECTION).toString().toUpperCase()) : null;
+//		int page = isNotBlank(requestParams.get(PARAM_PAGE)) ? Integer.valueOf(requestParams.get(PARAM_PAGE).toString()) - 1 : 0;
+//		int size = isNotBlank(requestParams.get(PARAM_SIZE)) ? Integer.valueOf(requestParams.get(PARAM_SIZE).toString()) : DEFAULT_SIZE;
+//		String properties = isNotBlank(requestParams.get(PARAM_PROPERTIES)) ? String.valueOf(requestParams.get(PARAM_PROPERTIES).toString().toUpperCase()) : null;
+//		Direction direction = isNotBlank(requestParams.get(PARAM_DIRECTION)) ? Direction.valueOf(requestParams.get(PARAM_DIRECTION).toString().toUpperCase()) : null;
 //		
 //		MultiValueMap<String, String> paginationParams = new LinkedMultiValueMap<String, String>();
 //		paginationParams.set(PARAM_PAGE, String.valueOf(page));
@@ -99,7 +99,7 @@
 //	}
 //
 //	public static String convertParam(Object value) {
-//		if (isNotEmpty(value)) {
+//		if (isNotBlank(value)) {
 //			return value.toString();
 //		} else {
 //			return "";
@@ -107,7 +107,7 @@
 //	}
 //
 //	public static String convertParamEncode(Object value) {
-//		if (isNotEmpty(value)) {
+//		if (isNotBlank(value)) {
 //			try {
 //				return URLEncoder.encode(value.toString(), "UTF-8").toString();
 //			} catch (UnsupportedEncodingException e) {
@@ -119,7 +119,7 @@
 //		}
 //	}
 //
-//	public static boolean isNotEmpty(Object object) {
+//	public static boolean isNotBlank(Object object) {
 //		if (object == null) {
 //			return false;
 //		} else if (object instanceof String) {

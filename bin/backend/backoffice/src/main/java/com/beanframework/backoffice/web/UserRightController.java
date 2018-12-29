@@ -24,12 +24,12 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserRightConstants;
 import com.beanframework.backoffice.data.UserRightSearch;
+import com.beanframework.backoffice.data.UserRightSpecification;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightSpecification;
 import com.beanframework.user.service.UserRightFacade;
 
 @Controller
@@ -50,7 +50,7 @@ public class UserRightController extends AbstractCommonController {
 	@Value(WebUserRightConstants.LIST_SIZE)
 	private int MODULE_USERRIGHT_LIST_SIZE;
 
-	private Page<UserRight> getPagination(Model model, @RequestParam Map<String, Object> requestParams)
+	private Page<UserRight> getPagination(UserRightSearch userRightSearch, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
@@ -64,12 +64,6 @@ public class UserRightController extends AbstractCommonController {
 		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
-		UserRightSearch userrightSearch = (UserRightSearch) model.asMap()
-				.get(WebUserRightConstants.ModelAttribute.SEARCH);
-
-		UserRight userRight = new UserRight();
-		userRight.setId(userrightSearch.getIdSearch());
-
 		if (properties == null) {
 			properties = new String[1];
 			properties[0] = UserRight.CREATED_DATE;
@@ -77,7 +71,7 @@ public class UserRightController extends AbstractCommonController {
 		}
 
 		Page<UserRight> pagination = userRightFacade.findPage(
-				UserRightSpecification.findByCriteria(userRight),
+				UserRightSpecification.findByCriteria(userRightSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
@@ -88,6 +82,10 @@ public class UserRightController extends AbstractCommonController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, UserRightSearch userrightSearch) {
+		
+		userrightSearch.setSearchAll((String)requestParams.get("userrightSearch.searchAll"));
+		userrightSearch.setId((String)requestParams.get("userrightSearch.id"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -100,8 +98,8 @@ public class UserRightController extends AbstractCommonController {
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute(UserRightSearch.ID_SEARCH, userrightSearch.getIdSearch());
-		redirectAttributes.addFlashAttribute(WebUserRightConstants.ModelAttribute.SEARCH, userrightSearch);
+		redirectAttributes.addAttribute("searchAll", userrightSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", userrightSearch.getId());
 
 		return redirectAttributes;
 	}
@@ -127,7 +125,7 @@ public class UserRightController extends AbstractCommonController {
 			@ModelAttribute(WebUserRightConstants.ModelAttribute.UPDATE) UserRight userrightUpdate,
 			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(userrightSearch, model, requestParams));
 
 		if (userrightUpdate.getUuid() != null) {
 

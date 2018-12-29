@@ -24,11 +24,11 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebLanguageConstants;
 import com.beanframework.backoffice.data.LanguageSearch;
+import com.beanframework.backoffice.data.LanguageSpecification;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.domain.LanguageSpecification;
 import com.beanframework.language.service.LanguageFacade;
 
 @Controller
@@ -46,7 +46,7 @@ public class LanguageController extends AbstractCommonController {
 	@Value(WebLanguageConstants.LIST_SIZE)
 	private int MODULE_LANGUAGE_LIST_SIZE;
 
-	private Page<Language> getPagination(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<Language> getPagination(LanguageSearch languageSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -59,18 +59,13 @@ public class LanguageController extends AbstractCommonController {
 		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
-		LanguageSearch languageSearch = (LanguageSearch) model.asMap().get(WebLanguageConstants.ModelAttribute.SEARCH);
-
-		Language language = new Language();
-		language.setId(languageSearch.getIdSearch());
-
 		if (properties == null) {
 			properties = new String[1];
 			properties[0] = Language.SORT;
 			direction = Sort.Direction.ASC;
 		}
 
-		Page<Language> pagination = languageFacade.findPage(LanguageSpecification.findByCriteria(language),
+		Page<Language> pagination = languageFacade.findPage(LanguageSpecification.findByCriteria(languageSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
@@ -81,6 +76,11 @@ public class LanguageController extends AbstractCommonController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, LanguageSearch languageSearch) {
+		
+		languageSearch.setSearchAll((String)requestParams.get("languageSearch.searchAll"));
+		languageSearch.setId((String)requestParams.get("languageSearch.id"));
+		languageSearch.setName((String)requestParams.get("languageSearch.name"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -93,8 +93,9 @@ public class LanguageController extends AbstractCommonController {
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute(LanguageSearch.ID_SEARCH, languageSearch.getIdSearch());
-		redirectAttributes.addFlashAttribute(WebLanguageConstants.ModelAttribute.SEARCH, languageSearch);
+		redirectAttributes.addAttribute("searchAll", languageSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", languageSearch.getId());
+		redirectAttributes.addAttribute("name", languageSearch.getName());
 
 		return redirectAttributes;
 	}
@@ -119,7 +120,7 @@ public class LanguageController extends AbstractCommonController {
 			@ModelAttribute(WebLanguageConstants.ModelAttribute.UPDATE) Language languageUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(languageSearch, model, requestParams));
 
 		if (languageUpdate.getUuid() != null) {
 
@@ -132,7 +133,7 @@ public class LanguageController extends AbstractCommonController {
 				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
-
+		
 		return VIEW_LANGUAGE_LIST;
 	}
 

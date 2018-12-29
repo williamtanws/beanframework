@@ -1,4 +1,4 @@
-package com.beanframework.user.domain;
+package com.beanframework.backoffice.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +11,12 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
-public class UserPermissionSpecification {
-	public static Specification<UserPermission> findByCriteria(final UserPermission userPermission) {
+import com.beanframework.user.domain.UserRight;
 
-		return new Specification<UserPermission>() {
+public class UserRightSpecification {
+	public static Specification<UserRight> findByCriteria(final UserRight userRight) {
+
+		return new Specification<UserRight>() {
 
 			/**
 			 * 
@@ -22,12 +24,12 @@ public class UserPermissionSpecification {
 			private static final long serialVersionUID = 9019750522524126629L;
 
 			@Override
-			public Predicate toPredicate(Root<UserPermission> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<UserRight> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(userPermission.getId())) {
-					predicates.add(cb.or(cb.like(root.get(UserPermission.ID), "%" + userPermission.getId() + "%")));
+				if (StringUtils.isNotBlank(userRight.getId())) {
+					predicates.add(cb.or(cb.like(root.get(UserRight.ID), "%" + userRight.getId() + "%")));
 				}
 				
 				if(predicates.isEmpty()) {

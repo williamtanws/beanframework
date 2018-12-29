@@ -1,15 +1,20 @@
 package com.beanframework.backoffice.data;
 
-public class EmailSearch {
+import com.beanframework.email.domain.Email;
 
-	private String emailSearch;
+public class EmailSearch extends Email {
 
-	public String getEmailSearch() {
-		return emailSearch;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2095184379346330872L;
+	private String searchAll;
+
+	public String getSearchAll() {
+		return searchAll;
 	}
 
-	public void setEmailSearch(String emailSearch) {
-		this.emailSearch = emailSearch;
+	public void setSearchAll(String searchAll) {
+		this.searchAll = searchAll;
 	}
-
 }

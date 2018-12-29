@@ -26,7 +26,7 @@ public class AdminSpecification {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(admin.getId())) {
+				if (StringUtils.isNotBlank(admin.getId())) {
 					predicates.add(cb.or(cb.like(root.get(Admin.ID), "%" + admin.getId() + "%")));
 				}
 				

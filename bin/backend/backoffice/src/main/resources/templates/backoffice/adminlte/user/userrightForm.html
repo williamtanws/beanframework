@@ -81,7 +81,7 @@
 						<input type="hidden" name="size" th:value="${pagination.getSize()}">
 						<input type="hidden" name="direction" th:value="${direction}">
 						<input type="hidden" name="properties" th:value="${properties}">
-						<input type="hidden" th:value="${userrightSearch.idSearch}" name="idSearch">
+						<input type="hidden" th:value="${userrightSearch.id}" name="id">
 						<div class="modal-body">
 							<div class="container-fluid">
 								<div class="row">
@@ -147,7 +147,7 @@
 			<input type="hidden" name="size" th:value="${pagination.getSize()}">
 			<input type="hidden" name="direction" th:value="${direction}">
 			<input type="hidden" name="properties" th:value="${properties}">
-			<input type="hidden" th:value="${userrightSearch.idSearch}" name="idSearch">
+			<input type="hidden" th:value="${userrightSearch.id}" name="id">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -229,7 +229,7 @@
 							<input type="hidden" name="size" th:value="${pagination.getSize()}">
 							<input type="hidden" name="direction" th:value="${direction}">
 							<input type="hidden" name="properties" th:value="${properties}">
-							<input type="hidden" name="idSearch" th:value="${userrightSearch.idSearch}">
+							<input type="hidden" name="id" th:value="${userrightSearch.id}">
 							<input type="hidden" name="uuid" th:value="${userrightUpdate.uuid}">
 							<button type="submit" class="btn btn-danger" th:text="#{module.backoffice.delete}"></button>
 						</form>

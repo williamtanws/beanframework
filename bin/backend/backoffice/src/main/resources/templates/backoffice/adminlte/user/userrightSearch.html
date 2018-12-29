@@ -9,7 +9,7 @@
 					<form th:action="@{${@environment.getProperty('path.userright')}}" method="get" th:object="${userrightSearch}">
 						<input type="hidden" name="size" th:value="${pagination.size}">
 						<div class="input-group">
-							<input type="text" name="idSearch" th:value="${userrightSearch.idSearch}" class="form-control">
+							<input type="text" name="idSearch" th:value="${userrightSearch.id}" class="form-control">
 							<span class="input-group-btn">
 								<button type="submit" id="search-btn" class="btn btn-primary" th:text="#{module.backoffice.search}"></button>
 								<button type="button" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-search" th:title="#{module.backoffice.search.advanced}">
@@ -38,7 +38,7 @@
 						<div class="modal-body">
 							<div class="form-group">
 								<label for="id" th:text="#{module.userright.id}"></label>
-								<input name="idSearch" th:value="${userrightSearch.idSearch}" type="text" class="form-control" />
+								<input name="id" th:value="${userrightSearch.id}" type="text" class="form-control" />
 							</div>
 						</div>
 						<div class="modal-footer">

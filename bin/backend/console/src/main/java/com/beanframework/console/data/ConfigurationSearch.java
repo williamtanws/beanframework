@@ -1,16 +1,20 @@
 package com.beanframework.console.data;
 
-public class ConfigurationSearch {
-	
-	public static final String ID_SEARCH = "idSearch";
+import com.beanframework.configuration.domain.Configuration;
 
-	private String idSearch;
+public class ConfigurationSearch extends Configuration {
 
-	public String getIdSearch() {
-		return idSearch;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7541038350063356234L;
+	private String searchAll;
+
+	public String getSearchAll() {
+		return searchAll;
 	}
 
-	public void setIdSearch(String idSearch) {
-		this.idSearch = idSearch;
+	public void setSearchAll(String searchAll) {
+		this.searchAll = searchAll;
 	}
 }

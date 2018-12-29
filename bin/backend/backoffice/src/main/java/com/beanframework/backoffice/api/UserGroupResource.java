@@ -33,7 +33,7 @@ public class UserGroupResource {
 		UserGroup userGroup = userGroupFacade.findOneDtoByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (userGroup != null && userGroup.getUuid().equals(uuid)) {
 				return "true";

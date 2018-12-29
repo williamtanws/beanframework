@@ -42,7 +42,7 @@ public class UserRightValidateInterceptor implements ValidateInterceptor<UserRig
 
 			} else {
 				// Update exists
-				if (StringUtils.isNotEmpty(model.getId())) {
+				if (StringUtils.isNotBlank(model.getId())) {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(UserRight.ID, model.getId());
 					UserRight exists = modelService.findOneEntityByProperties(properties, UserRight.class);

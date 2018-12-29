@@ -1,16 +1,20 @@
 package com.beanframework.backoffice.data;
 
-public class UserRightSearch {
-	
-	public static final String ID_SEARCH = "idSearch";
+import com.beanframework.user.domain.UserRight;
 
-	private String idSearch;
+public class UserRightSearch extends UserRight {
 
-	public String getIdSearch() {
-		return idSearch;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 235891293590559927L;
+	private String searchAll;
+
+	public String getSearchAll() {
+		return searchAll;
 	}
 
-	public void setIdSearch(String idSearch) {
-		this.idSearch = idSearch;
+	public void setSearchAll(String searchAll) {
+		this.searchAll = searchAll;
 	}
 }

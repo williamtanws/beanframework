@@ -32,7 +32,7 @@ public class EmployeeResource {
 		Employee employee = employeeFacade.findOneDtoByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (employee != null && employee.getUuid().equals(uuid)) {
 				return "true";

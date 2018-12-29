@@ -24,12 +24,12 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserPermissionConstants;
 import com.beanframework.backoffice.data.UserPermissionSearch;
+import com.beanframework.backoffice.data.UserPermissionSpecification;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserPermissionSpecification;
 import com.beanframework.user.service.UserPermissionFacade;
 
 @Controller
@@ -50,7 +50,7 @@ public class UserPermissionController extends AbstractCommonController {
 	@Value(WebUserPermissionConstants.LIST_SIZE)
 	private int MODULE_USERPERMISSION_LIST_SIZE;
 
-	private Page<UserPermission> getPagination(Model model, @RequestParam Map<String, Object> requestParams)
+	private Page<UserPermission> getPagination(UserPermissionSearch userPermissionSearch, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
@@ -64,12 +64,6 @@ public class UserPermissionController extends AbstractCommonController {
 		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
-		UserPermissionSearch userpermissionSearch = (UserPermissionSearch) model.asMap()
-				.get(WebUserPermissionConstants.ModelAttribute.SEARCH);
-
-		UserPermission userPermission = new UserPermission();
-		userPermission.setId(userpermissionSearch.getIdSearch());
-
 		if (properties == null) {
 			properties = new String[1];
 			properties[0] = UserPermission.CREATED_DATE;
@@ -77,7 +71,7 @@ public class UserPermissionController extends AbstractCommonController {
 		}
 
 		Page<UserPermission> pagination = userPermissionFacade.findPage(
-				UserPermissionSpecification.findByCriteria(userPermission),
+				UserPermissionSpecification.findByCriteria(userPermissionSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
@@ -88,6 +82,10 @@ public class UserPermissionController extends AbstractCommonController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, UserPermissionSearch userpermissionSearch) {
+		
+		userpermissionSearch.setSearchAll((String)requestParams.get("userpermissionSearch.searchAll"));
+		userpermissionSearch.setId((String)requestParams.get("userpermissionSearch.id"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -100,8 +98,8 @@ public class UserPermissionController extends AbstractCommonController {
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute(UserPermissionSearch.ID_SEARCH, userpermissionSearch.getIdSearch());
-		redirectAttributes.addFlashAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH, userpermissionSearch);
+		redirectAttributes.addAttribute("searchAll", userpermissionSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", userpermissionSearch.getId());
 
 		return redirectAttributes;
 	}
@@ -127,7 +125,7 @@ public class UserPermissionController extends AbstractCommonController {
 			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE) UserPermission userpermissionUpdate,
 			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(userpermissionSearch, model, requestParams));
 
 		if (userpermissionUpdate.getUuid() != null) {
 
