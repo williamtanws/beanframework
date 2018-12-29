@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.configuration.domain.Configuration;
@@ -32,7 +32,7 @@ import com.beanframework.console.data.ConfigurationSearch;
 import com.beanframework.console.data.ConfigurationSpecification;
 
 @Controller
-public class ConfigurationController extends AbstractCommonController {
+public class ConfigurationController extends AbstractController {
 
 	@Autowired
 	private ConfigurationFacade configurationFacade;

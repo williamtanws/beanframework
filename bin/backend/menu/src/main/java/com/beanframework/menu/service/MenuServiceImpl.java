@@ -144,7 +144,7 @@ public class MenuServiceImpl implements MenuService {
 
 		for (Menu parent : parents) {
 			Hibernate.initialize(parent.getUserGroups());
-			Hibernate.initialize(parent.getMenuFields());
+			Hibernate.initialize(parent.getFields());
 
 			// Find all childs
 			Specification<Menu> spec = new Specification<Menu>() {

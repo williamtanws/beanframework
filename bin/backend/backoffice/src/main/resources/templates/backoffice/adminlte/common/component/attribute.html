@@ -5,11 +5,11 @@
 		<div class="row">
 			<div class="col-md-6">
 				<th:block th:each="langActive : ${moduleLanguages}" th:if="*{uuid != null}">
-					<th:block th:each="field,itrStat : *{userGroupFields}" th:if="${field.dynamicField.language.id == langActive.id}">
+					<th:block th:each="field,itrStat : *{fields}" th:if="${field.dynamicField.language.id == langActive.id}">
 						<div class="form-group">
 							<label for="name" th:text="${field.dynamicField.name}+'('+${field.dynamicField.language.id}+')'"></label>
-							<input type="hidden" th:name="'userGroupFields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-							<input type="text" class="form-control" th:name="'userGroupFields['+${itrStat.index}+'].value'" th:value="${field.value}" th:required="${field.dynamicField.required}">
+							<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
+							<input type="text" class="form-control" th:name="'fields['+${itrStat.index}+'].value'" th:value="${field.value}" th:required="${field.dynamicField.required}">
 							<span class="help-block"></span>
 						</div>
 					</th:block>

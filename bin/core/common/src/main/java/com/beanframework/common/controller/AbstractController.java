@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.common.service.LocaleMessageService;
 
-public class AbstractCommonController {
+public class AbstractController {
 
 	public static final String ERROR = "error";
 	public static final String SUCCESS = "success";

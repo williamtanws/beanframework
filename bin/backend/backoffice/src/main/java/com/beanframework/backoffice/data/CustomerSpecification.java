@@ -11,9 +11,10 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.customer.domain.Customer;
 
-public class CustomerSpecification {
+public class CustomerSpecification extends AbstractSpecification {
 	public static Specification<Customer> findByCriteria(final CustomerSearch data) {
 
 		return new Specification<Customer>() {
@@ -45,10 +46,7 @@ public class CustomerSpecification {
 
 	public static void addPredicates(String id, Root<Customer> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
-			if (id.contains("%") == false && id.contains("_") == false) {
-				id = "%" + id + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Customer.ID), id)));
+			predicates.add(cb.or(cb.like(root.get(Customer.ID), convertToPattern(id))));
 		}
 	}
 }

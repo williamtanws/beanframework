@@ -25,7 +25,7 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebUserPermissionConstants;
 import com.beanframework.backoffice.data.UserPermissionSearch;
 import com.beanframework.backoffice.data.UserPermissionSpecification;
-import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.utils.ParamUtils;
@@ -33,7 +33,7 @@ import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.service.UserPermissionFacade;
 
 @Controller
-public class UserPermissionController extends AbstractCommonController {
+public class UserPermissionController extends AbstractController {
 
 	@Autowired
 	private UserPermissionFacade userPermissionFacade;

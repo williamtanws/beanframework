@@ -50,7 +50,7 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 
 			prototype.setUserGroups(source.getUserGroups());
 			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthority.class));
-			prototype.setUserGroupFields(modelService.getDto(source.getUserGroupFields(), UserGroupField.class));
+			prototype.setFields(modelService.getDto(source.getFields(), UserGroupField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

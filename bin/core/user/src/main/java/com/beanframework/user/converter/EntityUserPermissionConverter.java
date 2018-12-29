@@ -53,11 +53,11 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 			prototype.setLastModifiedDate(new Date());
 
 			prototype.setSort(source.getSort());
-			if (source.getUserPermissionFields() != null && source.getUserPermissionFields().isEmpty() == false) {
-				for (int i = 0; i < prototype.getUserPermissionFields().size(); i++) {
-					for (UserPermissionField sourceUserPermissionField : source.getUserPermissionFields()) {
-						if (prototype.getUserPermissionFields().get(i).getUuid().equals(sourceUserPermissionField.getUuid())) {
-							prototype.getUserPermissionFields().get(i).setValue(sourceUserPermissionField.getValue());
+			if (source.getFields() != null && source.getFields().isEmpty() == false) {
+				for (int i = 0; i < prototype.getFields().size(); i++) {
+					for (UserPermissionField sourceUserPermissionField : source.getFields()) {
+						if (prototype.getFields().get(i).getUuid().equals(sourceUserPermissionField.getUuid())) {
+							prototype.getFields().get(i).setValue(sourceUserPermissionField.getValue());
 						}
 					}
 				}

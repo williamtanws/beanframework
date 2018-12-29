@@ -11,9 +11,10 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.user.domain.UserGroup;
 
-public class UserGroupSpecification {
+public class UserGroupSpecification extends AbstractSpecification {
 	public static Specification<UserGroup> findByCriteria(final UserGroupSearch data) {
 
 		return new Specification<UserGroup>() {
@@ -45,10 +46,7 @@ public class UserGroupSpecification {
 
 	public static void addPredicates(String id, Root<UserGroup> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
-			if (id.contains("%") == false && id.contains("_") == false) {
-				id = "%" + id + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(UserGroup.ID), id)));
+			predicates.add(cb.or(cb.like(root.get(UserGroup.ID), convertToPattern(id))));
 		}
 	}
 }

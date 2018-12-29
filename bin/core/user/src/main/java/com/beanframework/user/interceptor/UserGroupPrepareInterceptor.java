@@ -45,9 +45,9 @@ public class UserGroupPrepareInterceptor implements PrepareInterceptor<UserGroup
 			}
 		}
 		
-		for (int i = 0; i < model.getUserGroupFields().size(); i++) {
-			if (StringUtils.isBlank(model.getUserGroupFields().get(i).getValue())) {
-				model.getUserGroupFields().get(i).setValue(null);
+		for (int i = 0; i < model.getFields().size(); i++) {
+			if (StringUtils.isBlank(model.getFields().get(i).getValue())) {
+				model.getFields().get(i).setValue(null);
 			}
 		}
 	}
@@ -61,7 +61,7 @@ public class UserGroupPrepareInterceptor implements PrepareInterceptor<UserGroup
 			for (DynamicField dynamicField : dynamicFields) {
 
 				boolean add = true;
-				for (UserGroupField userGroupField : model.getUserGroupFields()) {
+				for (UserGroupField userGroupField : model.getFields()) {
 					if (dynamicField.getUuid().equals(userGroupField.getDynamicField().getUuid())) {
 						add = false;
 					}
@@ -73,7 +73,7 @@ public class UserGroupPrepareInterceptor implements PrepareInterceptor<UserGroup
 					userGroupField.setId(model.getId() + "_" + dynamicField.getId());
 
 					userGroupField.setUserGroup(model);
-					model.getUserGroupFields().add(userGroupField);
+					model.getFields().add(userGroupField);
 				}
 			}
 		} catch (Exception e) {

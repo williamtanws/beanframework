@@ -30,9 +30,9 @@ public class MenuPrepareInterceptor implements PrepareInterceptor<Menu> {
 		if (StringUtils.isBlank(model.getIcon())) {
 			model.setIcon(null);
 		}
-		for (int i = 0; i < model.getMenuFields().size(); i++) {
-			if (StringUtils.isBlank(model.getMenuFields().get(i).getValue())) {
-				model.getMenuFields().get(i).setValue(null);
+		for (int i = 0; i < model.getFields().size(); i++) {
+			if (StringUtils.isBlank(model.getFields().get(i).getValue())) {
+				model.getFields().get(i).setValue(null);
 			}
 		}
 	}
@@ -46,7 +46,7 @@ public class MenuPrepareInterceptor implements PrepareInterceptor<Menu> {
 			for (DynamicField dynamicField : dynamicFields) {
 
 				boolean add = true;
-				for (MenuField modelUserGroupField : model.getMenuFields()) {
+				for (MenuField modelUserGroupField : model.getFields()) {
 					if (dynamicField.getUuid().equals(modelUserGroupField.getDynamicField().getUuid())) {
 						add = false;
 					}
@@ -58,7 +58,7 @@ public class MenuPrepareInterceptor implements PrepareInterceptor<Menu> {
 					userGroupField.setId(model.getId() + "_" + dynamicField.getId());
 
 					userGroupField.setMenu(model);
-					model.getMenuFields().add(userGroupField);
+					model.getFields().add(userGroupField);
 				}
 			}
 		} catch (Exception e) {

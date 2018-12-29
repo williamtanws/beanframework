@@ -23,9 +23,9 @@ public class UserRightPrepareInterceptor implements PrepareInterceptor<UserRight
 	public void onPrepare(UserRight model) throws InterceptorException {
 		generateUserRightField(model);
 		
-		for (int i = 0; i < model.getUserRightFields().size(); i++) {
-			if (StringUtils.isBlank(model.getUserRightFields().get(i).getValue())) {
-				model.getUserRightFields().get(i).setValue(null);
+		for (int i = 0; i < model.getFields().size(); i++) {
+			if (StringUtils.isBlank(model.getFields().get(i).getValue())) {
+				model.getFields().get(i).setValue(null);
 			}
 		}
 	}
@@ -39,7 +39,7 @@ public class UserRightPrepareInterceptor implements PrepareInterceptor<UserRight
 			for (DynamicField dynamicField : dynamicFields) {
 
 				boolean add = true;
-				for (UserRightField modelUserGroupField : model.getUserRightFields()) {
+				for (UserRightField modelUserGroupField : model.getFields()) {
 					if (dynamicField.getUuid().equals(modelUserGroupField.getDynamicField().getUuid())) {
 						add = false;
 					}
@@ -51,7 +51,7 @@ public class UserRightPrepareInterceptor implements PrepareInterceptor<UserRight
 					userRightField.setId(model.getId() + "_" + dynamicField.getId());
 
 					userRightField.setUserRight(model);
-					model.getUserRightFields().add(userRightField);
+					model.getFields().add(userRightField);
 				}
 			}
 		} catch (Exception e) {

@@ -5,14 +5,14 @@
 		<table id="usergroupTable" class="table table-bordered table-hover">
 			<thead>
 				<tr>
-					<th th:text="#{module.usergroup.id}"></th>
+					<th th:text="#{module.backoffice.id}"></th>
 					<th th:text="#{module.backoffice.select}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="userGroup,itrStat : *{userGroups}">
-					<th:block th:each="userGroupField : ${userGroup.userGroupFields}">
-						<td th:if="(${userGroupField.dynamicField.language.id == #locale.toString()})" th:text="${userGroupField.value}"></td>
+					<th:block th:each="field : ${userGroup.fields}">
+						<td th:if="(${field.dynamicField.language.id == #locale.toString()})" th:text="${field.value}"></td>
 					</th:block>
 					<td>
 						<input type="hidden" th:name="'userGroups['+${itrStat.index}+'].uuid'" th:value="${userGroup.uuid}">

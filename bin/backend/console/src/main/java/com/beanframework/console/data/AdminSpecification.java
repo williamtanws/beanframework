@@ -12,8 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.data.AbstractSpecification;
 
-public class AdminSpecification {
+public class AdminSpecification extends AbstractSpecification {
 	public static Specification<Admin> findByCriteria(final AdminSearch data) {
 
 		return new Specification<Admin>() {
@@ -45,10 +46,7 @@ public class AdminSpecification {
 
 	public static void addPredicates(String id, Root<Admin> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
-			if (id.contains("%") == false && id.contains("_") == false) {
-				id = "%" + id + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Admin.ID), id)));
+			predicates.add(cb.or(cb.like(root.get(Admin.ID), convertToPattern(id))));
 		}
 	}
 }

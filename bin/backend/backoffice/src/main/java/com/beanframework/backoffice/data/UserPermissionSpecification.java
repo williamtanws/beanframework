@@ -11,14 +11,14 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.user.domain.UserPermission;
 
-public class UserPermissionSpecification {
+public class UserPermissionSpecification extends AbstractSpecification {
 	public static Specification<UserPermission> findByCriteria(final UserPermissionSearch data) {
 
 		return new Specification<UserPermission>() {
 
-	
 			/**
 			 * 
 			 */
@@ -46,10 +46,7 @@ public class UserPermissionSpecification {
 
 	public static void addPredicates(String id, Root<UserPermission> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
-			if (id.contains("%") == false && id.contains("_") == false) {
-				id = "%" + id + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(UserPermission.ID), id)));
+			predicates.add(cb.or(cb.like(root.get(UserPermission.ID), convertToPattern(id))));
 		}
 	}
 }

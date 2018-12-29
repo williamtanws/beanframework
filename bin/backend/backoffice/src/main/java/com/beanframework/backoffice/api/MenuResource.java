@@ -98,7 +98,7 @@ public class MenuResource {
 
 		Locale locale = LocaleContextHolder.getLocale();
 
-		for (MenuField menuField : menu.getMenuFields()) {
+		for (MenuField menuField : menu.getFields()) {
 			if (menuField.getDynamicField().getLanguage().getId().equals(locale.toString())) {
 
 				String name = menuField.getValue();

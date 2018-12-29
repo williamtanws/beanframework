@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="search (searchAction, objectSearch, searchField )">
+	<th:block layout:fragment="search (searchAction, objectSearch, searchFields, displayFields, searchForm )">
 		<div class="col-md-6">
 			<div class="box box-solid">
 				<div class="box-body">
@@ -21,7 +21,7 @@
 							</span>
 						</div>
 					</form>
-					<span class="text-block" th:each="field : ${searchFields}" th:if="${!#strings.isEmpty(objectSearch.__${field}__)}" th:text="' ['+${field}+': '+${objectSearch.__${field}__}+']'"></span>
+					<span class="text-block" th:each="field : ${displayFields}" th:if="${!#strings.isEmpty(objectSearch.__${field}__)}" th:text="' ['+${field}+': '+${objectSearch.__${field}__}+']'"></span>
 				</div>
 			</div>
 		</div>
@@ -41,6 +41,7 @@
 								<label th:text="${field}" th:for="${field}"></label>
 								<input type="text" th:name="${field}" th:value="${objectSearch.__${field}__}" class="form-control">
 							</div>
+							<th:block th:if="${searchForm}" layout:insert="${searchForm} :: searchForm"></th:block>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>

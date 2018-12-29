@@ -55,7 +55,7 @@ public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob>
 		prototype.setJobName(source.getJobName());
 		prototype.setDescription(source.getDescription());
 		prototype.setCronExpression(source.getCronExpression());
-		prototype.setStartup(source.isStartup());
+		prototype.setStartup(source.getStartup());
 
 		return prototype;
 	}

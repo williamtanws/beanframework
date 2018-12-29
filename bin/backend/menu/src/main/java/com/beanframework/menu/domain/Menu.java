@@ -45,7 +45,7 @@ public class Menu extends GenericDomain {
 	public static final String CHILDS = "childs";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_GROUPS_UUID = "userGroups.uuid";
-	public static final String MENU_FIELDS = "menuFields";
+	public static final String FIELDS = "fields";
 
 	@NotNull
 	private Integer sort;
@@ -76,7 +76,7 @@ public class Menu extends GenericDomain {
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<MenuField> menuFields = new ArrayList<MenuField>();
+	private List<MenuField> fields = new ArrayList<MenuField>();
 
 	@Transient
 	private Boolean active;
@@ -145,12 +145,12 @@ public class Menu extends GenericDomain {
 		this.userGroups = userGroups;
 	}
 
-	public List<MenuField> getMenuFields() {
-		return menuFields;
+	public List<MenuField> getFields() {
+		return fields;
 	}
 
-	public void setMenuFields(List<MenuField> menuFields) {
-		this.menuFields = menuFields;
+	public void setFields(List<MenuField> fields) {
+		this.fields = fields;
 	}
 
 	public Boolean getActive() {

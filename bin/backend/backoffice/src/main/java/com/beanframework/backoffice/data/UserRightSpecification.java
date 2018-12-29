@@ -11,9 +11,10 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.user.domain.UserRight;
 
-public class UserRightSpecification {
+public class UserRightSpecification extends AbstractSpecification {
 	public static Specification<UserRight> findByCriteria(final UserRightSearch data) {
 
 		return new Specification<UserRight>() {
@@ -45,10 +46,7 @@ public class UserRightSpecification {
 
 	public static void addPredicates(String id, Root<UserRight> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
-			if (id.contains("%") == false && id.contains("_") == false) {
-				id = "%" + id + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(UserRight.ID), id)));
+			predicates.add(cb.or(cb.like(root.get(UserRight.ID), convertToPattern(id))));
 		}
 	}
 }

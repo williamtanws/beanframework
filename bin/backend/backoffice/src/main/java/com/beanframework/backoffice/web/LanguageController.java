@@ -25,14 +25,14 @@ import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebLanguageConstants;
 import com.beanframework.backoffice.data.LanguageSearch;
 import com.beanframework.backoffice.data.LanguageSpecification;
-import com.beanframework.common.controller.AbstractCommonController;
+import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.service.LanguageFacade;
 
 @Controller
-public class LanguageController extends AbstractCommonController {
+public class LanguageController extends AbstractController {
 
 	@Autowired
 	private LanguageFacade languageFacade;

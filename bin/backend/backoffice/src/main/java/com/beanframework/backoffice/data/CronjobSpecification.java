@@ -11,9 +11,12 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.domain.CronjobEnum.Result;
+import com.beanframework.cronjob.domain.CronjobEnum.Status;
 
-public class CronjobSpecification {
+public class CronjobSpecification extends AbstractSpecification {
 	public static Specification<Cronjob> findByCriteria(final CronjobSearch data) {
 
 		return new Specification<Cronjob>() {
@@ -29,9 +32,9 @@ public class CronjobSpecification {
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
 				if (StringUtils.isNotEmpty(data.getSearchAll())) {
-					addPredicates(data.getSearchAll(), data.getSearchAll(), data.getSearchAll(), data.getSearchAll(), data.getSearchAll(), root, cb, predicates);
+					addPredicates(data.getSearchAll(), data.getSearchAll(), data.getSearchAll(), data.getSearchAll(), null, null, null, root, cb, predicates);
 				} else {
-					addPredicates(data.getId(), data.getJobClass(), data.getJobName(), data.getJobGroup(), data.getDescription(), root, cb, predicates);
+					addPredicates(data.getId(), data.getJobClass(), data.getJobName(), data.getJobGroup(), data.getStartup(), data.getStatus(), data.getResult(), root, cb, predicates);
 				}
 
 				if (predicates.isEmpty()) {
@@ -43,40 +46,39 @@ public class CronjobSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String jobClass, String jobName, String JobGroup, String description, Root<Cronjob> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String jobClass, String jobName, String JobGroup, Boolean startup, Status status, Result result, Root<Cronjob> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
-			if (id.contains("%") == false && id.contains("_") == false) {
-				id = "%" + id + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Cronjob.ID), id)));
+			predicates.add(cb.or(cb.like(root.get(Cronjob.ID), convertToPattern(id))));
 		}
 
 		if (StringUtils.isNotEmpty(jobClass)) {
-			if (jobClass.contains("%") == false && jobClass.contains("_") == false) {
-				jobClass = "%" + jobClass + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Cronjob.JOB_CLASS), jobClass)));
+			predicates.add(cb.or(cb.like(root.get(Cronjob.JOB_CLASS), convertToPattern(jobClass))));
 		}
 
 		if (StringUtils.isNotEmpty(jobName)) {
-			if (jobName.contains("%") == false && jobName.contains("_") == false) {
-				jobName = "%" + jobName + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Cronjob.JOB_NAME), jobName)));
+			predicates.add(cb.or(cb.like(root.get(Cronjob.JOB_NAME), convertToPattern(jobName))));
 		}
 
 		if (StringUtils.isNotEmpty(JobGroup)) {
-			if (JobGroup.contains("%") == false && JobGroup.contains("_") == false) {
-				JobGroup = "%" + JobGroup + "%";
+			predicates.add(cb.or(cb.like(root.get(Cronjob.JOB_GROUP), convertToPattern(JobGroup))));
+		}
+		
+		if (startup != null) {
+			if(startup == Boolean.TRUE) {
+				predicates.add(cb.or(cb.isTrue(root.get(Cronjob.STATUS))));
 			}
-			predicates.add(cb.or(cb.like(root.get(Cronjob.JOB_GROUP), JobGroup)));
+			if(startup == Boolean.FALSE) {
+				predicates.add(cb.or(cb.isFalse(root.get(Cronjob.STATUS))));
+			}
 		}
 
-		if (StringUtils.isNotEmpty(description)) {
-			if (description.contains("%") == false && description.contains("_") == false) {
-				description = "%" + description + "%";
-			}
-			predicates.add(cb.or(cb.like(root.get(Cronjob.JOB_CLASS), description)));
+		if (status != null) {
+			predicates.add(cb.or(cb.equal(root.get(Cronjob.STATUS), status)));
 		}
+
+		if (result != null) {
+			predicates.add(cb.or(cb.equal(root.get(Cronjob.RESULT), result)));
+		}
+
 	}
 }

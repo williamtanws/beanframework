@@ -83,7 +83,7 @@ public class UserGroupUpdate extends Updater {
 				userGroup.setId(csv.getId());
 			} else {
 				Hibernate.initialize(userGroup.getUserGroups());
-				Hibernate.initialize(userGroup.getUserGroupFields());
+				Hibernate.initialize(userGroup.getFields());
 			}
 
 			modelService.saveEntity(userGroup, UserGroup.class);
@@ -95,9 +95,9 @@ public class UserGroupUpdate extends Updater {
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split("=")[0];
 					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < userGroup.getUserGroupFields().size(); i++) {
-						if (userGroup.getUserGroupFields().get(i).getId().equals(userGroup.getId()+"_"+dynamicFieldId)) {
-							userGroup.getUserGroupFields().get(i).setValue(value);
+					for (int i = 0; i < userGroup.getFields().size(); i++) {
+						if (userGroup.getFields().get(i).getId().equals(userGroup.getId()+"_"+dynamicFieldId)) {
+							userGroup.getFields().get(i).setValue(value);
 						}
 					}
 				}

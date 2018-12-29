@@ -85,7 +85,7 @@ public class CustomerUpdate extends Updater {
 				customer = modelService.create(Customer.class);
 				customer.setId(csv.getId());
 			} else {
-				Hibernate.initialize(customer.getUserFields());
+				Hibernate.initialize(customer.getFields());
 			}
 
 			if (StringUtils.isNotBlank(csv.getPassword())) {
@@ -103,9 +103,9 @@ public class CustomerUpdate extends Updater {
 			if (csv.getDynamicField() != null) {
 				String dynamicFieldId = csv.getDynamicField().split(";")[0];
 				String value = csv.getDynamicField().split(";")[1];
-				for (int i = 0; i < customer.getUserFields().size(); i++) {
-					if (customer.getUserFields().get(i).getId().equals(dynamicFieldId)) {
-						customer.getUserFields().get(i).setValue(value);
+				for (int i = 0; i < customer.getFields().size(); i++) {
+					if (customer.getFields().get(i).getId().equals(dynamicFieldId)) {
+						customer.getFields().get(i).setValue(value);
 					}
 				}
 			}
@@ -119,9 +119,9 @@ public class CustomerUpdate extends Updater {
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split("=")[0];
 					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < customer.getUserFields().size(); i++) {
-						if (customer.getUserFields().get(i).getId().equals(customer.getId()+"_"+dynamicFieldId)) {
-							customer.getUserFields().get(i).setValue(value);
+					for (int i = 0; i < customer.getFields().size(); i++) {
+						if (customer.getFields().get(i).getId().equals(customer.getId()+"_"+dynamicFieldId)) {
+							customer.getFields().get(i).setValue(value);
 						}
 					}
 				}
