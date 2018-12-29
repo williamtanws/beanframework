@@ -25,11 +25,11 @@ import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.domain.ConfigurationSpecification;
 import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.console.WebConfigurationConstants;
 import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.data.ConfigurationSearch;
+import com.beanframework.console.data.ConfigurationSpecification;
 
 @Controller
 public class ConfigurationController extends AbstractCommonController {

@@ -1,4 +1,4 @@
-package com.beanframework.backoffice.data;
+package com.beanframework.console.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,27 +11,27 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.beanframework.language.domain.Language;
+import com.beanframework.configuration.domain.Configuration;
 
-public class LanguageSpecification {
-	public static Specification<Language> findByCriteria(final LanguageSearch data) {
+public class ConfigurationSpecification {
+	public static Specification<Configuration> findByCriteria(final ConfigurationSearch data) {
 
-		return new Specification<Language>() {
+		return new Specification<Configuration>() {
 
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = -5242475835563326841L;
+			private static final long serialVersionUID = 3546335730982207838L;
 
 			@Override
-			public Predicate toPredicate(Root<Language> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<Configuration> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
 				if (StringUtils.isNotEmpty(data.getSearchAll())) {
 					addPredicates(data.getSearchAll(), data.getSearchAll(), root, cb, predicates);
 				} else {
-					addPredicates(data.getId(), data.getName(), root, cb, predicates);
+					addPredicates(data.getId(), data.getValue(), root, cb, predicates);
 				}
 
 				if (predicates.isEmpty()) {
@@ -43,19 +43,19 @@ public class LanguageSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<Language> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String value, Root<Configuration> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
 			if (id.contains("%") == false && id.contains("_") == false) {
 				id = "%" + id + "%";
 			}
-			predicates.add(cb.or(cb.like(root.get(Language.ID), id)));
+			predicates.add(cb.or(cb.like(root.get(Configuration.ID), id)));
 		}
 
-		if (StringUtils.isNotEmpty(name)) {
-			if (name.contains("%") == false && name.contains("_") == false) {
-				name = "%" + name + "%";
+		if (StringUtils.isNotEmpty(value)) {
+			if (value.contains("%") == false && value.contains("_") == false) {
+				value = "%" + value + "%";
 			}
-			predicates.add(cb.or(cb.like(root.get(Language.NAME), name)));
+			predicates.add(cb.or(cb.like(root.get(Configuration.VALUE), value)));
 		}
 	}
 }

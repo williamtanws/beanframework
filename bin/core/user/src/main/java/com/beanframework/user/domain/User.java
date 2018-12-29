@@ -43,6 +43,7 @@ public abstract class User extends GenericDomain {
 	public static final String ENABLED = "enabled";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_ROLES = "userRoles";
+	public static final String USER_FIELDS = "userFields";
 
 	private static final long serialVersionUID = -7444894280894062710L;
 	@NotNull

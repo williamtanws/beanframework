@@ -14,31 +14,41 @@ import org.springframework.data.jpa.domain.Specification;
 import com.beanframework.employee.domain.Employee;
 
 public class EmployeeSpecification {
-	public static Specification<Employee> findByCriteria(final Employee employee) {
+	public static Specification<Employee> findByCriteria(final EmployeeSearch data) {
 
 		return new Specification<Employee>() {
 
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = 6060970738788715423L;
+			private static final long serialVersionUID = -6720888940006483484L;
 
 			@Override
 			public Predicate toPredicate(Root<Employee> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotBlank(employee.getId())) {
-					predicates.add(cb.or(cb.like(root.get(Employee.ID), "%" + employee.getId() + "%")));
+				if (StringUtils.isNotEmpty(data.getSearchAll())) {
+					addPredicates(data.getSearchAll(), root, cb, predicates);
+				} else {
+					addPredicates(data.getId(), root, cb, predicates);
 				}
-				
-				if(predicates.isEmpty()) {
+
+				if (predicates.isEmpty()) {
 					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-				}
-				else {
+				} else {
 					return cb.or(predicates.toArray(new Predicate[predicates.size()]));
 				}
 			}
 		};
+	}
+
+	public static void addPredicates(String id, Root<Employee> root, CriteriaBuilder cb, List<Predicate> predicates) {
+		if (StringUtils.isNotEmpty(id)) {
+			if (id.contains("%") == false && id.contains("_") == false) {
+				id = "%" + id + "%";
+			}
+			predicates.add(cb.or(cb.like(root.get(Employee.ID), id)));
+		}
 	}
 }
