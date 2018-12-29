@@ -33,7 +33,6 @@ import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
-import com.beanframework.language.domain.Language;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;

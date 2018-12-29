@@ -14,31 +14,42 @@ import org.springframework.data.jpa.domain.Specification;
 import com.beanframework.user.domain.UserPermission;
 
 public class UserPermissionSpecification {
-	public static Specification<UserPermission> findByCriteria(final UserPermission userPermission) {
+	public static Specification<UserPermission> findByCriteria(final UserPermissionSearch data) {
 
 		return new Specification<UserPermission>() {
 
+	
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = 9019750522524126629L;
+			private static final long serialVersionUID = -4282172888118261930L;
 
 			@Override
 			public Predicate toPredicate(Root<UserPermission> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotBlank(userPermission.getId())) {
-					predicates.add(cb.or(cb.like(root.get(UserPermission.ID), "%" + userPermission.getId() + "%")));
+				if (StringUtils.isNotEmpty(data.getSearchAll())) {
+					addPredicates(data.getSearchAll(), root, cb, predicates);
+				} else {
+					addPredicates(data.getId(), root, cb, predicates);
 				}
-				
-				if(predicates.isEmpty()) {
+
+				if (predicates.isEmpty()) {
 					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-				}
-				else {
+				} else {
 					return cb.or(predicates.toArray(new Predicate[predicates.size()]));
 				}
 			}
 		};
+	}
+
+	public static void addPredicates(String id, Root<UserPermission> root, CriteriaBuilder cb, List<Predicate> predicates) {
+		if (StringUtils.isNotEmpty(id)) {
+			if (id.contains("%") == false && id.contains("_") == false) {
+				id = "%" + id + "%";
+			}
+			predicates.add(cb.or(cb.like(root.get(UserPermission.ID), id)));
+		}
 	}
 }

@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.domain.AdminSpecification;
 import com.beanframework.admin.service.AdminFacade;
 import com.beanframework.common.controller.AbstractCommonController;
 import com.beanframework.common.exception.BusinessException;
@@ -30,6 +29,7 @@ import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.console.WebAdminConstants;
 import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.data.AdminSearch;
+import com.beanframework.console.data.AdminSpecification;
 
 @Controller
 public class AdminController extends AbstractCommonController {

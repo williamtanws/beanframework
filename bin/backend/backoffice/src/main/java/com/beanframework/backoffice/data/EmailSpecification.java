@@ -14,28 +14,24 @@ import org.springframework.data.jpa.domain.Specification;
 import com.beanframework.email.domain.Email;
 
 public class EmailSpecification {
-	public static Specification<Email> findByCriteria(final Email email) {
+	public static Specification<Email> findByCriteria(final EmailSearch data) {
 
 		return new Specification<Email>() {
 
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = 3162338087352704668L;
+			private static final long serialVersionUID = -6116377294874765960L;
 
 			@Override
 			public Predicate toPredicate(Root<Email> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotBlank(email.getToRecipients())) {
-					predicates.add(cb.or(cb.like(root.get(Email.TORECIPIENTS), "%" + email.getToRecipients() + "%")));
-				}
-				if (StringUtils.isNotBlank(email.getCcRecipients())) {
-					predicates.add(cb.or(cb.like(root.get(Email.CCRECIPIENTS), "%" + email.getCcRecipients() + "%")));
-				}
-				if (StringUtils.isNotBlank(email.getBccRecipients())) {
-					predicates.add(cb.or(cb.like(root.get(Email.BCCRECIPIENTS), "%" + email.getBccRecipients() + "%")));
+				if (StringUtils.isNotEmpty(data.getSearchAll())) {
+					addPredicates(data.getSearchAll(), data.getSearchAll(), data.getSearchAll(), data.getSearchAll(), data.getSearchAll(), data.getSearchAll(), root, cb, predicates);
+				} else {
+					addPredicates(data.getToRecipients(), data.getCcRecipients(), data.getBccRecipients(), data.getSubject(), data.getText(), data.getHtml(), root, cb, predicates);
 				}
 
 				if (predicates.isEmpty()) {
@@ -45,5 +41,42 @@ public class EmailSpecification {
 				}
 			}
 		};
+	}
+
+	public static void addPredicates(String to, String cc, String bcc, String subject, String text, String html, Root<Email> root, CriteriaBuilder cb, List<Predicate> predicates) {
+		if (StringUtils.isNotEmpty(to)) {
+			if (to.contains("%") == false && to.contains("_") == false) {
+				to = "%" + to + "%";
+			}
+			predicates.add(cb.or(cb.like(root.get(Email.TO_RECIPIENTS), to)));
+		}
+
+		if (StringUtils.isNotEmpty(cc)) {
+			if (cc.contains("%") == false && cc.contains("_") == false) {
+				cc = "%" + cc + "%";
+			}
+			predicates.add(cb.or(cb.like(root.get(Email.CC_RECIPIENTS), cc)));
+		}
+
+		if (StringUtils.isNotEmpty(bcc)) {
+			if (bcc.contains("%") == false && bcc.contains("_") == false) {
+				bcc = "%" + bcc + "%";
+			}
+			predicates.add(cb.or(cb.like(root.get(Email.BCC_RECIPIENTS), bcc)));
+		}
+
+		if (StringUtils.isNotEmpty(text)) {
+			if (text.contains("%") == false && text.contains("_") == false) {
+				text = "%" + text + "%";
+			}
+			predicates.add(cb.or(cb.like(root.get(Email.TEXT), text)));
+		}
+
+		if (StringUtils.isNotEmpty(html)) {
+			if (html.contains("%") == false && text.contains("_") == false) {
+				html = "%" + html + "%";
+			}
+			predicates.add(cb.or(cb.like(root.get(Email.HTML), html)));
+		}
 	}
 }

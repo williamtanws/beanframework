@@ -14,22 +14,24 @@ import org.springframework.data.jpa.domain.Specification;
 import com.beanframework.user.domain.UserGroup;
 
 public class UserGroupSpecification {
-	public static Specification<UserGroup> findByCriteria(final UserGroup userGroup) {
+	public static Specification<UserGroup> findByCriteria(final UserGroupSearch data) {
 
 		return new Specification<UserGroup>() {
 
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = -4107506452736175041L;
+			private static final long serialVersionUID = -2538770551492938502L;
 
 			@Override
 			public Predicate toPredicate(Root<UserGroup> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotBlank(userGroup.getId())) {
-					predicates.add(cb.or(cb.like(root.get(UserGroup.ID), "%" + userGroup.getId() + "%")));
+				if (StringUtils.isNotEmpty(data.getSearchAll())) {
+					addPredicates(data.getSearchAll(), root, cb, predicates);
+				} else {
+					addPredicates(data.getId(), root, cb, predicates);
 				}
 
 				if (predicates.isEmpty()) {
@@ -39,5 +41,14 @@ public class UserGroupSpecification {
 				}
 			}
 		};
+	}
+
+	public static void addPredicates(String id, Root<UserGroup> root, CriteriaBuilder cb, List<Predicate> predicates) {
+		if (StringUtils.isNotEmpty(id)) {
+			if (id.contains("%") == false && id.contains("_") == false) {
+				id = "%" + id + "%";
+			}
+			predicates.add(cb.or(cb.like(root.get(UserGroup.ID), id)));
+		}
 	}
 }
