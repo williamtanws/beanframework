@@ -22,7 +22,7 @@ public static final String PAGINATION = "pagination";
 		public static final String SUCCESS = "success";
 		public static final String INFO = "info";
 		public static final String PAGINATION = "pagination";
-		public static final String NAVIGATION_TREE = "navigationTree";
+		public static final String MENU_NAVIGATION = "menuNavigation";
 		public static final String MODULE_LANGUAGES = "moduleLanguages";
 	}
 

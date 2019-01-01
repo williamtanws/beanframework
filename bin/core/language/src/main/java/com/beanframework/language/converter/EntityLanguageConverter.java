@@ -1,49 +1,56 @@
 package com.beanframework.language.converter;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 
-@Component
-public class EntityLanguageConverter implements Converter<Language, Language> {
+public class EntityLanguageConverter implements EntityConverter<Language, Language> {
 
 	@Autowired
-	private LanguageService languageService;
+	private ModelService modelService;
 
 	@Override
-	public Language convert(Language source) {
+	public Language convert(Language source) throws ConverterException {
 
-		Optional<Language> prototype = Optional.of(languageService.create());
-		if (source.getUuid() != null) {
-			Optional<Language> exists = languageService.findEntityByUuid(source.getUuid());
-			if(exists.isPresent()) {
-				prototype = exists;
+		Language prototype;
+		try {
+
+			if (source.getUuid() != null) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Language.UUID, source.getUuid());
+				Language exists = modelService.findOneEntityByProperties(properties, Language.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(Language.class);
+				}
+			} else {
+				prototype = modelService.create(Language.class);
 			}
-		}
-		else if (StringUtils.isNotEmpty(source.getId())) {
-			Optional<Language> exists = languageService.findEntityById(source.getId());
-			if(exists.isPresent()) {
-				prototype = exists;
-			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	private Language convert(Language source, Language prototype) {
 
-		prototype.setId(source.getId());
+		if (source.getId() != null)
+			prototype.setId(source.getId());
+		prototype.setLastModifiedDate(new Date());
+
 		prototype.setName(source.getName());
 		prototype.setSort(source.getSort());
 		prototype.setActive(source.getActive());
-		prototype.setLastModifiedDate(new Date());
 
 		return prototype;
 	}

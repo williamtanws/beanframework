@@ -1,108 +1,65 @@
 package com.beanframework.user.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.validator.DeleteUserPermissionValidator;
-import com.beanframework.user.validator.SaveUserPermissionValidator;
 
 @Component
 public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Autowired
-	private UserPermissionService userPermissionService;
-
-	@Autowired
-	private SaveUserPermissionValidator saveUserPermissionValidator;
-	
-	@Autowired
-	private DeleteUserPermissionValidator deleteUserPermissionValidator;
+	private ModelService modelService;
 
 	@Override
-	public UserPermission create() {
-		return userPermissionService.create();
+	public Page<UserPermission> findPage(Specification<UserPermission> specification, PageRequest pageRequest) throws Exception {
+		return modelService.findDtoPage(specification, pageRequest, UserPermission.class);
 	}
 
 	@Override
-	public UserPermission initDefaults(UserPermission userPermission) {
-		return userPermissionService.initDefaults(userPermission);
-	}
-
-	@Override
-	public UserPermission save(UserPermission userPermission, Errors bindingResult) {
-		saveUserPermissionValidator.validate(userPermission, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return userPermission;
-		}
-
-		return userPermissionService.save(userPermission);
-	}
-
-	@Override
-	public void delete(UUID uuid, Errors bindingResult) {
-		deleteUserPermissionValidator.validate(uuid, bindingResult);
-		
-		if (bindingResult.hasErrors() == false) {
-			userPermissionService.delete(uuid);
-		}
-	}
-
-	@Override
-	public void deleteAll() {
-		userPermissionService.deleteAll();
-	}
-
-	@Override
-	public UserPermission findByUuid(UUID uuid) {
-		return userPermissionService.findByUuid(uuid);
-	}
-
-	@Override
-	public UserPermission findById(String id) {
-		return userPermissionService.findById(id);
+	public UserPermission create() throws Exception {
+		return modelService.create(UserPermission.class);
 	}
 	
-	@Override
-	public List<UserPermission> findByOrderByCreatedDate() {
-		return userPermissionService.findByOrderByCreatedDateDesc();
-	}
 
 	@Override
-	public Page<UserPermission> page(UserPermission userPermission, int page, int size, Direction direction,
-			String... properties) {
-
-		// Change page to index's page
-		page = page <= 0 ? 0 : page - 1;
-		size = size <= 0 ? 1 : size;
-
-		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
-
-		return userPermissionService.page(userPermission, pageRequest);
+	public UserPermission findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, UserPermission.class);
 	}
 
-	public UserPermissionService getUserPermissionService() {
-		return userPermissionService;
+	@Override
+	public UserPermission findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, UserPermission.class);
 	}
 
-	public void setUserPermissionService(UserPermissionService userPermissionService) {
-		this.userPermissionService = userPermissionService;
+	@Override
+	public UserPermission createDto(UserPermission model) throws BusinessException {
+		return (UserPermission) modelService.saveDto(model, UserPermission.class);
 	}
 
-	public SaveUserPermissionValidator getSaveUserPermissionValidator() {
-		return saveUserPermissionValidator;
+	@Override
+	public UserPermission updateDto(UserPermission model) throws BusinessException {
+		return (UserPermission) modelService.saveDto(model, UserPermission.class);
 	}
 
-	public void setSaveUserPermissionValidator(SaveUserPermissionValidator saveUserPermissionValidator) {
-		this.saveUserPermissionValidator = saveUserPermissionValidator;
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.deleteByUuid(uuid, UserPermission.class);
+	}
+
+	@Override
+	public List<UserPermission> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findDtoBySorts(sorts, UserPermission.class);
 	}
 
 }

@@ -1,11 +1,11 @@
 package com.beanframework.backoffice.api;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,18 +18,22 @@ import com.beanframework.user.service.UserPermissionFacade;
 
 @RestController
 public class UserPermissionResource {
+
 	@Autowired
 	private UserPermissionFacade userPermissionFacade;
 
-	@PreAuthorize(WebUserPermissionConstants.PreAuthorize.READ)
 	@RequestMapping(WebUserPermissionConstants.Path.Api.CHECKID)
-	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
-		UserPermission userPermission = userPermissionFacade.findById(id);
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(UserPermission.ID, id);
+
+		UserPermission userPermission = userPermissionFacade.findOneDtoByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (userPermission != null && userPermission.getUuid().equals(uuid)) {
 				return "true";

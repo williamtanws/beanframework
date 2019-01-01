@@ -1,72 +1,70 @@
 package com.beanframework.user.converter;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
+import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserPermissionLang;
-import com.beanframework.user.service.UserPermissionService;
+import com.beanframework.user.domain.UserPermissionField;
 
-@Component
-public class EntityUserPermissionConverter implements Converter<UserPermission, UserPermission> {
+public class EntityUserPermissionConverter implements EntityConverter<UserPermission, UserPermission> {
 
 	@Autowired
-	private UserPermissionService userPermissionService;
-
-	@Autowired
-	private LanguageService languageService;
+	private ModelService modelService;
 
 	@Override
-	public UserPermission convert(UserPermission source) {
+	public UserPermission convert(UserPermission source) throws ConverterException {
 
-		Optional<UserPermission> prototype = Optional.of(userPermissionService.create());
-		if (source.getUuid() != null) {
-			Optional<UserPermission> exists = userPermissionService.findEntityByUuid(source.getUuid());
-			if (exists.isPresent()) {
-				prototype = exists;
+		UserPermission prototype;
+		try {
+
+			if (source.getUuid() != null) {
+
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserPermission.UUID, source.getUuid());
+
+				UserPermission exists = modelService.findOneEntityByProperties(properties, UserPermission.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(UserPermission.class);
+				}
+			} else {
+				prototype = modelService.create(UserPermission.class);
 			}
-		} else if (StringUtils.isNotEmpty(source.getId())) {
-			Optional<UserPermission> exists = userPermissionService.findEntityById(source.getId());
-			if (exists.isPresent()) {
-				prototype = exists;
-			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
-	private UserPermission convert(UserPermission source, UserPermission prototype) {
+	private UserPermission convert(UserPermission source, UserPermission prototype) throws ConverterException {
 
-		prototype.setId(source.getId());
-		prototype.setSort(source.getSort());
-		prototype.setLastModifiedDate(new Date());
+		try {
+			if (source.getId() != null)
+				prototype.setId(source.getId());
+			prototype.setLastModifiedDate(new Date());
 
-		prototype.getUserPermissionLangs().clear();
-		for (UserPermissionLang userPermissionLang : source.getUserPermissionLangs()) {
-			if (userPermissionLang.getLanguage().getUuid() != null) {
-				Optional<Language> language = languageService.findEntityByUuid(userPermissionLang.getLanguage().getUuid());
-				if (language.isPresent()) {
-					userPermissionLang.setLanguage(language.get());
-					userPermissionLang.setUserPermission(prototype);
-					prototype.getUserPermissionLangs().add(userPermissionLang);
-				}
-			} else if (StringUtils.isNotEmpty(userPermissionLang.getLanguage().getId())) {
-				Optional<Language> language = languageService.findEntityById(userPermissionLang.getLanguage().getId());
-				if (language.isPresent()) {
-					userPermissionLang.setLanguage(language.get());
-					userPermissionLang.setUserPermission(prototype);
-					prototype.getUserPermissionLangs().add(userPermissionLang);
+			prototype.setSort(source.getSort());
+			if (source.getFields() != null && source.getFields().isEmpty() == false) {
+				for (int i = 0; i < prototype.getFields().size(); i++) {
+					for (UserPermissionField sourceUserPermissionField : source.getFields()) {
+						if (prototype.getFields().get(i).getUuid().equals(sourceUserPermissionField.getUuid())) {
+							prototype.getFields().get(i).setValue(sourceUserPermissionField.getValue());
+						}
+					}
 				}
 			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), e);
 		}
-
 		return prototype;
 	}
 

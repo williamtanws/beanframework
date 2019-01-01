@@ -1,0 +1,12 @@
+userGroupId,userPermissionId,create,read,update,delete
+employeegroup,language,+,+,+,+
+employeegroup,userpermission,+,+,+,+
+employeegroup,userright,+,+,+,+
+employeegroup,usergroup,+,+,+,+
+employeegroup,menu,+,+,+,+
+employeegroup,employeesession,-,+,-,+
+employeegroup,employee,+,+,+,+
+employeegroup,cronjob,+,+,+,+
+employeegroup,filemanager,+,+,+,+
+employeegroup,email,+,+,+,+
+customergroup,customer,+,+,+,+

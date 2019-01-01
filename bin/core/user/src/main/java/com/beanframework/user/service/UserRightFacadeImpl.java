@@ -1,107 +1,64 @@
 package com.beanframework.user.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.validator.DeleteUserRightValidator;
-import com.beanframework.user.validator.SaveUserRightValidator;
 
 @Component
 public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Autowired
-	private UserRightService userRightService;
-
-	@Autowired
-	private SaveUserRightValidator saveUserRightValidator;
-	
-	@Autowired
-	private DeleteUserRightValidator deleteUserRightValidator;
+	private ModelService modelService;
 
 	@Override
-	public UserRight create() {
-		return userRightService.create();
+	public Page<UserRight> findPage(Specification<UserRight> specification, PageRequest pageRequest) throws Exception {
+		return modelService.findDtoPage(specification, pageRequest, UserRight.class);
 	}
 
 	@Override
-	public UserRight initDefaults(UserRight userRight) {
-		return userRightService.initDefaults(userRight);
+	public UserRight create() throws Exception {
+		return modelService.create(UserRight.class);
 	}
 
 	@Override
-	public UserRight save(UserRight userRight, Errors bindingResult) {
-		saveUserRightValidator.validate(userRight, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return userRight;
-		}
-
-		return userRightService.save(userRight);
+	public UserRight findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, UserRight.class);
 	}
 
 	@Override
-	public void delete(UUID uuid, Errors bindingResult) {
-		deleteUserRightValidator.validate(uuid, bindingResult);
-		
-		if (bindingResult.hasErrors() == false) {
-			userRightService.delete(uuid);
-		}
+	public UserRight findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, UserRight.class);
 	}
 
 	@Override
-	public void deleteAll() {
-		userRightService.deleteAll();
+	public UserRight createDto(UserRight model) throws BusinessException {
+		return (UserRight) modelService.saveDto(model, UserRight.class);
 	}
 
 	@Override
-	public UserRight findByUuid(UUID uuid) {
-		return userRightService.findByUuid(uuid);
+	public UserRight updateDto(UserRight model) throws BusinessException {
+		return (UserRight) modelService.saveDto(model, UserRight.class);
 	}
 
 	@Override
-	public UserRight findById(String id) {
-		return userRightService.findById(id);
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.deleteByUuid(uuid, UserRight.class);
 	}
-	
-	@Override
-	public List<UserRight> findByOrderByCreatedDate() {
-		return userRightService.findByOrderByCreatedDateDesc();
-	}
-
 
 	@Override
-	public Page<UserRight> page(UserRight userRight, int page, int size, Direction direction, String... properties) {
-
-		// Change page to index's page
-		page = page <= 0 ? 0 : page - 1;
-		size = size <= 0 ? 1 : size;
-
-		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
-
-		return userRightService.page(userRight, pageRequest);
+	public List<UserRight> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findDtoBySorts(sorts, UserRight.class);
 	}
 
-	public UserRightService getUserRightService() {
-		return userRightService;
-	}
-
-	public void setUserRightService(UserRightService userRightService) {
-		this.userRightService = userRightService;
-	}
-
-	public SaveUserRightValidator getSaveUserRightValidator() {
-		return saveUserRightValidator;
-	}
-
-	public void setSaveUserRightValidator(SaveUserRightValidator saveUserRightValidator) {
-		this.saveUserRightValidator = saveUserRightValidator;
-	}
 }

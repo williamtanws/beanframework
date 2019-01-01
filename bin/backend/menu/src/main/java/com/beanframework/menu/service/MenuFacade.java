@@ -1,38 +1,45 @@
 package com.beanframework.menu.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.MapBindingResult;
+import org.springframework.security.access.prepost.PreAuthorize;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.menu.domain.Menu;
 
 public interface MenuFacade {
 
-	Menu create();
+	public static interface PreAuthorizeEnum {
+		public static final String READ = "hasAuthority('menu_read')";
+		public static final String CREATE = "hasAuthority('menu_create')";
+		public static final String UPDATE = "hasAuthority('menu_update')";
+		public static final String DELETE = "hasAuthority('menu_delete')";
+	}
 
-	Menu initDefaults(Menu menu);
+	Menu create() throws Exception;
 
-	Menu save(Menu menu, Errors bindingResult);
-	
-	List<Menu> save(List<Menu> menus, MapBindingResult bindingResult);
-	
-	void changePosition(UUID fromUuid, UUID toUuid, int toIndex, BindingResult bindingResult);
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	Menu findOneDtoByUuid(UUID uuid) throws Exception;
 
-	void delete(UUID uuid, Errors bindingResult);
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	Menu findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
-	void deleteAll();
+	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	Menu createDto(Menu model) throws BusinessException;
 
-	Menu findByUuid(UUID uuid);
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	Menu updateDto(Menu model) throws BusinessException;
 
-	Menu findById(String id);
+	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	void delete(UUID uuid) throws BusinessException;
 
-	Menu findByPath(String path);
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	void changePosition(UUID fromUuid, UUID toUuid, int toIndex) throws BusinessException;
 
-	List<Menu> findMenuTree();
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	List<Menu> findDtoMenuTree() throws BusinessException;
 
-	List<Menu> findNavigationTreeByUserGroup(List<UUID> userGroupUuids);
-
+	List<Menu> findDtoMenuTreeByCurrentUser() throws BusinessException;
 }

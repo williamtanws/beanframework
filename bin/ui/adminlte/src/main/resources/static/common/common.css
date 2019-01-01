@@ -1,0 +1,71 @@
+.fa-minus-circle.color{
+	color: #d73925;
+}
+
+.fa-save.color{
+	color: #008d4c;
+}
+
+.fa-edit.color{
+	color: #f3c613;
+}
+
+.fa-language.color{
+	color: #d83333;
+}
+
+.fa-plus.color{
+	color: #008d4c;
+}
+
+.fa-dashboard.color{
+	color: #3c8dbc;
+}
+
+.fa-globe.color{
+	color: #59DDDD;
+}
+
+.fa-search.color{
+	color: #808080;
+}
+
+.fa-file-code-o.color{
+	color: red;
+}
+
+.fa-folder.color{
+	color: #e0c88d;
+}
+
+.fa-calendar.color{
+	color: #da0000;
+}
+
+.fa-server.color{
+	color: #b31389;
+}
+
+.fa-sitemap.color{
+	color: #e6cd69;
+}
+
+.select2{
+	width: 100%;
+}
+
+.table tr{
+	cursor: pointer;
+}
+
+.nav-tabs-custom {
+    margin-bottom: 10px;
+}
+
+.btn.btn-success{
+	min-width: 74px;
+}
+
+.nav-tabs-custom>.nav-tabs>li>a .error {
+	color: red;
+}

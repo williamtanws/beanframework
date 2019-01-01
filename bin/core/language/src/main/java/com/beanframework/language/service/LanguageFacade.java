@@ -1,33 +1,43 @@
 package com.beanframework.language.service;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.validation.Errors;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.language.domain.Language;
 
 public interface LanguageFacade {
 
-	Language create();
+	public static interface PreAuthorizeEnum {
+		public static final String READ = "hasAuthority('language_read')";
+		public static final String CREATE = "hasAuthority('language_create')";
+		public static final String UPDATE = "hasAuthority('language_update')";
+		public static final String DELETE = "hasAuthority('language_delete')";
+	}
 
-	Language initDefaults(Language language);
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	public Page<Language> findPage(Specification<Language> specification, PageRequest pageable) throws Exception;
 
-	Language save(Language language, Errors bindingResult);
+	public Language create() throws Exception;
 
-	void delete(UUID uuid, Errors bindingResult);
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	public Language findOneDtoByUuid(UUID uuid) throws Exception;
 
-	void deleteAll();
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	public Language findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
-	Language findByUuid(UUID uuid);
+	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	public Language createDto(Language model) throws BusinessException;
 
-	Language findById(String id);
-		
-	List<Language> findByOrderBySortAsc();
-	
-	boolean isIdExists(String id);
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	public Language updateDto(Language model) throws BusinessException;
 
-	Page<Language> page(Language language, int page, int size, Direction direction, String... properties);
+	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	public void delete(UUID uuid) throws BusinessException;
+
 }

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
@@ -14,32 +15,25 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
-import com.beanframework.user.UserConstants;
+import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.user.UserRightConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
-@Table(name = UserConstants.Table.USER_RIGHT)
-public class UserRight extends AbstractDomain {
+@Table(name = UserRightConstants.Table.USER_RIGHT)
+public class UserRight extends GenericDomain {
 
 	private static final long serialVersionUID = 8192305251381233446L;
-	public static final String MODEL = "UserRight";
-	public static final String USER_RIGHT_LANGS = "userRightLangs";
+	public static final String FIELDS = "fields";
+	public static final String SORT = "sort";
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserRightLang.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<UserRightLang> userRightLangs = new ArrayList<UserRightLang>();
+	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OrderBy(UserRightField.DYNAMIC_FIELD)
+	private List<UserRightField> fields = new ArrayList<UserRightField>();
 
 	private Integer sort;
-
-	public List<UserRightLang> getUserRightLangs() {
-		return userRightLangs;
-	}
-
-	public void setUserRightLangs(List<UserRightLang> userRightLangs) {
-		this.userRightLangs = userRightLangs;
-	}
 
 	public Integer getSort() {
 		return sort;
@@ -47,6 +41,14 @@ public class UserRight extends AbstractDomain {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public List<UserRightField> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<UserRightField> fields) {
+		this.fields = fields;
 	}
 
 }

@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -14,83 +14,22 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.validator.DeleteAdminValidator;
-import com.beanframework.admin.validator.SaveAdminValidator;
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.ModelService;
 
 @Component
 public class AdminFacadeImpl implements AdminFacade {
 
 	@Autowired
+	private ModelService modelService;
+
+	@Autowired
 	private AdminService adminService;
 
-	@Autowired
-	private SaveAdminValidator saveAdminValidator;
-
-	@Autowired
-	private DeleteAdminValidator deleteAdminValidator;
-
 	@Override
-	public Admin create() {
-		return adminService.create();
-	}
-
-	@Override
-	public Admin initDefaults(Admin admin) {
-		return adminService.initDefaults(admin);
-	}
-
-	@Override
-	public Admin save(Admin admin, Errors bindingResult) {
-		saveAdminValidator.validate(admin, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return admin;
-		}
-
-		return adminService.save(admin);
-	}
-
-	@Override
-	public void delete(UUID uuid, Errors bindingResult) {
-		deleteAdminValidator.validate(uuid, bindingResult);
-		
-		if (bindingResult.hasErrors() == false) {
-			adminService.delete(uuid);
-		}
-	}
-
-	@Override
-	public void deleteAll() {
-		adminService.deleteAll();
-	}
-
-	@Override
-	public Admin findByUuid(UUID uuid) {
-		return adminService.findByUuid(uuid);
-	}
-
-	@Override
-	public Admin findById(String id) {
-		return adminService.findById(id);
-	}
-
-	@Override
-	public Page<Admin> page(Admin admin, int page, int size, Direction direction, String... properties) {
-
-		// Change page to index's page
-		page = page <= 0 ? 0 : page - 1;
-		size = size <= 0 ? 1 : size;
-
-		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
-
-		return adminService.page(admin, pageRequest);
-	}
-
-	@Override
-	public Admin getCurrentAdmin() {
+	public Admin getCurrentUser() {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -103,52 +42,58 @@ public class AdminFacadeImpl implements AdminFacade {
 	}
 
 	@Override
-	public Admin authenticate(String id, String password) {
-		Admin admin = adminService.authenticate(id, password);
+	public Admin findDtoAuthenticate(String id, String password) throws Exception {
+		Admin admin = adminService.findDtoAuthenticate(id, password);
 
 		if (admin == null) {
 			throw new BadCredentialsException("Bad Credentials");
 		}
-		if (admin.isEnabled() == false) {
+		if (admin.getEnabled() == false) {
 			throw new DisabledException("Account Disabled");
 		}
 
-		if (admin.isAccountNonExpired() == false) {
+		if (admin.getAccountNonExpired() == false) {
 			throw new AccountExpiredException("Account Expired");
 		}
 
-		if (admin.isAccountNonLocked() == false) {
+		if (admin.getAccountNonLocked() == false) {
 			throw new LockedException("Account Locked");
 		}
 
-		if (admin.isCredentialsNonExpired() == false) {
-			throw new CredentialsExpiredException("Passwrd Expired");
+		if (admin.getCredentialsNonExpired() == false) {
+			throw new CredentialsExpiredException("Password Expired");
 		}
 		return admin;
 	}
 
-	public AdminService getAdminService() {
-		return adminService;
+	@Override
+	public Page<Admin> findDtoPage(Specification<Admin> findByCriteria, PageRequest pageable) throws Exception {
+		return modelService.findDtoPage(findByCriteria, pageable, Admin.class);
 	}
 
-	public void setAdminService(AdminService adminService) {
-		this.adminService = adminService;
+	@Override
+	public Admin create() throws Exception {
+		return modelService.create(Admin.class);
 	}
 
-	public SaveAdminValidator getSaveAdminValidator() {
-		return saveAdminValidator;
+	@Override
+	public Admin findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Admin.class);
 	}
 
-	public void setSaveAdminValidator(SaveAdminValidator saveAdminValidator) {
-		this.saveAdminValidator = saveAdminValidator;
+	@Override
+	public Admin createDto(Admin model) throws BusinessException {
+		return (Admin) modelService.saveDto(model, Admin.class);
 	}
 
-	public DeleteAdminValidator getDeleteAdminValidator() {
-		return deleteAdminValidator;
+	@Override
+	public Admin saveDto(Admin model) throws BusinessException {
+		return (Admin) modelService.saveDto(model, Admin.class);
+
 	}
 
-	public void setDeleteAdminValidator(DeleteAdminValidator deleteAdminValidator) {
-		this.deleteAdminValidator = deleteAdminValidator;
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.deleteByUuid(uuid, Admin.class);
 	}
-
 }

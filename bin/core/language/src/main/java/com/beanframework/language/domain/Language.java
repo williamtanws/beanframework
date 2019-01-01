@@ -4,18 +4,19 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 
+import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.language.LanguageConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Audited
 @Table(name = LanguageConstants.Table.LANGUAGE)
-public class Language extends AbstractDomain {
+public class Language extends GenericDomain {
 
 	private static final long serialVersionUID = 5992760081038782486L;
-	public static final String MODEL = "Language";
 	public static final String NAME = "name";
 	public static final String ACTIVE = "active";
 	public static final String SORT = "sort";

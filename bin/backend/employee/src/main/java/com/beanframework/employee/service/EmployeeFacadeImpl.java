@@ -1,124 +1,92 @@
 package com.beanframework.employee.service;
 
-import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
+import com.beanframework.employee.EmployeeConstants;
+import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.domain.EmployeeSession;
-import com.beanframework.employee.validator.DeleteEmployeeValidator;
-import com.beanframework.employee.validator.SaveEmployeeProfileValidator;
-import com.beanframework.employee.validator.SaveEmployeeValidator;
 
 @Component
 public class EmployeeFacadeImpl implements EmployeeFacade {
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private EmployeeService employeeService;
 
 	@Autowired
-	private SaveEmployeeValidator saveEmployeeValidator;
-
-	@Autowired
-	private SaveEmployeeProfileValidator saveEmployeeProfileValidator;
-
-	@Autowired
-	private DeleteEmployeeValidator deleteEmployeeValidator;
-
-	@Autowired
 	private SessionRegistry sessionRegistry;
+	
+	@Autowired
+	private LocaleMessageService localeMessageService;
 
 	@Override
-	public Employee create() {
-		return employeeService.create();
-	}
-
-	@Override
-	public Employee initDefaults(Employee employee) {
-		return employeeService.initDefaults(employee);
-	}
-
-	@Override
-	public Employee save(Employee employee, Errors bindingResult) {
-		saveEmployeeValidator.validate(employee, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return employee;
-		}
-
-		return employeeService.save(employee);
-	}
-
-	@Override
-	public Employee saveProfile(Employee employee, MultipartFile picture, Errors bindingResult) {
-		saveEmployeeProfileValidator.validate(employee, bindingResult);
-		saveEmployeeProfileValidator.validate(picture, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return employee;
-		}
-
+	public Employee saveProfile(Employee employee, MultipartFile picture) throws BusinessException {
+		
 		try {
-			return employeeService.saveProfile(employee, picture);
-		} catch (IOException e) {
-			bindingResult.reject("employee", e.toString());
-			return employee;
+			if (picture != null && picture.isEmpty() == false) {
+				String mimetype = picture.getContentType();
+				String type = mimetype.split("/")[0];
+				if (type.equals("image") == false) {
+					throw new Exception(localeMessageService.getMessage(EmployeeConstants.Locale.PICTURE_WRONGFORMAT));
+				}
+			}
+			
+			modelService.saveEntity(employee, Employee.class);
+			employeeService.saveProfilePicture(employee, picture);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
 		}
+		
+		return employee;
 	}
 
 	@Override
 	public Employee updatePrincipal(Employee employee) {
-		return employeeService.updatePrincipal(employee);
-	}
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Employee employeePrincipal = (Employee) auth.getPrincipal();
+		employeePrincipal = findDtoPrincipal(employee);
 
-	@Override
-	public void delete(UUID uuid, Errors bindingResult) {
-		deleteEmployeeValidator.validate(uuid, bindingResult);
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal,
+				employeePrincipal.getPassword(), employeePrincipal.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(token);
 
-		if (bindingResult.hasErrors() == false) {
-			employeeService.delete(uuid);
-		}
+		return employeePrincipal;
 	}
 	
-	@Override
-	public void delete(String id, Errors bindingResult) {
-		deleteEmployeeValidator.validate(id, bindingResult);
-
-		if (bindingResult.hasErrors() == false) {
-			employeeService.delete(id);
-		}
-	}
-
-	@Override
-	public void deleteAll() {
-		employeeService.deleteAll();
-	}
-
-	@Override
-	public Employee findByUuid(UUID uuid) {
-		return employeeService.findByUuid(uuid);
-	}
-
-	@Override
-	public Employee findById(String id) {
-		return employeeService.findById(id);
+	private Employee findDtoPrincipal(Employee source) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Employee employeePrincipal = (Employee) auth.getPrincipal();
+		
+		employeePrincipal.setId(source.getId());
+		
+		return employeePrincipal;
 	}
 
 	@Override
@@ -168,69 +136,87 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	}
 
 	@Override
-	public Page<Employee> page(Employee employee, int page, int size, Direction direction, String... properties) {
+	public Employee getCurrentUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		// Change page to index's page
-		page = page <= 0 ? 0 : page - 1;
-		size = size <= 0 ? 1 : size;
+		if (auth != null && auth.getPrincipal() instanceof Employee) {
 
-		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
-
-		return employeeService.page(employee, pageRequest);
+			Employee employee = (Employee) auth.getPrincipal();
+			return employee;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
-	public Employee getCurrentEmployee() {
-		return employeeService.getCurrentEmployee();
-	}
-
-	@Override
-	public Employee authenticate(String id, String password) {
-		Employee employee = employeeService.authenticate(id, password);
+	public Employee findDtoAuthenticate(String id, String password) throws Exception {
+		Employee employee = employeeService.findDtoAuthenticate(id, password);
 
 		if (employee == null) {
 			throw new BadCredentialsException("Bad Credentials");
 		}
-		if (employee.isEnabled() == false) {
+		if (employee.getEnabled() == false) {
 			throw new DisabledException("Account Disabled");
 		}
 
-		if (employee.isAccountNonExpired() == false) {
+		if (employee.getAccountNonExpired() == false) {
 			throw new AccountExpiredException("Account Expired");
 		}
 
-		if (employee.isAccountNonLocked() == false) {
+		if (employee.getAccountNonLocked() == false) {
 			throw new LockedException("Account Locked");
 		}
 
-		if (employee.isCredentialsNonExpired() == false) {
+		if (employee.getCredentialsNonExpired() == false) {
 			throw new CredentialsExpiredException("Passwrd Expired");
 		}
 		return employee;
 	}
 
-	public EmployeeService getEmployeeService() {
-		return employeeService;
+	@Override
+	public void deleteEmployeeProfilePictureByUuid(UUID uuid) {
+		employeeService.deleteEmployeeProfilePictureByUuid(uuid);
 	}
 
-	public void setEmployeeService(EmployeeService employeeService) {
-		this.employeeService = employeeService;
+	@Override
+	public void deleteAllEmployeeProfilePicture() {
+		employeeService.deleteAllEmployeeProfilePicture();
 	}
 
-	public SaveEmployeeValidator getSaveEmployeeValidator() {
-		return saveEmployeeValidator;
+	@Override
+	public Page<Employee> findPage(Specification<Employee> specification, PageRequest pageRequest) throws Exception {
+		return modelService.findDtoPage(specification, pageRequest, Employee.class);
+	}
+	
+
+	@Override
+	public Employee findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Employee.class);
 	}
 
-	public void setSaveEmployeeValidator(SaveEmployeeValidator saveEmployeeValidator) {
-		this.saveEmployeeValidator = saveEmployeeValidator;
+	@Override
+	public Employee findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, Employee.class);
 	}
 
-	public SaveEmployeeProfileValidator getSaveCurrentEmployeeValidator() {
-		return saveEmployeeProfileValidator;
+	@Override
+	public Employee create() throws Exception {
+		return modelService.create(Employee.class);
 	}
 
-	public void setSaveCurrentEmployeeValidator(SaveEmployeeProfileValidator saveCurrentEmployeeValidator) {
-		this.saveEmployeeProfileValidator = saveCurrentEmployeeValidator;
+	@Override
+	public Employee createDto(Employee model) throws BusinessException {
+		return (Employee) modelService.saveDto(model, Employee.class);
+	}
+
+	@Override
+	public Employee updateDto(Employee model) throws BusinessException {
+		return (Employee) modelService.saveDto(model, Employee.class);
+	}
+
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.deleteByUuid(uuid, Employee.class);
 	}
 
 }

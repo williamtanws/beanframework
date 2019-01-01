@@ -1,36 +1,48 @@
 package com.beanframework.customer.service;
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.validation.Errors;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.customer.domain.Customer;
 
 public interface CustomerFacade {
-
-	Customer create();
-
-	Customer initDefaults(Customer customer);
-
-	Customer save(Customer customer, Errors bindingResult);
-
-	void delete(UUID uuid, Errors bindingResult);
 	
-	void delete(String id, Errors bindingResult);
-	
-	void deleteAll();
+	public static interface PreAuthorizeEnum {
+		public static final String READ = "hasAuthority('customer_read')";
+		public static final String CREATE = "hasAuthority('customer_create')";
+		public static final String UPDATE = "hasAuthority('customer_update')";
+		public static final String DELETE = "hasAuthority('customer_delete')";
+	}
 
-	Customer findByUuid(UUID uuid);
+	Customer getCurrentUser();
 
-	Customer findById(String id);
-	
-	boolean existsById(String id);
+	Customer findDtoAuthenticate(String id, String password) throws Exception;
 
-	Page<Customer> page(Customer customer, int page, int size, Direction direction, String... properties);
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	Page<Customer> findPage(Specification<Customer> findByCriteria, PageRequest of) throws Exception;
 
-	Customer getCurrentCustomer();
+	Customer create() throws Exception;
 
-	Customer authenticate(String id, String password);
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	Customer findOneDtoByUuid(UUID uuid) throws Exception;
+
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	Customer findOneDtoByProperties(Map<String, Object> properties) throws Exception;
+
+	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	Customer createDto(Customer customerCreate) throws BusinessException;
+
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	Customer updateDto(Customer customerUpdate) throws BusinessException;
+
+	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	void delete(UUID uuid) throws BusinessException;
+
+
 }

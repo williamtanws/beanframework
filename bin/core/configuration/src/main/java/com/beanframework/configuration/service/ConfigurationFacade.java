@@ -3,26 +3,24 @@ package com.beanframework.configuration.service;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.validation.Errors;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.configuration.domain.Configuration;
 
 public interface ConfigurationFacade {
 
-	Configuration create();
+	Page<Configuration> findDtoPage(Specification<Configuration> findByCriteria, PageRequest of) throws Exception;
 
-	Configuration initDefaults(Configuration admin);
+	Configuration create() throws Exception;
 
-	Configuration save(Configuration admin, Errors bindingResult);
+	Configuration findOneDtoByUuid(UUID uuid) throws Exception;
 
-	void delete(UUID uuid, Errors bindingResult);
+	Configuration createDto(Configuration configurationCreate) throws BusinessException;
 
-	void deleteAll();
+	Configuration updateDto(Configuration configurationUpdate) throws BusinessException;
 
-	Configuration findByUuid(UUID uuid);
+	void delete(UUID uuid) throws BusinessException;
 
-	Configuration findById(String id);
-
-	Page<Configuration> page(Configuration admin, int page, int size, Direction direction, String... properties);
 }

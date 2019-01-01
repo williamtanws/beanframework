@@ -5,98 +5,48 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.validator.DeleteConfigurationValidator;
-import com.beanframework.configuration.validator.SaveConfigurationValidator;
 
 @Component
 public class ConfigurationFacadeImpl implements ConfigurationFacade {
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ModelService modelService;
 
-	@Autowired
-	private SaveConfigurationValidator saveConfigurationValidator;
+	@Override
+	public Page<Configuration> findDtoPage(Specification<Configuration> specification, PageRequest pageable) throws Exception {
+		return modelService.findDtoPage(specification, pageable, Configuration.class);
+	}
+
+	@Override
+	public Configuration create() throws Exception {
+		return modelService.create(Configuration.class);
+	}
+
+	@Override
+	public Configuration findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Configuration.class);
+	}
+
+	@Override
+	public Configuration createDto(Configuration model) throws BusinessException {
+		return (Configuration) modelService.saveDto(model, Configuration.class);
+	}
+
+	@Override
+	public Configuration updateDto(Configuration model) throws BusinessException {
+		return (Configuration) modelService.saveDto(model, Configuration.class);
+	}
+
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.deleteByUuid(uuid, Configuration.class);
+	}
 	
-	@Autowired
-	private DeleteConfigurationValidator deleteConfigurationValidator;
-
-	@Override
-	public Configuration create() {
-		return configurationService.create();
-	}
-
-	@Override
-	public Configuration initDefaults(Configuration configuration) {
-		return configurationService.initDefaults(configuration);
-	}
-
-	@Override
-	public Configuration save(Configuration configuration, Errors bindingResult) {
-		saveConfigurationValidator.validate(configuration, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return configuration;
-		}
-
-		return configurationService.save(configuration);
-	}
-
-	@Override
-	public void delete(UUID uuid, Errors bindingResult) {
-		deleteConfigurationValidator.validate(uuid, bindingResult);
-		
-		if (bindingResult.hasErrors() == false) {
-			configurationService.delete(uuid);
-		}
-	}
-
-	@Override
-	public void deleteAll() {
-		configurationService.deleteAll();
-	}
-
-	@Override
-	public Configuration findByUuid(UUID uuid) {
-		return configurationService.findByUuid(uuid);
-	}
-
-	@Override
-	public Configuration findById(String id) {
-		return configurationService.findById(id);
-	}
-
-	@Override
-	public Page<Configuration> page(Configuration configuration, int page, int size, Direction direction,
-			String... properties) {
-
-		// Change page to index's page
-		page = page <= 0 ? 0 : page - 1;
-		size = size <= 0 ? 1 : size;
-
-		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
-
-		return configurationService.page(configuration, pageRequest);
-	}
-
-	public ConfigurationService getConfigurationService() {
-		return configurationService;
-	}
-
-	public void setConfigurationService(ConfigurationService configurationService) {
-		this.configurationService = configurationService;
-	}
-
-	public SaveConfigurationValidator getSaveConfigurationValidator() {
-		return saveConfigurationValidator;
-	}
-
-	public void setSaveConfigurationValidator(SaveConfigurationValidator saveConfigurationValidator) {
-		this.saveConfigurationValidator = saveConfigurationValidator;
-	}
-
+	
 }

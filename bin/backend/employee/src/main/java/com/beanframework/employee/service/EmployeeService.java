@@ -1,45 +1,24 @@
 package com.beanframework.employee.service;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.employee.domain.Employee;
 
 public interface EmployeeService {
 
-	Employee create();
-
-	Employee initDefaults(Employee employee);
-
-	Employee save(Employee employee);
-
-	Employee saveProfile(Employee employee, MultipartFile picture) throws IOException;
-
 	Employee updatePrincipal(Employee employee);
 
-	void delete(UUID uuid);
+	Employee findDtoAuthenticate(String id, String password) throws Exception;
 
-	void delete(String id);
+	void saveProfilePicture(Employee employee, MultipartFile picture) throws IOException;
 
-	void deleteAll();
+	void deleteEmployeeProfilePictureByUuid(UUID uuid);
 
-	Optional<Employee> findEntityByUuid(UUID uuid);
-
-	Optional<Employee> findEntityById(String id);
-
-	Employee findByUuid(UUID uuid);
-
-	Employee findById(String id);
-
-	Page<Employee> page(Employee employee, Pageable pageable);
+	void deleteAllEmployeeProfilePicture();
 
 	Employee getCurrentEmployee();
-
-	Employee authenticate(String id, String password);
 
 }

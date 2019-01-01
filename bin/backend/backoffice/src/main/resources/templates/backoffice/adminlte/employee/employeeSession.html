@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="/backoffice/adminlte/common/layout/layoutBackoffice">
+	layout:decorate="${@environment.getProperty('layout.backoffice')}">
 <head>
 <title th:text="#{module.employee.session}"></title>
 </head>
@@ -8,7 +8,7 @@
 	<th:block layout:fragment="content">
 		<section class="content">
 			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/fragment/alert :: custom"></th:block>
+				<th:block layout:insert="/backoffice/adminlte/common/component/alert :: custom"></th:block>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -70,7 +70,7 @@
 														<td>
 															<form role="form" th:action="@{${@environment.getProperty('path.employee.session')}}" method="post">
 																<input type="hidden" name="delete">
-																<input type="hidden" name="username" th:value="${row.principalEmployee.uuid}">
+																<input type="hidden" name="uuid" th:value="${row.principalEmployee.uuid}">
 																<button type="submit" class="btn btn-block btn-danger btn-sm" th:text="#{module.employee.expirenow}"></button>
 															</form>
 														</td>

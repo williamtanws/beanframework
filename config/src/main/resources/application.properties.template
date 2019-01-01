@@ -2,7 +2,7 @@
 # = APPLICATION
 # ===============================
 spring.profiles.active=dev
-spring.profiles.include=console,backoffice,platform
+spring.profiles.include=platform,console,backoffice
 
 # =======================================================
 # = INTERNATIONALIZATION (MessageSourceAutoConfiguration)

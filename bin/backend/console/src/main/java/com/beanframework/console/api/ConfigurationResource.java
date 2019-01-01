@@ -1,5 +1,6 @@
 package com.beanframework.console.api;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -10,25 +11,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.console.WebConfigurationConstants;
 import com.beanframework.console.WebConsoleConstants;
 
 @RestController
 public class ConfigurationResource {
-
+	
 	@Autowired
-	private ConfigurationFacade configurationFacade;
+	private ModelService modelService;
 
 	@GetMapping(WebConfigurationConstants.Path.Api.CHECKID)
-	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) {
+	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(WebConsoleConstants.Param.ID).toString();
-		Configuration configuration = configurationFacade.findById(id);
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, id);
+		
+		Configuration configuration = modelService.findOneEntityByProperties(properties, Configuration.class);
 
 		String uuidStr = (String) requestParams.get(WebConsoleConstants.Param.UUID);
-		if (StringUtils.isNotEmpty(uuidStr)) {
+		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (configuration != null && configuration.getUuid().equals(uuid)) {
 				return "true";

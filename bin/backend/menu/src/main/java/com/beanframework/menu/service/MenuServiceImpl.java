@@ -2,109 +2,72 @@ package com.beanframework.menu.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.Cache.ValueWrapper;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.beanframework.menu.MenuConstants;
-import com.beanframework.menu.converter.DtoMenuConverter;
-import com.beanframework.menu.converter.EntityMenuConverter;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.repository.MenuRepository;
+import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
 
 @Service
 public class MenuServiceImpl implements MenuService {
 
-	Logger logger = LoggerFactory.getLogger(MenuServiceImpl.class.getName());
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private MenuRepository menuRepository;
 
 	@Autowired
-	private EntityMenuConverter entityMenuConverter;
+	protected CacheManager cacheManager;
 
-	@Autowired
-	private DtoMenuConverter dtoMenuConverter;
-
-	@Override
-	public Menu create() {
-		return initDefaults(new Menu());
-	}
-
-	@Override
-	public Menu initDefaults(Menu menu) {
-		menu.setSort(-1);
-		return menu;
-	}
-
-	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
-			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
-	@Transactional(readOnly = false)
-	@Override
-	public Menu save(Menu menu) {
-		menu = entityMenuConverter.convert(menu);
-		menu = menuRepository.save(menu);
-		menu = dtoMenuConverter.convert(menu);
-
-		return menu;
-	}
-	
-	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
-			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
-	@Transactional(readOnly = false)
-	@Override
-	public List<Menu> save(List<Menu> menus) {
-		menus = entityMenuConverter.convert(menus);
-		menus = menuRepository.saveAll(menus);
-		menus = dtoMenuConverter.convert(menus);
-
-		return menus;
-	}
-	
-	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
-			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
-	@Transactional(readOnly = false)
+	@Transactional
 	@Override
 	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) {
-		
-		if(toUuid == null) {
+
+		if (toUuid == null) {
 			menuRepository.setParentNullByUuid(fromUuid);
-			
+
 			menuRepository.updateSortByUuid(fromUuid, toIndex);
-			
+
 			List<Menu> toMenuChilds = menuRepository.findByParentNullOrderBySort();
-			
+
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
 			menuRepository.saveAll(menus);
-		}
-		else {
+		} else {
 			menuRepository.updateParentByUuid(fromUuid, toUuid);
-			
+
 			menuRepository.updateSortByUuid(fromUuid, toIndex);
-			
+
 			List<Menu> toMenuChilds = menuRepository.findByParentUuidOrderBySort(toUuid);
-			
+
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
 			menuRepository.saveAll(menus);
 		}
+
+		modelService.clearCache(Menu.class);
 	}
-	
+
 	private List<Menu> changePosition(List<Menu> menuList, UUID fromId, int toIndex) {
 
 		int topIndex;
@@ -148,73 +111,9 @@ public class MenuServiceImpl implements MenuService {
 		return menuList;
 	}
 
-	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
-			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
-	@Transactional(readOnly = false)
-	@Override
-	public void delete(UUID uuid) {
-		menuRepository.deleteById(uuid);
-	}
-
-	@CacheEvict(value = { MenuConstants.Cache.MENU, MenuConstants.Cache.NAVIGATION_TREE,
-			MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP }, allEntries = true)
-	@Transactional(readOnly = false)
-	@Override
-	public void deleteAll() {
-		menuRepository.deleteAll();
-	}
-
 	@Transactional(readOnly = true)
 	@Override
-	public Optional<Menu> findEntityByUuid(UUID uuid) {
-		return menuRepository.findByUuid(uuid);
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public Optional<Menu> findEntityById(String id) {
-		return menuRepository.findById(id);
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public Menu findByUuid(UUID uuid) {
-		Optional<Menu> menu = menuRepository.findByUuid(uuid);
-
-		if (menu.isPresent()) {
-			return dtoMenuConverter.convert(menu.get());
-		} else {
-			return null;
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public Menu findById(String id) {
-		Optional<Menu> menu = menuRepository.findById(id);
-
-		if (menu.isPresent()) {
-			return dtoMenuConverter.convert(menu.get());
-		} else {
-			return null;
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public Menu findByPath(String path) {
-		Optional<Menu> menu = menuRepository.findByPath(path);
-
-		if (menu.isPresent()) {
-			return dtoMenuConverter.convert(menu.get());
-		} else {
-			return null;
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public List<Menu> findMenuTree() {
+	public List<Menu> findDtoMenuTree() throws Exception {
 
 		// Find all root parents
 		Specification<Menu> spec = new Specification<Menu>() {
@@ -232,16 +131,20 @@ public class MenuServiceImpl implements MenuService {
 				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			}
 		};
-		List<Menu> rootParents = menuRepository.findAll(spec);
+		List<Menu> menuTree = menuRepository.findAll(spec);
 
-		initializeChilds(rootParents);
+		initializeChilds(menuTree);
 
-		return dtoMenuConverter.convert(rootParents);
+		menuTree = modelService.getDto(menuTree, Menu.class);
+
+		return menuTree;
 	}
 
-	private void initializeChilds(List<Menu> parents) {
+	private void initializeChilds(List<Menu> parents) throws Exception {
 
 		for (Menu parent : parents) {
+			Hibernate.initialize(parent.getUserGroups());
+			Hibernate.initialize(parent.getFields());
 
 			// Find all childs
 			Specification<Menu> spec = new Specification<Menu>() {
@@ -260,50 +163,35 @@ public class MenuServiceImpl implements MenuService {
 				}
 			};
 			List<Menu> childs = menuRepository.findAll(spec);
-			parent.setChilds(childs);
+			if (childs != null && childs.isEmpty()) {
+				parent.setChilds(childs);
 
-			if (parent.getChilds().isEmpty() == false) {
 				initializeChilds(parent.getChilds());
 			}
 		}
 	}
 
-	@Cacheable(cacheNames = MenuConstants.Cache.NAVIGATION_TREE_BY_USERGROUP, key = "#userGroupUuids")
 	@Transactional(readOnly = true)
 	@Override
-	public List<Menu> findNavigationTreeByUserGroup(List<UUID> userGroupUuids) {
+	public List<Menu> findDtoMenuTreeByCurrentUser() throws Exception {
 
-		// Find all root parents
-		Specification<Menu> spec = new Specification<Menu>() {
-			private static final long serialVersionUID = 1L;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-			@Override
-			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+		User user = (User) auth.getPrincipal();
 
-				List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Menu> menuTree = modelService.getDto(findMenuTreeCached(), Menu.class);
+		filterMenuNavigation(menuTree, collectUserGroupUuid(user.getUserGroups()));
 
-				predicates.add(cb.and(root.get(Menu.PARENT).isNull()));
-				predicates.add(cb.isTrue(root.get(Menu.ENABLED)));
-				predicates.add(cb.and(root.join(Menu.USER_GROUPS, JoinType.INNER).get("uuid").in(userGroupUuids)));
-				
-				query.orderBy(cb.asc(root.get(Menu.SORT)));
-				query.distinct(true);
-
-				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-			}
-		};
-		List<Menu> rootParents = menuRepository.findAll(spec);
-
-		initializeChildsByUserGroup(rootParents, userGroupUuids);
-
-		return dtoMenuConverter.convert(rootParents);
+		return menuTree;
 	}
 
-	private void initializeChildsByUserGroup(List<Menu> parents, List<UUID> userGroupUuids) {
+	@SuppressWarnings("unchecked")
+	private List<Menu> findMenuTreeCached() throws Exception {
 
-		for (Menu parent : parents) {
+		ValueWrapper valueWrapper = cacheManager.getCache(Menu.class.getName()).get("MenuTree");
+		if (valueWrapper == null) {
 
-			// Find all childs
+			// Find all root parents
 			Specification<Menu> spec = new Specification<Menu>() {
 				private static final long serialVersionUID = 1L;
 
@@ -312,22 +200,62 @@ public class MenuServiceImpl implements MenuService {
 
 					List<Predicate> predicates = new ArrayList<Predicate>();
 
-					predicates.add(cb.and(root.get(Menu.PARENT).get(Menu.UUID).in(parent.getUuid())));
-					predicates.add(cb.isTrue(root.get(Menu.ENABLED)));
-					predicates.add(cb.and(root.join(Menu.USER_GROUPS, JoinType.INNER).get(UserGroup.UUID).in(userGroupUuids)));
+					predicates.add(cb.and(root.get(Menu.PARENT).isNull()));
 
 					query.orderBy(cb.asc(root.get(Menu.SORT)));
-					query.distinct(true);
 
 					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 				}
 			};
-			List<Menu> childs = menuRepository.findAll(spec);
-			parent.setChilds(childs);
+			List<Menu> menuTree = menuRepository.findAll(spec);
 
-			if (parent.getChilds().isEmpty() == false) {
-				initializeChildsByUserGroup(parent.getChilds(), userGroupUuids);
+			initializeChilds(menuTree);
+
+			cacheManager.getCache(Menu.class.getName()).put("MenuTree", menuTree);
+
+			return menuTree;
+		} else {
+			return (List<Menu>) valueWrapper.get();
+		}
+	}
+
+	private Set<UUID> collectUserGroupUuid(List<UserGroup> userGroups) {
+		Set<UUID> userGroupUuids = new LinkedHashSet<UUID>();
+		for (UserGroup userGroup : userGroups) {
+			userGroupUuids.add(userGroup.getUuid());
+			if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
+				userGroupUuids.addAll(collectUserGroupUuid(userGroup.getUserGroups()));
 			}
 		}
+		return userGroupUuids;
+	}
+
+	private void filterMenuNavigation(List<Menu> menu, Set<UUID> userGroupUuids) {
+		Iterator<Menu> parent = menu.iterator();
+		while (parent.hasNext()) {
+			Menu menuNext = parent.next();
+			if (menuNext.getEnabled() == false) {
+				parent.remove();
+			}
+
+			boolean remove = true;
+			for (UserGroup userGroup : menuNext.getUserGroups()) {
+				if (userGroupUuids.contains(userGroup.getUuid())) {
+					remove = false;
+				}
+			}
+			if (remove) {
+				parent.remove();
+			}
+
+			if (menuNext.getChilds() != null && menuNext.getChilds().isEmpty() == false) {
+				filterMenuNavigation(menuNext.getChilds(), userGroupUuids);
+			}
+		}
+	}
+
+	@Override
+	public void delete(UUID uuid) throws Exception {
+		modelService.deleteByUuid(uuid, Menu.class);
 	}
 }

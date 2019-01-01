@@ -2,7 +2,13 @@
 # = APPLICATION
 # ===============================
 project.dir=../..
+data.dir=${project.dir}/data
+temp.dir=${project.dir}/temp
+log.dir=${project.dir}/log
+spring.pid.file=${temp.dir}/pid.txt
+server.tomcat.basedir=${temp.dir}/tomcat
 spring.devtools.add-properties=true
+spring.devtools.restart.enabled=true
 
 # ===============================
 # = THYMELEAF
@@ -18,22 +24,22 @@ platform.hibernate.show_sql=true
 # = DATA SOURCE
 # ===============================
 datasource.platform.url=jdbc:mariadb://localhost:3306/beanframework?useUnicode=yes&characterEncoding=UTF-8
-datasource.platform.username=
-datasource.platform.password=
+datasource.platform.username=root
+datasource.platform.password=P@ssw0rd
 datasource.platform.driverClassName=org.mariadb.jdbc.Driver
 platform.hibernate.dialect=org.hibernate.dialect.MariaDB53Dialect
 
 # ===============================
 # = EMAIL
 # ===============================
-spring.mail.host=
-spring.mail.port=
-spring.mail.username=
-spring.mail.password=
-spring.mail.from.name=
-spring.mail.from.email=
-spring.mail.properties.mail.smtp.auth=
-spring.mail.properties.mail.smtp.starttls.enable=
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=williamtanarvato@gmail.com
+spring.mail.password=0126666401
+spring.mail.from.name=Beanframework
+spring.mail.from.email=williamtanarvato@gmail.com 
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
 
 #============================================================================
 # Configure ThreadPool  

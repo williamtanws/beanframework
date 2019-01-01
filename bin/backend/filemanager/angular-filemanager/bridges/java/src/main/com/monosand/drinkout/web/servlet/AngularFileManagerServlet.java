@@ -282,7 +282,7 @@ public class AngularFileManagerServlet extends HttpServlet {
                         files.put(item.getName(), item.getInputStream());
                     }
                 }
-                if (files.isEmpty()) {
+                if (files.isBlank()) {
                     LOG.debug("file size  = 0");
                     throw new Exception("file size  = 0");
                 } else {

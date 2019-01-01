@@ -1,22 +1,24 @@
 package com.beanframework.user.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.Audited;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.user.UserConstants;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = UserConstants.Table.USER_AUTHORITY)
-public class UserAuthority extends AbstractDomain {
+public class UserAuthority extends GenericDomain {
 
 	/**
 	 * 
@@ -24,6 +26,7 @@ public class UserAuthority extends AbstractDomain {
 	private static final long serialVersionUID = -5421555853972873801L;
 	public static final String USER_GROUP = "userGroup";
 	public static final String USER_PERMISSION = "userPermission";
+	public static final String USER_PERMISSION_UUID = "userPermission.uuid";
 	public static final String USER_RIGHT = "userRight";
 
 	@NotNull
@@ -43,9 +46,6 @@ public class UserAuthority extends AbstractDomain {
 
 	@NotNull
 	private Boolean enabled;
-
-	@Transient
-	private String enabledStr;
 
 	public UserGroup getUserGroup() {
 		return userGroup;
@@ -77,13 +77,5 @@ public class UserAuthority extends AbstractDomain {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
-	}
-
-	public String getEnabledStr() {
-		return enabledStr;
-	}
-
-	public void setEnabledStr(String enabledStr) {
-		this.enabledStr = enabledStr;
 	}
 }

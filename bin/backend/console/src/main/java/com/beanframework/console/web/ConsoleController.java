@@ -6,8 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.WebApplicationConstants;
+import com.beanframework.console.WebConsoleConstants;
 
 @Controller
 public class ConsoleController {

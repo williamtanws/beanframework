@@ -26,11 +26,4 @@ public interface WebCronjobConstants {
 		public static final String UPDATE = "cronjobUpdate";
 		public static final String SEARCH = "cronjobSearch";
 	}
-	
-	public static interface PreAuthorize {
-		public static final String READ = "hasAuthority('cronjob_read')";
-		public static final String CREATE = "hasAuthority('cronjob_create')";
-		public static final String UPDATE = "hasAuthority('cronjob_update')";
-		public static final String DELETE = "hasAuthority('cronjob_delete')";
-	}
 }

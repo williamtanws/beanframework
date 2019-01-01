@@ -1,6 +1,5 @@
 package com.beanframework.console.web;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,12 +8,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,22 +21,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.controller.AbstractController;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.console.WebConfigurationConstants;
 import com.beanframework.console.WebConsoleConstants;
-import com.beanframework.console.domain.ConfigurationSearch;
+import com.beanframework.console.data.ConfigurationSearch;
+import com.beanframework.console.data.ConfigurationSpecification;
 
 @Controller
-public class ConfigurationController {
+public class ConfigurationController extends AbstractController {
 
 	@Autowired
 	private ConfigurationFacade configurationFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@Value(WebConfigurationConstants.Path.CONFIGURATION)
 	private String PATH_CONFIGURATION;
@@ -48,24 +46,18 @@ public class ConfigurationController {
 	@Value(WebConfigurationConstants.LIST_SIZE)
 	private int MODULE_CONFIGURATION_LIST_SIZE;
 
-	private Page<Configuration> getPagination(Model model, @RequestParam Map<String, Object> requestParams) {
+	private Page<Configuration> getPagination(ConfigurationSearch configurationSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_CONFIGURATION_LIST_SIZE : size;
 
 		String propertiesStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.PROPERTIES));
-		String[] properties = StringUtils.isEmpty(propertiesStr) ? null
+		String[] properties = StringUtils.isBlank(propertiesStr) ? null
 				: propertiesStr.split(WebConsoleConstants.Pagination.PROPERTIES_SPLIT);
 
 		String directionStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.DIRECTION));
-		Direction direction = StringUtils.isEmpty(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
-
-		ConfigurationSearch configurationSearch = (ConfigurationSearch) model.asMap()
-				.get(WebConfigurationConstants.ModelAttribute.SEARCH);
-
-		Configuration configuration = new Configuration();
-		configuration.setId(configurationSearch.getIdSearch());
+		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
 		if (properties == null) {
 			properties = new String[1];
@@ -73,7 +65,8 @@ public class ConfigurationController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Configuration> pagination = configurationFacade.page(configuration, page, size, direction, properties);
+		Page<Configuration> pagination = configurationFacade.findDtoPage(ConfigurationSpecification.findByCriteria(configurationSearch),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
@@ -83,6 +76,10 @@ public class ConfigurationController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, ConfigurationSearch configurationSearch) {
+		
+		configurationSearch.setSearchAll((String)requestParams.get("configurationSearch.searchAll"));
+		configurationSearch.setId((String)requestParams.get("configurationSearch.id"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
@@ -95,19 +92,19 @@ public class ConfigurationController {
 		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute(ConfigurationSearch.ID_SEARCH, configurationSearch.getIdSearch());
-		redirectAttributes.addFlashAttribute(WebConfigurationConstants.ModelAttribute.SEARCH, configurationSearch);
+		redirectAttributes.addAttribute("searchAll", configurationSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", configurationSearch.getId());
 
 		return redirectAttributes;
 	}
 
 	@ModelAttribute(WebConfigurationConstants.ModelAttribute.CREATE)
-	public Configuration populateConfigurationCreate(HttpServletRequest request) {
+	public Configuration populateConfigurationCreate(HttpServletRequest request) throws Exception {
 		return configurationFacade.create();
 	}
 
 	@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE)
-	public Configuration populateConfigurationForm(HttpServletRequest request) {
+	public Configuration populateConfigurationForm(HttpServletRequest request) throws Exception {
 		return configurationFacade.create();
 	}
 
@@ -120,18 +117,19 @@ public class ConfigurationController {
 	public String list(
 			@ModelAttribute(WebConfigurationConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
 			@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
-			Model model, @RequestParam Map<String, Object> requestParams) {
+			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(configurationSearch, model, requestParams));
 
 		if (configurationUpdate.getUuid() != null) {
-			Configuration existingConfiguration = configurationFacade.findByUuid(configurationUpdate.getUuid());
+
+			Configuration existingConfiguration = configurationFacade.findOneDtoByUuid(configurationUpdate.getUuid());
+			
 			if (existingConfiguration != null) {
 				model.addAttribute(WebConfigurationConstants.ModelAttribute.UPDATE, existingConfiguration);
 			} else {
 				configurationUpdate.setUuid(null);
-				model.addAttribute(WebConsoleConstants.Model.ERROR,
-						localeMessageService.getMessage(WebConsoleConstants.Locale.RECORD_UUID_NOT_FOUND));
+				addErrorMessage(model, WebConsoleConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 
@@ -149,24 +147,12 @@ public class ConfigurationController {
 			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
-			configurationCreate = configurationFacade.save(configurationCreate, bindingResult);
-			if (bindingResult.hasErrors()) {
+			try {
+				configurationCreate = configurationFacade.createDto(configurationCreate);
 
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebConsoleConstants.Locale.SAVE_SUCCESS));
+				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -190,24 +176,12 @@ public class ConfigurationController {
 			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
-			configurationUpdate = configurationFacade.save(configurationUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
+			try {
+				configurationUpdate = configurationFacade.updateDto(configurationUpdate);
 
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebConsoleConstants.Locale.SAVE_SUCCESS));
+				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -227,25 +201,13 @@ public class ConfigurationController {
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		configurationFacade.delete(configurationUpdate.getUuid(), bindingResult);
+		try {
+			configurationFacade.delete(configurationUpdate.getUuid());
 
-		if (bindingResult.hasErrors()) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessage.toString());
+			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
+		} catch (BusinessException e) {
+			addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebConfigurationConstants.ModelAttribute.UPDATE, configurationUpdate);
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebConsoleConstants.Locale.DELETE_SUCCESS));
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, configurationSearch);

@@ -23,11 +23,4 @@ public interface WebLanguageConstants {
 		public static final String UPDATE = "languageUpdate";
 		public static final String SEARCH = "languageSearch";
 	}
-	
-	public static interface PreAuthorize {
-		public static final String READ = "hasAuthority('language_read')";
-		public static final String CREATE = "hasAuthority('language_create')";
-		public static final String UPDATE = "hasAuthority('language_update')";
-		public static final String DELETE = "hasAuthority('language_delete')";
-	}
 }

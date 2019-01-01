@@ -4,29 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerService;
-import com.beanframework.user.converter.DtoUserGroupConverter;
+import com.beanframework.user.domain.UserGroup;
 
-@Component
-public class DtoCustomerConverter implements Converter<Customer, Customer> {
-
-	@Autowired
-	private CustomerService customerService;
+public class DtoCustomerConverter implements DtoConverter<Customer, Customer> {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(DtoCustomerConverter.class);
 	
 	@Autowired
-	private DtoUserGroupConverter dtoUserGroupConverter;
+	private ModelService modelService;
 
 	@Override
-	public Customer convert(Customer source) {
-		return convert(source, customerService.create());
+	public Customer convert(Customer source) throws ConverterException {
+		return convert(source, new Customer());
 	}
 
-	public List<Customer> convert(List<Customer> sources) {
+	public List<Customer> convert(List<Customer> sources) throws ConverterException {
 		List<Customer> convertedList = new ArrayList<Customer>();
 		for (Customer source : sources) {
 			convertedList.add(convert(source));
@@ -34,22 +34,29 @@ public class DtoCustomerConverter implements Converter<Customer, Customer> {
 		return convertedList;
 	}
 
-	private Customer convert(Customer source, Customer prototype) {
+	private Customer convert(Customer source, Customer prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setName(source.getName());
-		prototype.setAccountNonExpired(source.isAccountNonExpired());
-		prototype.setAccountNonLocked(source.isAccountNonLocked());
-		prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
-		prototype.setEnabled(source.isEnabled());
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 		
-		Hibernate.initialize(source.getUserGroups());
-		prototype.setUserGroups(dtoUserGroupConverter.convert(source.getUserGroups()));
+		prototype.setAuthorities(source.getAuthorities());
+		prototype.setPassword(source.getPassword());
+		prototype.setAccountNonExpired(source.getAccountNonExpired());
+		prototype.setAccountNonLocked(source.getAccountNonLocked());
+		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+		prototype.setEnabled(source.getEnabled());
+		try {
+			Hibernate.initialize(source.getUserGroups());
+			
+			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroup.class));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 
 		return prototype;
 	}

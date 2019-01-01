@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="/console/adminlte/common/layout/layoutConsole">
+	layout:decorate="${@environment.getProperty('layout.console')}">
 <head>
 <title th:text="#{module.admin}"></title>
 </head>
@@ -74,7 +74,7 @@
 			</div>
 			<div class="form-group">
 				<label th:text="#{module.console.lastmodified.by} + ':'"></label>
-				<a th:href="@{${@environment.getProperty('path.admin')}(uuid=*{lastModifiedBy})}" th:text="#{module.console.find.user}" th:if="*{lastModifiedBy != null}"></a>
+				<a th:href="@{${@environment.getProperty('path.admin')}(uuid=*{lastModifiedBy})}+'#tab_general'" th:text="#{module.console.find.user}" th:if="*{lastModifiedBy != null}"></a>
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -84,7 +84,7 @@
 			</div>
 			<div class="form-group">
 				<label th:text="#{module.console.created.by} + ':'"></label>
-				<a th:href="@{${@environment.getProperty('path.admin')}(uuid=*{createdBy})}" th:text="#{module.console.find.user}" th:if="*{createdBy != null}"></a>
+				<a th:href="@{${@environment.getProperty('path.admin')}(uuid=*{createdBy})}+'#tab_general'" th:text="#{module.console.find.user}" th:if="*{createdBy != null}"></a>
 			</div>
 		</div>
 	</th:block>
@@ -214,10 +214,10 @@
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
 							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.console.general}"></a>
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.console.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li>
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.console.administration}"></a>
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.console.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content">

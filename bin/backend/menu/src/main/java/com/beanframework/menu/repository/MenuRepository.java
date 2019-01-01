@@ -1,7 +1,6 @@
 package com.beanframework.menu.repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,21 +15,15 @@ import com.beanframework.menu.domain.Menu;
 @Repository
 public interface MenuRepository extends JpaRepository<Menu, UUID>, JpaSpecificationExecutor<Menu> {
 
-	Optional<Menu> findByUuid(UUID uuid);
-
-	Optional<Menu> findById(String id);
-
-	Optional<Menu> findByPath(String path);
-
 	@Query("select m from Menu m where m.parent is null and m.enabled = 1 order by m.sort asc")
 	List<Menu> findNavigationTree();
-	
+
 	@Query("select m from Menu m where m.parent = null order by m.sort asc")
 	List<Menu> findByParentNullOrderBySort();
 
 	@Query("select m from Menu m where m.parent.uuid = :uuid order by m.sort asc")
 	List<Menu> findByParentUuidOrderBySort(@Param("uuid") UUID toUuid);
-	
+
 	@Modifying
 	@Query("update Menu m set m.parent.uuid = :parentUuid where m.uuid = :uuid")
 	void updateParentByUuid(@Param("uuid") UUID uuid, @Param("parentUuid") UUID parentUuid);
@@ -42,6 +35,5 @@ public interface MenuRepository extends JpaRepository<Menu, UUID>, JpaSpecificat
 	@Modifying
 	@Query("update Menu m set m.parent = null where m.uuid = :uuid")
 	void setParentNullByUuid(@Param("uuid") UUID fromUuid);
-
 
 }

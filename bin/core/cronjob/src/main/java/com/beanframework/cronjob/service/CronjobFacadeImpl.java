@@ -1,18 +1,20 @@
 package com.beanframework.cronjob.service;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
-import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
@@ -21,8 +23,8 @@ import com.beanframework.cronjob.domain.CronjobData;
 public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Autowired
-	private CronjobService cronjobService;
-	
+	private ModelService modelService;
+
 	@Autowired
 	private CronjobManagerService cronjobManagerService;
 
@@ -30,134 +32,121 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	private LocaleMessageService localeMessageService;
 
 	@Override
-	public Cronjob create() {
-		return cronjobService.create();
-	}
-
-	@Override
-	public Cronjob initDefaults(Cronjob cronjob) {
-		return cronjobService.initDefaults(cronjob);
-	}
-
-	@Override
-	public void trigger(Cronjob cronjob, Errors bindingResult) {
-		cronjobManagerService.trigger(cronjob);
-	}
-
-	@Override
-	public Cronjob save(Cronjob cronjob, Errors bindingResult) {
-
-		if (cronjob.getUuid() == null) {
-			if (StringUtils.isEmpty(cronjob.getJobGroup())) {
-				bindingResult.reject(Cronjob.JOB_GROUP,
-						localeMessageService.getMessage(CronjobConstants.Locale.CRONJOB_GROUP_REQUIRED));
-				return cronjob;
-			}
-
-			if (StringUtils.isEmpty(cronjob.getJobName())) {
-				bindingResult.reject(Cronjob.JOB_NAME,
-						localeMessageService.getMessage(CronjobConstants.Locale.CRONJOB_NAME_REQUIRED));
-				return cronjob;
-			}
-
-			if (cronjobService.isGroupAndNameExists(cronjob.getJobGroup(), cronjob.getJobName())) {
-				bindingResult.reject(Cronjob.JOB_GROUP,
-						localeMessageService.getMessage(CronjobConstants.Locale.CRONJOB_NAME_GROUP_EXISTS));
-				return cronjob;
-			}
-		}
-
-		return cronjobService.save(cronjob);
-	}
-
-	@Override
-	public Cronjob addCronjobData(UUID uuid, String name, String value, Errors bindingResult) {
-
-		Cronjob updateCronjob = cronjobService.findByUuid(uuid);
-
-		List<CronjobData> datas = updateCronjob.getCronjobDatas();
-
-		for (int i = 0; i < datas.size(); i++) {
-			if (datas.get(i).getName().equals(name)) {
-				bindingResult.rejectValue(CronjobData.NAME,
-						localeMessageService.getMessage(CronjobConstants.Locale.CRONJOB_DATA_NAME_EXISTS));
-			}
-		}
-
-		CronjobData data = new CronjobData();
-		data.setName(name);
-		data.setValue(value);
-		data.setCronjob(updateCronjob);
-
-		updateCronjob.getCronjobDatas().add(data);
-
-		return cronjobService.save(updateCronjob);
-	}
-
-	@Override
-	public void removeCronjobData(UUID uuid) throws Exception {
-
-		cronjobService.deleteCronJobData(uuid);
-	}
-
-	@Override
-	public Cronjob delete(UUID uuid, Errors bindingResult) {
-		Cronjob cronjob = findByUuid(uuid);
+	public void trigger(Cronjob cronjob) throws BusinessException {
 		try {
-			cronjobManagerService.deleteJobByUuid(cronjob.getUuid());
-			cronjobService.deleteByUuid(cronjob.getUuid());
-		} catch (SchedulerException e) {
-			bindingResult.reject(Cronjob.UUID, e.getMessage());
+			cronjobManagerService.trigger(cronjob);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
 		}
-		return cronjob;
 	}
 
 	@Override
-	public Cronjob deleteCronjobByGroupAndName(String jobGroup, String jobName, Errors bindingResult) {
-		Cronjob cronjob = findByJobGroupAndJobName(jobGroup, jobName);
+	public Cronjob addCronjobData(UUID uuid, String name, String value) throws BusinessException {
+
 		try {
-			cronjobManagerService.deleteJobByUuid(cronjob.getUuid());
-			cronjobService.deleteByUuid(cronjob.getUuid());
-		} catch (SchedulerException e) {
-			bindingResult.rejectValue(Cronjob.UUID, e.getMessage());
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, uuid);
+
+			Cronjob updateCronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+
+			List<CronjobData> datas = updateCronjob.getCronjobDatas();
+
+			for (int i = 0; i < datas.size(); i++) {
+				if (datas.get(i).getName().equals(name)) {
+					throw new Exception(localeMessageService.getMessage(CronjobConstants.Locale.CRONJOB_DATA_NAME_EXISTS));
+				}
+			}
+
+			CronjobData data = new CronjobData();
+			data.setName(name);
+			data.setValue(value);
+			data.setCronjob(updateCronjob);
+
+			updateCronjob.getCronjobDatas().add(data);
+
+			modelService.saveEntity(updateCronjob, Cronjob.class);
+
+			return updateCronjob;
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
 		}
-		return cronjob;
 	}
 
 	@Override
-	public void deleteAll() {
-		cronjobService.deleteAll();
+	public Page<Cronjob> findPage(Specification<Cronjob> specification, PageRequest pageable) throws Exception {
+		return modelService.findDtoPage(specification, pageable, Cronjob.class);
 	}
 
 	@Override
-	public boolean isGroupAndNameExists(String jobGroup, String jobName) {
-		return cronjobService.isGroupAndNameExists(jobGroup, jobName);
+	public Cronjob create() throws Exception {
+		return modelService.create(Cronjob.class);
+	}
+	
+
+	@Override
+	public Cronjob findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Cronjob.class);
 	}
 
 	@Override
-	public Cronjob findByUuid(UUID uuid) {
-		return cronjobService.findByUuid(uuid);
+	public Cronjob findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, Cronjob.class);
 	}
 
 	@Override
-	public Cronjob findById(String id) {
-		return cronjobService.findById(id);
+	public Cronjob createDto(Cronjob model) throws BusinessException {
+		return (Cronjob) modelService.saveDto(model, Cronjob.class);
 	}
 
 	@Override
-	public Cronjob findByJobGroupAndJobName(String jobGroup, String jobName) {
-		return cronjobService.findByJobGroupAndJobName(jobGroup, jobName);
+	public Cronjob updateDto(Cronjob model) throws BusinessException {
+		return (Cronjob) modelService.saveDto(model, Cronjob.class);
+
 	}
 
 	@Override
-	public Page<Cronjob> page(Cronjob cronjob, int page, int size, Direction direction, String... properties) {
-
-		// Change page to index's page
-		page = page <= 0 ? 0 : page - 1;
-		size = size <= 0 ? 1 : size;
-
-		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
-
-		return cronjobService.page(cronjob, pageRequest);
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.deleteByUuid(uuid, Cronjob.class);
 	}
+
+	@Override
+	public void updateDtoCronjobData(UUID cronjobUuid, CronjobData cronjobData) throws BusinessException {
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, cronjobUuid);
+
+			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+
+			cronjobData.setCronjob(cronjob);
+			cronjob.getCronjobDatas().add(cronjobData);
+
+			modelService.saveEntity(cronjobData, CronjobData.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void removeDtoCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException {
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.UUID, cronjobUuid);
+
+			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+
+			Iterator<CronjobData> cronjobDatas = cronjob.getCronjobDatas().iterator();
+			while (cronjobDatas.hasNext()) {
+				if (cronjobDatas.next().getUuid().equals(cronjobDataUuid)) {
+					cronjobDatas.remove();
+				}
+			}
+
+			modelService.saveEntity(cronjob, Cronjob.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
 }

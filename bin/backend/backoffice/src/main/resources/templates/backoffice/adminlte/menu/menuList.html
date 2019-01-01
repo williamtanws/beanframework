@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="/backoffice/adminlte/common/layout/layoutBackoffice">
+	layout:decorate="${@environment.getProperty('layout.backoffice')}">
 <head>
 <title th:text="#{module.menu}"></title>
 <!-- jstree -->
@@ -10,7 +10,7 @@
 	<th:block layout:fragment="content">
 		<section class="content">
 			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/fragment/alert :: custom"></th:block>
+				<th:block layout:insert="/backoffice/adminlte/common/component/alert :: custom"></th:block>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -136,7 +136,7 @@
 						$('#change-form').submit();
 	
 					}).bind("select_node.jstree", function(e, data) {
-						window.location = url + "?uuid="+ data.node.id;
+						window.location = url + "?uuid="+ data.node.id+'#tab_general';
 					});
 				});
 			}

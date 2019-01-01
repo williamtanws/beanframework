@@ -3,34 +3,30 @@ package com.beanframework.user.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
+import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserPermissionLang;
-import com.beanframework.user.service.UserPermissionService;
+import com.beanframework.user.domain.UserPermissionField;
 
-@Component
-public class DtoUserPermissionConverter implements Converter<UserPermission, UserPermission> {
-
-	@Autowired
-	private UserPermissionService userPermissionService;
-
-	@Autowired
-	private LanguageService languageService;
+public class DtoUserPermissionConverter implements DtoConverter<UserPermission, UserPermission> {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserPermissionConverter.class);
 	
 	@Autowired
-	private DtoUserPermissionLangConverter dtoUserPermissionLangConverter;
+	private ModelService modelService;
 
 	@Override
-	public UserPermission convert(UserPermission source) {
-		return convert(source, userPermissionService.create());
+	public UserPermission convert(UserPermission source) throws ConverterException {		
+		return convert(source, new UserPermission());
 	}
 
-	public List<UserPermission> convert(List<UserPermission> sources) {
+	public List<UserPermission> convert(List<UserPermission> sources) throws ConverterException {
 		List<UserPermission> convertedList = new ArrayList<UserPermission>();
 		for (UserPermission source : sources) {
 			convertedList.add(convert(source));
@@ -38,34 +34,23 @@ public class DtoUserPermissionConverter implements Converter<UserPermission, Use
 		return convertedList;
 	}
 
-	private UserPermission convert(UserPermission source, UserPermission prototype) {
+	private UserPermission convert(UserPermission source, UserPermission prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setSort(source.getSort());
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
-		// Process User Permission Lang
-		prototype.setUserPermissionLangs(dtoUserPermissionLangConverter.convert(source.getUserPermissionLangs()));
-		List<Language> languages = languageService.findByOrderBySortAsc();
-		for (Language language : languages) {
-			boolean addNewLanguage = true;
-			for (UserPermissionLang userPermissionLang : source.getUserPermissionLangs()) {
-				if (userPermissionLang.getLanguage().getUuid().equals(language.getUuid())) {
-					addNewLanguage = false;
-				}
-			}
-
-			if (addNewLanguage) {
-				UserPermissionLang userPermissionLang = new UserPermissionLang();
-				userPermissionLang.setLanguage(language);
-				userPermissionLang.setUserPermission(prototype);
-
-				prototype.getUserPermissionLangs().add(userPermissionLang);
-			}
+		prototype.setSort(source.getSort());
+		try {
+			Hibernate.initialize(source.getFields());
+			
+			prototype.setFields(modelService.getDto(source.getFields(), UserPermissionField.class));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 		return prototype;

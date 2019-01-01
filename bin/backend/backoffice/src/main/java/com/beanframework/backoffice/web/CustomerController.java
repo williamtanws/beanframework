@@ -1,6 +1,7 @@
 package com.beanframework.backoffice.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,13 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +26,10 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebCustomerConstants;
-import com.beanframework.backoffice.domain.CustomerSearch;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.backoffice.data.CustomerSearch;
+import com.beanframework.backoffice.data.CustomerSpecification;
+import com.beanframework.common.controller.AbstractController;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.customer.domain.Customer;
@@ -36,16 +38,13 @@ import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupFacade;
 
 @Controller
-public class CustomerController {
+public class CustomerController extends AbstractController {
 
 	@Autowired
 	private CustomerFacade customerFacade;
 	
 	@Autowired
 	private UserGroupFacade userGroupFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@Value(WebCustomerConstants.Path.CUSTOMER)
 	private String PATH_CUSTOMER;
@@ -56,31 +55,28 @@ public class CustomerController {
 	@Value(WebCustomerConstants.LIST_SIZE)
 	private int MODULE_CUSTOMER_LIST_SIZE;
 
-	private Page<Customer> getPagination(Model model, @RequestParam Map<String, Object> requestParams) {
+	private Page<Customer> getPagination(CustomerSearch customerSearch, Model model, @RequestParam Map<String, Object> requestParams)
+			throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_CUSTOMER_LIST_SIZE : size;
 
 		String propertiesStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.PROPERTIES));
-		String[] properties = StringUtils.isEmpty(propertiesStr) ? null
+		String[] properties = StringUtils.isBlank(propertiesStr) ? null
 				: propertiesStr.split(WebBackofficeConstants.Pagination.PROPERTIES_SPLIT);
 
 		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
-		Direction direction = StringUtils.isEmpty(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
-
-		CustomerSearch customerSearch = (CustomerSearch) model.asMap().get(WebCustomerConstants.ModelAttribute.SEARCH);
-
-		Customer customer = new Customer();
-		customer.setId(customerSearch.getIdSearch());
-
+		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
+		
 		if (properties == null) {
 			properties = new String[1];
 			properties[0] = Customer.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Customer> pagination = customerFacade.page(customer, page, size, direction, properties);
+		Page<Customer> pagination = customerFacade.findPage(CustomerSpecification.findByCriteria(customerSearch),
+				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
@@ -90,6 +86,10 @@ public class CustomerController {
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
 			@RequestParam Map<String, Object> requestParams, CustomerSearch customerSearch) {
+		
+		customerSearch.setSearchAll((String)requestParams.get("customerSearch.searchAll"));
+		customerSearch.setId((String)requestParams.get("customerSearch.id"));
+		
 		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
@@ -102,19 +102,19 @@ public class CustomerController {
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute(CustomerSearch.ID_SEARCH, customerSearch.getIdSearch());
-		redirectAttributes.addFlashAttribute(WebCustomerConstants.ModelAttribute.SEARCH, customerSearch);
+		redirectAttributes.addAttribute("searchAll", customerSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", customerSearch.getId());
 
 		return redirectAttributes;
 	}
 
 	@ModelAttribute(WebCustomerConstants.ModelAttribute.CREATE)
-	public Customer populateCustomerCreate(HttpServletRequest request) {
+	public Customer populateCustomerCreate(HttpServletRequest request) throws Exception {
 		return customerFacade.create();
 	}
 
 	@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE)
-	public Customer populateCustomerForm(HttpServletRequest request) {
+	public Customer populateCustomerForm(HttpServletRequest request) throws Exception {
 		return customerFacade.create();
 	}
 
@@ -123,22 +123,27 @@ public class CustomerController {
 		return new CustomerSearch();
 	}
 
-	@PreAuthorize(WebCustomerConstants.PreAuthorize.READ)
 	@GetMapping(value = WebCustomerConstants.Path.CUSTOMER)
 	public String list(@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) {
+			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(model, requestParams));
+		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(customerSearch, model, requestParams));
 
 		if (customerUpdate.getUuid() != null) {
-			Customer existingCustomer = customerFacade.findByUuid(customerUpdate.getUuid());
+
+			Customer existingCustomer = customerFacade.findOneDtoByUuid(customerUpdate.getUuid());
+
 			if (existingCustomer != null) {
-				
-				List<UserGroup> userGroups = userGroupFacade.findByOrderByCreatedDate();
+
+				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
+
+				List<UserGroup> userGroups = userGroupFacade.findDtoBySorts(sorts);
+
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingCustomer.getUserGroups()) {
-						if(userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
+						if (userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
 							userGroups.get(i).setSelected("true");
 						}
 					}
@@ -148,51 +153,39 @@ public class CustomerController {
 				model.addAttribute(WebCustomerConstants.ModelAttribute.UPDATE, existingCustomer);
 			} else {
 				customerUpdate.setUuid(null);
-				model.addAttribute(WebBackofficeConstants.Model.ERROR,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND));
+				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
-		
+
 		return VIEW_CUSTOMER_LIST;
 	}
 
-	@PreAuthorize(WebCustomerConstants.PreAuthorize.CREATE)
-	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params="create")
-	public RedirectView create(@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
+	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "create")
+	public RedirectView create(
+			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.CREATE) Customer customerCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (customerCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, "Create new record doesn't need UUID.");
+			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+					"Create new record doesn't need UUID.");
 		} else {
-			
+
 			List<UserGroup> userGroups = new ArrayList<UserGroup>();
 			for (UserGroup userGroup : customerCreate.getUserGroups()) {
-				if(BooleanUtils.parseBoolean(userGroup.getSelected())) {
+				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
 					userGroups.add(userGroup);
 				}
 			}
 			customerCreate.setUserGroups(userGroups);
-			
-			customerCreate = customerFacade.save(customerCreate, bindingResult);
-			if (bindingResult.hasErrors()) {
 
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
+			try {
+				customerCreate = customerFacade.createDto(customerCreate);
 
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -205,43 +198,32 @@ public class CustomerController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebCustomerConstants.PreAuthorize.UPDATE)
-	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params="update")
-	public RedirectView update(@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
+	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "update")
+	public RedirectView update(
+			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (customerUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, "Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+					"Update record needed existing UUID.");
 		} else {
-			
+
 			List<UserGroup> userGroups = new ArrayList<UserGroup>();
 			for (UserGroup userGroup : customerUpdate.getUserGroups()) {
-				if(BooleanUtils.parseBoolean(userGroup.getSelected())) {
+				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
 					userGroups.add(userGroup);
 				}
 			}
 			customerUpdate.setUserGroups(userGroups);
-			
-			customerUpdate = customerFacade.save(customerUpdate, bindingResult);
-			if (bindingResult.hasErrors()) {
 
-				StringBuilder errorMessage = new StringBuilder();
-				List<ObjectError> errors = bindingResult.getAllErrors();
-				for (ObjectError error : errors) {
-					if (errorMessage.length() != 0) {
-						errorMessage.append("<br>");
-					}
-					errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-				}
+			try {
+				customerUpdate = customerFacade.updateDto(customerUpdate);
 
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-			} else {
-
-				redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
@@ -254,32 +236,20 @@ public class CustomerController {
 		return redirectView;
 	}
 
-	@PreAuthorize(WebCustomerConstants.PreAuthorize.DELETE)
-	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params="delete")
-	public RedirectView delete(@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
+	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "delete")
+	public RedirectView delete(
+			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
 			@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		customerFacade.delete(customerUpdate.getUuid(), bindingResult);
+		try {
+			customerFacade.delete(customerUpdate.getUuid());
 
-		if (bindingResult.hasErrors()) {
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getObjectName() + ": " + error.getDefaultMessage());
-			}
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
+			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+		} catch (BusinessException e) {
+			addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(WebCustomerConstants.ModelAttribute.UPDATE, customerUpdate);
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebBackofficeConstants.Locale.DELETE_SUCCESS));
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, customerSearch);
