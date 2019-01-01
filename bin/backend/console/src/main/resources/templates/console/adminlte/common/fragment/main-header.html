@@ -55,7 +55,7 @@
 								</ul>
 							</li>
 
-							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.configuration') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.initialize') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.update') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.remove') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.license') ? 'dropdown active':'dropdown'}">
+							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.configuration') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.initialize') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.update') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.license') ? 'dropdown active':'dropdown'}">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 									<span th:text="#{module.console.platform}"></span>
 									<span class="caret"></span>
@@ -66,9 +66,6 @@
 									</li>
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.update') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.console.platform.update')}}" th:text="#{module.console.platform.update}"></a>
-									</li>
-									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.remove') ? 'active':''}">
-										<a th:href="@{${@environment.getProperty('path.console.platform.remove')}}" th:text="#{module.console.platform.remove}"></a>
 									</li>
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.license') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.console.platform.license')}}" th:text="#{module.console.platform.license}"></a>

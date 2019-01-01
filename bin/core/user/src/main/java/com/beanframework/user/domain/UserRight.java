@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
@@ -29,6 +30,7 @@ public class UserRight extends GenericDomain {
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OrderBy(UserRightField.DYNAMIC_FIELD)
 	private List<UserRightField> fields = new ArrayList<UserRightField>();
 
 	private Integer sort;

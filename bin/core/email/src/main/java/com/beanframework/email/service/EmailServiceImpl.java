@@ -63,7 +63,7 @@ public class EmailServiceImpl implements EmailService {
 	@Transactional
 	@Override
 	public void delete(UUID uuid) throws IOException, BusinessException {
-		modelService.delete(uuid, Email.class);
+		modelService.deleteByUuid(uuid, Email.class);
 		
 		String workingDir = System.getProperty("user.dir");
 

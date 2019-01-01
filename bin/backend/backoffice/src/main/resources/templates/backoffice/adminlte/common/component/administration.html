@@ -3,28 +3,30 @@
 <body>
 	<th:block layout:fragment="administration">
 		<div class="row">
-			<div class="col-md-6">
-				<div class="form-group">
-					<label th:text="#{module.backoffice.uuid} + ':'"></label>
-					<span class="text-block" th:text="*{uuid}"></span>
+			<div class="col-md-12 row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label th:text="#{module.backoffice.uuid} + ':'"></label>
+						<span class="text-block" th:text="*{uuid}"></span>
+					</div>
+					<div class="form-group">
+						<label th:text="#{module.backoffice.lastmodified.date} + ':'"></label>
+						<span class="text-block" th:text="*{lastModifiedDate != null} ? *{#dates.format(lastModifiedDate, ' dd MMMM yyyy hh:mma')}"></span>
+					</div>
+					<div class="form-group" sec:authorize="hasAuthority('employee_read')">
+						<label th:text="#{module.backoffice.lastmodified.by} + ':'"></label>
+						<a th:href="@{${@environment.getProperty('path.employee')}(uuid=*{lastModifiedBy})}+'#tab_general'" th:text="#{module.backoffice.find.user}" th:if="*{lastModifiedBy != null}"></a>
+					</div>
 				</div>
-				<div class="form-group">
-					<label th:text="#{module.backoffice.lastmodified.date} + ':'"></label>
-					<span class="text-block" th:text="*{lastModifiedDate != null} ? *{#dates.format(lastModifiedDate, ' dd MMMM yyyy hh:mma')}"></span>
-				</div>
-				<div class="form-group" sec:authorize="hasAuthority('employee_read')">
-					<label th:text="#{module.backoffice.lastmodified.by} + ':'"></label>
-					<a th:href="@{${@environment.getProperty('path.employee')}(uuid=*{lastModifiedBy})}+'#tab_general'" th:text="#{module.backoffice.find.user}" th:if="*{lastModifiedBy != null}"></a>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="form-group">
-					<label th:text="#{module.backoffice.created.date} + ':'"></label>
-					<span class="text-block" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy hh:mma')}"></span>
-				</div>
-				<div class="form-group" sec:authorize="hasAuthority('employee_read')">
-					<label th:text="#{module.backoffice.created.by} + ':'"></label>
-					<a th:href="@{${@environment.getProperty('path.employee')}(uuid=*{createdBy})}+'#tab_general'" th:text="#{module.backoffice.find.user}" th:if="*{createdBy != null}"></a>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label th:text="#{module.backoffice.created.date} + ':'"></label>
+						<span class="text-block" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy hh:mma')}"></span>
+					</div>
+					<div class="form-group" sec:authorize="hasAuthority('employee_read')">
+						<label th:text="#{module.backoffice.created.by} + ':'"></label>
+						<a th:href="@{${@environment.getProperty('path.employee')}(uuid=*{createdBy})}+'#tab_general'" th:text="#{module.backoffice.find.user}" th:if="*{createdBy != null}"></a>
+					</div>
 				</div>
 			</div>
 		</div>

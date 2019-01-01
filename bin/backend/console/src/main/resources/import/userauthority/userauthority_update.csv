@@ -9,7 +9,4 @@ employeegroup,employee,+,+,+,+
 employeegroup,cronjob,+,+,+,+
 employeegroup,filemanager,+,+,+,+
 employeegroup,email,+,+,+,+
-employeegroup,media,+,+,+,+
-employeegroup,history,,+,,
-employeegroup,catalog,+,+,+,+
 customergroup,customer,+,+,+,+

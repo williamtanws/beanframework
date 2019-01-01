@@ -81,7 +81,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.delete(uuid, Customer.class);
+		modelService.deleteByUuid(uuid, Customer.class);
 	}
 
 }

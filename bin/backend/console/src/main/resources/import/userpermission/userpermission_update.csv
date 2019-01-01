@@ -10,4 +10,3 @@ customer,7,userpermission_name_en=Customer;userpermission_name_cn=顾客
 cronjob,8,userpermission_name_en=Cronjob;userpermission_name_cn=定时任务
 filemanager,9,userpermission_name_en=File Manager;userpermission_name_cn=文件管理器
 email,10,userpermission_name_en=Email;userpermission_name_cn=电子邮件
-history,13,userpermission_name_en=History;userpermission_name_cn=历史

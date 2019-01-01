@@ -53,7 +53,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.delete(uuid, UserGroup.class);
+		modelService.deleteByUuid(uuid, UserGroup.class);
 	}
 
 	@Override

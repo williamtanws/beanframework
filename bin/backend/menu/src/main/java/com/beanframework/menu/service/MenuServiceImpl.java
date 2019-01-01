@@ -179,14 +179,14 @@ public class MenuServiceImpl implements MenuService {
 
 		User user = (User) auth.getPrincipal();
 
-		List<Menu> menuTree = findDtoMenuTreeCached();
+		List<Menu> menuTree = modelService.getDto(findMenuTreeCached(), Menu.class);
 		filterMenuNavigation(menuTree, collectUserGroupUuid(user.getUserGroups()));
 
 		return menuTree;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Menu> findDtoMenuTreeCached() throws Exception {
+	private List<Menu> findMenuTreeCached() throws Exception {
 
 		ValueWrapper valueWrapper = cacheManager.getCache(Menu.class.getName()).get("MenuTree");
 		if (valueWrapper == null) {
@@ -210,8 +210,6 @@ public class MenuServiceImpl implements MenuService {
 			List<Menu> menuTree = menuRepository.findAll(spec);
 
 			initializeChilds(menuTree);
-
-			menuTree = modelService.getDto(menuTree, Menu.class);
 
 			cacheManager.getCache(Menu.class.getName()).put("MenuTree", menuTree);
 
@@ -258,6 +256,6 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public void delete(UUID uuid) throws Exception {
-		modelService.delete(uuid, Menu.class);
+		modelService.deleteByUuid(uuid, Menu.class);
 	}
 }

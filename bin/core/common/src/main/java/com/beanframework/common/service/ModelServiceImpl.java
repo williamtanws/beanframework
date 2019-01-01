@@ -445,12 +445,32 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(rollbackFor = BusinessException.class)
 	@Override
-	public void saveAll() throws BusinessException {
+	public void flush() throws BusinessException {
 		modelRepository.flush();
 	}
-
+	
+	@Transactional
 	@Override
-	public void delete(UUID uuid, Class modelClass) throws BusinessException {
+	public void deleteByEntity(Object entityModel, Class modelClass) throws BusinessException {
+		try {
+
+			delete(entityModel);
+
+			removeInterceptor(entityModel, modelClass);
+
+			clearCache(modelClass);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new BusinessException(e.getMessage(), e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@Transactional
+	@Override
+	public void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException {
 		try {
 
 			Object model = findOneEntityByUuid(uuid, modelClass);
@@ -469,6 +489,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
+	@Transactional
 	@Override
 	public void deleteAll(Class modelClass) throws BusinessException {
 		try {

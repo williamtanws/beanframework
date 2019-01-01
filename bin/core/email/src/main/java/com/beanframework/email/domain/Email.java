@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.email.EmailConstants;
+import com.beanframework.email.domain.EmailEnum.Result;
 import com.beanframework.email.domain.EmailEnum.Status;
 
 @Entity
@@ -32,6 +33,8 @@ public class Email extends GenericDomain {
 	public static final String HTML = "html";
 	public static final String ATTACHMENTS = "attachments";
 	public static final String STATUS = "status";
+	public static final String RESULT = "result";
+	public static final String MESSAGE = "message";
 
 	private String toRecipients;
 
@@ -50,7 +53,12 @@ public class Email extends GenericDomain {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
-	private String exception;
+	@Enumerated(EnumType.STRING)
+	private Result result;
+
+	@Lob
+	@Column(length = 100000)
+	private String message;
 
 	@Transient
 	private File[] attachments;
@@ -111,12 +119,20 @@ public class Email extends GenericDomain {
 		this.status = status;
 	}
 
-	public String getException() {
-		return exception;
+	public Result getResult() {
+		return result;
 	}
 
-	public void setException(String exception) {
-		this.exception = exception;
+	public void setResult(Result result) {
+		this.result = result;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public File[] getAttachments() {

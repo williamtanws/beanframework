@@ -106,7 +106,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.delete(uuid, Cronjob.class);
+		modelService.deleteByUuid(uuid, Cronjob.class);
 	}
 
 	@Override

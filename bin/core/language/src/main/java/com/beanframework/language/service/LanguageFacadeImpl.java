@@ -51,7 +51,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.delete(uuid, Language.class);
+		modelService.deleteByUuid(uuid, Language.class);
 	}
 
 }

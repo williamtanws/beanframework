@@ -14,7 +14,7 @@ import com.beanframework.customer.CustomerConstants;
 import com.beanframework.customer.domain.Customer;
 
 public class CustomerValidateInterceptor implements ValidateInterceptor<Customer> {
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -23,22 +23,20 @@ public class CustomerValidateInterceptor implements ValidateInterceptor<Customer
 
 	@Override
 	public void onValidate(Customer model) throws InterceptorException {
-		
+
 		try {
 			if (model.getUuid() == null) {
 				// Save new
 				if (StringUtils.isBlank(model.getId())) {
 					throw new InterceptorException(localMessageService.getMessage(CustomerConstants.Locale.ID_REQUIRED), this);
 				} else if (StringUtils.isBlank(model.getPassword())) {
-					throw new InterceptorException(localMessageService.getMessage(CustomerConstants.Locale.PASSWORD_REQUIRED),
-							this);
+					throw new InterceptorException(localMessageService.getMessage(CustomerConstants.Locale.PASSWORD_REQUIRED), this);
 				} else {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(Customer.ID, model.getId());
 					boolean exists = modelService.existsByProperties(properties, Customer.class);
 					if (exists) {
-						throw new InterceptorException(localMessageService.getMessage(CustomerConstants.Locale.ID_EXISTS),
-								this);
+						throw new InterceptorException(localMessageService.getMessage(CustomerConstants.Locale.ID_EXISTS), this);
 					}
 				}
 
@@ -50,8 +48,7 @@ public class CustomerValidateInterceptor implements ValidateInterceptor<Customer
 					Customer exists = modelService.findOneEntityByProperties(properties, Customer.class);
 					if (exists != null) {
 						if (!model.getUuid().equals(exists.getUuid())) {
-							throw new InterceptorException(localMessageService.getMessage(CustomerConstants.Locale.ID_EXISTS),
-									this);
+							throw new InterceptorException(localMessageService.getMessage(CustomerConstants.Locale.ID_EXISTS), this);
 						}
 					}
 				}

@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -27,7 +28,10 @@ import com.beanframework.user.UserGroupConstants;
 @Table(name = UserGroupConstants.Table.USER_GROUP)
 public class UserGroup extends GenericDomain {
 
-	private static final long serialVersionUID = 8938920413700273352L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5960532156682901612L;
 	public static final String PARENT = "parent";
 	public static final String CHILDS = "childs";
 	public static final String USER_AUTHORITIES = "userAuthorities";
@@ -44,6 +48,7 @@ public class UserGroup extends GenericDomain {
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OrderBy(UserGroupField.DYNAMIC_FIELD)
 	private List<UserGroupField> fields = new ArrayList<UserGroupField>();
 
 	@Transient

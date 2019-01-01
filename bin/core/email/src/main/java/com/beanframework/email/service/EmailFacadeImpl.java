@@ -78,6 +78,6 @@ public class EmailFacadeImpl implements EmailFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.delete(uuid, Email.class);
+		modelService.deleteByUuid(uuid, Email.class);
 	}
 }

@@ -216,7 +216,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.delete(uuid, Employee.class);
+		modelService.deleteByUuid(uuid, Employee.class);
 	}
 
 }

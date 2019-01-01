@@ -53,7 +53,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.delete(uuid, UserRight.class);
+		modelService.deleteByUuid(uuid, UserRight.class);
 	}
 
 	@Override

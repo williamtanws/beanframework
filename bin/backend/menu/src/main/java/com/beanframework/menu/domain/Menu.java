@@ -76,6 +76,7 @@ public class Menu extends GenericDomain {
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OrderBy(MenuField.DYNAMIC_FIELD)
 	private List<MenuField> fields = new ArrayList<MenuField>();
 
 	@Transient

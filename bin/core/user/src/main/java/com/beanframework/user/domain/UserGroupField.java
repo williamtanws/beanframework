@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
@@ -36,6 +37,7 @@ public class UserGroupField extends GenericDomain {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")
+	@OrderBy(DynamicField.SORT+" ASC")
 	private DynamicField dynamicField;
 
 	private String value;
