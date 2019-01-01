@@ -1,2 +1,0 @@
-id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds
-employee,Employee,employee,true,true,true,true,employeegroup;customergroup

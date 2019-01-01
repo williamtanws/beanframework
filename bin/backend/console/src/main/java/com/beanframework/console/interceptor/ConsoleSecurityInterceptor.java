@@ -1,5 +1,8 @@
 package com.beanframework.console.interceptor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,8 +16,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.console.WebConsoleConstants;
 import com.beanframework.console.WebLicenseConstants;
 import com.mchange.v1.lang.BooleanUtils;
@@ -23,9 +26,9 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 
 	UrlPathHelper urlPathHelper = new UrlPathHelper();
 	Logger logger = LoggerFactory.getLogger(ConsoleSecurityInterceptor.class);
-
+	
 	@Autowired
-	private ConfigurationFacade configurationFacade;
+	private ModelService modelService;
 
 	@Value(WebConsoleConstants.Path.LOGIN)
 	private String PATH_LOGIN;
@@ -44,8 +47,12 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 
 			if (path != null && path.equalsIgnoreCase(PATH_LICENSE) == false
 					&& path.equalsIgnoreCase(PATH_LOGIN) == false) {
-				Configuration license = configurationFacade
-						.findById(WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+				
+				
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Configuration.ID, WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+				
+				Configuration license = modelService.findOneDtoByProperties(properties, Configuration.class);
 
 				if (license == null || BooleanUtils.parseBoolean(license.getValue()) == false) {
 					response.sendRedirect(PATH_LICENSE);

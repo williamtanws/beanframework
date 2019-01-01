@@ -18,16 +18,8 @@ public interface WebUserPermissionConstants {
 	}
 
 	public interface ModelAttribute {
-
 		public static final String CREATE = "userpermissionCreate";
 		public static final String UPDATE = "userpermissionUpdate";
 		public static final String SEARCH = "userpermissionSearch";
-	}
-	
-	public static interface PreAuthorize {
-		public static final String READ = "hasAuthority('userpermission_read')";
-		public static final String CREATE = "hasAuthority('userpermission_create')";
-		public static final String UPDATE = "hasAuthority('userpermission_update')";
-		public static final String DELETE = "hasAuthority('userpermission_delete')";
 	}
 }

@@ -12,8 +12,8 @@
 					<span th:text="#{module.backoffice.dashboard}"></span>
 				</a>
 			</li>
-			<th:block th:if="${navigationTree != null}">
-				<th:block th:each="menu : ${navigationTree}" th:id="${menu.uuid}">
+			<th:block th:if="${menuNavigation != null}">
+				<th:block th:each="menu : ${menuNavigation}" th:id="${menu.uuid}">
 					<th:block th:insert="backoffice/adminlte/common/fragment/menu :: tree-submenu" th:with="menu=${menu}"></th:block>
 				</th:block>
 			</th:block>
@@ -21,10 +21,10 @@
 	</th:block>
 	<th:block th:fragment="tree-submenu">
 		<li th:class="${#httpServletRequest.requestURI == menu.path ? 'active':''}" th:if="${#lists.isEmpty(menu.childs)}" th:id="${menu.uuid}">
-			<a th:href="${menu.path}" th:target="${menu.target}">
+			<a th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}">
 				<i th:classappend="${menu.icon}"></i>
-				<th:block th:each="lang: ${menu.menuLangs}">
-					<span th:text="${lang.name}" th:if="(${lang.language.id} == ${#locale.toString()})"></span>
+				<th:block th:each="menuField: ${menu.fields}">
+					<span th:text="${menuField.value != null and menuField.value != ''} ? ${menuField.value}:'['+${menu.id}+']'" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
 				</th:block>
 			</a>
 			<script th:inline="javascript">
@@ -34,8 +34,8 @@
 		<li class="treeview" th:if="${not #lists.isEmpty(menu.childs)}" th:id="${menu.uuid}">
 			<a href="#">
 				<i th:classappend="${menu.icon}"></i>
-				<th:block th:each="lang: ${menu.menuLangs}">
-					<span th:text="${lang.name}" th:if="(${lang.language.id} == ${#locale.toString()})"></span>
+				<th:block th:each="menuField: ${menu.fields}">
+					<span th:text="${menuField.value != null and menuField.value != ''} ? ${menuField.value}:'['+${menu.id}+']'" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
 				</th:block>
 				<span class="pull-right-container">
 					<i class="fa fa-angle-left pull-right"></i>
@@ -54,18 +54,18 @@
 			<i class="fa fa-dashboard"></i>
 			<span th:text="#{module.backoffice.dashboard}"></span>
 		</a>
-		<th:block th:if="${navigationTree != null}">
-			<th:block th:each="menu : ${navigationTree}">
+		<th:block th:if="${menuNavigation != null}">
+			<th:block th:each="menu : ${menuNavigation}">
 				<th:block th:insert="backoffice/adminlte/common/fragment/menu :: button-submenu" th:with="menu=${menu}"></th:block>
 			</th:block>
 		</th:block>
 	</th:block>
 	<th:block th:fragment="button-submenu">
 		<th:block th:if="${#lists.isEmpty(menu.childs)}">
-			<a class="btn btn-app" th:href="${menu.path}" th:target="${menu.target}">
+			<a class="btn btn-app" th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}">
 				<i th:classappend="${menu.icon}"></i>
-				<th:block th:each="lang: ${menu.menuLangs}">
-					<span th:text="${lang.name}" th:if="(${lang.language.id} == ${#locale.toString()})"></span>
+				<th:block th:each="menuField: ${menu.fields}">
+					<span th:text="${menuField.value != null and menuField.value != ''} ? ${menuField.value}:'['+${menu.id}+']'" th:if="(${menuField.dynamicField.language.id} == ${#locale.toString()})"></span>
 				</th:block>
 			</a>
 		</th:block>

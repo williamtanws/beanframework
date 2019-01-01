@@ -14,6 +14,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -24,7 +26,7 @@ import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.user.UserConstants;
 
 @Entity
@@ -33,9 +35,8 @@ import com.beanframework.user.UserConstants;
 @Table(name = UserConstants.Table.USER)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
-public abstract class User extends AbstractDomain {
+public abstract class User extends GenericDomain {
 
-	public static final String MODEL = "User";
 	public static final String PASSWORD = "password";
 	public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";
 	public static final String ACCOUNT_NON_LOCKED = "accountNonLocked";
@@ -43,34 +44,28 @@ public abstract class User extends AbstractDomain {
 	public static final String ENABLED = "enabled";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_ROLES = "userRoles";
+	public static final String FIELDS = "fields";
 
 	private static final long serialVersionUID = -7444894280894062710L;
 	@NotNull
 	private String password;
-	@NotNull
 	private Boolean accountNonExpired;
-	@NotNull
 	private Boolean accountNonLocked;
-	@NotNull
 	private Boolean credentialsNonExpired;
-	@NotNull
 	private Boolean enabled;
-	
-	@Cascade({CascadeType.REFRESH})
+
+	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = UserConstants.Table.USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
+	@JoinTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
+
+	@Cascade({ CascadeType.ALL })
+	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OrderBy(UserField.DYNAMIC_FIELD)
+	private List<UserField> fields = new ArrayList<UserField>();
 
 	@Transient
 	private Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-
-	public Set<GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
-
-	public void setAuthorities(Set<GrantedAuthority> authorities) {
-		this.authorities = authorities;
-	}
 
 	public String getPassword() {
 		return password;
@@ -80,7 +75,7 @@ public abstract class User extends AbstractDomain {
 		this.password = password;
 	}
 
-	public Boolean isAccountNonExpired() {
+	public Boolean getAccountNonExpired() {
 		return accountNonExpired;
 	}
 
@@ -88,7 +83,7 @@ public abstract class User extends AbstractDomain {
 		this.accountNonExpired = accountNonExpired;
 	}
 
-	public Boolean isAccountNonLocked() {
+	public Boolean getAccountNonLocked() {
 		return accountNonLocked;
 	}
 
@@ -96,7 +91,7 @@ public abstract class User extends AbstractDomain {
 		this.accountNonLocked = accountNonLocked;
 	}
 
-	public Boolean isCredentialsNonExpired() {
+	public Boolean getCredentialsNonExpired() {
 		return credentialsNonExpired;
 	}
 
@@ -104,7 +99,7 @@ public abstract class User extends AbstractDomain {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 
-	public Boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
@@ -119,4 +114,21 @@ public abstract class User extends AbstractDomain {
 	public void setUserGroups(List<UserGroup> userGroups) {
 		this.userGroups = userGroups;
 	}
+
+	public List<UserField> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<UserField> fields) {
+		this.fields = fields;
+	}
+
+	public Set<GrantedAuthority> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(Set<GrantedAuthority> authorities) {
+		this.authorities = authorities;
+	}
+
 }

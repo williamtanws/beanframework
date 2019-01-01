@@ -3,135 +3,99 @@ package com.beanframework.user.converter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
+import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupLang;
-import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserGroupService;
-import com.beanframework.user.service.UserPermissionService;
-import com.beanframework.user.service.UserRightService;
+import com.beanframework.user.domain.UserGroupField;
 
-@Component
-public class EntityUserGroupConverter implements Converter<UserGroup, UserGroup> {
+public class EntityUserGroupConverter implements EntityConverter<UserGroup, UserGroup> {
 
 	@Autowired
-	private UserGroupService userGroupService;
-
-	@Autowired
-	private LanguageService languageService;
-
-	@Autowired
-	private UserPermissionService userPermissionService;
-
-	@Autowired
-	private UserRightService userRightService;
+	private ModelService modelService;
 
 	@Override
-	public UserGroup convert(UserGroup source) {
+	public UserGroup convert(UserGroup source) throws ConverterException {
 
-		Optional<UserGroup> prototype = Optional.of(userGroupService.create());
-		if (source.getUuid() != null) {
-			Optional<UserGroup> exists = userGroupService.findEntityByUuid(source.getUuid());
-			if(exists.isPresent()) {
-				prototype = exists;
+		UserGroup prototype;
+		try {
+
+			if (source.getUuid() != null) {
+
+				UserGroup exists = modelService.findOneEntityByUuid(source.getUuid(), UserGroup.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(UserGroup.class);
+				}
+			} else {
+				prototype = modelService.create(UserGroup.class);
 			}
-		}
-		else if (StringUtils.isNotEmpty(source.getId())) {
-			Optional<UserGroup> exists = userGroupService.findEntityById(source.getId());
-			if(exists.isPresent()) {
-				prototype = exists;
-			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
-	private UserGroup convert(UserGroup source, UserGroup prototype) {
-
-		prototype.setId(source.getId());
-		prototype.setLastModifiedDate(new Date());
-
-		prototype.getUserGroupLangs().clear();
-		for (UserGroupLang userGroupLang : source.getUserGroupLangs()) {
-			if (userGroupLang.getLanguage().getUuid() != null) {
-				Optional<Language> language = languageService.findEntityByUuid(userGroupLang.getLanguage().getUuid());
-				if (language.isPresent()) {
-					userGroupLang.setLanguage(language.get());
-					userGroupLang.setUserGroup(prototype);
-					prototype.getUserGroupLangs().add(userGroupLang);
-				}
-			} else if (StringUtils.isNotEmpty(userGroupLang.getLanguage().getId())) {
-				Optional<Language> language = languageService.findEntityById(userGroupLang.getLanguage().getId());
-				if (language.isPresent()) {
-					userGroupLang.setLanguage(language.get());
-					userGroupLang.setUserGroup(prototype);
-					prototype.getUserGroupLangs().add(userGroupLang);
-				}
+	public List<UserGroup> convert(List<UserGroup> sources) throws ConverterException {
+		List<UserGroup> convertedList = new ArrayList<UserGroup>();
+		try {
+			for (UserGroup source : sources) {
+				convertedList.add(convert(source));
 			}
+		} catch (ConverterException e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
+		return convertedList;
+	}
 
-		// Process User Authorities
-		Hibernate.initialize(prototype.getUserAuthorities());
-		for (UserAuthority userAuthority : prototype.getUserAuthorities()) {
-			Hibernate.initialize(userAuthority.getUserPermission());
-			Hibernate.initialize(userAuthority.getUserRight());
-		}
-		if (prototype.getUserAuthorities().isEmpty()) {
-			List<UserPermission> userPermissions = userPermissionService.findEntityAllByOrderBySortAsc();
-			List<UserRight> userRights = userRightService.findEntityAllByOrderBySortAsc();
+	private UserGroup convert(UserGroup source, UserGroup prototype) throws ConverterException {
 
-			for (UserPermission userPermission : userPermissions) {
-				for (UserRight userRight : userRights) {
-					UserAuthority userAuthority = new UserAuthority();
-					userAuthority.setUserGroup(prototype);
-					userAuthority.setUserPermission(userPermission);
-					userAuthority.setUserRight(userRight);
-					userAuthority.setEnabled(false);
+		try {
+			if (source.getId() != null) {
+				prototype.setId(source.getId());
+			}
+			prototype.setLastModifiedDate(new Date());
 
-					prototype.getUserAuthorities().add(userAuthority);
+			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
+				prototype.setUserGroups(new ArrayList<UserGroup>());
+			} else {
+				List<UserGroup> childs = new ArrayList<UserGroup>();
+				for (UserGroup userGroup : source.getUserGroups()) {
+					UserGroup entityUserGroup = modelService.findOneEntityByUuid(userGroup.getUuid(), UserGroup.class);
+					if (entityUserGroup != null)
+						childs.add(entityUserGroup);
+				}
+				prototype.setUserGroups(childs);
+			}
+			if (source.getUserAuthorities() != null && source.getUserAuthorities().isEmpty() == false) {
+				for (int i = 0; i < prototype.getUserAuthorities().size(); i++) {
+					for (UserAuthority sourceUserAuthority : source.getUserAuthorities()) {
+						if (prototype.getUserAuthorities().get(i).getUuid().equals(sourceUserAuthority.getUuid())) {
+							prototype.getUserAuthorities().get(i).setEnabled(sourceUserAuthority.getEnabled());
+						}
+					}
 				}
 			}
-		}
-		List<UserAuthority> newAuthorities = new ArrayList<UserAuthority>();
-		for (UserAuthority sourceUserAuthority : source.getUserAuthorities()) {
-			
-			boolean addNewAuthority = true;
-			for (int i = 0; i < prototype.getUserAuthorities().size(); i++) {
-				if (sourceUserAuthority.getUserPermission().getUuid()
-						.equals(prototype.getUserAuthorities().get(i).getUserPermission().getUuid())
-						&& sourceUserAuthority.getUserRight().getUuid()
-								.equals(prototype.getUserAuthorities().get(i).getUserRight().getUuid())) {
-					prototype.getUserAuthorities().get(i).setEnabled(sourceUserAuthority.getEnabled());
-					addNewAuthority = false;
+			if (source.getFields() != null && source.getFields().isEmpty() == false) {
+				for (int i = 0; i < prototype.getFields().size(); i++) {
+					for (UserGroupField sourceUserGroupField : source.getFields()) {
+						if (prototype.getFields().get(i).getUuid().equals(sourceUserGroupField.getUuid())) {
+							prototype.getFields().get(i).setValue(sourceUserGroupField.getValue());
+						}
+					}
 				}
 			}
-			
-			if (addNewAuthority) {
-				
-				Optional<UserPermission> userPermission = userPermissionService.findEntityByUuid(sourceUserAuthority.getUserPermission().getUuid());
-				Optional<UserRight> userRight = userRightService.findEntityByUuid(sourceUserAuthority.getUserRight().getUuid());
-				
-				UserAuthority userAuthority = new UserAuthority();
-				userAuthority.setUserGroup(prototype);
-				userAuthority.setUserPermission(userPermission.get());
-				userAuthority.setUserRight(userRight.get());
-				userAuthority.setEnabled(sourceUserAuthority.getEnabled());
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), e);
 
-				newAuthorities.add(userAuthority);
-			}
 		}
-		prototype.getUserAuthorities().addAll(newAuthorities);
 
 		return prototype;
 	}

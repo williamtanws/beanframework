@@ -12,13 +12,13 @@ import javax.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.cronjob.CronjobConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = CronjobConstants.Table.CRONJOB_DATA)
-public class CronjobData extends AbstractDomain {
+public class CronjobData extends GenericDomain {
 
 	private static final long serialVersionUID = 5142597586346258761L;
 	public static final String NAME = "name";

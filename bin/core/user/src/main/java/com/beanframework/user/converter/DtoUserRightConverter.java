@@ -3,34 +3,30 @@ package com.beanframework.user.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
+import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightLang;
-import com.beanframework.user.service.UserRightService;
+import com.beanframework.user.domain.UserRightField;
 
-@Component
-public class DtoUserRightConverter implements Converter<UserRight, UserRight> {
-
-	@Autowired
-	private UserRightService userRightService;
-
-	@Autowired
-	private LanguageService languageService;
+public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight> {
 	
+	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserRightConverter.class);
+
 	@Autowired
-	private DtoUserRightLangConverter dtoUserRightLangConverter;
+	private ModelService modelService;
 
 	@Override
-	public UserRight convert(UserRight source) {
-		return convert(source, userRightService.create());
+	public UserRight convert(UserRight source) throws ConverterException {
+		return convert(source, new UserRight());
 	}
 
-	public List<UserRight> convert(List<UserRight> sources) {
+	public List<UserRight> convert(List<UserRight> sources) throws ConverterException {
 		List<UserRight> convertedList = new ArrayList<UserRight>();
 		for (UserRight source : sources) {
 			convertedList.add(convert(source));
@@ -38,36 +34,25 @@ public class DtoUserRightConverter implements Converter<UserRight, UserRight> {
 		return convertedList;
 	}
 
-	private UserRight convert(UserRight source, UserRight prototype) {
+	private UserRight convert(UserRight source, UserRight prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setSort(source.getSort());
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
-		// Process User Right Lang
-		prototype.setUserRightLangs(dtoUserRightLangConverter.convert(source.getUserRightLangs()));
-		List<Language> languages = languageService.findByOrderBySortAsc();
-		for (Language language : languages) {
-			boolean addNewLanguage = true;
-			for (UserRightLang userRightLang : source.getUserRightLangs()) {
-				if (userRightLang.getLanguage().getUuid().equals(language.getUuid())) {
-					addNewLanguage = false;
-				}
-			}
-
-			if (addNewLanguage) {
-				UserRightLang userRightLang = new UserRightLang();
-				userRightLang.setLanguage(language);
-				userRightLang.setUserRight(prototype);
-
-				prototype.getUserRightLangs().add(userRightLang);
-			}
+		prototype.setSort(source.getSort());
+		try {
+			Hibernate.initialize(source.getFields());
+			
+			prototype.setFields(modelService.getDto(source.getFields(), UserRightField.class));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
 		}
-		
+
 		return prototype;
 	}
 

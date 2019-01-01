@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="/console/adminlte/common/layout/layoutConsole">
+	layout:decorate="${@environment.getProperty('layout.console')}">
 <head>
 <title th:text="#{module.console.platform.license}"></title>
+<style>
+.license {
+    height: auto;
+    max-height: 350px;
+    overflow: auto;
+    background-color: #eeeeee;
+    word-break: normal !important;
+    word-wrap: normal !important;
+    white-space: pre !important;
+}​
+</style>
 </head>
 <body>
 	<th:block layout:fragment="content">
@@ -34,7 +45,7 @@
 									<input type="hidden" name="uuid" th:value="*{uuid}">
 									<input type="hidden" name="id" th:value="*{id}">
 									<div class="col-xs-12" style="text-align: center;">
-										<pre>
+										<pre class="license">
 MIT License
 								
 Copyright 2018 <strong>Beanframework</strong>

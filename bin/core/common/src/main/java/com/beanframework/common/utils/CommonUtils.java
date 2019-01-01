@@ -36,7 +36,7 @@ public abstract class CommonUtils {
         return null == var;
     }
     
-    public static boolean isNotEmpty(Object var){
+    public static boolean isNotBlank(Object var){
     	return null != var;
     }
 

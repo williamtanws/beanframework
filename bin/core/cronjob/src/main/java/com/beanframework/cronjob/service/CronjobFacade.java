@@ -1,41 +1,56 @@
 package com.beanframework.cronjob.service;
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.validation.Errors;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.domain.CronjobData;
 
 public interface CronjobFacade {
 
-	Cronjob create();
+	public static interface PreAuthorizeEnum {
+		public static final String READ = "hasAuthority('cronjob_read')";
+		public static final String CREATE = "hasAuthority('cronjob_create')";
+		public static final String UPDATE = "hasAuthority('cronjob_update')";
+		public static final String DELETE = "hasAuthority('cronjob_delete')";
+	}
 
-	Cronjob initDefaults(Cronjob cronjob);
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	void trigger(Cronjob cronjob) throws BusinessException;
 
-	void trigger(Cronjob cronjob, Errors bindingResult);
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	Cronjob addCronjobData(UUID uuid, String name, String value) throws BusinessException;
 
-	Cronjob save(Cronjob cronjob, Errors bindingResult);
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	Page<Cronjob> findPage(Specification<Cronjob> findByCriteria, PageRequest of) throws Exception;
 
-	Cronjob addCronjobData(UUID uuid, String name, String value, Errors bindingResult);
+	Cronjob create() throws Exception;
 
-	void removeCronjobData(UUID uuid) throws Exception;
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	Cronjob findOneDtoByUuid(UUID uuid) throws Exception;
 
-	Cronjob delete(UUID uuid, Errors bindingResult);
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	Cronjob findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
-	Cronjob deleteCronjobByGroupAndName(String jobGroup, String jobName, Errors bindingResult);
-	
-	void deleteAll();
+	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	Cronjob createDto(Cronjob cronjobCreate) throws BusinessException;
 
-	boolean isGroupAndNameExists(String jobGroup, String jobName);
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	Cronjob updateDto(Cronjob cronjobUpdate) throws BusinessException;
 
-	Cronjob findByUuid(UUID uuid);
-	
-	Cronjob findById(String id);
+	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	void delete(UUID uuid) throws BusinessException;
 
-	Cronjob findByJobGroupAndJobName(String jobGroup, String jobName);
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	void updateDtoCronjobData(UUID cronjobUuid, CronjobData cronjobData) throws BusinessException;
 
-	Page<Cronjob> page(Cronjob cronjob, int page, int size, Direction direction, String... properties);
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	void removeDtoCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException;
 
 }

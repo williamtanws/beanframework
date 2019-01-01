@@ -4,48 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
+import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupLang;
-import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserGroupService;
-import com.beanframework.user.service.UserPermissionService;
-import com.beanframework.user.service.UserRightService;
+import com.beanframework.user.domain.UserGroupField;
 
-@Component
-public class DtoUserGroupConverter implements Converter<UserGroup, UserGroup> {
+public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup> {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserGroupConverter.class);
 
 	@Autowired
-	private UserGroupService userGroupService;
-	
-	@Autowired
-	private UserPermissionService userPermissionService;
-	
-	@Autowired
-	private UserRightService userRightService;
-	
-	@Autowired
-	private LanguageService languageService;
-	
-	@Autowired
-	private DtoUserAuthorityConverter dtoUserAuthorityConverter;
-	
-	@Autowired
-	private DtoUserGroupLangConverter dtoUserGroupLangConverter;
+	private ModelService modelService;
 
 	@Override
-	public UserGroup convert(UserGroup source) {
-		return convert(source, userGroupService.create());
+	public UserGroup convert(UserGroup source) throws ConverterException {
+		return convert(source, new UserGroup());
 	}
 
-	public List<UserGroup> convert(List<UserGroup> sources) {
+	public List<UserGroup> convert(List<UserGroup> sources) throws ConverterException {
 		List<UserGroup> convertedList = new ArrayList<UserGroup>();
 		for (UserGroup source : sources) {
 			convertedList.add(convert(source));
@@ -53,7 +35,7 @@ public class DtoUserGroupConverter implements Converter<UserGroup, UserGroup> {
 		return convertedList;
 	}
 
-	private UserGroup convert(UserGroup source, UserGroup prototype) {
+	private UserGroup convert(UserGroup source, UserGroup prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -62,45 +44,16 @@ public class DtoUserGroupConverter implements Converter<UserGroup, UserGroup> {
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
-		// Process User Group Lang
-		prototype.setUserGroupLangs(dtoUserGroupLangConverter.convert(source.getUserGroupLangs()));
-		List<Language> languages = languageService.findByOrderBySortAsc();
-		for (Language language : languages) {
-			boolean addNewLanguage = true;
-			for (UserGroupLang userGroupLang : source.getUserGroupLangs()) {
-				if(userGroupLang.getLanguage().getUuid().equals(language.getUuid())) {
-					addNewLanguage = false;
-				}
-			}
-			
-			if(addNewLanguage) {
-				UserGroupLang userGroupLang = new UserGroupLang();
-				userGroupLang.setLanguage(language);
-				userGroupLang.setUserGroup(prototype);
-				
-				prototype.getUserGroupLangs().add(userGroupLang);
-			}
-		}
-		
-		// Process User Authorities
-		Hibernate.initialize(source.getUserAuthorities());
-		prototype.setUserAuthorities(dtoUserAuthorityConverter.convert(source.getUserAuthorities()));
-		if(prototype.getUserAuthorities().isEmpty()) {
-			List<UserPermission> userPermissions = userPermissionService.findEntityAllByOrderBySortAsc();
-			List<UserRight> userRights = userRightService.findEntityAllByOrderBySortAsc();
-			
-			for (UserPermission userPermission : userPermissions) {
-				for (UserRight userRight : userRights) {
-					UserAuthority userAuthority = new UserAuthority();
-					userAuthority.setUserGroup(prototype);
-					userAuthority.setUserPermission(userPermission);
-					userAuthority.setUserRight(userRight);
-					userAuthority.setEnabled(false);
-					
-					prototype.getUserAuthorities().add(userAuthority);
-				}
-			}
-			
+		try {
+			Hibernate.initialize(source.getUserGroups());
+			Hibernate.initialize(source.getUserAuthorities());
+
+			prototype.setUserGroups(source.getUserGroups());
+			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthority.class));
+			prototype.setFields(modelService.getDto(source.getFields(), UserGroupField.class));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 		return prototype;

@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -18,19 +20,20 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.menu.MenuConstants;
 import com.beanframework.user.domain.UserGroup;
 
 @Entity
+@Audited
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = MenuConstants.Table.MENU)
-public class Menu extends AbstractDomain {
+public class Menu extends GenericDomain {
 
 	private static final long serialVersionUID = 8293422057240349702L;
-	public static final String MODEL = "menu";
 	public static final String SORT = "sort";
 	public static final String DESCRIPTION = "description";
 	public static final String ICON = "icon";
@@ -38,8 +41,11 @@ public class Menu extends AbstractDomain {
 	public static final String TARGET = "target";
 	public static final String ENABLED = "enabled";
 	public static final String PARENT = "parent";
+	public static final String PARENT_UUID = "parent.uuid";
 	public static final String CHILDS = "childs";
 	public static final String USER_GROUPS = "userGroups";
+	public static final String USER_GROUPS_UUID = "userGroups.uuid";
+	public static final String FIELDS = "fields";
 
 	@NotNull
 	private Integer sort;
@@ -48,31 +54,33 @@ public class Menu extends AbstractDomain {
 
 	private String path;
 
-	private String target;
+	@Enumerated(EnumType.STRING)
+	private MenuTargetTypeEnum target;
 
 	@NotNull
 	private Boolean enabled;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_uuid")
 	private Menu parent;
 
-	@Cascade({CascadeType.ALL})
-	@OneToMany(mappedBy = PARENT, fetch = FetchType.EAGER)
+	@Cascade({ CascadeType.ALL })
+	@OneToMany(mappedBy = PARENT, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(SORT + " ASC")
 	private List<Menu> childs = new ArrayList<Menu>();
 
-	@Cascade({CascadeType.REFRESH})
+	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = MenuConstants.Table.MENU_USER_GROUP_REL, joinColumns = @JoinColumn(name = "menu_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
-	@Cascade({CascadeType.ALL})
-	@OneToMany(mappedBy = MenuLang.MENU, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<MenuLang> menuLangs = new ArrayList<MenuLang>();
-	
+	@Cascade({ CascadeType.ALL })
+	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OrderBy(MenuField.DYNAMIC_FIELD)
+	private List<MenuField> fields = new ArrayList<MenuField>();
+
 	@Transient
-	private boolean active;
+	private Boolean active;
 
 	public Integer getSort() {
 		return sort;
@@ -98,19 +106,19 @@ public class Menu extends AbstractDomain {
 		this.path = path;
 	}
 
-	public String getTarget() {
+	public MenuTargetTypeEnum getTarget() {
 		return target;
 	}
 
-	public void setTarget(String target) {
+	public void setTarget(MenuTargetTypeEnum target) {
 		this.target = target;
 	}
 
-	public boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -138,19 +146,20 @@ public class Menu extends AbstractDomain {
 		this.userGroups = userGroups;
 	}
 
-	public List<MenuLang> getMenuLangs() {
-		return menuLangs;
+	public List<MenuField> getFields() {
+		return fields;
 	}
 
-	public void setMenuLangs(List<MenuLang> menuLangs) {
-		this.menuLangs = menuLangs;
+	public void setFields(List<MenuField> fields) {
+		this.fields = fields;
 	}
 
-	public Boolean getEnabled() {
-		return enabled;
+	public Boolean getActive() {
+		return active;
 	}
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
+
 }

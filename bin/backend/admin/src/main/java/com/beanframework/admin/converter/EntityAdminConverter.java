@@ -1,52 +1,61 @@
 package com.beanframework.admin.converter;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminService;
+import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.utils.PasswordUtils;
 
-@Component
-public class EntityAdminConverter implements Converter<Admin, Admin> {
+public class EntityAdminConverter implements EntityConverter<Admin, Admin> {
 
 	@Autowired
-	private AdminService adminService;
+	private ModelService modelService;
 
 	@Override
-	public Admin convert(Admin source) {
+	public Admin convert(Admin source) throws ConverterException {
 
-		Optional<Admin> prototype = null;
-		if (source.getUuid() != null) {
-			prototype = adminService.findEntityByUuid(source.getUuid());
-			if (prototype.isPresent() == false) {
-				prototype = Optional.of(adminService.create());
+		Admin prototype;
+		try {
+			prototype = modelService.create(Admin.class);
+			if (source.getUuid() != null) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Admin.UUID, source.getUuid());
+				Admin exists = modelService.findOneEntityByProperties(properties, Admin.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(Admin.class);
+				}
+			} else {
+				prototype = modelService.create(Admin.class);
 			}
-		}
-		else {
-			prototype = Optional.of(adminService.create());
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
 	private Admin convert(Admin source, Admin prototype) {
 
-		prototype.setId(source.getId());
-		prototype.setAccountNonExpired(source.isAccountNonExpired());
-		prototype.setAccountNonLocked(source.isAccountNonLocked());
-		prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
-		prototype.setEnabled(source.isEnabled());
+		if (source.getId() != null)
+			prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
-		
-		if (StringUtils.isNotEmpty(source.getPassword())) {
+
+		prototype.setAccountNonExpired(source.getAccountNonExpired());
+		prototype.setAccountNonLocked(source.getAccountNonLocked());
+		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+		prototype.setEnabled(source.getEnabled());
+		if (StringUtils.isNotBlank(source.getPassword()))
 			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-		}
 
 		return prototype;
 	}

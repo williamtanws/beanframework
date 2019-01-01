@@ -1,106 +1,64 @@
 package com.beanframework.user.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.validator.DeleteUserGroupValidator;
-import com.beanframework.user.validator.SaveUserGroupValidator;
 
 @Component
 public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Autowired
-	private UserGroupService userGroupService;
-
-	@Autowired
-	private SaveUserGroupValidator saveUserGroupValidator;
-	
-	@Autowired
-	private DeleteUserGroupValidator deleteUserGroupValidator;
+	private ModelService modelService;
 
 	@Override
-	public UserGroup create() {
-		return userGroupService.create();
+	public Page<UserGroup> findPage(Specification<UserGroup> specification, PageRequest pageRequest) throws Exception {
+		return modelService.findDtoPage(specification, pageRequest, UserGroup.class);
 	}
 
 	@Override
-	public UserGroup initDefaults(UserGroup userGroup) {
-		return userGroupService.initDefaults(userGroup);
-	}
-
-	@Override
-	public UserGroup save(UserGroup userGroup, Errors bindingResult) {
-		saveUserGroupValidator.validate(userGroup, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return userGroup;
-		}
-
-		return userGroupService.save(userGroup);
-	}
-
-	@Override
-	public void delete(UUID uuid, Errors bindingResult) {
-		deleteUserGroupValidator.validate(uuid, bindingResult);
-		
-		if (bindingResult.hasErrors() == false) {
-			userGroupService.delete(uuid);
-		}
-	}
-
-	@Override
-	public void deleteAll() {
-		userGroupService.deleteAll();
-	}
-
-	@Override
-	public UserGroup findByUuid(UUID uuid) {
-		return userGroupService.findByUuid(uuid);
-	}
-
-	@Override
-	public UserGroup findById(String id) {
-		return userGroupService.findById(id);
+	public UserGroup create() throws Exception {
+		return modelService.create(UserGroup.class);
 	}
 	
 	@Override
-	public List<UserGroup> findByOrderByCreatedDate() {
-		return userGroupService.findByOrderByCreatedDate();
+	public UserGroup findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, UserGroup.class);
 	}
 
 	@Override
-	public Page<UserGroup> page(UserGroup userGroup, int page, int size, Direction direction, String... properties) {
-
-		// Change page to index's page
-		page = page <= 0 ? 0 : page - 1;
-		size = size <= 0 ? 1 : size;
-
-		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
-
-		return userGroupService.page(userGroup, pageRequest);
+	public UserGroup findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, UserGroup.class);
 	}
 
-	public UserGroupService getUserGroupService() {
-		return userGroupService;
+	@Override
+	public UserGroup createDto(UserGroup model) throws BusinessException {
+		return (UserGroup) modelService.saveDto(model, UserGroup.class);
 	}
 
-	public void setUserGroupService(UserGroupService userGroupService) {
-		this.userGroupService = userGroupService;
+	@Override
+	public UserGroup updateDto(UserGroup model) throws BusinessException {
+		return (UserGroup) modelService.saveDto(model, UserGroup.class);
 	}
 
-	public SaveUserGroupValidator getSaveUserGroupValidator() {
-		return saveUserGroupValidator;
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.deleteByUuid(uuid, UserGroup.class);
 	}
 
-	public void setSaveUserGroupValidator(SaveUserGroupValidator saveUserGroupValidator) {
-		this.saveUserGroupValidator = saveUserGroupValidator;
+	@Override
+	public List<UserGroup> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findDtoBySorts(sorts, UserGroup.class);
 	}
+
 }

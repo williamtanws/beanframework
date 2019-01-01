@@ -37,4 +37,33 @@ public class EmailEnum {
 			return this.getValue();
 		}
 	}
+	
+	public enum Result {
+		SUCCESS("Success"), ERROR("Error");
+
+		private String value;
+
+		Result(final String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public static Result fromName(String name) {
+			if (SUCCESS.name().equalsIgnoreCase(name)) {
+				return SUCCESS;
+			} else if (ERROR.name().equalsIgnoreCase(name)) {
+				return ERROR;
+			} else {
+				return null;
+			}
+		}
+
+		@Override
+		public String toString() {
+			return this.getValue();
+		}
+	}
 }

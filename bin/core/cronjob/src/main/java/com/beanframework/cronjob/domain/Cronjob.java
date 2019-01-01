@@ -19,27 +19,36 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.AbstractDomain;
+import com.beanframework.common.domain.GenericDomain;
 import com.beanframework.cronjob.CronjobConstants;
-import com.beanframework.cronjob.domain.CronjobEnum.Status;
 import com.beanframework.cronjob.domain.CronjobEnum.JobTrigger;
 import com.beanframework.cronjob.domain.CronjobEnum.Result;
+import com.beanframework.cronjob.domain.CronjobEnum.Status;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = CronjobConstants.Table.CRONJOB)
-public class Cronjob extends AbstractDomain {
-
-	public static final String MODEL = "cronjob";
+public class Cronjob extends GenericDomain {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8939913795649500178L;
+	public static final String JOB_CLASS = "jobClass";
 	public static final String JOB_NAME = "jobName";
 	public static final String JOB_GROUP = "jobGroup";
 	public static final String DESCRIPTION = "description";
+	public static final String CRON_EXPRESSION = "cronExpression";
+	public static final String STARTUP = "startup";
+	public static final String RESULT = "result";
+	public static final String MESSAGE = "message";
+	public static final String JOB_TRIGGER = "jobTrigger";
+	public static final String TRIGGER_START_DATE = "triggerStartDate";
+	public static final String LAST_TRIGGERED_DATE = "lastTriggeredDate";
+	public static final String LAST_START_EXECUTED_DATE = "lastStartExecutedDate";
+	public static final String LAST_FINISH_EXECUTED_DATE = "lastFinishExecutedDate";
 	public static final String CRONJOB_DATAS = "cronjobDatas";
+	public static final String STATUS = "status";
 
 	private String jobClass;
 
@@ -78,7 +87,7 @@ public class Cronjob extends AbstractDomain {
 	private Date lastFinishExecutedDate;
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = CronjobData.CRONJOB, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = CronjobData.CRONJOB, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy("createdDate DESC")
 	private List<CronjobData> cronjobDatas = new ArrayList<CronjobData>(0);
 

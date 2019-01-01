@@ -3,30 +3,27 @@ package com.beanframework.admin.service;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.validation.Errors;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.exception.BusinessException;
 
 public interface AdminFacade {
 
-	Admin create();
+	Admin getCurrentUser();
 
-	Admin initDefaults(Admin admin);
+	Admin findDtoAuthenticate(String id, String password) throws Exception;
 
-	Admin save(Admin admin, Errors bindingResult);
+	Page<Admin> findDtoPage(Specification<Admin> findByCriteria, PageRequest of) throws Exception;
 
-	void delete(UUID uuid, Errors bindingResult);
+	Admin create() throws Exception;
 
-	void deleteAll();
+	Admin findOneDtoByUuid(UUID uuid) throws Exception;
 
-	Admin findByUuid(UUID uuid);
+	Admin createDto(Admin adminCreate) throws BusinessException;
 
-	Admin findById(String id);
+	Admin saveDto(Admin adminUpdate) throws BusinessException;
 
-	Page<Admin> page(Admin admin, int page, int size, Direction direction, String... properties);
-
-	Admin getCurrentAdmin();
-
-	Admin authenticate(String id, String password);
+	void delete(UUID uuid) throws BusinessException;
 }

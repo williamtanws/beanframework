@@ -1,19 +1,17 @@
 package com.beanframework.menu.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.MapBindingResult;
 
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.validator.DeleteMenuValidator;
-import com.beanframework.menu.validator.SaveMenuValidator;
 
 @Component
 public class MenuFacadeImpl implements MenuFacade {
@@ -21,95 +19,69 @@ public class MenuFacadeImpl implements MenuFacade {
 	Logger logger = LoggerFactory.getLogger(MenuFacadeImpl.class.getName());
 
 	@Autowired
+	private ModelService modelService;
+
+	@Autowired
 	private MenuService menuService;
 
-	@Autowired
-	private SaveMenuValidator saveMenuValidator;
-
-	@Autowired
-	private DeleteMenuValidator deleteMenuValidator;
-
 	@Override
-	public Menu create() {
-		return menuService.create();
+	public Menu create() throws Exception {
+		return modelService.create(Menu.class);
 	}
 
 	@Override
-	public Menu initDefaults(Menu menu) {
-		return menuService.initDefaults(menu);
+	public Menu findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Menu.class);
 	}
 
 	@Override
-	public Menu save(Menu menu, Errors bindingResult) {
-		saveMenuValidator.validate(menu, bindingResult);
+	public Menu findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, Menu.class);
+	}
 
-		if (bindingResult.hasErrors()) {
-			return menu;
+	@Override
+	public Menu createDto(Menu model) throws BusinessException {
+		return (Menu) modelService.saveDto(model, Menu.class);
+	}
+
+	@Override
+	public Menu updateDto(Menu model) throws BusinessException {
+		return (Menu) modelService.saveDto(model, Menu.class);
+	}
+
+	@Override
+	public void changePosition(UUID fromUuid, UUID toUuid, int toIndex) throws BusinessException {
+		try {
+			menuService.savePosition(fromUuid, toUuid, toIndex);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
 		}
-
-		return menuService.save(menu);
-	}
-	
-	@Override
-	public List<Menu> save(List<Menu> menus, MapBindingResult bindingResult) {
-		saveMenuValidator.validate(menus, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return menus;
-		}
-
-		return menuService.save(menus);
 	}
 
 	@Override
-	public void changePosition(UUID fromUuid, UUID toUuid, int toIndex, BindingResult bindingResult) {
-		if (fromUuid == null) {
-			bindingResult.reject("fromId", "From Id required.");
-		}
-
-		if (fromUuid == null) {
-			bindingResult.reject("toIndex", "To Index required.");
-		}
-
-		menuService.savePosition(fromUuid, toUuid, toIndex);
-	}
-
-	@Override
-	public void delete(UUID uuid, Errors bindingResult) {
-		deleteMenuValidator.validate(uuid, bindingResult);
-
-		if (bindingResult.hasErrors() == false) {
+	public void delete(UUID uuid) throws BusinessException {
+		try {
 			menuService.delete(uuid);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
 		}
 	}
 
 	@Override
-	public void deleteAll() {
-		menuService.deleteAll();
+	public List<Menu> findDtoMenuTree() throws BusinessException {
+		try {
+			return menuService.findDtoMenuTree();
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@Override
-	public Menu findByUuid(UUID uuid) {
-		return menuService.findByUuid(uuid);
-	}
-
-	@Override
-	public Menu findById(String id) {
-		return menuService.findById(id);
-	}
-
-	@Override
-	public Menu findByPath(String path) {
-		return menuService.findByPath(path);
-	}
-
-	@Override
-	public List<Menu> findMenuTree() {
-		return menuService.findMenuTree();
-	}
-
-	@Override
-	public List<Menu> findNavigationTreeByUserGroup(List<UUID> userGroupUuids) {
-		return menuService.findNavigationTreeByUserGroup(userGroupUuids);
+	public List<Menu> findDtoMenuTreeByCurrentUser() throws BusinessException {
+		try {
+			return menuService.findDtoMenuTreeByCurrentUser();
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 }

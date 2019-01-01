@@ -1,13 +1,13 @@
 package com.beanframework.filemanager.utils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import com.github.junrar.Archive;
 import com.github.junrar.exception.RarException;
 import com.github.junrar.impl.FileVolumeManager;
 import com.github.junrar.rarfile.FileHeader;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class RarUtils {
 

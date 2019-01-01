@@ -1,5 +1,0 @@
-id,sort,name_en,name_cn
-create,0,Create,创建
-read,1,Read,读取
-update,2,Update,更新
-delete,3,Delete,删除

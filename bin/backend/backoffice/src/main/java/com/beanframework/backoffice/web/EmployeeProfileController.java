@@ -29,13 +29,18 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.WebBackofficeConstants;
 import com.beanframework.backoffice.WebEmployeeConstants;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeFacade;
 
 @Controller
 public class EmployeeProfileController {
+	
+	@Autowired
+	private ModelService modelService;
 
 	@Autowired
 	private EmployeeFacade employeeFacade;
@@ -53,15 +58,15 @@ public class EmployeeProfileController {
 	public String PROFILE_PICTURE_LOCATION;
 
 	@ModelAttribute(WebEmployeeConstants.ModelAttribute.PROFILE)
-	public Employee populateEmployeeForm(HttpServletRequest request) {
-		return employeeFacade.create();
+	public Employee populateEmployeeForm(HttpServletRequest request) throws Exception {
+		return modelService.create(Employee.class);
 	}
 
 	@GetMapping(value = WebEmployeeConstants.Path.PROFILE)
 	public String profile(@ModelAttribute(WebEmployeeConstants.ModelAttribute.PROFILE) Employee employeeProfile,
 			Model model, @RequestParam Map<String, Object> requestParams) {
 
-		employeeProfile = employeeFacade.getCurrentEmployee();
+		employeeProfile = employeeFacade.getCurrentUser();
 
 		model.addAttribute(WebEmployeeConstants.ModelAttribute.PROFILE, employeeProfile);
 
@@ -70,11 +75,11 @@ public class EmployeeProfileController {
 
 	@GetMapping(value = WebEmployeeConstants.Path.PROFILE_PICTURE)
 	public @ResponseBody byte[] getImage(@RequestParam Map<String, Object> requestParams) throws IOException {
-		Employee employee = employeeFacade.getCurrentEmployee();
+		Employee employee = employeeFacade.getCurrentUser();
 		
 		String type = (String) requestParams.get("type");
 		
-		if(StringUtils.isEmpty(type) || (type.equals("original") == false && type.equals("thumbnail") == false)) {
+		if(StringUtils.isBlank(type) || (type.equals("original") == false && type.equals("thumbnail") == false)) {
 			type = "thumbnail";
 		}
 		
@@ -97,9 +102,14 @@ public class EmployeeProfileController {
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes, @RequestParam("picture") MultipartFile picture) {
 
-		employeeProfile = employeeFacade.saveProfile(employeeProfile, picture, bindingResult);
-		if (bindingResult.hasErrors()) {
-
+		try {
+			employeeProfile = employeeFacade.saveProfile(employeeProfile, picture);
+			
+			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
+					localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+		} catch (BusinessException e) {
+			bindingResult.reject(Employee.class.getSimpleName(), e.getMessage());
+			
 			StringBuilder errorMessage = new StringBuilder();
 			List<ObjectError> errors = bindingResult.getAllErrors();
 			for (ObjectError error : errors) {
@@ -110,11 +120,6 @@ public class EmployeeProfileController {
 			}
 
 			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
-
-		} else {
-
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
 		}
 
 		RedirectView redirectView = new RedirectView();

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="/console/adminlte/common/layout/layoutConsole">
+	layout:decorate="${@environment.getProperty('layout.console')}">
 <head>
 <title th:text="#{module.console.platform.update}"></title>
 </head>
@@ -9,10 +9,13 @@
 		<section class="content">
 			<div class="box box-primary">
 				<div class="box-header with-border">
-					<h3 class="box-title" th:text="#{module.console.platform.update}+#{module.console.platform.modules}"></h3>
+					<h3 class="box-title" th:text="#{module.console.platform.update}"></h3>
 				</div>
 				<div class="box-body">
-					<th:block layout:insert="/console/adminlte/common/fragment/alert :: custom"></th:block>
+					<th:block layout:insert="/console/adminlte/common/component/alert :: custom"></th:block>
+					<div class="form-group">
+						<span class="text-block" th:text="#{module.console.platform.update.insturction}"></span>
+					</div>
 					<div class="col-md-9">
 						<div class="col-md-12">
 							<div class="form-group checkbox icheck">
@@ -23,10 +26,18 @@
 							</div>
 						</div>
 						<form method="post" id="createForm" th:action="@{${@environment.getProperty('path.console.update')}}">
+							<div class="col-md-3">
+								<div class="form-group">
+									<br />
+									<button type="submit" class="btn btn-block btn-success" th:text="#{module.console.platform.update}" data-toggle="modal" data-target="#modal-loading" data-backdrop="static"
+										data-keyboard="false"></button>
+								</div>
+							</div>
 							<div class="col-md-12" th:each="update : ${updates}">
 								<div class="form-group checkbox icheck">
 									<label>
 										<input type="checkbox" th:name="${update.key}">
+										&nbsp;
 										<span th:text="${update.value.name}"></span>
 										<br>
 										<span style="padding-left: 40px" th:text="${update.value.description}"></span>
@@ -37,10 +48,24 @@
 							<div class="col-md-3">
 								<div class="form-group">
 									<br />
-									<button type="submit" class="btn btn-block btn-primary" th:text="#{module.console.platform.update}"></button>
+									<button type="submit" class="btn btn-block btn-success" th:text="#{module.console.platform.update}" data-toggle="modal" data-target="#modal-loading" data-backdrop="static"
+										data-keyboard="false"></button>
 								</div>
 							</div>
 						</form>
+						<div class="modal fade" id="modal-loading">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title" th:text="#{module.console.loading}"></h4>
+									</div>
+									<div class="modal-body" th:utext="#{module.console.platform.update.loading}"></div>
+								</div>
+								<!-- /.modal-content -->
+							</div>
+							<!-- /.modal-dialog -->
+						</div>
+						<!-- /.modal -->
 					</div>
 					<div class="col-md-3">
 						<div class="box box-solid" style="background-color: #ecf0f5;">
@@ -55,11 +80,14 @@
 			</div>
 		</section>
 		<script type="text/javascript">
-			$("#checkAll").click(
-					function() {
-						$('#createForm input:checkbox').not(this).prop(
-								'checked', this.checked);
-					});
+			$(document).ready(function() {
+				$('#checkAll').on('ifChecked', function(event) {
+					$('#createForm input:checkbox').iCheck('check');
+				});
+				$('#checkAll').on('ifUnchecked', function(event) {
+					$('#createForm input:checkbox').iCheck('uncheck');
+				});
+			});
 		</script>
 	</th:block>
 </body>

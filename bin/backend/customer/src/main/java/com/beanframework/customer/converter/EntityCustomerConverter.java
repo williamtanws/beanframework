@@ -1,76 +1,68 @@
 package com.beanframework.customer.converter;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerService;
-import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupService;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.utils.PasswordUtils;
 
-@Component
-public class EntityCustomerConverter implements Converter<Customer, Customer> {
+public class EntityCustomerConverter implements EntityConverter<Customer, Customer> {
 
 	@Autowired
-	private CustomerService customerService;
-	
-	@Autowired
-	private UserGroupService userGroupService;
+	private ModelService modelService;
 
 	@Override
-	public Customer convert(Customer source) {
+	public Customer convert(Customer source) throws ConverterException {
 
-		Optional<Customer> prototype = Optional.of(customerService.create());
-		if (source.getUuid() != null) {
-			Optional<Customer> exists = customerService.findEntityByUuid(source.getUuid());
-			if(exists.isPresent()) {
-				prototype = exists;
+		Customer prototype;
+		try {
+
+			if (source.getUuid() != null) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Customer.UUID, source.getUuid());
+				Customer exists = modelService.findOneEntityByProperties(properties, Customer.class);
+
+				if (exists != null) {
+					prototype = exists;
+				} else {
+					prototype = modelService.create(Customer.class);
+				}
+			} else {
+				prototype = modelService.create(Customer.class);
 			}
-		}
-		else if (StringUtils.isNotEmpty(source.getId())) {
-			Optional<Customer> exists = customerService.findEntityById(source.getId());
-			if(exists.isPresent()) {
-				prototype = exists;
-			}
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), this);
 		}
 
-		return convert(source, prototype.get());
+		return convert(source, prototype);
 	}
 
-	private Customer convert(Customer source, Customer prototype) {
+	private Customer convert(Customer source, Customer prototype) throws ConverterException {
 
-		prototype.setId(source.getId());
-		prototype.setName(source.getName());
-		prototype.setAccountNonExpired(source.isAccountNonExpired());
-		prototype.setAccountNonLocked(source.isAccountNonLocked());
-		prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
-		prototype.setEnabled(source.isEnabled());
+		if (source.getId() != null)
+			prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
-		
-		if (StringUtils.isNotEmpty(source.getPassword())) {
+
+		prototype.setAccountNonExpired(source.getAccountNonExpired());
+		prototype.setAccountNonLocked(source.getAccountNonLocked());
+		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+		prototype.setEnabled(source.getEnabled());
+		if (StringUtils.isNotBlank(source.getPassword()))
 			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-		}
-		
-		Hibernate.initialize(prototype.getUserGroups());
-		prototype.getUserGroups().clear();
-		for (UserGroup userGroup : source.getUserGroups()) {
-			if(userGroup.getUuid() != null) {
-				Optional<UserGroup> existingUserGroup = userGroupService.findEntityByUuid(userGroup.getUuid());
-				if (existingUserGroup.isPresent()) {
-					prototype.getUserGroups().add(existingUserGroup.get());
-				}
-			}
-			else if(StringUtils.isNotEmpty(userGroup.getId())) {
-				Optional<UserGroup> existingUserGroup = userGroupService.findEntityById(userGroup.getId());
-				if (existingUserGroup.isPresent()) {
-					prototype.getUserGroups().add(existingUserGroup.get());
+		if (source.getFields() != null && source.getFields().isEmpty() == false) {
+			for (int i = 0; i < prototype.getFields().size(); i++) {
+				for (UserField sourceUserField : source.getFields()) {
+					if (prototype.getFields().get(i).getUuid().equals(sourceUserField.getUuid())) {
+						prototype.getFields().get(i).setValue(sourceUserField.getValue());
+					}
 				}
 			}
 		}

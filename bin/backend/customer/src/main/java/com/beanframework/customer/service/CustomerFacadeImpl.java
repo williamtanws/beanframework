@@ -1,107 +1,32 @@
 package com.beanframework.customer.service;
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.validator.DeleteCustomerValidator;
-import com.beanframework.customer.validator.SaveCustomerValidator;
 
 @Component
 public class CustomerFacadeImpl implements CustomerFacade {
-
+	
+	@Autowired
+	private ModelService modelService;
+	
 	@Autowired
 	private CustomerService customerService;
 
-	@Autowired
-	private SaveCustomerValidator saveCustomerValidator;
-
-	@Autowired
-	private DeleteCustomerValidator deleteCustomerValidator;
-
 	@Override
-	public Customer create() {
-		return customerService.create();
-	}
-
-	@Override
-	public Customer initDefaults(Customer customer) {
-		return customerService.initDefaults(customer);
-	}
-
-	@Override
-	public Customer save(Customer customer, Errors bindingResult) {
-		saveCustomerValidator.validate(customer, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return customer;
-		}
-
-		return customerService.save(customer);
-	}
-	
-	
-	@Override
-	public void delete(UUID uuid, Errors bindingResult) {
-		deleteCustomerValidator.validate(uuid, bindingResult);
-		
-		if (bindingResult.hasErrors() == false) {
-			customerService.delete(uuid);
-		}
-	}
-
-	@Override
-	public void delete(String id, Errors bindingResult) {
-		deleteCustomerValidator.validate(id, bindingResult);
-		
-		if (bindingResult.hasErrors() == false) {
-			customerService.deleteById(id);
-		}
-	}
-
-	@Override
-	public void deleteAll() {
-		customerService.deleteAll();
-	}
-
-	@Override
-	public Customer findByUuid(UUID uuid) {
-		return customerService.findByUuid(uuid);
-	}
-
-	@Override
-	public Customer findById(String id) {
-		return customerService.findById(id);
-	}
-	
-	@Override
-	public boolean existsById(String id) {
-		return customerService.existsById(id);
-	}
-
-	@Override
-	public Page<Customer> page(Customer customer, int page, int size, Direction direction, String... properties) {
-
-		// Change page to index's page
-		page = page <= 0 ? 0 : page - 1;
-		size = size <= 0 ? 1 : size;
-
-		PageRequest pageRequest = PageRequest.of(page, size, direction, properties);
-
-		return customerService.page(customer, pageRequest);
-	}
-
-	@Override
-	public Customer getCurrentCustomer() {
+	public Customer getCurrentUser() {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -114,8 +39,8 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	}
 
 	@Override
-	public Customer authenticate(String id, String password) {
-		Customer customer = customerService.authenticate(id, password);
+	public Customer findDtoAuthenticate(String id, String password) throws Exception {
+		Customer customer = customerService.findDtoAuthenticate(id, password);
 
 		if (customer == null) {
 			throw new BadCredentialsException("Bad Credentials");
@@ -123,28 +48,40 @@ public class CustomerFacadeImpl implements CustomerFacade {
 		return customer;
 	}
 
-	public CustomerService getCustomerService() {
-		return customerService;
+	@Override
+	public Page<Customer> findPage(Specification<Customer> specification, PageRequest pageable) throws Exception {
+		return modelService.findDtoPage(specification, pageable, Customer.class);
 	}
 
-	public void setCustomerService(CustomerService customerService) {
-		this.customerService = customerService;
+	@Override
+	public Customer create() throws Exception {
+		return modelService.create(Customer.class);
+	}
+	
+
+	@Override
+	public Customer findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, Customer.class);
 	}
 
-	public SaveCustomerValidator getSaveCustomerValidator() {
-		return saveCustomerValidator;
+	@Override
+	public Customer findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findDtoByProperties(properties, Customer.class);
 	}
 
-	public void setSaveCustomerValidator(SaveCustomerValidator saveCustomerValidator) {
-		this.saveCustomerValidator = saveCustomerValidator;
+	@Override
+	public Customer createDto(Customer model) throws BusinessException {
+		return (Customer) modelService.saveDto(model, Customer.class);
 	}
 
-	public DeleteCustomerValidator getDeleteCustomerValidator() {
-		return deleteCustomerValidator;
+	@Override
+	public Customer updateDto(Customer model) throws BusinessException {
+		return (Customer) modelService.saveDto(model, Customer.class);
 	}
 
-	public void setDeleteCustomerValidator(DeleteCustomerValidator deleteCustomerValidator) {
-		this.deleteCustomerValidator = deleteCustomerValidator;
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		modelService.deleteByUuid(uuid, Customer.class);
 	}
 
 }

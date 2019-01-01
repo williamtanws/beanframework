@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
@@ -38,7 +39,7 @@ public class ConsoleAuthProvider implements AuthenticationProvider {
 
 		Admin admin;
 		try {
-			admin = adminFacade.authenticate(id, password);
+			admin = adminFacade.findDtoAuthenticate(id, password);
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException(localeMessageService.getMessage(WebConsoleConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		} catch (DisabledException e) {
@@ -49,6 +50,8 @@ public class ConsoleAuthProvider implements AuthenticationProvider {
 			throw new LockedException(localeMessageService.getMessage(WebAdminConstants.Locale.ACCOUNT_LOCKED));
 		} catch (CredentialsExpiredException e) {
 			throw new CredentialsExpiredException(localeMessageService.getMessage(WebAdminConstants.Locale.ACCOUNT_PASSWORD_EXPIRED));
+		} catch (Exception e) {
+			throw new AuthenticationServiceException(e.getMessage());
 		}
 		
 		//Console
