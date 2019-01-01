@@ -31,7 +31,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.beanframework.console.config.IntegrationConfig;
 import com.beanframework.console.integration.handle.ArchiveFileProcessor;
-import com.beanframework.console.integration.handle.UpdateFileProcessor;
+import com.beanframework.console.integration.handle.ImporterFileProcessor;
 
 /**
  * Inbound File Adapter looks for files that match the given regular expression
@@ -60,7 +60,7 @@ public class FilePollingIntegrationFlow {
 	private ArchiveFileProcessor archiveFileProcessor;
 	
 	@Autowired
-	private UpdateFileProcessor updateFileProcessor;
+	private ImporterFileProcessor updateFileProcessor;
 	
 	@Autowired
 	private PlatformTransactionManager transactionManager;

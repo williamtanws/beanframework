@@ -51,18 +51,23 @@
 								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
-						<div class="tab-content">
+						<div class="tab-content tab-validate">
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
+									<div class="row">
+										<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
+									</div>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/common/component/attribute :: attribute"></th:block>
+									<div class="row">
+										<th:block layout:insert="/backoffice/adminlte/common/component/attribute :: attribute"></th:block>
+									</div>
 								</div>
+								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history">
@@ -90,6 +95,8 @@
 		    $(document).ready(function() {
 		        $('#update-form').validate({
 		        	onfocusout: false,
+		        	ignore: [],
+		            errorPlacement: function() {},
 		            invalidHandler: function(form, validator) {
 		                var errors = validator.numberOfInvalids();
 		                if (errors) {                    
@@ -125,10 +132,22 @@
 		            },
 		            highlight: function(element) {
 		                $(element).closest('.form-group').addClass('has-error');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
+		                });
 		            },
 		            unhighlight: function(element) {
-		                //$(element).closest('.form-group').removeClass('has-error');
-		                //$(element).closest('.form-group').find('.help-block').html('');
+		                $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').find('.help-block').html('');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+	                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','');
+	                    
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
+		                });
 		            },
 		            errorPlacement: function(error, element) {
 		                element.closest('.form-group').find('.help-block').html(error.text());

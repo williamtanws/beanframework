@@ -65,3 +65,7 @@
 .btn.btn-success{
 	min-width: 74px;
 }
+
+.nav-tabs-custom>.nav-tabs>li>a .error {
+	color: red;
+}

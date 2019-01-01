@@ -54,7 +54,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.delete(uuid, UserPermission.class);
+		modelService.deleteByUuid(uuid, UserPermission.class);
 	}
 
 	@Override

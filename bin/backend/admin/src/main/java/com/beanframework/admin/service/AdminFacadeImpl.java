@@ -94,6 +94,6 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.delete(uuid, Admin.class);
+		modelService.deleteByUuid(uuid, Admin.class);
 	}
 }

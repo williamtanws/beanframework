@@ -14,7 +14,7 @@ import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.domain.Employee;
 
 public class EmployeeValidateInterceptor implements ValidateInterceptor<Employee> {
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -23,22 +23,20 @@ public class EmployeeValidateInterceptor implements ValidateInterceptor<Employee
 
 	@Override
 	public void onValidate(Employee model) throws InterceptorException {
-		
+
 		try {
 			if (model.getUuid() == null) {
 				// Save new
 				if (StringUtils.isBlank(model.getId())) {
 					throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.ID_REQUIRED), this);
 				} else if (StringUtils.isBlank(model.getPassword())) {
-					throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.PASSWORD_REQUIRED),
-							this);
+					throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.PASSWORD_REQUIRED), this);
 				} else {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(Employee.ID, model.getId());
 					boolean exists = modelService.existsByProperties(properties, Employee.class);
 					if (exists) {
-						throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.ID_EXISTS),
-								this);
+						throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.ID_EXISTS), this);
 					}
 				}
 
@@ -50,8 +48,7 @@ public class EmployeeValidateInterceptor implements ValidateInterceptor<Employee
 					Employee exists = modelService.findOneEntityByProperties(properties, Employee.class);
 					if (exists != null) {
 						if (!model.getUuid().equals(exists.getUuid())) {
-							throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.ID_EXISTS),
-									this);
+							throw new InterceptorException(localMessageService.getMessage(EmployeeConstants.Locale.ID_EXISTS), this);
 						}
 					}
 				}

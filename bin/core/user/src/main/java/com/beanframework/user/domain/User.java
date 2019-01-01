@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -60,6 +61,7 @@ public abstract class User extends GenericDomain {
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OrderBy(UserField.DYNAMIC_FIELD)
 	private List<UserField> fields = new ArrayList<UserField>();
 
 	@Transient

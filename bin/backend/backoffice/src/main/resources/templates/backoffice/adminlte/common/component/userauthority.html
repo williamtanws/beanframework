@@ -8,13 +8,13 @@
 					<th th:text="#{module.userpermission}"></th>
 
 					<th th:each="userRight: ${userRights}">
-						<th:block th:each="field : ${userRight.userRightFields}">
+						<th:block th:each="field : ${userRight.fields}">
 							<span th:if="(${field.dynamicField.language.id == #locale.toString() and field.dynamicField.name == 'Name'})" th:text="${field.value}"></span>
 						</th:block>
 					</th>
 				</tr>
 				<tr th:each="userPermission: ${userPermissions}">
-					<th:block th:each="field : ${userPermission.userPermissionFields}">
+					<th:block th:each="field : ${userPermission.fields}">
 						<th th:if="(${field.dynamicField.language.id == #locale.toString()})" th:text="${field.value}"></th>
 					</th:block>
 					<td th:each="userRight: ${userRights}">

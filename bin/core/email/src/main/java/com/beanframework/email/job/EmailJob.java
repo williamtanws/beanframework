@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.email.domain.Email;
+import com.beanframework.email.domain.EmailEnum.Result;
 import com.beanframework.email.domain.EmailEnum.Status;
 
 @Component
@@ -91,7 +92,7 @@ public class EmailJob implements Job {
 					pendingEmails.get(i).setStatus(Status.PROCESSING);
 					modelService.saveEntity(pendingEmails.get(i), Email.class);
 				}
-				modelService.saveAll();
+				modelService.flush();
 			}
 
 			// Get all processing email
@@ -136,12 +137,15 @@ public class EmailJob implements Job {
 						sendEmail(toRecipients, ccRecipients, bccRecipients, email.getSubject(), email.getText(), email.getHtml(), files);
 						
 						email.setStatus(Status.SENT);
+						email.setResult(Result.SUCCESS);
+						email.setMessage(null);
 						modelService.saveEntity(email, Email.class);
 						
 						sentEmail++;
 					} catch (Exception e) {
 						email.setStatus(Status.FAILED);
-						email.setException(e.toString());
+						email.setResult(Result.ERROR);
+						email.setMessage(e.toString());
 						modelService.saveEntity(email, Email.class);
 						
 						e.printStackTrace();

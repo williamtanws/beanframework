@@ -59,9 +59,11 @@ public interface ModelService {
 
 	Object saveDto(Object model, Class modelClass) throws BusinessException;
 
-	void saveAll() throws BusinessException;
+	void flush() throws BusinessException;
+	
+	void deleteByEntity(Object entityModel, Class modelClass) throws BusinessException;
 
-	void delete(UUID uuid, Class modelClass) throws BusinessException;
+	void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
 	void deleteAll(Class modelClass) throws BusinessException;
 

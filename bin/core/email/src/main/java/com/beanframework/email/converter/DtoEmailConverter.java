@@ -39,7 +39,8 @@ public class DtoEmailConverter implements DtoConverter<Email, Email> {
 		prototype.setText(source.getText());
 		prototype.setHtml(source.getHtml());
 		prototype.setStatus(source.getStatus());
-		prototype.setException(source.getException());
+		prototype.setResult(source.getResult());
+		prototype.setMessage(source.getMessage());
 		
 		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());

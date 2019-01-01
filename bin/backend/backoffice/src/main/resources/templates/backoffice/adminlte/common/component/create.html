@@ -20,8 +20,15 @@
 						<div class="modal-body">
 							<div class="container-fluid">
 								<div class="row">
-									<th:block layout:insert="${createForm} :: general"></th:block>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="id" th:text="#{module.backoffice.id} + ' *'"></label>
+											<input type="text" class="form-control" name="id">
+											<span class="help-block"></span>
+										</div>
+									</div>
 								</div>
+								<th:block layout:insert="${createForm} :: create"></th:block>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -38,6 +45,13 @@
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
 		        $('#create-form').validate({
+		        	onfocusout: false,
+		            invalidHandler: function(form, validator) {
+		                var errors = validator.numberOfInvalids();
+		                if (errors) {                    
+		                    validator.errorList[0].element.focus();
+		                }
+		            },
 		            rules: {
 		                id: {
 		                    required: true,

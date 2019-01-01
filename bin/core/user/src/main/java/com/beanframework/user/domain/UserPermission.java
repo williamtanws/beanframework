@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
@@ -23,13 +24,17 @@ import com.beanframework.user.UserPermissionConstants;
 @Table(name = UserPermissionConstants.Table.USER_PERMISSION)
 public class UserPermission extends GenericDomain {
 
-	private static final long serialVersionUID = 5923500001897510869L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8824467052116434484L;
 	public static final String USER_PERMISSION_FIELD = "userPermissionField";
 	public static final String SORT = "sort";
 	public static final String FIELDS = "fields";
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserPermissionField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OrderBy(UserPermissionField.DYNAMIC_FIELD)
 	private List<UserPermissionField> fields = new ArrayList<UserPermissionField>();
 
 	private Integer sort;
