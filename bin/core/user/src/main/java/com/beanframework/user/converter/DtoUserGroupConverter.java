@@ -17,7 +17,7 @@ import com.beanframework.user.domain.UserGroupField;
 
 public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup> {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserGroupConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserGroupConverter.class);
 
 	@Autowired
 	private ModelService modelService;

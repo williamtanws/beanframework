@@ -15,7 +15,7 @@ import com.beanframework.user.domain.UserRightField;
 
 public class DtoUserRightFieldConverter implements DtoConverter<UserRightField, UserRightField> {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserRightFieldConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserRightFieldConverter.class);
 
 	@Autowired
 	private ModelService modelService;

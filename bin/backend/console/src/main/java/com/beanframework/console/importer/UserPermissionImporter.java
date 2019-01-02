@@ -15,7 +15,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +28,19 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.converter.EntityUserPermissionImporterConverter;
 import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserRight;
 
 public class UserPermissionImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(UserPermissionImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(UserPermissionImporter.class);
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EntityUserPermissionImporterConverter converter;
 
 	@Value("${module.console.import.update.userpermission}")
 	private String IMPORT_UPDATE;
@@ -122,40 +124,10 @@ public class UserPermissionImporter extends Importer {
 	public void save(List<UserPermissionCsv> csvList) throws Exception {
 
 		for (UserPermissionCsv csv : csvList) {
-
-			// UserPermission
-
-			Map<String, Object> userPermissionProperties = new HashMap<String, Object>();
-			userPermissionProperties.put(UserPermission.ID, csv.getId());
-
-			UserPermission userPermission = modelService.findOneEntityByProperties(userPermissionProperties, UserPermission.class);
-
-			if (userPermission == null) {
-				userPermission = modelService.create(UserPermission.class);
-				userPermission.setId(csv.getId());
-			} else {
-				Hibernate.initialize(userPermission.getFields());
-			}
-			userPermission.setSort(csv.getSort());
-
-			modelService.saveEntity(userPermission, UserPermission.class);
-
-			// UserPermission Field
-
-			if (csv.getDynamicField() != null) {
-				String[] dynamicFields = csv.getDynamicField().split(";");
-				for (String dynamicField : dynamicFields) {
-					String dynamicFieldId = dynamicField.split("=")[0];
-					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < userPermission.getFields().size(); i++) {
-						if (userPermission.getFields().get(i).getId().equals(userPermission.getId()+"_"+dynamicFieldId)) {
-							userPermission.getFields().get(i).setValue(value);
-						}
-					}
-				}
-			}
-
-			modelService.saveEntity(userPermission, UserRight.class);
+			
+			UserPermission model = converter.convert(csv);
+			
+			modelService.saveEntity(model, UserPermission.class);
 		}
 	}
 

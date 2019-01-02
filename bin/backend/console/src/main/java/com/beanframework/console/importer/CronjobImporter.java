@@ -15,7 +15,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,24 +28,27 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.converter.EntityCronjobImporterConverter;
 import com.beanframework.console.csv.CronjobCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.cronjob.service.CronjobManagerService;
 
 public class CronjobImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(CronjobImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(CronjobImporter.class);
 
 	@Autowired
 	private ModelService modelService;
-	
+
+	@Autowired
+	private EntityCronjobImporterConverter converter;
+
 	@Autowired
 	private CronjobManagerService cronjobManagerService;
 
 	@Value("${module.console.import.update.cronjob}")
 	private String IMPORT_UPDATE;
-	
+
 	@Value("${module.console.import.remove.cronjob}")
 	private String IMPORT_REMOVE;
 
@@ -72,7 +74,7 @@ public class CronjobImporter extends Importer {
 			save(cronjobCsvList);
 		}
 	}
-	
+
 	@Override
 	public void remove() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -87,7 +89,7 @@ public class CronjobImporter extends Importer {
 			remove(cronjobCsvList);
 		}
 	}
-	
+
 	public List<CronjobCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
@@ -101,13 +103,12 @@ public class CronjobImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			CronjobCsv csv;
-			LOGGER.info("Start import "+WebPlatformUpdateConstants.Importer.Cronjob.NAME);
+			LOGGER.info("Start import " + WebPlatformUpdateConstants.Importer.Cronjob.NAME);
 			while ((csv = beanReader.read(CronjobCsv.class, header, processors)) != null) {
-				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
-						csv);
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+WebPlatformUpdateConstants.Importer.Cronjob.NAME);
+			LOGGER.info("Finished import " + WebPlatformUpdateConstants.Importer.Cronjob.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -125,85 +126,19 @@ public class CronjobImporter extends Importer {
 	}
 
 	public void save(List<CronjobCsv> csvList) throws Exception {
-		
+
 		cronjobManagerService.clearAllScheduler();
 
 		for (CronjobCsv csv : csvList) {
+			Cronjob model = converter.convert(csv);
 
-			// Cronjob
+			modelService.saveEntity(model, Cronjob.class);
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.ID, csv.getId());
-
-			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
-
-			if (cronjob == null) {
-				cronjob = modelService.create(Cronjob.class);
-				cronjob.setId(csv.getId());
-			}
-			else {
-				Hibernate.initialize(cronjob.getCronjobDatas());
-			}
-
-			cronjob.setJobClass(csv.getJobClass());
-			cronjob.setJobGroup(csv.getJobGroup());
-			cronjob.setJobName(csv.getJobName());
-			cronjob.setDescription(csv.getDescription());
-			cronjob.setCronExpression(csv.getCronExpression());
-			cronjob.setStartup(csv.isStartup());
-			
-			for (int i = 0; i < cronjob.getCronjobDatas().size(); i++) {
-				if (csv.getCronjobData() != null) {
-					String[] cronjobDataList = csv.getCronjobData().split(SPLITTER);
-
-					for (String cronjobDataString : cronjobDataList) {
-						String name = cronjobDataString.split(EQUALS)[0];
-						String value = cronjobDataString.split(EQUALS)[1];
-
-						if (cronjob.getCronjobDatas().get(i).getName().equals(name)) {
-							cronjob.getCronjobDatas().get(i).setValue(value);
-						}
-					}
-				}
-			}
-
-			modelService.saveEntity(cronjob, Cronjob.class);
-			
-
-
-			// CronjobData
-
-			if (csv.getCronjobData() != null) {
-
-				String[] cronjobDataList = csv.getCronjobData().split(SPLITTER);
-
-				for (String cronjobDataString : cronjobDataList) {
-					String name = cronjobDataString.split(EQUALS)[0];
-					String value = cronjobDataString.split(EQUALS)[1];
-					
-					boolean add = true;
-					for (CronjobData cronjobData : cronjob.getCronjobDatas()) {
-						if (cronjobData.getName().equals(name)) {
-							add = false;
-						}
-					}
-					
-					if(add) {
-						CronjobData cronjobData = modelService.create(CronjobData.class);
-						cronjobData.setName(name);
-						cronjobData.setValue(value);
-						cronjobData.setCronjob(cronjob);
-						cronjob.getCronjobDatas().add(cronjobData);
-
-						modelService.saveDto(cronjob, Cronjob.class);
-					}
-				}
-			}
 		}
 
 		cronjobManagerService.initCronJob();
 	}
-	
+
 	public void remove(List<CronjobCsv> configurationCsvList) throws Exception {
 		for (CronjobCsv csv : configurationCsvList) {
 			Map<String, Object> properties = new HashMap<String, Object>();

@@ -7,9 +7,10 @@ public class Importer {
 	private int sort;
 	private String description;
 	public static final String SPLITTER = ";";
-	public static final String EQUALS = ":";
+	public static final String EQUALS = "=";
 	public static final String POSITIVE = "+";
 	public static final String NEGATIVE = "-";
+	public static final String UNDERSCORE = "_";
 
 	public String getKey() {
 		return key;

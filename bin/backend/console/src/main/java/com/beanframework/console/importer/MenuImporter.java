@@ -9,15 +9,12 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +28,19 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.converter.EntityMenuImporterConverter;
 import com.beanframework.console.csv.MenuCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuTargetTypeEnum;
-import com.beanframework.user.domain.UserGroup;
 
 public class MenuImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(MenuImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(MenuImporter.class);
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EntityMenuImporterConverter converter;
 
 	@Value("${module.console.import.update.menu}")
 	private String IMPORT_UPDATE;
@@ -125,117 +124,115 @@ public class MenuImporter extends Importer {
 	public void save(List<MenuCsv> csvList) throws Exception {
 
 		for (MenuCsv csv : csvList) {
-
-			// Menu
-
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Menu.ID, csv.getId());
-			Menu menu = modelService.findOneEntityByProperties(properties, Menu.class);
-
-			if (menu == null) {
-				menu = modelService.create(Menu.class);
-				menu.setId(csv.getId());
-			} else {
-				Hibernate.initialize(menu.getParent());
-				Hibernate.initialize(menu.getUserGroups());
-				Hibernate.initialize(menu.getFields());
-			}
-
-			menu.setSort(csv.getSort());
-			menu.setIcon(csv.getIcon());
-			menu.setPath(csv.getPath());
-			if (StringUtils.isBlank(csv.getTarget())) {
-				menu.setTarget(MenuTargetTypeEnum.SELF);
-			} else {
-				menu.setTarget(MenuTargetTypeEnum.valueOf(csv.getTarget()));
-			}
-			menu.setEnabled(csv.isEnabled());
-
+			Menu menu = converter.convert(csv);
 			modelService.saveEntity(menu, Menu.class);
-
-			// Menu Field
-
-			// UserRight Field
-
-			if (csv.getDynamicField() != null) {
-				String[] dynamicFields = csv.getDynamicField().split(";");
-				for (String dynamicField : dynamicFields) {
-					String dynamicFieldId = dynamicField.split("=")[0];
-					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < menu.getFields().size(); i++) {
-						if (menu.getFields().get(i).getId().equals(menu.getId() + "_" + dynamicFieldId)) {
-							menu.getFields().get(i).setValue(value);
-						}
-					}
-				}
-			}
-
-			modelService.saveEntity(menu, Menu.class);
-
-			// Old Parent
-
-			if (menu.getParent() != null) {
-				Map<String, Object> parentProperties = new HashMap<String, Object>();
-				parentProperties.put(Menu.UUID, menu.getParent().getUuid());
-				Menu oldParent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
-
-				if (oldParent != null) {
-
-					Iterator<Menu> iterator = oldParent.getChilds().iterator();
-
-					while (iterator.hasNext()) {
-						if (iterator.next().getUuid().equals(menu.getUuid())) {
-							iterator.remove();
-						}
-					}
-					modelService.saveEntity(oldParent, Menu.class);
-				}
-			}
-
-			// New Parent
-
-			if (StringUtils.isNotBlank(csv.getParent())) {
-				Map<String, Object> parentProperties = new HashMap<String, Object>();
-				parentProperties.put(Menu.ID, csv.getParent());
-				Menu parent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
-
-				if (parent == null) {
-					LOGGER.error("Parent not exists: " + csv.getParent());
-				} else {
-					Hibernate.initialize(parent.getChilds());
-
-					boolean addChild = true;
-					for (Menu child : parent.getChilds()) {
-						if (child.getUuid().equals(menu.getUuid())) {
-							addChild = false;
-						}
-					}
-					if (addChild) {
-						menu.setParent(parent);
-						parent.getChilds().add(menu);
-						modelService.saveEntity(parent, Menu.class);
-					}
-				}
-			}
-
-			// User Group
-
-			if (csv.getUserGroupIds() != null) {
-				String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
-				for (int i = 0; i < userGroupIds.length; i++) {
-					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-
-					if (userGroup == null) {
-						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-					} else {
-						menu.getUserGroups().add(userGroup);
-
-						modelService.saveEntity(userGroup, UserGroup.class);
-					}
-				}
-			}
+//			// Menu
+//
+//			Map<String, Object> properties = new HashMap<String, Object>();
+//			properties.put(Menu.ID, csv.getId());
+//			Menu menu = modelService.findOneEntityByProperties(properties, Menu.class);
+//
+//			if (menu == null) {
+//				menu = modelService.create(Menu.class);
+//				menu.setId(csv.getId());
+//			} else {
+//				Hibernate.initialize(menu.getParent());
+//				Hibernate.initialize(menu.getUserGroups());
+//			}
+//
+//			menu.setSort(csv.getSort());
+//			menu.setIcon(csv.getIcon());
+//			menu.setPath(csv.getPath());
+//			if (StringUtils.isBlank(csv.getTarget())) {
+//				menu.setTarget(MenuTargetTypeEnum.SELF);
+//			} else {
+//				menu.setTarget(MenuTargetTypeEnum.valueOf(csv.getTarget()));
+//			}
+//			menu.setEnabled(csv.isEnabled());
+//
+//			modelService.saveEntity(menu, Menu.class);
+//
+//			// Field
+//
+//			if (csv.getDynamicField() != null) {
+//				String[] dynamicFields = csv.getDynamicField().split(";");
+//				for (String dynamicField : dynamicFields) {
+//					String dynamicFieldId = dynamicField.split("=")[0];
+//					String value = dynamicField.split("=")[1];
+//					for (int i = 0; i < menu.getFields().size(); i++) {
+//						if (menu.getFields().get(i).getId().equals(menu.getId() + "_" + dynamicFieldId)) {
+//							menu.getFields().get(i).setValue(value);
+//						}
+//					}
+//				}
+//			}
+//
+//			modelService.saveEntity(menu, Menu.class);
+//
+//			// Old Parent
+//
+//			if (menu.getParent() != null) {
+//				Map<String, Object> parentProperties = new HashMap<String, Object>();
+//				parentProperties.put(Menu.UUID, menu.getParent().getUuid());
+//				Menu oldParent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
+//
+//				if (oldParent != null) {
+//
+//					Iterator<Menu> iterator = oldParent.getChilds().iterator();
+//
+//					while (iterator.hasNext()) {
+//						if (iterator.next().getUuid().equals(menu.getUuid())) {
+//							iterator.remove();
+//						}
+//					}
+//					modelService.saveEntity(oldParent, Menu.class);
+//				}
+//			}
+//
+//			// New Parent
+//
+//			if (StringUtils.isNotBlank(csv.getParent())) {
+//				Map<String, Object> parentProperties = new HashMap<String, Object>();
+//				parentProperties.put(Menu.ID, csv.getParent());
+//				Menu parent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
+//
+//				if (parent == null) {
+//					LOGGER.error("Parent not exists: " + csv.getParent());
+//				} else {
+//					Hibernate.initialize(parent.getChilds());
+//
+//					boolean addChild = true;
+//					for (Menu child : parent.getChilds()) {
+//						if (child.getUuid().equals(menu.getUuid())) {
+//							addChild = false;
+//						}
+//					}
+//					if (addChild) {
+//						menu.setParent(parent);
+//						parent.getChilds().add(menu);
+//						modelService.saveEntity(parent, Menu.class);
+//					}
+//				}
+//			}
+//
+//			// User Group
+//
+//			if (csv.getUserGroupIds() != null) {
+//				String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
+//				for (int i = 0; i < userGroupIds.length; i++) {
+//					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+//					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+//					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+//
+//					if (userGroup == null) {
+//						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+//					} else {
+//						menu.getUserGroups().add(userGroup);
+//
+//						modelService.saveEntity(userGroup, UserGroup.class);
+//					}
+//				}
+//			}
 		}
 	}	
 	

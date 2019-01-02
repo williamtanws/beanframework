@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="create (createAction, createObject, createForm, createCheckId)">
+		<div class="modal fade" id="modal-create">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.console.record.new}"></h4>
+					</div>
+					<form id="create-form" role="form" th:action="${createAction}" method="post" th:object="${createObject}">
+						<input type="hidden" name="create">
+						<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
+						<input type="hidden" name="size" th:value="${pagination.getSize()}">
+						<input type="hidden" name="direction" th:value="${direction}">
+						<input type="hidden" name="properties" th:value="${properties}">
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="id" th:text="#{module.console.id} + ' *'"></label>
+											<input type="text" class="form-control" name="id">
+											<span class="help-block"></span>
+										</div>
+									</div>
+								</div>
+								<th:block layout:insert="${createForm} :: create"></th:block>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.console.cancel}+'  '"></button>
+							<button type="submit" class="btn btn-success" th:text="#{module.console.save}"></button>
+						</div>
+					</form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    $(document).ready(function() {
+		        $('#create-form').validate({
+		        	onfocusout: false,
+		            invalidHandler: function(form, validator) {
+		                var errors = validator.numberOfInvalids();
+		                if (errors) {                    
+		                    validator.errorList[0].element.focus();
+		                }
+		            },
+		            rules: {
+		                id: {
+		                    required: true,
+		                    remote: {
+		                        url: /*[[${createCheckId}]]*/ ,
+		                        type: "get",
+		                        data: {
+		                            uuid: '' ,
+		                            id: function() {
+		                                return $("#create-form input[name='id']").val();
+		                            }
+		                        }
+		                    }
+		                },
+		                name: {
+		                    required: true
+		                }
+		            },
+		            messages: {
+		                id: {
+		                    required: /*[[#{module.console.id.required}]]*/ ,
+		                    remote: /*[[#{module.console.id.exists}]]*/
+		                }
+		            },
+		            highlight: function(element) {
+		                $(element).closest('.form-group').addClass('has-error');
+		            },
+		            unhighlight: function(element) {
+		                $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').find('.help-block').html('');
+		            },
+		            errorPlacement: function(error, element) {
+		                element.closest('.form-group').find('.help-block').html(error.text());
+		            }
+		        });
+		
+		    });
+		    /*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>

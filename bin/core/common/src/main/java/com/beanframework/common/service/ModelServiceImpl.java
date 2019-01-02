@@ -355,7 +355,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findAll(Class modelClass) throws Exception {
+	public <T extends Collection> T findDtoAll(Class modelClass) throws Exception {
 
 		try {
 			List<Object> models = getCachedResultList(null, null, null, null, modelClass);
@@ -493,7 +493,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public void deleteAll(Class modelClass) throws BusinessException {
 		try {
-			List<Object> models = findAll(modelClass);
+			List<Object> models = findDtoAll(modelClass);
 			for (Object model : models) {
 				delete(model);
 			}

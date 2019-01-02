@@ -17,7 +17,7 @@ import com.beanframework.user.domain.UserRight;
 
 public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, UserAuthority> {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserAuthorityConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserAuthorityConverter.class);
 
 	@Autowired
 	private ModelService modelService;

@@ -49,7 +49,7 @@ public interface ModelService {
 
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
-	<T extends Collection> T findAll(Class modelClass) throws Exception;
+	<T extends Collection> T findDtoAll(Class modelClass) throws Exception;
 
 	<T> Page<T> findDtoPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
 

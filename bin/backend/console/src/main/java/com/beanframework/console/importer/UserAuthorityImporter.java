@@ -34,7 +34,7 @@ import com.beanframework.console.registry.Importer;
 import com.beanframework.user.domain.UserGroup;
 
 public class UserAuthorityImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(UserAuthorityImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(UserAuthorityImporter.class);
 
 	@Autowired
 	private ModelService modelService;

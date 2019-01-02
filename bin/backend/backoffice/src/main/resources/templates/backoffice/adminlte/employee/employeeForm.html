@@ -5,9 +5,6 @@
 <title th:text="#{module.employee}"></title>
 </head>
 <body>
-	<th:block layout:fragment="create">
-
-	</th:block>
 	<th:block layout:fragment="update">
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.employee')}" method="post" th:object="${employeeUpdate}">
 			<input type="hidden" name="update" />

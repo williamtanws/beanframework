@@ -14,9 +14,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +29,18 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.converter.EntityAdminImporterConverter;
 import com.beanframework.console.csv.AdminCsv;
 import com.beanframework.console.registry.Importer;
-import com.beanframework.user.utils.PasswordUtils;
 
 public class AdminImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(AdminImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(AdminImporter.class);
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EntityAdminImporterConverter converter;
 
 	@Value("${module.console.import.update.admin}")
 	private String IMPORT_UPDATE;
@@ -124,27 +125,9 @@ public class AdminImporter extends Importer {
 
 		for (AdminCsv csv : csvList) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Admin.ID, csv.getId());
-
-			Admin admin = modelService.findOneEntityByProperties(properties, Admin.class);
-
-			if (admin == null) {
-				admin = modelService.create(Admin.class);
-				admin.setId(csv.getId());
-			} else {
-				Hibernate.initialize(admin.getFields());
-			}
-
-			if (StringUtils.isNotBlank(csv.getPassword())) {
-				admin.setPassword(PasswordUtils.encode(csv.getPassword()));
-			}
-			admin.setAccountNonExpired(csv.isAccountNonExpired());
-			admin.setAccountNonLocked(csv.isAccountNonLocked());
-			admin.setCredentialsNonExpired(csv.isCredentialsNonExpired());
-			admin.setEnabled(csv.isEnabled());			
+			Admin model = converter.convert(csv);
 			
-			modelService.saveEntity(admin, Admin.class);
+			modelService.saveEntity(model, Admin.class);
 		}
 	}
 	

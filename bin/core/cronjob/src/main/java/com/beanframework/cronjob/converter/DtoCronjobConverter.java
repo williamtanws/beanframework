@@ -16,7 +16,7 @@ import com.beanframework.cronjob.domain.CronjobData;
 
 public class DtoCronjobConverter implements DtoConverter<Cronjob, Cronjob> {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(DtoCronjobConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoCronjobConverter.class);
 
 	@Autowired
 	private ModelService modelService;

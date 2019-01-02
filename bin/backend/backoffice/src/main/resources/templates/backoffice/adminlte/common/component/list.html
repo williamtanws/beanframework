@@ -57,13 +57,13 @@
 														<th:block th:if="${#authorization.expression('hasAuthority('''+updateAuthority+''')')}">
 															<tr th:onclick="getForm([[${row.uuid}]])">
 																<th scope="row" th:text="${row.id}"></th>
-																<td scope="row" th:each="field : ${listFields}" th:text="${row.__${field[0]}__}"></td>
+																<td scope="row" th:each="field : ${listFields}" th:text="${#strings.abbreviate(row.__${field[0]}__,50)}"></td>
 															</tr>
 														</th:block>
 														<th:block th:if="!${#authorization.expression('hasAuthority('''+updateAuthority+''')')}">
 															<tr>
 																<th scope="row" th:text="${row.id}"></th>
-																<td scope="row" th:each="field : ${listFields}" th:text="${row.__${field[0]}__}"></td>
+																<td scope="row" th:each="field : ${listFields}" th:text="${#strings.abbreviate(row.__${field[0]}__,50)}"></td>
 															</tr>
 														</th:block>
 													</th:block>

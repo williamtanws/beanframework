@@ -5,202 +5,27 @@
 <title th:text="#{module.admin}"></title>
 </head>
 <body>
-	<th:block layout:fragment="general">
-		<div class="col-md-6">
-			<div class="form-group">
-				<label for="id" th:text="#{module.admin.id}"></label>
-				<input type="text" class="form-control" name="id" th:value="*{id}">
-				<span class="help-block"></span>
-			</div>
-			<div class="form-group">
-				<label for="password" th:text="#{module.admin.password}"></label>
-				<input type="password" class="form-control" name="password">
-				<span class="help-block"></span>
-			</div>
-			<div class="form-group">
-				<label for="confirmPassword" th:text="#{module.admin.password.confirm}"></label>
-				<input name="confirmPassword" type="password" class="form-control">
-				<span class="help-block"></span>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label for="enabled" th:text="#{module.admin.enabled}"></label>
-				<small th:text="#{module.admin.enabled.indicate}"></small>
-				<select class="form-control" name="enabled">
-					<option value="1" th:selected="${adminUpdate.uuid != null} ? ${adminUpdate.enabled == true} : true" th:text="#{module.console.yes}"></option>
-					<option value="0" th:selected="${adminUpdate.uuid != null} ? ${adminUpdate.enabled == false} : false" th:text="#{module.console.no}"></option>
-				</select>
-				<span class="help-block"></span>
-			</div>
-			<div class="form-group">
-				<label for="accountNonLocked" th:text="#{module.admin.locked}"></label>
-				<small th:text="#{module.admin.locked.indicate}"></small>
-				<select class="form-control" name="accountNonLocked">
-					<option value="1" th:selected="${adminUpdate.uuid != null} ? ${adminNonLocked == true} : true" th:text="#{module.console.no}"></option>
-					<option value="0" th:selected="${adminUpdate.uuid != null} ? ${adminNonLocked == false} : false" th:text="#{module.console.yes}"></option>
-				</select>
-				<span class="help-block"></span>
-			</div>
-			<div class="form-group">
-				<label for="accountNonExpired" th:text="#{module.admin.expired}"></label>
-				<small th:text="#{module.admin.expired.indicate}"></small>
-				<select class="form-control" name="accountNonExpired">
-					<option value="1" th:selected="${adminUpdate.uuid != null} ? ${adminNonExpired == true} : true" th:text="#{module.console.no}"></option>
-					<option value="0" th:selected="${adminUpdate.uuid != null} ? ${adminNonExpired == false} : false" th:text="#{module.console.yes}"></option>
-				</select>
-				<span class="help-block"></span>
-			</div>
-			<div class="form-group">
-				<label for="credentialsNonExpired" th:text="#{module.admin.credentials.expired}"></label>
-				<small th:text="#{module.admin.credentials.expired.indicate}"></small>
-				<select class="form-control" name="credentialsNonExpired">
-					<option value="1" th:selected="${adminUpdate.uuid != null} ? ${adminUpdate.credentialsNonExpired == true}: true" th:text="#{module.console.no}"></option>
-					<option value="0" th:selected="${adminUpdate.uuid != null} ? ${adminUpdate.credentialsNonExpired == false} : false" th:text="#{module.console.yes}"></option>
-				</select>
-				<span class="help-block"></span>
-			</div>
-		</div>
-	</th:block>
-	<th:block layout:fragment="administration">
-		<div class="col-md-6">
-			<div class="form-group">
-				<label th:text="#{module.console.uuid} + ':'"></label>
-				<span class="text-block" th:text="*{uuid}"></span>
-			</div>
-			<div class="form-group">
-				<label th:text="#{module.console.lastmodified.date} + ':'"></label>
-				<span class="text-block" th:text="*{lastModifiedDate != null} ? *{#dates.format(lastModifiedDate, ' dd MMMM yyyy hh:mma')}"></span>
-			</div>
-			<div class="form-group">
-				<label th:text="#{module.console.lastmodified.by} + ':'"></label>
-				<a th:href="@{${@environment.getProperty('path.admin')}(uuid=*{lastModifiedBy})}+'#tab_general'" th:text="#{module.console.find.user}" th:if="*{lastModifiedBy != null}"></a>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label th:text="#{module.console.created.date} + ':'"></label>
-				<span class="text-block" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy hh:mma')}"></span>
-			</div>
-			<div class="form-group">
-				<label th:text="#{module.console.created.by} + ':'"></label>
-				<a th:href="@{${@environment.getProperty('path.admin')}(uuid=*{createdBy})}+'#tab_general'" th:text="#{module.console.find.user}" th:if="*{createdBy != null}"></a>
-			</div>
-		</div>
-	</th:block>
-	<th:block layout:fragment="create">
-		<div class="modal fade" id="modal-create">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" th:text="#{module.console.record.new}"></h4>
-					</div>
-					<form id="admin-create-form" role="form" th:action="@{${@environment.getProperty('path.admin')}}" method="post" th:object="${adminCreate}">
-						<input type="hidden" name="create">
-						<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
-						<input type="hidden" name="size" th:value="${pagination.getSize()}">
-						<input type="hidden" name="direction" th:value="${direction}">
-						<input type="hidden" name="properties" th:value="${properties}">
-						<input type="hidden" name="idSearch" th:value="${adminSearch.idSearch}">
-						<div class="modal-body">
-							<div class="container-fluid">
-								<div class="row">
-									<th:block layout:insert="/console/adminlte/admin/adminForm :: general"></th:block>
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.console.cancel}+'  '"></button>
-							<button type="submit" class="btn btn-success" th:text="#{module.console.save}"></button>
-						</div>
-					</form>
-				</div>
-				<!-- /.modal-content -->
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
-		<script th:inline="javascript">
-		    /*<![CDATA[*/
-		    $(document).ready(function() {
-		        $('#admin-create-form').validate({
-		            rules: {
-		                id: {
-		                	minlength: 5,
-		                    maxlength: 20,
-		                    required: true,
-		                    remote: {
-		                        url: /*[[${@environment.getProperty('path.api.admin.checkid')}]]*/ ,
-		                        type: "get",
-		                        data: {
-		                            uuid: '' ,
-		                            id: function() {
-		                                return $("#admin-create-form input[name='id']").val();
-		                            }
-		                        }
-		                    }
-		                },
-		                password: {
-		                    required: true,
-		                    minlength: /*[[${@environment.getProperty('module.admin.password.min')}]]*/,
-		                    maxlength: /*[[${@environment.getProperty('module.admin.password.max')}]]*/
-		                },
-		                confirmPassword: {
-		                    equalTo: "#admin-create-form input[name='password']"
-		                }
-		            },
-		            messages: {
-		                id: {
-		                    required: /*[[#{module.admin.id.required}]]*/ ,
-		                    remote: /*[[#{module.admin.id.exists}]]*/
-		                },
-		                password: {
-		                    required: /*[[#{module.admin.password.required}]]*/
-		                },
-		                confirmPassword: {
-		                    required: /*[[#{module.admin.password.confirm.required}]]*/ ,
-		                    equalTo: /*[[#{module.admin.password.confirm.notmatch}]]*/
-		                }
-		            },
-		            highlight: function(element) {
-		                $(element).closest('.form-group').addClass('has-error');
-		            },
-		            unhighlight: function(element) {
-		                $(element).closest('.form-group').removeClass('has-error');
-		                $(element).closest('.form-group').find('.help-block').html('');
-		            },
-		            errorPlacement: function(error, element) {
-		                element.closest('.form-group').find('.help-block').html(error.text());
-		            }
-		        });
-		    });
-		    /*]]>*/
-		</script>
-	</th:block>
 	<th:block layout:fragment="update">
-		<form id="admin-update-form" role="form" th:action="@{${@environment.getProperty('path.admin')}}" method="post" th:object="${adminUpdate}">
-			<input type="hidden" name="update">
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.admin')}" method="post" th:object="${adminUpdate}">
+			<input type="hidden" name="update" />
 			<input type="hidden" name="uuid" th:value="${adminUpdate.uuid}" />
 			<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
 			<input type="hidden" name="size" th:value="${pagination.getSize()}">
 			<input type="hidden" name="direction" th:value="${direction}">
 			<input type="hidden" name="properties" th:value="${properties}">
-			<input type="hidden" name="idSearch" th:value="${adminSearch.idSearch}">
+			<input type="hidden" name="adminSearch.searchAll" th:value="${objectSearch.searchAll}" class="form-control">
+			<input type="hidden" th:each="field : ${searchFields}" th:name="'adminSearch.'+${field}" th:value="${objectSearch.__${field}__}" class="form-control">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-delete">
-										<i class="fa fa-trash"></i>
-									</button>
+									<th:block layout:insert="/console/adminlte/common/component/delete :: button"></th:block>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<a class="btn btn-default" th:text="#{module.console.refresh}" onclick="window.location.reload()"></a>
-									<button type="submit" class="btn btn-success" th:text="#{module.console.save}"></button>
+									<th:block layout:insert="/console/adminlte/common/component/refresh :: button"></th:block>
+									<th:block layout:insert="/console/adminlte/common/component/update :: button"></th:block>
 								</div>
 							</div>
 						</div>
@@ -217,20 +42,93 @@
 								<a href="#tab_general" data-toggle="tab" th:text="#{module.console.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li>
+								<a href="#tab_history" data-toggle="tab" th:text="#{module.console.history}" onclick="changeTab('history')"></a>
+							</li>
+							<li>
 								<a href="#tab_administration" data-toggle="tab" th:text="#{module.console.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
-						<div class="tab-content">
+						<div class="tab-content tab-validate">
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
-									<th:block layout:insert="/console/adminlte/admin/adminForm :: general"></th:block>
+									<div class="row">
+										<th:block layout:insert="/console/adminlte/common/component/general :: general"></th:block>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-12 row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for="password" th:text="#{module.admin.password}"></label>
+													<input type="password" class="form-control" name="password">
+													<span class="help-block"></span>
+												</div>
+												<div class="form-group">
+													<label for="confirmPassword" th:text="#{module.admin.password.confirm}"></label>
+													<input name="confirmPassword" type="password" class="form-control">
+													<span class="help-block"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="enabled" th:text="#{module.admin.enabled}"></label>
+												<small th:text="#{module.admin.enabled.indicate}"></small>
+												<select class="form-control" name="enabled">
+													<option value="1" th:selected="${adminUpdate.uuid != null} ? ${adminUpdate.enabled == true} : true" th:text="#{module.console.yes}"></option>
+													<option value="0" th:selected="${adminUpdate.uuid != null} ? ${adminUpdate.enabled == false} : false" th:text="#{module.console.no}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="accountNonLocked" th:text="#{module.admin.locked}"></label>
+												<small th:text="#{module.admin.locked.indicate}"></small>
+												<select class="form-control" name="accountNonLocked">
+													<option value="1" th:selected="${adminUpdate.uuid != null} ? ${adminNonLocked == true} : true" th:text="#{module.console.no}"></option>
+													<option value="0" th:selected="${adminUpdate.uuid != null} ? ${adminNonLocked == false} : false" th:text="#{module.console.yes}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="accountNonExpired" th:text="#{module.admin.expired}"></label>
+												<small th:text="#{module.admin.expired.indicate}"></small>
+												<select class="form-control" name="accountNonExpired">
+													<option value="1" th:selected="${adminUpdate.uuid != null} ? ${adminNonExpired == true} : true" th:text="#{module.console.no}"></option>
+													<option value="0" th:selected="${adminUpdate.uuid != null} ? ${adminNonExpired == false} : false" th:text="#{module.console.yes}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="credentialsNonExpired" th:text="#{module.admin.credentials.expired}"></label>
+												<small th:text="#{module.admin.credentials.expired.indicate}"></small>
+												<select class="form-control" name="credentialsNonExpired">
+													<option value="1" th:selected="${adminUpdate.uuid != null} ? ${adminUpdate.credentialsNonExpired == true}: true" th:text="#{module.console.no}"></option>
+													<option value="0" th:selected="${adminUpdate.uuid != null} ? ${adminUpdate.credentialsNonExpired == false} : false" th:text="#{module.console.yes}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_history">
+								<div class="box-body">
+									<th:block layout:insert="/console/adminlte/common/component/history :: history"></th:block>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
-									<th:block layout:insert="/console/adminlte/admin/adminForm :: administration"></th:block>
+									<th:block layout:insert="/console/adminlte/common/component/administration :: administration"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -242,43 +140,21 @@
 				<!-- /.col -->
 			</div>
 		</form>
-		<div class="modal fade" id="modal-delete">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" th:text="#{module.console.delete.confirm}"></h4>
-					</div>
-					<div class="modal-body" th:utext="#{module.console.delete.confirm.info}"></div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.console.no}+'  '"></button>
-						<form id="delete-admin-form" th:action="@{${@environment.getProperty('path.admin')}}" method="post" th:object="${adminSearch}">
-							<input type="hidden" name="delete">
-							<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
-							<input type="hidden" name="size" th:value="${pagination.getSize()}">
-							<input type="hidden" name="direction" th:value="${direction}">
-							<input type="hidden" name="properties" th:value="${properties}">
-							<input type="hidden" name="idSearch" th:value="${adminSearch.idSearch}">
-							<input type="hidden" name="uuid" th:value="${adminUpdate.uuid}">
-							<button type="submit" class="btn btn-danger" th:text="#{module.console.delete}"></button>
-						</form>
-					</div>
-				</div>
-				<!-- /.modal-content -->
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
-		<!-- /.modal -->
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
-		        $('#admin-update-form').validate({
+		        $('#update-form').validate({
+		        	onfocusout: false,
+		        	ignore: [],
+		            errorPlacement: function() {},
+		            invalidHandler: function(form, validator) {
+		                var errors = validator.numberOfInvalids();
+		                if (errors) {                    
+		                    validator.errorList[0].element.focus();
+		                }
+		            },
 		            rules: {
 		            	id: {
-		                    minlength: 5,
-		                    maxlength: 20,
 		                    required: true,
 		                    remote: {
 		                        url: /*[[${@environment.getProperty('path.api.admin.checkid')}]]*/ ,
@@ -286,39 +162,42 @@
 		                        data: {
 		                            uuid: /*[[${adminUpdate.uuid}]]*/ ,
 		                            id: function() {
-		                                return $("#admin-update-form input[name='id']").val();
+		                                return $("#update-form input[name='id']").val();
 		                            }
 		                        }
 		                    }
 		                },
-		                password: {
-		                    required: false,
-		                    minlength: /*[[${@environment.getProperty('module.admin.password.min')}]]*/,
-		                    maxlength: /*[[${@environment.getProperty('module.admin.password.max')}]]*/
-		                },
-		                confirmPassword: {
-		                    equalTo: "#admin-update-form input[name='password']"
+		                name: {
+		                    required: true
 		                }
 		            },
 		            messages: {
 		                id: {
-		                    required: /*[[#{module.admin.id.required}]]*/ ,
-		                    remote: /*[[#{module.admin.id.exists}]]*/
+		                    required: /*[[#{module.console.id.required}]]*/ ,
+		                    remote: /*[[#{module.console.id.exists}]]*/
 		                },
-		                password: {
-		                    required: /*[[#{module.admin.password.required}]]*/
-		                },
-		                confirmPassword: {
-		                    required: /*[[#{module.admin.password.confirm.required}]]*/ ,
-		                    equalTo: /*[[#{module.admin.password.confirm.notmatch}]]*/
+		                name: {
+		                    required: /*[[#{module.admin.name.required}]]*/
 		                }
 		            },
 		            highlight: function(element) {
 		                $(element).closest('.form-group').addClass('has-error');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
+		                });
 		            },
 		            unhighlight: function(element) {
 		                $(element).closest('.form-group').removeClass('has-error');
 		                $(element).closest('.form-group').find('.help-block').html('');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+	                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','');
+	                    
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
+		                });
 		            },
 		            errorPlacement: function(error, element) {
 		                element.closest('.form-group').find('.help-block').html(error.text());
@@ -328,6 +207,9 @@
 		    });
 		    /*]]>*/
 		</script>
+
+		<th:block
+			layout:insert="/console/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.admin')}}, objectSearch=${adminSearch}, deleteUuid=${adminUpdate.uuid})"></th:block>
 	</th:block>
 </body>
 </html>
