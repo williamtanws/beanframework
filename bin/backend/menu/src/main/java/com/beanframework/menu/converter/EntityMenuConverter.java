@@ -70,12 +70,14 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 			Hibernate.initialize(source.getChilds());
 			Hibernate.initialize(source.getUserGroups());
 
+			// Parent
 			if (source.getParent() == null || source.getParent().getUuid() == null) {
 				prototype.setParent(null);
 			} else {
 				Menu parent = modelService.findOneEntityByUuid(source.getParent().getUuid(), Menu.class);
 				prototype.setParent(parent);
 			}
+			// Child
 			if (source.getChilds() == null || source.getChilds().isEmpty()) {
 				prototype.setChilds(new ArrayList<Menu>());
 			} else {
@@ -87,6 +89,7 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 				}
 				prototype.setChilds(childs);
 			}
+			// User Group
 			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
 				prototype.setUserGroups(new ArrayList<UserGroup>());
 			} else {
@@ -98,6 +101,7 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 				}
 				prototype.setUserGroups(userGroups);
 			}
+			// Field
 			if (source.getFields() == null || source.getFields().isEmpty()) {
 				prototype.setFields(new ArrayList<MenuField>());
 			} else {

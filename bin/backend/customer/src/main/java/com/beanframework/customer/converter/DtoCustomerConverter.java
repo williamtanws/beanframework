@@ -16,7 +16,7 @@ import com.beanframework.user.domain.UserGroup;
 
 public class DtoCustomerConverter implements DtoConverter<Customer, Customer> {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(DtoCustomerConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoCustomerConverter.class);
 	
 	@Autowired
 	private ModelService modelService;

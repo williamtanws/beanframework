@@ -21,6 +21,7 @@ import com.beanframework.console.csv.UserAuthorityCsv;
 import com.beanframework.console.csv.UserGroupCsv;
 import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.csv.UserRightCsv;
+import com.beanframework.console.data.FileProcessor;
 import com.beanframework.console.importer.AdminImporter;
 import com.beanframework.console.importer.ConfigurationImporter;
 import com.beanframework.console.importer.CronjobImporter;
@@ -34,7 +35,7 @@ import com.beanframework.console.importer.UserPermissionImporter;
 import com.beanframework.console.importer.UserRightImporter;
 
 @Component
-public class ImporterFileProcessor {
+public class ImporterFileProcessor implements FileProcessor{
 
 	private static final String MSG = "%s received. Path: %s";
 
@@ -71,6 +72,7 @@ public class ImporterFileProcessor {
 	@Autowired
 	private UserRightImporter userRightImporter;
 
+	@Override
 	public void process(Message<String> msg) throws Exception {
 		String fileName = (String) msg.getHeaders().get(FileHeaders.FILENAME);
 		File fileOriginalFile = (File) msg.getHeaders().get(FileHeaders.ORIGINAL_FILE);

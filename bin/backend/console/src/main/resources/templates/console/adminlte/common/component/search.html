@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="search">
+	<th:block layout:fragment="search (searchAction, objectSearch, searchFields, displayFields, searchForm )">
 		<div class="col-md-6">
 			<div class="box box-solid">
 				<div class="box-body">
 					<!-- search form -->
-					<form th:action="@{${@environment.getProperty('path.configuration')}}" method="get" th:object="${configurationSearch}">
+					<form th:action="${searchAction}" method="get" th:object="${objectSearch}">
 						<input type="hidden" name="size" th:value="${pagination.size}">
 						<div class="input-group">
-							<input type="text" name="idSearch" th:value="${configurationSearch.idSearch}" class="form-control">
+							<input type="text" name="searchAll" th:value="${objectSearch.searchAll}" class="form-control">
 							<span class="input-group-btn">
 								<button type="submit" id="search-btn" class="btn btn-primary" th:text="#{module.console.search}"></button>
 								<button type="button" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-search" th:title="#{module.console.search.advanced}">
 									<span class="fa fa-search-plus"></span>
 								</button>
-								<a th:href="@{${@environment.getProperty('path.configuration')}}" class="btn btn-default btn-flat" th:title="#{module.console.refresh}">
+								<a th:href="${searchAction}" class="btn btn-default btn-flat" th:title="#{module.console.refresh}">
 									<span class="fa fa-refresh"></span>
 								</a>
 							</span>
 						</div>
 					</form>
+					<span class="text-block" th:each="field : ${displayFields}" th:if="${!#strings.isEmpty(objectSearch.__${field}__)}" th:text="' ['+${field}+': '+${objectSearch.__${field}__}+']'"></span>
 				</div>
 			</div>
 		</div>
 		<div class="modal fade" id="modal-search">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<form th:action="@{${@environment.getProperty('path.configuration')}}" method="get" th:object="${configurationSearch}">
+					<form th:action="${searchAction}" method="get" th:object="${objectSearch}">
 						<input type="hidden" name="size" th:value="${pagination.size}">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -36,10 +37,11 @@
 							<h4 class="modal-title" th:text="#{module.console.search.advanced}"></h4>
 						</div>
 						<div class="modal-body">
-							<div class="form-group">
-								<label for="id" th:text="#{module.configuration.id}"></label>
-								<input name="idSearch" th:value="${configurationSearch.idSearch}" type="text" class="form-control" />
+							<div class="form-group" th:each="field : ${searchFields}">
+								<label th:text="${field}" th:for="${field}"></label>
+								<input type="text" th:name="${field}" th:value="${objectSearch.__${field}__}" class="form-control">
 							</div>
+							<th:block th:if="${searchForm}" layout:insert="${searchForm} :: searchForm"></th:block>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.console.cancel}+'  '"></button>

@@ -2,19 +2,32 @@ package com.beanframework.configuration.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.configuration.converter.DtoConfigurationConverter;
 import com.beanframework.configuration.converter.EntityConfigurationConverter;
 import com.beanframework.configuration.interceptor.ConfigurationInitialDefaultsInterceptor;
+import com.beanframework.configuration.interceptor.ConfigurationInterceptor;
 import com.beanframework.configuration.interceptor.ConfigurationLoadInterceptor;
 import com.beanframework.configuration.interceptor.ConfigurationPrepareInterceptor;
 import com.beanframework.configuration.interceptor.ConfigurationRemoveInterceptor;
 import com.beanframework.configuration.interceptor.ConfigurationValidateInterceptor;
 
 @Configuration
-public class ConfigurationConfig {
+public class ConfigurationConfig implements WebMvcConfigurer{
+	
+	@Bean
+	public ConfigurationInterceptor configurationInterceptor() {
+		return new ConfigurationInterceptor();
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(configurationInterceptor()).addPathPatterns("/**");
+	}
 
 	@Bean
 	public DtoConfigurationConverter dtoConfigurationConverter() {

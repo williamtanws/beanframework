@@ -14,9 +14,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +28,23 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.converter.EntityEmployeeImporterConverter;
 import com.beanframework.console.csv.EmployeeCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.utils.PasswordUtils;
 
 public class EmployeeImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(EmployeeImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(EmployeeImporter.class);
 
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private EntityEmployeeImporterConverter converter;
+
 	@Value("${module.console.import.update.employee}")
 	private String IMPORT_UPDATE;
-	
+
 	@Value("${module.console.import.remove.employee}")
 	private String IMPORT_REMOVE;
 
@@ -70,7 +70,7 @@ public class EmployeeImporter extends Importer {
 			save(employeeCsvList);
 		}
 	}
-	
+
 	@Override
 	public void remove() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -85,7 +85,7 @@ public class EmployeeImporter extends Importer {
 			remove(employeeCsvList);
 		}
 	}
-	
+
 	public List<EmployeeCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
@@ -99,12 +99,12 @@ public class EmployeeImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			EmployeeCsv csv;
-			LOGGER.info("Start import "+WebPlatformUpdateConstants.Importer.Employee.NAME);
+			LOGGER.info("Start import " + WebPlatformUpdateConstants.Importer.Employee.NAME);
 			while ((csv = beanReader.read(EmployeeCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+WebPlatformUpdateConstants.Importer.Employee.NAME);
+			LOGGER.info("Finished import " + WebPlatformUpdateConstants.Importer.Employee.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -125,64 +125,11 @@ public class EmployeeImporter extends Importer {
 
 		for (EmployeeCsv csv : csvList) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Employee.ID, csv.getId());
-
-			Employee employee = modelService.findOneEntityByProperties(properties, Employee.class);
-
-			if (employee == null) {
-				employee = modelService.create(Employee.class);
-				employee.setId(csv.getId());
-			} else {
-				Hibernate.initialize(employee.getFields());
-			}
-
-			if (StringUtils.isNotBlank(csv.getPassword())) {
-				employee.setPassword(PasswordUtils.encode(csv.getPassword()));
-			}
-			employee.setAccountNonExpired(csv.isAccountNonExpired());
-			employee.setAccountNonLocked(csv.isAccountNonLocked());
-			employee.setCredentialsNonExpired(csv.isCredentialsNonExpired());
-			employee.setEnabled(csv.isEnabled());
-
-			modelService.saveEntity(employee, Employee.class);
-
-			// User Field
-
-			if (csv.getDynamicField() != null) {
-				String[] dynamicFields = csv.getDynamicField().split(";");
-				for (String dynamicField : dynamicFields) {
-					String dynamicFieldId = dynamicField.split("=")[0];
-					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < employee.getFields().size(); i++) {
-						if (employee.getFields().get(i).getId().equals(employee.getId()+"_"+dynamicFieldId)) {
-							employee.getFields().get(i).setValue(value);
-						}
-					}
-				}
-			}
-
-			modelService.saveEntity(employee, Employee.class);
-
-			// User Group
-
-			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
-			for (int i = 0; i < userGroupIds.length; i++) {
-				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-
-				if (userGroup == null) {
-					LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-				} else {
-					employee.getUserGroups().add(userGroup);
-
-					modelService.saveEntity(userGroup, UserGroup.class);
-				}
-			}
+			Employee model = converter.convert(csv);
+			modelService.saveEntity(model, Employee.class);
 		}
 	}
-	
+
 	public void remove(List<EmployeeCsv> csvList) throws Exception {
 		for (EmployeeCsv csv : csvList) {
 			Map<String, Object> properties = new HashMap<String, Object>();

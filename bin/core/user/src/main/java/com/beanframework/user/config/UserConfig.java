@@ -49,7 +49,7 @@ import com.beanframework.user.interceptor.UserValidateInterceptor;
 public class UserConfig {
 
 	/////////////////////////
-	//    DTO Converter    //
+	// DTO Converter //
 	/////////////////////////
 
 	@Bean
@@ -165,7 +165,7 @@ public class UserConfig {
 	}
 
 	////////////////////////////
-	//    ENTITY Converter    //
+	// ENTITY Converter //
 	////////////////////////////
 
 	@Bean
@@ -279,9 +279,9 @@ public class UserConfig {
 
 		return mapping;
 	}
-	
+
 	////////////////////////////////////////
-	//    Initial Defaults Interceptor    //
+	// Initial Defaults Interceptor //
 	////////////////////////////////////////
 
 	@Bean
@@ -311,10 +311,10 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
-	
-	////////////////////////////////////////
-	//    Validate Defaults Interceptor    //
-	////////////////////////////////////////
+
+	//////////////////////////
+	// Validate Interceptor //
+	//////////////////////////
 
 	@Bean
 	public UserAuthorityValidateInterceptor userAuthorityValidateInterceptor() {
@@ -385,9 +385,9 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	///////////////////////////////
-	//    Prepare Interceptor    //
+	// Prepare Interceptor //
 	///////////////////////////////
 
 	@Bean
@@ -417,7 +417,7 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserRightPrepareInterceptor userRightPrepareInterceptor() {
 		return new UserRightPrepareInterceptor();
@@ -431,7 +431,7 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserPermissionPrepareInterceptor userPermissionPrepareInterceptor() {
 		return new UserPermissionPrepareInterceptor();
@@ -445,9 +445,9 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	////////////////////////////
-	//    Load Interceptor    //
+	// Load Interceptor //
 	////////////////////////////
 
 	@Bean
@@ -463,7 +463,7 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserGroupLoadInterceptor userGroupLoadInterceptor() {
 		return new UserGroupLoadInterceptor();
@@ -477,9 +477,9 @@ public class UserConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	//////////////////////////////
-	//    Remove Interceptor    //
+	// Remove Interceptor //
 	//////////////////////////////
 
 	@Bean

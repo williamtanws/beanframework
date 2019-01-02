@@ -16,7 +16,7 @@ import com.beanframework.user.domain.UserField;
 
 public class DtoEmployeeConverter implements DtoConverter<Employee, Employee> {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(DtoEmployeeConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoEmployeeConverter.class);
 
 	@Autowired
 	private ModelService modelService;

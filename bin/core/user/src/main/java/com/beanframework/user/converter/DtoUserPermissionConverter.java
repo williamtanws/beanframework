@@ -16,7 +16,7 @@ import com.beanframework.user.domain.UserPermissionField;
 
 public class DtoUserPermissionConverter implements DtoConverter<UserPermission, UserPermission> {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(DtoUserPermissionConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserPermissionConverter.class);
 	
 	@Autowired
 	private ModelService modelService;

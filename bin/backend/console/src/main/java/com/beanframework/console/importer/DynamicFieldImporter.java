@@ -28,17 +28,19 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.converter.EntityDynamicFieldImporterConverter;
 import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
-import com.beanframework.language.domain.Language;
 
 public class DynamicFieldImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldImporter.class);
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private EntityDynamicFieldImporterConverter converter;
 
 	@Value("${module.console.import.update.dynamicfield}")
 	private String IMPORT_UPDATE;
@@ -97,12 +99,12 @@ public class DynamicFieldImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			DynamicFieldCsv csv;
-			LOGGER.info("Start import "+WebPlatformUpdateConstants.Importer.DynamicField.NAME);
+			LOGGER.info("Start import " + WebPlatformUpdateConstants.Importer.DynamicField.NAME);
 			while ((csv = beanReader.read(DynamicFieldCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+WebPlatformUpdateConstants.Importer.DynamicField.NAME);
+			LOGGER.info("Finished import " + WebPlatformUpdateConstants.Importer.DynamicField.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -122,26 +124,8 @@ public class DynamicFieldImporter extends Importer {
 	public void save(List<DynamicFieldCsv> csvList) throws Exception {
 
 		for (DynamicFieldCsv csv : csvList) {
-			Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
-			dynamicFieldProperties.put(DynamicField.ID, csv.getId());
-			DynamicField model = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
 
-			if (model == null) {
-				model = modelService.create(DynamicField.class);
-				model.setId(csv.getId());
-			}
-			model.setName(csv.getName());
-			model.setFieldType(DynamicFieldTypeEnum.valueOf(csv.getType()));
-			model.setSort(csv.getSort());
-			model.setRequired(csv.isRequired());
-			model.setRule(csv.getRule());
-			model.setFieldGroup(csv.getGroup());
-			model.setLabel(csv.getLabel());
-
-			Map<String, Object> languageProperties = new HashMap<String, Object>();
-			languageProperties.put(Language.ID, csv.getLanguage());
-			Language modelLanguage = modelService.findOneEntityByProperties(languageProperties, Language.class);
-			model.setLanguage(modelLanguage);
+			DynamicField model = converter.convert(csv);
 
 			modelService.saveEntity(model, DynamicField.class);
 		}

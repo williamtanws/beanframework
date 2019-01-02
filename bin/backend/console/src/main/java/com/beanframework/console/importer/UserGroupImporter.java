@@ -15,7 +15,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +28,19 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.converter.EntityUserGroupImporterConverter;
 import com.beanframework.console.csv.UserGroupCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.user.domain.UserGroup;
 
 public class UserGroupImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(UserGroupImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(UserGroupImporter.class);
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EntityUserGroupImporterConverter converter;
 
 	@Value("${module.console.import.update.usergroup}")
 	private String IMPORT_UPDATE;
@@ -121,68 +124,10 @@ public class UserGroupImporter extends Importer {
 	public void save(List<UserGroupCsv> userGroupCsvList) throws Exception {
 
 		for (UserGroupCsv csv : userGroupCsvList) {
+			
+			UserGroup model = converter.convert(csv);
 
-			// UserGroup
-
-			Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-			userGroupProperties.put(UserGroup.ID, csv.getId());
-
-			UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-
-			if (userGroup == null) {
-				userGroup = modelService.create(UserGroup.class);
-				userGroup.setId(csv.getId());
-			} else {
-				Hibernate.initialize(userGroup.getUserGroups());
-				Hibernate.initialize(userGroup.getFields());
-			}
-
-			modelService.saveEntity(userGroup, UserGroup.class);
-
-			// UserGroup Field
-
-			if (csv.getDynamicField() != null) {
-				String[] dynamicFields = csv.getDynamicField().split(";");
-				for (String dynamicField : dynamicFields) {
-					String dynamicFieldId = dynamicField.split("=")[0];
-					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < userGroup.getFields().size(); i++) {
-						if (userGroup.getFields().get(i).getId().equals(userGroup.getId() + "_" + dynamicFieldId)) {
-							userGroup.getFields().get(i).setValue(value);
-						}
-					}
-				}
-			}
-
-			modelService.saveEntity(userGroup, UserGroup.class);
-		}
-
-		// User Group
-
-		for (UserGroupCsv csv : userGroupCsvList) {
-
-			Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-			userGroupProperties.put(UserGroup.ID, csv.getId());
-
-			UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-			Hibernate.initialize(userGroup.getUserGroups());
-
-			if (csv.getUserGroupIds() != null) {
-				String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
-				for (int i = 0; i < userGroupIds.length; i++) {
-					Map<String, Object> userGroupChildProperties = new HashMap<String, Object>();
-					userGroupChildProperties.put(UserGroup.ID, userGroupIds[i]);
-					UserGroup userGroupChild = modelService.findOneEntityByProperties(userGroupChildProperties, UserGroup.class);
-
-					if (userGroupChild == null) {
-						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-					} else {
-						userGroup.getUserGroups().add(userGroupChild);
-
-						modelService.saveEntity(userGroupChild, UserGroup.class);
-					}
-				}
-			}
+			modelService.saveEntity(model, UserGroup.class);
 		}
 	}
 

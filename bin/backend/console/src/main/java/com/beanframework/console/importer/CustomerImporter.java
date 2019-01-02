@@ -14,9 +14,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +28,19 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.converter.EntityCustomerImporterConverter;
 import com.beanframework.console.csv.CustomerCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.utils.PasswordUtils;
 
 public class CustomerImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(CustomerImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(CustomerImporter.class);
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EntityCustomerImporterConverter converter;
 
 	@Value("${module.console.import.update.customer}")
 	private String IMPORT_UPDATE;
@@ -125,75 +125,8 @@ public class CustomerImporter extends Importer {
 
 		for (CustomerCsv csv : customerCsvList) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Customer.ID, csv.getId());
-
-			Customer customer = modelService.findOneEntityByProperties(properties, Customer.class);
-
-			if (customer == null) {
-				customer = modelService.create(Customer.class);
-				customer.setId(csv.getId());
-			} else {
-				Hibernate.initialize(customer.getFields());
-			}
-
-			if (StringUtils.isNotBlank(csv.getPassword())) {
-				customer.setPassword(PasswordUtils.encode(csv.getPassword()));
-			}
-			customer.setAccountNonExpired(csv.isAccountNonExpired());
-			customer.setAccountNonLocked(csv.isAccountNonLocked());
-			customer.setCredentialsNonExpired(csv.isCredentialsNonExpired());
-			customer.setEnabled(csv.isEnabled());
-
-			modelService.saveEntity(customer, Customer.class);
-			
-			// Employee Field
-
-			if (csv.getDynamicField() != null) {
-				String dynamicFieldId = csv.getDynamicField().split(";")[0];
-				String value = csv.getDynamicField().split(";")[1];
-				for (int i = 0; i < customer.getFields().size(); i++) {
-					if (customer.getFields().get(i).getId().equals(dynamicFieldId)) {
-						customer.getFields().get(i).setValue(value);
-					}
-				}
-			}
-
-			modelService.saveEntity(customer, Customer.class);
-			
-			// User Field
-
-			if (csv.getDynamicField() != null) {
-				String[] dynamicFields = csv.getDynamicField().split(";");
-				for (String dynamicField : dynamicFields) {
-					String dynamicFieldId = dynamicField.split("=")[0];
-					String value = dynamicField.split("=")[1];
-					for (int i = 0; i < customer.getFields().size(); i++) {
-						if (customer.getFields().get(i).getId().equals(customer.getId()+"_"+dynamicFieldId)) {
-							customer.getFields().get(i).setValue(value);
-						}
-					}
-				}
-			}
-			
-			modelService.saveEntity(customer, Customer.class);
-
-			// User Group
-
-			String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
-			for (int i = 0; i < userGroupIds.length; i++) {
-				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-
-				if (userGroup == null) {
-					LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-				} else {
-					customer.getUserGroups().add(userGroup);
-
-					modelService.saveEntity(userGroup, UserGroup.class);
-				}
-			}
+			Customer model = converter.convert(csv);
+			modelService.saveEntity(model, Customer.class);
 		}
 	}
 	

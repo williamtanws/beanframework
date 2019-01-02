@@ -16,7 +16,7 @@ import com.beanframework.menu.domain.MenuField;
 
 public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(DtoMenuConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoMenuConverter.class);
 
 	@Autowired
 	private ModelService modelService;

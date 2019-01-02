@@ -29,14 +29,18 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.converter.EntityConfigurationImporterConverter;
 import com.beanframework.console.csv.ConfigurationCsv;
 import com.beanframework.console.registry.Importer;
 
 public class ConfigurationImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(ConfigurationImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(ConfigurationImporter.class);
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EntityConfigurationImporterConverter converter;
 
 	@Value("${module.console.import.update.configuration}")
 	private String IMPORT_UPDATE;
@@ -121,19 +125,9 @@ public class ConfigurationImporter extends Importer {
 
 		for (ConfigurationCsv csv : csvList) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Configuration.ID, csv.getId());
+			Configuration model = converter.convert(csv);
 
-			Configuration configuration = modelService.findOneEntityByProperties(properties, Configuration.class);
-
-			if (configuration == null) {
-				configuration = modelService.create(Configuration.class);
-				configuration.setId(csv.getId());
-			}
-
-			configuration.setValue(csv.getValue());
-
-			modelService.saveEntity(configuration, Configuration.class);
+			modelService.saveEntity(model, Configuration.class);
 		}
 	}
 

@@ -28,15 +28,19 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.converter.EntityLanguageImporterConverter;
 import com.beanframework.console.csv.LanguageCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.language.domain.Language;
 
 public class LanguageImporter extends Importer {
-	private static Logger LOGGER = LoggerFactory.getLogger(LanguageImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(LanguageImporter.class);
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private EntityLanguageImporterConverter converter;
 
 	@Value("${module.console.import.update.language}")
 	private String IMPORT_UPDATE;
@@ -66,7 +70,7 @@ public class LanguageImporter extends Importer {
 			save(languageCsvList);
 		}
 	}
-	
+
 	@Override
 	public void remove() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -81,7 +85,7 @@ public class LanguageImporter extends Importer {
 			remove(languageCsvList);
 		}
 	}
-	
+
 	public List<LanguageCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
@@ -95,13 +99,12 @@ public class LanguageImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			LanguageCsv csv;
-			LOGGER.info("Start import "+WebPlatformUpdateConstants.Importer.Language.NAME);
+			LOGGER.info("Start import " + WebPlatformUpdateConstants.Importer.Language.NAME);
 			while ((csv = beanReader.read(LanguageCsv.class, header, processors)) != null) {
-				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(),
-						csv);
+				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+WebPlatformUpdateConstants.Importer.Language.NAME);
+			LOGGER.info("Finished import " + WebPlatformUpdateConstants.Importer.Language.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -122,23 +125,12 @@ public class LanguageImporter extends Importer {
 
 		for (LanguageCsv csv : csvList) {
 
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Language.ID, csv.getId());
+			Language model = converter.convert(csv);
 
-			Language language = modelService.findOneEntityByProperties(properties, Language.class);
-
-			if (language == null) {
-				language = modelService.create(Language.class);
-				language.setId(csv.getId());
-			}
-			language.setName(csv.getName());
-			language.setActive(csv.isActive());
-			language.setSort(csv.getSort());
-
-			modelService.saveEntity(language, Language.class);
+			modelService.saveEntity(model, Language.class);
 		}
 	}
-	
+
 	public void remove(List<LanguageCsv> csvList) throws Exception {
 		for (LanguageCsv csv : csvList) {
 			Map<String, Object> properties = new HashMap<String, Object>();

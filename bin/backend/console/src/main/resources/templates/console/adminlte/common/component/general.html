@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="general">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="id" th:text="#{module.console.id} + ': '"></label>
+				<span class="text-block" th:text="*{id}"></span>
+			</div>
+		</div>
+	</th:block>
+</body>
+</html>
