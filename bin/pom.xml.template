@@ -30,6 +30,7 @@
     	<module>backend/customer</module>
         <module>backend/filemanager</module>
         <module>backend/backoffice</module>
+        <module>backend/cockpit</module>
         <module>platform</module>
         <module>../config</module>
     </modules>
