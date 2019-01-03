@@ -1,4 +1,4 @@
-package com.beanframework.backoffice.config;
+package com.beanframework.backoffice.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

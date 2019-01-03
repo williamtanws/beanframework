@@ -1,4 +1,4 @@
-package com.beanframework.backoffice.config;
+package com.beanframework.console.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,57 +15,55 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
+import com.beanframework.console.WebConsoleConstants;
+import com.beanframework.console.security.ConsoleAuthProvider;
+import com.beanframework.console.security.ConsoleSuccessHandler;
+import com.beanframework.console.security.CsrfHeaderFilter;
+import com.beanframework.console.security.SessionExpiredDetectingLoginUrlAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
 @Order(1)
-public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
-		
-	@Value(WebBackofficeConstants.Path.BACKOFFICE)
-	private String PATH_BACKOFFICE;
+public class ConsoleConfig extends WebSecurityConfigurerAdapter {
 	
-	@Value(WebBackofficeConstants.Path.BACKOFFICE_API)
-	private String PATH_BACKOFFICE_API;
+	@Value(WebConsoleConstants.Path.CONSOLE)
+	private String MODULE_CONSOLE_PATH;
 	
-	@Value(WebBackofficeConstants.Http.USERNAME_PARAM)
+	@Value(WebConsoleConstants.Path.CONSOLE_API)
+	private String MODULE_CONSOLE_PATH_API;
+	
+	@Value(WebConsoleConstants.Http.USERNAME_PARAM)
 	private String HTTP_USERNAME_PARAM;
 	
-	@Value(WebBackofficeConstants.Http.PASSWORD_PARAM)
+	@Value(WebConsoleConstants.Http.PASSWORD_PARAM)
 	private String HTTP_PASSWORD_PARAM;
 	
-	@Value(WebBackofficeConstants.Http.ANTPATTERNS_PERMITALL)
+	@Value(WebConsoleConstants.Http.ANTPATTERNS_PERMITALL)
 	private String[] HTTP_ANTPATTERNS_PERMITALL;
 	
-	@Value(WebBackofficeConstants.Http.REMEMBERME_PARAM)
+	@Value(WebConsoleConstants.Http.REMEMBERME_PARAM)
 	private String HTTP_REMEMBERME_PARAM;
 	
-	@Value(WebBackofficeConstants.Http.REMEMBERME_COOKIENAME)
+	@Value(WebConsoleConstants.Http.REMEMBERME_COOKIENAME)
 	private String HTTP_REMEMBERME_COOKIENAME;
 	
-	@Value(WebBackofficeConstants.Http.REMEMBERME_TOKENVALIDITYSECONDS)
+	@Value(WebConsoleConstants.Http.REMEMBERME_TOKENVALIDITYSECONDS)
 	private int HTTP_REMEMBERME_TOKENVALIDITYSECONDS;
 	
-	@Value(WebBackofficeConstants.Path.LOGIN)
-	private String PATH_BACKOFFICE_LOGIN;
+	@Value(WebConsoleConstants.Path.LOGIN)
+	private String PATH_CONSOLE_LOGIN;
 	
-	@Value(WebBackofficeConstants.Path.LOGOUT)
-	private String PATH_BACKOFFICE_LOGOUT;
+	@Value(WebConsoleConstants.Path.LOGOUT)
+	private String PATH_CONSOLE_LOGOUT;
 	
-	@Value(WebBackofficeConstants.Authority.BACKOFFICE)
-	private String BACKOFFICE_ACCESS;
-	
-	@Value("${module.backoffice.session.max:-1}")
-	private int SESSION_MAX;
-	
-	@Value("${module.backoffice.session.login.prevent:false}")
-	private boolean SESSION_LOGIN_PREVENT;
+	@Value(WebConsoleConstants.Authority.CONSOLE)
+	private String CONSOLE_ACCESS;
 	
 	@Autowired
-	private BackofficeAuthProvider authProvider;
+	private ConsoleAuthProvider authProvider;
 	
 	@Autowired
-	private BackofficeSuccessHandler successHandler;
+	private ConsoleSuccessHandler successHandler;
 	
 	@Autowired
 	private SessionRegistry sessionRegistry;
@@ -73,34 +71,34 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
     	http
     		.requestMatchers()
-    			.antMatchers(PATH_BACKOFFICE+"/**", PATH_BACKOFFICE_API+"/**")
+    			.antMatchers(MODULE_CONSOLE_PATH+"/**", MODULE_CONSOLE_PATH_API+"/**")
     			.and()
 	        .authorizeRequests()
 	        	.antMatchers(HTTP_ANTPATTERNS_PERMITALL).permitAll()
-	        	.antMatchers(PATH_BACKOFFICE+"/**").authenticated()
-	        	.antMatchers(PATH_BACKOFFICE+"/**").hasAnyAuthority(BACKOFFICE_ACCESS)
+	        	.antMatchers(MODULE_CONSOLE_PATH+"/**", MODULE_CONSOLE_PATH_API+"/**").authenticated()
+	        	.antMatchers(MODULE_CONSOLE_PATH+"/**").hasAnyAuthority(CONSOLE_ACCESS)
 	        	.and()
-	        .addFilterAfter(csrfHeaderFilter(PATH_BACKOFFICE), CsrfFilter.class)
+	        .addFilterAfter(csrfHeaderFilter(MODULE_CONSOLE_PATH), CsrfFilter.class)
 	        .csrf().csrfTokenRepository(csrfTokenRepository())
 	        	.and()
 	        .formLogin()
-                .loginPage(PATH_BACKOFFICE_LOGIN)
+                .loginPage(PATH_CONSOLE_LOGIN)
                 .successHandler(successHandler)
-                .failureUrl(PATH_BACKOFFICE_LOGIN+"?error")
+                .failureUrl(PATH_CONSOLE_LOGIN+"?error")
                 .usernameParameter(HTTP_USERNAME_PARAM)
                 .passwordParameter(HTTP_PASSWORD_PARAM)
                 .permitAll()
                 .and()
             .logout()
-            	.logoutUrl(PATH_BACKOFFICE_LOGOUT)
-            	.logoutSuccessUrl(PATH_BACKOFFICE_LOGIN+"?logout") 
+            	.logoutUrl(PATH_CONSOLE_LOGOUT)
+            	.logoutSuccessUrl(PATH_CONSOLE_LOGIN+"?logout") 
             	.invalidateHttpSession(true)
-            	.deleteCookies(WebBackofficeConstants.Cookie.REMEMBER_ME)
+            	.deleteCookies(WebConsoleConstants.Cookie.REMEMBER_ME)
                	.permitAll()
         		.and()
         	.exceptionHandling()
-        		.accessDeniedPage(PATH_BACKOFFICE_LOGIN+"?denied")
-        		.authenticationEntryPoint(backofficeAuthenticationEntryPoint())
+        		.accessDeniedPage(PATH_CONSOLE_LOGIN+"?denied")
+        		.authenticationEntryPoint(consoleAuthenticationEntryPoint())
         		.and()
         	.rememberMe()
         		.rememberMeParameter(HTTP_REMEMBERME_PARAM)
@@ -108,10 +106,10 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
         		.tokenValiditySeconds(HTTP_REMEMBERME_TOKENVALIDITYSECONDS)
         		.and()
         	.sessionManagement()
-        		.maximumSessions(SESSION_MAX)
+        		.maximumSessions(-1)
         		.sessionRegistry(sessionRegistry)
-        		.maxSessionsPreventsLogin(SESSION_LOGIN_PREVENT)
-        		.expiredUrl(PATH_BACKOFFICE_LOGIN+"?expired");
+        		.maxSessionsPreventsLogin(true)
+        		.expiredUrl(PATH_CONSOLE_LOGIN+"?expired");
     	http.headers().frameOptions().sameOrigin();
     }
     
@@ -133,7 +131,7 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Bean
-    public AuthenticationEntryPoint backofficeAuthenticationEntryPoint() {
-        return new SessionExpiredDetectingLoginUrlAuthenticationEntryPoint(PATH_BACKOFFICE_LOGIN);
+    public AuthenticationEntryPoint consoleAuthenticationEntryPoint() {
+        return new SessionExpiredDetectingLoginUrlAuthenticationEntryPoint(PATH_CONSOLE_LOGIN);
     }
 }

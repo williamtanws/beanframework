@@ -18,9 +18,12 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
@@ -29,6 +32,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -40,8 +44,12 @@ import com.zaxxer.hikari.HikariDataSource;
 		entityManagerFactoryRef = "entityManagerFactory",
 		transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
-@EnableCaching
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableAsync
+@EnableJpaAuditing
+@EnableCaching
+@PropertySource("file:../../config/src/main/resources/application.properties")
+@Order(0)
 public class PlatformConfig {
 	
 	protected final Logger logger = LoggerFactory.getLogger(PlatformConfig.class);
@@ -195,13 +203,7 @@ public class PlatformConfig {
 		properties.put("hibernate.c3p0.preferredTestQuery", "SELECT 1");
 		properties.put("hibernate.c3p0.autoCommitOnClose", "true");
 		properties.put("hibernate.c3p0.testConnectionOnCheckout", "true");
-		//anti-pattern
-//		properties.put("hibernate.enable_lazy_load_no_trans", "true");
 		properties.put("current_session_context_class", "thread");
-		// Fix hibernate multiple merge problem
-//		properties.put("hibernate.event.merge.entity_copy_observer", "allow");
-		// Fix LAZY on session problems in unit tests
-//		properties.put("hibernate.enable_lazy_load_no_trans", "true");
 		return properties;
 	}
 

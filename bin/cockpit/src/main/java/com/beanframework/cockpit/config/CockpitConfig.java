@@ -19,8 +19,8 @@ import com.beanframework.cockpit.WebCockpitConstants;
 
 @Configuration
 @EnableWebSecurity
-@Order(2)
-public class CockpitSecurityConfig extends WebSecurityConfigurerAdapter {
+@Order(3)
+public class CockpitConfig extends WebSecurityConfigurerAdapter {
 		
 	@Value(WebCockpitConstants.Path.COCKPIT)
 	private String PATH_COCKPIT;
