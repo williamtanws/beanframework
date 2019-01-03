@@ -1,4 +1,4 @@
-package com.beanframework.backoffice.config;
+package com.beanframework.console.security;
 
 import java.io.IOException;
 

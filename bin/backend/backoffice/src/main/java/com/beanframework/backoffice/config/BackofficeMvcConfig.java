@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -15,6 +16,7 @@ import com.beanframework.backoffice.interceptor.BackofficeSecurityInterceptor;
 import com.beanframework.user.domain.User;
 
 @Configuration
+@EnableWebMvc
 public class BackofficeMvcConfig implements WebMvcConfigurer{
 
 	@Value("${backoffice.webroot}")
