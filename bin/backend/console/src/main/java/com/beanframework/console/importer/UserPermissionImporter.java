@@ -27,7 +27,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityUserPermissionImporterConverter;
 import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.registry.Importer;
@@ -50,10 +50,10 @@ public class UserPermissionImporter extends Importer {
 
 	@PostConstruct
 	public void importer() {
-		setKey(WebPlatformUpdateConstants.Importer.UserPermission.KEY);
-		setName(WebPlatformUpdateConstants.Importer.UserPermission.NAME);
-		setSort(WebPlatformUpdateConstants.Importer.UserPermission.SORT);
-		setDescription(WebPlatformUpdateConstants.Importer.UserPermission.DESCRIPTION);
+		setKey(PlatformUpdateWebConstants.Importer.UserPermissionImporter.KEY);
+		setName(PlatformUpdateWebConstants.Importer.UserPermissionImporter.NAME);
+		setSort(PlatformUpdateWebConstants.Importer.UserPermissionImporter.SORT);
+		setDescription(PlatformUpdateWebConstants.Importer.UserPermissionImporter.DESCRIPTION);
 	}
 
 	@Override
@@ -99,12 +99,12 @@ public class UserPermissionImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			UserPermissionCsv csv;
-			LOGGER.info("Start import "+WebPlatformUpdateConstants.Importer.UserPermission.NAME);
+			LOGGER.info("Start import "+PlatformUpdateWebConstants.Importer.UserPermissionImporter.NAME);
 			while ((csv = beanReader.read(UserPermissionCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+WebPlatformUpdateConstants.Importer.UserPermission.NAME);
+			LOGGER.info("Finished import "+PlatformUpdateWebConstants.Importer.UserPermissionImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

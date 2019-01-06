@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.WebAdminConstants;
-import com.beanframework.console.WebConsoleConstants;
+import com.beanframework.console.AdminWebConstants;
+import com.beanframework.console.ConsoleWebConstants;
 
 @RestController
 public class AdminResource {
@@ -22,16 +22,16 @@ public class AdminResource {
 	@Autowired
 	private ModelService modelService;
 
-	@GetMapping(WebAdminConstants.Path.Api.CHECKID)
+	@GetMapping(AdminWebConstants.Path.Api.CHECKID)
 	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		String id = requestParams.get(WebConsoleConstants.Param.ID).toString();
+		String id = requestParams.get(ConsoleWebConstants.Param.ID).toString();
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Admin.ID, id);
 		Admin admin = modelService.findOneEntityByProperties(properties, Admin.class);
 		
-		String uuidStr = (String) requestParams.get(WebConsoleConstants.Param.UUID);
+		String uuidStr = (String) requestParams.get(ConsoleWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (admin != null && admin.getUuid().equals(uuid)) {

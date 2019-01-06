@@ -27,7 +27,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityCronjobImporterConverter;
 import com.beanframework.console.csv.CronjobCsv;
 import com.beanframework.console.registry.Importer;
@@ -54,10 +54,10 @@ public class CronjobImporter extends Importer {
 
 	@PostConstruct
 	public void importer() {
-		setKey(WebPlatformUpdateConstants.Importer.Cronjob.KEY);
-		setName(WebPlatformUpdateConstants.Importer.Cronjob.NAME);
-		setSort(WebPlatformUpdateConstants.Importer.Cronjob.SORT);
-		setDescription(WebPlatformUpdateConstants.Importer.Cronjob.DESCRIPTION);
+		setKey(PlatformUpdateWebConstants.Importer.CronjobImporter.KEY);
+		setName(PlatformUpdateWebConstants.Importer.CronjobImporter.NAME);
+		setSort(PlatformUpdateWebConstants.Importer.CronjobImporter.SORT);
+		setDescription(PlatformUpdateWebConstants.Importer.CronjobImporter.DESCRIPTION);
 	}
 
 	@Override
@@ -103,12 +103,12 @@ public class CronjobImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			CronjobCsv csv;
-			LOGGER.info("Start import " + WebPlatformUpdateConstants.Importer.Cronjob.NAME);
+			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.CronjobImporter.NAME);
 			while ((csv = beanReader.read(CronjobCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + WebPlatformUpdateConstants.Importer.Cronjob.NAME);
+			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.CronjobImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

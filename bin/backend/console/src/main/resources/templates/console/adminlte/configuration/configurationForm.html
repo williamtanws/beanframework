@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
 	layout:decorate="${@environment.getProperty('layout.console')}">
 <head>
-<title th:text="#{module.configuration}"></title>
+<title th:utext="#{module.configuration}"></title>
 </head>
 <body>
 	<th:block layout:fragment="update">

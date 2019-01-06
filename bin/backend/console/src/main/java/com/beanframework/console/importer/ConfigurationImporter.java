@@ -28,7 +28,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityConfigurationImporterConverter;
 import com.beanframework.console.csv.ConfigurationCsv;
 import com.beanframework.console.registry.Importer;
@@ -50,10 +50,10 @@ public class ConfigurationImporter extends Importer {
 
 	@PostConstruct
 	public void importer() {
-		setKey(WebPlatformUpdateConstants.Importer.Configuration.KEY);
-		setName(WebPlatformUpdateConstants.Importer.Configuration.NAME);
-		setSort(WebPlatformUpdateConstants.Importer.Configuration.SORT);
-		setDescription(WebPlatformUpdateConstants.Importer.Configuration.DESCRIPTION);
+		setKey(PlatformUpdateWebConstants.Importer.ConfigurationImporter.KEY);
+		setName(PlatformUpdateWebConstants.Importer.ConfigurationImporter.NAME);
+		setSort(PlatformUpdateWebConstants.Importer.ConfigurationImporter.SORT);
+		setDescription(PlatformUpdateWebConstants.Importer.ConfigurationImporter.DESCRIPTION);
 	}
 
 	@Override
@@ -99,12 +99,12 @@ public class ConfigurationImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			ConfigurationCsv csv;
-			LOGGER.info("Start import "+WebPlatformUpdateConstants.Importer.Configuration.NAME);
+			LOGGER.info("Start import "+PlatformUpdateWebConstants.Importer.ConfigurationImporter.NAME);
 			while ((csv = beanReader.read(ConfigurationCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+WebPlatformUpdateConstants.Importer.Configuration.NAME);
+			LOGGER.info("Finished import "+PlatformUpdateWebConstants.Importer.ConfigurationImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

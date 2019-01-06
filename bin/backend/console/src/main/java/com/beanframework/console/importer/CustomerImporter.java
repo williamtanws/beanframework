@@ -27,7 +27,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityCustomerImporterConverter;
 import com.beanframework.console.csv.CustomerCsv;
 import com.beanframework.console.registry.Importer;
@@ -50,10 +50,10 @@ public class CustomerImporter extends Importer {
 
 	@PostConstruct
 	public void importer() {
-		setKey(WebPlatformUpdateConstants.Importer.Customer.KEY);
-		setName(WebPlatformUpdateConstants.Importer.Customer.NAME);
-		setSort(WebPlatformUpdateConstants.Importer.Customer.SORT);
-		setDescription(WebPlatformUpdateConstants.Importer.Customer.DESCRIPTION);
+		setKey(PlatformUpdateWebConstants.Importer.CustomerImporter.KEY);
+		setName(PlatformUpdateWebConstants.Importer.CustomerImporter.NAME);
+		setSort(PlatformUpdateWebConstants.Importer.CustomerImporter.SORT);
+		setDescription(PlatformUpdateWebConstants.Importer.CustomerImporter.DESCRIPTION);
 	}
 
 	@Override
@@ -99,12 +99,12 @@ public class CustomerImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			CustomerCsv csv;
-			LOGGER.info("Start import "+WebPlatformUpdateConstants.Importer.Customer.NAME);
+			LOGGER.info("Start import "+PlatformUpdateWebConstants.Importer.CustomerImporter.NAME);
 			while ((csv = beanReader.read(CustomerCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+WebPlatformUpdateConstants.Importer.Customer.NAME);
+			LOGGER.info("Finished import "+PlatformUpdateWebConstants.Importer.CustomerImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

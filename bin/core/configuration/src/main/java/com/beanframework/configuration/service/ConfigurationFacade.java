@@ -17,6 +17,8 @@ public interface ConfigurationFacade {
 
 	Configuration findOneDtoByUuid(UUID uuid) throws Exception;
 
+	Configuration findOneDtoById(String id) throws Exception;
+	
 	Configuration createDto(Configuration configurationCreate) throws BusinessException;
 
 	Configuration updateDto(Configuration configurationUpdate) throws BusinessException;

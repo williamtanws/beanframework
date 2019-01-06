@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
-import com.beanframework.backoffice.WebCronjobConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.CronjobWebConstants;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.service.CronjobFacade;
 
@@ -23,17 +23,17 @@ public class CronjobResource {
 	@Autowired
 	private CronjobFacade cronjobFacade;
 
-	@RequestMapping(WebCronjobConstants.Path.Api.CHECKID)
+	@RequestMapping(CronjobWebConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
+		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.ID, id);
 
 		Cronjob cronjob = cronjobFacade.findOneDtoByProperties(properties);
 
-		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
+		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (cronjob != null && cronjob.getUuid().equals(uuid)) {
@@ -44,10 +44,10 @@ public class CronjobResource {
 		return cronjob != null ? "false" : "true";
 	}
 
-	@RequestMapping(WebCronjobConstants.Path.Api.CHECKJOBGROUPNAME)
+	@RequestMapping(CronjobWebConstants.Path.Api.CHECKJOBGROUPNAME)
 	public String checkName(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
+		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		String jobGroup = (String) requestParams.get("jobGroup");
 		String jobName = (String) requestParams.get("jobName");
 
@@ -66,7 +66,7 @@ public class CronjobResource {
 		}
 	}
 
-	@RequestMapping(WebCronjobConstants.Path.Api.CHECKJOBCLASS)
+	@RequestMapping(CronjobWebConstants.Path.Api.CHECKJOBCLASS)
 	public String checkJobClass(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String jobClass = (String) requestParams.get("jobClass");
@@ -80,7 +80,7 @@ public class CronjobResource {
 		return "true";
 	}
 
-	@RequestMapping(WebCronjobConstants.Path.Api.CHECKCRONEXPRESSION)
+	@RequestMapping(CronjobWebConstants.Path.Api.CHECKCRONEXPRESSION)
 	public String checkConExpression(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String conExpression = (String) requestParams.get("conExpression");

@@ -530,7 +530,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return query;
 	}
 	
-	private String sqlProperties(Map<String, Object> properties) {
+	protected String sqlProperties(Map<String, Object> properties) {
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
 			if (propertiesBuilder.length() == 0) {
@@ -546,7 +546,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return propertiesBuilder.toString();
 	}
 
-	private String sqlSorts(Map<String, Sort.Direction> sorts) {
+	protected String sqlSorts(Map<String, Sort.Direction> sorts) {
 		StringBuilder sortsBuilder = new StringBuilder();
 		for (Entry<String, Direction> entry : sorts.entrySet()) {
 			if (sortsBuilder.length() == 0) {

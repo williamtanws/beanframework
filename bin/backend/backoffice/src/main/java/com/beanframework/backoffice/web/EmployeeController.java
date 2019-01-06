@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
-import com.beanframework.backoffice.WebEmployeeConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.backoffice.data.EmployeeSearch;
 import com.beanframework.backoffice.data.EmployeeSpecification;
 import com.beanframework.common.controller.AbstractController;
@@ -46,26 +46,26 @@ public class EmployeeController extends AbstractController {
 	@Autowired
 	private UserGroupFacade userGroupFacade;
 
-	@Value(WebEmployeeConstants.Path.EMPLOYEE)
+	@Value(EmployeeWebConstants.Path.EMPLOYEE)
 	private String PATH_EMPLOYEE;
 
-	@Value(WebEmployeeConstants.View.LIST)
+	@Value(EmployeeWebConstants.View.LIST)
 	private String VIEW_EMPLOYEE_LIST;
 
-	@Value(WebEmployeeConstants.LIST_SIZE)
+	@Value(EmployeeWebConstants.LIST_SIZE)
 	private int MODULE_EMPLOYEE_LIST_SIZE;
 
 	private Page<Employee> getPagination(EmployeeSearch employeeSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
+		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
+		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_EMPLOYEE_LIST_SIZE : size;
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.PROPERTIES));
+		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
 		String[] properties = StringUtils.isBlank(propertiesStr) ? null
-				: propertiesStr.split(WebBackofficeConstants.Pagination.PROPERTIES_SPLIT);
+				: propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
 
-		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
+		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 		
 		if (properties == null) {
@@ -77,8 +77,8 @@ public class EmployeeController extends AbstractController {
 		Page<Employee> pagination = employeeFacade.findPage(EmployeeSpecification.findByCriteria(employeeSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
-		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
-		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
+		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
+		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
 
 		return pagination;
 	}
@@ -89,45 +89,45 @@ public class EmployeeController extends AbstractController {
 		employeeSearch.setSearchAll((String)requestParams.get("employeeSearch.searchAll"));
 		employeeSearch.setId((String)requestParams.get("employeeSearch.id"));
 		
-		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
+		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
+		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_EMPLOYEE_LIST_SIZE : size;
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.PROPERTIES));
-		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
+		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
+		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
 
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PAGE, page);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.PAGE, page);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.SIZE, size);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
 		redirectAttributes.addAttribute("searchAll", employeeSearch.getSearchAll());
 		redirectAttributes.addAttribute("id", employeeSearch.getId());
 
 		return redirectAttributes;
 	}
 
-	@ModelAttribute(WebEmployeeConstants.ModelAttribute.CREATE)
+	@ModelAttribute(EmployeeWebConstants.ModelAttribute.CREATE)
 	public Employee populateEmployeeCreate(HttpServletRequest request) throws Exception {
 		return employeeFacade.create();
 	}
 
-	@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE)
+	@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE)
 	public Employee populateEmployeeForm(HttpServletRequest request) throws Exception {
 		return employeeFacade.create();
 	}
 
-	@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH)
+	@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH)
 	public EmployeeSearch populateEmployeeSearch(HttpServletRequest request) {
 		return new EmployeeSearch();
 	}
 
-	@GetMapping(value = WebEmployeeConstants.Path.EMPLOYEE)
-	public String list(@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
-			@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
+	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
+	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(employeeSearch, model, requestParams));
+		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(employeeSearch, model, requestParams));
 
 		if (employeeUpdate.getUuid() != null) {
 
@@ -149,25 +149,25 @@ public class EmployeeController extends AbstractController {
 				}
 				existingEmployee.setUserGroups(userGroups);
 
-				model.addAttribute(WebEmployeeConstants.ModelAttribute.UPDATE, existingEmployee);
+				model.addAttribute(EmployeeWebConstants.ModelAttribute.UPDATE, existingEmployee);
 			} else {
 				employeeUpdate.setUuid(null);
-				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
+				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 
 		return VIEW_EMPLOYEE_LIST;
 	}
 
-	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params = "create")
+	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
 	public RedirectView create(
-			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
-			@ModelAttribute(WebEmployeeConstants.ModelAttribute.CREATE) Employee employeeCreate, Model model,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.CREATE) Employee employeeCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (employeeCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
 
@@ -182,7 +182,7 @@ public class EmployeeController extends AbstractController {
 			try {
 				employeeCreate = employeeFacade.createDto(employeeCreate);
 
-				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
@@ -197,15 +197,15 @@ public class EmployeeController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params = "update")
+	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "update")
 	public RedirectView update(
-			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
-			@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (employeeUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
 
@@ -220,7 +220,7 @@ public class EmployeeController extends AbstractController {
 			try {
 				employeeUpdate = employeeFacade.updateDto(employeeUpdate);
 
-				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
 
@@ -236,10 +236,10 @@ public class EmployeeController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebEmployeeConstants.Path.EMPLOYEE, params = "delete")
+	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "delete")
 	public RedirectView delete(
-			@ModelAttribute(WebEmployeeConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
-			@ModelAttribute(WebEmployeeConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -247,10 +247,10 @@ public class EmployeeController extends AbstractController {
 			employeeFacade.delete(employeeUpdate.getUuid());
 			employeeFacade.deleteEmployeeProfilePictureByUuid(employeeUpdate.getUuid());
 
-			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(WebEmployeeConstants.ModelAttribute.UPDATE, employeeUpdate);
+			redirectAttributes.addFlashAttribute(EmployeeWebConstants.ModelAttribute.UPDATE, employeeUpdate);
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, employeeSearch);

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -266,15 +267,33 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			Long count = getCachedSingleResult(properties, null, "count(o)", modelClass);
-
-			if (count == null) {
-				count = (Long) createQuery(properties, null, "count(o)", null, modelClass).getSingleResult();
-
-				setCachedSingleResult(properties, null, "count(o)", modelClass, count);
+//			Long count = getCachedSingleResult(properties, null, "count(o)", modelClass);
+//
+//			if (count == null) {
+//				count = (Long) createQuery(properties, null, "count(o)", null, modelClass).getSingleResult();
+//
+//				setCachedSingleResult(properties, null, "count(o)", modelClass, count);
+//			}
+//				
+			String qlString = "";
+			
+			if (properties != null && properties.isEmpty() == false) {
+				qlString = qlString + " where " + sqlProperties(properties);
 			}
+			
+			TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(o) FROM "+modelClass.getName()+" o "+qlString, Long.class);
+			
+			if (properties != null && properties.isEmpty() == false) {
+				for (Map.Entry<String, Object> entry : properties.entrySet()) {
+					if (entry.getValue() != null) {
+						query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());
+					}
+				}
+			}
+			
+			long count = query.getSingleResult();
 
-			return count.equals(0L) ? false : true;
+			return count > 0 ? true : false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -355,7 +374,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findDtoAll(Class modelClass) throws Exception {
+	public <T extends Collection> T findAllDto(Class modelClass) throws Exception {
 
 		try {
 			List<Object> models = getCachedResultList(null, null, null, null, modelClass);
@@ -493,7 +512,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public void deleteAll(Class modelClass) throws BusinessException {
 		try {
-			List<Object> models = findDtoAll(modelClass);
+			List<Object> models = findAllDto(modelClass);
 			for (Object model : models) {
 				delete(model);
 			}

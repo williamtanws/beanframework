@@ -18,8 +18,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
-import com.beanframework.backoffice.WebEmployeeConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeFacade;
@@ -41,7 +41,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 	@Autowired
 	private EmployeeFacade employeeFacade;
 
-	@Value(WebBackofficeConstants.Authority.BACKOFFICE)
+	@Value(BackofficeWebConstants.Authority.BACKOFFICE)
 	private String BACKOFFICE_ACCESS;
 
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -52,15 +52,15 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 		try {
 			employee = employeeFacade.findDtoAuthenticate(id, password);
 		} catch (BadCredentialsException e) {
-			throw new BadCredentialsException(localeMessageService.getMessage(WebBackofficeConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
+			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		} catch (DisabledException e) {
-			throw new DisabledException(localeMessageService.getMessage(WebEmployeeConstants.Locale.ACCOUNT_DISABLED));
+			throw new DisabledException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_DISABLED));
 		} catch (AccountExpiredException e) {
-			throw new AccountExpiredException(localeMessageService.getMessage(WebEmployeeConstants.Locale.ACCOUNT_EXPIRED));
+			throw new AccountExpiredException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_EXPIRED));
 		} catch (LockedException e) {
-			throw new LockedException(localeMessageService.getMessage(WebEmployeeConstants.Locale.ACCOUNT_LOCKED));
+			throw new LockedException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_LOCKED));
 		} catch (CredentialsExpiredException e) {
-			throw new CredentialsExpiredException(localeMessageService.getMessage(WebEmployeeConstants.Locale.ACCOUNT_PASSWORD_EXPIRED));
+			throw new CredentialsExpiredException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_PASSWORD_EXPIRED));
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AuthenticationServiceException(e.getMessage(), e);

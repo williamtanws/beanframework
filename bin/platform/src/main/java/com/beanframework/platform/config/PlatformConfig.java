@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -47,7 +46,6 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableAsync
 @EnableJpaAuditing
-@EnableCaching
 @PropertySource("file:../../config/src/main/resources/application.properties")
 @Order(0)
 public class PlatformConfig {

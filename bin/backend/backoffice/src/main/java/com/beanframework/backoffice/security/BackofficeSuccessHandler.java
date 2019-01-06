@@ -15,12 +15,12 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
 
 @Component
 public class BackofficeSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-	@Value(WebBackofficeConstants.Path.BACKOFFICE)
+	@Value(BackofficeWebConstants.Path.BACKOFFICE)
 	private String PATH_BACKOFFICE;
 
 	private RequestCache requestCache = new HttpSessionRequestCache();

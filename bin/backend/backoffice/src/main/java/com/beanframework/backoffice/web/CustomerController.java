@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
-import com.beanframework.backoffice.WebCustomerConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.CustomerWebConstants;
 import com.beanframework.backoffice.data.CustomerSearch;
 import com.beanframework.backoffice.data.CustomerSpecification;
 import com.beanframework.common.controller.AbstractController;
@@ -46,27 +46,27 @@ public class CustomerController extends AbstractController {
 	@Autowired
 	private UserGroupFacade userGroupFacade;
 
-	@Value(WebCustomerConstants.Path.CUSTOMER)
+	@Value(CustomerWebConstants.Path.CUSTOMER)
 	private String PATH_CUSTOMER;
 
-	@Value(WebCustomerConstants.View.LIST)
+	@Value(CustomerWebConstants.View.LIST)
 	private String VIEW_CUSTOMER_LIST;
 
-	@Value(WebCustomerConstants.LIST_SIZE)
+	@Value(CustomerWebConstants.LIST_SIZE)
 	private int MODULE_CUSTOMER_LIST_SIZE;
 
 	private Page<Customer> getPagination(CustomerSearch customerSearch, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
-		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
+		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
+		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_CUSTOMER_LIST_SIZE : size;
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.PROPERTIES));
+		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
 		String[] properties = StringUtils.isBlank(propertiesStr) ? null
-				: propertiesStr.split(WebBackofficeConstants.Pagination.PROPERTIES_SPLIT);
+				: propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
 
-		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
+		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 		
 		if (properties == null) {
@@ -78,8 +78,8 @@ public class CustomerController extends AbstractController {
 		Page<Customer> pagination = customerFacade.findPage(CustomerSpecification.findByCriteria(customerSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
-		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
-		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
+		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
+		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
 
 		return pagination;
 	}
@@ -90,45 +90,45 @@ public class CustomerController extends AbstractController {
 		customerSearch.setSearchAll((String)requestParams.get("customerSearch.searchAll"));
 		customerSearch.setId((String)requestParams.get("customerSearch.id"));
 		
-		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
+		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
+		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_CUSTOMER_LIST_SIZE : size;
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.PROPERTIES));
-		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
+		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
+		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
 
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PAGE, page);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.PAGE, page);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.SIZE, size);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
 		redirectAttributes.addAttribute("searchAll", customerSearch.getSearchAll());
 		redirectAttributes.addAttribute("id", customerSearch.getId());
 
 		return redirectAttributes;
 	}
 
-	@ModelAttribute(WebCustomerConstants.ModelAttribute.CREATE)
+	@ModelAttribute(CustomerWebConstants.ModelAttribute.CREATE)
 	public Customer populateCustomerCreate(HttpServletRequest request) throws Exception {
 		return customerFacade.create();
 	}
 
-	@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE)
+	@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE)
 	public Customer populateCustomerForm(HttpServletRequest request) throws Exception {
 		return customerFacade.create();
 	}
 
-	@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH)
+	@ModelAttribute(CustomerWebConstants.ModelAttribute.SEARCH)
 	public CustomerSearch populateCustomerSearch(HttpServletRequest request) {
 		return new CustomerSearch();
 	}
 
-	@GetMapping(value = WebCustomerConstants.Path.CUSTOMER)
-	public String list(@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
-			@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
+	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER)
+	public String list(@ModelAttribute(CustomerWebConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
+			@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(customerSearch, model, requestParams));
+		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(customerSearch, model, requestParams));
 
 		if (customerUpdate.getUuid() != null) {
 
@@ -150,25 +150,25 @@ public class CustomerController extends AbstractController {
 				}
 				existingCustomer.setUserGroups(userGroups);
 
-				model.addAttribute(WebCustomerConstants.ModelAttribute.UPDATE, existingCustomer);
+				model.addAttribute(CustomerWebConstants.ModelAttribute.UPDATE, existingCustomer);
 			} else {
 				customerUpdate.setUuid(null);
-				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
+				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 
 		return VIEW_CUSTOMER_LIST;
 	}
 
-	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "create")
+	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "create")
 	public RedirectView create(
-			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
-			@ModelAttribute(WebCustomerConstants.ModelAttribute.CREATE) Customer customerCreate, Model model,
+			@ModelAttribute(CustomerWebConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
+			@ModelAttribute(CustomerWebConstants.ModelAttribute.CREATE) Customer customerCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (customerCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
 
@@ -183,7 +183,7 @@ public class CustomerController extends AbstractController {
 			try {
 				customerCreate = customerFacade.createDto(customerCreate);
 
-				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
@@ -198,15 +198,15 @@ public class CustomerController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "update")
+	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "update")
 	public RedirectView update(
-			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
-			@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
+			@ModelAttribute(CustomerWebConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
+			@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (customerUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
 
@@ -221,7 +221,7 @@ public class CustomerController extends AbstractController {
 			try {
 				customerUpdate = customerFacade.updateDto(customerUpdate);
 
-				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
@@ -236,20 +236,20 @@ public class CustomerController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebCustomerConstants.Path.CUSTOMER, params = "delete")
+	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "delete")
 	public RedirectView delete(
-			@ModelAttribute(WebCustomerConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
-			@ModelAttribute(WebCustomerConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
+			@ModelAttribute(CustomerWebConstants.ModelAttribute.SEARCH) CustomerSearch customerSearch,
+			@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE) Customer customerUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
 			customerFacade.delete(customerUpdate.getUuid());
 
-			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(Customer.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(WebCustomerConstants.ModelAttribute.UPDATE, customerUpdate);
+			redirectAttributes.addFlashAttribute(CustomerWebConstants.ModelAttribute.UPDATE, customerUpdate);
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, customerSearch);

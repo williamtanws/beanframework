@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,9 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.UserGroupCsv;
 import com.beanframework.console.registry.Importer;
+import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.domain.UserGroupField;
 
 @Component
 public class EntityUserGroupImporterConverter implements EntityConverter<UserGroupCsv, UserGroup> {
@@ -62,30 +63,42 @@ public class EntityUserGroupImporterConverter implements EntityConverter<UserGro
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split(Importer.EQUALS)[0];
 					String value = dynamicField.split(Importer.EQUALS)[1];
+
+					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
 							prototype.getFields().get(i).setValue(value);
+							add = false;
 						}
+					}
+
+					if (add) {
+						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
+						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
+						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
+
+						UserGroupField field = modelService.create(UserGroupField.class);
+						field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
+						field.setValue(value);
+						field.setDynamicField(entityDynamicField);
+						field.setUserGroup(prototype);
+						prototype.getFields().add(field);
 					}
 				}
 			}
 
 			// User Group
-			if (StringUtils.isNotBlank(source.getUserGroupIds())) {
+			if (source.getUserGroupIds() != null) {
 				String[] userGroupIds = source.getUserGroupIds().split(Importer.SPLITTER);
 				for (int i = 0; i < userGroupIds.length; i++) {
-					if (userGroupIds[i].equalsIgnoreCase(source.getId())) {
-						LOGGER.error("UserGroupIds cannot assign to itself: " + userGroupIds[i]);
-					} else {
-						Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-						userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-						UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 
-						if (userGroup == null) {
-							LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-						} else {
-							prototype.getUserGroups().add(userGroup);
-						}
+					if (userGroup == null) {
+						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+					} else {
+						prototype.getUserGroups().add(userGroup);
 					}
 				}
 			}
