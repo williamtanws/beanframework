@@ -27,7 +27,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityUserRightImporterConverter;
 import com.beanframework.console.csv.UserRightCsv;
 import com.beanframework.console.registry.Importer;
@@ -50,10 +50,10 @@ public class UserRightImporter extends Importer {
 
 	@PostConstruct
 	public void importer() {
-		setKey(WebPlatformUpdateConstants.Importer.UserRight.KEY);
-		setName(WebPlatformUpdateConstants.Importer.UserRight.NAME);
-		setSort(WebPlatformUpdateConstants.Importer.UserRight.SORT);
-		setDescription(WebPlatformUpdateConstants.Importer.UserRight.DESCRIPTION);
+		setKey(PlatformUpdateWebConstants.Importer.UserRightImporter.KEY);
+		setName(PlatformUpdateWebConstants.Importer.UserRightImporter.NAME);
+		setSort(PlatformUpdateWebConstants.Importer.UserRightImporter.SORT);
+		setDescription(PlatformUpdateWebConstants.Importer.UserRightImporter.DESCRIPTION);
 	}
 
 	@Override
@@ -124,9 +124,7 @@ public class UserRightImporter extends Importer {
 	public void save(List<UserRightCsv> csvList) throws Exception {
 
 		for (UserRightCsv csv : csvList) {
-
 			UserRight model = converter.convert(csv);
-
 			modelService.saveEntity(model, UserRight.class);
 		}
 	}

@@ -16,7 +16,9 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.MenuCsv;
 import com.beanframework.console.registry.Importer;
+import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.domain.MenuTargetTypeEnum;
 import com.beanframework.user.domain.UserGroup;
 
@@ -101,10 +103,27 @@ public class EntityMenuImporterConverter implements EntityConverter<MenuCsv, Men
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split(Importer.EQUALS)[0];
 					String value = dynamicField.split(Importer.EQUALS)[1];
+
+					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
 							prototype.getFields().get(i).setValue(value);
+							add = false;
 						}
+					}
+					
+					if(add) {
+						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
+						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
+						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
+						
+						
+						MenuField field = modelService.create(MenuField.class);
+						field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
+						field.setValue(value);
+						field.setDynamicField(entityDynamicField);
+						field.setMenu(prototype);
+						prototype.getFields().add(field);
 					}
 				}
 			}

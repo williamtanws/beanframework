@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.console.WebConfigurationConstants;
-import com.beanframework.console.WebConsoleConstants;
+import com.beanframework.console.ConfigurationWebConstants;
+import com.beanframework.console.ConsoleWebConstants;
 
 @RestController
 public class ConfigurationResource {
@@ -22,17 +22,17 @@ public class ConfigurationResource {
 	@Autowired
 	private ModelService modelService;
 
-	@GetMapping(WebConfigurationConstants.Path.Api.CHECKID)
+	@GetMapping(ConfigurationWebConstants.Path.Api.CHECKID)
 	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		String id = requestParams.get(WebConsoleConstants.Param.ID).toString();
+		String id = requestParams.get(ConsoleWebConstants.Param.ID).toString();
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
 		
 		Configuration configuration = modelService.findOneEntityByProperties(properties, Configuration.class);
 
-		String uuidStr = (String) requestParams.get(WebConsoleConstants.Param.UUID);
+		String uuidStr = (String) requestParams.get(ConsoleWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (configuration != null && configuration.getUuid().equals(uuid)) {

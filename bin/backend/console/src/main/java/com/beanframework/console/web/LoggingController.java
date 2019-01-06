@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.beanframework.console.WebLoggingConstants;
+import com.beanframework.console.LoggingWebConstants;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -29,31 +29,31 @@ import ch.qos.logback.classic.LoggerContext;
 @Controller
 public class LoggingController {
 
-	@Value(WebLoggingConstants.Location.LOGGING)
+	@Value(LoggingWebConstants.Location.LOGGING)
 	private String LOG_DIR;
 
-	@Value(WebLoggingConstants.View.LOGGING_LEVEL)
+	@Value(LoggingWebConstants.View.LOGGING_LEVEL)
 	private String VIEW_LOGGING_LEVEL;
 	
-	@Value(WebLoggingConstants.View.LOGGING_TAIL)
+	@Value(LoggingWebConstants.View.LOGGING_TAIL)
 	private String VIEW_LOGGING_TAIL;
 	
-	@Value(WebLoggingConstants.Path.LOGGING_TAIL)
+	@Value(LoggingWebConstants.Path.LOGGING_TAIL)
 	private String Path_LOGGING_TAIL;
 
-	@RequestMapping(value = WebLoggingConstants.Path.LOGGING, method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = LoggingWebConstants.Path.LOGGING, method = { RequestMethod.GET, RequestMethod.POST })
 	public String logging(Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return "redirect:" + Path_LOGGING_TAIL + "?level=all";
 	}
 
-	@RequestMapping(value = WebLoggingConstants.Path.LOGGING_TAIL, method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = LoggingWebConstants.Path.LOGGING_TAIL, method = { RequestMethod.GET, RequestMethod.POST })
 	public String tail(Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_LOGGING_TAIL;
 	}
 
-	@RequestMapping(value = WebLoggingConstants.Path.LOGGING_DOWNLOAD, method = { RequestMethod.GET,
+	@RequestMapping(value = LoggingWebConstants.Path.LOGGING_DOWNLOAD, method = { RequestMethod.GET,
 			RequestMethod.POST })
 	public ResponseEntity<byte[]> download(Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
@@ -76,7 +76,7 @@ public class LoggingController {
 		return null;
 	}
 
-	@RequestMapping(value = WebLoggingConstants.Path.LOGGING_LEVEL, method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = LoggingWebConstants.Path.LOGGING_LEVEL, method = { RequestMethod.GET, RequestMethod.POST })
 	public String level(Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request) {
 

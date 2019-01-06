@@ -27,7 +27,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityLanguageImporterConverter;
 import com.beanframework.console.csv.LanguageCsv;
 import com.beanframework.console.registry.Importer;
@@ -50,10 +50,10 @@ public class LanguageImporter extends Importer {
 
 	@PostConstruct
 	public void importer() {
-		setKey(WebPlatformUpdateConstants.Importer.Language.KEY);
-		setName(WebPlatformUpdateConstants.Importer.Language.NAME);
-		setSort(WebPlatformUpdateConstants.Importer.Language.SORT);
-		setDescription(WebPlatformUpdateConstants.Importer.Language.DESCRIPTION);
+		setKey(PlatformUpdateWebConstants.Importer.LanguageImporter.KEY);
+		setName(PlatformUpdateWebConstants.Importer.LanguageImporter.NAME);
+		setSort(PlatformUpdateWebConstants.Importer.LanguageImporter.SORT);
+		setDescription(PlatformUpdateWebConstants.Importer.LanguageImporter.DESCRIPTION);
 	}
 
 	@Override
@@ -99,12 +99,12 @@ public class LanguageImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			LanguageCsv csv;
-			LOGGER.info("Start import " + WebPlatformUpdateConstants.Importer.Language.NAME);
+			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.LanguageImporter.NAME);
 			while ((csv = beanReader.read(LanguageCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + WebPlatformUpdateConstants.Importer.Language.NAME);
+			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.LanguageImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

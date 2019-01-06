@@ -22,16 +22,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.data.domain.Sort;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.csv.UserAuthorityCsv;
 import com.beanframework.console.registry.Importer;
+import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.domain.UserPermission;
+import com.beanframework.user.domain.UserRight;
 
 public class UserAuthorityImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserAuthorityImporter.class);
@@ -47,10 +52,10 @@ public class UserAuthorityImporter extends Importer {
 	
 	@PostConstruct
 	public void importer() {
-		setKey(WebPlatformUpdateConstants.Importer.UserAuthority.KEY);
-		setName(WebPlatformUpdateConstants.Importer.UserAuthority.NAME);
-		setSort(WebPlatformUpdateConstants.Importer.UserAuthority.SORT);
-		setDescription(WebPlatformUpdateConstants.Importer.UserAuthority.DESCRIPTION);
+		setKey(PlatformUpdateWebConstants.Importer.UserAuthorityImporter.KEY);
+		setName(PlatformUpdateWebConstants.Importer.UserAuthorityImporter.NAME);
+		setSort(PlatformUpdateWebConstants.Importer.UserAuthorityImporter.SORT);
+		setDescription(PlatformUpdateWebConstants.Importer.UserAuthorityImporter.DESCRIPTION);
 	}
 
 	@Override
@@ -96,12 +101,12 @@ public class UserAuthorityImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			UserAuthorityCsv csv;
-			LOGGER.info("Start import " + WebPlatformUpdateConstants.Importer.UserAuthority.NAME);
+			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.UserAuthorityImporter.NAME);
 			while ((csv = beanReader.read(UserAuthorityCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + WebPlatformUpdateConstants.Importer.UserAuthority.NAME);
+			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.UserAuthorityImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -146,8 +151,8 @@ public class UserAuthorityImporter extends Importer {
 			if (userGroup == null) {
 				LOGGER.error("userGroupId not exists: " + userGroupId);
 			} else {
-
-				Hibernate.initialize(userGroup.getUserAuthorities());
+				
+				generateUserAuthority(userGroup);
 
 				for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
 					Hibernate.initialize(userGroup.getUserAuthorities().get(i).getUserRight());
@@ -170,9 +175,51 @@ public class UserAuthorityImporter extends Importer {
 						}
 					}
 				}
-
+				
 				modelService.saveEntity(userGroup, UserGroup.class);
 			}
+		}
+	}
+	
+	private void generateUserAuthority(UserGroup model) throws InterceptorException {
+		try {
+			Hibernate.initialize(model.getUserAuthorities());
+
+			Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
+			userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
+			List<UserPermission> userPermissions = modelService.findEntityBySorts(userPermissionSorts, UserPermission.class);
+
+			Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
+			userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
+			List<UserRight> userRights = modelService.findEntityBySorts(userRightSorts, UserRight.class);
+
+			for (UserPermission userPermission : userPermissions) {
+				for (UserRight userRight : userRights) {
+
+					String authorityId = model.getId() + "_" + userPermission.getId() + "_" + userRight.getId();
+
+					boolean add = true;
+					if (model.getUserAuthorities() != null && model.getUserAuthorities().isEmpty() == false) {
+						for (UserAuthority userAuthority : model.getUserAuthorities()) {
+							if (userAuthority.getId().equals(authorityId)) {
+								add = false;
+							}
+						}
+					}
+
+					if (add) {
+						UserAuthority userAuthority = modelService.create(UserAuthority.class);
+						userAuthority.setId(authorityId);
+						userAuthority.setUserPermission(userPermission);
+						userAuthority.setUserRight(userRight);
+
+						userAuthority.setUserGroup(model);
+						model.getUserAuthorities().add(userAuthority);
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new InterceptorException(e.getMessage(), e);
 		}
 	}
 	

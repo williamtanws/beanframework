@@ -26,8 +26,8 @@ import com.beanframework.admin.service.AdminFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
-import com.beanframework.console.WebAdminConstants;
-import com.beanframework.console.WebConsoleConstants;
+import com.beanframework.console.AdminWebConstants;
+import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.data.AdminSearch;
 import com.beanframework.console.data.AdminSpecification;
 
@@ -37,26 +37,26 @@ public class AdminController extends AbstractController {
 	@Autowired
 	private AdminFacade adminFacade;
 
-	@Value(WebAdminConstants.Path.ADMIN)
+	@Value(AdminWebConstants.Path.ADMIN)
 	private String PATH_ADMIN;
 
-	@Value(WebAdminConstants.View.LIST)
+	@Value(AdminWebConstants.View.LIST)
 	private String VIEW_ADMIN_LIST;
 
-	@Value(WebAdminConstants.LIST_SIZE)
+	@Value(AdminWebConstants.LIST_SIZE)
 	private int MODULE_ADMIN_LIST_SIZE;
 
 	private Page<Admin> getPagination(AdminSearch adminSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
+		int page = ParamUtils.parseInt(requestParams.get(ConsoleWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
+		int size = ParamUtils.parseInt(requestParams.get(ConsoleWebConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_ADMIN_LIST_SIZE : size;
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.PROPERTIES));
+		String propertiesStr = ParamUtils.parseString(requestParams.get(ConsoleWebConstants.Pagination.PROPERTIES));
 		String[] properties = StringUtils.isBlank(propertiesStr) ? null
-				: propertiesStr.split(WebConsoleConstants.Pagination.PROPERTIES_SPLIT);
+				: propertiesStr.split(ConsoleWebConstants.Pagination.PROPERTIES_SPLIT);
 
-		String directionStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.DIRECTION));
+		String directionStr = ParamUtils.parseString(requestParams.get(ConsoleWebConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
 		if (properties == null) {
@@ -68,8 +68,8 @@ public class AdminController extends AbstractController {
 		Page<Admin> pagination = adminFacade.findDtoPage(AdminSpecification.findByCriteria(adminSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
-		model.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
-		model.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
+		model.addAttribute(ConsoleWebConstants.Pagination.PROPERTIES, propertiesStr);
+		model.addAttribute(ConsoleWebConstants.Pagination.DIRECTION, directionStr);
 
 		return pagination;
 	}
@@ -80,74 +80,74 @@ public class AdminController extends AbstractController {
 		adminSearch.setSearchAll((String)requestParams.get("adminSearch.searchAll"));
 		adminSearch.setId((String)requestParams.get("adminSearch.id"));
 		
-		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
+		int page = ParamUtils.parseInt(requestParams.get(ConsoleWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
+		int size = ParamUtils.parseInt(requestParams.get(ConsoleWebConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_ADMIN_LIST_SIZE : size;
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.PROPERTIES));
-		String directionStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.DIRECTION));
+		String propertiesStr = ParamUtils.parseString(requestParams.get(ConsoleWebConstants.Pagination.PROPERTIES));
+		String directionStr = ParamUtils.parseString(requestParams.get(ConsoleWebConstants.Pagination.DIRECTION));
 
-		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.PAGE, page);
-		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.SIZE, size);
-		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
-		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
+		redirectAttributes.addAttribute(ConsoleWebConstants.Pagination.PAGE, page);
+		redirectAttributes.addAttribute(ConsoleWebConstants.Pagination.SIZE, size);
+		redirectAttributes.addAttribute(ConsoleWebConstants.Pagination.PROPERTIES, propertiesStr);
+		redirectAttributes.addAttribute(ConsoleWebConstants.Pagination.DIRECTION, directionStr);
 		redirectAttributes.addAttribute("searchAll", adminSearch.getSearchAll());
 		redirectAttributes.addAttribute("id", adminSearch.getId());
 
 		return redirectAttributes;
 	}
 
-	@ModelAttribute(WebAdminConstants.ModelAttribute.CREATE)
+	@ModelAttribute(AdminWebConstants.ModelAttribute.CREATE)
 	public Admin populateAdminCreate(HttpServletRequest request) throws Exception {
 		return adminFacade.create();
 	}
 
-	@ModelAttribute(WebAdminConstants.ModelAttribute.UPDATE)
+	@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE)
 	public Admin populateAdminForm(HttpServletRequest request) throws Exception {
 		return adminFacade.create();
 	}
 
-	@ModelAttribute(WebAdminConstants.ModelAttribute.SEARCH)
+	@ModelAttribute(AdminWebConstants.ModelAttribute.SEARCH)
 	public AdminSearch populateAdminSearch(HttpServletRequest request) {
 		return new AdminSearch();
 	}
 
-	@GetMapping(value = WebAdminConstants.Path.ADMIN)
-	public String list(@ModelAttribute(WebAdminConstants.ModelAttribute.SEARCH) AdminSearch adminSearch,
-			@ModelAttribute(WebAdminConstants.ModelAttribute.UPDATE) Admin adminUpdate, Model model,
+	@GetMapping(value = AdminWebConstants.Path.ADMIN)
+	public String list(@ModelAttribute(AdminWebConstants.ModelAttribute.SEARCH) AdminSearch adminSearch,
+			@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE) Admin adminUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(adminSearch, model, requestParams));
+		model.addAttribute(ConsoleWebConstants.PAGINATION, getPagination(adminSearch, model, requestParams));
 
 		if (adminUpdate.getUuid() != null) {
 			Admin existingAdmin = adminFacade.findOneDtoByUuid(adminUpdate.getUuid());
 
 			if (existingAdmin != null) {
-				model.addAttribute(WebAdminConstants.ModelAttribute.UPDATE, existingAdmin);
+				model.addAttribute(AdminWebConstants.ModelAttribute.UPDATE, existingAdmin);
 			} else {
 				adminUpdate.setUuid(null);
-				addErrorMessage(model, WebConsoleConstants.Locale.RECORD_UUID_NOT_FOUND);
+				addErrorMessage(model, ConsoleWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 
 		return VIEW_ADMIN_LIST;
 	}
 
-	@PostMapping(value = WebAdminConstants.Path.ADMIN, params = "create")
-	public RedirectView create(@ModelAttribute(WebAdminConstants.ModelAttribute.SEARCH) AdminSearch adminSearch,
-			@ModelAttribute(WebAdminConstants.ModelAttribute.CREATE) Admin adminCreate, Model model,
+	@PostMapping(value = AdminWebConstants.Path.ADMIN, params = "create")
+	public RedirectView create(@ModelAttribute(AdminWebConstants.ModelAttribute.SEARCH) AdminSearch adminSearch,
+			@ModelAttribute(AdminWebConstants.ModelAttribute.CREATE) Admin adminCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (adminCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR,
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
 				adminCreate = adminFacade.createDto(adminCreate);
 
-				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(Admin.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
@@ -162,20 +162,20 @@ public class AdminController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebAdminConstants.Path.ADMIN, params = "update")
-	public RedirectView update(@ModelAttribute(WebAdminConstants.ModelAttribute.SEARCH) AdminSearch adminSearch,
-			@ModelAttribute(WebAdminConstants.ModelAttribute.UPDATE) Admin adminUpdate, Model model,
+	@PostMapping(value = AdminWebConstants.Path.ADMIN, params = "update")
+	public RedirectView update(@ModelAttribute(AdminWebConstants.ModelAttribute.SEARCH) AdminSearch adminSearch,
+			@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE) Admin adminUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (adminUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR,
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
 			try {
 				adminUpdate = adminFacade.saveDto(adminUpdate);
 
-				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(Admin.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
@@ -190,19 +190,19 @@ public class AdminController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebAdminConstants.Path.ADMIN, params = "delete")
-	public RedirectView delete(@ModelAttribute(WebAdminConstants.ModelAttribute.SEARCH) AdminSearch adminSearch,
-			@ModelAttribute(WebAdminConstants.ModelAttribute.UPDATE) Admin adminUpdate, Model model,
+	@PostMapping(value = AdminWebConstants.Path.ADMIN, params = "delete")
+	public RedirectView delete(@ModelAttribute(AdminWebConstants.ModelAttribute.SEARCH) AdminSearch adminSearch,
+			@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE) Admin adminUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
 			adminFacade.delete(adminUpdate.getUuid());
 
-			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
+			addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(Admin.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(WebAdminConstants.ModelAttribute.UPDATE, adminUpdate);
+			redirectAttributes.addFlashAttribute(AdminWebConstants.ModelAttribute.UPDATE, adminUpdate);
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, adminSearch);

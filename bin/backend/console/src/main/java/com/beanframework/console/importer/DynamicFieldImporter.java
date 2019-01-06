@@ -27,7 +27,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityDynamicFieldImporterConverter;
 import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.Importer;
@@ -50,10 +50,10 @@ public class DynamicFieldImporter extends Importer {
 
 	@PostConstruct
 	public void importer() {
-		setKey(WebPlatformUpdateConstants.Importer.DynamicField.KEY);
-		setName(WebPlatformUpdateConstants.Importer.DynamicField.NAME);
-		setSort(WebPlatformUpdateConstants.Importer.DynamicField.SORT);
-		setDescription(WebPlatformUpdateConstants.Importer.DynamicField.DESCRIPTION);
+		setKey(PlatformUpdateWebConstants.Importer.DynamicFieldImporter.KEY);
+		setName(PlatformUpdateWebConstants.Importer.DynamicFieldImporter.NAME);
+		setSort(PlatformUpdateWebConstants.Importer.DynamicFieldImporter.SORT);
+		setDescription(PlatformUpdateWebConstants.Importer.DynamicFieldImporter.DESCRIPTION);
 	}
 
 	@Override
@@ -99,12 +99,12 @@ public class DynamicFieldImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			DynamicFieldCsv csv;
-			LOGGER.info("Start import " + WebPlatformUpdateConstants.Importer.DynamicField.NAME);
+			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.DynamicFieldImporter.NAME);
 			while ((csv = beanReader.read(DynamicFieldCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + WebPlatformUpdateConstants.Importer.DynamicField.NAME);
+			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.DynamicFieldImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

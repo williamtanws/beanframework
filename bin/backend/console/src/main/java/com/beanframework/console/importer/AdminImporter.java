@@ -28,7 +28,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityAdminImporterConverter;
 import com.beanframework.console.csv.AdminCsv;
 import com.beanframework.console.registry.Importer;
@@ -50,10 +50,10 @@ public class AdminImporter extends Importer {
 
 	@PostConstruct
 	public void importer() {
-		setKey(WebPlatformUpdateConstants.Importer.Admin.KEY);
-		setName(WebPlatformUpdateConstants.Importer.Admin.NAME);
-		setSort(WebPlatformUpdateConstants.Importer.Admin.SORT);
-		setDescription(WebPlatformUpdateConstants.Importer.Admin.DESCRIPTION);
+		setKey(PlatformUpdateWebConstants.Importer.AdminImporter.KEY);
+		setName(PlatformUpdateWebConstants.Importer.AdminImporter.NAME);
+		setSort(PlatformUpdateWebConstants.Importer.AdminImporter.SORT);
+		setDescription(PlatformUpdateWebConstants.Importer.AdminImporter.DESCRIPTION);
 	}
 
 	@Override
@@ -99,12 +99,12 @@ public class AdminImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			AdminCsv csv;
-			LOGGER.info("Start import "+WebPlatformUpdateConstants.Importer.Admin.NAME);
+			LOGGER.info("Start import "+PlatformUpdateWebConstants.Importer.AdminImporter.NAME);
 			while ((csv = beanReader.read(AdminCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+WebPlatformUpdateConstants.Importer.Admin.NAME);
+			LOGGER.info("Finished import "+PlatformUpdateWebConstants.Importer.AdminImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

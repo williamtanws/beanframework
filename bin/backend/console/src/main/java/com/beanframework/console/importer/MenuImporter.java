@@ -27,7 +27,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityMenuImporterConverter;
 import com.beanframework.console.csv.MenuCsv;
 import com.beanframework.console.registry.Importer;
@@ -50,10 +50,10 @@ public class MenuImporter extends Importer {
 
 	@PostConstruct
 	public void importer() {
-		setKey(WebPlatformUpdateConstants.Importer.Menu.KEY);
-		setName(WebPlatformUpdateConstants.Importer.Menu.NAME);
-		setSort(WebPlatformUpdateConstants.Importer.Menu.SORT);
-		setDescription(WebPlatformUpdateConstants.Importer.Menu.DESCRIPTION);
+		setKey(PlatformUpdateWebConstants.Importer.MenuImporter.KEY);
+		setName(PlatformUpdateWebConstants.Importer.MenuImporter.NAME);
+		setSort(PlatformUpdateWebConstants.Importer.MenuImporter.SORT);
+		setDescription(PlatformUpdateWebConstants.Importer.MenuImporter.DESCRIPTION);
 	}
 
 	@Override
@@ -99,12 +99,12 @@ public class MenuImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			MenuCsv csv;
-			LOGGER.info("Start import "+WebPlatformUpdateConstants.Importer.Menu.NAME);
+			LOGGER.info("Start import "+PlatformUpdateWebConstants.Importer.MenuImporter.NAME);
 			while ((csv = beanReader.read(MenuCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+WebPlatformUpdateConstants.Importer.Menu.NAME);
+			LOGGER.info("Finished import "+PlatformUpdateWebConstants.Importer.MenuImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -126,113 +126,6 @@ public class MenuImporter extends Importer {
 		for (MenuCsv csv : csvList) {
 			Menu menu = converter.convert(csv);
 			modelService.saveEntity(menu, Menu.class);
-//			// Menu
-//
-//			Map<String, Object> properties = new HashMap<String, Object>();
-//			properties.put(Menu.ID, csv.getId());
-//			Menu menu = modelService.findOneEntityByProperties(properties, Menu.class);
-//
-//			if (menu == null) {
-//				menu = modelService.create(Menu.class);
-//				menu.setId(csv.getId());
-//			} else {
-//				Hibernate.initialize(menu.getParent());
-//				Hibernate.initialize(menu.getUserGroups());
-//			}
-//
-//			menu.setSort(csv.getSort());
-//			menu.setIcon(csv.getIcon());
-//			menu.setPath(csv.getPath());
-//			if (StringUtils.isBlank(csv.getTarget())) {
-//				menu.setTarget(MenuTargetTypeEnum.SELF);
-//			} else {
-//				menu.setTarget(MenuTargetTypeEnum.valueOf(csv.getTarget()));
-//			}
-//			menu.setEnabled(csv.isEnabled());
-//
-//			modelService.saveEntity(menu, Menu.class);
-//
-//			// Field
-//
-//			if (csv.getDynamicField() != null) {
-//				String[] dynamicFields = csv.getDynamicField().split(";");
-//				for (String dynamicField : dynamicFields) {
-//					String dynamicFieldId = dynamicField.split("=")[0];
-//					String value = dynamicField.split("=")[1];
-//					for (int i = 0; i < menu.getFields().size(); i++) {
-//						if (menu.getFields().get(i).getId().equals(menu.getId() + "_" + dynamicFieldId)) {
-//							menu.getFields().get(i).setValue(value);
-//						}
-//					}
-//				}
-//			}
-//
-//			modelService.saveEntity(menu, Menu.class);
-//
-//			// Old Parent
-//
-//			if (menu.getParent() != null) {
-//				Map<String, Object> parentProperties = new HashMap<String, Object>();
-//				parentProperties.put(Menu.UUID, menu.getParent().getUuid());
-//				Menu oldParent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
-//
-//				if (oldParent != null) {
-//
-//					Iterator<Menu> iterator = oldParent.getChilds().iterator();
-//
-//					while (iterator.hasNext()) {
-//						if (iterator.next().getUuid().equals(menu.getUuid())) {
-//							iterator.remove();
-//						}
-//					}
-//					modelService.saveEntity(oldParent, Menu.class);
-//				}
-//			}
-//
-//			// New Parent
-//
-//			if (StringUtils.isNotBlank(csv.getParent())) {
-//				Map<String, Object> parentProperties = new HashMap<String, Object>();
-//				parentProperties.put(Menu.ID, csv.getParent());
-//				Menu parent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
-//
-//				if (parent == null) {
-//					LOGGER.error("Parent not exists: " + csv.getParent());
-//				} else {
-//					Hibernate.initialize(parent.getChilds());
-//
-//					boolean addChild = true;
-//					for (Menu child : parent.getChilds()) {
-//						if (child.getUuid().equals(menu.getUuid())) {
-//							addChild = false;
-//						}
-//					}
-//					if (addChild) {
-//						menu.setParent(parent);
-//						parent.getChilds().add(menu);
-//						modelService.saveEntity(parent, Menu.class);
-//					}
-//				}
-//			}
-//
-//			// User Group
-//
-//			if (csv.getUserGroupIds() != null) {
-//				String[] userGroupIds = csv.getUserGroupIds().split(SPLITTER);
-//				for (int i = 0; i < userGroupIds.length; i++) {
-//					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-//					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-//					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-//
-//					if (userGroup == null) {
-//						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-//					} else {
-//						menu.getUserGroups().add(userGroup);
-//
-//						modelService.saveEntity(userGroup, UserGroup.class);
-//					}
-//				}
-//			}
 		}
 	}	
 	

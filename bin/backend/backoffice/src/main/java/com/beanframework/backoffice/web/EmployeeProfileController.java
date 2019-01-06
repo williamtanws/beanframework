@@ -27,8 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
-import com.beanframework.backoffice.WebEmployeeConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
@@ -48,32 +48,32 @@ public class EmployeeProfileController {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-	@Value(WebEmployeeConstants.Path.PROFILE)
+	@Value(EmployeeWebConstants.Path.PROFILE)
 	private String PATH_PROFILE;
 
-	@Value(WebEmployeeConstants.View.PROFILE)
+	@Value(EmployeeWebConstants.View.PROFILE)
 	private String VIEW_EMPLOYEE_PROFILE;
 	
 	@Value(EmployeeConstants.PROFILE_PICTURE_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
 
-	@ModelAttribute(WebEmployeeConstants.ModelAttribute.PROFILE)
+	@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE)
 	public Employee populateEmployeeForm(HttpServletRequest request) throws Exception {
 		return modelService.create(Employee.class);
 	}
 
-	@GetMapping(value = WebEmployeeConstants.Path.PROFILE)
-	public String profile(@ModelAttribute(WebEmployeeConstants.ModelAttribute.PROFILE) Employee employeeProfile,
+	@GetMapping(value = EmployeeWebConstants.Path.PROFILE)
+	public String profile(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) Employee employeeProfile,
 			Model model, @RequestParam Map<String, Object> requestParams) {
 
 		employeeProfile = employeeFacade.getCurrentUser();
 
-		model.addAttribute(WebEmployeeConstants.ModelAttribute.PROFILE, employeeProfile);
+		model.addAttribute(EmployeeWebConstants.ModelAttribute.PROFILE, employeeProfile);
 
 		return VIEW_EMPLOYEE_PROFILE;
 	}
 
-	@GetMapping(value = WebEmployeeConstants.Path.PROFILE_PICTURE)
+	@GetMapping(value = EmployeeWebConstants.Path.PROFILE_PICTURE)
 	public @ResponseBody byte[] getImage(@RequestParam Map<String, Object> requestParams) throws IOException {
 		Employee employee = employeeFacade.getCurrentUser();
 		
@@ -97,16 +97,16 @@ public class EmployeeProfileController {
 		return IOUtils.toByteArray(targetStream);
 	}
 
-	@PostMapping(value = WebEmployeeConstants.Path.PROFILE, params = "update")
-	public RedirectView update(@ModelAttribute(WebEmployeeConstants.ModelAttribute.PROFILE) Employee employeeProfile,
+	@PostMapping(value = EmployeeWebConstants.Path.PROFILE, params = "update")
+	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) Employee employeeProfile,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes, @RequestParam("picture") MultipartFile picture) {
 
 		try {
 			employeeProfile = employeeFacade.saveProfile(employeeProfile, picture);
 			
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.SUCCESS,
-					localeMessageService.getMessage(WebBackofficeConstants.Locale.SAVE_SUCCESS));
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS,
+					localeMessageService.getMessage(BackofficeWebConstants.Locale.SAVE_SUCCESS));
 		} catch (BusinessException e) {
 			bindingResult.reject(Employee.class.getSimpleName(), e.getMessage());
 			
@@ -119,7 +119,7 @@ public class EmployeeProfileController {
 				errorMessage.append(error.getDefaultMessage());
 			}
 
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR, errorMessage.toString());
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, errorMessage.toString());
 		}
 
 		RedirectView redirectView = new RedirectView();

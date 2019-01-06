@@ -1,5 +1,7 @@
 package com.beanframework.configuration.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,14 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	@Override
 	public Configuration findOneDtoByUuid(UUID uuid) throws Exception {
 		return modelService.findOneDtoByUuid(uuid, Configuration.class);
+	}
+	
+	@Override
+	public Configuration findOneDtoById(String id) throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, id);
+		
+		return modelService.findOneDtoByProperties(properties, Configuration.class);
 	}
 
 	@Override

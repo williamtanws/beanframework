@@ -21,8 +21,8 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.console.WebConsoleConstants;
-import com.beanframework.console.WebLicenseConstants;
+import com.beanframework.console.ConsoleWebConstants;
+import com.beanframework.console.LicenseWebConstants;
 
 @Controller
 public class LicenseController extends AbstractController {
@@ -30,16 +30,16 @@ public class LicenseController extends AbstractController {
 	@Autowired
 	private ModelService modelService;
 	
-	@Value(WebLicenseConstants.Path.LICENSE)
+	@Value(LicenseWebConstants.Path.LICENSE)
 	private String PATH_LICENSE;
 	
-	@Value(WebLicenseConstants.View.LICENSE)
+	@Value(LicenseWebConstants.View.LICENSE)
 	private String VIEW_LICENSE;
 
 	public boolean isLicenseAccepted() throws Exception {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Configuration.ID, WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+		properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 		
 		Configuration configuration = modelService.findOneDtoByProperties(properties, Configuration.class);
 		
@@ -52,39 +52,39 @@ public class LicenseController extends AbstractController {
 		}
 	}
 
-	@GetMapping(value = WebLicenseConstants.Path.LICENSE)
-	public String view(@ModelAttribute(WebLicenseConstants.ModelAttribute.LICENSE) Configuration configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
+	@GetMapping(value = LicenseWebConstants.Path.LICENSE)
+	public String view(@ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) Configuration configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Configuration.ID, WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+			properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			
 			configuration = modelService.findOneDtoByProperties(properties, Configuration.class);
 			if(configuration == null) {
 				configuration = modelService.create(Configuration.class);
 			}
 
-			model.addAttribute(WebLicenseConstants.Model.LICENSE, configuration);
+			model.addAttribute(LicenseWebConstants.Model.LICENSE, configuration);
 		} catch (Exception e) {
-			model.addAttribute(WebConsoleConstants.Model.ERROR, e.getMessage());
+			model.addAttribute(ConsoleWebConstants.Model.ERROR, e.getMessage());
 		}
 
 		return VIEW_LICENSE;
 	}
 
-	@PostMapping(value = WebLicenseConstants.Path.LICENSE)
-	public RedirectView accept(@ModelAttribute(WebLicenseConstants.ModelAttribute.LICENSE) Configuration configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
+	@PostMapping(value = LicenseWebConstants.Path.LICENSE)
+	public RedirectView accept(@ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) Configuration configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Configuration.ID, WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+			properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			
 			Configuration existingConfiguration = modelService.findOneDtoByProperties(properties, Configuration.class);
 						
 			if(existingConfiguration == null) {
 				existingConfiguration = modelService.create(Configuration.class);
-				existingConfiguration.setId(WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+				existingConfiguration.setId(LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			}
 			
 			if(BooleanUtils.parseBoolean(configuration.getValue())) {
@@ -95,7 +95,7 @@ public class LicenseController extends AbstractController {
 			}
 			
 			modelService.saveDto(existingConfiguration, Configuration.class);
-			addSuccessMessage(redirectAttributes, WebLicenseConstants.Locale.ACCEPT_SUCCESS);
+			addSuccessMessage(redirectAttributes, LicenseWebConstants.Locale.ACCEPT_SUCCESS);
 		} catch (Exception e) {
 			addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 		}

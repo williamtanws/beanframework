@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
-import com.beanframework.backoffice.WebUserGroupConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.UserGroupWebConstants;
 import com.beanframework.backoffice.data.UserGroupSearch;
 import com.beanframework.backoffice.data.UserGroupSpecification;
 import com.beanframework.common.controller.AbstractController;
@@ -52,26 +52,26 @@ public class UserGroupController extends AbstractController {
 	@Autowired
 	private UserPermissionFacade userPermissionFacade;
 
-	@Value(WebUserGroupConstants.Path.USERGROUP)
+	@Value(UserGroupWebConstants.Path.USERGROUP)
 	private String PATH_USERGROUP;
 
-	@Value(WebUserGroupConstants.View.LIST)
+	@Value(UserGroupWebConstants.View.LIST)
 	private String VIEW_USERGROUP_LIST;
 
-	@Value(WebUserGroupConstants.LIST_SIZE)
+	@Value(UserGroupWebConstants.LIST_SIZE)
 	private int MODULE_USERGROUP_LIST_SIZE;
 
 	private Page<UserGroup> getPagination(UserGroupSearch userGroupSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
+		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
+		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_USERGROUP_LIST_SIZE : size;
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.PROPERTIES));
+		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
 		String[] properties = StringUtils.isBlank(propertiesStr) ? null
-				: propertiesStr.split(WebBackofficeConstants.Pagination.PROPERTIES_SPLIT);
+				: propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
 
-		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
+		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 		
 		if (properties == null) {
@@ -83,8 +83,8 @@ public class UserGroupController extends AbstractController {
 		Page<UserGroup> pagination = userGroupFacade.findPage(UserGroupSpecification.findByCriteria(userGroupSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
-		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
-		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
+		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
+		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
 
 		return pagination;
 	}
@@ -95,45 +95,45 @@ public class UserGroupController extends AbstractController {
 		usergroupSearch.setSearchAll((String)requestParams.get("usergroupSearch.searchAll"));
 		usergroupSearch.setId((String)requestParams.get("usergroupSearch.id"));
 		
-		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
+		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
+		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_USERGROUP_LIST_SIZE : size;
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.PROPERTIES));
-		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
+		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
+		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
 
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PAGE, page);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.PAGE, page);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.SIZE, size);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
+		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
 		redirectAttributes.addAttribute("searchAll", usergroupSearch.getSearchAll());
 		redirectAttributes.addAttribute("id", usergroupSearch.getId());
 
 		return redirectAttributes;
 	}
 
-	@ModelAttribute(WebUserGroupConstants.ModelAttribute.CREATE)
+	@ModelAttribute(UserGroupWebConstants.ModelAttribute.CREATE)
 	public UserGroup populateUserGroupCreate(HttpServletRequest request) throws Exception {
 		return userGroupFacade.create();
 	}
 
-	@ModelAttribute(WebUserGroupConstants.ModelAttribute.UPDATE)
+	@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE)
 	public UserGroup populateUserGroupForm(HttpServletRequest request) throws Exception {
 		return userGroupFacade.create();
 	}
 
-	@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH)
+	@ModelAttribute(UserGroupWebConstants.ModelAttribute.SEARCH)
 	public UserGroupSearch populateUserGroupSearch(HttpServletRequest request) {
 		return new UserGroupSearch();
 	}
 
-	@GetMapping(value = WebUserGroupConstants.Path.USERGROUP)
-	public String list(@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
-			@ModelAttribute(WebUserGroupConstants.ModelAttribute.UPDATE) UserGroup usergroupUpdate, Model model,
+	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP)
+	public String list(@ModelAttribute(UserGroupWebConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
+			@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE) UserGroup usergroupUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(usergroupSearch, model, requestParams));
+		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(usergroupSearch, model, requestParams));
 
 		if (usergroupUpdate.getUuid() != null) {
 
@@ -176,30 +176,30 @@ public class UserGroupController extends AbstractController {
 				model.addAttribute("userRights", userRights);
 				model.addAttribute("userPermissions", userPermissions);
 				
-				model.addAttribute(WebUserGroupConstants.ModelAttribute.UPDATE, existingUserGroup);
+				model.addAttribute(UserGroupWebConstants.ModelAttribute.UPDATE, existingUserGroup);
 			} else {
 				usergroupUpdate.setUuid(null);
-				addErrorMessage(model, WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND);
+				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 		return VIEW_USERGROUP_LIST;
 	}
 
-	@PostMapping(value = WebUserGroupConstants.Path.USERGROUP, params = "create")
+	@PostMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "create")
 	public RedirectView create(
-			@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
-			@ModelAttribute(WebUserGroupConstants.ModelAttribute.CREATE) UserGroup usergroupCreate, Model model,
+			@ModelAttribute(UserGroupWebConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
+			@ModelAttribute(UserGroupWebConstants.ModelAttribute.CREATE) UserGroup usergroupCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (usergroupCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
 				usergroupCreate = userGroupFacade.createDto(usergroupCreate);
 
-				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(UserGroup.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
@@ -214,15 +214,15 @@ public class UserGroupController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebUserGroupConstants.Path.USERGROUP, params = "update")
+	@PostMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "update")
 	public RedirectView update(
-			@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
-			@ModelAttribute(WebUserGroupConstants.ModelAttribute.UPDATE) UserGroup usergroupUpdate, Model model,
+			@ModelAttribute(UserGroupWebConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
+			@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE) UserGroup usergroupUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (usergroupUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
 			
@@ -237,7 +237,7 @@ public class UserGroupController extends AbstractController {
 			try {
 				usergroupUpdate = userGroupFacade.updateDto(usergroupUpdate);
 
-				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(UserGroup.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
@@ -252,20 +252,20 @@ public class UserGroupController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebUserGroupConstants.Path.USERGROUP, params = "delete")
+	@PostMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "delete")
 	public RedirectView delete(
-			@ModelAttribute(WebUserGroupConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
-			@ModelAttribute(WebUserGroupConstants.ModelAttribute.UPDATE) UserGroup usergroupUpdate, Model model,
+			@ModelAttribute(UserGroupWebConstants.ModelAttribute.SEARCH) UserGroupSearch usergroupSearch,
+			@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE) UserGroup usergroupUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
 			userGroupFacade.delete(usergroupUpdate.getUuid());
 
-			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(UserGroup.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(WebUserGroupConstants.ModelAttribute.UPDATE, usergroupUpdate);
+			redirectAttributes.addFlashAttribute(UserGroupWebConstants.ModelAttribute.UPDATE, usergroupUpdate);
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, usergroupSearch);

@@ -41,16 +41,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.beanframework.backoffice.WebFilemanagerConstants;
+import com.beanframework.backoffice.FilemanagerWebConstants;
 
 @RestController
 public class FilemanagerResource {
 	
-	@Value(WebFilemanagerConstants.FILE_MANAGER_LOCATION)
+	@Value(FilemanagerWebConstants.FILE_MANAGER_LOCATION)
 	public String STORAGE;
 
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.READ)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_LIST)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_LIST)
 	public Object list(@RequestBody JSONObject json) throws ServletException {
 
 		try {
@@ -97,8 +97,8 @@ public class FilemanagerResource {
 	/**
 	 * Upload File
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.CREATE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_UPLOAD)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.CREATE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_UPLOAD)
 	public Object upload(@RequestParam("destination") String destination, HttpServletRequest request) {
 
 		try {
@@ -124,8 +124,8 @@ public class FilemanagerResource {
 	/**
 	 * File download/preview
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.READ)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_PREVIEW)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_PREVIEW)
 	public void preview(HttpServletResponse response, String path) throws IOException {
 
 		File file = new File(STORAGE, path);
@@ -154,8 +154,8 @@ public class FilemanagerResource {
 	/**
 	 * Create directory
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.CREATE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_CREATEFOLDER)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.CREATE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_CREATEFOLDER)
 	public Object createFolder(@RequestBody JSONObject json) {
 		try {
 			String newPath = json.getString("newPath");
@@ -172,8 +172,8 @@ public class FilemanagerResource {
 	/**
 	 * Modify file or directory
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.UPDATE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_CHANGEPERMISSIONS)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.UPDATE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_CHANGEPERMISSIONS)
 	public Object changePermissions(@RequestBody JSONObject json) {
 		try {
 
@@ -195,8 +195,8 @@ public class FilemanagerResource {
 	/**
 	 * Create File or directory
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.CREATE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_COPY)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.CREATE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_COPY)
 	public Object copy(@RequestBody JSONObject json, HttpServletRequest request) {
 		try {
 			String newpath = json.getString("newPath");
@@ -219,8 +219,8 @@ public class FilemanagerResource {
 	/**
 	 * Move files or directories
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.UPDATE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_MOVE)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.UPDATE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_MOVE)
 	public Object move(@RequestBody JSONObject json) {
 		try {
 			String newpath = json.getString("newPath");
@@ -247,8 +247,8 @@ public class FilemanagerResource {
 	/**
 	 * Delete file or directory
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.DELETE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_REMOVE)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.DELETE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_REMOVE)
 	public Object remove(@RequestBody JSONObject json) {
 		try {
 			JSONArray items = json.getJSONArray("items");
@@ -268,8 +268,8 @@ public class FilemanagerResource {
 	/**
 	 * Rename file or directory
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.UPDATE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_RENAME)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.UPDATE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_RENAME)
 	public Object rename(@RequestBody JSONObject json) {
 		try {
 			String path = json.getString("item");
@@ -291,8 +291,8 @@ public class FilemanagerResource {
 	/**
 	 * View the contents of the file, for html?txt, etc. Edit the file
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.CREATE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_GETCONTENT)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.CREATE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_GETCONTENT)
 	public Object getContent(@RequestBody JSONObject json) {
 		try {
 			String path = json.getString("item");
@@ -311,8 +311,8 @@ public class FilemanagerResource {
 	/**
 	 * Modify the contents of the file, for html?txt, etc. Edit the file
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.UPDATE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_EDIT)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.UPDATE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_EDIT)
 	public Object edit(@RequestBody JSONObject json) {
 		try {
 			String path = json.getString("item");
@@ -330,8 +330,8 @@ public class FilemanagerResource {
 	/**
 	 * File compression
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.UPDATE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_COMPRESS)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.UPDATE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_COMPRESS)
 	public Object compress(@RequestBody JSONObject json) {
 		try {
 			String destination = json.getString("destination");
@@ -357,8 +357,8 @@ public class FilemanagerResource {
 	/**
 	 * File decompression
 	 */
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.CREATE)
-	@RequestMapping(WebFilemanagerConstants.Path.Api.ANGULARFILEMANAGER_EXTRACT)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.CREATE)
+	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_EXTRACT)
 	public Object extract(@RequestBody JSONObject json) {
 		try {
 			String destination = json.getString("destination");

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
-import com.beanframework.backoffice.WebMenuConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.MenuWebConstants;
 import com.beanframework.backoffice.data.TreeJson;
 import com.beanframework.backoffice.data.TreeJsonState;
 import com.beanframework.common.exception.BusinessException;
@@ -30,16 +30,16 @@ public class MenuResource {
 	@Autowired
 	private MenuFacade menuFacade;
 
-	@RequestMapping(WebMenuConstants.Path.Api.CHECKID)
+	@RequestMapping(MenuWebConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		String id = (String) requestParams.get(WebBackofficeConstants.Param.ID);
+		String id = (String) requestParams.get(BackofficeWebConstants.Param.ID);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.ID, id);
 		Menu menu = menuFacade.findOneDtoByProperties(properties);
 
-		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
+		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (menu != null && menu.getUuid().equals(uuid)) {
@@ -50,9 +50,9 @@ public class MenuResource {
 		return menu != null ? "false" : "true";
 	}
 
-	@RequestMapping(WebMenuConstants.Path.Api.TREE)
+	@RequestMapping(MenuWebConstants.Path.Api.TREE)
 	public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams) throws BusinessException {
-		String uuid = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
+		String uuid = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 
 		List<Menu> rootMenu = menuFacade.findDtoMenuTree();
 		List<TreeJson> data = new ArrayList<TreeJson>();

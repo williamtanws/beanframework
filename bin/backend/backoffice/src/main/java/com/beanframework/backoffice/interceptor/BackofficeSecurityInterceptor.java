@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
@@ -63,7 +63,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 			throws BusinessException {
 		if (employee.getUserGroups().isEmpty() == false) {
 			List<Menu> menuNavigation = menuFacade.findDtoMenuTreeByCurrentUser();
-			modelAndView.getModelMap().addAttribute(WebBackofficeConstants.Model.MENU_NAVIGATION, menuNavigation);
+			modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MENU_NAVIGATION, menuNavigation);
 		}
 	}
 
@@ -72,6 +72,6 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 		sorts.put(Language.SORT, Sort.Direction.ASC);
 
 		List<Language> languages = modelService.findDtoBySorts(sorts, Language.class);
-		modelAndView.getModelMap().addAttribute(WebBackofficeConstants.Model.MODULE_LANGUAGES, languages);
+		modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MODULE_LANGUAGES, languages);
 	}
 }

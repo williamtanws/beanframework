@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
-import com.beanframework.backoffice.WebCustomerConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.CustomerWebConstants;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerFacade;
 
@@ -21,17 +21,17 @@ public class CustomerResource {
 	@Autowired
 	private CustomerFacade customerFacade;
 
-	@RequestMapping(WebCustomerConstants.Path.Api.CHECKID)
+	@RequestMapping(CustomerWebConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
+		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Customer.ID, id);
 
 		Customer customer = customerFacade.findOneDtoByProperties(properties);
 
-		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
+		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (customer != null && customer.getUuid().equals(uuid)) {

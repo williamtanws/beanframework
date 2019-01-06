@@ -14,7 +14,9 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.UserRightCsv;
 import com.beanframework.console.registry.Importer;
+import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.domain.UserRight;
+import com.beanframework.user.domain.UserRightField;
 
 @Component
 public class EntityUserRightImporterConverter implements EntityConverter<UserRightCsv, UserRight> {
@@ -62,10 +64,27 @@ public class EntityUserRightImporterConverter implements EntityConverter<UserRig
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split(Importer.EQUALS)[0];
 					String value = dynamicField.split(Importer.EQUALS)[1];
+					
+					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
 							prototype.getFields().get(i).setValue(value);
+							add = false;
 						}
+					}
+					
+					if(add) {
+						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
+						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
+						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
+						
+						
+						UserRightField field = modelService.create(UserRightField.class);
+						field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
+						field.setValue(value);
+						field.setDynamicField(entityDynamicField);
+						field.setUserRight(prototype);
+						prototype.getFields().add(field);
 					}
 				}
 			}

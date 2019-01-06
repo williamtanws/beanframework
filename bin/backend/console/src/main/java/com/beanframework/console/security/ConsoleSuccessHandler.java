@@ -11,12 +11,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.console.WebConsoleConstants;
+import com.beanframework.console.ConsoleWebConstants;
 
 @Component
 public class ConsoleSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-	@Value(WebConsoleConstants.Path.CONSOLE)
+	@Value(ConsoleWebConstants.Path.CONSOLE)
 	private String PATH_CONSOLE;
 
 	@Override

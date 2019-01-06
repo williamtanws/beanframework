@@ -3,6 +3,7 @@ package com.beanframework.backoffice.config;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -16,7 +17,9 @@ import com.beanframework.backoffice.interceptor.BackofficeSecurityInterceptor;
 import com.beanframework.user.domain.User;
 
 @Configuration
+@EnableCaching
 @EnableWebMvc
+//@ComponentScan(basePackages = { "com.beanframework.backoffice" })
 public class BackofficeMvcConfig implements WebMvcConfigurer{
 
 	@Value("${backoffice.webroot}")

@@ -26,8 +26,8 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationFacade;
-import com.beanframework.console.WebConfigurationConstants;
-import com.beanframework.console.WebConsoleConstants;
+import com.beanframework.console.ConfigurationWebConstants;
+import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.data.ConfigurationSearch;
 import com.beanframework.console.data.ConfigurationSpecification;
 
@@ -37,26 +37,26 @@ public class ConfigurationController extends AbstractController {
 	@Autowired
 	private ConfigurationFacade configurationFacade;
 
-	@Value(WebConfigurationConstants.Path.CONFIGURATION)
+	@Value(ConfigurationWebConstants.Path.CONFIGURATION)
 	private String PATH_CONFIGURATION;
 
-	@Value(WebConfigurationConstants.View.LIST)
+	@Value(ConfigurationWebConstants.View.LIST)
 	private String VIEW_CONFIGURATION_LIST;
 
-	@Value(WebConfigurationConstants.LIST_SIZE)
+	@Value(ConfigurationWebConstants.LIST_SIZE)
 	private int MODULE_CONFIGURATION_LIST_SIZE;
 
 	private Page<Configuration> getPagination(ConfigurationSearch configurationSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
+		int page = ParamUtils.parseInt(requestParams.get(ConsoleWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
+		int size = ParamUtils.parseInt(requestParams.get(ConsoleWebConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_CONFIGURATION_LIST_SIZE : size;
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.PROPERTIES));
+		String propertiesStr = ParamUtils.parseString(requestParams.get(ConsoleWebConstants.Pagination.PROPERTIES));
 		String[] properties = StringUtils.isBlank(propertiesStr) ? null
-				: propertiesStr.split(WebConsoleConstants.Pagination.PROPERTIES_SPLIT);
+				: propertiesStr.split(ConsoleWebConstants.Pagination.PROPERTIES_SPLIT);
 
-		String directionStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.DIRECTION));
+		String directionStr = ParamUtils.parseString(requestParams.get(ConsoleWebConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
 
 		if (properties == null) {
@@ -68,8 +68,8 @@ public class ConfigurationController extends AbstractController {
 		Page<Configuration> pagination = configurationFacade.findDtoPage(ConfigurationSpecification.findByCriteria(configurationSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
-		model.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
-		model.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
+		model.addAttribute(ConsoleWebConstants.Pagination.PROPERTIES, propertiesStr);
+		model.addAttribute(ConsoleWebConstants.Pagination.DIRECTION, directionStr);
 
 		return pagination;
 	}
@@ -80,77 +80,77 @@ public class ConfigurationController extends AbstractController {
 		configurationSearch.setSearchAll((String)requestParams.get("configurationSearch.searchAll"));
 		configurationSearch.setId((String)requestParams.get("configurationSearch.id"));
 		
-		int page = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.PAGE));
+		int page = ParamUtils.parseInt(requestParams.get(ConsoleWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebConsoleConstants.Pagination.SIZE));
+		int size = ParamUtils.parseInt(requestParams.get(ConsoleWebConstants.Pagination.SIZE));
 		size = size <= 0 ? MODULE_CONFIGURATION_LIST_SIZE : size;
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.PROPERTIES));
-		String directionStr = ParamUtils.parseString(requestParams.get(WebConsoleConstants.Pagination.DIRECTION));
+		String propertiesStr = ParamUtils.parseString(requestParams.get(ConsoleWebConstants.Pagination.PROPERTIES));
+		String directionStr = ParamUtils.parseString(requestParams.get(ConsoleWebConstants.Pagination.DIRECTION));
 
-		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.PAGE, page);
-		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.SIZE, size);
-		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.PROPERTIES, propertiesStr);
-		redirectAttributes.addAttribute(WebConsoleConstants.Pagination.DIRECTION, directionStr);
+		redirectAttributes.addAttribute(ConsoleWebConstants.Pagination.PAGE, page);
+		redirectAttributes.addAttribute(ConsoleWebConstants.Pagination.SIZE, size);
+		redirectAttributes.addAttribute(ConsoleWebConstants.Pagination.PROPERTIES, propertiesStr);
+		redirectAttributes.addAttribute(ConsoleWebConstants.Pagination.DIRECTION, directionStr);
 		redirectAttributes.addAttribute("searchAll", configurationSearch.getSearchAll());
 		redirectAttributes.addAttribute("id", configurationSearch.getId());
 
 		return redirectAttributes;
 	}
 
-	@ModelAttribute(WebConfigurationConstants.ModelAttribute.CREATE)
+	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CREATE)
 	public Configuration populateConfigurationCreate(HttpServletRequest request) throws Exception {
 		return configurationFacade.create();
 	}
 
-	@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE)
+	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE)
 	public Configuration populateConfigurationForm(HttpServletRequest request) throws Exception {
 		return configurationFacade.create();
 	}
 
-	@ModelAttribute(WebConfigurationConstants.ModelAttribute.SEARCH)
+	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH)
 	public ConfigurationSearch populateConfigurationSearch(HttpServletRequest request) {
 		return new ConfigurationSearch();
 	}
 
-	@GetMapping(value = WebConfigurationConstants.Path.CONFIGURATION)
+	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION)
 	public String list(
-			@ModelAttribute(WebConfigurationConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
-			@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
 			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(WebConsoleConstants.PAGINATION, getPagination(configurationSearch, model, requestParams));
+		model.addAttribute(ConsoleWebConstants.PAGINATION, getPagination(configurationSearch, model, requestParams));
 
 		if (configurationUpdate.getUuid() != null) {
 
 			Configuration existingConfiguration = configurationFacade.findOneDtoByUuid(configurationUpdate.getUuid());
 			
 			if (existingConfiguration != null) {
-				model.addAttribute(WebConfigurationConstants.ModelAttribute.UPDATE, existingConfiguration);
+				model.addAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE, existingConfiguration);
 			} else {
 				configurationUpdate.setUuid(null);
-				addErrorMessage(model, WebConsoleConstants.Locale.RECORD_UUID_NOT_FOUND);
+				addErrorMessage(model, ConsoleWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 
 		return VIEW_CONFIGURATION_LIST;
 	}
 
-	@PostMapping(value = WebConfigurationConstants.Path.CONFIGURATION, params = "create")
+	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "create")
 	public RedirectView create(
-			@ModelAttribute(WebConfigurationConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
-			@ModelAttribute(WebConfigurationConstants.ModelAttribute.CREATE) Configuration configurationCreate,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CREATE) Configuration configurationCreate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (configurationCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR,
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
 			try {
 				configurationCreate = configurationFacade.createDto(configurationCreate);
 
-				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
@@ -165,21 +165,21 @@ public class ConfigurationController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebConfigurationConstants.Path.CONFIGURATION, params = "update")
+	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "update")
 	public RedirectView update(
-			@ModelAttribute(WebConfigurationConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
-			@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (configurationUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR,
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
 			try {
 				configurationUpdate = configurationFacade.updateDto(configurationUpdate);
 
-				addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
@@ -194,20 +194,20 @@ public class ConfigurationController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebConfigurationConstants.Path.CONFIGURATION, params = "delete")
+	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "delete")
 	public RedirectView delete(
-			@ModelAttribute(WebConfigurationConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
-			@ModelAttribute(WebConfigurationConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
 			configurationFacade.delete(configurationUpdate.getUuid());
 
-			addSuccessMessage(redirectAttributes, WebConsoleConstants.Locale.DELETE_SUCCESS);
+			addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(WebConfigurationConstants.ModelAttribute.UPDATE, configurationUpdate);
+			redirectAttributes.addFlashAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE, configurationUpdate);
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, configurationSearch);

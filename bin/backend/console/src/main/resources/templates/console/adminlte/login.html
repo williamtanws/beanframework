@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="${@environment.getProperty('layout.console.login')}">
 <head>
-<title th:text="#{module.console.login}"></title>
+<title th:utext="#{module.console.login}"></title>
 </head>
 <body>
 	<th:block layout:fragment="content">
 		<div class="login-box">
 			<div class="login-logo">
 				<a th:href="@{${@environment.getProperty('console.webroot')}}">
-					<b th:text="#{module.console}"></b>
+					<b th:utext="#{module.console}"></b>
 				</a>
 			</div>
 			<!-- /.login-logo -->

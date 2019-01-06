@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.console.WebConsoleConstants;
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.ConsoleWebConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.console.registry.ImporterRegistry;
 
@@ -36,10 +36,10 @@ public class PlatformUpdateController {
 
 	Logger logger = LoggerFactory.getLogger(PlatformUpdateController.class);
 
-	@Value(WebPlatformUpdateConstants.Path.UPDATE)
+	@Value(PlatformUpdateWebConstants.Path.UPDATE)
 	private String PATH_UPDATE;
 
-	@Value(WebPlatformUpdateConstants.View.UPDATE)
+	@Value(PlatformUpdateWebConstants.View.UPDATE)
 	private String VIEW_UPDATE;
 
 	@Autowired
@@ -51,7 +51,7 @@ public class PlatformUpdateController {
 	@Autowired
 	private SessionRegistry sessionRegistry;
 
-	@GetMapping(value = WebPlatformUpdateConstants.Path.UPDATE)
+	@GetMapping(value = PlatformUpdateWebConstants.Path.UPDATE)
 	public String list(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
 		Set<Entry<String, Importer>> mapEntries = importerRegistry.getImporters().entrySet();
@@ -82,7 +82,7 @@ public class PlatformUpdateController {
 		return VIEW_UPDATE;
 	}
 
-	@PostMapping(value = WebPlatformUpdateConstants.Path.UPDATE)
+	@PostMapping(value = PlatformUpdateWebConstants.Path.UPDATE)
 	public RedirectView update(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
 
 		StringBuilder successMessages = new StringBuilder();
@@ -117,17 +117,17 @@ public class PlatformUpdateController {
 		}
 
 		if (successMessages.length() != 0) {
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.SUCCESS, successMessages.toString());
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, successMessages.toString());
 		}
 		if (errorMessages.length() != 0) {
-			redirectAttributes.addFlashAttribute(WebConsoleConstants.Model.ERROR, errorMessages.toString());
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, errorMessages.toString());
 		}
 
 		cacheManager.clearAll();
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_UPDATE+"?clearsessions=1");
+		redirectView.setUrl(PATH_UPDATE+"?clearsessions=0");
 		return redirectView;
 	}
 

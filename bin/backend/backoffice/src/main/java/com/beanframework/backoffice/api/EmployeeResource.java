@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
-import com.beanframework.backoffice.WebEmployeeConstants;
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeFacade;
 
@@ -21,17 +21,17 @@ public class EmployeeResource {
 	@Autowired
 	private EmployeeFacade employeeFacade;
 
-	@RequestMapping(WebEmployeeConstants.Path.Api.CHECKID)
+	@RequestMapping(EmployeeWebConstants.Path.Api.CHECKID)
 	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		String id = requestParams.get(WebBackofficeConstants.Param.ID).toString();
+		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
 
 		Employee employee = employeeFacade.findOneDtoByProperties(properties);
 
-		String uuidStr = (String) requestParams.get(WebBackofficeConstants.Param.UUID);
+		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (employee != null && employee.getUuid().equals(uuid)) {

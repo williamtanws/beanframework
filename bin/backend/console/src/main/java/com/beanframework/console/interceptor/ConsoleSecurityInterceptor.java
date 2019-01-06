@@ -18,8 +18,8 @@ import org.springframework.web.util.UrlPathHelper;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.console.WebConsoleConstants;
-import com.beanframework.console.WebLicenseConstants;
+import com.beanframework.console.ConsoleWebConstants;
+import com.beanframework.console.LicenseWebConstants;
 import com.mchange.v1.lang.BooleanUtils;
 
 public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
@@ -30,10 +30,10 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	private ModelService modelService;
 
-	@Value(WebConsoleConstants.Path.LOGIN)
+	@Value(ConsoleWebConstants.Path.LOGIN)
 	private String PATH_LOGIN;
 
-	@Value(WebLicenseConstants.Path.LICENSE)
+	@Value(LicenseWebConstants.Path.LICENSE)
 	private String PATH_LICENSE;
 
 	@Override
@@ -50,7 +50,7 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 				
 				
 				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Configuration.ID, WebLicenseConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+				properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 				
 				Configuration license = modelService.findOneDtoByProperties(properties, Configuration.class);
 

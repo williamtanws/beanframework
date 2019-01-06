@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.beanframework.console.WebPlatformUpdateConstants;
+import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.importer.AdminImporter;
 import com.beanframework.console.importer.ConfigurationImporter;
 import com.beanframework.console.importer.CronjobImporter;
@@ -97,40 +97,40 @@ public class PlatformUpdateConfig implements ApplicationListener<ApplicationRead
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent event) {
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.Admin.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.AdminImporter.KEY))
 			importerRegistry.addImporter(adminImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.Configuration.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.ConfigurationImporter.KEY))
 			importerRegistry.addImporter(configurationImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.Cronjob.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.CronjobImporter.KEY))
 			importerRegistry.addImporter(cronjobImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.Customer.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.CustomerImporter.KEY))
 			importerRegistry.addImporter(customerImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.DynamicField.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.DynamicFieldImporter.KEY))
 			importerRegistry.addImporter(dynamicFieldImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.Employee.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.EmployeeImporter.KEY))
 			importerRegistry.addImporter(employeeImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.Language.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.LanguageImporter.KEY))
 			importerRegistry.addImporter(languageImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.Menu.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.MenuImporter.KEY))
 			importerRegistry.addImporter(menuImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.UserAuthority.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.UserAuthorityImporter.KEY))
 			importerRegistry.addImporter(userAuthorityImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.UserGroup.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.UserGroupImporter.KEY))
 			importerRegistry.addImporter(userGroupImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.UserPermission.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.UserPermissionImporter.KEY))
 			importerRegistry.addImporter(userPermissionImporter());
 
-		if (importKeyList.contains(WebPlatformUpdateConstants.Importer.UserRight.KEY))
+		if (importKeyList.contains(PlatformUpdateWebConstants.Importer.UserRightImporter.KEY))
 			importerRegistry.addImporter(userRightImporter());
 	}
 }
