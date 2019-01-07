@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,16 +56,25 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 	private Menu convert(Menu source, Menu prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null) {
-				prototype.setId(source.getId());
-			}
 			prototype.setLastModifiedDate(new Date());
 
-			prototype.setSort(source.getSort());
-			prototype.setIcon(source.getIcon());
-			prototype.setPath(source.getPath());
-			prototype.setTarget(source.getTarget());
-			prototype.setEnabled(source.getEnabled());
+			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+				prototype.setId(source.getId());
+
+			if (prototype.getSort() == source.getSort() == false)
+				prototype.setSort(source.getSort());
+
+			if (StringUtils.equals(prototype.getIcon(), source.getIcon()) == false)
+				prototype.setIcon(source.getIcon());
+
+			if (StringUtils.equals(prototype.getPath(), source.getPath()) == false)
+				prototype.setPath(source.getPath());
+
+			if (prototype.getTarget() == source.getTarget() == false)
+				prototype.setTarget(source.getTarget());
+
+			if (prototype.getEnabled() == source.getEnabled() == false)
+				prototype.setEnabled(source.getEnabled());
 
 			Hibernate.initialize(source.getParent());
 			Hibernate.initialize(source.getChilds());
@@ -72,14 +82,19 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 
 			// Parent
 			if (source.getParent() == null || source.getParent().getUuid() == null) {
-				prototype.setParent(null);
+				if (prototype.getParent() != null)
+					prototype.setParent(null);
 			} else {
-				Menu parent = modelService.findOneEntityByUuid(source.getParent().getUuid(), Menu.class);
-				prototype.setParent(parent);
+				if (prototype.getParent().getUuid() != source.getParent().getUuid()) {
+					Menu parent = modelService.findOneEntityByUuid(source.getParent().getUuid(), Menu.class);
+					prototype.setParent(parent);
+				}
 			}
 			// Child
 			if (source.getChilds() == null || source.getChilds().isEmpty()) {
-				prototype.setChilds(new ArrayList<Menu>());
+				if (prototype.getChilds().isEmpty() == false)
+					prototype.setChilds(new ArrayList<Menu>());
+
 			} else {
 				List<Menu> childs = new ArrayList<Menu>();
 				for (Menu child : source.getChilds()) {
@@ -91,7 +106,8 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 			}
 			// User Group
 			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
-				prototype.setUserGroups(new ArrayList<UserGroup>());
+				if (prototype.getUserGroups().isEmpty() == false)
+					prototype.setUserGroups(new ArrayList<UserGroup>());
 			} else {
 				List<UserGroup> userGroups = new ArrayList<UserGroup>();
 				for (UserGroup userGroup : source.getUserGroups()) {
@@ -103,7 +119,8 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 			}
 			// Field
 			if (source.getFields() == null || source.getFields().isEmpty()) {
-				prototype.setFields(new ArrayList<MenuField>());
+				if (prototype.getFields().isEmpty() == false)
+					prototype.setFields(new ArrayList<MenuField>());
 			} else {
 				List<MenuField> menuFields = new ArrayList<MenuField>();
 				for (MenuField menuField : source.getFields()) {

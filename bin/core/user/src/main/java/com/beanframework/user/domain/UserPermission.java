@@ -37,6 +37,7 @@ public class UserPermission extends GenericDomain {
 	@OrderBy(UserPermissionField.DYNAMIC_FIELD)
 	private List<UserPermissionField> fields = new ArrayList<UserPermissionField>();
 
+	@Audited(withModifiedFlag=true)
 	private Integer sort;
 
 	public List<UserPermissionField> getFields() {

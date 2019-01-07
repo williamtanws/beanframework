@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
@@ -58,18 +59,32 @@ public class EntityUserFieldConverter implements EntityConverter<UserField, User
 	private UserField convert(UserField source, UserField prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
 			prototype.setLastModifiedDate(new Date());
 
+			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+				prototype.setId(StringUtils.strip(source.getId()));
+
+			// Dynamic Field
 			if (source.getDynamicField() == null) {
-				prototype.setDynamicField(null);
+				if (prototype.getDynamicField() != null)
+					prototype.setDynamicField(null);
 			} else {
-				DynamicField dynamicField = modelService.findOneEntityByUuid(source.getDynamicField().getUuid(),
-						DynamicField.class);
-				prototype.setDynamicField(dynamicField);
+				boolean add = true;
+				if (prototype.getDynamicField() != null) {
+					if (source.getDynamicField().getUuid() == prototype.getDynamicField().getUuid()) {
+						add = false;
+					}
+				}
+
+				if (add) {
+					DynamicField dynamicField = modelService.findOneEntityByUuid(source.getDynamicField().getUuid(), DynamicField.class);
+					prototype.setDynamicField(dynamicField);
+				}
 			}
-			prototype.setValue(source.getValue());
+
+			if (StringUtils.equals(prototype.getValue(), source.getValue()) == false)
+				prototype.setValue(StringUtils.strip(source.getValue()));
+			
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}

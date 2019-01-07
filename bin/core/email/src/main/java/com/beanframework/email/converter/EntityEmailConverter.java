@@ -4,13 +4,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.email.domain.Email;
-import com.beanframework.email.domain.EmailEnum.Status;
 
 public class EntityEmailConverter implements EntityConverter<Email, Email> {
 
@@ -43,21 +43,31 @@ public class EntityEmailConverter implements EntityConverter<Email, Email> {
 	}
 
 	private Email convert(Email source, Email prototype) {
-		
-		if (source.getId() != null) {
-			prototype.setId(source.getId());
-		}
+
 		prototype.setLastModifiedDate(new Date());
 
-		prototype.setToRecipients(source.getToRecipients());
-		prototype.setCcRecipients(source.getCcRecipients());
-		prototype.setBccRecipients(source.getBccRecipients());
-		prototype.setSubject(source.getSubject());
-		prototype.setText(source.getText());
-		prototype.setHtml(source.getHtml());
-		if (source.getStatus() == null) {
-			prototype.setStatus(Status.DRAFT);
-		} else {
+		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+			prototype.setId(StringUtils.strip(source.getId()));
+
+		if (StringUtils.equals(source.getToRecipients(), prototype.getToRecipients()) == false)
+			prototype.setToRecipients(StringUtils.strip(source.getToRecipients()));
+
+		if (StringUtils.equals(source.getCcRecipients(), prototype.getCcRecipients()) == false)
+			prototype.setCcRecipients(StringUtils.strip(source.getCcRecipients()));
+
+		if (StringUtils.equals(source.getBccRecipients(), prototype.getBccRecipients()) == false)
+			prototype.setBccRecipients(StringUtils.strip(source.getBccRecipients()));
+
+		if (StringUtils.equals(source.getSubject(), prototype.getSubject()) == false)
+			prototype.setSubject(StringUtils.strip(source.getSubject()));
+
+		if (StringUtils.equals(source.getText(), prototype.getText()) == false)
+			prototype.setText(StringUtils.strip(source.getText()));
+
+		if (StringUtils.equals(source.getHtml(), prototype.getHtml()) == false)
+			prototype.setHtml(StringUtils.strip(source.getHtml()));
+
+		if (source.getStatus() != prototype.getStatus()) {
 			prototype.setStatus(source.getStatus());
 		}
 

@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.web;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -126,6 +127,10 @@ public class EmailController extends AbstractController {
 			Email existingEmail = emailFacade.findOneDtoByUuid(emailUpdate.getUuid());
 
 			if (existingEmail != null) {
+				
+				List<Object[]> revisions = emailFacade.findHistoryByUuid(emailUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
+				
 				model.addAttribute(EmailWebConstants.ModelAttribute.UPDATE, existingEmail);
 			} else {
 				emailUpdate.setUuid(null);

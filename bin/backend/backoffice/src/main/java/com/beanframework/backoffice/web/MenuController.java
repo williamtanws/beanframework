@@ -83,6 +83,12 @@ public class MenuController extends AbstractController {
 					}
 				}
 				existingMenu.setUserGroups(userGroups);
+				
+				List<Object[]> revisions = menuFacade.findHistoryByUuid(menuUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
+				
+				List<Object[]> fieldRevisions = menuFacade.findFieldHistoryByUuid(menuUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.FIELD_REVISIONS, fieldRevisions);
 
 				model.addAttribute(MenuWebConstants.ModelAttribute.UPDATE, existingMenu);
 			} else {

@@ -31,7 +31,7 @@ public class UserRightField extends GenericDomain {
 	public static final String USER_RIGHT = "userRight";
 	public static final String DYNAMIC_FIELD = "dynamicField";
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userright_uuid")

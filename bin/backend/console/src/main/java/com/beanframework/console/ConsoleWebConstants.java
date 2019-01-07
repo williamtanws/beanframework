@@ -22,6 +22,7 @@ public interface ConsoleWebConstants {
 		public static final String SUCCESS = "success";
 		public static final String INFO = "info";
 		public static final String PAGINATION = "pagination";
+		public static final String REVISIONS = "revisions";
 	}
 
 	public interface Path {

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
@@ -46,13 +47,17 @@ public class EntityCronjobDataConverter implements EntityConverter<CronjobData, 
 
 	private CronjobData convert(CronjobData source, CronjobData prototype) {
 
-		if (source.getId() != null)
-			prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
 
-		prototype.setName(source.getName());
-		prototype.setValue(source.getValue());
-		
+		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+			prototype.setId(StringUtils.strip(source.getId()));
+
+		if (StringUtils.equals(source.getName(), prototype.getName()) == false)
+			prototype.setName(StringUtils.strip(source.getName()));
+
+		if (StringUtils.equals(source.getValue(), prototype.getValue()) == false)
+			prototype.setValue(StringUtils.strip(source.getValue()));
+
 		return prototype;
 	}
 

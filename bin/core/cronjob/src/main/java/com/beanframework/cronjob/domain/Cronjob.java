@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
@@ -27,6 +29,7 @@ import com.beanframework.cronjob.domain.CronjobEnum.Status;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Audited
 @Table(name = CronjobConstants.Table.CRONJOB)
 public class Cronjob extends GenericDomain {
 
@@ -50,40 +53,51 @@ public class Cronjob extends GenericDomain {
 	public static final String CRONJOB_DATAS = "cronjobDatas";
 	public static final String STATUS = "status";
 
+	@Audited(withModifiedFlag = true)
 	private String jobClass;
 
-	/** Task Group */
+	@Audited(withModifiedFlag = true)
 	private String jobGroup;
 
-	/** Task Name */
+	@Audited(withModifiedFlag = true)
 	private String jobName;
 
+	@Audited(withModifiedFlag = true)
 	private String description;
 
-	/** Task run time expression */
+	@Audited(withModifiedFlag = true)
 	private String cronExpression;
 
+	@Audited(withModifiedFlag = true)
 	private Boolean startup;
 
+	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
+	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
 	private Result result;
 
+	@Audited(withModifiedFlag = true)
 	@Lob
 	@Column(length = 100000)
 	private String message;
 
+	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
 	private JobTrigger jobTrigger;
 
+	@Audited(withModifiedFlag = true)
 	private Date triggerStartDate;
 
+	@Audited(withModifiedFlag = true)
 	private Date lastTriggeredDate;
 
+	@NotAudited
 	private Date lastStartExecutedDate;
 
+	@NotAudited
 	private Date lastFinishExecutedDate;
 
 	@Cascade({ CascadeType.ALL })

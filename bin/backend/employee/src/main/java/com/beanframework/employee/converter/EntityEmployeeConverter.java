@@ -52,8 +52,9 @@ public class EntityEmployeeConverter implements EntityConverter<Employee, Employ
 
 		try {
 			prototype.setLastModifiedDate(new Date());
+			
 			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
-				prototype.setId(source.getId());
+				prototype.setId(StringUtils.strip(source.getId()));
 
 			if (source.getAccountNonExpired() != null && source.getAccountNonExpired() != prototype.getAccountNonExpired())
 				prototype.setAccountNonExpired(source.getAccountNonExpired());
@@ -71,14 +72,14 @@ public class EntityEmployeeConverter implements EntityConverter<Employee, Employ
 				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
 
 			if (StringUtils.equals(source.getName(), prototype.getName()) == false)
-				prototype.setName(source.getName());
+				prototype.setName(StringUtils.strip(source.getName()));
 
 			// Field
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserField sourceUserField : source.getFields()) {
 						if (prototype.getFields().get(i).getUuid().equals(sourceUserField.getUuid())) {
-							prototype.getFields().get(i).setValue(sourceUserField.getValue());
+							prototype.getFields().get(i).setValue(StringUtils.strip(sourceUserField.getValue()));
 						}
 					}
 				}

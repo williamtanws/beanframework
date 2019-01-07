@@ -1,15 +1,13 @@
 package com.beanframework.cronjob.domain;
 
-import java.util.Date;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
@@ -17,6 +15,7 @@ import com.beanframework.cronjob.CronjobConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Audited
 @Table(name = CronjobConstants.Table.CRONJOB_DATA)
 public class CronjobData extends GenericDomain {
 
@@ -25,16 +24,16 @@ public class CronjobData extends GenericDomain {
 	public static final String VALUE = "value";
 	public static final String CRONJOB = "cronjob";
 
-	private String name;
-	private String value;
-
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToOne
 	@JoinColumn(name = "cronjob_uuid")
 	private Cronjob cronjob;
 
-	@CreatedDate
-	@Column(updatable = false)
-	private Date createdDate;
+	@Audited(withModifiedFlag = true)
+	private String name;
+
+	@Audited(withModifiedFlag = true)
+	private String value;
 
 	public String getName() {
 		return name;
@@ -59,13 +58,4 @@ public class CronjobData extends GenericDomain {
 	public void setCronjob(Cronjob cronjob) {
 		this.cronjob = cronjob;
 	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
 }

@@ -24,6 +24,9 @@ import com.beanframework.user.UserRightConstants;
 @Table(name = UserRightConstants.Table.USER_RIGHT)
 public class UserRight extends GenericDomain {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 8192305251381233446L;
 	public static final String FIELDS = "fields";
 	public static final String SORT = "sort";

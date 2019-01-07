@@ -5,7 +5,7 @@
 		<div class="row">
 			<div class="box-body chat">
 				<!-- chat item -->
-				<div class="item" th:each="revision : ${revisions}">
+				<div class="item" th:each="revision : ${revisions}" th:if="${not #lists.isEmpty(revision[3])}">
 					<img th:src="@{${@environment.getProperty('path.employee.profile.picture')}(type='thumbnail')}" alt="user image" class="online">
 
 					<p class="message">
@@ -18,7 +18,7 @@
 							</small>
 						</span>
 						<th:block th:each="property : ${revision[3]}">
-							<span th:text="#{module.language.__${property}__} + ' -> ' + ${revision[0].__${property}__}"></span>
+							<span th:text="#{module.history.__${property}__} + ' -> ' + ${revision[0].__${property}__}"></span>
 							<br>
 						</th:block>
 						<th:block th:each="field : ${fieldRevisions}" th:if="${field[1].id == revision[1].id}">

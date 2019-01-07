@@ -5,7 +5,13 @@ public interface EmailWebConstants {
 	public static final String LIST_SIZE = "${module.email.list.size}";
 
 	public interface Path {
+
+		public interface Api {
+			public static final String CHECKID = "${path.api.email.checkid}";
+		}
+
 		public static final String EMAIL = "${path.email}";
+
 	}
 
 	public interface View {

@@ -1,5 +1,6 @@
 package com.beanframework.console.web;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -126,6 +127,10 @@ public class ConfigurationController extends AbstractController {
 			Configuration existingConfiguration = configurationFacade.findOneDtoByUuid(configurationUpdate.getUuid());
 			
 			if (existingConfiguration != null) {
+				
+				List<Object[]> revisions = configurationFacade.findHistoryByUuid(configurationUpdate.getUuid(), null, null);
+				model.addAttribute(ConsoleWebConstants.Model.REVISIONS, revisions);
+				
 				model.addAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE, existingConfiguration);
 			} else {
 				configurationUpdate.setUuid(null);

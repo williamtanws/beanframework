@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
@@ -48,11 +49,14 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 	private UserPermission convert(UserPermission source, UserPermission prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
 			prototype.setLastModifiedDate(new Date());
 
-			prototype.setSort(source.getSort());
+			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+				prototype.setId(source.getId());
+
+			if (source.getSort() != prototype.getSort())
+				prototype.setSort(source.getSort());
+			
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserPermissionField sourceUserPermissionField : source.getFields()) {

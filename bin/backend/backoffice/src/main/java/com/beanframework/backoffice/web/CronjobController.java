@@ -3,6 +3,7 @@ package com.beanframework.backoffice.web;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -153,6 +154,10 @@ public class CronjobController extends AbstractController {
 			Cronjob existingCronjob = cronjobFacade.findOneDtoByUuid(cronjobUpdate.getUuid());
 
 			if (existingCronjob != null) {
+				
+				List<Object[]> revisions = cronjobFacade.findHistoryByUuid(cronjobUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
+				
 				model.addAttribute(CronjobWebConstants.ModelAttribute.UPDATE, existingCronjob);
 			} else {
 				cronjobUpdate.setUuid(null);

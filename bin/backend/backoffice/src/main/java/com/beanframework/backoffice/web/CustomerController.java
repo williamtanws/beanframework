@@ -149,6 +149,12 @@ public class CustomerController extends AbstractController {
 					}
 				}
 				existingCustomer.setUserGroups(userGroups);
+				
+				List<Object[]> revisions = customerFacade.findHistoryByUuid(customerUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
+				
+				List<Object[]> fieldRevisions = customerFacade.findFieldHistoryByUuid(customerUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.FIELD_REVISIONS, fieldRevisions);
 
 				model.addAttribute(CustomerWebConstants.ModelAttribute.UPDATE, existingCustomer);
 			} else {

@@ -1,5 +1,6 @@
 package com.beanframework.customer.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -47,5 +48,9 @@ public interface CustomerFacade {
 	Customer saveEntity(Customer model) throws BusinessException;
 
 	void deleteById(String id) throws BusinessException;
+
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
+	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
 }
