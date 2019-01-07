@@ -21,8 +21,11 @@ public class Language extends GenericDomain {
 	public static final String ACTIVE = "active";
 	public static final String SORT = "sort";
 
+	@Audited(withModifiedFlag=true)
 	private String name;
+	@Audited(withModifiedFlag=true)
 	private Boolean active;
+	@Audited(withModifiedFlag=true)
 	private Integer sort;
 
 	public String getName() {

@@ -34,12 +34,12 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	public Configuration findOneDtoByUuid(UUID uuid) throws Exception {
 		return modelService.findOneDtoByUuid(uuid, Configuration.class);
 	}
-	
+
 	@Override
 	public Configuration findOneDtoById(String id) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
-		
+
 		return modelService.findOneDtoByProperties(properties, Configuration.class);
 	}
 
@@ -57,6 +57,24 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		modelService.deleteByUuid(uuid, Configuration.class);
 	}
-	
-	
+
+	@Override
+	public Configuration saveEntity(Configuration model) throws BusinessException {
+		return (Configuration) modelService.saveEntity(model, Configuration.class);
+	}
+
+	@Override
+	public void deleteById(String id) throws BusinessException {
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Configuration.ID, id);
+			Configuration model = modelService.findOneEntityByProperties(properties, Configuration.class);
+			modelService.deleteByEntity(model, Configuration.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
 }

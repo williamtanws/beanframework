@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.web;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -130,6 +131,12 @@ public class UserRightController extends AbstractController {
 		if (userrightUpdate.getUuid() != null) {
 
 			UserRight existingUserRight = userRightFacade.findOneDtoByUuid(userrightUpdate.getUuid());
+			
+			List<Object[]> revisions = userRightFacade.findHistoryByUuid(userrightUpdate.getUuid(), null, null);
+			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
+			
+			List<Object[]> fieldRevisions = userRightFacade.findFieldHistoryByUuid(userrightUpdate.getUuid(), null, null);
+			model.addAttribute(BackofficeWebConstants.Model.FIELD_REVISIONS, fieldRevisions);
 
 			if (existingUserRight != null) {
 				model.addAttribute(UserRightWebConstants.ModelAttribute.UPDATE, existingUserRight);

@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.web;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -130,6 +131,12 @@ public class UserPermissionController extends AbstractController {
 		if (userpermissionUpdate.getUuid() != null) {
 
 			UserPermission existingUserPermission = userPermissionFacade.findOneDtoByUuid(userpermissionUpdate.getUuid());
+			
+			List<Object[]> revisions = userPermissionFacade.findHistoryByUuid(userpermissionUpdate.getUuid(), null, null);
+			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
+			
+			List<Object[]> fieldRevisions = userPermissionFacade.findFieldHistoryByUuid(userpermissionUpdate.getUuid(), null, null);
+			model.addAttribute(BackofficeWebConstants.Model.FIELD_REVISIONS, fieldRevisions);
 
 			if (existingUserPermission != null) {
 				model.addAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE, existingUserPermission);

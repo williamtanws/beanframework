@@ -8,9 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -26,25 +24,25 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.service.ModelService;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityUserPermissionImporterConverter;
 import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.user.domain.UserPermission;
+import com.beanframework.user.service.UserPermissionFacade;
 
 public class UserPermissionImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserPermissionImporter.class);
 
 	@Autowired
-	private ModelService modelService;
-	
+	private UserPermissionFacade userPermissionFacade;
+
 	@Autowired
 	private EntityUserPermissionImporterConverter converter;
 
 	@Value("${module.console.import.update.userpermission}")
 	private String IMPORT_UPDATE;
-	
+
 	@Value("${module.console.import.remove.userpermission}")
 	private String IMPORT_REMOVE;
 
@@ -70,7 +68,7 @@ public class UserPermissionImporter extends Importer {
 			save(userPermissionCsvList);
 		}
 	}
-	
+
 	@Override
 	public void remove() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -85,7 +83,7 @@ public class UserPermissionImporter extends Importer {
 			remove(csvList);
 		}
 	}
-	
+
 	public List<UserPermissionCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
@@ -99,12 +97,12 @@ public class UserPermissionImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			UserPermissionCsv csv;
-			LOGGER.info("Start import "+PlatformUpdateWebConstants.Importer.UserPermissionImporter.NAME);
+			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.UserPermissionImporter.NAME);
 			while ((csv = beanReader.read(UserPermissionCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+PlatformUpdateWebConstants.Importer.UserPermissionImporter.NAME);
+			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.UserPermissionImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -124,19 +122,14 @@ public class UserPermissionImporter extends Importer {
 	public void save(List<UserPermissionCsv> csvList) throws Exception {
 
 		for (UserPermissionCsv csv : csvList) {
-			
 			UserPermission model = converter.convert(csv);
-			
-			modelService.saveEntity(model, UserPermission.class);
+			userPermissionFacade.saveEntity(model);
 		}
 	}
 
 	public void remove(List<UserPermissionCsv> csvList) throws Exception {
 		for (UserPermissionCsv csv : csvList) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(UserPermission.ID, csv.getId());
-			UserPermission model = modelService.findOneEntityByProperties(properties, UserPermission.class);
-			modelService.deleteByEntity(model, UserPermission.class);
+			userPermissionFacade.deleteById(csv.getId());
 		}
 	}
 }

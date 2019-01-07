@@ -10,8 +10,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditQuery;
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -267,33 +271,15 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-//			Long count = getCachedSingleResult(properties, null, "count(o)", modelClass);
-//
-//			if (count == null) {
-//				count = (Long) createQuery(properties, null, "count(o)", null, modelClass).getSingleResult();
-//
-//				setCachedSingleResult(properties, null, "count(o)", modelClass, count);
-//			}
-//				
-			String qlString = "";
-			
-			if (properties != null && properties.isEmpty() == false) {
-				qlString = qlString + " where " + sqlProperties(properties);
-			}
-			
-			TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(o) FROM "+modelClass.getName()+" o "+qlString, Long.class);
-			
-			if (properties != null && properties.isEmpty() == false) {
-				for (Map.Entry<String, Object> entry : properties.entrySet()) {
-					if (entry.getValue() != null) {
-						query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());
-					}
-				}
-			}
-			
-			long count = query.getSingleResult();
+			Long count = getCachedSingleResult(properties, null, "count(o)", modelClass);
 
-			return count > 0 ? true : false;
+			if (count == null) {
+				count = (Long) createQuery(properties, null, "count(o)", null, modelClass).getSingleResult();
+
+				setCachedSingleResult(properties, null, "count(o)", modelClass, count);
+			}
+
+			return count.equals(0L) ? false : true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -399,6 +385,32 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
+	public <T extends Collection> T findHistory(boolean selectDeletedEntities, AuditCriterion criterion, AuditOrder order, Integer firstResult, Integer maxResults, Class modelClass) throws Exception {
+
+		// Create the Audit Reader. It uses the EntityManager, which will be opened when
+		// starting the new Transation and closed when the Transaction finishes.
+		AuditReader auditReader = AuditReaderFactory.get(entityManager);
+
+		// Create the Query:
+		AuditQuery auditQuery = auditReader.createQuery().forRevisionsOfEntityWithChanges(modelClass, selectDeletedEntities);
+		
+		if (criterion != null)
+			auditQuery.add(criterion);
+		
+		if (order != null)
+			auditQuery.addOrder(order);
+
+		if (firstResult != null)
+			auditQuery.setFirstResult(firstResult);
+
+		if (maxResults != null)
+			auditQuery.setMaxResults(maxResults);
+
+		return (T) auditQuery.getResultList();
+	}
+
+	@Transactional(readOnly = true)
+	@Override
 	public <T> Page<T> findDtoPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
@@ -467,7 +479,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void flush() throws BusinessException {
 		modelRepository.flush();
 	}
-	
+
 	@Transactional
 	@Override
 	public void deleteByEntity(Object entityModel, Class modelClass) throws BusinessException {

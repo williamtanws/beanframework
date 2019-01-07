@@ -11,7 +11,7 @@
 					</div>
 					<div class="form-group">
 						<label th:text="#{module.backoffice.lastmodified.date} + ':'"></label>
-						<span class="text-block" th:text="*{lastModifiedDate != null} ? *{#dates.format(lastModifiedDate, ' dd MMMM yyyy hh:mma')}"></span>
+						<span class="text-block" th:text="*{lastModifiedDate != null} ? *{#dates.format(lastModifiedDate, ' dd MMMM yyyy, hh:mma')}"></span>
 					</div>
 					<div class="form-group" sec:authorize="hasAuthority('employee_read')">
 						<label th:text="#{module.backoffice.lastmodified.by} + ':'"></label>
@@ -21,7 +21,7 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label th:text="#{module.backoffice.created.date} + ':'"></label>
-						<span class="text-block" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy hh:mma')}"></span>
+						<span class="text-block" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy, hh:mma')}"></span>
 					</div>
 					<div class="form-group" sec:authorize="hasAuthority('employee_read')">
 						<label th:text="#{module.backoffice.created.by} + ':'"></label>

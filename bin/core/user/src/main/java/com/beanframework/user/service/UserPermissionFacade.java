@@ -25,8 +25,6 @@ public interface UserPermissionFacade {
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Page<UserPermission> findPage(Specification<UserPermission> specification, PageRequest pageRequest) throws Exception;
 
-	UserPermission create() throws Exception;
-
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	UserPermission findOneDtoByUuid(UUID uuid) throws Exception;
 
@@ -41,7 +39,17 @@ public interface UserPermissionFacade {
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
+	
+	UserPermission create() throws Exception;
 
 	List<UserPermission> findDtoBySorts(Map<String, Direction> sorts) throws Exception;
+
+	UserPermission saveEntity(UserPermission model) throws BusinessException;
+
+	void deleteById(String id) throws Exception;
+
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
+	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
 }

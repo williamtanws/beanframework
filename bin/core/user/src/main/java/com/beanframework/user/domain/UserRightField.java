@@ -9,7 +9,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
@@ -30,18 +30,20 @@ public class UserRightField extends GenericDomain {
 	public static final String LANGUAGE = "language";
 	public static final String USER_RIGHT = "userRight";
 	public static final String DYNAMIC_FIELD = "dynamicField";
-	
-	@NotAudited
+
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userRight_uuid")
+	@JoinColumn(name = "userright_uuid")
 	private UserRight userRight;
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")
-	@OrderBy(DynamicField.SORT+" ASC")
+	@OrderBy(DynamicField.SORT + " ASC")
 	private DynamicField dynamicField;
 
+	@Audited(withModifiedFlag = true)
 	private String value;
 
 	public UserRight getUserRight() {

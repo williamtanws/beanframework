@@ -27,7 +27,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.common.service.ModelService;
+import com.beanframework.admin.service.AdminFacade;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityAdminImporterConverter;
 import com.beanframework.console.csv.AdminCsv;
@@ -37,14 +37,14 @@ public class AdminImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(AdminImporter.class);
 
 	@Autowired
-	private ModelService modelService;
-	
+	private AdminFacade adminFacade;
+
 	@Autowired
 	private EntityAdminImporterConverter converter;
 
 	@Value("${module.console.import.update.admin}")
 	private String IMPORT_UPDATE;
-	
+
 	@Value("${module.console.import.remove.admin}")
 	private String IMPORT_REMOVE;
 
@@ -70,7 +70,7 @@ public class AdminImporter extends Importer {
 			save(adminCsvList);
 		}
 	}
-	
+
 	@Override
 	public void remove() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -99,12 +99,12 @@ public class AdminImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			AdminCsv csv;
-			LOGGER.info("Start import "+PlatformUpdateWebConstants.Importer.AdminImporter.NAME);
+			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.AdminImporter.NAME);
 			while ((csv = beanReader.read(AdminCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+PlatformUpdateWebConstants.Importer.AdminImporter.NAME);
+			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.AdminImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -120,23 +120,19 @@ public class AdminImporter extends Importer {
 		}
 		return csvList;
 	}
-	
+
 	public void save(List<AdminCsv> csvList) throws Exception {
 
 		for (AdminCsv csv : csvList) {
 
 			Admin model = converter.convert(csv);
-			
-			modelService.saveEntity(model, Admin.class);
+			adminFacade.saveEntity(model);
 		}
 	}
-	
+
 	public void remove(List<AdminCsv> csvList) throws Exception {
 		for (AdminCsv csv : csvList) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Admin.ID, csv.getId());
-			Admin model = modelService.findOneEntityByProperties(properties, Admin.class);
-			modelService.deleteByEntity(model, Admin.class);
+			adminFacade.deleteById(csv.getId());
 		}
 	}
 

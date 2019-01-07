@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,33 +25,32 @@ public interface ModelService {
 	<T> T create(Class modelClass) throws Exception;
 
 	<T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception;
-	
+
 	<T> T findOneDtoByUuid(UUID uuid, Class modelClass) throws Exception;
 
 	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	<T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
-	
+
 	<T extends Collection> T findEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	<T extends Collection> T findEntityBySorts(Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
-	
-	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties,
-			Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
-	
-	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties,
-			Map<String, Sort.Direction> sorts, int maxResult, Class modelClass) throws Exception;
+
+	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
+
+	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, int maxResult, Class modelClass) throws Exception;
 
 	<T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	<T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
 
-	<T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties,
-			Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
+	<T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
 
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	<T extends Collection> T findAllDto(Class modelClass) throws Exception;
+
+	<T extends Collection> T findHistory(boolean selectDeletedEntities, AuditCriterion criterion, AuditOrder order, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
 
 	<T> Page<T> findDtoPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
 
@@ -60,7 +61,7 @@ public interface ModelService {
 	Object saveDto(Object model, Class modelClass) throws BusinessException;
 
 	void flush() throws BusinessException;
-	
+
 	void deleteByEntity(Object entityModel, Class modelClass) throws BusinessException;
 
 	void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException;

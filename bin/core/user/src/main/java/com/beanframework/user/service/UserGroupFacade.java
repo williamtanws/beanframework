@@ -44,4 +44,12 @@ public interface UserGroupFacade {
 
 	List<UserGroup> findDtoBySorts(Map<String, Direction> sorts) throws Exception;
 
+	UserGroup saveEntity(UserGroup model) throws BusinessException;
+
+	void deleteById(String id) throws BusinessException;
+
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
+	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
 }

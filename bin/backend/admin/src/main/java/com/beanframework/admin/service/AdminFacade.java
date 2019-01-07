@@ -26,4 +26,8 @@ public interface AdminFacade {
 	Admin saveDto(Admin adminUpdate) throws BusinessException;
 
 	void delete(UUID uuid) throws BusinessException;
+
+	Admin saveEntity(Admin model) throws BusinessException;
+
+	void deleteById(String id) throws BusinessException;
 }

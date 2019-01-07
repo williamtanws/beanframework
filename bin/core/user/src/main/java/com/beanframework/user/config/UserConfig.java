@@ -2,6 +2,7 @@ package com.beanframework.user.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.interceptor.InterceptorMapping;
@@ -46,6 +47,7 @@ import com.beanframework.user.interceptor.UserRightValidateInterceptor;
 import com.beanframework.user.interceptor.UserValidateInterceptor;
 
 @Configuration
+@EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 public class UserConfig {
 
 	/////////////////////////

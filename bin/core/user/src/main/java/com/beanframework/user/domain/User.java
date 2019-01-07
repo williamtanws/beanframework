@@ -45,6 +45,7 @@ public abstract class User extends GenericDomain {
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_ROLES = "userRoles";
 	public static final String FIELDS = "fields";
+	public static final String NAME = "name";
 
 	private static final long serialVersionUID = -7444894280894062710L;
 	@NotNull
@@ -53,6 +54,7 @@ public abstract class User extends GenericDomain {
 	private Boolean accountNonLocked;
 	private Boolean credentialsNonExpired;
 	private Boolean enabled;
+	private String name;
 
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -129,6 +131,14 @@ public abstract class User extends GenericDomain {
 
 	public void setAuthorities(Set<GrantedAuthority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

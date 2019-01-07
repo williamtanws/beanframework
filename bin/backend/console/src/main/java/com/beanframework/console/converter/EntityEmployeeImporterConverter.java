@@ -67,6 +67,7 @@ public class EntityEmployeeImporterConverter implements EntityConverter<Employee
 			prototype.setEnabled(source.isEnabled());
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+			prototype.setName(source.getName());
 			
 			// Dynamic Field
 			if (source.getDynamicField() != null) {

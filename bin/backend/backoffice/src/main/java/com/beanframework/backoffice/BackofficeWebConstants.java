@@ -24,6 +24,8 @@ public static final String PAGINATION = "pagination";
 		public static final String PAGINATION = "pagination";
 		public static final String MENU_NAVIGATION = "menuNavigation";
 		public static final String MODULE_LANGUAGES = "moduleLanguages";
+		public static final String REVISIONS = "revisions";
+		public static final String FIELD_REVISIONS = "fieldRevisions";
 	}
 
 	public interface Path {

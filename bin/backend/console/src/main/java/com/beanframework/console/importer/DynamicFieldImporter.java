@@ -8,9 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -26,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.service.ModelService;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityDynamicFieldImporterConverter;
 import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.service.DynamicFieldFacade;
 
 public class DynamicFieldImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldImporter.class);
 
 	@Autowired
-	private ModelService modelService;
+	private DynamicFieldFacade dynamicFieldFacade;
 
 	@Autowired
 	private EntityDynamicFieldImporterConverter converter;
@@ -126,17 +124,13 @@ public class DynamicFieldImporter extends Importer {
 		for (DynamicFieldCsv csv : csvList) {
 
 			DynamicField model = converter.convert(csv);
-
-			modelService.saveEntity(model, DynamicField.class);
+			dynamicFieldFacade.saveEntity(model);
 		}
 	}
 
 	private void remove(List<DynamicFieldCsv> csvList) throws Exception {
 		for (DynamicFieldCsv csv : csvList) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(DynamicField.ID, csv.getId());
-			DynamicField model = modelService.findOneEntityByProperties(properties, DynamicField.class);
-			modelService.deleteByEntity(model, DynamicField.class);
+			dynamicFieldFacade.deleteById(csv.getId());
 		}
 	}
 

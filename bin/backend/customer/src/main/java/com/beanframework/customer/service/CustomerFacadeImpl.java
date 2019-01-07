@@ -1,5 +1,6 @@
 package com.beanframework.customer.service;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,10 +19,10 @@ import com.beanframework.customer.domain.Customer;
 
 @Component
 public class CustomerFacadeImpl implements CustomerFacade {
-	
+
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private CustomerService customerService;
 
@@ -57,7 +58,6 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public Customer create() throws Exception {
 		return modelService.create(Customer.class);
 	}
-	
 
 	@Override
 	public Customer findOneDtoByUuid(UUID uuid) throws Exception {
@@ -82,6 +82,25 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		modelService.deleteByUuid(uuid, Customer.class);
+	}
+
+	@Override
+	public Customer saveEntity(Customer model) throws BusinessException {
+		return (Customer) modelService.saveEntity(model, Customer.class);
+	}
+
+	@Override
+	public void deleteById(String id) throws BusinessException {
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Customer.ID, id);
+			Customer model = modelService.findOneEntityByProperties(properties, Customer.class);
+			modelService.deleteByEntity(model, Customer.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 }

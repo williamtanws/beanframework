@@ -57,6 +57,17 @@
 									<div class="row">
 										<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
 									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-12 row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for="sort" th:text="#{module.userright.sort}"></label>
+													<input type="text" class="form-control" name="sort" th:value="*{sort}" min="0" step="1" onkeypress="return isNumberKey(event)">
+													<span class="help-block"></span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 								<!-- /.box-body -->
 							</div>
@@ -158,7 +169,8 @@
 		    /*]]>*/
 		</script>
 
-		<th:block layout:insert="/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.userright')}}, objectSearch=${userrightSearch}, deleteUuid=${userrightUpdate.uuid})"></th:block>
+		<th:block
+			layout:insert="/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.userright')}}, objectSearch=${userrightSearch}, deleteUuid=${userrightUpdate.uuid})"></th:block>
 	</th:block>
 </body>
 </html>

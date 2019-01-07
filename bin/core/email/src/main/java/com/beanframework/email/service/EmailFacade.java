@@ -1,5 +1,6 @@
 package com.beanframework.email.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,22 +14,20 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.email.domain.Email;
 
 public interface EmailFacade {
-	
+
 	public static interface PreAuthorizeEnum {
 		public static final String READ = "hasAuthority('email_read')";
 		public static final String CREATE = "hasAuthority('email_create')";
 		public static final String UPDATE = "hasAuthority('email_update')";
 		public static final String DELETE = "hasAuthority('email_delete')";
 	}
-	
+
 	void saveAttachment(Email email, MultipartFile[] attachments) throws BusinessException;
-	
+
 	void deleteAttachment(UUID uuid, String filename) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Page<Email> findPage(Specification<Email> findByCriteria, PageRequest of) throws Exception;
-
-	Email create() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Email findOneDtoByUuid(UUID uuid) throws Exception;
@@ -42,8 +41,9 @@ public interface EmailFacade {
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
+	Email create() throws Exception;
+
 	Email findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
-	
- 
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 }

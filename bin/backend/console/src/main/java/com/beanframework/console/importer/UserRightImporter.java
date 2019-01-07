@@ -8,9 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -26,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.service.ModelService;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityUserRightImporterConverter;
 import com.beanframework.console.csv.UserRightCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.user.domain.UserRight;
+import com.beanframework.user.service.UserRightFacade;
 
 public class UserRightImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserRightImporter.class);
-
+	
 	@Autowired
-	private ModelService modelService;
+	private UserRightFacade userRightFacade;
 
 	@Autowired
 	private EntityUserRightImporterConverter converter;
@@ -125,16 +123,13 @@ public class UserRightImporter extends Importer {
 
 		for (UserRightCsv csv : csvList) {
 			UserRight model = converter.convert(csv);
-			modelService.saveEntity(model, UserRight.class);
+			userRightFacade.saveEntity(model);
 		}
 	}
 
 	public void remove(List<UserRightCsv> csvList) throws Exception {
 		for (UserRightCsv csv : csvList) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(UserRight.ID, csv.getId());
-			UserRight model = modelService.findOneEntityByProperties(properties, UserRight.class);
-			modelService.deleteByEntity(model, UserRight.class);
+			userRightFacade.deleteById(csv.getId());
 		}
 	}
 

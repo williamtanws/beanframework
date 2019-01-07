@@ -2,7 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
 	<th:block layout:fragment="history">
-		<div class="row">History</div>
+		<div class="row">
+			<div class="box-body chat">
+				<!-- chat item -->
+				<div class="item" th:each="revision : ${revisions}">
+					<img th:src="@{${@environment.getProperty('path.employee.profile.picture')}(type='thumbnail')}" alt="user image" class="online">
+
+					<p class="message">
+						<span class="name">
+							<span th:text="${revision[0].lastModifiedBy != null } ? ${revision[0].lastModifiedBy.name}+': '"></span>
+							<span class="text-muted" th:text="#{module.backoffice.history.__${revision[2]}__}"></span>
+							<small class="text-muted pull-right">
+								<i class="fa fa-clock-o"></i>
+								<span th:text="${revision[0].lastModifiedDate!= null} ? ${#dates.format(revision[0].lastModifiedDate, ' dd MMMM yyyy, hh:mma')}"></span>
+							</small>
+						</span>
+						<th:block th:each="property : ${revision[3]}">
+							<span th:text="#{module.language.__${property}__} + ' -> ' + ${revision[0].__${property}__}"></span>
+							<br>
+						</th:block>
+						<th:block th:each="field : ${fieldRevisions}" th:if="${field[1].id == revision[1].id}">
+							<th:block th:each="property : ${field[3]}">
+								<span th:text="${field[0].dynamicField.name} + ' -> ' + ${field[0].__${property}__}"></span>
+								<br>
+							</th:block>
+						</th:block>
+					</p>
+				</div>
+				<!-- /.item -->
+			</div>
+		</div>
 	</th:block>
 </body>
 </html>
