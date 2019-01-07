@@ -16,8 +16,8 @@
 				<th:block layout:insert="/backoffice/adminlte/common/component/alert :: custom"></th:block>
 			</div>
 			<!-- List Table-->
-			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.userright}, objectUpdate=${userrightUpdate}, objectSearch=${userrightSearch}, icon=@{${@environment.getProperty('module.userright.icon')}}, createAuthority='userright_create', updateAuthority='userright_update', paginationAction=@{${@environment.getProperty('path.userright')}}, searchFields=${ {'id'} }, updateForm='/backoffice/adminlte/user/userrightForm')"></th:block>
+			<div class="row" th:with="userrightSort=#{module.userright.sort}">
+				<th:block layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.userright}, objectUpdate=${userrightUpdate}, objectSearch=${userrightSearch}, icon=@{${@environment.getProperty('module.userright.icon')}}, createAuthority='userright_create', updateAuthority='userright_update', listFields=${ {{'sort', userrightSort}} }, paginationAction=@{${@environment.getProperty('path.userright')}}, searchFields=${ {'id'} }, updateForm='/backoffice/adminlte/user/userrightForm')"></th:block>
 			</div>
 			<!-- Create Modal-->
 			<th:block sec:authorize="hasAuthority('userright_create')" layout:insert="/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.userright')}}, createObject=${userrightCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.userright.checkid')})"></th:block>

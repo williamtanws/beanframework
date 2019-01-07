@@ -1,5 +1,7 @@
 package com.beanframework.admin.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,5 +97,24 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		modelService.deleteByUuid(uuid, Admin.class);
+	}
+
+	@Override
+	public Admin saveEntity(Admin model) throws BusinessException {
+		return (Admin) modelService.saveEntity(model,Admin.class);
+	}
+
+	@Override
+	public void deleteById(String id) throws BusinessException {
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Admin.ID, id);
+			Admin model = modelService.findOneEntityByProperties(properties, Admin.class);
+			modelService.deleteByEntity(model, Admin.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 }

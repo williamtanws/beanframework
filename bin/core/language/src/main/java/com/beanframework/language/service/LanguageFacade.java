@@ -1,5 +1,6 @@
 package com.beanframework.language.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,8 +24,6 @@ public interface LanguageFacade {
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	public Page<Language> findPage(Specification<Language> specification, PageRequest pageable) throws Exception;
 
-	public Language create() throws Exception;
-
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	public Language findOneDtoByUuid(UUID uuid) throws Exception;
 
@@ -39,5 +38,13 @@ public interface LanguageFacade {
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	public void delete(UUID uuid) throws BusinessException;
+	
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	
+	public Language create() throws Exception;
+
+	Language saveEntity(Language model) throws BusinessException;
+
+	public void deleteById(String id) throws BusinessException;
 
 }

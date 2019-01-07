@@ -8,9 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -26,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.service.ModelService;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityLanguageImporterConverter;
 import com.beanframework.console.csv.LanguageCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.language.domain.Language;
+import com.beanframework.language.service.LanguageFacade;
 
 public class LanguageImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(LanguageImporter.class);
 
 	@Autowired
-	private ModelService modelService;
+	private LanguageFacade languageFacade;
 
 	@Autowired
 	private EntityLanguageImporterConverter converter;
@@ -126,17 +124,13 @@ public class LanguageImporter extends Importer {
 		for (LanguageCsv csv : csvList) {
 
 			Language model = converter.convert(csv);
-
-			modelService.saveEntity(model, Language.class);
+			languageFacade.saveEntity(model);
 		}
 	}
 
 	public void remove(List<LanguageCsv> csvList) throws Exception {
 		for (LanguageCsv csv : csvList) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Language.ID, csv.getId());
-			Language model = modelService.findOneEntityByProperties(properties, Language.class);
-			modelService.deleteByEntity(model, Language.class);
+			languageFacade.deleteById(csv.getId());
 		}
 	}
 

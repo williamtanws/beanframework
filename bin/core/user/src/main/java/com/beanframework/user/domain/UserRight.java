@@ -33,6 +33,7 @@ public class UserRight extends GenericDomain {
 	@OrderBy(UserRightField.DYNAMIC_FIELD)
 	private List<UserRightField> fields = new ArrayList<UserRightField>();
 
+	@Audited(withModifiedFlag = true)
 	private Integer sort;
 
 	public Integer getSort() {

@@ -1,5 +1,6 @@
 package com.beanframework.cronjob.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,8 +31,6 @@ public interface CronjobFacade {
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Page<Cronjob> findPage(Specification<Cronjob> findByCriteria, PageRequest of) throws Exception;
 
-	Cronjob create() throws Exception;
-
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Cronjob findOneDtoByUuid(UUID uuid) throws Exception;
 
@@ -53,4 +52,11 @@ public interface CronjobFacade {
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
 	void removeDtoCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException;
 
+	Cronjob create() throws Exception;
+
+	Cronjob saveEntity(Cronjob model) throws BusinessException;
+
+	void deleteById(String id) throws BusinessException;
+	
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 }

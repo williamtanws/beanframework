@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
@@ -44,13 +45,18 @@ public class EntityLanguageConverter implements EntityConverter<Language, Langua
 
 	private Language convert(Language source, Language prototype) {
 
-		if (source.getId() != null)
-			prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
+		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+			prototype.setId(source.getId());
 
-		prototype.setName(source.getName());
-		prototype.setSort(source.getSort());
-		prototype.setActive(source.getActive());
+		if (StringUtils.equals(prototype.getName(), source.getName()) == false)
+			prototype.setName(source.getName());
+
+		if (prototype.getSort() == source.getSort() == false)
+			prototype.setSort(source.getSort());
+
+		if (prototype.getActive() == source.getActive() == false)
+			prototype.setActive(source.getActive());
 
 		return prototype;
 	}

@@ -6,6 +6,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,10 +33,13 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
+import com.beanframework.user.domain.User;
+import com.beanframework.user.domain.UserField;
+import com.beanframework.user.service.AuditorFacade;
 
 @Component
 public class EmployeeFacadeImpl implements EmployeeFacade {
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -41,13 +48,16 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private SessionRegistry sessionRegistry;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
+	@Autowired
+	private AuditorFacade auditorFacade;
+
 	@Override
 	public Employee saveProfile(Employee employee, MultipartFile picture) throws BusinessException {
-		
+
 		try {
 			if (picture != null && picture.isEmpty() == false) {
 				String mimetype = picture.getContentType();
@@ -56,13 +66,13 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 					throw new Exception(localeMessageService.getMessage(EmployeeConstants.Locale.PICTURE_WRONGFORMAT));
 				}
 			}
-			
+
 			modelService.saveEntity(employee, Employee.class);
 			employeeService.saveProfilePicture(employee, picture);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
-		
+
 		return employee;
 	}
 
@@ -72,20 +82,19 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		Employee employeePrincipal = (Employee) auth.getPrincipal();
 		employeePrincipal = findDtoPrincipal(employee);
 
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal,
-				employeePrincipal.getPassword(), employeePrincipal.getAuthorities());
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal, employeePrincipal.getPassword(), employeePrincipal.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(token);
 
 		return employeePrincipal;
 	}
-	
+
 	private Employee findDtoPrincipal(Employee source) {
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Employee employeePrincipal = (Employee) auth.getPrincipal();
-		
+
 		employeePrincipal.setId(source.getId());
-		
+
 		return employeePrincipal;
 	}
 
@@ -98,8 +107,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			if (principal instanceof Employee) {
 				final Employee principalEmployee = (Employee) principal;
 				if (principalEmployee.getUuid() != null) {
-					List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principalEmployee,
-							false);
+					List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principalEmployee, false);
 					sessions.add(new EmployeeSession(principalEmployee, sessionInformations));
 				}
 			}
@@ -113,8 +121,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 		for (EmployeeSession employeeSession : userList) {
 			if (employeeSession.getPrincipalEmployee().getUuid().equals(uuid)) {
-				List<SessionInformation> session = sessionRegistry
-						.getAllSessions(employeeSession.getPrincipalEmployee(), false);
+				List<SessionInformation> session = sessionRegistry.getAllSessions(employeeSession.getPrincipalEmployee(), false);
 				for (SessionInformation sessionInformation : session) {
 					sessionInformation.expireNow();
 				}
@@ -127,8 +134,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		Set<EmployeeSession> userList = findAllSessions();
 
 		for (EmployeeSession employeeSession : userList) {
-			List<SessionInformation> session = sessionRegistry.getAllSessions(employeeSession.getPrincipalEmployee(),
-					false);
+			List<SessionInformation> session = sessionRegistry.getAllSessions(employeeSession.getPrincipalEmployee(), false);
 			for (SessionInformation sessionInformation : session) {
 				sessionInformation.expireNow();
 			}
@@ -187,7 +193,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public Page<Employee> findPage(Specification<Employee> specification, PageRequest pageRequest) throws Exception {
 		return modelService.findDtoPage(specification, pageRequest, Employee.class);
 	}
-	
 
 	@Override
 	public Employee findOneDtoByUuid(UUID uuid) throws Exception {
@@ -206,17 +211,46 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public Employee createDto(Employee model) throws BusinessException {
-		return (Employee) modelService.saveDto(model, Employee.class);
+		Employee employee = (Employee) modelService.saveDto(model, Employee.class);
+		auditorFacade.save(employee);
+		return employee;
 	}
 
 	@Override
 	public Employee updateDto(Employee model) throws BusinessException {
-		return (Employee) modelService.saveDto(model, Employee.class);
+		Employee employee = (Employee) modelService.saveDto(model, Employee.class);
+		auditorFacade.save(employee);
+		return employee;
+	}
+
+	@Override
+	public Employee saveEntity(Employee model) throws BusinessException {
+		Employee employee = (Employee) modelService.saveEntity(model, Employee.class);
+		auditorFacade.save(employee);
+		return employee;
 	}
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		modelService.deleteByUuid(uuid, Employee.class);
+	}
+	
+	@Override
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, User.class);
+		
+		return revisions;
+	}
+	
+	@Override
+	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(UserField.USER).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, UserField.class);
+		
+		return revisions;
 	}
 
 }

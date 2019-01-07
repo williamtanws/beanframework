@@ -8,9 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -26,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.service.ModelService;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityMenuImporterConverter;
 import com.beanframework.console.csv.MenuCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.service.MenuFacade;
 
 public class MenuImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuImporter.class);
 
 	@Autowired
-	private ModelService modelService;
+	private MenuFacade menuFacade;
 	
 	@Autowired
 	private EntityMenuImporterConverter converter;
@@ -125,16 +123,13 @@ public class MenuImporter extends Importer {
 
 		for (MenuCsv csv : csvList) {
 			Menu menu = converter.convert(csv);
-			modelService.saveEntity(menu, Menu.class);
+			menuFacade.saveEntity(menu);
 		}
 	}	
 	
 	public void remove(List<MenuCsv> csvList) throws Exception {
 		for (MenuCsv csv : csvList) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Menu.ID, csv.getId());
-			Menu model = modelService.findOneEntityByProperties(properties, Menu.class);
-			modelService.deleteByEntity(model, Menu.class);
+			menuFacade.deleteById(csv.getId());
 		}
 	}
 }

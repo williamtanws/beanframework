@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -81,7 +85,6 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public Cronjob create() throws Exception {
 		return modelService.create(Cronjob.class);
 	}
-	
 
 	@Override
 	public Cronjob findOneDtoByUuid(UUID uuid) throws Exception {
@@ -149,4 +152,31 @@ public class CronjobFacadeImpl implements CronjobFacade {
 		}
 	}
 
+	@Override
+	public Cronjob saveEntity(Cronjob model) throws BusinessException {
+		return (Cronjob) modelService.saveEntity(model, Cronjob.class);
+	}
+
+	@Override
+	public void deleteById(String id) throws BusinessException {
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.ID, id);
+			Cronjob model = modelService.findOneEntityByProperties(properties, Cronjob.class);
+			modelService.deleteByEntity(model, Cronjob.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, Cronjob.class);
+		
+		return revisions;
+	}
 }

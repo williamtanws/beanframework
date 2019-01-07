@@ -6,12 +6,17 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -38,7 +43,8 @@ public abstract class GenericDomain implements Serializable {
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	@Column(columnDefinition = "BINARY(16)", unique = true, updatable = false)
 	private UUID uuid;
-
+	
+	@Audited(withModifiedFlag = true)
 	@NotBlank
 	@Column(unique = true)
 	private String id;
@@ -48,14 +54,19 @@ public abstract class GenericDomain implements Serializable {
 	private Date createdDate;
 
 	@CreatedBy
-	@Column(updatable = false)
-	private String createdBy;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "createdby_uuid")
+	private Auditor createdBy;
 
+	@Audited
 	@LastModifiedDate
 	private Date lastModifiedDate;
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@LastModifiedBy
-	private String lastModifiedBy;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "lastmodifiedby_uuid")
+	private Auditor lastModifiedBy;
 
 	public UUID getUuid() {
 		return uuid;
@@ -81,11 +92,11 @@ public abstract class GenericDomain implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public String getCreatedBy() {
+	public Auditor getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(Auditor createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -97,11 +108,11 @@ public abstract class GenericDomain implements Serializable {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 
-	public String getLastModifiedBy() {
+	public Auditor getLastModifiedBy() {
 		return lastModifiedBy;
 	}
 
-	public void setLastModifiedBy(String lastModifiedBy) {
+	public void setLastModifiedBy(Auditor lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
 }

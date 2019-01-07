@@ -12,7 +12,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.customer.domain.Customer;
 
 public interface CustomerFacade {
-	
+
 	public static interface PreAuthorizeEnum {
 		public static final String READ = "hasAuthority('customer_read')";
 		public static final String CREATE = "hasAuthority('customer_create')";
@@ -20,14 +20,8 @@ public interface CustomerFacade {
 		public static final String DELETE = "hasAuthority('customer_delete')";
 	}
 
-	Customer getCurrentUser();
-
-	Customer findDtoAuthenticate(String id, String password) throws Exception;
-
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Page<Customer> findPage(Specification<Customer> findByCriteria, PageRequest of) throws Exception;
-
-	Customer create() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Customer findOneDtoByUuid(UUID uuid) throws Exception;
@@ -44,5 +38,14 @@ public interface CustomerFacade {
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
+	Customer getCurrentUser();
+
+	Customer findDtoAuthenticate(String id, String password) throws Exception;
+
+	Customer create() throws Exception;
+
+	Customer saveEntity(Customer model) throws BusinessException;
+
+	void deleteById(String id) throws BusinessException;
 
 }

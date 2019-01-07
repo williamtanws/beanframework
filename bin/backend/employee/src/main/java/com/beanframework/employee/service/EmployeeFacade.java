@@ -1,5 +1,6 @@
 package com.beanframework.employee.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -41,14 +42,6 @@ public interface EmployeeFacade {
 	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.DELETE)
 	void expireAllSessions();
 
-	Employee getCurrentUser();
-
-	Employee findDtoAuthenticate(String id, String password) throws BusinessException, Exception;
-
-	void deleteEmployeeProfilePictureByUuid(UUID uuid);
-
-	void deleteAllEmployeeProfilePicture();
-
 	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
 	Page<Employee> findPage(Specification<Employee> specification, PageRequest pageRequest) throws Exception;
 
@@ -58,15 +51,29 @@ public interface EmployeeFacade {
 	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
 	Employee findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
-	Employee create() throws Exception;
-
 	@PreAuthorize(EmployeePreAuthorizeEnum.CREATE)
 	Employee createDto(Employee model) throws BusinessException;
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.UPDATE)
 	Employee updateDto(Employee model) throws BusinessException;
 
+	Employee saveEntity(Employee model) throws BusinessException;
+
 	@PreAuthorize(EmployeePreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
+
+	Employee create() throws Exception;
+
+	Employee getCurrentUser();
+
+	Employee findDtoAuthenticate(String id, String password) throws BusinessException, Exception;
+
+	void deleteEmployeeProfilePictureByUuid(UUID uuid);
+
+	void deleteAllEmployeeProfilePicture();
+
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
+	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
 }

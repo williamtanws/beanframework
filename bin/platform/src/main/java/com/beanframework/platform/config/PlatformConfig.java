@@ -22,7 +22,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
@@ -45,7 +44,6 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableTransactionManagement
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableAsync
-@EnableJpaAuditing
 @PropertySource("file:../../config/src/main/resources/application.properties")
 @Order(0)
 public class PlatformConfig {

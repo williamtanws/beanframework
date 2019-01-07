@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.web;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -125,6 +126,9 @@ public class LanguageController extends AbstractController {
 		if (languageUpdate.getUuid() != null) {
 
 			Language existingLanguage = languageFacade.findOneDtoByUuid(languageUpdate.getUuid());
+			
+			List<Object[]> revisions = languageFacade.findHistoryByUuid(languageUpdate.getUuid(), null, null);
+			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
 
 			if (existingLanguage != null) {
 				model.addAttribute(LanguageWebConstants.ModelAttribute.UPDATE, existingLanguage);

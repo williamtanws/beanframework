@@ -8,9 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -26,19 +24,19 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.service.ModelService;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityCronjobImporterConverter;
 import com.beanframework.console.csv.CronjobCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.service.CronjobFacade;
 import com.beanframework.cronjob.service.CronjobManagerService;
 
 public class CronjobImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(CronjobImporter.class);
 
 	@Autowired
-	private ModelService modelService;
+	private CronjobFacade cronjobFacade;
 
 	@Autowired
 	private EntityCronjobImporterConverter converter;
@@ -130,10 +128,9 @@ public class CronjobImporter extends Importer {
 		cronjobManagerService.clearAllScheduler();
 
 		for (CronjobCsv csv : csvList) {
+
 			Cronjob model = converter.convert(csv);
-
-			modelService.saveEntity(model, Cronjob.class);
-
+			cronjobFacade.saveEntity(model);
 		}
 
 		cronjobManagerService.initCronJob();
@@ -141,10 +138,7 @@ public class CronjobImporter extends Importer {
 
 	public void remove(List<CronjobCsv> configurationCsvList) throws Exception {
 		for (CronjobCsv csv : configurationCsvList) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.ID, csv.getId());
-			Cronjob model = modelService.findOneEntityByProperties(properties, Cronjob.class);
-			modelService.deleteByEntity(model, Cronjob.class);
+			cronjobFacade.deleteById(csv.getId());
 		}
 	}
 }

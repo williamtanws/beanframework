@@ -25,4 +25,8 @@ public interface ConfigurationFacade {
 
 	void delete(UUID uuid) throws BusinessException;
 
+	Configuration saveEntity(Configuration model) throws BusinessException;
+
+	void deleteById(String id) throws BusinessException;
+
 }

@@ -8,9 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -26,8 +24,8 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityConfigurationImporterConverter;
 import com.beanframework.console.csv.ConfigurationCsv;
@@ -37,7 +35,7 @@ public class ConfigurationImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(ConfigurationImporter.class);
 
 	@Autowired
-	private ModelService modelService;
+	private ConfigurationFacade configurationFacade;
 	
 	@Autowired
 	private EntityConfigurationImporterConverter converter;
@@ -126,17 +124,13 @@ public class ConfigurationImporter extends Importer {
 		for (ConfigurationCsv csv : csvList) {
 
 			Configuration model = converter.convert(csv);
-
-			modelService.saveEntity(model, Configuration.class);
+			configurationFacade.saveEntity(model);
 		}
 	}
 
 	public void remove(List<ConfigurationCsv> csvList) throws Exception {
 		for (ConfigurationCsv csv : csvList) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Configuration.ID, csv.getId());
-			Configuration model = modelService.findOneEntityByProperties(properties, Configuration.class);
-			modelService.deleteByEntity(model, Configuration.class);
+			configurationFacade.deleteById(csv.getId());
 		}
 	}
 

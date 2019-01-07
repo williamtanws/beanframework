@@ -8,9 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -26,25 +24,25 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.service.ModelService;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.EntityCustomerImporterConverter;
 import com.beanframework.console.csv.CustomerCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.customer.domain.Customer;
+import com.beanframework.customer.service.CustomerFacade;
 
 public class CustomerImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(CustomerImporter.class);
 
 	@Autowired
-	private ModelService modelService;
-	
+	private CustomerFacade customerFacade;
+
 	@Autowired
 	private EntityCustomerImporterConverter converter;
 
 	@Value("${module.console.import.update.customer}")
 	private String IMPORT_UPDATE;
-	
+
 	@Value("${module.console.import.remove.customer}")
 	private String IMPORT_REMOVE;
 
@@ -70,7 +68,7 @@ public class CustomerImporter extends Importer {
 			save(customerCsvList);
 		}
 	}
-	
+
 	@Override
 	public void remove() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -99,12 +97,12 @@ public class CustomerImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			CustomerCsv csv;
-			LOGGER.info("Start import "+PlatformUpdateWebConstants.Importer.CustomerImporter.NAME);
+			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.CustomerImporter.NAME);
 			while ((csv = beanReader.read(CustomerCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+PlatformUpdateWebConstants.Importer.CustomerImporter.NAME);
+			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.CustomerImporter.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -120,22 +118,19 @@ public class CustomerImporter extends Importer {
 		}
 		return csvList;
 	}
-	
+
 	public void save(List<CustomerCsv> customerCsvList) throws Exception {
 
 		for (CustomerCsv csv : customerCsvList) {
 
 			Customer model = converter.convert(csv);
-			modelService.saveEntity(model, Customer.class);
+			customerFacade.saveEntity(model);
 		}
 	}
-	
+
 	public void remove(List<CustomerCsv> csvList) throws Exception {
 		for (CustomerCsv csv : csvList) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Customer.ID, csv.getId());
-			Customer model = modelService.findOneEntityByProperties(properties, Customer.class);
-			modelService.deleteByEntity(model, Customer.class);
+			customerFacade.deleteById(csv.getId());
 		}
 	}
 

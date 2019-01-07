@@ -33,7 +33,7 @@ public class UserPermission extends GenericDomain {
 	public static final String FIELDS = "fields";
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserPermissionField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = UserPermissionField.USER_PERMISSION, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy(UserPermissionField.DYNAMIC_FIELD)
 	private List<UserPermissionField> fields = new ArrayList<UserPermissionField>();
 

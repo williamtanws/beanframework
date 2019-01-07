@@ -18,8 +18,6 @@ public interface MenuFacade {
 		public static final String DELETE = "hasAuthority('menu_delete')";
 	}
 
-	Menu create() throws Exception;
-
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Menu findOneDtoByUuid(UUID uuid) throws Exception;
 
@@ -41,5 +39,15 @@ public interface MenuFacade {
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Menu> findDtoMenuTree() throws BusinessException;
 
+	Menu create() throws Exception;
+
 	List<Menu> findDtoMenuTreeByCurrentUser() throws BusinessException;
+
+	Menu saveEntity(Menu menu) throws BusinessException;
+
+	void deleteById(String id) throws BusinessException;
+
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
+	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 }
