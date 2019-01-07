@@ -1,5 +1,6 @@
 package com.beanframework.admin.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -30,4 +31,6 @@ public interface AdminFacade {
 	Admin saveEntity(Admin model) throws BusinessException;
 
 	void deleteById(String id) throws BusinessException;
+
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 }

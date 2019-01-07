@@ -45,17 +45,29 @@ public class EntityAdminConverter implements EntityConverter<Admin, Admin> {
 	}
 
 	private Admin convert(Admin source, Admin prototype) {
-
-		if (source.getId() != null)
-			prototype.setId(source.getId());
+		
 		prototype.setLastModifiedDate(new Date());
 
-		prototype.setAccountNonExpired(source.getAccountNonExpired());
-		prototype.setAccountNonLocked(source.getAccountNonLocked());
-		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
-		prototype.setEnabled(source.getEnabled());
+		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+			prototype.setId(source.getId());
+
+		if (source.getAccountNonExpired() != null && source.getAccountNonExpired() != prototype.getAccountNonExpired())
+			prototype.setAccountNonExpired(source.getAccountNonExpired());
+
+		if (source.getAccountNonLocked() != null && source.getAccountNonLocked() != prototype.getAccountNonLocked())
+			prototype.setAccountNonLocked(source.getAccountNonLocked());
+
+		if (source.getCredentialsNonExpired() != null && source.getCredentialsNonExpired() != prototype.getCredentialsNonExpired())
+			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+
+		if (source.getEnabled() != null && source.getEnabled() != prototype.getEnabled())
+			prototype.setEnabled(source.getEnabled());
+
 		if (StringUtils.isNotBlank(source.getPassword()))
 			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+
+		if (StringUtils.equals(source.getName(), prototype.getName()) == false)
+			prototype.setName(StringUtils.strip(source.getName()));
 
 		return prototype;
 	}

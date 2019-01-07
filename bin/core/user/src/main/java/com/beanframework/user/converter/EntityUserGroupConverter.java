@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
@@ -58,10 +59,11 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 	private UserGroup convert(UserGroup source, UserGroup prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null) {
-				prototype.setId(source.getId());
-			}
 			prototype.setLastModifiedDate(new Date());
+			
+			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+				prototype.setId(source.getId());
+			
 			
 			// Dynamic Field
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {

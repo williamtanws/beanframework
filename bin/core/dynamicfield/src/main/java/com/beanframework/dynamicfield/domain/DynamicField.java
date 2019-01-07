@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
@@ -36,17 +37,30 @@ public class DynamicField extends GenericDomain {
 	public static final String LABEL = "label";
 	public static final String LANGUAGE = "language";
 
+	@Audited(withModifiedFlag = true)
 	private String name;
+	
+	@Audited(withModifiedFlag = true)
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private DynamicFieldTypeEnum fieldType;
+	
+	@Audited(withModifiedFlag = true)
 	private Integer sort;
+	
+	@Audited(withModifiedFlag = true)
 	private Boolean required;
+	
+	@Audited(withModifiedFlag = true)
 	private String rule;
+	
+	@Audited(withModifiedFlag = true)
 	private String fieldGroup;
+	
+	@Audited(withModifiedFlag = true)
 	private String label;
 
-	@NotAudited
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "language_uuid")
 	private Language language;

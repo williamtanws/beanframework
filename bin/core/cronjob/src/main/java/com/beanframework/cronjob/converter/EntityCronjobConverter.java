@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
@@ -46,16 +47,28 @@ public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob>
 
 	private Cronjob convert(Cronjob source, Cronjob prototype) {
 
-		if (source.getId() != null)
-			prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
 
-		prototype.setJobClass(source.getJobClass());
-		prototype.setJobGroup(source.getJobGroup());
-		prototype.setJobName(source.getJobName());
-		prototype.setDescription(source.getDescription());
-		prototype.setCronExpression(source.getCronExpression());
-		prototype.setStartup(source.getStartup());
+		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+			prototype.setId(StringUtils.strip(source.getId()));
+
+		if (StringUtils.equals(source.getJobClass(), prototype.getJobClass()) == false)
+			prototype.setJobClass(StringUtils.strip(source.getJobClass()));
+
+		if (StringUtils.equals(source.getJobGroup(), prototype.getJobGroup()) == false)
+			prototype.setJobGroup(StringUtils.strip(source.getJobGroup()));
+
+		if (StringUtils.equals(source.getJobName(), prototype.getJobName()) == false)
+			prototype.setJobName(StringUtils.strip(source.getJobName()));
+
+		if (StringUtils.equals(source.getDescription(), prototype.getDescription()) == false)
+			prototype.setDescription(StringUtils.strip(source.getDescription()));
+
+		if (StringUtils.equals(source.getCronExpression(), prototype.getCronExpression()) == false)
+			prototype.setCronExpression(StringUtils.strip(source.getCronExpression()));
+
+		if (source.getStartup() != prototype.getStartup())
+			prototype.setStartup(source.getStartup());
 
 		return prototype;
 	}

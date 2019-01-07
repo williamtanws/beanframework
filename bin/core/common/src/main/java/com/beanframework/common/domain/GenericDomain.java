@@ -43,7 +43,7 @@ public abstract class GenericDomain implements Serializable {
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	@Column(columnDefinition = "BINARY(16)", unique = true, updatable = false)
 	private UUID uuid;
-	
+
 	@Audited(withModifiedFlag = true)
 	@NotBlank
 	@Column(unique = true)
@@ -114,5 +114,10 @@ public abstract class GenericDomain implements Serializable {
 
 	public void setLastModifiedBy(Auditor lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
+	}
+
+	@Override
+	public String toString() {
+		return "ID: " + id;
 	}
 }

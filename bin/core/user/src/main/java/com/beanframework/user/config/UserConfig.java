@@ -14,7 +14,6 @@ import com.beanframework.user.converter.DtoUserPermissionConverter;
 import com.beanframework.user.converter.DtoUserPermissionFieldConverter;
 import com.beanframework.user.converter.DtoUserRightConverter;
 import com.beanframework.user.converter.DtoUserRightFieldConverter;
-import com.beanframework.user.converter.EntityUserConverter;
 import com.beanframework.user.converter.EntityUserFieldConverter;
 import com.beanframework.user.converter.EntityUserGroupConverter;
 import com.beanframework.user.converter.EntityUserGroupFieldConverter;
@@ -169,20 +168,6 @@ public class UserConfig {
 	////////////////////////////
 	// ENTITY Converter //
 	////////////////////////////
-
-	@Bean
-	public EntityUserConverter entityUserConverter() {
-		return new EntityUserConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityUserConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityUserConverter());
-		mapping.setTypeCode(User.class.getSimpleName());
-
-		return mapping;
-	}
 
 	@Bean
 	public EntityUserFieldConverter entityUserFieldConverter() {

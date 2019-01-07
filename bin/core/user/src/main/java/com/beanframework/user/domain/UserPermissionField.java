@@ -9,7 +9,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
@@ -32,17 +32,19 @@ public class UserPermissionField extends GenericDomain {
 	public static final String USER_PERMISSION = "userPermission";
 	public static final String DYNAMIC_FIELD = "dynamicField";
 	
-	@NotAudited
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userPermission_uuid")
 	private UserPermission userPermission;
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")
 	@OrderBy(DynamicField.SORT+" ASC")
 	private DynamicField dynamicField;
 
+	@Audited(withModifiedFlag=true)
 	private String value;
 
 	public UserPermission getUserPermission() {

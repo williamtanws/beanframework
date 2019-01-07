@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
@@ -38,8 +39,7 @@ public class EntityUserPermissionFieldConverter implements EntityConverter<UserP
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserPermissionField.UUID, source.getUuid());
 
-				UserPermissionField exists = modelService.findOneEntityByProperties(properties,
-						UserPermissionField.class);
+				UserPermissionField exists = modelService.findOneEntityByProperties(properties, UserPermissionField.class);
 
 				if (exists != null) {
 					prototype = exists;
@@ -56,22 +56,35 @@ public class EntityUserPermissionFieldConverter implements EntityConverter<UserP
 		return convert(source, prototype);
 	}
 
-	private UserPermissionField convert(UserPermissionField source, UserPermissionField prototype)
-			throws ConverterException {
+	private UserPermissionField convert(UserPermissionField source, UserPermissionField prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
 			prototype.setLastModifiedDate(new Date());
 
+			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+				prototype.setId(source.getId());
+
+			// Dynamic Field
 			if (source.getDynamicField() == null) {
-				prototype.setDynamicField(null);
+				if (prototype.getDynamicField() != null)
+					prototype.setDynamicField(null);
 			} else {
-				DynamicField dynamicField = modelService.findOneEntityByUuid(source.getDynamicField().getUuid(),
-						DynamicField.class);
-				prototype.setDynamicField(dynamicField);
+				boolean add = true;
+				if (prototype.getDynamicField() != null) {
+					if (source.getDynamicField().getUuid() == prototype.getDynamicField().getUuid()) {
+						add = false;
+					}
+				}
+
+				if (add) {
+					DynamicField dynamicField = modelService.findOneEntityByUuid(source.getDynamicField().getUuid(), DynamicField.class);
+					prototype.setDynamicField(dynamicField);
+				}
 			}
-			prototype.setValue(source.getValue());
+
+			if (StringUtils.equals(source.getValue(), prototype.getValue()) == false)
+				prototype.setValue(source.getValue());
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}

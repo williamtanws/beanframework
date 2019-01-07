@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
@@ -47,28 +48,36 @@ public class Menu extends GenericDomain {
 	public static final String USER_GROUPS_UUID = "userGroups.uuid";
 	public static final String FIELDS = "fields";
 
+	@Audited(withModifiedFlag=true)
 	@NotNull
 	private Integer sort;
 
+	@Audited(withModifiedFlag=true)
 	private String icon;
 
+	@Audited(withModifiedFlag=true)
 	private String path;
 
+	@Audited(withModifiedFlag=true)
 	@Enumerated(EnumType.STRING)
 	private MenuTargetTypeEnum target;
 
+	@Audited(withModifiedFlag=true)
 	@NotNull
 	private Boolean enabled;
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_uuid")
 	private Menu parent;
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = PARENT, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(SORT + " ASC")
 	private List<Menu> childs = new ArrayList<Menu>();
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = MenuConstants.Table.MENU_USER_GROUP_REL, joinColumns = @JoinColumn(name = "menu_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))

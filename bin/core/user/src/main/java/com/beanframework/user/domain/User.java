@@ -23,6 +23,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -48,14 +49,27 @@ public abstract class User extends GenericDomain {
 	public static final String NAME = "name";
 
 	private static final long serialVersionUID = -7444894280894062710L;
+	
+	@Audited(withModifiedFlag=true)
 	@NotNull
 	private String password;
+	
+	@Audited(withModifiedFlag=true)
 	private Boolean accountNonExpired;
+	
+	@Audited(withModifiedFlag=true)
 	private Boolean accountNonLocked;
+	
+	@Audited(withModifiedFlag=true)
 	private Boolean credentialsNonExpired;
+	
+	@Audited(withModifiedFlag=true)
 	private Boolean enabled;
+	
+	@Audited(withModifiedFlag=true)
 	private String name;
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))

@@ -1,5 +1,6 @@
 package com.beanframework.console.web;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -124,6 +125,10 @@ public class AdminController extends AbstractController {
 			Admin existingAdmin = adminFacade.findOneDtoByUuid(adminUpdate.getUuid());
 
 			if (existingAdmin != null) {
+				
+				List<Object[]> revisions = adminFacade.findHistoryByUuid(adminUpdate.getUuid(), null, null);
+				model.addAttribute(ConsoleWebConstants.Model.REVISIONS, revisions);
+				
 				model.addAttribute(AdminWebConstants.ModelAttribute.UPDATE, existingAdmin);
 			} else {
 				adminUpdate.setUuid(null);

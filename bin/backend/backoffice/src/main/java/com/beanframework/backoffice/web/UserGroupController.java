@@ -176,6 +176,12 @@ public class UserGroupController extends AbstractController {
 				model.addAttribute("userRights", userRights);
 				model.addAttribute("userPermissions", userPermissions);
 				
+				List<Object[]> revisions = userGroupFacade.findHistoryByUuid(usergroupUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
+				
+				List<Object[]> fieldRevisions = userGroupFacade.findFieldHistoryByUuid(usergroupUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.FIELD_REVISIONS, fieldRevisions);
+				
 				model.addAttribute(UserGroupWebConstants.ModelAttribute.UPDATE, existingUserGroup);
 			} else {
 				usergroupUpdate.setUuid(null);

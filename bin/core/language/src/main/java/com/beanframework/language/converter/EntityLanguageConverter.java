@@ -46,11 +46,12 @@ public class EntityLanguageConverter implements EntityConverter<Language, Langua
 	private Language convert(Language source, Language prototype) {
 
 		prototype.setLastModifiedDate(new Date());
+		
 		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
-			prototype.setId(source.getId());
+			prototype.setId(StringUtils.strip(source.getId()));
 
 		if (StringUtils.equals(prototype.getName(), source.getName()) == false)
-			prototype.setName(source.getName());
+			prototype.setName(StringUtils.strip(source.getName()));
 
 		if (prototype.getSort() == source.getSort() == false)
 			prototype.setSort(source.getSort());

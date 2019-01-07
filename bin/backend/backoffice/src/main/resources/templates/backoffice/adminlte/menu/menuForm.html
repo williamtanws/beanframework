@@ -49,6 +49,9 @@
 								<a href="#tab_usergroup" data-toggle="tab" th:text="#{module.usergroup}" onclick="changeTab('usergroup')"></a>
 							</li>
 							<li>
+								<a href="#tab_history" data-toggle="tab" th:text="#{module.history}" onclick="changeTab('history')"></a>
+							</li>
+							<li>
 								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
@@ -104,6 +107,12 @@
 									<th:block layout:insert="/backoffice/adminlte/common/component/usergroup :: usergroup"></th:block>
 								</div>
 								<!-- /.box-body -->
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_history">
+								<div class="box-body">
+									<th:block layout:insert="/backoffice/adminlte/common/component/history :: history"></th:block>
+								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration">

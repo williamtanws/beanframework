@@ -148,6 +148,12 @@ public class EmployeeController extends AbstractController {
 					}
 				}
 				existingEmployee.setUserGroups(userGroups);
+				
+				List<Object[]> revisions = employeeFacade.findHistoryByUuid(employeeUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
+				
+				List<Object[]> fieldRevisions = employeeFacade.findFieldHistoryByUuid(employeeUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.FIELD_REVISIONS, fieldRevisions);
 
 				model.addAttribute(EmployeeWebConstants.ModelAttribute.UPDATE, existingEmployee);
 			} else {

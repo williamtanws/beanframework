@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
@@ -44,11 +45,13 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 
 	private Configuration convert(Configuration source, Configuration prototype) {
 
-		if (source.getId() != null)
-			prototype.setId(source.getId());
 		prototype.setLastModifiedDate(new Date());
 
-		prototype.setValue(source.getValue());
+		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+			prototype.setId(StringUtils.strip(source.getId()));
+
+		if (StringUtils.equals(source.getValue(), prototype.getValue()) == false)
+			prototype.setValue(StringUtils.strip(source.getValue()));
 
 		return prototype;
 	}
