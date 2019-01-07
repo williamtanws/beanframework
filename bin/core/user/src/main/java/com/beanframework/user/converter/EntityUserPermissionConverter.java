@@ -1,6 +1,5 @@
 package com.beanframework.user.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +48,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 	private UserPermission convert(UserPermission source, UserPermission prototype) throws ConverterException {
 
 		try {
-			prototype.setLastModifiedDate(new Date());
+			
 
 			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 				prototype.setId(source.getId());

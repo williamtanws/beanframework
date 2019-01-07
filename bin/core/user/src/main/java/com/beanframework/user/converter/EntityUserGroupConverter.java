@@ -1,7 +1,6 @@
 package com.beanframework.user.converter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +58,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 	private UserGroup convert(UserGroup source, UserGroup prototype) throws ConverterException {
 
 		try {
-			prototype.setLastModifiedDate(new Date());
+			
 			
 			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 				prototype.setId(source.getId());

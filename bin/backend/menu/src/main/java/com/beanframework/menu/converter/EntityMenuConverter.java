@@ -1,7 +1,6 @@
 package com.beanframework.menu.converter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -56,7 +55,7 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 	private Menu convert(Menu source, Menu prototype) throws ConverterException {
 
 		try {
-			prototype.setLastModifiedDate(new Date());
+			
 
 			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 				prototype.setId(source.getId());

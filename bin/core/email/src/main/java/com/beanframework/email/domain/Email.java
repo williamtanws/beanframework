@@ -11,6 +11,8 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericDomain;
@@ -20,11 +22,14 @@ import com.beanframework.email.domain.EmailEnum.Status;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Audited
 @Table(name = EmailConstants.Table.EMAIL)
 public class Email extends GenericDomain {
 
-	private static final long serialVersionUID = 2324052965289006873L;
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6066375988761984365L;
 	public static final String TO_RECIPIENTS = "toRecipients";
 	public static final String CC_RECIPIENTS = "ccRecipients";
 	public static final String BCC_RECIPIENTS = "bccRecipients";
@@ -36,26 +41,35 @@ public class Email extends GenericDomain {
 	public static final String RESULT = "result";
 	public static final String MESSAGE = "message";
 
+	@Audited(withModifiedFlag = true)
 	private String toRecipients;
 
+	@Audited(withModifiedFlag = true)
 	private String ccRecipients;
 
+	@Audited(withModifiedFlag = true)
 	private String bccRecipients;
 
+	@Audited(withModifiedFlag = true)
 	private String subject;
 
+	@Audited(withModifiedFlag = true)
 	private String text;
 
+	@Audited(withModifiedFlag = true)
 	@Lob
 	@Column(length = 100000)
 	private String html;
 
+	@NotAudited
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
+	@NotAudited
 	@Enumerated(EnumType.STRING)
 	private Result result;
 
+	@Audited(withModifiedFlag = true)
 	@Lob
 	@Column(length = 100000)
 	private String message;

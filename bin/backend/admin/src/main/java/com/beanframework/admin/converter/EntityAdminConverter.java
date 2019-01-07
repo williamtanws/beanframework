@@ -1,6 +1,5 @@
 package com.beanframework.admin.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,8 +44,6 @@ public class EntityAdminConverter implements EntityConverter<Admin, Admin> {
 	}
 
 	private Admin convert(Admin source, Admin prototype) {
-		
-		prototype.setLastModifiedDate(new Date());
 
 		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 			prototype.setId(source.getId());

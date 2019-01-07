@@ -1,6 +1,5 @@
 package com.beanframework.console.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +53,7 @@ public class EntityUserRightImporterConverter implements EntityConverter<UserRig
 		try {
 			if (source.getId() != null)
 				prototype.setId(source.getId());
-			prototype.setLastModifiedDate(new Date());
+			
 
 			prototype.setSort(source.getSort());
 

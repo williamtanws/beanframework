@@ -14,6 +14,7 @@ public class CustomerCsv extends AbstractCsv {
 	private boolean credentialsNonExpired;
 	private boolean enabled;
 	private String userGroupIds;
+	private String name;
 	private String dynamicField;
 
 	public static CellProcessor[] getUpdateProcessors() {
@@ -25,6 +26,7 @@ public class CustomerCsv extends AbstractCsv {
 				new ParseBool(), // credentialsNonExpired
 				new ParseBool(), // enabled
 				new org.supercsv.cellprocessor.Optional(), // userGroupId
+				new Optional(), // name
 				new Optional() // dynamicField
 		};
 
@@ -81,6 +83,14 @@ public class CustomerCsv extends AbstractCsv {
 
 	public void setUserGroupIds(String userGroupIds) {
 		this.userGroupIds = userGroupIds;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDynamicField() {

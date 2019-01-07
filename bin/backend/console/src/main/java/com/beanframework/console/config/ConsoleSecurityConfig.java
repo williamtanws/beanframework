@@ -17,9 +17,9 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.security.ConsoleAuthProvider;
-import com.beanframework.console.security.ConsoleSuccessHandler;
 import com.beanframework.console.security.ConsoleCsrfHeaderFilter;
 import com.beanframework.console.security.ConsoleSessionExpiredDetectingLoginUrlAuthenticationEntryPoint;
+import com.beanframework.console.security.ConsoleSuccessHandler;
 
 @Configuration
 @EnableWebSecurity

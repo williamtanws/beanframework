@@ -1,6 +1,5 @@
 package com.beanframework.user.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +48,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRight, User
 	private UserRight convert(UserRight source, UserRight prototype) throws ConverterException {
 
 		try {
-			prototype.setLastModifiedDate(new Date());
+			
 
 			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 				prototype.setId(source.getId());

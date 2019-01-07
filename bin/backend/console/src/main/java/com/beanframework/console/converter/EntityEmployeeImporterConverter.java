@@ -1,6 +1,5 @@
 package com.beanframework.console.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,7 +58,7 @@ public class EntityEmployeeImporterConverter implements EntityConverter<Employee
 		try {
 			if (source.getId() != null)
 				prototype.setId(source.getId());
-			prototype.setLastModifiedDate(new Date());
+			
 
 			prototype.setAccountNonExpired(source.isAccountNonExpired());
 			prototype.setAccountNonLocked(source.isAccountNonLocked());

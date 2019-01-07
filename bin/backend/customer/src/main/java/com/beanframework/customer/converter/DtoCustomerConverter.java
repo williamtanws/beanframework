@@ -49,6 +49,7 @@ public class DtoCustomerConverter implements DtoConverter<Customer, Customer> {
 		prototype.setAccountNonLocked(source.getAccountNonLocked());
 		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 		prototype.setEnabled(source.getEnabled());
+		prototype.setName(source.getName());
 		try {
 			Hibernate.initialize(source.getUserGroups());
 			

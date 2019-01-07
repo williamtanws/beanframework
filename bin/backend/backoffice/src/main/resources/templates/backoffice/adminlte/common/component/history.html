@@ -5,12 +5,18 @@
 		<div class="row">
 			<div class="box-body chat">
 				<!-- chat item -->
-				<div class="item" th:each="revision : ${revisions}" th:if="${not #lists.isEmpty(revision[3])}">
+				<div class="item" th:each="revision : ${revisions}" th:if="${not #lists.isEmpty(revision[3]) or revision[2] == T(org.hibernate.envers.RevisionType).ADD}">
 					<img th:src="@{${@environment.getProperty('path.employee.profile.picture')}(type='thumbnail')}" alt="user image" class="online">
 
 					<p class="message">
 						<span class="name">
-							<span th:text="${revision[0].lastModifiedBy != null } ? ${revision[0].lastModifiedBy.name}+': '"></span>
+							<th:block th:if="${revision[0].lastModifiedBy == null}">
+								<span th:text="#{module.backoffice.system}+': '"></span>
+							</th:block>
+							<th:block th:if="${revision[0].lastModifiedBy != null}">
+								<span sec:authorize="!hasAuthority('employee_read')" th:text="${revision[0].lastModifiedBy.name}+': '"></span>
+								<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=${revision[0].lastModifiedBy.uuid})}+'#tab_general'" th:text="${revision[0].lastModifiedBy.name}+': '"></a>
+							</th:block>
 							<span class="text-muted" th:text="#{module.backoffice.history.__${revision[2]}__}"></span>
 							<small class="text-muted pull-right">
 								<i class="fa fa-clock-o"></i>

@@ -1,6 +1,5 @@
 package com.beanframework.configuration.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +44,7 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 
 	private Configuration convert(Configuration source, Configuration prototype) {
 
-		prototype.setLastModifiedDate(new Date());
+		
 
 		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 			prototype.setId(StringUtils.strip(source.getId()));

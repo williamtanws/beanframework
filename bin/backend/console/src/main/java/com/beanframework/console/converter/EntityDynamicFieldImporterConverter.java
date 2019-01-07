@@ -1,6 +1,5 @@
 package com.beanframework.console.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +52,7 @@ public class EntityDynamicFieldImporterConverter implements EntityConverter<Dyna
 		try {
 			if (source.getId() != null)
 				prototype.setId(source.getId());
-			prototype.setLastModifiedDate(new Date());
+			
 
 			prototype.setName(source.getName());
 			prototype.setFieldType(DynamicFieldTypeEnum.valueOf(source.getType()));

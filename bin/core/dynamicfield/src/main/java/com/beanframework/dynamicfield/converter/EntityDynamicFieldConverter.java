@@ -1,6 +1,5 @@
 package com.beanframework.dynamicfield.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +45,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 
 		if (source.getId() != null)
 			prototype.setId(source.getId());
-		prototype.setLastModifiedDate(new Date());
+		
 
 		prototype.setName(source.getName());
 		prototype.setRequired(source.getRequired());
