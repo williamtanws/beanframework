@@ -1,6 +1,5 @@
 package com.beanframework.email.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +43,7 @@ public class EntityEmailConverter implements EntityConverter<Email, Email> {
 
 	private Email convert(Email source, Email prototype) {
 
-		prototype.setLastModifiedDate(new Date());
+		
 
 		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 			prototype.setId(StringUtils.strip(source.getId()));

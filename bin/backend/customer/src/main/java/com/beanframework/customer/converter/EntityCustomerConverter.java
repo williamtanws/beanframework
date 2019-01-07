@@ -1,7 +1,6 @@
 package com.beanframework.customer.converter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +50,7 @@ public class EntityCustomerConverter implements EntityConverter<Customer, Custom
 	private Customer convert(Customer source, Customer prototype) throws ConverterException {
 
 		try {
-			prototype.setLastModifiedDate(new Date());
+			
 			
 			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 				prototype.setId(StringUtils.strip(source.getId()));

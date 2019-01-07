@@ -1,6 +1,5 @@
 package com.beanframework.console.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +54,7 @@ public class EntityUserGroupImporterConverter implements EntityConverter<UserGro
 		try {
 			if (source.getId() != null)
 				prototype.setId(source.getId());
-			prototype.setLastModifiedDate(new Date());
+			
 
 			// Dynamic Field
 			if (source.getDynamicField() != null) {

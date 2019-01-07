@@ -71,15 +71,15 @@ public class Cronjob extends GenericDomain {
 	@Audited(withModifiedFlag = true)
 	private Boolean startup;
 
-	@Audited(withModifiedFlag = true)
+	@NotAudited
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
-	@Audited(withModifiedFlag = true)
+	@NotAudited
 	@Enumerated(EnumType.STRING)
 	private Result result;
 
-	@Audited(withModifiedFlag = true)
+	@NotAudited
 	@Lob
 	@Column(length = 100000)
 	private String message;

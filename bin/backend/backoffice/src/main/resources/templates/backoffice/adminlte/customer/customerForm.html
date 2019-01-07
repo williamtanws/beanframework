@@ -45,6 +45,9 @@
 								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.backoffice.attribute}" onclick="changeTab('attribute')"></a>
 							</li>
 							<li>
+								<a href="#tab_usergroup" data-toggle="tab" th:text="#{module.usergroup}" onclick="changeTab('usergroup')"></a>
+							</li>
+							<li>
 								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
 							</li>
 							<li>
@@ -57,6 +60,73 @@
 									<div class="row">
 										<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
 									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="name" th:text="#{module.customer.name}"></label>
+												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="password" th:text="#{module.customer.password}"></label>
+												<input type="password" class="form-control" name="password">
+												<span class="help-block"></span>
+											</div>
+											<div class="form-group">
+												<label for="confirmPassword" th:text="#{module.customer.password.confirm}"></label>
+												<input name="confirmPassword" type="password" class="form-control">
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="enabled" th:text="#{module.customer.enabled}"></label>
+												<small th:text="#{module.customer.enabled.indicate}"></small>
+												<select class="form-control" name="enabled">
+													<option value="1" th:selected="${customerUpdate.uuid != null} ? ${customerUpdate.enabled == true} : true" th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="${customerUpdate.uuid != null} ? ${customerUpdate.enabled == false} : false" th:text="#{module.backoffice.no}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="accountNonLocked" th:text="#{module.customer.locked}"></label>
+												<small th:text="#{module.customer.locked.indicate}"></small>
+												<select class="form-control" name="accountNonLocked">
+													<option value="1" th:selected="${customerUpdate.uuid != null} ? ${customerNonLocked == true} : true" th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="${customerUpdate.uuid != null} ? ${customerNonLocked == false} : false" th:text="#{module.backoffice.yes}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="accountNonExpired" th:text="#{module.customer.expired}"></label>
+												<small th:text="#{module.customer.expired.indicate}"></small>
+												<select class="form-control" name="accountNonExpired">
+													<option value="1" th:selected="${customerUpdate.uuid != null} ? ${customerNonExpired == true} : true" th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="${customerUpdate.uuid != null} ? ${customerNonExpired == false} : false" th:text="#{module.backoffice.yes}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="credentialsNonExpired" th:text="#{module.customer.credentials.expired}"></label>
+												<small th:text="#{module.customer.credentials.expired.indicate}"></small>
+												<select class="form-control" name="credentialsNonExpired">
+													<option value="1" th:selected="${customerUpdate.uuid != null} ? ${customerUpdate.credentialsNonExpired == true}: true" th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="${customerUpdate.uuid != null} ? ${customerUpdate.credentialsNonExpired == false} : false" th:text="#{module.backoffice.yes}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
 								</div>
 								<!-- /.box-body -->
 							</div>
@@ -68,6 +138,12 @@
 									</div>
 								</div>
 								<!-- /.box-body -->
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_usergroup">
+								<div class="box-body">
+									<th:block layout:insert="/backoffice/adminlte/common/component/usergroup :: usergroup"></th:block>
+								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history">
@@ -118,7 +194,15 @@
 		                    }
 		                },
 		                name: {
-		                    required: true
+		                    required: true,
+		                },
+		                password: {
+		                    required: false,
+		                    minlength: /*[[${@environment.getProperty('module.customer.password.min')}]]*/,
+		                    maxlength: /*[[${@environment.getProperty('module.customer.password.max')}]]*/
+		                },
+		                confirmPassword: {
+		                    equalTo: "#update-form input[name='password']"
 		                }
 		            },
 		            messages: {
@@ -128,6 +212,13 @@
 		                },
 		                name: {
 		                    required: /*[[#{module.customer.name.required}]]*/
+		                },
+		                password: {
+		                    required: /*[[#{module.customer.password.required}]]*/
+		                },
+		                confirmPassword: {
+		                    required: /*[[#{module.customer.password.confirm.required}]]*/ ,
+		                    equalTo: /*[[#{module.customer.password.confirm.notmatch}]]*/
 		                }
 		            },
 		            highlight: function(element) {
@@ -158,7 +249,8 @@
 		    /*]]>*/
 		</script>
 
-		<th:block layout:insert="/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.customer')}}, objectSearch=${customerSearch}, deleteUuid=${customerUpdate.uuid})"></th:block>
+		<th:block
+			layout:insert="/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.customer')}}, objectSearch=${customerSearch}, deleteUuid=${customerUpdate.uuid})"></th:block>
 	</th:block>
 </body>
 </html>

@@ -61,18 +61,23 @@
 										<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-12 row">
-											<div class="col-md-6">
-												<div class="form-group">
-													<label for="password" th:text="#{module.employee.password}"></label>
-													<input type="password" class="form-control" name="password">
-													<span class="help-block"></span>
-												</div>
-												<div class="form-group">
-													<label for="confirmPassword" th:text="#{module.employee.password.confirm}"></label>
-													<input name="confirmPassword" type="password" class="form-control">
-													<span class="help-block"></span>
-												</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="name" th:text="#{module.employee.name}"></label>
+												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="password" th:text="#{module.employee.password}"></label>
+												<input type="password" class="form-control" name="password">
+												<span class="help-block"></span>
+											</div>
+											<div class="form-group">
+												<label for="confirmPassword" th:text="#{module.employee.password.confirm}"></label>
+												<input name="confirmPassword" type="password" class="form-control">
+												<span class="help-block"></span>
 											</div>
 										</div>
 									</div>
@@ -189,7 +194,15 @@
 		                    }
 		                },
 		                name: {
-		                    required: true
+		                    required: true,
+		                },
+		                password: {
+		                    required: false,
+		                    minlength: /*[[${@environment.getProperty('module.employee.password.min')}]]*/,
+		                    maxlength: /*[[${@environment.getProperty('module.employee.password.max')}]]*/
+		                },
+		                confirmPassword: {
+		                    equalTo: "#update-form input[name='password']"
 		                }
 		            },
 		            messages: {
@@ -199,6 +212,13 @@
 		                },
 		                name: {
 		                    required: /*[[#{module.employee.name.required}]]*/
+		                },
+		                password: {
+		                    required: /*[[#{module.employee.password.required}]]*/
+		                },
+		                confirmPassword: {
+		                    required: /*[[#{module.employee.password.confirm.required}]]*/ ,
+		                    equalTo: /*[[#{module.employee.password.confirm.notmatch}]]*/
 		                }
 		            },
 		            highlight: function(element) {

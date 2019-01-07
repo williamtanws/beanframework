@@ -1,6 +1,5 @@
 package com.beanframework.cronjob.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +46,7 @@ public class EntityCronjobDataConverter implements EntityConverter<CronjobData, 
 
 	private CronjobData convert(CronjobData source, CronjobData prototype) {
 
-		prototype.setLastModifiedDate(new Date());
+		
 
 		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 			prototype.setId(StringUtils.strip(source.getId()));

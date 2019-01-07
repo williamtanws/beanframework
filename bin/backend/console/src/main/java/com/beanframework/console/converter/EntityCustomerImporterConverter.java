@@ -1,6 +1,5 @@
 package com.beanframework.console.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,7 +58,6 @@ public class EntityCustomerImporterConverter implements EntityConverter<Customer
 		try {
 			if (source.getId() != null)
 				prototype.setId(source.getId());
-			prototype.setLastModifiedDate(new Date());
 
 			prototype.setAccountNonExpired(source.isAccountNonExpired());
 			prototype.setAccountNonLocked(source.isAccountNonLocked());
@@ -67,7 +65,8 @@ public class EntityCustomerImporterConverter implements EntityConverter<Customer
 			prototype.setEnabled(source.isEnabled());
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-			
+			prototype.setName(source.getName());
+
 			// Dynamic Field
 			if (source.getDynamicField() != null) {
 				String[] dynamicFields = source.getDynamicField().split(Importer.SPLITTER);
@@ -82,13 +81,12 @@ public class EntityCustomerImporterConverter implements EntityConverter<Customer
 							add = false;
 						}
 					}
-					
-					if(add) {
+
+					if (add) {
 						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
-						
-						
+
 						UserField field = modelService.create(UserField.class);
 						field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
 						field.setValue(value);
@@ -98,7 +96,7 @@ public class EntityCustomerImporterConverter implements EntityConverter<Customer
 					}
 				}
 			}
-			
+
 			// User Group
 			String[] userGroupIds = source.getUserGroupIds().split(Importer.SPLITTER);
 			for (int i = 0; i < userGroupIds.length; i++) {

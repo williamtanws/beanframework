@@ -1,6 +1,5 @@
 package com.beanframework.language.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +44,7 @@ public class EntityLanguageConverter implements EntityConverter<Language, Langua
 
 	private Language convert(Language source, Language prototype) {
 
-		prototype.setLastModifiedDate(new Date());
+		
 		
 		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 			prototype.setId(StringUtils.strip(source.getId()));

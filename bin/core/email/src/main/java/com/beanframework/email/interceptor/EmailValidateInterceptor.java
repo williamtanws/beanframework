@@ -10,29 +10,23 @@ import com.beanframework.common.interceptor.ValidateInterceptor;
 import com.beanframework.email.domain.Email;
 
 public class EmailValidateInterceptor implements ValidateInterceptor<Email> {
-	
-	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-			Pattern.CASE_INSENSITIVE);
+
+	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
 	@Override
 	public void onValidate(Email model) throws InterceptorException {
-		
-		if (StringUtils.isBlank(model.getToRecipients()) && StringUtils.isBlank(model.getCcRecipients())
-				&& StringUtils.isBlank(model.getBccRecipients())) {
-			throw new InterceptorException("Please input recipient");
-		} else {
-			if (StringUtils.isNotBlank(model.getToRecipients())) {
-				valiateRecipients(model.getToRecipients());
-			}
-			if (StringUtils.isNotBlank(model.getCcRecipients())) {
-				valiateRecipients(model.getCcRecipients());
-			}
-			if (StringUtils.isNotBlank(model.getBccRecipients())) {
-				valiateRecipients(model.getBccRecipients());
-			}
+
+		if (StringUtils.isNotBlank(model.getToRecipients())) {
+			valiateRecipients(model.getToRecipients());
+		}
+		if (StringUtils.isNotBlank(model.getCcRecipients())) {
+			valiateRecipients(model.getCcRecipients());
+		}
+		if (StringUtils.isNotBlank(model.getBccRecipients())) {
+			valiateRecipients(model.getBccRecipients());
 		}
 	}
-	
+
 	private void valiateRecipients(final String recipients) throws InterceptorException {
 		String[] recipientsArray = recipients.split(";");
 		for (int i = 0; i < recipientsArray.length; i++) {

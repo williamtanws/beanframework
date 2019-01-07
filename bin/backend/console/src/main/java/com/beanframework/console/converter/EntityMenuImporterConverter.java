@@ -1,6 +1,5 @@
 package com.beanframework.console.converter;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,7 +59,7 @@ public class EntityMenuImporterConverter implements EntityConverter<MenuCsv, Men
 		try {
 			if (source.getId() != null)
 				prototype.setId(source.getId());
-			prototype.setLastModifiedDate(new Date());
+			
 
 			prototype.setSort(source.getSort());
 			prototype.setIcon(source.getIcon());
