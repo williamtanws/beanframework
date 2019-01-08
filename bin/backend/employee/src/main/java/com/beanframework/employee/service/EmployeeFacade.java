@@ -31,7 +31,7 @@ public interface EmployeeFacade {
 
 	Employee saveProfile(Employee employee, MultipartFile picture) throws BusinessException;
 
-	Employee updatePrincipal(Employee employee);
+	void updatePrincipal(Employee employee);
 
 	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.READ)
 	Set<EmployeeSession> findAllSessions();

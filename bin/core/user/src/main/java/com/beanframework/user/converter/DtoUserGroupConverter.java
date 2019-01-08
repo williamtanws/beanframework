@@ -43,6 +43,8 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup>
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
+		
+		prototype.setName(source.getName());
 
 		try {
 			Hibernate.initialize(source.getUserGroups());

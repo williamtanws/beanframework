@@ -28,8 +28,12 @@ public class UserRight extends GenericDomain {
 	 * 
 	 */
 	private static final long serialVersionUID = 8192305251381233446L;
+	public static final String NAME = "name";
 	public static final String FIELDS = "fields";
 	public static final String SORT = "sort";
+
+	@Audited(withModifiedFlag = true)
+	private String name;
 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -38,6 +42,14 @@ public class UserRight extends GenericDomain {
 
 	@Audited(withModifiedFlag = true)
 	private Integer sort;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Integer getSort() {
 		return sort;

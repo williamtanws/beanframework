@@ -35,6 +35,7 @@ import com.beanframework.user.domain.UserGroup;
 public class Menu extends GenericDomain {
 
 	private static final long serialVersionUID = 8293422057240349702L;
+	public static final String NAME = "name";
 	public static final String SORT = "sort";
 	public static final String DESCRIPTION = "description";
 	public static final String ICON = "icon";
@@ -47,22 +48,25 @@ public class Menu extends GenericDomain {
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_GROUPS_UUID = "userGroups.uuid";
 	public static final String FIELDS = "fields";
+	
+	@Audited(withModifiedFlag = true)
+	private String name;
 
-	@Audited(withModifiedFlag=true)
+	@Audited(withModifiedFlag = true)
 	@NotNull
 	private Integer sort;
 
-	@Audited(withModifiedFlag=true)
+	@Audited(withModifiedFlag = true)
 	private String icon;
 
-	@Audited(withModifiedFlag=true)
+	@Audited(withModifiedFlag = true)
 	private String path;
 
-	@Audited(withModifiedFlag=true)
+	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
 	private MenuTargetTypeEnum target;
 
-	@Audited(withModifiedFlag=true)
+	@Audited(withModifiedFlag = true)
 	@NotNull
 	private Boolean enabled;
 
@@ -88,8 +92,18 @@ public class Menu extends GenericDomain {
 	@OrderBy(MenuField.DYNAMIC_FIELD)
 	private List<MenuField> fields = new ArrayList<MenuField>();
 
+	
+
 	@Transient
 	private Boolean active;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Integer getSort() {
 		return sort;

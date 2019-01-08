@@ -3,11 +3,13 @@ package com.beanframework.console.csv;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.ParseInt;
+import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class MenuCsv extends AbstractCsv {
 
+	private String name;
 	private int sort;
 	private String icon;
 	private String path;
@@ -16,10 +18,11 @@ public class MenuCsv extends AbstractCsv {
 	private String parent;
 	private String userGroupIds;
 	private String dynamicField;
-	
+
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
 				new UniqueHashCode(), // ID
+				new NotNull(), // name
 				new ParseInt(), // sort
 				new Optional(), // icon
 				new Optional(), // path
@@ -30,6 +33,14 @@ public class MenuCsv extends AbstractCsv {
 				new Optional() // dynamicField
 		};
 		return processors;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getSort() {

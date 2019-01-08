@@ -3,6 +3,7 @@ package com.beanframework.console.converter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,15 +53,12 @@ public class EntityCronjobImporterConverter implements EntityConverter<CronjobCs
 	private Cronjob convert(CronjobCsv source, Cronjob prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
-			
-
-			prototype.setJobClass(source.getJobClass());
-			prototype.setJobGroup(source.getJobGroup());
-			prototype.setJobName(source.getJobName());
-			prototype.setDescription(source.getDescription());
-			prototype.setCronExpression(source.getCronExpression());
+			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setJobClass(StringUtils.strip(source.getJobClass()));
+			prototype.setJobGroup(StringUtils.strip(source.getJobGroup()));
+			prototype.setJobName(StringUtils.strip(source.getJobName()));
+			prototype.setDescription(StringUtils.strip(source.getDescription()));
+			prototype.setCronExpression(StringUtils.strip(source.getCronExpression()));
 			prototype.setStartup(source.isStartup());
 			
 			// Cronjob Data

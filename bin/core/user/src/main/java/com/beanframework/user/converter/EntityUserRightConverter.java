@@ -1,5 +1,6 @@
 package com.beanframework.user.converter;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,19 +49,26 @@ public class EntityUserRightConverter implements EntityConverter<UserRight, User
 	private UserRight convert(UserRight source, UserRight prototype) throws ConverterException {
 
 		try {
-			
+			Date lastModifiedDate = new Date();
+			prototype.setLastModifiedDate(lastModifiedDate);
 
-			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
-				prototype.setId(source.getId());
+			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(StringUtils.strip(source.getId()), prototype.getId()) == false)
+				prototype.setId(StringUtils.strip(source.getId()));
+
+			if (StringUtils.equals(StringUtils.strip(source.getName()), prototype.getName()) == false)
+				prototype.setName(StringUtils.strip(source.getName()));
 
 			if (source.getSort() != prototype.getSort())
 				prototype.setSort(source.getSort());
-			
+
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserRightField sourceUserRightField : source.getFields()) {
 						if (prototype.getFields().get(i).getUuid().equals(sourceUserRightField.getUuid())) {
-							prototype.getFields().get(i).setValue(sourceUserRightField.getValue());
+							if(StringUtils.equals(StringUtils.strip(sourceUserRightField.getValue()), prototype.getFields().get(i).getValue()) == false){
+								prototype.getFields().get(i).setValue(StringUtils.strip(sourceUserRightField.getValue()));
+								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+							}
 						}
 					}
 				}

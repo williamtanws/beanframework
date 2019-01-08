@@ -47,6 +47,9 @@ public class EntityEmailConverter implements EntityConverter<Email, Email> {
 
 		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
 			prototype.setId(StringUtils.strip(source.getId()));
+		
+		if (StringUtils.equals(source.getName(), prototype.getName()) == false)
+			prototype.setName(StringUtils.strip(source.getName()));
 
 		if (StringUtils.equals(source.getToRecipients(), prototype.getToRecipients()) == false)
 			prototype.setToRecipients(StringUtils.strip(source.getToRecipients()));

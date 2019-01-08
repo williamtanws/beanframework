@@ -48,19 +48,21 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 	private UserPermission convert(UserPermission source, UserPermission prototype) throws ConverterException {
 
 		try {
-			
 
 			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
-				prototype.setId(source.getId());
+				prototype.setId(StringUtils.strip(source.getId()));
+
+			if (StringUtils.equals(source.getName(), prototype.getName()) == false)
+				prototype.setName(StringUtils.strip(source.getName()));
 
 			if (source.getSort() != prototype.getSort())
 				prototype.setSort(source.getSort());
-			
+
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserPermissionField sourceUserPermissionField : source.getFields()) {
 						if (prototype.getFields().get(i).getUuid().equals(sourceUserPermissionField.getUuid())) {
-							prototype.getFields().get(i).setValue(sourceUserPermissionField.getValue());
+							prototype.getFields().get(i).setValue(StringUtils.strip(sourceUserPermissionField.getValue()));
 						}
 					}
 				}

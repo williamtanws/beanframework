@@ -26,7 +26,7 @@ public class DynamicFieldCsv extends AbstractCsv {
 				new ParseInt(), // sort
 				new ParseBool(), // required
 				new Optional(), // rule
-				new NotNull(), // group
+				new Optional(), // group
 				new NotNull(), // label
 				new NotNull() // language
 		};

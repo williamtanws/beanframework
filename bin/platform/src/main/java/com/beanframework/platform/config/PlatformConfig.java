@@ -200,6 +200,7 @@ public class PlatformConfig {
 		properties.put("hibernate.c3p0.autoCommitOnClose", "true");
 		properties.put("hibernate.c3p0.testConnectionOnCheckout", "true");
 		properties.put("current_session_context_class", "thread");
+		properties.put("hibernate.envers.autoRegisterListeners", "false");
 		return properties;
 	}
 

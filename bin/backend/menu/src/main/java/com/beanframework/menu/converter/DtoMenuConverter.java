@@ -47,6 +47,7 @@ public class DtoMenuConverter implements DtoConverter<Menu, Menu> {
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
+		prototype.setName(source.getName());
 		prototype.setParent(source.getParent());
 		prototype.setIcon(source.getIcon());
 		prototype.setPath(source.getPath());

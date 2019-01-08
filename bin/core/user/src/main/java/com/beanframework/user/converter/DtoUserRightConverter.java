@@ -43,6 +43,7 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
+		prototype.setName(source.getName());
 		prototype.setSort(source.getSort());
 		try {
 			Hibernate.initialize(source.getFields());

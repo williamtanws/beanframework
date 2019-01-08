@@ -8,6 +8,7 @@ public class CronjobPrepareInterceptor implements PrepareInterceptor<Cronjob> {
 
 	@Override
 	public void onPrepare(Cronjob model) throws InterceptorException {
+		
 	}
 
 }

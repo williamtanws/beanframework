@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
@@ -20,7 +19,6 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
@@ -45,7 +43,6 @@ public abstract class GenericDomain implements Serializable {
 	private UUID uuid;
 
 	@Audited(withModifiedFlag = true)
-	@NotBlank
 	@Column(unique = true)
 	private String id;
 
@@ -59,7 +56,6 @@ public abstract class GenericDomain implements Serializable {
 	private Auditor createdBy;
 
 	@Audited
-	@LastModifiedDate
 	private Date lastModifiedDate;
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)

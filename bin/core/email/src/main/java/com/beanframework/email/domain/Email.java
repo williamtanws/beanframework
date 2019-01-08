@@ -30,6 +30,7 @@ public class Email extends GenericDomain {
 	 * 
 	 */
 	private static final long serialVersionUID = 6066375988761984365L;
+	public static final String NAME = "name";
 	public static final String TO_RECIPIENTS = "toRecipients";
 	public static final String CC_RECIPIENTS = "ccRecipients";
 	public static final String BCC_RECIPIENTS = "bccRecipients";
@@ -40,6 +41,9 @@ public class Email extends GenericDomain {
 	public static final String STATUS = "status";
 	public static final String RESULT = "result";
 	public static final String MESSAGE = "message";
+
+	@Audited(withModifiedFlag = true)
+	private String name;
 
 	@Audited(withModifiedFlag = true)
 	private String toRecipients;
@@ -76,6 +80,14 @@ public class Email extends GenericDomain {
 
 	@Transient
 	private File[] attachments;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getToRecipients() {
 		return toRecipients;

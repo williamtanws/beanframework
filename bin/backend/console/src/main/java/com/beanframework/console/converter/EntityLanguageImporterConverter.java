@@ -3,6 +3,7 @@ package com.beanframework.console.converter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +49,8 @@ public class EntityLanguageImporterConverter implements EntityConverter<Language
 	private Language convert(LanguageCsv source, Language prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
-			
-			
-			prototype.setName(source.getName());
+			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setName(StringUtils.strip(source.getName()));
 			prototype.setActive(source.isActive());
 			prototype.setSort(source.getSort());
 

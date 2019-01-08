@@ -57,7 +57,7 @@ public class ConsoleAuthProvider implements AuthenticationProvider {
 		//Console
 		admin.getAuthorities().add(new SimpleGrantedAuthority(CONSOLE_ACCESS));
 
-		return new UsernamePasswordAuthenticationToken(admin, password, admin.getAuthorities());
+		return new UsernamePasswordAuthenticationToken(admin, admin.getPassword(), admin.getAuthorities());
 	}
 
 	public boolean supports(Class<? extends Object> authentication) {

@@ -56,9 +56,7 @@ public class EntityEmployeeImporterConverter implements EntityConverter<Employee
 	private Employee convert(EmployeeCsv source, Employee prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
-			
+			prototype.setId(StringUtils.strip(source.getId()));
 
 			prototype.setAccountNonExpired(source.isAccountNonExpired());
 			prototype.setAccountNonLocked(source.isAccountNonLocked());
@@ -66,8 +64,9 @@ public class EntityEmployeeImporterConverter implements EntityConverter<Employee
 			prototype.setEnabled(source.isEnabled());
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-			prototype.setName(source.getName());
 			
+			prototype.setName(StringUtils.strip(source.getName()));
+
 			// Dynamic Field
 			if (source.getDynamicField() != null) {
 				String[] dynamicFields = source.getDynamicField().split(Importer.SPLITTER);
@@ -78,27 +77,28 @@ public class EntityEmployeeImporterConverter implements EntityConverter<Employee
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
-							prototype.getFields().get(i).setValue(value);
+							prototype.getFields().get(i).setValue(StringUtils.strip(value));
 							add = false;
 						}
 					}
-					
-					if(add) {
+
+					if (add) {
 						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
-						
-						
-						UserField field = modelService.create(UserField.class);
-						field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
-						field.setValue(value);
-						field.setDynamicField(entityDynamicField);
-						field.setUser(prototype);
-						prototype.getFields().add(field);
+
+						if (entityDynamicField != null) {
+							UserField field = modelService.create(UserField.class);
+							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
+							field.setValue(StringUtils.strip(value));
+							field.setDynamicField(entityDynamicField);
+							field.setUser(prototype);
+							prototype.getFields().add(field);
+						}
 					}
 				}
 			}
-			
+
 			// User Group
 			if (source.getUserGroupIds() != null) {
 				String[] userGroupIds = source.getUserGroupIds().split(Importer.SPLITTER);
@@ -106,7 +106,7 @@ public class EntityEmployeeImporterConverter implements EntityConverter<Employee
 					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
 					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
-	
+
 					if (userGroup == null) {
 						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
 					} else {
