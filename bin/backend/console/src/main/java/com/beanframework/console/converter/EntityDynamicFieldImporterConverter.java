@@ -3,6 +3,7 @@ package com.beanframework.console.converter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,17 +51,14 @@ public class EntityDynamicFieldImporterConverter implements EntityConverter<Dyna
 	private DynamicField convert(DynamicFieldCsv source, DynamicField prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
-			
-
-			prototype.setName(source.getName());
+			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setName(StringUtils.strip(source.getName()));
 			prototype.setFieldType(DynamicFieldTypeEnum.valueOf(source.getType()));
 			prototype.setSort(source.getSort());
 			prototype.setRequired(source.isRequired());
-			prototype.setRule(source.getRule());
-			prototype.setFieldGroup(source.getGroup());
-			prototype.setLabel(source.getLabel());
+			prototype.setRule(StringUtils.strip(StringUtils.strip(source.getRule())));
+			prototype.setFieldGroup(StringUtils.strip(source.getGroup()));
+			prototype.setLabel(StringUtils.strip(source.getLabel()));
 			
 			Map<String, Object> languageProperties = new HashMap<String, Object>();
 			languageProperties.put(Language.ID, source.getLanguage());

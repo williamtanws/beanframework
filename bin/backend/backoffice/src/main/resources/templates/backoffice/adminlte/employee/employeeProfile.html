@@ -27,6 +27,7 @@
 									</div>
 									<div id="collapseOne" th:class="'panel-collapse collapse in'">
 										<form id="employee-update-form" role="form" th:action="@{${@environment.getProperty('path.employee.profile')}}" enctype="multipart/form-data" method="post" th:object="${employeeProfile}">
+											<input type="hidden" class="form-control" name="id" th:value="*{id}">
 											<div class="box-body">
 												<div class="row">
 													<div class="col-md-12">

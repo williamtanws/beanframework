@@ -2,10 +2,10 @@ package com.beanframework.backoffice.web;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,18 +32,23 @@ import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeFacade;
 
 @Controller
 public class EmployeeProfileController {
-	
+
 	@Autowired
 	private ModelService modelService;
 
 	@Autowired
 	private EmployeeFacade employeeFacade;
+
+	@Autowired
+	private ConfigurationFacade configurationFacade;
 
 	@Autowired
 	private LocaleMessageService localeMessageService;
@@ -53,9 +58,12 @@ public class EmployeeProfileController {
 
 	@Value(EmployeeWebConstants.View.PROFILE)
 	private String VIEW_EMPLOYEE_PROFILE;
-	
+
 	@Value(EmployeeConstants.PROFILE_PICTURE_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
+	
+	@Value(BackofficeWebConstants.Configuration.DEFAULT_AVATAR)
+	public String CONFIGURATION_DEFAULT_AVATAR;
 
 	@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE)
 	public Employee populateEmployeeForm(HttpServletRequest request) throws Exception {
@@ -63,8 +71,7 @@ public class EmployeeProfileController {
 	}
 
 	@GetMapping(value = EmployeeWebConstants.Path.PROFILE)
-	public String profile(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) Employee employeeProfile,
-			Model model, @RequestParam Map<String, Object> requestParams) {
+	public String profile(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) Employee employeeProfile, Model model, @RequestParam Map<String, Object> requestParams) {
 
 		employeeProfile = employeeFacade.getCurrentUser();
 
@@ -74,42 +81,58 @@ public class EmployeeProfileController {
 	}
 
 	@GetMapping(value = EmployeeWebConstants.Path.PROFILE_PICTURE)
-	public @ResponseBody byte[] getImage(@RequestParam Map<String, Object> requestParams) throws IOException {
-		Employee employee = employeeFacade.getCurrentUser();
-		
+	public @ResponseBody byte[] getImage(@RequestParam Map<String, Object> requestParams) throws Exception {
+
+		UUID uuid = null;
+
+		if (requestParams.get("uuid") != null) {
+			uuid = UUID.fromString((String) requestParams.get("uuid"));
+		} else {
+			Employee employee = employeeFacade.getCurrentUser();
+			uuid = employee.getUuid();
+		}
+
 		String type = (String) requestParams.get("type");
-		
-		if(StringUtils.isBlank(type) || (type.equals("original") == false && type.equals("thumbnail") == false)) {
+
+		if (StringUtils.isBlank(type) || (type.equals("original") == false && type.equals("thumbnail") == false)) {
 			type = "thumbnail";
 		}
-		
+
 		InputStream targetStream;
-		File picture = new File(PROFILE_PICTURE_LOCATION+File.separator+employee.getUuid()+File.separator+type+".png");
-		
-		if(picture.exists()) {
+		File picture = new File(PROFILE_PICTURE_LOCATION + File.separator + uuid + File.separator + type + ".png");
+
+		if (picture.exists()) {
 			targetStream = new FileInputStream(picture);
+
+			return IOUtils.toByteArray(targetStream);
+		} else {
+
+			Configuration configuration = configurationFacade.findOneDtoById(CONFIGURATION_DEFAULT_AVATAR);
+
+			if (configuration == null) {
+				return null;
+			} else {
+
+				ClassPathResource resource = new ClassPathResource(configuration.getValue());
+				targetStream = resource.getInputStream();
+
+				return IOUtils.toByteArray(targetStream);
+			}
 		}
-		else {
-			ClassPathResource resource = new ClassPathResource("static/common/img/avatar.png"); 
-			targetStream = resource.getInputStream();
-		}
-		
-		return IOUtils.toByteArray(targetStream);
+
 	}
 
 	@PostMapping(value = EmployeeWebConstants.Path.PROFILE, params = "update")
-	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) Employee employeeProfile,
-			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes, @RequestParam("picture") MultipartFile picture) {
+	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) Employee employeeProfile, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("picture") MultipartFile picture) {
 
 		try {
 			employeeProfile = employeeFacade.saveProfile(employeeProfile, picture);
-			
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS,
-					localeMessageService.getMessage(BackofficeWebConstants.Locale.SAVE_SUCCESS));
+
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS, localeMessageService.getMessage(BackofficeWebConstants.Locale.SAVE_SUCCESS));
 		} catch (BusinessException e) {
 			bindingResult.reject(Employee.class.getSimpleName(), e.getMessage());
-			
+
 			StringBuilder errorMessage = new StringBuilder();
 			List<ObjectError> errors = bindingResult.getAllErrors();
 			for (ObjectError error : errors) {

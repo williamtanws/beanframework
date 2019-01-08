@@ -58,18 +58,19 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 	private UserGroup convert(UserGroup source, UserGroup prototype) throws ConverterException {
 
 		try {
-			
-			
+
 			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
-				prototype.setId(source.getId());
-			
-			
+				prototype.setId(StringUtils.strip(source.getId()));
+
+			if (StringUtils.equals(source.getName(), prototype.getName()) == false)
+				prototype.setName(StringUtils.strip(source.getName()));
+
 			// Dynamic Field
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserGroupField sourceUserGroupField : source.getFields()) {
 						if (prototype.getFields().get(i).getUuid().equals(sourceUserGroupField.getUuid())) {
-							prototype.getFields().get(i).setValue(sourceUserGroupField.getValue());
+							prototype.getFields().get(i).setValue(StringUtils.strip(sourceUserGroupField.getValue()));
 						}
 					}
 				}
@@ -87,7 +88,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 				}
 				prototype.setUserGroups(childs);
 			}
-			
+
 			// User Authority
 			if (source.getUserAuthorities() != null && source.getUserAuthorities().isEmpty() == false) {
 				for (int i = 0; i < prototype.getUserAuthorities().size(); i++) {

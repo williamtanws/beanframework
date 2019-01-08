@@ -43,10 +43,6 @@
 											<table class="table table-bordered table-hover dataTable">
 												<thead>
 													<tr role="row">
-														<th class="sorting" id="id"
-															th:class="${pagination.getSort().getOrderFor('id') != null}? sorting_+${pagination.getSort().getOrderFor('id').getDirection().toString().toLowerCase()} : sorting"
-															th:text="#{module.console.id}"></th>
-
 														<th class="sorting" th:each="field : ${listFields}" th:id="${field[0]}"
 															th:class="${pagination.getSort().getOrderFor(field[0]) != null}? sorting_+${pagination.getSort().getOrderFor(field[0]).getDirection().toString().toLowerCase()} : sorting"
 															th:text="${field[1]}"></th>
@@ -55,7 +51,6 @@
 												<tbody>
 													<th:block th:each="row : ${pagination.content}">
 														<tr th:onclick="getForm([[${row.uuid}]])">
-															<th scope="row" th:text="${row.id}"></th>
 															<td scope="row" th:each="field : ${listFields}" th:text="${#strings.abbreviate(row.__${field[0]}__,50)}"></td>
 														</tr>
 													</th:block>

@@ -3,6 +3,7 @@ package com.beanframework.console.converter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +52,8 @@ public class EntityUserPermissionImporterConverter implements EntityConverter<Us
 	private UserPermission convert(UserPermissionCsv source, UserPermission prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
-			
-
+			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setName(StringUtils.strip(source.getName()));
 			prototype.setSort(source.getSort());
 
 			// Dynamic Field
@@ -67,23 +66,24 @@ public class EntityUserPermissionImporterConverter implements EntityConverter<Us
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
-							prototype.getFields().get(i).setValue(value);
+							prototype.getFields().get(i).setValue(StringUtils.strip(value));
 							add = false;
 						}
 					}
-					
-					if(add) {
+
+					if (add) {
 						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
-						
-						
-						UserPermissionField field = modelService.create(UserPermissionField.class);
-						field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
-						field.setValue(value);
-						field.setDynamicField(entityDynamicField);
-						field.setUserPermission(prototype);
-						prototype.getFields().add(field);
+
+						if(entityDynamicField != null) {
+							UserPermissionField field = modelService.create(UserPermissionField.class);
+							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
+							field.setValue(StringUtils.strip(value));
+							field.setDynamicField(entityDynamicField);
+							field.setUserPermission(prototype);
+							prototype.getFields().add(field);
+						}
 					}
 				}
 			}

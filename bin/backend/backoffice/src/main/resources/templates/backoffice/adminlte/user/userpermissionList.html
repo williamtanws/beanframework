@@ -9,15 +9,15 @@
 		<section class="content">
 			<!-- Search Form-->
 			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.userpermission')}}, objectSearch=${userpermissionSearch}, searchFields=${ {'id'} }, displayFields=${ {'id'} } )"></th:block>
+				<th:block layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.userpermission')}}, objectSearch=${userpermissionSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )"></th:block>
 			</div>
 			<!-- Alert Notification-->
 			<div class="row">
 				<th:block layout:insert="/backoffice/adminlte/common/component/alert :: custom"></th:block>
 			</div>
 			<!-- List Table-->
-			<div class="row" th:with="userpermissionSort=#{module.userpermission.sort}">
-				<th:block layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.userpermission}, objectUpdate=${userpermissionUpdate}, objectSearch=${userpermissionSearch}, icon=@{${@environment.getProperty('module.userpermission.icon')}}, createAuthority='userpermission_create', updateAuthority='userpermission_update', listFields=${ {{'sort', userpermissionSort}} }, paginationAction=@{${@environment.getProperty('path.userpermission')}}, searchFields=${ {'id'} }, updateForm='/backoffice/adminlte/user/userpermissionForm')"></th:block>
+			<div class="row" th:with="userpermissionName=#{module.userpermission.name},userpermissionSort=#{module.userpermission.sort}">
+				<th:block layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.userpermission}, objectUpdate=${userpermissionUpdate}, objectSearch=${userpermissionSearch}, icon=@{${@environment.getProperty('module.userpermission.icon')}}, createAuthority='userpermission_create', updateAuthority='userpermission_update', listFields=${ {{'id', 'ID'},{'name', userpermissionName},{'sort', userpermissionSort}} }, paginationAction=@{${@environment.getProperty('path.userpermission')}}, searchFields=${ {'id','name'} }, updateForm='/backoffice/adminlte/user/userpermissionForm')"></th:block>
 			</div>
 			<!-- Create Modal-->
 			<th:block sec:authorize="hasAuthority('userpermission_create')" layout:insert="/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.userpermission')}}, createObject=${userpermissionCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.userpermission.checkid')})"></th:block>

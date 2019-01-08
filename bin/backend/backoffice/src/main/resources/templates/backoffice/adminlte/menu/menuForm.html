@@ -64,6 +64,13 @@
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
 											<div class="form-group">
+												<label for="name" th:text="#{module.menu.name}"></label>
+												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
 												<label for="path" th:text="#{module.menu.path}"></label>
 												<small th:text="#{module.menu.path.indicate}"></small>
 												<input type="text" class="form-control" name="path" th:value="*{path}">
@@ -182,6 +189,7 @@
 		        
 		        $('#menu-update-form').validate({
 		            rules: {
+		            	id: {
 		                    required: true,
 		                    remote: {
 		                        url: /*[[${@environment.getProperty('path.api.menu.checkid')}]]*/ ,
@@ -193,11 +201,18 @@
 		                            }
 		                        }
 		                    }
+		                },
+		                name: {
+		                    required: true
+		                }
 		            },
 		            messages: {
-		                id: {
+		            	id: {
 		                    required: /*[[#{module.menu.id.required}]]*/ ,
 		                    remote: /*[[#{module.menu.id.exists}]]*/
+		                },
+		                name: {
+		                    required: /*[[#{module.menu.name.required}]]*/
 		                }
 		            },
 		            highlight: function(element) {

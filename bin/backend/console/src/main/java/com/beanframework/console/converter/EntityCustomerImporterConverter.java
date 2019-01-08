@@ -56,8 +56,7 @@ public class EntityCustomerImporterConverter implements EntityConverter<Customer
 	private Customer convert(CustomerCsv source, Customer prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
+			prototype.setId(StringUtils.strip(source.getId()));
 
 			prototype.setAccountNonExpired(source.isAccountNonExpired());
 			prototype.setAccountNonLocked(source.isAccountNonLocked());
@@ -65,7 +64,8 @@ public class EntityCustomerImporterConverter implements EntityConverter<Customer
 			prototype.setEnabled(source.isEnabled());
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-			prototype.setName(source.getName());
+			
+			prototype.setName(StringUtils.strip(source.getName()));
 
 			// Dynamic Field
 			if (source.getDynamicField() != null) {
@@ -77,7 +77,7 @@ public class EntityCustomerImporterConverter implements EntityConverter<Customer
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
-							prototype.getFields().get(i).setValue(value);
+							prototype.getFields().get(i).setValue(StringUtils.strip(value));
 							add = false;
 						}
 					}
@@ -87,27 +87,31 @@ public class EntityCustomerImporterConverter implements EntityConverter<Customer
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
 
-						UserField field = modelService.create(UserField.class);
-						field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
-						field.setValue(value);
-						field.setDynamicField(entityDynamicField);
-						field.setUser(prototype);
-						prototype.getFields().add(field);
+						if (entityDynamicField != null) {
+							UserField field = modelService.create(UserField.class);
+							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
+							field.setValue(StringUtils.strip(value));
+							field.setDynamicField(entityDynamicField);
+							field.setUser(prototype);
+							prototype.getFields().add(field);
+						}
 					}
 				}
 			}
 
 			// User Group
-			String[] userGroupIds = source.getUserGroupIds().split(Importer.SPLITTER);
-			for (int i = 0; i < userGroupIds.length; i++) {
-				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+			if (source.getUserGroupIds() != null) {
+				String[] userGroupIds = source.getUserGroupIds().split(Importer.SPLITTER);
+				for (int i = 0; i < userGroupIds.length; i++) {
+					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 
-				if (userGroup == null) {
-					LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-				} else {
-					prototype.getUserGroups().add(userGroup);
+					if (userGroup == null) {
+						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+					} else {
+						prototype.getUserGroups().add(userGroup);
+					}
 				}
 			}
 		} catch (Exception e) {

@@ -57,13 +57,11 @@ public class EntityMenuImporterConverter implements EntityConverter<MenuCsv, Men
 	private Menu convert(MenuCsv source, Menu prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
-			
-
+			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setName(StringUtils.strip(source.getName()));
 			prototype.setSort(source.getSort());
-			prototype.setIcon(source.getIcon());
-			prototype.setPath(source.getPath());
+			prototype.setIcon(StringUtils.strip(source.getIcon()));
+			prototype.setPath(StringUtils.strip(source.getPath()));
 			
 			if (StringUtils.isBlank(source.getTarget())) {
 				prototype.setTarget(MenuTargetTypeEnum.SELF);
@@ -106,7 +104,7 @@ public class EntityMenuImporterConverter implements EntityConverter<MenuCsv, Men
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
-							prototype.getFields().get(i).setValue(value);
+							prototype.getFields().get(i).setValue(StringUtils.strip(value));
 							add = false;
 						}
 					}
@@ -116,13 +114,14 @@ public class EntityMenuImporterConverter implements EntityConverter<MenuCsv, Men
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
 						
-						
-						MenuField field = modelService.create(MenuField.class);
-						field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
-						field.setValue(value);
-						field.setDynamicField(entityDynamicField);
-						field.setMenu(prototype);
-						prototype.getFields().add(field);
+						if(entityDynamicField != null) {
+							MenuField field = modelService.create(MenuField.class);
+							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
+							field.setValue(StringUtils.strip(value));
+							field.setDynamicField(entityDynamicField);
+							field.setMenu(prototype);
+							prototype.getFields().add(field);
+						}
 					}
 				}
 			}

@@ -78,7 +78,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 		}
 		logger.debug("Authorized: " + authorized.toString());
 
-		return new UsernamePasswordAuthenticationToken(employee, password, employee.getAuthorities());
+		return new UsernamePasswordAuthenticationToken(employee, employee.getPassword(), employee.getAuthorities());
 
 	}
 

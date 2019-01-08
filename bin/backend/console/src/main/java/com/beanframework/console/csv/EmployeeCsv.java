@@ -8,29 +8,37 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class EmployeeCsv extends AbstractCsv {
 
+	private String name;
 	private String password;
 	private boolean accountNonExpired;
 	private boolean accountNonLocked;
 	private boolean credentialsNonExpired;
 	private boolean enabled;
 	private String userGroupIds;
-	private String name;
 	private String dynamicField;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
 				new UniqueHashCode(), // id
+				new NotNull(), // name
 				new NotNull(), // password
 				new ParseBool(), // accountNonExpired
 				new ParseBool(), // accountNonLocked
 				new ParseBool(), // credentialsNonExpired
 				new ParseBool(), // enabled
 				new org.supercsv.cellprocessor.Optional(), // userGroupId
-				new Optional(), // name
 				new Optional() // dynamicField
 		};
 
 		return processors;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getPassword() {
@@ -81,14 +89,6 @@ public class EmployeeCsv extends AbstractCsv {
 		this.userGroupIds = userGroupIds;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getDynamicField() {
 		return dynamicField;
 	}
@@ -96,4 +96,5 @@ public class EmployeeCsv extends AbstractCsv {
 	public void setDynamicField(String dynamicField) {
 		this.dynamicField = dynamicField;
 	}
+
 }

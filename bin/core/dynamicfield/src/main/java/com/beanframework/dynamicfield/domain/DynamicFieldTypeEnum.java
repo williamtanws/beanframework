@@ -4,8 +4,10 @@ public enum DynamicFieldTypeEnum {
 	INTEGER("Integer"),
 	FLOATING_POINT("Floating Point"),
 	TEXT("Text"),
+	SELECT("Select"),
 	BOOLEAN("Boolean"),
-	DATE("Date");
+	DATE("Date"),
+	FILE("File");
 
 	private String type;
 

@@ -58,8 +58,11 @@
 						<div class="tab-content tab-validate">
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
-									<div class="row">
-										<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="name" th:text="#{module.email.name} + '*'"></label>
+											<input class="form-control" name="name" th:value="*{name}"></input>
+										</div>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
@@ -281,24 +284,13 @@
 		                }
 		            },
 		            rules: {
-		            	id: {
-		                    required: true,
-		                    remote: {
-		                        url: /*[[${@environment.getProperty('path.api.email.checkid')}]]*/ ,
-		                        type: "get",
-		                        data: {
-		                            uuid: /*[[${emailUpdate.uuid}]]*/ ,
-		                            id: function() {
-		                                return $("#update-form input[name='id']").val();
-		                            }
-		                        }
-		                    }
+		            	name: {
+		                    required: true
 		                }
 		            },
 		            messages: {
-		                id: {
-		                    required: /*[[#{module.backoffice.id.required}]]*/ ,
-		                    remote: /*[[#{module.backoffice.id.exists}]]*/
+		            	subject: {
+		                    required: /*[[#{module.email.name.required}]]*/
 		                }
 		            },
 		            highlight: function(element) {

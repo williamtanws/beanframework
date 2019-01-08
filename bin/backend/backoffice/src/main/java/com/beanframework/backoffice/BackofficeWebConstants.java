@@ -1,9 +1,14 @@
 package com.beanframework.backoffice;
 
 public interface BackofficeWebConstants {
+
+	public static final String PAGINATION = "pagination";
 	
-public static final String PAGINATION = "pagination";
-	
+
+	public interface Configuration {
+		public static final String DEFAULT_AVATAR = "${module.backoffice.configuration.avatar.default}";
+	}
+
 	public interface Pagination {
 		public static final String PAGE = "page";
 		public static final String SIZE = "size";
@@ -55,8 +60,8 @@ public static final String PAGINATION = "pagination";
 		public static final String REMEMBERME_TOKENVALIDITYSECONDS = "${module.backoffice.http.rememberme.tokenvalidityseconds}";
 
 	}
-	
-	public interface Cookie{
+
+	public interface Cookie {
 		public static final String REMEMBER_ME = "REMEMBER_ME";
 	}
 

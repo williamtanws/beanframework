@@ -10,7 +10,6 @@ public class CronjobDataInitialDefaultsInterceptor implements InitialDefaultsInt
 
 	@Override
 	public void onInitialDefaults(CronjobData model) throws InterceptorException {
-		model.setId(UUID.randomUUID().toString().replace("-", ""));
 	}
 
 }

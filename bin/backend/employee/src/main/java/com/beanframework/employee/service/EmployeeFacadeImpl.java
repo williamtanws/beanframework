@@ -32,6 +32,7 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.EmployeeSession;
+import com.beanframework.employee.converter.EntityEmployeeProfileConverter;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserField;
@@ -54,6 +55,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private AuditorFacade auditorFacade;
+	
+	@Autowired
+	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
 
 	@Override
 	public Employee saveProfile(Employee employee, MultipartFile picture) throws BusinessException {
@@ -66,8 +70,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 					throw new Exception(localeMessageService.getMessage(EmployeeConstants.Locale.PICTURE_WRONGFORMAT));
 				}
 			}
-
-			modelService.saveEntity(employee, Employee.class);
+			employee = entityEmployeeProfileConverter.convert(employee);
+			employee = (Employee) modelService.saveEntity(employee, Employee.class);
+			updatePrincipal(employee);
 			employeeService.saveProfilePicture(employee, picture);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -77,25 +82,15 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	}
 
 	@Override
-	public Employee updatePrincipal(Employee employee) {
+	public void updatePrincipal(Employee employee) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Employee employeePrincipal = (Employee) auth.getPrincipal();
-		employeePrincipal = findDtoPrincipal(employee);
+		employeePrincipal.setId(employee.getId());
+		employeePrincipal.setName(employee.getName());
+		employeePrincipal.setPassword(employee.getPassword());
 
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal, employeePrincipal.getPassword(), employeePrincipal.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(token);
-
-		return employeePrincipal;
-	}
-
-	private Employee findDtoPrincipal(Employee source) {
-
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Employee employeePrincipal = (Employee) auth.getPrincipal();
-
-		employeePrincipal.setId(source.getId());
-
-		return employeePrincipal;
 	}
 
 	@Override

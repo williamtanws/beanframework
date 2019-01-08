@@ -11,7 +11,6 @@ public class EmailInitialDefaultsInterceptor implements InitialDefaultsIntercept
 
 	@Override
 	public void onInitialDefaults(Email model) throws InterceptorException {
-		model.setId(UUID.randomUUID().toString().replace("-", ""));
 		model.setStatus(EmailEnum.Status.DRAFT);
 	}
 

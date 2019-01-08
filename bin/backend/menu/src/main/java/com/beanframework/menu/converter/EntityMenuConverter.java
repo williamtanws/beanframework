@@ -55,19 +55,21 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 	private Menu convert(Menu source, Menu prototype) throws ConverterException {
 
 		try {
-			
 
 			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
-				prototype.setId(source.getId());
+				prototype.setId(StringUtils.strip(source.getId()));
+			
+			if (StringUtils.equals(prototype.getName(), source.getName()) == false)
+				prototype.setName(StringUtils.strip(source.getName()));
 
 			if (prototype.getSort() == source.getSort() == false)
 				prototype.setSort(source.getSort());
 
 			if (StringUtils.equals(prototype.getIcon(), source.getIcon()) == false)
-				prototype.setIcon(source.getIcon());
+				prototype.setIcon(StringUtils.strip(source.getIcon()));
 
 			if (StringUtils.equals(prototype.getPath(), source.getPath()) == false)
-				prototype.setPath(source.getPath());
+				prototype.setPath(StringUtils.strip(source.getPath()));
 
 			if (prototype.getTarget() == source.getTarget() == false)
 				prototype.setTarget(source.getTarget());
@@ -124,7 +126,7 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 				List<MenuField> menuFields = new ArrayList<MenuField>();
 				for (MenuField menuField : source.getFields()) {
 					MenuField entityMenuField = modelService.findOneEntityByUuid(menuField.getUuid(), MenuField.class);
-					entityMenuField.setValue(menuField.getValue());
+					entityMenuField.setValue(StringUtils.strip(menuField.getValue()));
 					menuFields.add(entityMenuField);
 				}
 				prototype.setFields(menuFields);

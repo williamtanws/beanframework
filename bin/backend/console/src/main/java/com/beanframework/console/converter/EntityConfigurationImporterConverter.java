@@ -3,6 +3,7 @@ package com.beanframework.console.converter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +49,9 @@ public class EntityConfigurationImporterConverter implements EntityConverter<Con
 	private Configuration convert(ConfigurationCsv source, Configuration prototype) throws ConverterException {
 
 		try {
-			if (source.getId() != null)
-				prototype.setId(source.getId());
+			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setValue(StringUtils.strip(source.getValue()));
 			
-
-			prototype.setValue(source.getValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ConverterException(e.getMessage(), e);

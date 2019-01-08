@@ -6,17 +6,19 @@ import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
-public class AdminCsv extends AbstractCsv{
+public class AdminCsv extends AbstractCsv {
 
+	private String name;
 	private String password;
 	private boolean accountNonExpired;
 	private boolean accountNonLocked;
 	private boolean credentialsNonExpired;
 	private boolean enabled;
-	
+
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
 				new UniqueHashCode(), // id
+				new NotNull(), // name
 				new NotNull(), // password
 				new ParseBool(), // accountNonExpired
 				new ParseBool(), // accountNonLocked
@@ -29,6 +31,13 @@ public class AdminCsv extends AbstractCsv{
 		return processors;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getPassword() {
 		return password;
