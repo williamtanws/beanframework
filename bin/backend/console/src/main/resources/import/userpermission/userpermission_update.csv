@@ -10,3 +10,4 @@ customer,Customer,7,userpermission_name_en=Customer;userpermission_name_cn=顾�
 cronjob,Cronjob,8,userpermission_name_en=Cronjob;userpermission_name_cn=定时任务
 filemanager,File Manager,9,userpermission_name_en=File Manager;userpermission_name_cn=文件管理器
 email,Email,10,userpermission_name_en=Email;userpermission_name_cn=电子邮件
+auditor,Auditor,11,userpermission_name_en=Auditor;userpermission_name_cn=稽核员

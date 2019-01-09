@@ -15,7 +15,7 @@ import com.beanframework.console.csv.AdminCsv;
 import com.beanframework.user.utils.PasswordUtils;
 
 @Component
-public class EntityAdminConverterImporter implements EntityConverter<AdminCsv, Admin> {
+public class ImportEntityAdminConverter implements EntityConverter<AdminCsv, Admin> {
 
 	@Autowired
 	private ModelService modelService;

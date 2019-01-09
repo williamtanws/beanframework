@@ -6,6 +6,7 @@ userpermission,User Permission,2,fa fa-key,/backoffice/userpermission,,true,syst
 menu,Menu,4,fa fa-align-justify,/backoffice/menu,,true,system,employeegroup,menu_name_en=Menu;menu_name_cn=菜单
 cronjob,Cronjob,5,fa fa-calendar,/backoffice/cronjob,,true,system,employeegroup,menu_name_en=Cron Job;menu_name_cn=定时任务
 email,Email,6,fa fa-envelope,/backoffice/email,,true,system,employeegroup,menu_name_en=Email;menu_name_cn=电子邮件
+auditor,Auditor,7,fa fa-users,/backoffice/auditor,,true,system,employeegroup,menu_name_en=Auditor;menu_name_cn=稽核员
 multimedia,Multimedia,2,fa fa-file-image-o,,,true,,customergroup,menu_name_en=Multimedia;menu_name_cn=多媒体
 filemanager,File Manager,1,fa fa-folder,/backoffice/filemanager,,true,multimedia,employeegroup,menu_name_en=File Manager;menu_name_cn=文件管理器
 user,User,3,fa fa-user,,,true,,employeegroup;customergroup,menu_name_en=User;menu_name_cn=用户

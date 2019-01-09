@@ -50,16 +50,9 @@
 												</thead>
 												<tbody>
 													<th:block th:each="row : ${pagination.content}">
-														<th:block th:if="${#authorization.expression('hasAuthority('''+updateAuthority+''')')}">
-															<tr th:onclick="getForm([[${row.uuid}]])">
-																<td scope="row" th:each="field : ${listFields}" th:text="${#strings.abbreviate(row.__${field[0]}__,50)}"></td>
-															</tr>
-														</th:block>
-														<th:block th:if="!${#authorization.expression('hasAuthority('''+updateAuthority+''')')}">
-															<tr>
-																<td scope="row" th:each="field : ${listFields}" th:text="${#strings.abbreviate(row.__${field[0]}__,50)}"></td>
-															</tr>
-														</th:block>
+														<tr th:onclick="getForm([[${row.uuid}]])">
+															<td scope="row" th:each="field : ${listFields}" th:text="${#strings.abbreviate(row.__${field[0]}__,50)}"></td>
+														</tr>
 													</th:block>
 												</tbody>
 											</table>

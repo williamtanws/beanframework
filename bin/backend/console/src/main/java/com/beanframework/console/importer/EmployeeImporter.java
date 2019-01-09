@@ -28,7 +28,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.EntityEmployeeConverterImporter;
+import com.beanframework.console.converter.ImportEntityEmployeeConverter;
 import com.beanframework.console.csv.EmployeeCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.employee.domain.Employee;
@@ -44,7 +44,7 @@ public class EmployeeImporter extends Importer {
 	private EmployeeFacade employeeFacade;
 
 	@Autowired
-	private EntityEmployeeConverterImporter converter;
+	private ImportEntityEmployeeConverter converter;
 
 	@Value("${module.console.import.update.employee}")
 	private String IMPORT_UPDATE;
