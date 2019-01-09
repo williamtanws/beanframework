@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.user.service.AuditorFacade;
 
 @Component
 public class AdminFacadeImpl implements AdminFacade {
@@ -34,6 +35,9 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Autowired
 	private AdminService adminService;
+
+	@Autowired
+	private AuditorFacade auditorFacade;
 
 	@Override
 	public Admin getCurrentUser() {
@@ -90,13 +94,16 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public Admin createDto(Admin model) throws BusinessException {
-		return (Admin) modelService.saveDto(model, Admin.class);
+		Admin admin = (Admin) modelService.saveDto(model, Admin.class);
+		auditorFacade.save(admin);
+		return admin;
 	}
 
 	@Override
 	public Admin saveDto(Admin model) throws BusinessException {
-		return (Admin) modelService.saveDto(model, Admin.class);
-
+		Admin admin = (Admin) modelService.saveDto(model, Admin.class);
+		auditorFacade.save(admin);
+		return admin;
 	}
 
 	@Override
@@ -110,7 +117,7 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public Admin saveEntity(Admin model) throws BusinessException {
-		return (Admin) modelService.saveEntity(model,Admin.class);
+		return (Admin) modelService.saveEntity(model, Admin.class);
 	}
 
 	@Override
@@ -126,13 +133,13 @@ public class AdminFacadeImpl implements AdminFacade {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, Admin.class);
-		
+
 		return revisions;
 	}
 }

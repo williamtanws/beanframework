@@ -1,48 +1,28 @@
 package com.beanframework.common.domain;
 
-import java.io.Serializable;
-import java.util.UUID;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
+
+import org.hibernate.envers.Audited;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.beanframework.common.CommonConstants;
 
 @Entity
-@Table(name = "auditor")
-public class Auditor implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+@Audited
+@Table(name = CommonConstants.Table.AUDITOR)
+public class Auditor extends GenericDomain {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8890339553608336532L;
+	private static final long serialVersionUID = 2180422049651244927L;
+	public static final String NAME = "name";
 
-	@Id
-	@Column(columnDefinition = "BINARY(16)", unique = true, updatable = false)
-	private UUID uuid;
-
-	@NotBlank
-	@Column(unique = true)
-	private String id;
-
+	@Audited(withModifiedFlag = true)
 	private String name;
-
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

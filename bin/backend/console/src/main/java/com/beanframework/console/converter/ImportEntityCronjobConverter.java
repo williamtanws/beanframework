@@ -18,9 +18,9 @@ import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 
 @Component
-public class EntityCronjobConverterImporter implements EntityConverter<CronjobCsv, Cronjob> {
+public class ImportEntityCronjobConverter implements EntityConverter<CronjobCsv, Cronjob> {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCronjobConverterImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(ImportEntityCronjobConverter.class);
 
 	@Autowired
 	private ModelService modelService;

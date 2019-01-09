@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.user.converter.DtoAuditorConverter;
 import com.beanframework.user.converter.DtoUserAuthorityConverter;
 import com.beanframework.user.converter.DtoUserFieldConverter;
 import com.beanframework.user.converter.DtoUserGroupConverter;
@@ -59,6 +60,20 @@ public class UserConfig {
 	///////////////////
 	// DTO Converter //
 	///////////////////
+	
+	@Bean
+	public DtoAuditorConverter dtoAuditorConverter() {
+		return new DtoAuditorConverter();
+	}
+
+	@Bean
+	public ConverterMapping dtoAuditorConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dtoAuditorConverter());
+		mapping.setTypeCode(Auditor.class.getSimpleName());
+
+		return mapping;
+	}
 
 	@Bean
 	public DtoUserAuthorityConverter dtoUserAuthorityConverter() {

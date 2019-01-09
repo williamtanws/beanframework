@@ -66,7 +66,7 @@ public class LanguageController extends AbstractController {
 			direction = Sort.Direction.ASC;
 		}
 
-		Page<Language> pagination = languageFacade.findPage(LanguageSpecification.findByCriteria(languageSearch),
+		Page<Language> pagination = languageFacade.findDtoPage(LanguageSpecification.findByCriteria(languageSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);

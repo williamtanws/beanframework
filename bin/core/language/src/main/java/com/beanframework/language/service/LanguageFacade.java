@@ -22,7 +22,7 @@ public interface LanguageFacade {
 	}
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public Page<Language> findPage(Specification<Language> specification, PageRequest pageable) throws Exception;
+	public Page<Language> findDtoPage(Specification<Language> specification, PageRequest pageable) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	public Language findOneDtoByUuid(UUID uuid) throws Exception;

@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -51,7 +53,7 @@ public abstract class GenericDomain implements Serializable {
 	private Date createdDate;
 
 	@CreatedBy
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "createdby_uuid")
 	private Auditor createdBy;
 
@@ -60,7 +62,8 @@ public abstract class GenericDomain implements Serializable {
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@LastModifiedBy
-	@ManyToOne(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.MERGE })
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "lastmodifiedby_uuid")
 	private Auditor lastModifiedBy;
 

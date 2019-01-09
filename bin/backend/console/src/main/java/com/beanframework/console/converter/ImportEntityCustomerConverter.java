@@ -12,46 +12,57 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.csv.UserGroupCsv;
+import com.beanframework.console.csv.CustomerCsv;
 import com.beanframework.console.registry.Importer;
+import com.beanframework.customer.domain.Customer;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupField;
+import com.beanframework.user.utils.PasswordUtils;
 
 @Component
-public class EntityUserGroupConverterImporter implements EntityConverter<UserGroupCsv, UserGroup> {
+public class ImportEntityCustomerConverter implements EntityConverter<CustomerCsv, Customer> {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger(EntityUserGroupConverterImporter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(ImportEntityCustomerConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public UserGroup convert(UserGroupCsv source) throws ConverterException {
+	public Customer convert(CustomerCsv source) throws ConverterException {
 
 		try {
 
 			if (source.getId() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(UserGroup.ID, source.getId());
+				properties.put(Customer.ID, source.getId());
 
-				UserGroup prototype = modelService.findOneEntityByProperties(properties, UserGroup.class);
+				Customer prototype = modelService.findOneEntityByProperties(properties, Customer.class);
 
 				if (prototype != null) {
+
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(UserGroup.class));
+			return convert(source, modelService.create(Customer.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
 		}
 	}
 
-	private UserGroup convert(UserGroupCsv source, UserGroup prototype) throws ConverterException {
+	private Customer convert(CustomerCsv source, Customer prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.strip(source.getId()));
+
+			prototype.setAccountNonExpired(source.isAccountNonExpired());
+			prototype.setAccountNonLocked(source.isAccountNonLocked());
+			prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
+			prototype.setEnabled(source.isEnabled());
+			if (StringUtils.isNotBlank(source.getPassword()))
+				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+			
 			prototype.setName(StringUtils.strip(source.getName()));
 
 			// Dynamic Field
@@ -75,11 +86,11 @@ public class EntityUserGroupConverterImporter implements EntityConverter<UserGro
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
 
 						if (entityDynamicField != null) {
-							UserGroupField field = new UserGroupField();
+							UserField field = new UserField();
 							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.strip(value));
 							field.setDynamicField(entityDynamicField);
-							field.setUserGroup(prototype);
+							field.setUser(prototype);
 							prototype.getFields().add(field);
 						}
 					}
@@ -101,7 +112,6 @@ public class EntityUserGroupConverterImporter implements EntityConverter<UserGro
 					}
 				}
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ConverterException(e.getMessage(), e);
