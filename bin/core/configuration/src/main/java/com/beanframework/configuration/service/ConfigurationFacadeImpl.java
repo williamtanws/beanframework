@@ -60,7 +60,11 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.deleteByUuid(uuid, Configuration.class);
+		try {
+			modelService.deleteByUuid(uuid, Configuration.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@Override

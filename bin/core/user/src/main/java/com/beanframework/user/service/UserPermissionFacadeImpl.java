@@ -60,7 +60,11 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.deleteByUuid(uuid, UserPermission.class);
+		try {
+			modelService.deleteByUuid(uuid, UserPermission.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@Override
@@ -74,11 +78,15 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(UserPermission.ID, id);
-		UserPermission model = modelService.findOneEntityByProperties(properties, UserPermission.class);
-		modelService.deleteByEntity(model, UserPermission.class);
+	public void deleteById(String id) throws BusinessException {
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(UserPermission.ID, id);
+			UserPermission model = modelService.findOneEntityByProperties(properties, UserPermission.class);
+			modelService.deleteByEntity(model, UserPermission.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 	
 	@Override

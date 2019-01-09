@@ -59,7 +59,11 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.deleteByUuid(uuid, UserRight.class);
+		try {
+			modelService.deleteByUuid(uuid, UserRight.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@Override
@@ -73,11 +77,15 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(UserRight.ID, id);
-		UserRight model = modelService.findOneEntityByProperties(properties, UserRight.class);
-		modelService.deleteByEntity(model, UserRight.class);
+	public void deleteById(String id) throws BusinessException {
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(UserRight.ID, id);
+			UserRight model = modelService.findOneEntityByProperties(properties, UserRight.class);
+			modelService.deleteByEntity(model, UserRight.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 	
 	@Override

@@ -114,6 +114,10 @@ public class MenuResource {
 				return name;
 			}
 		}
+		
+		if(StringUtils.isNotBlank(menu.getName())) {
+			return menu.getName();
+		}
 
 		return "[" + menu.getId() + "]";
 	}

@@ -3,7 +3,6 @@ package com.beanframework.customer.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +50,6 @@ public class DtoCustomerConverter implements DtoConverter<Customer, Customer> {
 		prototype.setEnabled(source.getEnabled());
 		prototype.setName(source.getName());
 		try {
-			Hibernate.initialize(source.getUserGroups());
-			
 			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroup.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

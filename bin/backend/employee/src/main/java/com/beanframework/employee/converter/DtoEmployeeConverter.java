@@ -51,8 +51,6 @@ public class DtoEmployeeConverter implements DtoConverter<Employee, Employee> {
 		prototype.setEnabled(source.getEnabled());
 		prototype.setName(source.getName());
 		try {
-			Hibernate.initialize(source.getUserGroups());
-			
 			prototype.setUserGroups(source.getUserGroups());
 			prototype.setFields(modelService.getDto(source.getFields(), UserField.class));
 		} catch (Exception e) {

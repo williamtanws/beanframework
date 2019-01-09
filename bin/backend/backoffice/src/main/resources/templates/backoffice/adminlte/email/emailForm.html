@@ -8,7 +8,7 @@
 	<th:block layout:fragment="update">
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.email')}" method="post" th:object="${emailUpdate}">
 			<input type="hidden" name="update" />
-			<input type="hidden" name="status" th:value="${emailUpdate.status}">
+			<input type="hidden" name="status" th:value="${emailUpdate.status.name()}">
 			<input type="hidden" name="uuid" th:value="${emailUpdate.uuid}" />
 			<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
 			<input type="hidden" name="size" th:value="${pagination.getSize()}">
@@ -58,10 +58,12 @@
 						<div class="tab-content tab-validate">
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="name" th:text="#{module.email.name} + '*'"></label>
-											<input class="form-control" name="name" th:value="*{name}"></input>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="name" th:text="#{module.email.name} + '*'"></label>
+												<input class="form-control" name="name" th:value="*{name}"></input>
+											</div>
 										</div>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">

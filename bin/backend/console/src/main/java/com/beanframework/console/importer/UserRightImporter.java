@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.EntityUserRightImporterConverter;
+import com.beanframework.console.converter.EntityUserRightConverterImporter;
 import com.beanframework.console.csv.UserRightCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.user.domain.UserRight;
@@ -38,7 +38,7 @@ public class UserRightImporter extends Importer {
 	private UserRightFacade userRightFacade;
 
 	@Autowired
-	private EntityUserRightImporterConverter converter;
+	private EntityUserRightConverterImporter converter;
 
 	@Value("${module.console.import.update.userright}")
 	private String IMPORT_UPDATE;

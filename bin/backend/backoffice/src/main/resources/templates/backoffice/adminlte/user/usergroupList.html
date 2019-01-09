@@ -9,15 +9,15 @@
 		<section class="content">
 			<!-- Search Form-->
 			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.usergroup')}}, objectSearch=${usergroupSearch}, searchFields=${ {'id'} } )"></th:block>
+				<th:block layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.usergroup')}}, objectSearch=${usergroupSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )"></th:block>
 			</div>
 			<!-- Alert Notification-->
 			<div class="row">
 				<th:block layout:insert="/backoffice/adminlte/common/component/alert :: custom"></th:block>
 			</div>
 			<!-- List Table-->
-			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.usergroup}, objectUpdate=${usergroupUpdate}, objectSearch=${usergroupSearch}, icon=@{${@environment.getProperty('module.usergroup.icon')}}, createAuthority='usergroup_create', updateAuthority='usergroup_update', paginationAction=@{${@environment.getProperty('path.usergroup')}}, searchFields=${ {'id'} }, updateForm='/backoffice/adminlte/user/usergroupForm')"></th:block>
+			<div class="row" th:with="usergroupName=#{module.usergroup.name}">
+				<th:block layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.usergroup}, objectUpdate=${usergroupUpdate}, objectSearch=${usergroupSearch}, icon=@{${@environment.getProperty('module.usergroup.icon')}}, createAuthority='usergroup_create', updateAuthority='usergroup_update', listFields=${ {{'id', 'ID'},{'name', usergroupName}} }, paginationAction=@{${@environment.getProperty('path.usergroup')}}, searchFields=${ {'id','name'} }, updateForm='/backoffice/adminlte/user/usergroupForm')"></th:block>
 			</div>
 			<!-- Create Modal-->
 			<th:block sec:authorize="hasAuthority('usergroup_create')" layout:insert="/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.usergroup')}}, createObject=${usergroupCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.usergroup.checkid')})"></th:block>

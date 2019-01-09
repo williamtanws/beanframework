@@ -1,10 +1,11 @@
 package com.beanframework.menu.converter;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.EntityConverter;
@@ -22,26 +23,23 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 	@Override
 	public Menu convert(Menu source) throws ConverterException {
 
-		Menu prototype;
 		try {
 
 			if (source.getUuid() != null) {
 
-				Menu exists = modelService.findOneEntityByUuid(source.getUuid(), Menu.class);
+				Menu prototype = modelService.findOneEntityByUuid(source.getUuid(), Menu.class);
 
-				if (exists != null) {
-					prototype = exists;
-				} else {
-					prototype = modelService.create(Menu.class);
+				if (prototype != null) {
+					return convert(source, prototype);
 				}
-			} else {
-				prototype = modelService.create(Menu.class);
 			}
+
+			return convert(source, modelService.create(Menu.class));
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
 		}
 
-		return convert(source, prototype);
 	}
 
 	public List<Menu> convert(List<Menu> sources) throws ConverterException {
@@ -55,82 +53,97 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 	private Menu convert(Menu source, Menu prototype) throws ConverterException {
 
 		try {
+			Date lastModifiedDate = new Date();
 
-			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
 				prototype.setId(StringUtils.strip(source.getId()));
-			
-			if (StringUtils.equals(prototype.getName(), source.getName()) == false)
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+
+			if (StringUtils.equals(prototype.getName(), source.getName()) == false) {
 				prototype.setName(StringUtils.strip(source.getName()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
-			if (prototype.getSort() == source.getSort() == false)
+			if (prototype.getSort() == source.getSort() == false) {
 				prototype.setSort(source.getSort());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
-			if (StringUtils.equals(prototype.getIcon(), source.getIcon()) == false)
+			if (StringUtils.equals(prototype.getIcon(), source.getIcon()) == false) {
 				prototype.setIcon(StringUtils.strip(source.getIcon()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
-			if (StringUtils.equals(prototype.getPath(), source.getPath()) == false)
+			if (StringUtils.equals(prototype.getPath(), source.getPath()) == false) {
 				prototype.setPath(StringUtils.strip(source.getPath()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
-			if (prototype.getTarget() == source.getTarget() == false)
+			if (prototype.getTarget() == source.getTarget() == false) {
 				prototype.setTarget(source.getTarget());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
-			if (prototype.getEnabled() == source.getEnabled() == false)
+			if (prototype.getEnabled() == source.getEnabled() == false) {
 				prototype.setEnabled(source.getEnabled());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
-			Hibernate.initialize(source.getParent());
-			Hibernate.initialize(source.getChilds());
-			Hibernate.initialize(source.getUserGroups());
+			// Field
+			if (source.getFields() != null && source.getFields().isEmpty() == false) {
+				for (int i = 0; i < prototype.getFields().size(); i++) {
+					for (MenuField sourceField : source.getFields()) {
+						if (StringUtils.equals(StringUtils.strip(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+							prototype.getFields().get(i).setValue(StringUtils.strip(sourceField.getValue()));
 
-			// Parent
-			if (source.getParent() == null || source.getParent().getUuid() == null) {
-				if (prototype.getParent() != null)
-					prototype.setParent(null);
-			} else {
-				if (prototype.getParent().getUuid() != source.getParent().getUuid()) {
-					Menu parent = modelService.findOneEntityByUuid(source.getParent().getUuid(), Menu.class);
-					prototype.setParent(parent);
+							prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+							prototype.setLastModifiedDate(lastModifiedDate);
+						}
+					}
 				}
 			}
-			// Child
-			if (source.getChilds() == null || source.getChilds().isEmpty()) {
-				if (prototype.getChilds().isEmpty() == false)
-					prototype.setChilds(new ArrayList<Menu>());
 
-			} else {
-				List<Menu> childs = new ArrayList<Menu>();
-				for (Menu child : source.getChilds()) {
-					Menu entityMenu = modelService.findOneEntityByUuid(child.getUuid(), Menu.class);
-					if (entityMenu != null)
-						childs.add(entityMenu);
-				}
-				prototype.setChilds(childs);
-			}
 			// User Group
 			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
-				if (prototype.getUserGroups().isEmpty() == false)
-					prototype.setUserGroups(new ArrayList<UserGroup>());
-			} else {
-				List<UserGroup> userGroups = new ArrayList<UserGroup>();
-				for (UserGroup userGroup : source.getUserGroups()) {
-					UserGroup entityUserGroup = modelService.findOneEntityByUuid(userGroup.getUuid(), UserGroup.class);
-					if (entityUserGroup != null)
-						userGroups.add(entityUserGroup);
-				}
-				prototype.setUserGroups(userGroups);
+				prototype.setUserGroups(new ArrayList<UserGroup>());
+				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			// Field
-			if (source.getFields() == null || source.getFields().isEmpty()) {
-				if (prototype.getFields().isEmpty() == false)
-					prototype.setFields(new ArrayList<MenuField>());
-			} else {
-				List<MenuField> menuFields = new ArrayList<MenuField>();
-				for (MenuField menuField : source.getFields()) {
-					MenuField entityMenuField = modelService.findOneEntityByUuid(menuField.getUuid(), MenuField.class);
-					entityMenuField.setValue(StringUtils.strip(menuField.getValue()));
-					menuFields.add(entityMenuField);
+
+			Iterator<UserGroup> itr = prototype.getUserGroups().iterator();
+			while (itr.hasNext()) {
+				UserGroup userGroup = itr.next();
+
+				boolean remove = true;
+				for (UserGroup sourceUserGroup : source.getUserGroups()) {
+					if (userGroup.getUuid().equals(sourceUserGroup.getUuid())) {
+						remove = false;
+					}
 				}
-				prototype.setFields(menuFields);
+
+				if (remove) {
+					itr.remove();
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
 			}
+
+			for (UserGroup sourceUserGroup : source.getUserGroups()) {
+
+				boolean add = true;
+				for (UserGroup userGroup : prototype.getUserGroups()) {
+					if (sourceUserGroup.getUuid().equals(userGroup.getUuid()))
+						add = false;
+				}
+
+				if (add) {
+					UserGroup entityUserGroup = modelService.findOneEntityByUuid(sourceUserGroup.getUuid(), UserGroup.class);
+					if (entityUserGroup != null) {
+						prototype.getUserGroups().add(entityUserGroup);
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				}
+			}
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}

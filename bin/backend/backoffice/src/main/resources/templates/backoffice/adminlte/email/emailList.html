@@ -10,16 +10,16 @@
 			<!-- Search Form-->
 			<div class="row">
 				<th:block
-					layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.email')}}, objectSearch=${emailSearch}, searchFields=${ {'subject'} }, displayFields=${ {'subject'} } )"></th:block>
+					layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.email')}}, objectSearch=${emailSearch}, searchFields=${ {'name','subject'} }, displayFields=${ {'name','subject'} } )"></th:block>
 			</div>
 			<!-- Alert Notification-->
 			<div class="row">
 				<th:block layout:insert="/backoffice/adminlte/common/component/alert :: custom"></th:block>
 			</div>
 			<!-- List Table-->
-			<div class="row" th:with="createdDate=#{module.backoffice.createdDate}, subject=#{module.email.subject}">
+			<div class="row" th:with="emailName=#{module.email.name}, emailSubject=#{module.email.subject}">
 				<th:block
-					layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.email}, objectUpdate=${emailUpdate}, objectSearch=${emailSearch}, icon=@{${@environment.getProperty('module.email.icon')}}, createAuthority='email_create', updateAuthority='email_update', listFields=${ {{'subject', subject}} }, paginationAction=@{${@environment.getProperty('path.email')}}, searchFields=${ {'subject'} }, updateForm='/backoffice/adminlte/email/emailForm')"></th:block>
+					layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.email}, objectUpdate=${emailUpdate}, objectSearch=${emailSearch}, icon=@{${@environment.getProperty('module.email.icon')}}, createAuthority='email_create', updateAuthority='email_update', listFields=${ {{'name', emailName},{'subject', emailSubject}} }, paginationAction=@{${@environment.getProperty('path.email')}}, searchFields=${ {'name','subject'} }, updateForm='/backoffice/adminlte/email/emailForm')"></th:block>
 			</div>
 			<!-- Create Modal-->
 			<th:block sec:authorize="hasAuthority('email_create')"

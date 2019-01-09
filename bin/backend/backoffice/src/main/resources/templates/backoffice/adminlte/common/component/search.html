@@ -38,7 +38,7 @@
 						</div>
 						<div class="modal-body">
 							<div class="form-group" th:each="field : ${searchFields}">
-								<label th:text="${field}" th:for="${field}"></label>
+								<label th:text="#{module.search.__${field}__}" th:for="${field}"></label>
 								<input type="text" th:name="${field}" th:value="${objectSearch.__${field}__}" class="form-control">
 							</div>
 							<th:block th:if="${searchForm}" layout:insert="${searchForm} :: searchForm"></th:block>

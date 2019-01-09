@@ -1,7 +1,5 @@
 package com.beanframework.email.interceptor;
 
-import java.util.UUID;
-
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
 import com.beanframework.email.domain.Email;

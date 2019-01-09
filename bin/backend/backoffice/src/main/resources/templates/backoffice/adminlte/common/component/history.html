@@ -5,7 +5,7 @@
 		<div class="row">
 			<div class="box-body chat">
 				<!-- chat item -->
-				<div class="item" th:each="revision : ${revisions}">
+				<div class="item" th:each="revision : ${revisions}" >
 					<img th:if="${revision[0].lastModifiedBy != null}" th:src="@{${@environment.getProperty('path.employee.profile.picture')}(type='thumbnail',uuid=${revision[0].lastModifiedBy.uuid})}"
 						alt="user image" class="online">
 					<img th:with="defaultavatar=${@environment.getProperty('module.backoffice.configuration.avatar.default')}" th:if="${revision[0].lastModifiedBy == null}"
@@ -24,14 +24,21 @@
 							<span class="text-muted" th:text="#{module.backoffice.history.__${revision[2]}__}"></span>
 							<small class="text-muted pull-right">
 								<i class="fa fa-clock-o"></i>
-								<span th:text="${revision[0].lastModifiedDate!= null} ? ${#dates.format(revision[0].lastModifiedDate, ' dd MMMM yyyy, hh:mma')}"></span>
+								<span th:if="${revision[0].lastModifiedDate == null}" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy, hh:mma')}"></span>
+								<span th:if="${revision[0].lastModifiedDate != null}" th:text="${#dates.format(revision[0].lastModifiedDate, ' dd MMMM yyyy, hh:mma')}"></span>
 							</small>
 						</span>
 						<th:block th:each="property : ${revision[3]}">
-							<span th:if="${property != 'password'}" th:text="#{module.history.__${property}__}+' '"></span>
-							<span class="fa fa-long-arrow-right"></span>
-							<span th:text="' '+${revision[0].__${property}__}"></span>
-							<span th:if="${property == 'password'}" th:text="#{module.history.__${property}__}"></span>
+							<th:block th:if="${property == 'password'}">
+								<span th:text="#{module.history.__${property}__}+' '"></span>
+								<span class="fa fa-long-arrow-right"></span>
+								<span>******</span>
+							</th:block>
+							<th:block th:if="${property != 'password'}">
+								<span th:text="#{module.history.__${property}__}+' '"></span>
+								<span class="fa fa-long-arrow-right"></span>
+								<span th:text="' '+${revision[0].__${property}__}"></span>
+							</th:block>
 							<br>
 						</th:block>
 						<th:block th:each="field : ${fieldRevisions}" th:if="${field[1].id == revision[1].id}">

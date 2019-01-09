@@ -1,5 +1,6 @@
 package com.beanframework.language.converter;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,44 +20,48 @@ public class EntityLanguageConverter implements EntityConverter<Language, Langua
 	@Override
 	public Language convert(Language source) throws ConverterException {
 
-		Language prototype;
 		try {
 
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Language.UUID, source.getUuid());
-				Language exists = modelService.findOneEntityByProperties(properties, Language.class);
+				Language prototype = modelService.findOneEntityByProperties(properties, Language.class);
 
-				if (exists != null) {
-					prototype = exists;
-				} else {
-					prototype = modelService.create(Language.class);
+				if (prototype != null) {
+					return convert(source, prototype);
 				}
-			} else {
-				prototype = modelService.create(Language.class);
 			}
+
+			return convert(source, modelService.create(Language.class));
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
 		}
-
-		return convert(source, prototype);
 	}
 
 	private Language convert(Language source, Language prototype) {
 
-		
-		
-		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+		Date lastModifiedDate = new Date();
+
+		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
 			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (StringUtils.equals(prototype.getName(), source.getName()) == false)
+		if (StringUtils.equals(prototype.getName(), source.getName()) == false) {
 			prototype.setName(StringUtils.strip(source.getName()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (prototype.getSort() == source.getSort() == false)
+		if (prototype.getSort() == source.getSort() == false) {
 			prototype.setSort(source.getSort());
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (prototype.getActive() == source.getActive() == false)
+		if (prototype.getActive() == source.getActive() == false) {
 			prototype.setActive(source.getActive());
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
 		return prototype;
 	}

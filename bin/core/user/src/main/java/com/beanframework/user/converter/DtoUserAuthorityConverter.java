@@ -16,7 +16,7 @@ import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 
 public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, UserAuthority> {
-	
+
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserAuthorityConverter.class);
 
 	@Autowired
@@ -46,9 +46,6 @@ public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, Us
 
 		prototype.setEnabled(source.getEnabled());
 		try {
-			Hibernate.initialize(source.getUserPermission());
-			Hibernate.initialize(source.getUserRight());
-			
 			prototype.setUserPermission(modelService.getDto(source.getUserPermission(), UserPermission.class));
 			prototype.setUserRight(modelService.getDto(source.getUserRight(), UserRight.class));
 		} catch (Exception e) {
