@@ -18,7 +18,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -51,7 +50,6 @@ public abstract class User extends GenericDomain {
 	private static final long serialVersionUID = -7444894280894062710L;
 	
 	@Audited(withModifiedFlag=true)
-	@NotNull
 	private String password;
 	
 	@Audited(withModifiedFlag=true)

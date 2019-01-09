@@ -11,11 +11,11 @@
 						<div class="input-group">
 							<input type="text" name="searchAll" th:value="${objectSearch.searchAll}" class="form-control">
 							<span class="input-group-btn">
-								<button type="submit" id="search-btn" class="btn btn-primary" th:text="#{module.console.search}"></button>
-								<button type="button" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-search" th:title="#{module.console.search.advanced}">
+								<button type="submit" id="search-btn" class="btn btn-primary" th:text="#{module.backoffice.search}"></button>
+								<button type="button" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-search" th:title="#{module.backoffice.search.advanced}">
 									<span class="fa fa-search-plus"></span>
 								</button>
-								<a th:href="${searchAction}" class="btn btn-default btn-flat" th:title="#{module.console.refresh}">
+								<a th:href="${searchAction}" class="btn btn-default btn-flat" th:title="#{module.backoffice.refresh}">
 									<span class="fa fa-refresh"></span>
 								</a>
 							</span>
@@ -34,18 +34,18 @@
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 class="modal-title" th:text="#{module.console.search.advanced}"></h4>
+							<h4 class="modal-title" th:text="#{module.backoffice.search.advanced}"></h4>
 						</div>
 						<div class="modal-body">
 							<div class="form-group" th:each="field : ${searchFields}">
-								<label th:text="${field}" th:for="${field}"></label>
+								<label th:text="#{module.search.__${field}__}" th:for="${field}"></label>
 								<input type="text" th:name="${field}" th:value="${objectSearch.__${field}__}" class="form-control">
 							</div>
 							<th:block th:if="${searchForm}" layout:insert="${searchForm} :: searchForm"></th:block>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.console.cancel}+'  '"></button>
-							<button type="submit" class="btn btn-primary" th:text="#{module.console.search}" onclick="advancedSearch()"></button>
+							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+							<button type="submit" class="btn btn-primary" th:text="#{module.backoffice.search}" onclick="advancedSearch()"></button>
 						</div>
 					</form>
 				</div>

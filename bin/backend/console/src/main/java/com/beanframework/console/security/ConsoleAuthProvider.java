@@ -1,5 +1,6 @@
 package com.beanframework.console.security;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -36,6 +37,13 @@ public class ConsoleAuthProvider implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String id = authentication.getName();
 		String password = (String) authentication.getCredentials();
+		
+		if(StringUtils.strip(id) == null || StringUtils.strip(id) == "" ) {
+			throw new BadCredentialsException(localeMessageService.getMessage(ConsoleWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
+		}
+		if(StringUtils.strip(password) == null || StringUtils.strip(password) == "" ) {
+			throw new BadCredentialsException(localeMessageService.getMessage(ConsoleWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
+		}
 
 		Admin admin;
 		try {

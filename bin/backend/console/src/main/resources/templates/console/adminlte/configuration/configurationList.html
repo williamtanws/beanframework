@@ -17,7 +17,7 @@
 			</div>
 			<!-- List Table-->
 			<div class="row" th:with="valueName=#{module.configuration.value}">
-				<th:block layout:insert="/console/adminlte/common/component/list :: list (title=#{module.configuration}, objectUpdate=${configurationUpdate}, objectSearch=${configurationSearch}, icon=@{${@environment.getProperty('module.configuration.icon')}}, paginationAction=@{${@environment.getProperty('path.configuration')}}, listFields=${ {{'value', valueName}} }, searchFields=${ {'id','value'} }, updateForm='/console/adminlte/configuration/configurationForm')"></th:block>
+				<th:block layout:insert="/console/adminlte/common/component/list :: list (title=#{module.configuration}, objectUpdate=${configurationUpdate}, objectSearch=${configurationSearch}, icon=@{${@environment.getProperty('module.configuration.icon')}}, paginationAction=@{${@environment.getProperty('path.configuration')}}, listFields=${ {{'id', 'ID'}, {'value', valueName}} }, searchFields=${ {'id','value'} }, updateForm='/console/adminlte/configuration/configurationForm')"></th:block>
 			</div>
 			<!-- Create Modal-->
 			<th:block layout:insert="/console/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.configuration')}}, createObject=${configurationCreate}, createForm='/console/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.configuration.checkid')})"></th:block>
