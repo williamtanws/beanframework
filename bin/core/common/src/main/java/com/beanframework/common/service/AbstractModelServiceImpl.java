@@ -71,26 +71,47 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	protected void initialDefaultsInterceptor(Object model, Class modelClass) throws InterceptorException {
+		
+		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof InitialDefaultsInterceptor) {
 				InitialDefaultsInterceptor<Object> interceptor = (InitialDefaultsInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
 					interceptor.onInitialDefaults(model);
+					notIntercepted = false;
 				}
 			}
+		}
+		
+		if (notIntercepted) {
+			throw new InterceptorException("Cannot find any load interceptor to intercept target model: " + modelClass.getSimpleName());
+		}
+	}
+	
+	protected void loadInterceptor(Collection models, Class modelClass) throws InterceptorException {
+
+		Iterator iterator = models.iterator();
+		while (iterator.hasNext()) {
+			Object model = iterator.next();
+			loadInterceptor(model, modelClass);
 		}
 	}
 
 	protected void loadInterceptor(Object model, Class modelClass) throws InterceptorException {
-		if (model != null) {
-			for (InterceptorMapping interceptorMapping : interceptorMappings) {
-				if (interceptorMapping.getInterceptor() instanceof LoadInterceptor) {
-					LoadInterceptor<Object> interceptor = (LoadInterceptor<Object>) interceptorMapping.getInterceptor();
-					if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
-						interceptor.onLoad(model);
-					}
+		
+		boolean notIntercepted = true;
+		for (InterceptorMapping interceptorMapping : interceptorMappings) {
+			if (interceptorMapping.getInterceptor() instanceof LoadInterceptor) {
+				LoadInterceptor<Object> interceptor = (LoadInterceptor<Object>) interceptorMapping.getInterceptor();
+				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
+					interceptor.onLoad(model);
+					notIntercepted = false;
 				}
 			}
+		}
+
+		if (notIntercepted) {
+			throw new InterceptorException("Cannot find any load interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
 
@@ -104,13 +125,20 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	protected void prepareInterceptor(Object model, Class modelClass) throws InterceptorException {
+
+		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof PrepareInterceptor) {
 				PrepareInterceptor<Object> interceptor = (PrepareInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
 					interceptor.onPrepare(model);
+					notIntercepted = false;
 				}
 			}
+		}
+
+		if (notIntercepted) {
+			throw new InterceptorException("Cannot find any prepare interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
 
@@ -124,13 +152,20 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	protected void removeInterceptor(Object model, Class modelClass) throws InterceptorException {
+
+		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof RemoveInterceptor) {
 				RemoveInterceptor<Object> interceptor = (RemoveInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
 					interceptor.onRemove(model);
+					notIntercepted = false;
 				}
 			}
+		}
+
+		if (notIntercepted) {
+			throw new InterceptorException("Cannot find any remove interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
 
@@ -144,13 +179,20 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	protected void validateInterceptor(Object model, Class modelClass) throws InterceptorException {
+
+		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof ValidateInterceptor) {
 				ValidateInterceptor<Object> interceptor = (ValidateInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
 					interceptor.onValidate(model);
+					notIntercepted = false;
 				}
 			}
+		}
+
+		if (notIntercepted) {
+			throw new InterceptorException("Cannot find any validate interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
 
@@ -396,8 +438,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		if (sortsBuilder.length() > 0) {
 			qlString = qlString + " " + sortsBuilder.toString();
 		}
-		if(maxResult != null) {
-			if(maxResult > 0) {
+		if (maxResult != null) {
+			if (maxResult > 0) {
 				qlString = qlString + " limit " + maxResult;
 			}
 		}
@@ -489,8 +531,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			if (sortsBuilder.length() > 0) {
 				qlString = qlString + " " + sortsBuilder.toString();
 			}
-			if(maxResult != null) {
-				if(maxResult > 0) {
+			if (maxResult != null) {
+				if (maxResult > 0) {
 					qlString = qlString + " limit " + maxResult;
 				}
 			}
@@ -502,7 +544,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	protected void putCache(Class modelClass, Object key, Object value) {
 		cacheManager.getCache(modelClass.getName()).put(key, value);
 	}
-	
+
 	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer maxResult, Class modelClass) {
 		String qlString = "select " + (StringUtils.isBlank(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
@@ -521,15 +563,15 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 				}
 			}
 		}
-		if(maxResult != null) {
-			if(maxResult > 0) {
+		if (maxResult != null) {
+			if (maxResult > 0) {
 				query.setMaxResults(maxResult);
 			}
 		}
 
 		return query;
 	}
-	
+
 	protected String sqlProperties(Map<String, Object> properties) {
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {

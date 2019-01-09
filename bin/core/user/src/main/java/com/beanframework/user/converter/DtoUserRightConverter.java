@@ -46,8 +46,6 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRight>
 		prototype.setName(source.getName());
 		prototype.setSort(source.getSort());
 		try {
-			Hibernate.initialize(source.getFields());
-			
 			prototype.setFields(modelService.getDto(source.getFields(), UserRightField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

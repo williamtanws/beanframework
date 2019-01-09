@@ -22,17 +22,17 @@ public class MenuSpecification extends AbstractSpecification {
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = -3349403867960461011L;
+			private static final long serialVersionUID = -6451054614872238142L;
 
 			@Override
 			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(data.getSearchAll())) {
-					addPredicates(data.getSearchAll(), root, cb, predicates);
+				if (StringUtils.isNotBlank(data.getSearchAll())) {
+					addPredicates(data.getSearchAll(), data.getSearchAll(), root, cb, predicates);
 				} else {
-					addPredicates(data.getId(), root, cb, predicates);
+					addPredicates(data.getId(), data.getName(), root, cb, predicates);
 				}
 
 				if (predicates.isEmpty()) {
@@ -44,9 +44,12 @@ public class MenuSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, Root<Menu> root, CriteriaBuilder cb, List<Predicate> predicates) {
-		if (StringUtils.isNotEmpty(id)) {
+	public static void addPredicates(String id, String name, Root<Menu> root, CriteriaBuilder cb, List<Predicate> predicates) {
+		if (StringUtils.isNotBlank(id)) {
 			predicates.add(cb.or(cb.like(root.get(Menu.ID), convertToPattern(id))));
+		}
+		if (StringUtils.isNotBlank(name)) {
+			predicates.add(cb.or(cb.like(root.get(Menu.NAME), convertToPattern(name))));
 		}
 	}
 }

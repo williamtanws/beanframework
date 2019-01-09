@@ -21,7 +21,6 @@ public class EntityUserRightConverter implements EntityConverter<UserRight, User
 	@Override
 	public UserRight convert(UserRight source) throws ConverterException {
 
-		UserRight prototype;
 		try {
 
 			if (source.getUuid() != null) {
@@ -29,45 +28,50 @@ public class EntityUserRightConverter implements EntityConverter<UserRight, User
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserRight.UUID, source.getUuid());
 
-				UserRight exists = modelService.findOneEntityByProperties(properties, UserRight.class);
+				UserRight prototype = modelService.findOneEntityByProperties(properties, UserRight.class);
 
-				if (exists != null) {
-					prototype = exists;
-				} else {
-					prototype = modelService.create(UserRight.class);
+				if (prototype != null) {
+					return convert(source, prototype);
 				}
-			} else {
-				prototype = modelService.create(UserRight.class);
 			}
+
+			return convert(source, modelService.create(UserRight.class));
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
 		}
-
-		return convert(source, prototype);
 	}
 
 	private UserRight convert(UserRight source, UserRight prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();
-			prototype.setLastModifiedDate(lastModifiedDate);
 
-			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(StringUtils.strip(source.getId()), prototype.getId()) == false)
+			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(StringUtils.strip(source.getId()), prototype.getId()) == false) {
 				prototype.setId(StringUtils.strip(source.getId()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
-			if (StringUtils.equals(StringUtils.strip(source.getName()), prototype.getName()) == false)
+			if (StringUtils.equals(StringUtils.strip(source.getName()), prototype.getName()) == false) {
 				prototype.setName(StringUtils.strip(source.getName()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
-			if (source.getSort() != prototype.getSort())
+			if (source.getSort() != prototype.getSort()) {
 				prototype.setSort(source.getSort());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
+			// Field
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
-					for (UserRightField sourceUserRightField : source.getFields()) {
-						if (prototype.getFields().get(i).getUuid().equals(sourceUserRightField.getUuid())) {
-							if(StringUtils.equals(StringUtils.strip(sourceUserRightField.getValue()), prototype.getFields().get(i).getValue()) == false){
-								prototype.getFields().get(i).setValue(StringUtils.strip(sourceUserRightField.getValue()));
+					for (UserRightField sourceField : source.getFields()) {
+						if (prototype.getFields().get(i).getUuid().equals(sourceField.getUuid())) {
+							if (StringUtils.equals(StringUtils.strip(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+								prototype.getFields().get(i).setValue(StringUtils.strip(sourceField.getValue()));
+
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+								prototype.setLastModifiedDate(lastModifiedDate);
 							}
 						}
 					}

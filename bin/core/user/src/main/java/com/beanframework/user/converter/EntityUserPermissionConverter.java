@@ -1,5 +1,6 @@
 package com.beanframework.user.converter;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +21,6 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 	@Override
 	public UserPermission convert(UserPermission source) throws ConverterException {
 
-		UserPermission prototype;
 		try {
 
 			if (source.getUuid() != null) {
@@ -28,41 +28,50 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserPermission.UUID, source.getUuid());
 
-				UserPermission exists = modelService.findOneEntityByProperties(properties, UserPermission.class);
+				UserPermission prototype = modelService.findOneEntityByProperties(properties, UserPermission.class);
 
-				if (exists != null) {
-					prototype = exists;
-				} else {
-					prototype = modelService.create(UserPermission.class);
+				if (prototype != null) {
+					return convert(source, prototype);
 				}
-			} else {
-				prototype = modelService.create(UserPermission.class);
 			}
+
+			return convert(source, modelService.create(UserPermission.class));
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
 		}
 
-		return convert(source, prototype);
 	}
 
 	private UserPermission convert(UserPermission source, UserPermission prototype) throws ConverterException {
 
 		try {
+			Date lastModifiedDate = new Date();
 
-			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
 				prototype.setId(StringUtils.strip(source.getId()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
-			if (StringUtils.equals(source.getName(), prototype.getName()) == false)
+			if (StringUtils.equals(source.getName(), prototype.getName()) == false) {
 				prototype.setName(StringUtils.strip(source.getName()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
-			if (source.getSort() != prototype.getSort())
+			if (source.getSort() != prototype.getSort()) {
 				prototype.setSort(source.getSort());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
+			// Field
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
-					for (UserPermissionField sourceUserPermissionField : source.getFields()) {
-						if (prototype.getFields().get(i).getUuid().equals(sourceUserPermissionField.getUuid())) {
-							prototype.getFields().get(i).setValue(StringUtils.strip(sourceUserPermissionField.getValue()));
+					for (UserPermissionField sourceField : source.getFields()) {
+						if (StringUtils.equals(StringUtils.strip(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+							prototype.getFields().get(i).setValue(StringUtils.strip(sourceField.getValue()));
+							
+							prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}

@@ -46,7 +46,7 @@ public interface UserRightFacade {
 
 	UserRight saveEntity(UserRight model) throws BusinessException;
 
-	void deleteById(String id) throws Exception;
+	void deleteById(String id) throws BusinessException;
 
 	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 

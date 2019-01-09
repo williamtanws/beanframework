@@ -27,7 +27,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.EntityConfigurationImporterConverter;
+import com.beanframework.console.converter.EntityConfigurationConverterImporter;
 import com.beanframework.console.csv.ConfigurationCsv;
 import com.beanframework.console.registry.Importer;
 
@@ -38,7 +38,7 @@ public class ConfigurationImporter extends Importer {
 	private ConfigurationFacade configurationFacade;
 	
 	@Autowired
-	private EntityConfigurationImporterConverter converter;
+	private EntityConfigurationConverterImporter converter;
 
 	@Value("${module.console.import.update.configuration}")
 	private String IMPORT_UPDATE;

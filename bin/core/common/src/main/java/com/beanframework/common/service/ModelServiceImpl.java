@@ -480,7 +480,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		modelRepository.flush();
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void deleteByEntity(Object entityModel, Class modelClass) throws BusinessException {
 		try {
@@ -499,7 +499,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException {
 		try {
@@ -520,7 +520,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void deleteAll(Class modelClass) throws BusinessException {
 		try {

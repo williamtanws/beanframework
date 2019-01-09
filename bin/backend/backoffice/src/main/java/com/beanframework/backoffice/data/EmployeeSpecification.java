@@ -22,17 +22,17 @@ public class EmployeeSpecification extends AbstractSpecification {
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = -6720888940006483484L;
+			private static final long serialVersionUID = -6451054614872238142L;
 
 			@Override
 			public Predicate toPredicate(Root<Employee> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				if (StringUtils.isNotEmpty(data.getSearchAll())) {
-					addPredicates(data.getSearchAll(), root, cb, predicates);
+				if (StringUtils.isNotBlank(data.getSearchAll())) {
+					addPredicates(data.getSearchAll(), data.getSearchAll(), root, cb, predicates);
 				} else {
-					addPredicates(data.getId(), root, cb, predicates);
+					addPredicates(data.getId(), data.getName(), root, cb, predicates);
 				}
 
 				if (predicates.isEmpty()) {
@@ -44,9 +44,12 @@ public class EmployeeSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, Root<Employee> root, CriteriaBuilder cb, List<Predicate> predicates) {
-		if (StringUtils.isNotEmpty(id)) {
+	public static void addPredicates(String id, String name, Root<Employee> root, CriteriaBuilder cb, List<Predicate> predicates) {
+		if (StringUtils.isNotBlank(id)) {
 			predicates.add(cb.or(cb.like(root.get(Employee.ID), convertToPattern(id))));
+		}
+		if (StringUtils.isNotBlank(name)) {
+			predicates.add(cb.or(cb.like(root.get(Employee.NAME), convertToPattern(name))));
 		}
 	}
 }

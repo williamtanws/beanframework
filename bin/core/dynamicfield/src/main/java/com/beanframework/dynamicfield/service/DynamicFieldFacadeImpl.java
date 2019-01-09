@@ -55,7 +55,11 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.deleteByUuid(uuid, DynamicField.class);
+		try {
+			modelService.deleteByUuid(uuid, DynamicField.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@Override

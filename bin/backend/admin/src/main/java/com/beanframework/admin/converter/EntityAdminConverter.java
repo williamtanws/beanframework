@@ -1,5 +1,6 @@
 package com.beanframework.admin.converter;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,51 +21,61 @@ public class EntityAdminConverter implements EntityConverter<Admin, Admin> {
 	@Override
 	public Admin convert(Admin source) throws ConverterException {
 
-		Admin prototype;
 		try {
-			prototype = modelService.create(Admin.class);
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Admin.UUID, source.getUuid());
-				Admin exists = modelService.findOneEntityByProperties(properties, Admin.class);
+				Admin prototype = modelService.findOneEntityByProperties(properties, Admin.class);
 
-				if (exists != null) {
-					prototype = exists;
-				} else {
-					prototype = modelService.create(Admin.class);
+				if (prototype != null) {
+					return convert(source, prototype);
 				}
-			} else {
-				prototype = modelService.create(Admin.class);
 			}
+			return convert(source, modelService.create(Admin.class));
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
 		}
-
-		return convert(source, prototype);
 	}
 
 	private Admin convert(Admin source, Admin prototype) {
 
-		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+		Date lastModifiedDate = new Date();
+
+		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
 			prototype.setId(source.getId());
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (source.getAccountNonExpired() != null && source.getAccountNonExpired() != prototype.getAccountNonExpired())
+		if (source.getAccountNonExpired() != null && source.getAccountNonExpired() != prototype.getAccountNonExpired()) {
 			prototype.setAccountNonExpired(source.getAccountNonExpired());
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (source.getAccountNonLocked() != null && source.getAccountNonLocked() != prototype.getAccountNonLocked())
+		if (source.getAccountNonLocked() != null && source.getAccountNonLocked() != prototype.getAccountNonLocked()) {
 			prototype.setAccountNonLocked(source.getAccountNonLocked());
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (source.getCredentialsNonExpired() != null && source.getCredentialsNonExpired() != prototype.getCredentialsNonExpired())
+		if (source.getCredentialsNonExpired() != null && source.getCredentialsNonExpired() != prototype.getCredentialsNonExpired()) {
 			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (source.getEnabled() != null && source.getEnabled() != prototype.getEnabled())
+		if (source.getEnabled() != null && source.getEnabled() != prototype.getEnabled()) {
 			prototype.setEnabled(source.getEnabled());
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (StringUtils.isNotBlank(source.getPassword()))
+		if (StringUtils.isNotBlank(source.getPassword())) {
 			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (StringUtils.equals(source.getName(), prototype.getName()) == false)
+		if (StringUtils.equals(source.getName(), prototype.getName()) == false) {
 			prototype.setName(StringUtils.strip(source.getName()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
 		return prototype;
 	}

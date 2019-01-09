@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.EntityCronjobImporterConverter;
+import com.beanframework.console.converter.EntityCronjobConverterImporter;
 import com.beanframework.console.csv.CronjobCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.cronjob.domain.Cronjob;
@@ -39,7 +39,7 @@ public class CronjobImporter extends Importer {
 	private CronjobFacade cronjobFacade;
 
 	@Autowired
-	private EntityCronjobImporterConverter converter;
+	private EntityCronjobConverterImporter converter;
 
 	@Autowired
 	private CronjobManagerService cronjobManagerService;

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import com.beanframework.common.converter.ConverterMapping;
+import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.user.converter.DtoUserAuthorityConverter;
 import com.beanframework.user.converter.DtoUserFieldConverter;
@@ -14,14 +15,9 @@ import com.beanframework.user.converter.DtoUserPermissionConverter;
 import com.beanframework.user.converter.DtoUserPermissionFieldConverter;
 import com.beanframework.user.converter.DtoUserRightConverter;
 import com.beanframework.user.converter.DtoUserRightFieldConverter;
-import com.beanframework.user.converter.EntityUserFieldConverter;
 import com.beanframework.user.converter.EntityUserGroupConverter;
-import com.beanframework.user.converter.EntityUserGroupFieldConverter;
 import com.beanframework.user.converter.EntityUserPermissionConverter;
-import com.beanframework.user.converter.EntityUserPermissionFieldConverter;
 import com.beanframework.user.converter.EntityUserRightConverter;
-import com.beanframework.user.converter.EntityUserRightFieldConverter;
-import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
@@ -30,28 +26,39 @@ import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserPermissionField;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightField;
-import com.beanframework.user.interceptor.UserAuthorityInitialDefaultsInterceptor;
-import com.beanframework.user.interceptor.UserAuthorityValidateInterceptor;
-import com.beanframework.user.interceptor.UserGroupLoadInterceptor;
-import com.beanframework.user.interceptor.UserGroupPrepareInterceptor;
-import com.beanframework.user.interceptor.UserGroupValidateInterceptor;
-import com.beanframework.user.interceptor.UserInitialDefaultsInterceptor;
-import com.beanframework.user.interceptor.UserLoadInterceptor;
-import com.beanframework.user.interceptor.UserPermissionPrepareInterceptor;
-import com.beanframework.user.interceptor.UserPermissionValidateInterceptor;
-import com.beanframework.user.interceptor.UserPrepareInterceptor;
-import com.beanframework.user.interceptor.UserRemoveInterceptor;
-import com.beanframework.user.interceptor.UserRightPrepareInterceptor;
-import com.beanframework.user.interceptor.UserRightValidateInterceptor;
-import com.beanframework.user.interceptor.UserValidateInterceptor;
+import com.beanframework.user.interceptor.auditor.AuditorInitialDefaultsInterceptor;
+import com.beanframework.user.interceptor.auditor.AuditorLoadInterceptor;
+import com.beanframework.user.interceptor.auditor.AuditorPrepareInterceptor;
+import com.beanframework.user.interceptor.auditor.AuditorRemoveInterceptor;
+import com.beanframework.user.interceptor.auditor.AuditorValidateInterceptor;
+import com.beanframework.user.interceptor.userauthority.UserAuthorityInitialDefaultsInterceptor;
+import com.beanframework.user.interceptor.userauthority.UserAuthorityLoadInterceptor;
+import com.beanframework.user.interceptor.userauthority.UserAuthorityPrepareInterceptor;
+import com.beanframework.user.interceptor.userauthority.UserAuthorityRemoveInterceptor;
+import com.beanframework.user.interceptor.userauthority.UserAuthorityValidateInterceptor;
+import com.beanframework.user.interceptor.usergroup.UserGroupInitialDefaultsInterceptor;
+import com.beanframework.user.interceptor.usergroup.UserGroupLoadInterceptor;
+import com.beanframework.user.interceptor.usergroup.UserGroupPrepareInterceptor;
+import com.beanframework.user.interceptor.usergroup.UserGroupRemoveInterceptor;
+import com.beanframework.user.interceptor.usergroup.UserGroupValidateInterceptor;
+import com.beanframework.user.interceptor.userpermission.UserPermissionInitialDefaultsInterceptor;
+import com.beanframework.user.interceptor.userpermission.UserPermissionLoadInterceptor;
+import com.beanframework.user.interceptor.userpermission.UserPermissionPrepareInterceptor;
+import com.beanframework.user.interceptor.userpermission.UserPermissionRemoveInterceptor;
+import com.beanframework.user.interceptor.userpermission.UserPermissionValidateInterceptor;
+import com.beanframework.user.interceptor.userright.UserRightInitialDefaultsInterceptor;
+import com.beanframework.user.interceptor.userright.UserRightLoadInterceptor;
+import com.beanframework.user.interceptor.userright.UserRightPrepareInterceptor;
+import com.beanframework.user.interceptor.userright.UserRightRemoveInterceptor;
+import com.beanframework.user.interceptor.userright.UserRightValidateInterceptor;
 
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 public class UserConfig {
 
-	/////////////////////////
+	///////////////////
 	// DTO Converter //
-	/////////////////////////
+	///////////////////
 
 	@Bean
 	public DtoUserAuthorityConverter dtoUserAuthorityConverter() {
@@ -165,23 +172,9 @@ public class UserConfig {
 		return mapping;
 	}
 
-	////////////////////////////
+	//////////////////////
 	// ENTITY Converter //
-	////////////////////////////
-
-	@Bean
-	public EntityUserFieldConverter entityUserFieldConverter() {
-		return new EntityUserFieldConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityUserFieldConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityUserFieldConverter());
-		mapping.setTypeCode(UserField.class.getSimpleName());
-
-		return mapping;
-	}
+	//////////////////////
 
 	@Bean
 	public EntityUserGroupConverter entityUserGroupConverter() {
@@ -193,20 +186,6 @@ public class UserConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(entityUserGroupConverter());
 		mapping.setTypeCode(UserGroup.class.getSimpleName());
-
-		return mapping;
-	}
-
-	@Bean
-	public EntityUserGroupFieldConverter entityUserGroupFieldConverter() {
-		return new EntityUserGroupFieldConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityUserGroupFieldConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityUserGroupFieldConverter());
-		mapping.setTypeCode(UserGroupField.class.getSimpleName());
 
 		return mapping;
 	}
@@ -226,20 +205,6 @@ public class UserConfig {
 	}
 
 	@Bean
-	public EntityUserPermissionFieldConverter entityUserPermissionFieldConverter() {
-		return new EntityUserPermissionFieldConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityUserPermissionFieldConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityUserPermissionFieldConverter());
-		mapping.setTypeCode(UserPermissionField.class.getSimpleName());
-
-		return mapping;
-	}
-
-	@Bean
 	public EntityUserRightConverter entityUserRightConverter() {
 		return new EntityUserRightConverter();
 	}
@@ -253,34 +218,20 @@ public class UserConfig {
 		return mapping;
 	}
 
-	@Bean
-	public EntityUserRightFieldConverter entityUserRightFieldConverter() {
-		return new EntityUserRightFieldConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityUserRightFieldConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityUserRightFieldConverter());
-		mapping.setTypeCode(UserRightField.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////////////////
+	//////////////////////////////////
 	// Initial Defaults Interceptor //
-	////////////////////////////////////////
-
+	//////////////////////////////////
+	
 	@Bean
-	public UserInitialDefaultsInterceptor userInitialDefaultsInterceptor() {
-		return new UserInitialDefaultsInterceptor();
+	public AuditorInitialDefaultsInterceptor auditorInitialDefaultsInterceptor() {
+		return new AuditorInitialDefaultsInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping userInitialDefaultsInterceptorMapping() {
+	public InterceptorMapping auditorInitialDefaultsInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userInitialDefaultsInterceptor());
-		interceptorMapping.setTypeCode(User.class.getSimpleName());
+		interceptorMapping.setInterceptor(auditorInitialDefaultsInterceptor());
+		interceptorMapping.setTypeCode(Auditor.class.getSimpleName());
 
 		return interceptorMapping;
 	}
@@ -299,94 +250,150 @@ public class UserConfig {
 		return interceptorMapping;
 	}
 
-	//////////////////////////
-	// Validate Interceptor //
-	//////////////////////////
-
 	@Bean
-	public UserAuthorityValidateInterceptor userAuthorityValidateInterceptor() {
-		return new UserAuthorityValidateInterceptor();
+	public UserGroupInitialDefaultsInterceptor userGroupInitialDefaultsInterceptor() {
+		return new UserGroupInitialDefaultsInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping userAuthorityValidateInterceptorMapping() {
+	public InterceptorMapping userGroupInitialDefaultsInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userAuthorityValidateInterceptor());
-		interceptorMapping.setTypeCode(User.class.getSimpleName());
+		interceptorMapping.setInterceptor(userGroupInitialDefaultsInterceptor());
+		interceptorMapping.setTypeCode(UserGroup.class.getSimpleName());
 
 		return interceptorMapping;
 	}
 
 	@Bean
-	public UserGroupValidateInterceptor userGroupValidateInterceptor() {
-		return new UserGroupValidateInterceptor();
+	public UserPermissionInitialDefaultsInterceptor userPermissionInitialDefaultsInterceptor() {
+		return new UserPermissionInitialDefaultsInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping userGroupValidateInterceptorMapping() {
+	public InterceptorMapping userPermissionInitialDefaultsInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userGroupValidateInterceptor());
-		interceptorMapping.setTypeCode(User.class.getSimpleName());
+		interceptorMapping.setInterceptor(userPermissionInitialDefaultsInterceptor());
+		interceptorMapping.setTypeCode(UserPermission.class.getSimpleName());
 
 		return interceptorMapping;
 	}
 
 	@Bean
-	public UserPermissionValidateInterceptor userPermissionValidateInterceptor() {
-		return new UserPermissionValidateInterceptor();
+	public UserRightInitialDefaultsInterceptor userRightInitialDefaultsInterceptor() {
+		return new UserRightInitialDefaultsInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping userPermissionValidateInterceptorMapping() {
+	public InterceptorMapping userRightInitialDefaultsInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userPermissionValidateInterceptor());
-		interceptorMapping.setTypeCode(User.class.getSimpleName());
+		interceptorMapping.setInterceptor(userRightInitialDefaultsInterceptor());
+		interceptorMapping.setTypeCode(UserRight.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	//////////////////////
+	// Load Interceptor //
+	//////////////////////
+	
+	@Bean
+	public AuditorLoadInterceptor auditorLoadInterceptor() {
+		return new AuditorLoadInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping auditorLoadInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(auditorLoadInterceptor());
+		interceptorMapping.setTypeCode(Auditor.class.getSimpleName());
 
 		return interceptorMapping;
 	}
 
 	@Bean
-	public UserRightValidateInterceptor userRightValidateInterceptor() {
-		return new UserRightValidateInterceptor();
+	public UserAuthorityLoadInterceptor userAuthorityLoadInterceptor() {
+		return new UserAuthorityLoadInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping userRightValidateInterceptorMapping() {
+	public InterceptorMapping userLoadInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userRightValidateInterceptor());
-		interceptorMapping.setTypeCode(User.class.getSimpleName());
+		interceptorMapping.setInterceptor(userAuthorityLoadInterceptor());
+		interceptorMapping.setTypeCode(UserAuthority.class.getSimpleName());
 
 		return interceptorMapping;
 	}
 
 	@Bean
-	public UserValidateInterceptor userValidateInterceptor() {
-		return new UserValidateInterceptor();
+	public UserGroupLoadInterceptor userGroupLoadInterceptor() {
+		return new UserGroupLoadInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping userValidateInterceptorMapping() {
+	public InterceptorMapping userGroupLoadInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userValidateInterceptor());
-		interceptorMapping.setTypeCode(User.class.getSimpleName());
+		interceptorMapping.setInterceptor(userGroupLoadInterceptor());
+		interceptorMapping.setTypeCode(UserGroup.class.getSimpleName());
 
 		return interceptorMapping;
 	}
 
-	///////////////////////////////
+	@Bean
+	public UserPermissionLoadInterceptor userPermissionLoadInterceptor() {
+		return new UserPermissionLoadInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userPermissionLoadInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userPermissionLoadInterceptor());
+		interceptorMapping.setTypeCode(UserPermission.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	@Bean
+	public UserRightLoadInterceptor userRightLoadInterceptor() {
+		return new UserRightLoadInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userRightLoadInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userRightLoadInterceptor());
+		interceptorMapping.setTypeCode(UserRight.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	/////////////////////////
 	// Prepare Interceptor //
-	///////////////////////////////
-
+	/////////////////////////
+	
 	@Bean
-	public UserPrepareInterceptor userPrepareInterceptor() {
-		return new UserPrepareInterceptor();
+	public AuditorPrepareInterceptor auditorPrepareInterceptor() {
+		return new AuditorPrepareInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping userPrepareInterceptorMapping() {
+	public InterceptorMapping auditorPrepareInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userPrepareInterceptor());
-		interceptorMapping.setTypeCode(User.class.getSimpleName());
+		interceptorMapping.setInterceptor(auditorPrepareInterceptor());
+		interceptorMapping.setTypeCode(Auditor.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	@Bean
+	public UserAuthorityPrepareInterceptor userAuthorityPrepareInterceptor() {
+		return new UserAuthorityPrepareInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userAuthorityPrepareInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userAuthorityPrepareInterceptor());
+		interceptorMapping.setTypeCode(UserAuthority.class.getSimpleName());
 
 		return interceptorMapping;
 	}
@@ -406,20 +413,6 @@ public class UserConfig {
 	}
 
 	@Bean
-	public UserRightPrepareInterceptor userRightPrepareInterceptor() {
-		return new UserRightPrepareInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping userRightPrepareInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userRightPrepareInterceptor());
-		interceptorMapping.setTypeCode(UserRight.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
 	public UserPermissionPrepareInterceptor userPermissionPrepareInterceptor() {
 		return new UserPermissionPrepareInterceptor();
 	}
@@ -433,52 +426,164 @@ public class UserConfig {
 		return interceptorMapping;
 	}
 
-	////////////////////////////
-	// Load Interceptor //
-	////////////////////////////
-
 	@Bean
-	public UserLoadInterceptor userLoadInterceptor() {
-		return new UserLoadInterceptor();
+	public UserRightPrepareInterceptor userRightPrepareInterceptor() {
+		return new UserRightPrepareInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping userLoadInterceptorMapping() {
+	public InterceptorMapping userRightPrepareInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userLoadInterceptor());
-		interceptorMapping.setTypeCode(User.class.getSimpleName());
+		interceptorMapping.setInterceptor(userRightPrepareInterceptor());
+		interceptorMapping.setTypeCode(UserRight.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	//////////////////////////
+	// Validate Interceptor //
+	//////////////////////////
+	
+	@Bean
+	public AuditorValidateInterceptor auditorValidateInterceptor() {
+		return new AuditorValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping auditorValidateInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(auditorValidateInterceptor());
+		interceptorMapping.setTypeCode(Auditor.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+	
+	@Bean
+	public UserAuthorityValidateInterceptor userAuthorityValidateInterceptor() {
+		return new UserAuthorityValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userAuthorityValidateInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userAuthorityValidateInterceptor());
+		interceptorMapping.setTypeCode(UserAuthority.class.getSimpleName());
 
 		return interceptorMapping;
 	}
 
 	@Bean
-	public UserGroupLoadInterceptor userGroupLoadInterceptor() {
-		return new UserGroupLoadInterceptor();
+	public UserGroupValidateInterceptor userGroupValidateInterceptor() {
+		return new UserGroupValidateInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping userGroupLoadInterceptorMapping() {
+	public InterceptorMapping userGroupValidateInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userGroupLoadInterceptor());
+		interceptorMapping.setInterceptor(userGroupValidateInterceptor());
 		interceptorMapping.setTypeCode(UserGroup.class.getSimpleName());
 
 		return interceptorMapping;
 	}
 
-	//////////////////////////////
-	// Remove Interceptor //
-	//////////////////////////////
-
 	@Bean
-	public UserRemoveInterceptor userRemoveInterceptor() {
-		return new UserRemoveInterceptor();
+	public UserPermissionValidateInterceptor userPermissionValidateInterceptor() {
+		return new UserPermissionValidateInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping userRemoveInterceptorMapping() {
+	public InterceptorMapping userPermissionValidateInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userRemoveInterceptor());
-		interceptorMapping.setTypeCode(User.class.getSimpleName());
+		interceptorMapping.setInterceptor(userPermissionValidateInterceptor());
+		interceptorMapping.setTypeCode(UserPermission.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	@Bean
+	public UserRightValidateInterceptor userRightValidateInterceptor() {
+		return new UserRightValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userRightValidateInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userRightValidateInterceptor());
+		interceptorMapping.setTypeCode(UserRight.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	////////////////////////
+	// Remove Interceptor //
+	////////////////////////
+	
+	@Bean
+	public AuditorRemoveInterceptor auditorRemoveInterceptor() {
+		return new AuditorRemoveInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping auditorRemoveInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(auditorRemoveInterceptor());
+		interceptorMapping.setTypeCode(Auditor.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	@Bean
+	public UserAuthorityRemoveInterceptor userAuthorityRemoveInterceptor() {
+		return new UserAuthorityRemoveInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userAuthorityRemoveInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userAuthorityRemoveInterceptor());
+		interceptorMapping.setTypeCode(UserAuthority.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	@Bean
+	public UserGroupRemoveInterceptor userGroupRemoveInterceptor() {
+		return new UserGroupRemoveInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userGroupRemoveInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userGroupRemoveInterceptor());
+		interceptorMapping.setTypeCode(UserGroup.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	@Bean
+	public UserPermissionRemoveInterceptor userPermissionRemoveInterceptor() {
+		return new UserPermissionRemoveInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userPermissionRemoveInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userPermissionRemoveInterceptor());
+		interceptorMapping.setTypeCode(UserPermission.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	@Bean
+	public UserRightRemoveInterceptor userRightRemoveInterceptor() {
+		return new UserRightRemoveInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping userRightRemoveInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(userRightRemoveInterceptor());
+		interceptorMapping.setTypeCode(UserRight.class.getSimpleName());
 
 		return interceptorMapping;
 	}

@@ -22,10 +22,8 @@ import com.beanframework.cronjob.context.AutowiringSpringBeanJobFactory;
 import com.beanframework.cronjob.converter.DtoCronjobConverter;
 import com.beanframework.cronjob.converter.DtoCronjobDataConverter;
 import com.beanframework.cronjob.converter.EntityCronjobConverter;
-import com.beanframework.cronjob.converter.EntityCronjobDataConverter;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
-import com.beanframework.cronjob.interceptor.CronjobDataInitialDefaultsInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobInitialDefaultsInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobLoadInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobPrepareInterceptor;
@@ -42,24 +40,24 @@ public class CronjobConfig {
 
 	@Value(CronjobConstants.QUARTZ_PROPERTIES_LOCATION)
 	private String QUARTZ_PROPERTIES_LOCATION;
-	
+
 	@Value(CronjobConstants.QUARTZ_PROPERTIES_CLASSPATH)
 	private String QUARTZ_PROPERTIES_CLASSPATH;
 
 	@Bean
 	public Properties quartzProperties() throws Exception {
-		
+
 		PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
 
-		if(StringUtils.isNotBlank(QUARTZ_PROPERTIES_LOCATION)) {
+		if (StringUtils.isNotBlank(QUARTZ_PROPERTIES_LOCATION)) {
 			FileSystemResource fileSystemResource = new FileSystemResource(QUARTZ_PROPERTIES_LOCATION);
 			propertiesFactoryBean.setLocation(fileSystemResource);
 		}
-		
-		if(StringUtils.isNotBlank(QUARTZ_PROPERTIES_CLASSPATH)) {
+
+		if (StringUtils.isNotBlank(QUARTZ_PROPERTIES_CLASSPATH)) {
 			propertiesFactoryBean.setLocation(new ClassPathResource(QUARTZ_PROPERTIES_CLASSPATH));
 		}
-		
+
 		propertiesFactoryBean.afterPropertiesSet();
 		return propertiesFactoryBean.getObject();
 	}
@@ -85,12 +83,12 @@ public class CronjobConfig {
 
 		return schedulerFactory;
 	}
-	
+
 	@Bean
 	public DtoCronjobConverter dtoCronjobConverter() {
 		return new DtoCronjobConverter();
 	}
-	
+
 	@Bean
 	public ConverterMapping dtoCronjobConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
@@ -98,13 +96,13 @@ public class CronjobConfig {
 		mapping.setTypeCode(Cronjob.class.getSimpleName());
 
 		return mapping;
-	} 
-	
+	}
+
 	@Bean
 	public DtoCronjobDataConverter dtoCronjobDataConverter() {
 		return new DtoCronjobDataConverter();
 	}
-	
+
 	@Bean
 	public ConverterMapping dtoCronjobDataConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
@@ -112,13 +110,13 @@ public class CronjobConfig {
 		mapping.setTypeCode(CronjobData.class.getSimpleName());
 
 		return mapping;
-	} 
-	
+	}
+
 	@Bean
 	public EntityCronjobConverter entityCronjobConverter() {
 		return new EntityCronjobConverter();
 	}
-	
+
 	@Bean
 	public ConverterMapping entityCronjobConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
@@ -126,22 +124,8 @@ public class CronjobConfig {
 		mapping.setTypeCode(Cronjob.class.getSimpleName());
 
 		return mapping;
-	} 
-	
-	@Bean
-	public EntityCronjobDataConverter entityCronjobDataConverter() {
-		return new EntityCronjobDataConverter();
 	}
-	
-	@Bean
-	public ConverterMapping entityCronjobDataConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCronjobDataConverter());
-		mapping.setTypeCode(CronjobData.class.getSimpleName());
 
-		return mapping;
-	} 
-	
 	@Bean
 	public CronjobInitialDefaultsInterceptor cronjobInitialDefaultsInterceptor() {
 		return new CronjobInitialDefaultsInterceptor();
@@ -155,21 +139,7 @@ public class CronjobConfig {
 
 		return interceptorMapping;
 	}
-	
-	@Bean
-	public CronjobDataInitialDefaultsInterceptor cronjobDataInitialDefaultsInterceptor() {
-		return new CronjobDataInitialDefaultsInterceptor();
-	}
 
-	@Bean
-	public InterceptorMapping cronjobDataInitialDefaultsInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobDataInitialDefaultsInterceptor());
-		interceptorMapping.setTypeCode(CronjobData.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-	
 	@Bean
 	public CronjobValidateInterceptor cronjobValidateInterceptor() {
 		return new CronjobValidateInterceptor();
@@ -183,7 +153,7 @@ public class CronjobConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public CronjobPrepareInterceptor cronjobPrepareInterceptor() {
 		return new CronjobPrepareInterceptor();
@@ -211,7 +181,7 @@ public class CronjobConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public CronjobRemoveInterceptor cronjobRemoveInterceptor() {
 		return new CronjobRemoveInterceptor();
@@ -222,7 +192,7 @@ public class CronjobConfig {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(cronjobRemoveInterceptor());
 		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
-		
+
 		return interceptorMapping;
 	}
 }

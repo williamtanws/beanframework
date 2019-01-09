@@ -1,5 +1,6 @@
 package com.beanframework.cronjob.converter;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,6 @@ public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob>
 	@Override
 	public Cronjob convert(Cronjob source) throws ConverterException {
 
-		Cronjob prototype;
 		try {
 
 			if (source.getUuid() != null) {
@@ -27,47 +27,59 @@ public class EntityCronjobConverter implements EntityConverter<Cronjob, Cronjob>
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Cronjob.UUID, source.getUuid());
 
-				Cronjob exists = modelService.findOneEntityByProperties(properties, Cronjob.class);
+				Cronjob prototype = modelService.findOneEntityByProperties(properties, Cronjob.class);
 
-				if (exists != null) {
-					prototype = exists;
-				} else {
-					prototype = modelService.create(Cronjob.class);
+				if (prototype != null) {
+					return convert(source, prototype);
 				}
-			} else {
-				prototype = modelService.create(Cronjob.class);
 			}
+
+			return convert(source, modelService.create(Cronjob.class));
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
 		}
 
-		return convert(source, prototype);
 	}
 
 	private Cronjob convert(Cronjob source, Cronjob prototype) {
 
-		
+		Date lastModifiedDate = new Date();
 
-		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false)
+		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
 			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (StringUtils.equals(source.getJobClass(), prototype.getJobClass()) == false)
+		if (StringUtils.equals(source.getJobClass(), prototype.getJobClass()) == false) {
 			prototype.setJobClass(StringUtils.strip(source.getJobClass()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (StringUtils.equals(source.getJobGroup(), prototype.getJobGroup()) == false)
+		if (StringUtils.equals(source.getJobGroup(), prototype.getJobGroup()) == false) {
 			prototype.setJobGroup(StringUtils.strip(source.getJobGroup()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (StringUtils.equals(source.getJobName(), prototype.getJobName()) == false)
+		if (StringUtils.equals(source.getJobName(), prototype.getJobName()) == false) {
 			prototype.setJobName(StringUtils.strip(source.getJobName()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (StringUtils.equals(source.getDescription(), prototype.getDescription()) == false)
+		if (StringUtils.equals(source.getDescription(), prototype.getDescription()) == false) {
 			prototype.setDescription(StringUtils.strip(source.getDescription()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (StringUtils.equals(source.getCronExpression(), prototype.getCronExpression()) == false)
+		if (StringUtils.equals(source.getCronExpression(), prototype.getCronExpression()) == false) {
 			prototype.setCronExpression(StringUtils.strip(source.getCronExpression()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
-		if (source.getStartup() != prototype.getStartup())
+		if (source.getStartup() != prototype.getStartup()) {
 			prototype.setStartup(source.getStartup());
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 
 		return prototype;
 	}
