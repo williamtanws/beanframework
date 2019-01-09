@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.security;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,13 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String id = authentication.getName();
 		String password = (String) authentication.getCredentials();
+		
+		if(StringUtils.strip(id) == null || StringUtils.strip(id) == "" ) {
+			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
+		}
+		if(StringUtils.strip(password) == null || StringUtils.strip(password) == "" ) {
+			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
+		}
 
 		Employee employee;
 		try {
