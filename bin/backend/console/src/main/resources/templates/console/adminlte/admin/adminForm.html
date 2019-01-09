@@ -55,18 +55,23 @@
 										<th:block layout:insert="/console/adminlte/common/component/general :: general"></th:block>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-12 row">
-											<div class="col-md-6">
-												<div class="form-group">
-													<label for="password" th:text="#{module.admin.password}"></label>
-													<input type="password" class="form-control" name="password">
-													<span class="help-block"></span>
-												</div>
-												<div class="form-group">
-													<label for="confirmPassword" th:text="#{module.admin.password.confirm}"></label>
-													<input name="confirmPassword" type="password" class="form-control">
-													<span class="help-block"></span>
-												</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="name" th:text="#{module.admin.name}"></label>
+												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="password" th:text="#{module.admin.password}"></label>
+												<input type="password" class="form-control" name="password">
+												<span class="help-block"></span>
+											</div>
+											<div class="form-group">
+												<label for="confirmPassword" th:text="#{module.admin.password.confirm}"></label>
+												<input name="confirmPassword" type="password" class="form-control">
+												<span class="help-block"></span>
 											</div>
 										</div>
 									</div>
@@ -169,6 +174,14 @@
 		                },
 		                name: {
 		                    required: true
+		                },
+		                password: {
+		                    required: false,
+		                    minlength: /*[[${@environment.getProperty('module.admin.password.min')}]]*/,
+		                    maxlength: /*[[${@environment.getProperty('module.admin.password.max')}]]*/
+		                },
+		                confirmPassword: {
+		                    equalTo: "#update-form input[name='password']"
 		                }
 		            },
 		            messages: {
@@ -178,6 +191,13 @@
 		                },
 		                name: {
 		                    required: /*[[#{module.admin.name.required}]]*/
+		                },
+		                password: {
+		                    required: /*[[#{module.admin.password.required}]]*/
+		                },
+		                confirmPassword: {
+		                    required: /*[[#{module.admin.password.confirm.required}]]*/ ,
+		                    equalTo: /*[[#{module.admin.password.confirm.notmatch}]]*/
 		                }
 		            },
 		            highlight: function(element) {
@@ -208,8 +228,7 @@
 		    /*]]>*/
 		</script>
 
-		<th:block
-			layout:insert="/console/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.admin')}}, objectSearch=${adminSearch}, deleteUuid=${adminUpdate.uuid})"></th:block>
+		<th:block layout:insert="/console/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.admin')}}, objectSearch=${adminSearch}, deleteUuid=${adminUpdate.uuid})"></th:block>
 	</th:block>
 </body>
 </html>
