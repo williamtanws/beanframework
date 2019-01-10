@@ -17,6 +17,7 @@ public class DynamicFieldCsv extends AbstractCsv {
 	private String group;
 	private String label;
 	private String language;
+	private String enumValues;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
@@ -28,7 +29,8 @@ public class DynamicFieldCsv extends AbstractCsv {
 				new Optional(), // rule
 				new Optional(), // group
 				new NotNull(), // label
-				new NotNull() // language
+				new NotNull(), // language
+				new Optional(), // enumValues
 		};
 
 		return processors;
@@ -98,4 +100,11 @@ public class DynamicFieldCsv extends AbstractCsv {
 		this.language = language;
 	}
 
+	public String getEnumValues() {
+		return enumValues;
+	}
+
+	public void setEnumValues(String enumValues) {
+		this.enumValues = enumValues;
+	}
 }

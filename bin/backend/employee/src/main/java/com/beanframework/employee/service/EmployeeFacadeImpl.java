@@ -13,6 +13,7 @@ import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -250,6 +251,11 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, UserField.class);
 		
 		return revisions;
+	}
+
+	@Override
+	public List<Employee> findDtoBySorts(Map<String, Direction> employeeSorts) throws Exception {
+		return modelService.findDtoBySorts(employeeSorts, Employee.class);
 	}
 
 }
