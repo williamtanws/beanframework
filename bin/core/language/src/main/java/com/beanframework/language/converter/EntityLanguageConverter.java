@@ -43,19 +43,26 @@ public class EntityLanguageConverter implements EntityConverter<Language, Langua
 
 		Date lastModifiedDate = new Date();
 
-		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
-			prototype.setId(StringUtils.strip(source.getId()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(prototype.getName(), source.getName()) == false) {
-			prototype.setName(StringUtils.strip(source.getName()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (prototype.getSort() == source.getSort() == false) {
-			prototype.setSort(source.getSort());
-			prototype.setLastModifiedDate(lastModifiedDate);
+		if (source.getSort() == null) {
+			if (prototype.getSort() != null) {
+				prototype.setSort(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+		} else {
+			if (prototype.getSort() == null || prototype.getSort().equals(source.getSort()) == false) {
+				prototype.setSort(source.getSort());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 		}
 
 		if (prototype.getActive() == source.getActive() == false) {

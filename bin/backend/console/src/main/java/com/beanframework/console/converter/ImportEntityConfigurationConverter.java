@@ -49,8 +49,8 @@ public class ImportEntityConfigurationConverter implements EntityConverter<Confi
 	private Configuration convert(ConfigurationCsv source, Configuration prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.strip(source.getId()));
-			prototype.setValue(StringUtils.strip(source.getValue()));
+			prototype.setId(StringUtils.stripToNull(source.getId()));
+			prototype.setValue(StringUtils.stripToNull(source.getValue()));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -22,7 +22,7 @@ public class CronjobEnversPreUpdateEventListenerImpl extends EnversPreUpdateEven
 	public boolean onPreUpdate(PreUpdateEvent event) {
 		if (event.getEntity() instanceof Cronjob) {
 			Cronjob cronjob = (Cronjob) event.getEntity();
-			if (cronjob.getStatus().equals(CronjobEnum.Status.RUNNING))
+			if (cronjob.getStatus() != null && cronjob.getStatus().equals(CronjobEnum.Status.RUNNING) && cronjob.getLastModifiedBy() == null)
 				return false;
 		}
 

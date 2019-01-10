@@ -44,43 +44,57 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 
 		Date lastModifiedDate = new Date();
 
-		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(StringUtils.strip(source.getId()), prototype.getId()) == false) {
-			prototype.setId(StringUtils.strip(source.getId()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.strip(source.getName()), prototype.getName()) == false) {
-			prototype.setName(StringUtils.strip(source.getName()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (source.getRequired() == source.getRequired() == false) {
-			prototype.setRequired(source.getRequired());
+		if (source.getRequired() == null) {
+			if (prototype.getRequired() != null) {
+				prototype.setRequired(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+		} else {
+			if (prototype.getRequired() == null || prototype.getRequired().equals(source.getRequired()) == false) {
+				prototype.setRequired(source.getRequired());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+		}
+
+		if (StringUtils.equals(StringUtils.stripToNull(source.getRule()), prototype.getRule()) == false) {
+			prototype.setRule(StringUtils.stripToNull(source.getRule()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.strip(source.getRule()), prototype.getRule()) == false) {
-			prototype.setRule(StringUtils.strip(source.getRule()));
-			prototype.setLastModifiedDate(lastModifiedDate);
+		if (source.getSort() == null) {
+			if (prototype.getSort() != null) {
+				prototype.setSort(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+		} else {
+			if (prototype.getSort() == null || prototype.getSort().equals(source.getSort()) == false) {
+				prototype.setSort(source.getSort());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 		}
-
-		if (source.getSort() == source.getSort() == false) {
-			prototype.setSort(source.getSort());
-			prototype.setLastModifiedDate(lastModifiedDate);
-		}
-
+		
 		if (source.getFieldType() == source.getFieldType() == false) {
 			prototype.setFieldType(source.getFieldType());
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.strip(source.getFieldGroup()), prototype.getFieldGroup()) == false) {
-			prototype.setFieldGroup(StringUtils.strip(source.getFieldGroup()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getFieldGroup()), prototype.getFieldGroup()) == false) {
+			prototype.setFieldGroup(StringUtils.stripToNull(source.getFieldGroup()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.strip(source.getLabel()), prototype.getLabel()) == false) {
-			prototype.setLabel(StringUtils.strip(source.getLabel()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getLabel()), prototype.getLabel()) == false) {
+			prototype.setLabel(StringUtils.stripToNull(source.getLabel()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 

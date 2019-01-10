@@ -50,29 +50,57 @@ public class EntityEmployeeConverter implements EntityConverter<Employee, Employ
 		try {
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
-				prototype.setId(StringUtils.strip(source.getId()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (source.getAccountNonExpired() != null && source.getAccountNonExpired() != prototype.getAccountNonExpired()) {
-				prototype.setAccountNonExpired(source.getAccountNonExpired());
-				prototype.setLastModifiedDate(lastModifiedDate);
+			if (source.getAccountNonExpired() == null) {
+				if (prototype.getAccountNonExpired() != null) {
+					prototype.setAccountNonExpired(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				if (prototype.getAccountNonExpired() == null || prototype.getAccountNonExpired().equals(source.getAccountNonExpired()) == false) {
+					prototype.setAccountNonExpired(source.getAccountNonExpired());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
 			}
-
-			if (source.getAccountNonLocked() != null && source.getAccountNonLocked() != prototype.getAccountNonLocked()) {
-				prototype.setAccountNonLocked(source.getAccountNonLocked());
-				prototype.setLastModifiedDate(lastModifiedDate);
+			
+			if (source.getAccountNonLocked() == null) {
+				if (prototype.getAccountNonLocked() != null) {
+					prototype.setAccountNonLocked(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				if (prototype.getAccountNonLocked() == null || prototype.getAccountNonLocked().equals(source.getAccountNonLocked()) == false) {
+					prototype.setAccountNonLocked(source.getAccountNonLocked());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
 			}
-
-			if (source.getCredentialsNonExpired() != null && source.getCredentialsNonExpired() != prototype.getCredentialsNonExpired()) {
-				prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
-				prototype.setLastModifiedDate(lastModifiedDate);
+			
+			if (source.getCredentialsNonExpired() == null) {
+				if (prototype.getCredentialsNonExpired() != null) {
+					prototype.setCredentialsNonExpired(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				if (prototype.getCredentialsNonExpired() == null || prototype.getCredentialsNonExpired().equals(source.getCredentialsNonExpired()) == false) {
+					prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
 			}
-
-			if (source.getEnabled() != null && source.getEnabled() != prototype.getEnabled()) {
-				prototype.setEnabled(source.getEnabled());
-				prototype.setLastModifiedDate(lastModifiedDate);
+			
+			if (source.getEnabled() == null) {
+				if (prototype.getEnabled() != null) {
+					prototype.setEnabled(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				if (prototype.getEnabled() == null || prototype.getEnabled().equals(source.getEnabled()) == false) {
+					prototype.setEnabled(source.getEnabled());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
 			}
 
 			if (StringUtils.isNotBlank(source.getPassword())) {
@@ -80,8 +108,8 @@ public class EntityEmployeeConverter implements EntityConverter<Employee, Employ
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(source.getName(), prototype.getName()) == false) {
-				prototype.setName(StringUtils.strip(source.getName()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+				prototype.setName(StringUtils.stripToNull(source.getName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
@@ -89,8 +117,8 @@ public class EntityEmployeeConverter implements EntityConverter<Employee, Employ
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserField sourceField : source.getFields()) {
-						if (StringUtils.equals(StringUtils.strip(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
-							prototype.getFields().get(i).setValue(StringUtils.strip(sourceField.getValue()));
+						if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+							prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
 							prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
 							prototype.setLastModifiedDate(lastModifiedDate);

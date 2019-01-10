@@ -53,14 +53,14 @@ public class ImportEntityDynamicFieldConverter implements EntityConverter<Dynami
 	private DynamicField convert(DynamicFieldCsv source, DynamicField prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.strip(source.getId()));
-			prototype.setName(StringUtils.strip(source.getName()));
+			prototype.setId(StringUtils.stripToNull(source.getId()));
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setFieldType(DynamicFieldTypeEnum.valueOf(source.getType()));
 			prototype.setSort(source.getSort());
 			prototype.setRequired(source.isRequired());
-			prototype.setRule(StringUtils.strip(StringUtils.strip(source.getRule())));
-			prototype.setFieldGroup(StringUtils.strip(source.getGroup()));
-			prototype.setLabel(StringUtils.strip(source.getLabel()));
+			prototype.setRule(StringUtils.stripToNull(StringUtils.stripToNull(source.getRule())));
+			prototype.setFieldGroup(StringUtils.stripToNull(source.getGroup()));
+			prototype.setLabel(StringUtils.stripToNull(source.getLabel()));
 
 			if (StringUtils.isNotBlank(source.getLanguage())) {
 				Map<String, Object> languageProperties = new HashMap<String, Object>();

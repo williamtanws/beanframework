@@ -48,8 +48,8 @@ public class EntityEmployeeProfileConverter implements EntityConverter<Employee,
 		try {
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
-				prototype.setId(StringUtils.strip(source.getId()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
@@ -78,8 +78,8 @@ public class EntityEmployeeProfileConverter implements EntityConverter<Employee,
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(source.getName(), prototype.getName()) == false) {
-				prototype.setName(StringUtils.strip(source.getName()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+				prototype.setName(StringUtils.stripToNull(source.getName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 

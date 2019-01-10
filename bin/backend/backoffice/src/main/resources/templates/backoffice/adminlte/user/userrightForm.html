@@ -21,11 +21,11 @@
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block layout:insert="/backoffice/adminlte/common/component/delete :: button (deleteAuthority='userright_delete')"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/delete :: button (deleteAuthority='userright_delete')}"></th:block>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="/backoffice/adminlte/common/component/refresh :: button (deleteAuthority='userright_delete')"></th:block>
-									<th:block layout:insert="/backoffice/adminlte/common/component/update :: button (updateAuthority='userright_update')"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/refresh :: button (deleteAuthority='userright_delete')}"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/update :: button (updateAuthority='userright_update')}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -55,23 +55,21 @@
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
+										<th:block layout:insert="~{/backoffice/adminlte/common/component/general :: general}"></th:block>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-12 row">
-											<div class="col-md-6">
-												<div class="form-group">
-													<label for="name" th:text="#{module.userright.name}"></label>
-													<input type="text" class="form-control" name="name" th:value="*{name}">
-													<span class="help-block"></span>
-												</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="name" th:text="#{module.userright.name}"></label>
+												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<span class="help-block"></span>
 											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													<label for="sort" th:text="#{module.userright.sort}"></label>
-													<input type="text" class="form-control" name="sort" th:value="*{sort}" min="0" step="1" onkeypress="return isNumberKey(event)">
-													<span class="help-block"></span>
-												</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="sort" th:text="#{module.userright.sort}"></label>
+												<input type="text" class="form-control" name="sort" th:value="*{sort}" min="0" step="1" onkeypress="return isNumberKey(event)">
+												<span class="help-block"></span>
 											</div>
 										</div>
 									</div>
@@ -82,7 +80,7 @@
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="/backoffice/adminlte/common/component/attribute :: attribute"></th:block>
+										<th:block layout:insert="~{/backoffice/adminlte/common/component/attribute :: attribute}"></th:block>
 									</div>
 								</div>
 								<!-- /.box-body -->
@@ -90,13 +88,13 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/common/component/history :: history"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/history :: history}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/common/component/administration :: administration"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/administration :: administration}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -177,7 +175,7 @@
 		</script>
 
 		<th:block
-			layout:insert="/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.userright')}}, objectSearch=${userrightSearch}, deleteUuid=${userrightUpdate.uuid})"></th:block>
+			layout:insert="~{/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.userright')}}, objectSearch=${userrightSearch}, deleteUuid=${userrightUpdate.uuid})}"></th:block>
 	</th:block>
 </body>
 </html>

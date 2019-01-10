@@ -54,7 +54,7 @@ public class ImportEntityCustomerConverter implements EntityConverter<CustomerCs
 	private Customer convert(CustomerCsv source, Customer prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setId(StringUtils.stripToNull(source.getId()));
 
 			prototype.setAccountNonExpired(source.isAccountNonExpired());
 			prototype.setAccountNonLocked(source.isAccountNonLocked());
@@ -63,7 +63,7 @@ public class ImportEntityCustomerConverter implements EntityConverter<CustomerCs
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
 			
-			prototype.setName(StringUtils.strip(source.getName()));
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 
 			// Dynamic Field
 			if (source.getDynamicField() != null) {
@@ -75,7 +75,7 @@ public class ImportEntityCustomerConverter implements EntityConverter<CustomerCs
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
-							prototype.getFields().get(i).setValue(StringUtils.strip(value));
+							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
 					}
@@ -88,7 +88,7 @@ public class ImportEntityCustomerConverter implements EntityConverter<CustomerCs
 						if (entityDynamicField != null) {
 							UserField field = new UserField();
 							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
-							field.setValue(StringUtils.strip(value));
+							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setUser(prototype);
 							prototype.getFields().add(field);

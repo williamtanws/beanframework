@@ -12,7 +12,10 @@
 			</thead>
 			<tbody>
 				<tr th:each="employee,itrStat : *{employees}">
-					<th th:text="${employee.id}"></th>
+					<th>
+						<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=${employee.uuid})}" th:text="${employee.id}"></a>
+						<span sec:authorize="!hasAuthority('employee_read')" th:text="${employee.id}"></span>
+					</th>
 					<th th:text="${employee.name}"></th>
 					<td>
 						<input type="hidden" th:name="'employees['+${itrStat.index}+'].uuid'" th:value="${employee.uuid}">

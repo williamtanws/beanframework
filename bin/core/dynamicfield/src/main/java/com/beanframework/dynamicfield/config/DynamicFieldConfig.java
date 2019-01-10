@@ -6,8 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.dynamicfield.converter.DtoDynamicFieldConverter;
+import com.beanframework.dynamicfield.converter.DtoDynamicFieldEnumValueConverter;
 import com.beanframework.dynamicfield.converter.EntityDynamicFieldConverter;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldEnumValue;
 import com.beanframework.dynamicfield.interceptor.DynamicFieldInitialDefaultsInterceptor;
 import com.beanframework.dynamicfield.interceptor.DynamicFieldLoadInterceptor;
 import com.beanframework.dynamicfield.interceptor.DynamicFieldPrepareInterceptor;
@@ -31,6 +33,20 @@ public class DynamicFieldConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoDynamicFieldConverter());
 		mapping.setTypeCode(DynamicField.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
+	public DtoDynamicFieldEnumValueConverter dtoDynamicFieldEnumValueConverter() {
+		return new DtoDynamicFieldEnumValueConverter();
+	}
+
+	@Bean
+	public ConverterMapping dtoDynamicFieldEnumValueConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dtoDynamicFieldEnumValueConverter());
+		mapping.setTypeCode(DynamicFieldEnumValue.class.getSimpleName());
 
 		return mapping;
 	}

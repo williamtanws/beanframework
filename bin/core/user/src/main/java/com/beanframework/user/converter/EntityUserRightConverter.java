@@ -47,19 +47,26 @@ public class EntityUserRightConverter implements EntityConverter<UserRight, User
 		try {
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(StringUtils.strip(source.getId()), prototype.getId()) == false) {
-				prototype.setId(StringUtils.strip(source.getId()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.strip(source.getName()), prototype.getName()) == false) {
-				prototype.setName(StringUtils.strip(source.getName()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+				prototype.setName(StringUtils.stripToNull(source.getName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (source.getSort() != prototype.getSort()) {
-				prototype.setSort(source.getSort());
-				prototype.setLastModifiedDate(lastModifiedDate);
+			if (source.getSort() == null) {
+				if (prototype.getSort() != null) {
+					prototype.setSort(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				if (prototype.getSort() == null || prototype.getSort().equals(source.getSort()) == false) {
+					prototype.setSort(source.getSort());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
 			}
 
 			// Field
@@ -67,8 +74,8 @@ public class EntityUserRightConverter implements EntityConverter<UserRight, User
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserRightField sourceField : source.getFields()) {
 						if (prototype.getFields().get(i).getUuid().equals(sourceField.getUuid())) {
-							if (StringUtils.equals(StringUtils.strip(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
-								prototype.getFields().get(i).setValue(StringUtils.strip(sourceField.getValue()));
+							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
 								prototype.setLastModifiedDate(lastModifiedDate);

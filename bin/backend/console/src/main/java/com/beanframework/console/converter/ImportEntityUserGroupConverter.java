@@ -51,8 +51,8 @@ public class ImportEntityUserGroupConverter implements EntityConverter<UserGroup
 	private UserGroup convert(UserGroupCsv source, UserGroup prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.strip(source.getId()));
-			prototype.setName(StringUtils.strip(source.getName()));
+			prototype.setId(StringUtils.stripToNull(source.getId()));
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 
 			// Dynamic Field
 			if (source.getDynamicField() != null) {
@@ -64,7 +64,7 @@ public class ImportEntityUserGroupConverter implements EntityConverter<UserGroup
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
-							prototype.getFields().get(i).setValue(StringUtils.strip(value));
+							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
 					}
@@ -77,7 +77,7 @@ public class ImportEntityUserGroupConverter implements EntityConverter<UserGroup
 						if (entityDynamicField != null) {
 							UserGroupField field = new UserGroupField();
 							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
-							field.setValue(StringUtils.strip(value));
+							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setUserGroup(prototype);
 							prototype.getFields().add(field);

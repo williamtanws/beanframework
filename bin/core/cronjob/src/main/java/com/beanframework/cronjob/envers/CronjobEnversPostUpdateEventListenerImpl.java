@@ -22,7 +22,7 @@ public class CronjobEnversPostUpdateEventListenerImpl extends EnversPostUpdateEv
 	public void onPostUpdate(PostUpdateEvent event) {
 		if (event.getEntity() instanceof Cronjob) {
 			Cronjob cronjob = (Cronjob) event.getEntity();
-			if (cronjob.getStatus().equals(CronjobEnum.Status.RUNNING))
+			if (cronjob.getStatus() != null && cronjob.getStatus().equals(CronjobEnum.Status.RUNNING) && cronjob.getLastModifiedBy() == null)
 				return;
 		}
 

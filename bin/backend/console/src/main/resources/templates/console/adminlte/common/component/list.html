@@ -31,7 +31,7 @@
 														</button>
 													</div>
 													<div class="col-xs-8" style="text-align: right">
-														<th:block layout:insert="/console/adminlte/common/fragment/pagination :: button"></th:block>
+														<th:block layout:insert="~{/console/adminlte/common/fragment/pagination :: button}"></th:block>
 													</div>
 												</div>
 											</div>
@@ -73,7 +73,7 @@
 						</div>
 						<div id="collapseTwo" th:class="'panel-collapse collapse '+${objectUpdate.uuid == null ? '':'in'}">
 							<div class="box-body">
-								<th:block layout:insert="${updateForm} :: update" th:if="${objectUpdate.uuid != null}"></th:block>
+								<th:block layout:insert="~{${updateForm} :: update}" th:if="${objectUpdate.uuid != null}"></th:block>
 							</div>
 						</div>
 					</div>
@@ -106,7 +106,7 @@
 			<input type="hidden" name="searchAll" th:value="${objectSearch.searchAll}" class="form-control">
 			<input type="hidden" th:each="field : ${searchFields}" th:name="${field}" th:value="${objectSearch.__${field}__}" class="form-control">
 		</form>
-		<th:block layout:insert="/console/adminlte/common/component/list :: js"></th:block>
+		<th:block layout:insert="~{/console/adminlte/common/component/list :: js}"></th:block>
 	</th:block>
 
 	<th:block layout:fragment="js">

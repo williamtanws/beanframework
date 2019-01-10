@@ -29,7 +29,7 @@ public class DynamicFieldCsv extends AbstractCsv {
 				new Optional(), // rule
 				new Optional(), // group
 				new NotNull(), // label
-				new NotNull(), // language
+				new Optional(), // language
 				new Optional(), // enumValues
 		};
 

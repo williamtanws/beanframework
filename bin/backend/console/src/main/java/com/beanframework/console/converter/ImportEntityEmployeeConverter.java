@@ -53,7 +53,7 @@ public class ImportEntityEmployeeConverter implements EntityConverter<EmployeeCs
 	private Employee convert(EmployeeCsv source, Employee prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setAccountNonExpired(source.isAccountNonExpired());
 			prototype.setAccountNonLocked(source.isAccountNonLocked());
 			prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
@@ -61,7 +61,7 @@ public class ImportEntityEmployeeConverter implements EntityConverter<EmployeeCs
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
 			
-			prototype.setName(StringUtils.strip(source.getName()));
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 
 			// Dynamic Field
 			if (source.getDynamicField() != null) {
@@ -73,7 +73,7 @@ public class ImportEntityEmployeeConverter implements EntityConverter<EmployeeCs
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
-							prototype.getFields().get(i).setValue(StringUtils.strip(value));
+							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
 					}
@@ -86,7 +86,7 @@ public class ImportEntityEmployeeConverter implements EntityConverter<EmployeeCs
 						if (entityDynamicField != null) {
 							UserField field = new UserField();
 							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
-							field.setValue(StringUtils.strip(value));
+							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setUser(prototype);
 							prototype.getFields().add(field);
