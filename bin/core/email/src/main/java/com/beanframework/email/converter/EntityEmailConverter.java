@@ -43,43 +43,43 @@ public class EntityEmailConverter implements EntityConverter<Email, Email> {
 
 		Date lastModifiedDate = new Date();
 
-		if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
-			prototype.setId(StringUtils.strip(source.getId()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(source.getName(), prototype.getName()) == false) {
-			prototype.setName(StringUtils.strip(source.getName()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(source.getToRecipients(), prototype.getToRecipients()) == false) {
-			prototype.setToRecipients(StringUtils.strip(source.getToRecipients()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getToRecipients()), prototype.getToRecipients()) == false) {
+			prototype.setToRecipients(StringUtils.stripToNull(source.getToRecipients()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(source.getCcRecipients(), prototype.getCcRecipients()) == false) {
-			prototype.setCcRecipients(StringUtils.strip(source.getCcRecipients()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getCcRecipients()), prototype.getCcRecipients()) == false) {
+			prototype.setCcRecipients(StringUtils.stripToNull(source.getCcRecipients()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(source.getBccRecipients(), prototype.getBccRecipients()) == false) {
-			prototype.setBccRecipients(StringUtils.strip(source.getBccRecipients()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getBccRecipients()), prototype.getBccRecipients()) == false) {
+			prototype.setBccRecipients(StringUtils.stripToNull(source.getBccRecipients()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(source.getSubject(), prototype.getSubject()) == false) {
-			prototype.setSubject(StringUtils.strip(source.getSubject()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getSubject()), prototype.getSubject()) == false) {
+			prototype.setSubject(StringUtils.stripToNull(source.getSubject()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(source.getText(), prototype.getText()) == false) {
-			prototype.setText(StringUtils.strip(source.getText()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getText()), prototype.getText()) == false) {
+			prototype.setText(StringUtils.stripToNull(source.getText()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(source.getHtml(), prototype.getHtml()) == false) {
-			prototype.setHtml(StringUtils.strip(source.getHtml()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getHtml()), prototype.getHtml()) == false) {
+			prototype.setHtml(StringUtils.stripToNull(source.getHtml()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 

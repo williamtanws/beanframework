@@ -42,6 +42,7 @@ public class CronjobGlobalListener implements JobListener {
 			Cronjob cronjob = modelService.findOneEntityByUuid(uuid, Cronjob.class);
 			cronjob.setStatus(CronjobEnum.Status.RUNNING);
 			cronjob.setLastStartExecutedDate(new Date());
+			cronjob.setLastModifiedBy(null);
 
 			modelService.saveEntity(cronjob, Cronjob.class);
 		} catch (Exception e) {
@@ -61,6 +62,7 @@ public class CronjobGlobalListener implements JobListener {
 			cronjob.setStatus(CronjobEnum.Status.ABORTED);
 			cronjob.setResult(CronjobEnum.Result.ERROR);
 			cronjob.setLastFinishExecutedDate(new Date());
+			cronjob.setLastModifiedBy(null);
 
 			modelService.saveEntity(cronjob, Cronjob.class);
 		} catch (Exception e) {
@@ -109,6 +111,7 @@ public class CronjobGlobalListener implements JobListener {
 			cronjob.setResult(result);
 			cronjob.setMessage(message);
 			cronjob.setLastFinishExecutedDate(new Date());
+			cronjob.setLastModifiedBy(null);
 
 			modelService.saveEntity(cronjob, Cronjob.class);
 

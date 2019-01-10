@@ -46,7 +46,7 @@ public class ImportEntityAdminConverter implements EntityConverter<AdminCsv, Adm
 	private Admin convert(AdminCsv source, Admin prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.strip(source.getId()));
+			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setAccountNonExpired(source.isAccountNonExpired());
 			prototype.setAccountNonLocked(source.isAccountNonLocked());
 			prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());

@@ -21,14 +21,14 @@
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-									<th:block layout:insert="/backoffice/adminlte/common/component/delete :: button (deleteAuthority='cronjob_delete')"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/delete :: button (deleteAuthority='cronjob_delete')}"></th:block>
 								</div>
 								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
 									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-trigger" th:text="#{module.cronjob.trigger}" sec:authorize="hasAuthority('cronjob_update')"></button>
 								</div>
 								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: right">
-									<th:block layout:insert="/backoffice/adminlte/common/component/refresh :: button (deleteAuthority='cronjob_delete')"></th:block>
-									<th:block layout:insert="/backoffice/adminlte/common/component/update :: button (updateAuthority='cronjob_update')"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/refresh :: button (deleteAuthority='cronjob_delete')}"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/update :: button (updateAuthority='cronjob_update')}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -58,7 +58,7 @@
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
+										<th:block layout:insert="~{/backoffice/adminlte/common/component/general :: general}"></th:block>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
@@ -139,19 +139,19 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_status">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/cronjob/cronjobForm :: status"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/cronjob/cronjobForm :: status}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/common/component/history :: history"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/history :: history}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/common/component/administration :: administration"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/administration :: administration}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -248,7 +248,7 @@
 		</script>
 
 		<th:block
-			layout:insert="/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.cronjob')}}, objectSearch=${cronjobSearch}, deleteUuid=${cronjobUpdate.uuid})"></th:block>
+			layout:insert="~{/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.cronjob')}}, objectSearch=${cronjobSearch}, deleteUuid=${cronjobUpdate.uuid})}"></th:block>
 
 		<div class="modal fade" id="modal-trigger" sec:authorize="hasAuthority('cronjob_update')">
 			<div class="modal-dialog">

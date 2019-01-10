@@ -21,11 +21,11 @@
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block layout:insert="/console/adminlte/common/component/delete :: button"></th:block>
+									<th:block layout:insert="~{/console/adminlte/common/component/delete :: button}"></th:block>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="/console/adminlte/common/component/refresh :: button"></th:block>
-									<th:block layout:insert="/console/adminlte/common/component/update :: button"></th:block>
+									<th:block layout:insert="~{/console/adminlte/common/component/refresh :: button}"></th:block>
+									<th:block layout:insert="~{/console/adminlte/common/component/update :: button}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -52,7 +52,7 @@
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="/console/adminlte/common/component/general :: general"></th:block>
+										<th:block layout:insert="~{/console/adminlte/common/component/general :: general}"></th:block>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
@@ -127,13 +127,13 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history">
 								<div class="box-body">
-									<th:block layout:insert="/console/adminlte/common/component/history :: history"></th:block>
+									<th:block layout:insert="~{/console/adminlte/common/component/history :: history}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration">
 								<div class="box-body">
-									<th:block layout:insert="/console/adminlte/common/component/administration :: administration"></th:block>
+									<th:block layout:insert="~{/console/adminlte/common/component/administration :: administration}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -228,7 +228,8 @@
 		    /*]]>*/
 		</script>
 
-		<th:block layout:insert="/console/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.admin')}}, objectSearch=${adminSearch}, deleteUuid=${adminUpdate.uuid})"></th:block>
+		<th:block
+			layout:insert="~{/console/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.admin')}}, objectSearch=${adminSearch}, deleteUuid=${adminUpdate.uuid})}"></th:block>
 	</th:block>
 </body>
 </html>

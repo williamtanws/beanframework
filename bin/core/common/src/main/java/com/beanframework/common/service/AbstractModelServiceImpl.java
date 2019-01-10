@@ -395,7 +395,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 	protected <T extends Collection> T getCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer maxResult, Class modelClass) {
 
-		if (properties != null && sorts == null) {
+		if (properties == null && sorts == null) {
 			ValueWrapper valueWrapper = cacheManager.getCache(modelClass.getName()).get("*");
 			if (valueWrapper == null) {
 				return null;

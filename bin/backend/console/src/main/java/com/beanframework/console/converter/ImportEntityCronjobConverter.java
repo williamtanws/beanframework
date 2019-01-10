@@ -51,12 +51,12 @@ public class ImportEntityCronjobConverter implements EntityConverter<CronjobCsv,
 	private Cronjob convert(CronjobCsv source, Cronjob prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.strip(source.getId()));
-			prototype.setJobClass(StringUtils.strip(source.getJobClass()));
-			prototype.setJobGroup(StringUtils.strip(source.getJobGroup()));
-			prototype.setJobName(StringUtils.strip(source.getJobName()));
-			prototype.setDescription(StringUtils.strip(source.getDescription()));
-			prototype.setCronExpression(StringUtils.strip(source.getCronExpression()));
+			prototype.setId(StringUtils.stripToNull(source.getId()));
+			prototype.setJobClass(StringUtils.stripToNull(source.getJobClass()));
+			prototype.setJobGroup(StringUtils.stripToNull(source.getJobGroup()));
+			prototype.setJobName(StringUtils.stripToNull(source.getJobName()));
+			prototype.setDescription(StringUtils.stripToNull(source.getDescription()));
+			prototype.setCronExpression(StringUtils.stripToNull(source.getCronExpression()));
 			prototype.setStartup(source.isStartup());
 			
 			// Cronjob Data

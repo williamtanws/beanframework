@@ -45,13 +45,13 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 
 		Date lastModifiedDate = new Date();
 
-		if (StringUtils.isNotBlank(StringUtils.strip(source.getId())) && StringUtils.equals(StringUtils.strip(source.getId()), prototype.getId()) == false) {
-			prototype.setId(StringUtils.strip(source.getId()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.strip(source.getValue()), prototype.getValue()) == false) {
-			prototype.setValue(StringUtils.strip(source.getValue()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getValue()), prototype.getValue()) == false) {
+			prototype.setValue(StringUtils.stripToNull(source.getValue()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 

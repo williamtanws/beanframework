@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="dynamicfield">
+		<table id="dynamicfieldTable" class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th th:text="#{module.backoffice.id}"></th>
+					<th th:text="#{module.dynamicfield.name}"></th>
+					<th th:text="#{module.dynamicfield.values}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="field,itrStat : *{dynamicFields}">
+					<th>
+						<a sec:authorize="hasAuthority('dynamicfield_read')" th:href="@{${@environment.getProperty('path.dynamicfield')}(uuid=${field.uuid})}" th:text="${field.id}"></a>
+						<span sec:authorize="!hasAuthority('dynamicfield_read')" th:text="${field.id}"></span>
+					</th>
+					<td th:text="${field.name}"></td>
+					<td>
+						<th:block th:each="value: ${field.values}" >
+							<span th:text="${value.value}"></span><br>
+						</th:block>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    var locale = /*[[${#locale}]]*/;
+		    
+		    $(document).ready(function() {
+		    	
+		    	$('#dynamicfieldTable').DataTable({
+		    		  'language' : {
+				        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+				      },
+		    	      'pageLength'  : 10,
+		    	      'paging'      : true,
+		    	      'lengthChange': false,
+		    	      'searching'   : true,
+		    	      'ordering'    : true,
+		    	      'info'        : false,
+		    	      'autoWidth'   : true
+		    	})
+		    });
+		    /*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>

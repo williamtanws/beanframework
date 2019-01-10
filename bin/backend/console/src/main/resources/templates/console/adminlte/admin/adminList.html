@@ -9,18 +9,18 @@
 		<section class="content">
 			<!-- Search Form-->
 			<div class="row">
-				<th:block layout:insert="/console/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.admin')}}, objectSearch=${adminSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )"></th:block>
+				<th:block layout:insert="~{/console/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.admin')}}, objectSearch=${adminSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
 			</div>
 			<!-- Alert Notification-->
 			<div class="row">
-				<th:block layout:insert="/console/adminlte/common/component/alert :: custom"></th:block>
+				<th:block layout:insert="~{/console/adminlte/common/component/alert :: custom}"></th:block>
 			</div>
 			<!-- List Table-->
 			<div class="row" th:with="adminName=#{module.admin.name}">
-				<th:block layout:insert="/console/adminlte/common/component/list :: list (title=#{module.admin}, objectUpdate=${adminUpdate}, objectSearch=${adminSearch}, icon=@{${@environment.getProperty('module.admin.icon')}}, paginationAction=@{${@environment.getProperty('path.admin')}}, listFields=${ {{'id', 'ID'}, {'name', adminName}} }, searchFields=${ {'id','name'} }, updateForm='/console/adminlte/admin/adminForm')"></th:block>
+				<th:block layout:insert="~{/console/adminlte/common/component/list :: list (title=#{module.admin}, objectUpdate=${adminUpdate}, objectSearch=${adminSearch}, icon=@{${@environment.getProperty('module.admin.icon')}}, paginationAction=@{${@environment.getProperty('path.admin')}}, listFields=${ {{'id', 'ID'}, {'name', adminName}} }, searchFields=${ {'id','name'} }, updateForm='/console/adminlte/admin/adminForm')}"></th:block>
 			</div>
 			<!-- Create Modal-->
-			<th:block layout:insert="/console/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.admin')}}, createObject=${adminCreate}, createForm='/console/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.admin.checkid')})"></th:block>
+			<th:block layout:insert="~{/console/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.admin')}}, createObject=${adminCreate}, createForm='/console/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.admin.checkid')})}"></th:block>
 		</section>
 	</th:block>
 </body>

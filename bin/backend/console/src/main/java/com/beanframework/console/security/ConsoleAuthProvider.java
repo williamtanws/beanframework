@@ -38,10 +38,10 @@ public class ConsoleAuthProvider implements AuthenticationProvider {
 		String id = authentication.getName();
 		String password = (String) authentication.getCredentials();
 		
-		if(StringUtils.strip(id) == null || StringUtils.strip(id) == "" ) {
+		if(StringUtils.stripToNull(id) == null || StringUtils.stripToNull(id) == "" ) {
 			throw new BadCredentialsException(localeMessageService.getMessage(ConsoleWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		}
-		if(StringUtils.strip(password) == null || StringUtils.strip(password) == "" ) {
+		if(StringUtils.stripToNull(password) == null || StringUtils.stripToNull(password) == "" ) {
 			throw new BadCredentialsException(localeMessageService.getMessage(ConsoleWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		}
 

@@ -59,13 +59,13 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 		try {
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
-				prototype.setId(StringUtils.strip(source.getId()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(source.getName(), prototype.getName()) == false) {
-				prototype.setName(StringUtils.strip(source.getName()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+				prototype.setName(StringUtils.stripToNull(source.getName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
@@ -73,8 +73,8 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroup, User
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserGroupField sourceField : source.getFields()) {
-						if (StringUtils.equals(StringUtils.strip(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
-							prototype.getFields().get(i).setValue(StringUtils.strip(sourceField.getValue()));
+						if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+							prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
 							prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
 							prototype.setLastModifiedDate(lastModifiedDate);

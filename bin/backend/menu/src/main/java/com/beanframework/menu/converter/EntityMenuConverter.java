@@ -55,28 +55,35 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 		try {
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.isNotBlank(source.getId()) && StringUtils.equals(source.getId(), prototype.getId()) == false) {
-				prototype.setId(StringUtils.strip(source.getId()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(prototype.getName(), source.getName()) == false) {
-				prototype.setName(StringUtils.strip(source.getName()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+				prototype.setName(StringUtils.stripToNull(source.getName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (prototype.getSort() == source.getSort() == false) {
-				prototype.setSort(source.getSort());
+			if (source.getSort() == null) {
+				if (prototype.getSort() != null) {
+					prototype.setSort(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				if (prototype.getSort() == null || prototype.getSort().equals(source.getSort()) == false) {
+					prototype.setSort(source.getSort());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			}
+
+			if (StringUtils.equals(StringUtils.stripToNull(source.getIcon()), prototype.getIcon()) == false) {
+				prototype.setIcon(StringUtils.stripToNull(source.getIcon()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(prototype.getIcon(), source.getIcon()) == false) {
-				prototype.setIcon(StringUtils.strip(source.getIcon()));
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
-
-			if (StringUtils.equals(prototype.getPath(), source.getPath()) == false) {
-				prototype.setPath(StringUtils.strip(source.getPath()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getPath()), prototype.getPath()) == false) {
+				prototype.setPath(StringUtils.stripToNull(source.getPath()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
@@ -85,17 +92,24 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (prototype.getEnabled() == source.getEnabled() == false) {
-				prototype.setEnabled(source.getEnabled());
-				prototype.setLastModifiedDate(lastModifiedDate);
+			if (source.getEnabled() == null) {
+				if (prototype.getEnabled() != null) {
+					prototype.setEnabled(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				if (prototype.getEnabled() == null || prototype.getEnabled().equals(source.getEnabled()) == false) {
+					prototype.setEnabled(source.getEnabled());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
 			}
 
 			// Field
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (MenuField sourceField : source.getFields()) {
-						if (StringUtils.equals(StringUtils.strip(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
-							prototype.getFields().get(i).setValue(StringUtils.strip(sourceField.getValue()));
+						if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+							prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
 							prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
 							prototype.setLastModifiedDate(lastModifiedDate);

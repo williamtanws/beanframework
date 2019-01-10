@@ -55,11 +55,11 @@ public class ImportEntityMenuConverter implements EntityConverter<MenuCsv, Menu>
 	private Menu convert(MenuCsv source, Menu prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.strip(source.getId()));
-			prototype.setName(StringUtils.strip(source.getName()));
+			prototype.setId(StringUtils.stripToNull(source.getId()));
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setSort(source.getSort());
-			prototype.setIcon(StringUtils.strip(source.getIcon()));
-			prototype.setPath(StringUtils.strip(source.getPath()));
+			prototype.setIcon(StringUtils.stripToNull(source.getIcon()));
+			prototype.setPath(StringUtils.stripToNull(source.getPath()));
 			
 			if (StringUtils.isBlank(source.getTarget())) {
 				prototype.setTarget(MenuTargetTypeEnum.SELF);
@@ -102,7 +102,7 @@ public class ImportEntityMenuConverter implements EntityConverter<MenuCsv, Menu>
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
-							prototype.getFields().get(i).setValue(StringUtils.strip(value));
+							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
 					}
@@ -115,7 +115,7 @@ public class ImportEntityMenuConverter implements EntityConverter<MenuCsv, Menu>
 						if(entityDynamicField != null) {
 							MenuField field = new MenuField();
 							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
-							field.setValue(StringUtils.strip(value));
+							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setMenu(prototype);
 							prototype.getFields().add(field);

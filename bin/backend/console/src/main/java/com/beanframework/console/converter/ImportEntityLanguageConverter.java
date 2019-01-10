@@ -49,8 +49,8 @@ public class ImportEntityLanguageConverter implements EntityConverter<LanguageCs
 	private Language convert(LanguageCsv source, Language prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.strip(source.getId()));
-			prototype.setName(StringUtils.strip(source.getName()));
+			prototype.setId(StringUtils.stripToNull(source.getId()));
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setActive(source.isActive());
 			prototype.setSort(source.getSort());
 

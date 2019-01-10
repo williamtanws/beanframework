@@ -52,8 +52,8 @@ public class ImportEntityUserRightConverter implements EntityConverter<UserRight
 	private UserRight convert(UserRightCsv source, UserRight prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.strip(source.getId()));
-			prototype.setName(StringUtils.strip(source.getName()));
+			prototype.setId(StringUtils.stripToNull(source.getId()));
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setSort(source.getSort());
 
 			// Dynamic Field
@@ -66,7 +66,7 @@ public class ImportEntityUserRightConverter implements EntityConverter<UserRight
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
-							prototype.getFields().get(i).setValue(StringUtils.strip(value));
+							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
 					}
@@ -79,7 +79,7 @@ public class ImportEntityUserRightConverter implements EntityConverter<UserRight
 						if(entityDynamicField != null) {
 							UserRightField field = new UserRightField();
 							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
-							field.setValue(StringUtils.strip(value));
+							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setUserRight(prototype);
 							prototype.getFields().add(field);
