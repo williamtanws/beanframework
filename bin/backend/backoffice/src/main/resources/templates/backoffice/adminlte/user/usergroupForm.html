@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="${@environment.getProperty('layout.backoffice')}">
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
 <head>
 <title th:utext="#{module.usergroup}"></title>
 </head>
@@ -62,6 +62,15 @@
 								<div class="box-body">
 									<div class="row">
 										<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="name" th:text="#{module.usergroup.name}"></label>
+												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<span class="help-block"></span>
+											</div>
+										</div>
 									</div>
 								</div>
 								<!-- /.box-body -->
@@ -129,12 +138,18 @@
 		                            }
 		                        }
 		                    }
+		                },
+		                name: {
+		                    required: true,
 		                }
 		            },
 		            messages: {
 		                id: {
 		                    required: /*[[#{module.backoffice.id.required}]]*/ ,
 		                    remote: /*[[#{module.backoffice.id.exists}]]*/
+		                },
+		                name: {
+		                    required: /*[[#{module.usergroup.name.required}]]*/
 		                }
 		            },
 		            highlight: function(element) {

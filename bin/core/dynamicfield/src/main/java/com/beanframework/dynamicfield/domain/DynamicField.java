@@ -1,5 +1,8 @@
 package com.beanframework.dynamicfield.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
@@ -7,9 +10,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -38,24 +45,24 @@ public class DynamicField extends GenericDomain {
 
 	@Audited(withModifiedFlag = true)
 	private String name;
-	
+
 	@Audited(withModifiedFlag = true)
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private DynamicFieldTypeEnum fieldType;
-	
+
 	@Audited(withModifiedFlag = true)
 	private Integer sort;
-	
+
 	@Audited(withModifiedFlag = true)
 	private Boolean required;
-	
+
 	@Audited(withModifiedFlag = true)
 	private String rule;
-	
+
 	@Audited(withModifiedFlag = true)
 	private String fieldGroup;
-	
+
 	@Audited(withModifiedFlag = true)
 	private String label;
 
@@ -63,6 +70,11 @@ public class DynamicField extends GenericDomain {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "language_uuid")
 	private Language language;
+
+	@Cascade({ CascadeType.ALL })
+	@OneToMany(mappedBy = DynamicFieldEnumValue.DYNAMIC_FIELD, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OrderBy(DynamicFieldEnumValue.SORT + " ASC")
+	private List<DynamicFieldEnumValue> values = new ArrayList<DynamicFieldEnumValue>();
 
 	public String getName() {
 		return name;
@@ -126,6 +138,14 @@ public class DynamicField extends GenericDomain {
 
 	public void setLanguage(Language language) {
 		this.language = language;
+	}
+
+	public List<DynamicFieldEnumValue> getValues() {
+		return values;
+	}
+
+	public void setValues(List<DynamicFieldEnumValue> values) {
+		this.values = values;
 	}
 
 }

@@ -3,20 +3,17 @@
 <body>
 	<th:block layout:fragment="userauthority">
 		<table id="userauthorityTable" class="table table-bordered">
-			<tbody>
+			<thead>
 				<tr>
 					<th th:text="#{module.userpermission}"></th>
-
 					<th th:each="userRight: ${userRights}">
-						<th:block th:each="field : ${userRight.fields}">
-							<span th:if="(${field.dynamicField.language.id == #locale.toString() and field.dynamicField.name == 'Name'})" th:text="${field.value}"></span>
-						</th:block>
+						<span th:text="${userRight.name}"></span>
 					</th>
 				</tr>
+			</thead>
+			<tbody>
 				<tr th:each="userPermission: ${userPermissions}">
-					<th:block th:each="field : ${userPermission.fields}">
-						<th th:if="(${field.dynamicField.language.id == #locale.toString()})" th:text="${field.value}"></th>
-					</th:block>
+					<th th:text="${userPermission.name}"></th>
 					<td th:each="userRight: ${userRights}">
 						<th:block th:each="userAuthority,itrStat : *{userAuthorities}">
 							<th:block th:if="${userAuthority.userRight.uuid == userRight.uuid && userAuthority.userPermission.uuid == userPermission.uuid}">

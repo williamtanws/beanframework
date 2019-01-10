@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="usergroup">
-		<table id="usergroupTable" class="table table-bordered table-hover">
+	<th:block layout:fragment="employee">
+		<table id="employeeTable" class="table table-bordered table-hover">
 			<thead>
 				<tr>
 					<th th:text="#{module.backoffice.id}"></th>
-					<th th:text="#{module.usergroup.name}"></th>
+					<th th:text="#{module.employee.name}"></th>
 					<th th:text="#{module.backoffice.select}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="userGroup,itrStat : *{userGroups}">
-					<th th:text="${userGroup.id}"></th>
-					<th th:text="${userGroup.name}"></th>
+				<tr th:each="employee,itrStat : *{employees}">
+					<th th:text="${employee.id}"></th>
+					<th th:text="${employee.name}"></th>
 					<td>
-						<input type="hidden" th:name="'userGroups['+${itrStat.index}+'].uuid'" th:value="${userGroup.uuid}">
-						<input type="checkbox" th:name="'userGroups['+${itrStat.index}+'].selected'" th:checked="${userGroup.selected}">
+						<input type="hidden" th:name="'employees['+${itrStat.index}+'].uuid'" th:value="${employee.uuid}">
+						<input type="checkbox" th:name="'employees['+${itrStat.index}+'].selected'" th:checked="${employee.selected}">
 						<script th:inline="javascript">
 							$('input').iCheck({
 								checkboxClass : 'icheckbox_square-blue',
@@ -35,7 +35,7 @@
 		    
 		    $(document).ready(function() {
 		    	
-		    	$('#usergroupTable').DataTable({
+		    	$('#employeeTable').DataTable({
 		    		  'language' : {
 				        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
 				      },

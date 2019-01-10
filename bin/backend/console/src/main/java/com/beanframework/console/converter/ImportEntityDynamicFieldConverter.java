@@ -13,7 +13,9 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldCsv;
+import com.beanframework.console.registry.Importer;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldEnumValue;
 import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
 import com.beanframework.language.domain.Language;
 
@@ -59,11 +61,36 @@ public class ImportEntityDynamicFieldConverter implements EntityConverter<Dynami
 			prototype.setRule(StringUtils.strip(StringUtils.strip(source.getRule())));
 			prototype.setFieldGroup(StringUtils.strip(source.getGroup()));
 			prototype.setLabel(StringUtils.strip(source.getLabel()));
-			
-			Map<String, Object> languageProperties = new HashMap<String, Object>();
-			languageProperties.put(Language.ID, source.getLanguage());
-			Language modelLanguage = modelService.findOneEntityByProperties(languageProperties, Language.class);
-			prototype.setLanguage(modelLanguage);
+
+			if (StringUtils.isNotBlank(source.getLanguage())) {
+				Map<String, Object> languageProperties = new HashMap<String, Object>();
+				languageProperties.put(Language.ID, source.getLanguage());
+				Language modelLanguage = modelService.findOneEntityByProperties(languageProperties, Language.class);
+				prototype.setLanguage(modelLanguage);
+			}
+
+			// Enum Values
+			if (StringUtils.isNotBlank(source.getEnumValues())) {
+				String[] values = source.getEnumValues().split(Importer.SPLITTER);
+				for (int i = 0; i < values.length; i++) {
+
+					boolean add = true;
+					for (DynamicFieldEnumValue prototypeValue : prototype.getValues()) {
+						if (values[i].equals(prototypeValue.getValue())) {
+							add = false;
+						}
+					}
+
+					if (add) {
+						DynamicFieldEnumValue dynamicFieldEnumValue = new DynamicFieldEnumValue();
+						dynamicFieldEnumValue.setValue(StringUtils.upperCase(values[i]));
+						dynamicFieldEnumValue.setSort(i);
+
+						dynamicFieldEnumValue.setDynamicField(prototype);
+						prototype.getValues().add(dynamicFieldEnumValue);
+					}
+				}
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
