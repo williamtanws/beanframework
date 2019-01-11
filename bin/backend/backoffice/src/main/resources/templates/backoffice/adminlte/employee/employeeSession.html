@@ -55,7 +55,10 @@
 												</thead>
 												<tbody>
 													<tr th:each="row : ${sessions}">
-														<th scope="row" th:text="${row.principalEmployee.id}"></th>
+														<th scope="row">
+															<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=${row.principalEmployee.uuid})}" th:text="${row.principalEmployee.id}"></a>
+															<span sec:authorize="!hasAuthority('employee_read')" th:text="${row.principalEmployee.id}"></span>
+														</th>
 														<td>
 															<th:block th:each="row2 : ${row.sessionInformations}">
 																<span th:text="${row2.sessionId}"></span>

@@ -134,10 +134,6 @@
 		            highlight: function(element) {
 		                $(element).closest('.form-group').addClass('has-error');
 		            },
-		            unhighlight: function(element) {
-		                $(element).closest('.form-group').removeClass('has-error');
-		                $(element).closest('.form-group').find('.help-block').html('');
-		            },
 		            errorPlacement: function(error, element) {
 		                element.closest('.form-group').find('.help-block').html(error.text());
 		            }

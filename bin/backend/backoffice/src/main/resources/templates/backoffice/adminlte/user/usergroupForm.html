@@ -67,6 +67,7 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="name" th:text="#{module.usergroup.name}"></label>
+												<span>*</span>
 												<input type="text" class="form-control" name="name" th:value="*{name}">
 												<span class="help-block"></span>
 											</div>
@@ -154,10 +155,6 @@
 		            },
 		            highlight: function(element) {
 		                $(element).closest('.form-group').addClass('has-error');
-		            },
-		            unhighlight: function(element) {
-		                //$(element).closest('.form-group').removeClass('has-error');
-		                //$(element).closest('.form-group').find('.help-block').html('');
 		            },
 		            errorPlacement: function(error, element) {
 		                element.closest('.form-group').find('.help-block').html(error.text());

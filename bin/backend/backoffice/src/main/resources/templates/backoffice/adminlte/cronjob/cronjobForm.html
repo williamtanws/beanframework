@@ -64,16 +64,19 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="jobClass" th:text="#{module.cronjob.jobclass}"></label>
+												<span>*</span>
 												<input type="text" class="form-control" name="jobClass" th:value="*{jobClass}">
 												<span class="help-block"></span>
 											</div>
 											<div class="form-group">
 												<label for="jobGroup" th:text="#{module.cronjob.jobgroup}"></label>
+												<span>*</span>
 												<input type="text" class="form-control" name="jobGroup" th:value="*{jobGroup}">
 												<span class="help-block"></span>
 											</div>
 											<div class="form-group">
 												<label for="jobName" th:text="#{module.cronjob.jobname}"></label>
+												<span>*</span>
 												<input type="text" class="form-control" name="jobName" th:value="*{jobName}">
 												<span class="help-block"></span>
 											</div>
@@ -81,6 +84,7 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="cronExpression" th:text="#{module.cronjob.cronexpression}"></label>
+												<span>*</span>
 												<input type="text" class="form-control" name="cronExpression" th:value="*{cronExpression}">
 												<span class="help-block"></span>
 											</div>
@@ -223,17 +227,6 @@
 		                $(element).closest('.form-group').addClass('has-error');
 		                
 		                var id = $(element).closest('.tab-pane').attr('id');
-		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
-		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
-		                });
-		            },
-		            unhighlight: function(element) {
-		                $(element).closest('.form-group').removeClass('has-error');
-		                $(element).closest('.form-group').find('.help-block').html('');
-		                
-		                var id = $(element).closest('.tab-pane').attr('id');
-	                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','');
-	                    
 		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
 		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
 		                });

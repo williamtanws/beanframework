@@ -16,7 +16,7 @@
 						<a sec:authorize="hasAuthority('usergroup_read')" th:href="@{${@environment.getProperty('path.usergroup')}(uuid=${userGroup.uuid})}" th:text="${userGroup.id}"></a>
 						<span sec:authorize="!hasAuthority('usergroup_read')" th:text="${userGroup.id}"></span>
 					</th>
-					<th th:text="${userGroup.name}"></th>
+					<td th:text="${userGroup.name}"></td>
 					<td>
 						<input type="hidden" th:name="'userGroups['+${itrStat.index}+'].uuid'" th:value="${userGroup.uuid}">
 						<input type="checkbox" th:name="'userGroups['+${itrStat.index}+'].selected'" th:checked="${userGroup.selected}">
