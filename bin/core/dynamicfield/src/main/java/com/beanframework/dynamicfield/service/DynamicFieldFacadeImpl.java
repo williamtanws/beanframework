@@ -1,9 +1,14 @@
 package com.beanframework.dynamicfield.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,14 +38,6 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	@Override
 	public DynamicField findOneDtoByUuid(UUID uuid) throws Exception {
 		return modelService.findOneDtoByUuid(uuid, DynamicField.class);
-	}
-
-	@Override
-	public DynamicField findOneDtoById(String id) throws Exception {
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(DynamicField.ID, id);
-
-		return modelService.findOneDtoByProperties(properties, DynamicField.class);
 	}
 
 	@Override
@@ -79,6 +76,20 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public DynamicField findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, DynamicField.class);
+	}
+
+	@Override
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, DynamicField.class);
+		
+		return revisions;
 	}
 
 }

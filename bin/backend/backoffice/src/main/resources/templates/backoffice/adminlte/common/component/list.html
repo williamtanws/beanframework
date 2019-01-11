@@ -51,7 +51,8 @@
 												<tbody>
 													<th:block th:each="row : ${pagination.content}">
 														<tr th:onclick="getForm([[${row.uuid}]])">
-															<td scope="row" th:each="field : ${listFields}" th:text="${#strings.abbreviate(row.__${field[0]}__,50)}"></td>
+															<th th:if="${iStat.index == 0}" scope="row" th:each="field,iStat : ${listFields}" th:text="${#strings.abbreviate(row.__${field[0]}__,50)}"></th>
+															<td th:if="${iStat.index != 0}" scope="row" th:each="field,iStat : ${listFields}" th:text="${#strings.abbreviate(row.__${field[0]}__,50)}"></td>
 														</tr>
 													</th:block>
 												</tbody>

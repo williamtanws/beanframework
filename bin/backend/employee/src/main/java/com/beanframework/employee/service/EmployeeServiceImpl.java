@@ -145,8 +145,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 			return null;
 		}
 
-		Hibernate.initialize(employee.getUserGroups());
-
 		employee.setAuthorities(getAuthorities(employee.getUserGroups(), new HashSet<String>()));
 
 		return modelService.getDto(employee, Employee.class);

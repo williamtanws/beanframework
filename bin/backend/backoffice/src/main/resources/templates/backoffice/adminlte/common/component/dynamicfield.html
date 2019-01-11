@@ -7,6 +7,7 @@
 				<tr>
 					<th th:text="#{module.backoffice.id}"></th>
 					<th th:text="#{module.dynamicfield.name}"></th>
+					<th th:text="#{module.dynamicfield.fieldType}"></th>
 					<th th:text="#{module.dynamicfield.values}"></th>
 				</tr>
 			</thead>
@@ -15,8 +16,10 @@
 					<th>
 						<a sec:authorize="hasAuthority('dynamicfield_read')" th:href="@{${@environment.getProperty('path.dynamicfield')}(uuid=${field.uuid})}" th:text="${field.id}"></a>
 						<span sec:authorize="!hasAuthority('dynamicfield_read')" th:text="${field.id}"></span>
+						<input type="hidden" th:name="'dynamicFields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
 					</th>
 					<td th:text="${field.name}"></td>
+					<td th:text="${field.fieldType}"></td>
 					<td>
 						<th:block th:each="value: ${field.values}" >
 							<span th:text="${value.value}"></span><br>

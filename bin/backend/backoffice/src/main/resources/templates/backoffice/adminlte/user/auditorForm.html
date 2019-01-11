@@ -34,7 +34,12 @@
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="~{/backoffice/adminlte/common/component/general :: general}"></th:block>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label th:text="#{module.backoffice.id} + ':'"></label>
+												<span class="text-block" th:text="*{id}"></span>
+											</div>
+										</div>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
