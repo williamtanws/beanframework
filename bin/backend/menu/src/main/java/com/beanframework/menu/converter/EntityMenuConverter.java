@@ -120,8 +120,10 @@ public class EntityMenuConverter implements EntityConverter<Menu, Menu> {
 
 			// User Group
 			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
-				prototype.setUserGroups(new ArrayList<UserGroup>());
-				prototype.setLastModifiedDate(lastModifiedDate);
+				if (prototype.getUserGroups() == null || prototype.getUserGroups().isEmpty()) {
+					prototype.setUserGroups(new ArrayList<UserGroup>());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
 			}
 
 			Iterator<UserGroup> itr = prototype.getUserGroups().iterator();
