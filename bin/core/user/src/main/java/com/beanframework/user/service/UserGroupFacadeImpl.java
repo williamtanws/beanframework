@@ -68,7 +68,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public List<UserGroup> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findDtoBySorts(sorts, UserGroup.class);
+		return modelService.findDtoByPropertiesAndSorts(null, sorts, null, null, UserGroup.class);
 	}
 
 	@Override

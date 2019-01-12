@@ -255,7 +255,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public List<Employee> findDtoBySorts(Map<String, Direction> employeeSorts) throws Exception {
-		return modelService.findDtoBySorts(employeeSorts, Employee.class);
+		return modelService.findDtoByPropertiesAndSorts(null, employeeSorts, null, null, Employee.class);
 	}
 
 }
