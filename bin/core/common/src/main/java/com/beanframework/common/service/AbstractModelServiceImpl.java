@@ -393,7 +393,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected <T extends Collection> T getCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer maxResult, Class modelClass) {
+	protected <T extends Collection> T getCachedResultList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer firstResult, Integer maxResult, Class modelClass) {
 
 		if (properties == null && sorts == null) {
 			ValueWrapper valueWrapper = cacheManager.getCache(modelClass.getName()).get("*");
@@ -438,9 +438,14 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		if (sortsBuilder.length() > 0) {
 			qlString = qlString + " " + sortsBuilder.toString();
 		}
+		if (firstResult != null) {
+			if (firstResult > 0) {
+				qlString = qlString + " firstResult " + firstResult;
+			}
+		}
 		if (maxResult != null) {
 			if (maxResult > 0) {
-				qlString = qlString + " limit " + maxResult;
+				qlString = qlString + " maxResult " + maxResult;
 			}
 		}
 
@@ -545,7 +550,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		cacheManager.getCache(modelClass.getName()).put(key, value);
 	}
 
-	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer maxResult, Class modelClass) {
+	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer firstResult, Integer maxResult, Class modelClass) {
 		String qlString = "select " + (StringUtils.isBlank(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
 		if (properties != null && properties.isEmpty() == false) {
@@ -561,6 +566,11 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 				if (entry.getValue() != null) {
 					query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());
 				}
+			}
+		}
+		if (firstResult != null) {
+			if (firstResult > 0) {
+				query.setFirstResult(firstResult);
 			}
 		}
 		if (maxResult != null) {

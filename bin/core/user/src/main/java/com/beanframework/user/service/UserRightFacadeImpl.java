@@ -68,7 +68,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public List<UserRight> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findDtoBySorts(sorts, UserRight.class);
+		return modelService.findDtoByPropertiesAndSorts(null, sorts, null, null, UserRight.class);
 	}
 
 	@Override

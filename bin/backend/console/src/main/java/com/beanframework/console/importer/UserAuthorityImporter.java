@@ -187,11 +187,11 @@ public class UserAuthorityImporter extends Importer {
 
 			Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
 			userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
-			List<UserPermission> userPermissions = modelService.findEntityBySorts(userPermissionSorts, UserPermission.class);
+			List<UserPermission> userPermissions = modelService.findEntityByPropertiesAndSorts(null, userPermissionSorts, null, null, UserPermission.class);
 
 			Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
 			userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
-			List<UserRight> userRights = modelService.findEntityBySorts(userRightSorts, UserRight.class);
+			List<UserRight> userRights = modelService.findEntityByPropertiesAndSorts(null, userRightSorts, null, null, UserRight.class);
 
 			for (UserPermission userPermission : userPermissions) {
 				for (UserRight userRight : userRights) {

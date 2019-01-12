@@ -72,7 +72,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public Customer findOneDtoByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findDtoByProperties(properties, Customer.class);
+		return modelService.findDtoByPropertiesAndSorts(properties, null, null, null, Customer.class);
 	}
 
 	@Override

@@ -31,23 +31,15 @@ public interface ModelService {
 	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	<T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
-
-	<T extends Collection> T findEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
-
-	<T extends Collection> T findEntityBySorts(Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
-
-	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
-
-	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, int maxResult, Class modelClass) throws Exception;
-
-	<T extends Collection> T findDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
-
-	<T extends Collection> T findDtoBySorts(Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
-
-	<T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Class modelClass) throws Exception;
-
+	
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
+	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception;
+	
+	<T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception;
+	
+	<T extends Collection> T findAllEntity(Class modelClass) throws Exception;
+	
 	<T extends Collection> T findAllDto(Class modelClass) throws Exception;
 
 	<T extends Collection> T findHistory(boolean selectDeletedEntities, AuditCriterion criterion, AuditOrder order, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
