@@ -29,14 +29,14 @@ import com.beanframework.console.converter.ImportEntityCronjobConverter;
 import com.beanframework.console.csv.CronjobCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.service.CronjobFacade;
 import com.beanframework.cronjob.service.CronjobManagerService;
+import com.beanframework.cronjob.service.CronjobService;
 
 public class CronjobImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(CronjobImporter.class);
 
 	@Autowired
-	private CronjobFacade cronjobFacade;
+	private CronjobService cronjobService;
 
 	@Autowired
 	private ImportEntityCronjobConverter converter;
@@ -130,7 +130,7 @@ public class CronjobImporter extends Importer {
 		for (CronjobCsv csv : csvList) {
 
 			Cronjob model = converter.convert(csv);
-			cronjobFacade.saveEntity(model);
+			cronjobService.saveEntity(model);
 		}
 
 		cronjobManagerService.initCronJob();
@@ -138,7 +138,7 @@ public class CronjobImporter extends Importer {
 
 	public void remove(List<CronjobCsv> configurationCsvList) throws Exception {
 		for (CronjobCsv csv : configurationCsvList) {
-			cronjobFacade.deleteById(csv.getId());
+			cronjobService.deleteById(csv.getId());
 		}
 	}
 }

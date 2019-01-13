@@ -1,6 +1,5 @@
 package com.beanframework.customer.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.exception.BusinessException;
@@ -29,40 +25,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Autowired
 	private ModelService modelService;
 
-	@Autowired
-	private CustomerService customerService;
-
-	@Override
-	public Customer getCurrentUser() {
-
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		if (auth != null) {
-			Customer customer = (Customer) auth.getPrincipal();
-			return customer;
-		} else {
-			return null;
-		}
-	}
-
-	@Override
-	public Customer findDtoAuthenticate(String id, String password) throws Exception {
-		Customer customer = customerService.findDtoAuthenticate(id, password);
-
-		if (customer == null) {
-			throw new BadCredentialsException("Bad Credentials");
-		}
-		return customer;
-	}
-
 	@Override
 	public Page<Customer> findPage(Specification<Customer> specification, PageRequest pageable) throws Exception {
 		return modelService.findDtoPage(specification, pageable, Customer.class);
-	}
-
-	@Override
-	public Customer create() throws Exception {
-		return modelService.create(Customer.class);
 	}
 
 	@Override
@@ -95,39 +60,20 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	}
 
 	@Override
-	public Customer saveEntity(Customer model) throws BusinessException {
-		return (Customer) modelService.saveEntity(model, Customer.class);
-	}
-
-	@Override
-	public void deleteById(String id) throws BusinessException {
-
-		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Customer.ID, id);
-			Customer model = modelService.findOneEntityByProperties(properties, Customer.class);
-			modelService.deleteByEntity(model, Customer.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-	
-	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, Customer.class);
-		
+
 		return revisions;
 	}
-	
+
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(UserField.USER).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, UserField.class);
-		
+
 		return revisions;
 	}
 

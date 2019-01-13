@@ -39,12 +39,8 @@ public interface LanguageFacade {
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	public void delete(UUID uuid) throws BusinessException;
 	
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-	
-	public Language create() throws Exception;
 
-	Language saveEntity(Language model) throws BusinessException;
-
-	public void deleteById(String id) throws BusinessException;
 
 }

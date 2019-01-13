@@ -32,12 +32,16 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.service.UserPermissionFacade;
+import com.beanframework.user.service.UserPermissionService;
 
 @Controller
 public class UserPermissionController extends AbstractController {
 
 	@Autowired
 	private UserPermissionFacade userPermissionFacade;
+	
+	@Autowired
+	private UserPermissionService userPermissionService;
 
 	@Autowired
 	private LocaleMessageService localeMessageService;
@@ -107,12 +111,12 @@ public class UserPermissionController extends AbstractController {
 
 	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.CREATE)
 	public UserPermission populateUserPermissionCreate(HttpServletRequest request) throws Exception {
-		return userPermissionFacade.create();
+		return userPermissionService.create();
 	}
 
 	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE)
 	public UserPermission populateUserPermissionForm(HttpServletRequest request) throws Exception {
-		return userPermissionFacade.create();
+		return userPermissionService.create();
 	}
 
 	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.SEARCH)

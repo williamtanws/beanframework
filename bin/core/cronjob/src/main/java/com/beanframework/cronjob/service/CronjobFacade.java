@@ -52,11 +52,6 @@ public interface CronjobFacade {
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
 	void removeDtoCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException;
 
-	Cronjob create() throws Exception;
-
-	Cronjob saveEntity(Cronjob model) throws BusinessException;
-
-	void deleteById(String id) throws BusinessException;
-	
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 }

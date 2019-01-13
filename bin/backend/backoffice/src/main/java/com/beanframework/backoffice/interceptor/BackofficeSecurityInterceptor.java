@@ -19,33 +19,31 @@ import org.springframework.web.util.UrlPathHelper;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.language.domain.Language;
+import com.beanframework.language.service.LanguageService;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.service.MenuFacade;
+import com.beanframework.menu.service.MenuService;
 
 public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 
 	Logger logger = LoggerFactory.getLogger(BackofficeSecurityInterceptor.class);
 
 	UrlPathHelper urlPathHelper = new UrlPathHelper();
-
+	
 	@Autowired
-	private MenuFacade menuFacade;
-
+	private MenuService menuService;
+	
 	@Autowired
-	private ModelService modelService;
+	private LanguageService languageService;
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		return true;
 	}
 
 	@Override
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-			ModelAndView modelAndView) throws Exception {
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -59,19 +57,28 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 		}
 	}
 
-	protected void getMenuNavigation(HttpServletRequest request, ModelAndView modelAndView, Employee employee)
-			throws BusinessException {
-		if (employee.getUserGroups().isEmpty() == false) {
-			List<Menu> menuNavigation = menuFacade.findDtoMenuTreeByCurrentUser();
-			modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MENU_NAVIGATION, menuNavigation);
+	protected void getMenuNavigation(HttpServletRequest request, ModelAndView modelAndView, Employee employee) throws BusinessException {
+		try {
+			if (employee.getUserGroups().isEmpty() == false) {
+
+				List<Menu> menuNavigation = menuService.findDtoMenuTreeByCurrentUser();
+				modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MENU_NAVIGATION, menuNavigation);
+
+			}
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
 		}
 	}
 
 	protected void getLanguage(ModelAndView modelAndView) throws Exception {
-		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(Language.SORT, Sort.Direction.ASC);
+		try {
+			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+			sorts.put(Language.SORT, Sort.Direction.ASC);
 
-		List<Language> languages = modelService.findDtoByPropertiesAndSorts(null, sorts, null, null, Language.class);
-		modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MODULE_LANGUAGES, languages);
+			List<Language> languages = languageService.findDtoBySorts(sorts);
+			modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MODULE_LANGUAGES, languages);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 }

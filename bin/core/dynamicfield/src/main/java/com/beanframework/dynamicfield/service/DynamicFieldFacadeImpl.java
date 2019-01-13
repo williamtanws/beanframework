@@ -1,6 +1,5 @@
 package com.beanframework.dynamicfield.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,11 +30,6 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	}
 
 	@Override
-	public DynamicField create() throws Exception {
-		return modelService.create(DynamicField.class);
-	}
-
-	@Override
 	public DynamicField findOneDtoByUuid(UUID uuid) throws Exception {
 		return modelService.findOneDtoByUuid(uuid, DynamicField.class);
 	}
@@ -60,25 +54,6 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	}
 
 	@Override
-	public DynamicField saveEntity(DynamicField model) throws BusinessException {
-		return (DynamicField) modelService.saveEntity(model, DynamicField.class);
-	}
-
-	@Override
-	public void deleteById(String id) throws BusinessException {
-
-		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(DynamicField.ID, id);
-			DynamicField model = modelService.findOneEntityByProperties(properties, DynamicField.class);
-			modelService.deleteByEntity(model, DynamicField.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-
-	@Override
 	public DynamicField findOneDtoByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.findOneDtoByProperties(properties, DynamicField.class);
 	}
@@ -88,7 +63,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, DynamicField.class);
-		
+
 		return revisions;
 	}
 

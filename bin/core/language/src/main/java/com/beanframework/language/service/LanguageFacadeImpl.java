@@ -1,6 +1,5 @@
 package com.beanframework.language.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,11 +30,6 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	}
 
 	@Override
-	public Language create() throws Exception {
-		return modelService.create(Language.class);
-	}
-
-	@Override
 	public Language findOneDtoByUuid(UUID uuid) throws Exception {
 		return modelService.findOneDtoByUuid(uuid, Language.class);
 	}
@@ -50,7 +44,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, Language.class);
-		
+
 		return revisions;
 	}
 
@@ -73,23 +67,6 @@ public class LanguageFacadeImpl implements LanguageFacade {
 		}
 	}
 
-	@Override
-	public Language saveEntity(Language model) throws BusinessException {
-		return (Language) modelService.saveEntity(model, Language.class);
-	}
 
-	@Override
-	public void deleteById(String id) throws BusinessException {
-
-		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Language.ID, id);
-			Language model = modelService.findOneEntityByProperties(properties, Language.class);
-			modelService.deleteByEntity(model, Language.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
 
 }

@@ -36,7 +36,7 @@ import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeFacade;
+import com.beanframework.employee.service.EmployeeService;
 
 @Controller
 public class EmployeeProfileController {
@@ -45,7 +45,7 @@ public class EmployeeProfileController {
 	private ModelService modelService;
 
 	@Autowired
-	private EmployeeFacade employeeFacade;
+	private EmployeeService employeeService;
 
 	@Autowired
 	private ConfigurationFacade configurationFacade;
@@ -61,7 +61,7 @@ public class EmployeeProfileController {
 
 	@Value(EmployeeConstants.PROFILE_PICTURE_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
-	
+
 	@Value(BackofficeWebConstants.Configuration.DEFAULT_AVATAR)
 	public String CONFIGURATION_DEFAULT_AVATAR;
 
@@ -73,7 +73,7 @@ public class EmployeeProfileController {
 	@GetMapping(value = EmployeeWebConstants.Path.PROFILE)
 	public String profile(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) Employee employeeProfile, Model model, @RequestParam Map<String, Object> requestParams) {
 
-		employeeProfile = employeeFacade.getCurrentUser();
+		employeeProfile = employeeService.getCurrentUser();
 
 		model.addAttribute(EmployeeWebConstants.ModelAttribute.PROFILE, employeeProfile);
 
@@ -88,7 +88,7 @@ public class EmployeeProfileController {
 		if (requestParams.get("uuid") != null) {
 			uuid = UUID.fromString((String) requestParams.get("uuid"));
 		} else {
-			Employee employee = employeeFacade.getCurrentUser();
+			Employee employee = employeeService.getCurrentUser();
 			uuid = employee.getUuid();
 		}
 
@@ -124,10 +124,14 @@ public class EmployeeProfileController {
 
 	@PostMapping(value = EmployeeWebConstants.Path.PROFILE, params = "update")
 	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) Employee employeeProfile, Model model, BindingResult bindingResult,
-			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("picture") MultipartFile picture) {
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("picture") MultipartFile picture) throws Exception {
 
 		try {
-			employeeProfile = employeeFacade.saveProfile(employeeProfile, picture);
+			Employee employee = employeeService.getCurrentUser();
+			if (employee.getUuid().equals(employeeProfile.getUuid()) == false)
+				throw new Exception("Invalid attempted employee profile update.");
+
+			employeeProfile = employeeService.saveProfile(employeeProfile, picture);
 
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS, localeMessageService.getMessage(BackofficeWebConstants.Locale.SAVE_SUCCESS));
 		} catch (BusinessException e) {

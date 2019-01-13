@@ -10,8 +10,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.common.domain.Auditor;
-import com.beanframework.common.exception.BusinessException;
-import com.beanframework.user.domain.User;
 
 public interface AuditorFacade {
 
@@ -28,10 +26,7 @@ public interface AuditorFacade {
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	public Auditor findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-
-	public Auditor create() throws Exception;
-
-	Auditor save(User model) throws BusinessException;
 
 }

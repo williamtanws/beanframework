@@ -2,9 +2,11 @@ package com.beanframework.menu.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.repository.MenuRepository;
@@ -257,5 +260,29 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public void delete(UUID uuid) throws Exception {
 		modelService.deleteByUuid(uuid, Menu.class);
+	}
+
+	@Override
+	public Menu create() throws Exception {
+		return modelService.create(Menu.class);
+	}
+
+	@Override
+	public Menu saveEntity(Menu model) throws BusinessException {
+		return (Menu) modelService.saveEntity(model, Menu.class);
+	}
+
+	@Override
+	public void deleteById(String id) throws BusinessException {
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Menu.ID, id);
+			Menu model = modelService.findOneEntityByProperties(properties, Menu.class);
+			modelService.deleteByEntity(model, Menu.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 }

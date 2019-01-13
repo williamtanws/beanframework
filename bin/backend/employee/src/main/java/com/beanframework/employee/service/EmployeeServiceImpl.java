@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,20 +32,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
+import com.beanframework.employee.converter.EntityEmployeeProfileConverter;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.utils.PasswordUtils;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-	Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private LocaleMessageService localeMessageService;
+
+	@Autowired
+	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
+
+	@Autowired
+	private AuditorService auditorService;
 
 	@Value(EmployeeConstants.PROFILE_PICTURE_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
@@ -80,6 +94,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Employee updatePrincipal(Employee employee) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Employee employeePrincipal = (Employee) auth.getPrincipal();
+		employeePrincipal.setId(employee.getId());
+		employeePrincipal.setName(employee.getName());
+		employeePrincipal.setPassword(employee.getPassword());
 
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal, employeePrincipal.getPassword(), employeePrincipal.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(token);
@@ -95,7 +112,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				FileUtils.deleteDirectory(employeeProfilePictureFolder);
 			}
 		} catch (IOException e) {
-			logger.error(e.toString(), e);
+			LOGGER.error(e.toString(), e);
 		}
 	}
 
@@ -107,7 +124,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				FileUtils.deleteDirectory(employeeProfilePictureFolder);
 			}
 		} catch (IOException e) {
-			logger.error(e.toString(), e);
+			LOGGER.error(e.toString(), e);
 		}
 	}
 
@@ -150,7 +167,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return modelService.getDto(employee, Employee.class);
 	}
 
-	//processedUserGroupUuids to prevent infinity loop
+	// processedUserGroupUuids to prevent infinity loop
 	private Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids) {
 
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
@@ -184,5 +201,57 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return authorities;
+	}
+
+	@Override
+	public List<Employee> findDtoBySorts(Map<String, Direction> employeeSorts) throws Exception {
+		return modelService.findDtoByPropertiesAndSorts(null, employeeSorts, null, null, Employee.class);
+	}
+
+	@Override
+	public Employee saveProfile(Employee employee, MultipartFile picture) throws BusinessException {
+
+		try {
+			if (picture != null && picture.isEmpty() == false) {
+				String mimetype = picture.getContentType();
+				String type = mimetype.split("/")[0];
+				if (type.equals("image") == false) {
+					throw new Exception(localeMessageService.getMessage(EmployeeConstants.Locale.PICTURE_WRONGFORMAT));
+				}
+			}
+			employee = entityEmployeeProfileConverter.convert(employee);
+			employee = (Employee) modelService.saveEntity(employee, Employee.class);
+			updatePrincipal(employee);
+			saveProfilePicture(employee, picture);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+
+		return employee;
+	}
+
+	@Override
+	public Employee create() throws Exception {
+		return modelService.create(Employee.class);
+	}
+
+	@Override
+	public Employee getCurrentUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (auth != null && auth.getPrincipal() instanceof Employee) {
+
+			Employee employee = (Employee) auth.getPrincipal();
+			return employee;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public Employee saveEntity(Employee model) throws BusinessException {
+		Employee employee = (Employee) modelService.saveEntity(model, Employee.class);
+		auditorService.saveDto(employee);
+		return employee;
 	}
 }

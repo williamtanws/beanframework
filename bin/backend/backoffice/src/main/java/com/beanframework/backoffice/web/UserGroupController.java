@@ -37,20 +37,24 @@ import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserGroupFacade;
-import com.beanframework.user.service.UserPermissionFacade;
-import com.beanframework.user.service.UserRightFacade;
+import com.beanframework.user.service.UserGroupService;
+import com.beanframework.user.service.UserPermissionService;
+import com.beanframework.user.service.UserRightService;
 
 @Controller
 public class UserGroupController extends AbstractController {
 
 	@Autowired
 	private UserGroupFacade userGroupFacade;
+
+	@Autowired
+	private UserGroupService userGroupService;
 	
 	@Autowired
-	private UserRightFacade userRightFacade;
+	private UserRightService userRightService;
 	
 	@Autowired
-	private UserPermissionFacade userPermissionFacade;
+	private UserPermissionService userPermissionService;
 
 	@Value(UserGroupWebConstants.Path.USERGROUP)
 	private String PATH_USERGROUP;
@@ -115,12 +119,12 @@ public class UserGroupController extends AbstractController {
 
 	@ModelAttribute(UserGroupWebConstants.ModelAttribute.CREATE)
 	public UserGroup populateUserGroupCreate(HttpServletRequest request) throws Exception {
-		return userGroupFacade.create();
+		return userGroupService.create();
 	}
 
 	@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE)
 	public UserGroup populateUserGroupForm(HttpServletRequest request) throws Exception {
-		return userGroupFacade.create();
+		return userGroupService.create();
 	}
 
 	@ModelAttribute(UserGroupWebConstants.ModelAttribute.SEARCH)
@@ -146,7 +150,7 @@ public class UserGroupController extends AbstractController {
 				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 
-				List<UserGroup> userGroups = userGroupFacade.findDtoBySorts(sorts);
+				List<UserGroup> userGroups = userGroupService.findDtoBySorts(sorts);
 				
 				for (Iterator<UserGroup> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext(); ) {
 					if(userGroupsIterator.next().getUuid().equals(existingUserGroup.getUuid())) {
@@ -167,11 +171,11 @@ public class UserGroupController extends AbstractController {
 				
 				Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
 				userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
-				List<UserRight> userRights = userRightFacade.findDtoBySorts(userRightSorts);
+				List<UserRight> userRights = userRightService.findDtoBySorts(userRightSorts);
 				
 				Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
 				userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
-				List<UserPermission> userPermissions = userPermissionFacade.findDtoBySorts(userPermissionSorts);
+				List<UserPermission> userPermissions = userPermissionService.findDtoBySorts(userPermissionSorts);
 
 				model.addAttribute("userRights", userRights);
 				model.addAttribute("userPermissions", userPermissions);

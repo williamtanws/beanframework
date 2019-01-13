@@ -24,15 +24,15 @@ import com.beanframework.email.domain.Email;
 
 @Component
 public class EmailFacadeImpl implements EmailFacade {
-	
+
 	Logger logger = LoggerFactory.getLogger(EmailFacadeImpl.class);
 
 	@Autowired
 	private EmailService emailService;
-	
+
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Override
 	public void saveAttachment(Email email, MultipartFile[] attachments) throws BusinessException {
 		try {
@@ -41,7 +41,7 @@ public class EmailFacadeImpl implements EmailFacade {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public void deleteAttachment(UUID uuid, String filename) throws BusinessException {
 		try {
@@ -57,18 +57,8 @@ public class EmailFacadeImpl implements EmailFacade {
 	}
 
 	@Override
-	public Email create() throws Exception {
-		return modelService.create(Email.class);
-	}
-
-	@Override
 	public Email findOneDtoByUuid(UUID uuid) throws Exception {
 		return modelService.findOneDtoByUuid(uuid, Email.class);
-	}
-
-	@Override
-	public Email findOneDtoByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneDtoByProperties(properties, Email.class);
 	}
 
 	@Override
@@ -89,13 +79,18 @@ public class EmailFacadeImpl implements EmailFacade {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, Email.class);
-		
+
 		return revisions;
+	}
+
+	@Override
+	public Email findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return emailService.findOneDtoByProperties(properties);
 	}
 }

@@ -39,18 +39,10 @@ public interface CustomerFacade {
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	Customer getCurrentUser();
-
-	Customer findDtoAuthenticate(String id, String password) throws Exception;
-
-	Customer create() throws Exception;
-
-	Customer saveEntity(Customer model) throws BusinessException;
-
-	void deleteById(String id) throws BusinessException;
-
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
 }

@@ -26,12 +26,16 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.service.AuditorFacade;
+import com.beanframework.user.service.AuditorService;
 
 @Controller
 public class AuditorController extends AbstractController {
 
 	@Autowired
 	private AuditorFacade auditorFacade;
+	
+	@Autowired
+	private AuditorService auditorService;
 
 	@Value(AuditorWebConstants.Path.LANGUAGE)
 	private String PATH_LANGUAGE;
@@ -72,7 +76,7 @@ public class AuditorController extends AbstractController {
 
 	@ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE)
 	public Auditor populateAuditorForm(HttpServletRequest request) throws Exception {
-		return auditorFacade.create();
+		return auditorService.create();
 	}
 
 	@ModelAttribute(AuditorWebConstants.ModelAttribute.SEARCH)

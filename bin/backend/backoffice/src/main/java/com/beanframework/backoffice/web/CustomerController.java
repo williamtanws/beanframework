@@ -34,8 +34,9 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerFacade;
+import com.beanframework.customer.service.CustomerService;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupFacade;
+import com.beanframework.user.service.UserGroupService;
 
 @Controller
 public class CustomerController extends AbstractController {
@@ -44,7 +45,10 @@ public class CustomerController extends AbstractController {
 	private CustomerFacade customerFacade;
 	
 	@Autowired
-	private UserGroupFacade userGroupFacade;
+	private CustomerService customerService;
+	
+	@Autowired
+	private UserGroupService userGroupService;
 
 	@Value(CustomerWebConstants.Path.CUSTOMER)
 	private String PATH_CUSTOMER;
@@ -110,12 +114,12 @@ public class CustomerController extends AbstractController {
 
 	@ModelAttribute(CustomerWebConstants.ModelAttribute.CREATE)
 	public Customer populateCustomerCreate(HttpServletRequest request) throws Exception {
-		return customerFacade.create();
+		return customerService.create();
 	}
 
 	@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE)
 	public Customer populateCustomerForm(HttpServletRequest request) throws Exception {
-		return customerFacade.create();
+		return customerService.create();
 	}
 
 	@ModelAttribute(CustomerWebConstants.ModelAttribute.SEARCH)
@@ -139,7 +143,7 @@ public class CustomerController extends AbstractController {
 				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 
-				List<UserGroup> userGroups = userGroupFacade.findDtoBySorts(sorts);
+				List<UserGroup> userGroups = userGroupService.findDtoBySorts(sorts);
 
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingCustomer.getUserGroups()) {
