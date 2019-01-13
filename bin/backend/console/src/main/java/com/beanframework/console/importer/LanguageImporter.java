@@ -29,13 +29,13 @@ import com.beanframework.console.converter.ImportEntityLanguageConverter;
 import com.beanframework.console.csv.LanguageCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageFacade;
+import com.beanframework.language.service.LanguageService;
 
 public class LanguageImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(LanguageImporter.class);
 
 	@Autowired
-	private LanguageFacade languageFacade;
+	private LanguageService languageService;
 
 	@Autowired
 	private ImportEntityLanguageConverter converter;
@@ -124,13 +124,13 @@ public class LanguageImporter extends Importer {
 		for (LanguageCsv csv : csvList) {
 
 			Language model = converter.convert(csv);
-			languageFacade.saveEntity(model);
+			languageService.saveEntity(model);
 		}
 	}
 
 	public void remove(List<LanguageCsv> csvList) throws Exception {
 		for (LanguageCsv csv : csvList) {
-			languageFacade.deleteById(csv.getId());
+			languageService.deleteById(csv.getId());
 		}
 	}
 

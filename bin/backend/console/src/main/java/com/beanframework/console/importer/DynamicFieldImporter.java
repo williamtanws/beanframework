@@ -29,13 +29,13 @@ import com.beanframework.console.converter.ImportEntityDynamicFieldConverter;
 import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.service.DynamicFieldFacade;
+import com.beanframework.dynamicfield.service.DynamicFieldService;
 
 public class DynamicFieldImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldImporter.class);
 
 	@Autowired
-	private DynamicFieldFacade dynamicFieldFacade;
+	private DynamicFieldService dynamicFieldService;
 
 	@Autowired
 	private ImportEntityDynamicFieldConverter converter;
@@ -124,13 +124,13 @@ public class DynamicFieldImporter extends Importer {
 		for (DynamicFieldCsv csv : csvList) {
 
 			DynamicField model = converter.convert(csv);
-			dynamicFieldFacade.saveEntity(model);
+			dynamicFieldService.saveEntity(model);
 		}
 	}
 
 	private void remove(List<DynamicFieldCsv> csvList) throws Exception {
 		for (DynamicFieldCsv csv : csvList) {
-			dynamicFieldFacade.deleteById(csv.getId());
+			dynamicFieldService.deleteById(csv.getId());
 		}
 	}
 

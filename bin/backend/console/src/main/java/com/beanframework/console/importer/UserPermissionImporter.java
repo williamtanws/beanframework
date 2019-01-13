@@ -29,13 +29,13 @@ import com.beanframework.console.converter.ImportEntityUserPermissionConverter;
 import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.service.UserPermissionFacade;
+import com.beanframework.user.service.UserPermissionService;
 
 public class UserPermissionImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserPermissionImporter.class);
 
 	@Autowired
-	private UserPermissionFacade userPermissionFacade;
+	private UserPermissionService userPermissionService;
 
 	@Autowired
 	private ImportEntityUserPermissionConverter converter;
@@ -123,13 +123,13 @@ public class UserPermissionImporter extends Importer {
 
 		for (UserPermissionCsv csv : csvList) {
 			UserPermission model = converter.convert(csv);
-			userPermissionFacade.saveEntity(model);
+			userPermissionService.saveEntity(model);
 		}
 	}
 
 	public void remove(List<UserPermissionCsv> csvList) throws Exception {
 		for (UserPermissionCsv csv : csvList) {
-			userPermissionFacade.deleteById(csv.getId());
+			userPermissionService.deleteById(csv.getId());
 		}
 	}
 }

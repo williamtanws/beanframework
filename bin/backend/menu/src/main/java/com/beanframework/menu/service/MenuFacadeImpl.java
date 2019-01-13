@@ -1,6 +1,5 @@
 package com.beanframework.menu.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -29,11 +28,6 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Autowired
 	private MenuService menuService;
-
-	@Override
-	public Menu create() throws Exception {
-		return modelService.create(Menu.class);
-	}
 
 	@Override
 	public Menu findOneDtoByUuid(UUID uuid) throws Exception {
@@ -83,48 +77,20 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 
 	@Override
-	public List<Menu> findDtoMenuTreeByCurrentUser() throws BusinessException {
-		try {
-			return menuService.findDtoMenuTreeByCurrentUser();
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-
-	@Override
-	public Menu saveEntity(Menu model) throws BusinessException {
-		return (Menu) modelService.saveEntity(model, Menu.class);
-	}
-
-	@Override
-	public void deleteById(String id) throws BusinessException {
-
-		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Menu.ID, id);
-			Menu model = modelService.findOneEntityByProperties(properties, Menu.class);
-			modelService.deleteByEntity(model, Menu.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-	
-	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, Menu.class);
-		
+
 		return revisions;
 	}
-	
+
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(MenuField.MENU).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, MenuField.class);
-		
+
 		return revisions;
 	}
 }

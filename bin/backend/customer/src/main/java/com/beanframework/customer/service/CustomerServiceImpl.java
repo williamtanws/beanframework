@@ -5,9 +5,12 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.user.domain.UserAuthority;
@@ -16,7 +19,7 @@ import com.beanframework.user.utils.PasswordUtils;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -55,5 +58,42 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 
 		return modelService.getDto(customer, Customer.class);
+	}
+
+	@Override
+	public Customer create() throws Exception {
+		return modelService.create(Customer.class);
+	}
+
+	@Override
+	public Customer saveEntity(Customer model) throws BusinessException {
+		return (Customer) modelService.saveEntity(model, Customer.class);
+	}
+
+	@Override
+	public void deleteById(String id) throws BusinessException {
+
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Customer.ID, id);
+			Customer model = modelService.findOneEntityByProperties(properties, Customer.class);
+			modelService.deleteByEntity(model, Customer.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public Customer getCurrentUser() {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (auth != null) {
+			Customer customer = (Customer) auth.getPrincipal();
+			return customer;
+		} else {
+			return null;
+		}
 	}
 }

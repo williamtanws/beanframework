@@ -32,12 +32,16 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserRightFacade;
+import com.beanframework.user.service.UserRightService;
 
 @Controller
 public class UserRightController extends AbstractController {
 
 	@Autowired
 	private UserRightFacade userRightFacade;
+	
+	@Autowired
+	private UserRightService userRightService;
 
 	@Autowired
 	private LocaleMessageService localeMessageService;
@@ -107,12 +111,12 @@ public class UserRightController extends AbstractController {
 
 	@ModelAttribute(UserRightWebConstants.ModelAttribute.CREATE)
 	public UserRight populateUserRightCreate(HttpServletRequest request) throws Exception {
-		return userRightFacade.create();
+		return userRightService.create();
 	}
 
 	@ModelAttribute(UserRightWebConstants.ModelAttribute.UPDATE)
 	public UserRight populateUserRightForm(HttpServletRequest request) throws Exception {
-		return userRightFacade.create();
+		return userRightService.create();
 	}
 
 	@ModelAttribute(UserRightWebConstants.ModelAttribute.SEARCH)

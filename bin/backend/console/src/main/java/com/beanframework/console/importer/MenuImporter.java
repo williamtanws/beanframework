@@ -29,13 +29,13 @@ import com.beanframework.console.converter.ImportEntityMenuConverter;
 import com.beanframework.console.csv.MenuCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.service.MenuFacade;
+import com.beanframework.menu.service.MenuService;
 
 public class MenuImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuImporter.class);
 
 	@Autowired
-	private MenuFacade menuFacade;
+	private MenuService menuService;
 	
 	@Autowired
 	private ImportEntityMenuConverter converter;
@@ -123,13 +123,13 @@ public class MenuImporter extends Importer {
 
 		for (MenuCsv csv : csvList) {
 			Menu menu = converter.convert(csv);
-			menuFacade.saveEntity(menu);
+			menuService.saveEntity(menu);
 		}
 	}	
 	
 	public void remove(List<MenuCsv> csvList) throws Exception {
 		for (MenuCsv csv : csvList) {
-			menuFacade.deleteById(csv.getId());
+			menuService.deleteById(csv.getId());
 		}
 	}
 }

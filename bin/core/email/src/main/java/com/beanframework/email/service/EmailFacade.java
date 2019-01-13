@@ -22,10 +22,6 @@ public interface EmailFacade {
 		public static final String DELETE = "hasAuthority('email_delete')";
 	}
 
-	void saveAttachment(Email email, MultipartFile[] attachments) throws BusinessException;
-
-	void deleteAttachment(UUID uuid, String filename) throws BusinessException;
-
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	Page<Email> findPage(Specification<Email> findByCriteria, PageRequest of) throws Exception;
 
@@ -38,12 +34,18 @@ public interface EmailFacade {
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
 	Email updateDto(Email emailUpdate) throws BusinessException;
 
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	void saveAttachment(Email email, MultipartFile[] attachments) throws BusinessException;
+
+	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	void deleteAttachment(UUID uuid, String filename) throws BusinessException;
+
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	Email create() throws Exception;
-
-	Email findOneDtoByProperties(Map<String, Object> properties) throws Exception;
-
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	Email findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 }

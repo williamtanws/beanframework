@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.user.service.AuditorFacade;
+import com.beanframework.user.service.AuditorService;
 
 @Component
 public class AdminFacadeImpl implements AdminFacade {
@@ -37,7 +37,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	private AdminService adminService;
 
 	@Autowired
-	private AuditorFacade auditorFacade;
+	private AuditorService auditorService;
 
 	@Override
 	public Admin getCurrentUser() {
@@ -95,14 +95,14 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Override
 	public Admin createDto(Admin model) throws BusinessException {
 		Admin admin = (Admin) modelService.saveDto(model, Admin.class);
-		auditorFacade.save(admin);
+		auditorService.saveDto(admin);
 		return admin;
 	}
 
 	@Override
 	public Admin saveDto(Admin model) throws BusinessException {
 		Admin admin = (Admin) modelService.saveDto(model, Admin.class);
-		auditorFacade.save(admin);
+		auditorService.saveDto(admin);
 		return admin;
 	}
 

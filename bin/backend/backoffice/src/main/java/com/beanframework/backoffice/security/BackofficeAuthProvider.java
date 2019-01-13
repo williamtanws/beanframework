@@ -23,7 +23,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeFacade;
+import com.beanframework.employee.service.EmployeeService;
 
 @Component
 public class BackofficeAuthProvider implements AuthenticationProvider {
@@ -40,7 +40,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 	private LocaleMessageService localeMessageService;
 
 	@Autowired
-	private EmployeeFacade employeeFacade;
+	private EmployeeService employeeService;
 
 	@Value(BackofficeWebConstants.Authority.BACKOFFICE)
 	private String BACKOFFICE_ACCESS;
@@ -58,7 +58,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 
 		Employee employee;
 		try {
-			employee = employeeFacade.findDtoAuthenticate(id, password);
+			employee = employeeService.findDtoAuthenticate(id, password);
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		} catch (DisabledException e) {

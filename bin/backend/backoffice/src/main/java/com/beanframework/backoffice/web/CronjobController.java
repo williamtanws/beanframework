@@ -38,12 +38,16 @@ import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.cronjob.domain.CronjobEnum;
 import com.beanframework.cronjob.service.CronjobFacade;
 import com.beanframework.cronjob.service.CronjobManagerService;
+import com.beanframework.cronjob.service.CronjobService;
 
 @Controller
 public class CronjobController extends AbstractController {
 
 	@Autowired
 	private CronjobFacade cronjobFacade;
+	
+	@Autowired
+	private CronjobService cronjobService;
 
 	@Autowired
 	private CronjobManagerService cronjobManagerService;
@@ -130,12 +134,12 @@ public class CronjobController extends AbstractController {
 
 	@ModelAttribute(CronjobWebConstants.ModelAttribute.CREATE)
 	public Cronjob populateCronjobCreate(HttpServletRequest request) throws Exception {
-		return cronjobFacade.create();
+		return cronjobService.create();
 	}
 
 	@ModelAttribute(CronjobWebConstants.ModelAttribute.UPDATE)
 	public Cronjob populateCronjobForm(HttpServletRequest request) throws Exception {
-		return cronjobFacade.create();
+		return cronjobService.create();
 	}
 
 	@ModelAttribute(CronjobWebConstants.ModelAttribute.SEARCH)

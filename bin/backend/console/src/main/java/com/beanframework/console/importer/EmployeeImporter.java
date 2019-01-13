@@ -32,7 +32,7 @@ import com.beanframework.console.converter.ImportEntityEmployeeConverter;
 import com.beanframework.console.csv.EmployeeCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeFacade;
+import com.beanframework.employee.service.EmployeeService;
 
 public class EmployeeImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(EmployeeImporter.class);
@@ -41,7 +41,7 @@ public class EmployeeImporter extends Importer {
 	private ModelService modelService;
 	
 	@Autowired
-	private EmployeeFacade employeeFacade;
+	private EmployeeService employeeService;
 
 	@Autowired
 	private ImportEntityEmployeeConverter converter;
@@ -130,7 +130,7 @@ public class EmployeeImporter extends Importer {
 		for (EmployeeCsv csv : csvList) {
 
 			Employee model = converter.convert(csv);
-			employeeFacade.saveEntity(model);
+			employeeService.saveEntity(model);
 		}
 	}
 

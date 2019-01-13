@@ -39,12 +39,7 @@ public interface DynamicFieldFacade {
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	DynamicField create() throws Exception;
-
-	DynamicField saveEntity(DynamicField model) throws BusinessException;
-
-	void deleteById(String id) throws BusinessException;
-
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
 }

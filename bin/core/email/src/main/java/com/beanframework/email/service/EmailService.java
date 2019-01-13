@@ -1,6 +1,7 @@
 package com.beanframework.email.service;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -17,4 +18,8 @@ public interface EmailService {
 	void delete(UUID uuid) throws IOException, BusinessException;
 
 	void deleteAll() throws IOException, BusinessException;
+
+	Email create() throws Exception;
+
+	Email findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 }

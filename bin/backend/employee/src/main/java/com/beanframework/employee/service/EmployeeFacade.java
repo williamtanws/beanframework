@@ -7,10 +7,8 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.employee.EmployeeSession;
@@ -29,10 +27,6 @@ public interface EmployeeFacade {
 		public static final String READ = "hasAuthority('employeesession_read')";
 		public static final String DELETE = "hasAuthority('employeesession_delete')";
 	}
-
-	Employee saveProfile(Employee employee, MultipartFile picture) throws BusinessException;
-
-	void updatePrincipal(Employee employee);
 
 	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.READ)
 	Set<EmployeeSession> findAllSessions();
@@ -58,25 +52,13 @@ public interface EmployeeFacade {
 	@PreAuthorize(EmployeePreAuthorizeEnum.UPDATE)
 	Employee updateDto(Employee model) throws BusinessException;
 
-	Employee saveEntity(Employee model) throws BusinessException;
-
 	@PreAuthorize(EmployeePreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	Employee create() throws Exception;
-
-	Employee getCurrentUser();
-
-	Employee findDtoAuthenticate(String id, String password) throws BusinessException, Exception;
-
-	void deleteEmployeeProfilePictureByUuid(UUID uuid);
-
-	void deleteAllEmployeeProfilePicture();
-
+	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
 	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
+	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
 	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-
-	List<Employee> findDtoBySorts(Map<String, Direction> employeeSorts) throws Exception;
 
 }

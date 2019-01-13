@@ -29,13 +29,13 @@ import com.beanframework.console.converter.ImportEntityUserGroupConverter;
 import com.beanframework.console.csv.UserGroupCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupFacade;
+import com.beanframework.user.service.UserGroupService;
 
 public class UserGroupImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserGroupImporter.class);
 
 	@Autowired
-	private UserGroupFacade userGroupFacade;
+	private UserGroupService userGroupService;
 
 	@Autowired
 	private ImportEntityUserGroupConverter converter;
@@ -124,13 +124,13 @@ public class UserGroupImporter extends Importer {
 		for (UserGroupCsv csv : userGroupCsvList) {
 
 			UserGroup model = converter.convert(csv);
-			userGroupFacade.saveEntity(model);
+			userGroupService.saveEntity(model);
 		}
 	}
 
 	public void remove(List<UserGroupCsv> csvList) throws Exception {
 		for (UserGroupCsv csv : csvList) {
-			userGroupFacade.deleteById(csv.getId());
+			userGroupService.deleteById(csv.getId());
 		}
 	}
 }

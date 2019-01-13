@@ -31,12 +31,16 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.service.DynamicFieldFacade;
+import com.beanframework.dynamicfield.service.DynamicFieldService;
 
 @Controller
 public class DynamicFieldController extends AbstractController {
 
 	@Autowired
 	private DynamicFieldFacade dynamicFieldFacade;
+	
+	@Autowired
+	private DynamicFieldService dynamicFieldService;
 
 	@Value(DynamicFieldWebConstants.Path.LANGUAGE)
 	private String PATH_LANGUAGE;
@@ -103,12 +107,12 @@ public class DynamicFieldController extends AbstractController {
 
 	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.CREATE)
 	public DynamicField populateDynamicFieldCreate(HttpServletRequest request) throws Exception {
-		return dynamicFieldFacade.create();
+		return dynamicFieldService.create();
 	}
 
 	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE)
 	public DynamicField populateDynamicFieldForm(HttpServletRequest request) throws Exception {
-		return dynamicFieldFacade.create();
+		return dynamicFieldService.create();
 	}
 
 	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH)

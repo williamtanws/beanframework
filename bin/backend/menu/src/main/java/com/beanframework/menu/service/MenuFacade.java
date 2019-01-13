@@ -39,15 +39,9 @@ public interface MenuFacade {
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Menu> findDtoMenuTree() throws BusinessException;
 
-	Menu create() throws Exception;
-
-	List<Menu> findDtoMenuTreeByCurrentUser() throws BusinessException;
-
-	Menu saveEntity(Menu menu) throws BusinessException;
-
-	void deleteById(String id) throws BusinessException;
-
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
+	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 }

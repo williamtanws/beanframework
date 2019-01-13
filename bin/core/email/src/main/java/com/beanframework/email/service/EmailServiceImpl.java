@@ -2,6 +2,7 @@ package com.beanframework.email.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -47,9 +48,9 @@ public class EmailServiceImpl implements EmailService {
 
 	@Override
 	public void deleteAttachment(UUID uuid, String filename) throws IOException {
-		
+
 		String workingDir = System.getProperty("user.dir");
-		
+
 		File emailAttachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + uuid);
 		File[] files = emailAttachmentFolder.listFiles();
 
@@ -64,7 +65,7 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void delete(UUID uuid) throws IOException, BusinessException {
 		modelService.deleteByUuid(uuid, Email.class);
-		
+
 		String workingDir = System.getProperty("user.dir");
 
 		File emailAttachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + uuid);
@@ -75,10 +76,20 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void deleteAll() throws IOException, BusinessException {
 		modelService.deleteAll(Email.class);
-		
+
 		String workingDir = System.getProperty("user.dir");
 
 		File emailAttachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION);
 		FileUtils.deleteDirectory(emailAttachmentFolder);
+	}
+
+	@Override
+	public Email create() throws Exception {
+		return modelService.create(Email.class);
+	}
+
+	@Override
+	public Email findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, Email.class);
 	}
 }

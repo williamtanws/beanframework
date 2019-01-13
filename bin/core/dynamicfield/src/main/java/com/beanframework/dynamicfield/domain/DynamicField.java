@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
@@ -76,6 +77,9 @@ public class DynamicField extends GenericDomain {
 	@OneToMany(mappedBy = DynamicFieldEnumValue.DYNAMIC_FIELD, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(DynamicFieldEnumValue.SORT + " ASC")
 	private List<DynamicFieldEnumValue> values = new ArrayList<DynamicFieldEnumValue>();
+
+	@Transient
+	private String selected;
 
 	public String getName() {
 		return name;
@@ -147,6 +151,14 @@ public class DynamicField extends GenericDomain {
 
 	public void setValues(List<DynamicFieldEnumValue> values) {
 		this.values = values;
+	}
+
+	public String getSelected() {
+		return selected;
+	}
+
+	public void setSelected(String selected) {
+		this.selected = selected;
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.beanframework.user.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,7 +11,6 @@ import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
@@ -31,12 +29,6 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public Page<UserPermission> findPage(Specification<UserPermission> specification, PageRequest pageRequest) throws Exception {
 		return modelService.findDtoPage(specification, pageRequest, UserPermission.class);
 	}
-
-	@Override
-	public UserPermission create() throws Exception {
-		return modelService.create(UserPermission.class);
-	}
-	
 
 	@Override
 	public UserPermission findOneDtoByUuid(UUID uuid) throws Exception {
@@ -68,42 +60,20 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	}
 
 	@Override
-	public List<UserPermission> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findDtoByPropertiesAndSorts(null, sorts, null, null, UserPermission.class);
-	}
-
-	@Override
-	public UserPermission saveEntity(UserPermission model) throws BusinessException {
-		return (UserPermission) modelService.saveEntity(model, UserPermission.class);
-	}
-
-	@Override
-	public void deleteById(String id) throws BusinessException {
-		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(UserPermission.ID, id);
-			UserPermission model = modelService.findOneEntityByProperties(properties, UserPermission.class);
-			modelService.deleteByEntity(model, UserPermission.class);
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-	
-	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, UserPermission.class);
-		
+
 		return revisions;
 	}
-	
+
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(UserPermissionField.USER_PERMISSION).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
 		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, UserPermissionField.class);
-		
+
 		return revisions;
 	}
 

@@ -30,17 +30,21 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuFacade;
+import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupFacade;
+import com.beanframework.user.service.UserGroupService;
 
 @Controller
 public class MenuController extends AbstractController {
 
 	@Autowired
 	private MenuFacade menuFacade;
+	
+	@Autowired
+	private MenuService menuService;
 
 	@Autowired
-	private UserGroupFacade userGroupFacade;
+	private UserGroupService userGroupService;
 
 	@Value(MenuWebConstants.Path.MENU)
 	private String PATH_MENU;
@@ -53,12 +57,12 @@ public class MenuController extends AbstractController {
 
 	@ModelAttribute(MenuWebConstants.ModelAttribute.CREATE)
 	public Menu populateMenuCreate(HttpServletRequest request) throws Exception {
-		return menuFacade.create();
+		return menuService.create();
 	}
 
 	@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE)
 	public Menu populateMenuForm(HttpServletRequest request) throws Exception {
-		return menuFacade.create();
+		return menuService.create();
 	}
 
 	@GetMapping(value = MenuWebConstants.Path.MENU)
@@ -73,7 +77,7 @@ public class MenuController extends AbstractController {
 				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 
-				List<UserGroup> userGroups = userGroupFacade.findDtoBySorts(sorts);
+				List<UserGroup> userGroups = userGroupService.findDtoBySorts(sorts);
 
 				for (int i = 0; i < userGroups.size(); i++) {
 					for (UserGroup userGroup : existingMenu.getUserGroups()) {

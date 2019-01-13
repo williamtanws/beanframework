@@ -29,13 +29,13 @@ import com.beanframework.console.converter.ImportEntityCustomerConverter;
 import com.beanframework.console.csv.CustomerCsv;
 import com.beanframework.console.registry.Importer;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerFacade;
+import com.beanframework.customer.service.CustomerService;
 
 public class CustomerImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(CustomerImporter.class);
 
 	@Autowired
-	private CustomerFacade customerFacade;
+	private CustomerService customerService;
 
 	@Autowired
 	private ImportEntityCustomerConverter converter;
@@ -124,13 +124,13 @@ public class CustomerImporter extends Importer {
 		for (CustomerCsv csv : customerCsvList) {
 
 			Customer model = converter.convert(csv);
-			customerFacade.saveEntity(model);
+			customerService.saveEntity(model);
 		}
 	}
 
 	public void remove(List<CustomerCsv> csvList) throws Exception {
 		for (CustomerCsv csv : csvList) {
-			customerFacade.deleteById(csv.getId());
+			customerService.deleteById(csv.getId());
 		}
 	}
 
