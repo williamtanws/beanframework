@@ -24,7 +24,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.menu.MenuConstants;
 import com.beanframework.user.domain.UserGroup;
 
@@ -32,7 +32,7 @@ import com.beanframework.user.domain.UserGroup;
 @Audited
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = MenuConstants.Table.MENU)
-public class Menu extends GenericDomain {
+public class Menu extends GenericEntity {
 
 	private static final long serialVersionUID = 8293422057240349702L;
 	public static final String NAME = "name";

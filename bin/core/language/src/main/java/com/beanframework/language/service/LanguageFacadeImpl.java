@@ -26,7 +26,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
 	@Override
 	public Page<Language> findDtoPage(Specification<Language> specification, PageRequest pageable) throws Exception {
-		return modelService.findDtoPage(specification, pageable, Language.class);
+		return modelService.findEntityPage(specification, pageable, Language.class);
 	}
 
 	@Override

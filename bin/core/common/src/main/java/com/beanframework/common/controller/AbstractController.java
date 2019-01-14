@@ -16,7 +16,7 @@ public class AbstractController {
 	public static final String SUCCESS = "success";
 
 	@Autowired
-	private LocaleMessageService localeMessageService;
+	protected LocaleMessageService localeMessageService;
 
 	@SuppressWarnings("rawtypes")
 	public void addErrorMessage(Class objectClass, String message, BindingResult bindingResult,

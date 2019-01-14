@@ -26,25 +26,17 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants;
 import com.beanframework.backoffice.data.UserPermissionSearch;
 import com.beanframework.backoffice.data.UserPermissionSpecification;
+import com.beanframework.backoffice.facade.UserPermissionFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.service.UserPermissionFacade;
-import com.beanframework.user.service.UserPermissionService;
 
 @Controller
 public class UserPermissionController extends AbstractController {
 
 	@Autowired
 	private UserPermissionFacade userPermissionFacade;
-	
-	@Autowired
-	private UserPermissionService userPermissionService;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@Value(UserPermissionWebConstants.Path.USERPERMISSION)
 	private String PATH_USERPERMISSION;
@@ -111,12 +103,12 @@ public class UserPermissionController extends AbstractController {
 
 	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.CREATE)
 	public UserPermission populateUserPermissionCreate(HttpServletRequest request) throws Exception {
-		return userPermissionService.create();
+		return new UserPermission();
 	}
 
 	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE)
 	public UserPermission populateUserPermissionForm(HttpServletRequest request) throws Exception {
-		return userPermissionService.create();
+		return new UserPermission();
 	}
 
 	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.SEARCH)

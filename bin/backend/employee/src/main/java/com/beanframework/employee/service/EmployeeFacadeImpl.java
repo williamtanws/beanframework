@@ -82,7 +82,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public Page<Employee> findPage(Specification<Employee> specification, PageRequest pageRequest) throws Exception {
-		return modelService.findDtoPage(specification, pageRequest, Employee.class);
+		return modelService.findEntityPage(specification, pageRequest, Employee.class);
 	}
 
 	@Override

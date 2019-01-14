@@ -101,12 +101,12 @@ public class ConfigurationController extends AbstractController {
 
 	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CREATE)
 	public Configuration populateConfigurationCreate(HttpServletRequest request) throws Exception {
-		return configurationFacade.create();
+		return new Configuration();
 	}
 
 	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE)
 	public Configuration populateConfigurationForm(HttpServletRequest request) throws Exception {
-		return configurationFacade.create();
+		return new Configuration();
 	}
 
 	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH)

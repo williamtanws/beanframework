@@ -11,14 +11,14 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.DynamicFieldConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUM_VALUE)
-public class DynamicFieldEnumValue extends GenericDomain {
+public class DynamicFieldEnumValue extends GenericEntity {
 
 	/**
 	 * 

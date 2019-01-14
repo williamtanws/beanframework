@@ -20,22 +20,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.beanframework.backoffice.AuditorWebConstants;
 import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.data.AuditorDto;
 import com.beanframework.backoffice.data.AuditorSearch;
 import com.beanframework.backoffice.data.AuditorSpecification;
+import com.beanframework.backoffice.facade.AuditorFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.utils.ParamUtils;
-import com.beanframework.user.service.AuditorFacade;
-import com.beanframework.user.service.AuditorService;
 
 @Controller
 public class AuditorController extends AbstractController {
 
 	@Autowired
 	private AuditorFacade auditorFacade;
-	
-	@Autowired
-	private AuditorService auditorService;
 
 	@Value(AuditorWebConstants.Path.LANGUAGE)
 	private String PATH_LANGUAGE;
@@ -46,7 +43,7 @@ public class AuditorController extends AbstractController {
 	@Value(AuditorWebConstants.LIST_SIZE)
 	private int MODULE_LANGUAGE_LIST_SIZE;
 
-	private Page<Auditor> getPagination(AuditorSearch auditorSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<AuditorDto> getPagination(AuditorSearch auditorSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
@@ -65,7 +62,7 @@ public class AuditorController extends AbstractController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Auditor> pagination = auditorFacade.findDtoPage(AuditorSpecification.findByCriteria(auditorSearch),
+		Page<AuditorDto> pagination = auditorFacade.findDtoPage(AuditorSpecification.findByCriteria(auditorSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
@@ -76,7 +73,7 @@ public class AuditorController extends AbstractController {
 
 	@ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE)
 	public Auditor populateAuditorForm(HttpServletRequest request) throws Exception {
-		return auditorService.create();
+		return new Auditor();
 	}
 
 	@ModelAttribute(AuditorWebConstants.ModelAttribute.SEARCH)
@@ -93,7 +90,7 @@ public class AuditorController extends AbstractController {
 
 		if (auditorUpdate.getUuid() != null) {
 
-			Auditor existingAuditor = auditorFacade.findOneDtoByUuid(auditorUpdate.getUuid());
+			AuditorDto existingAuditor = auditorFacade.findOneDtoByUuid(auditorUpdate.getUuid());
 			
 			List<Object[]> revisions = auditorFacade.findHistoryByUuid(auditorUpdate.getUuid(), null, null);
 			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);

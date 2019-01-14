@@ -34,7 +34,6 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerFacade;
-import com.beanframework.customer.service.CustomerService;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupService;
 
@@ -43,9 +42,6 @@ public class CustomerController extends AbstractController {
 
 	@Autowired
 	private CustomerFacade customerFacade;
-	
-	@Autowired
-	private CustomerService customerService;
 	
 	@Autowired
 	private UserGroupService userGroupService;
@@ -114,12 +110,12 @@ public class CustomerController extends AbstractController {
 
 	@ModelAttribute(CustomerWebConstants.ModelAttribute.CREATE)
 	public Customer populateCustomerCreate(HttpServletRequest request) throws Exception {
-		return customerService.create();
+		return new Customer();
 	}
 
 	@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE)
 	public Customer populateCustomerForm(HttpServletRequest request) throws Exception {
-		return customerService.create();
+		return new Customer();
 	}
 
 	@ModelAttribute(CustomerWebConstants.ModelAttribute.SEARCH)

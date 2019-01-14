@@ -30,7 +30,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuFacade;
-import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupService;
 
@@ -39,9 +38,6 @@ public class MenuController extends AbstractController {
 
 	@Autowired
 	private MenuFacade menuFacade;
-	
-	@Autowired
-	private MenuService menuService;
 
 	@Autowired
 	private UserGroupService userGroupService;
@@ -57,12 +53,12 @@ public class MenuController extends AbstractController {
 
 	@ModelAttribute(MenuWebConstants.ModelAttribute.CREATE)
 	public Menu populateMenuCreate(HttpServletRequest request) throws Exception {
-		return menuService.create();
+		return new Menu();
 	}
 
 	@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE)
 	public Menu populateMenuForm(HttpServletRequest request) throws Exception {
-		return menuService.create();
+		return new Menu();
 	}
 
 	@GetMapping(value = MenuWebConstants.Path.MENU)

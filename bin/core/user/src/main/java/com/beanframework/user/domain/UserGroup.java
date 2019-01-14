@@ -20,14 +20,14 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserGroupConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = UserGroupConstants.Table.USER_GROUP)
-public class UserGroup extends GenericDomain {
+public class UserGroup extends GenericEntity {
 
 	/**
 	 * 

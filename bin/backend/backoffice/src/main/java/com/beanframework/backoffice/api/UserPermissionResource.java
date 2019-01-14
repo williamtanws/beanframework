@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants;
+import com.beanframework.backoffice.facade.UserPermissionFacade;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.service.UserPermissionFacade;
 
 @RestController
 public class UserPermissionResource {

@@ -32,16 +32,12 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.service.EmailFacade;
-import com.beanframework.email.service.EmailService;
 
 @Controller
 public class EmailController extends AbstractController {
 
 	@Autowired
 	private EmailFacade emailFacade;
-	
-	@Autowired
-	private EmailService emailService;
 
 	@Value(EmailWebConstants.Path.EMAIL)
 	private String PATH_EMAIL;
@@ -106,12 +102,12 @@ public class EmailController extends AbstractController {
 
 	@ModelAttribute(EmailWebConstants.ModelAttribute.CREATE)
 	public Email populateEmailCreate(HttpServletRequest request) throws Exception {
-		return emailService.create();
+		return new Email();
 	}
 
 	@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE)
 	public Email populateEmailForm(HttpServletRequest request) throws Exception {
-		return emailService.create();
+		return new Email();
 	}
 
 	@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH)

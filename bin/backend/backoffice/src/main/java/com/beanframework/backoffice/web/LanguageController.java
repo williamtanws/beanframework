@@ -31,7 +31,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.service.LanguageFacade;
-import com.beanframework.language.service.LanguageService;
 
 @Controller
 public class LanguageController extends AbstractController {
@@ -39,9 +38,6 @@ public class LanguageController extends AbstractController {
 	@Autowired
 	private LanguageFacade languageFacade;
 	
-	@Autowired
-	private LanguageService languageService;
-
 	@Value(LanguageWebConstants.Path.LANGUAGE)
 	private String PATH_LANGUAGE;
 
@@ -107,12 +103,12 @@ public class LanguageController extends AbstractController {
 
 	@ModelAttribute(LanguageWebConstants.ModelAttribute.CREATE)
 	public Language populateLanguageCreate(HttpServletRequest request) throws Exception {
-		return languageService.create();
+		return new Language();
 	}
 
 	@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE)
 	public Language populateLanguageForm(HttpServletRequest request) throws Exception {
-		return languageService.create();
+		return new Language();
 	}
 
 	@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH)

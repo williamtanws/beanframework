@@ -12,7 +12,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.UserConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = UserConstants.Table.USER_FIELD)
-public class UserField extends GenericDomain {
+public class UserField extends GenericEntity {
 
 	/**
 	 * 

@@ -25,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class GenericDomain implements Serializable {
+public abstract class GenericEntity implements Serializable {
 
 	/**
 	 * 
@@ -39,8 +39,8 @@ public abstract class GenericDomain implements Serializable {
 	public static final String LAST_MODIFIED_BY = "lastModifiedBy";
 
 	@Id
-	@GeneratedValue(generator = "uuid2")
-	@GenericGenerator(name = "uuid2", strategy = "uuid2")
+	@GeneratedValue(generator = "inquisitive-uuid2")
+	@GenericGenerator(name = "inquisitive-uuid2", strategy = "com.beanframework.common.domain.InquisitiveUUIDGenerator")
 	@Column(columnDefinition = "BINARY(16)", unique = true, updatable = false)
 	private UUID uuid;
 
@@ -119,4 +119,40 @@ public abstract class GenericDomain implements Serializable {
 	public String toString() {
 		return "ID: " + id;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GenericEntity other = (GenericEntity) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+
 }

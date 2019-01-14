@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 
 @Repository
-public interface ModelRepository<T extends GenericDomain> extends JpaRepository<T, UUID>, JpaSpecificationExecutor<T> {
+public interface ModelRepository<T extends GenericEntity> extends JpaRepository<T, UUID>, JpaSpecificationExecutor<T> {
 
 }

@@ -27,7 +27,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 
 	@Override
 	public Page<Configuration> findDtoPage(Specification<Configuration> specification, PageRequest pageable) throws Exception {
-		return modelService.findDtoPage(specification, pageable, Configuration.class);
+		return modelService.findEntityPage(specification, pageable, Configuration.class);
 	}
 
 	@Override

@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.common.domain.Auditor;
 
 public class AuditorSpecification extends AbstractSpecification {
-	public static Specification<Auditor> findByCriteria(final AuditorSearch data) {
+	public static Specification<AuditorDto> findByCriteria(final AuditorSearch data) {
 
-		return new Specification<Auditor>() {
+		return new Specification<AuditorDto>() {
 
 
 			/**
@@ -26,7 +26,7 @@ public class AuditorSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = 5718126808121944920L;
 
 			@Override
-			public Predicate toPredicate(Root<Auditor> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<AuditorDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -45,7 +45,7 @@ public class AuditorSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<Auditor> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String name, Root<AuditorDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
 			predicates.add(cb.or(cb.like(root.get(Auditor.ID), convertToPattern(id))));
 		}

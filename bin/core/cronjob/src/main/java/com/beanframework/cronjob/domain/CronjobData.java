@@ -10,14 +10,14 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.cronjob.CronjobConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = CronjobConstants.Table.CRONJOB_DATA)
-public class CronjobData extends GenericDomain {
+public class CronjobData extends GenericEntity {
 
 	private static final long serialVersionUID = 5142597586346258761L;
 	public static final String NAME = "name";

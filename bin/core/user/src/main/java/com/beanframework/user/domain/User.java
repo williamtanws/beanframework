@@ -26,7 +26,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserConstants;
 
 @Entity
@@ -35,7 +35,7 @@ import com.beanframework.user.UserConstants;
 @Table(name = UserConstants.Table.USER)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
-public abstract class User extends GenericDomain {
+public abstract class User extends GenericEntity {
 
 	public static final String PASSWORD = "password";
 	public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";

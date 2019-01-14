@@ -26,7 +26,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Override
 	public Page<DynamicField> findDtoPage(Specification<DynamicField> specification, PageRequest pageable) throws Exception {
-		return modelService.findDtoPage(specification, pageable, DynamicField.class);
+		return modelService.findEntityPage(specification, pageable, DynamicField.class);
 	}
 
 	@Override
