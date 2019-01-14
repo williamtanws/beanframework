@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.repository.ModelRepository;
 
@@ -94,7 +94,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(GenericDomain.UUID, uuid);
+			properties.put(GenericEntity.UUID, uuid);
 
 			Object model = (T) findOneEntityByProperties(properties, modelClass);
 			loadInterceptor(model, modelClass);
@@ -274,7 +274,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> Page<T> findDtoPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
+	public <T> Page<T> findEntityPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
@@ -283,8 +283,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				loadInterceptor(i.next(), modelClass);
 			}
 
-			List<T> content = getDto(page.getContent(), modelClass);
-			PageImpl<T> pageImpl = new PageImpl<T>(content, page.getPageable(), page.getTotalElements());
+//			List<T> content = getDto(page.getContent(), modelClass);
+//			PageImpl<T> pageImpl = new PageImpl<T>(content, page.getPageable(), page.getTotalElements());
+			PageImpl<T> pageImpl = new PageImpl<T>(page.getContent(), page.getPageable(), page.getTotalElements());
 
 			return pageImpl;
 		} catch (Exception e) {

@@ -78,7 +78,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Override
 	public Page<Cronjob> findPage(Specification<Cronjob> specification, PageRequest pageable) throws Exception {
-		return modelService.findDtoPage(specification, pageable, Cronjob.class);
+		return modelService.findEntityPage(specification, pageable, Cronjob.class);
 	}
 
 	@Override

@@ -11,14 +11,14 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = UserConstants.Table.USER_AUTHORITY)
-public class UserAuthority extends GenericDomain {
+public class UserAuthority extends GenericEntity {
 
 	/**
 	 * 

@@ -1,4 +1,4 @@
-package com.beanframework.user.service;
+package com.beanframework.backoffice.facade;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public Page<UserRight> findPage(Specification<UserRight> specification, PageRequest pageRequest) throws Exception {
-		return modelService.findDtoPage(specification, pageRequest, UserRight.class);
+		return modelService.findEntityPage(specification, pageRequest, UserRight.class);
 	}
 
 	@Override

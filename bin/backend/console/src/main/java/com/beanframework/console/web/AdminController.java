@@ -101,12 +101,12 @@ public class AdminController extends AbstractController {
 
 	@ModelAttribute(AdminWebConstants.ModelAttribute.CREATE)
 	public Admin populateAdminCreate(HttpServletRequest request) throws Exception {
-		return adminFacade.create();
+		return new Admin();
 	}
 
 	@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE)
 	public Admin populateAdminForm(HttpServletRequest request) throws Exception {
-		return adminFacade.create();
+		return new Admin();
 	}
 
 	@ModelAttribute(AdminWebConstants.ModelAttribute.SEARCH)

@@ -22,7 +22,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.DynamicFieldConstants;
 import com.beanframework.language.domain.Language;
 
@@ -30,7 +30,7 @@ import com.beanframework.language.domain.Language;
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = DynamicFieldConstants.Table.DYNAMIC_FIELD)
-public class DynamicField extends GenericDomain {
+public class DynamicField extends GenericEntity {
 
 	/**
 	 * 

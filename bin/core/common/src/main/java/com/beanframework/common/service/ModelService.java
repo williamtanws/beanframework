@@ -44,7 +44,7 @@ public interface ModelService {
 
 	<T extends Collection> T findHistory(boolean selectDeletedEntities, AuditCriterion criterion, AuditOrder order, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
 
-	<T> Page<T> findDtoPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
+	<T> Page<T> findEntityPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
 
 	void refresh(Object model);
 

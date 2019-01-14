@@ -111,12 +111,12 @@ public class EmployeeController extends AbstractController {
 
 	@ModelAttribute(EmployeeWebConstants.ModelAttribute.CREATE)
 	public Employee populateEmployeeCreate(HttpServletRequest request) throws Exception {
-		return employeeService.create();
+		return new Employee();
 	}
 
 	@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE)
 	public Employee populateEmployeeForm(HttpServletRequest request) throws Exception {
-		return employeeService.create();
+		return new Employee();
 	}
 
 	@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH)

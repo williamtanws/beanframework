@@ -7,14 +7,14 @@ import javax.persistence.Table;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.language.LanguageConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = LanguageConstants.Table.LANGUAGE)
-public class Language extends GenericDomain {
+public class Language extends GenericEntity {
 
 	private static final long serialVersionUID = 5992760081038782486L;
 	public static final String NAME = "name";

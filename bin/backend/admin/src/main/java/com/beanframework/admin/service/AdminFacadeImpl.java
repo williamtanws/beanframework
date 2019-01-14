@@ -79,7 +79,7 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public Page<Admin> findDtoPage(Specification<Admin> findByCriteria, PageRequest pageable) throws Exception {
-		return modelService.findDtoPage(findByCriteria, pageable, Admin.class);
+		return modelService.findEntityPage(findByCriteria, pageable, Admin.class);
 	}
 
 	@Override

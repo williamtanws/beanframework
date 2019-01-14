@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserRightWebConstants;
+import com.beanframework.backoffice.facade.UserRightFacade;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserRightFacade;
 
 @RestController
 public class UserRightResource {

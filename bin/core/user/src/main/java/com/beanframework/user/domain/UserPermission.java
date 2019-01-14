@@ -15,14 +15,14 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserPermissionConstants;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = UserPermissionConstants.Table.USER_PERMISSION)
-public class UserPermission extends GenericDomain {
+public class UserPermission extends GenericEntity {
 
 	/**
 	 * 

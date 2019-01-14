@@ -1,4 +1,4 @@
-package com.beanframework.user.service;
+package com.beanframework.backoffice.facade;
 
 import java.util.List;
 import java.util.Map;
@@ -16,44 +16,44 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupField;
+import com.beanframework.user.domain.UserPermission;
+import com.beanframework.user.domain.UserPermissionField;
 
 @Component
-public class UserGroupFacadeImpl implements UserGroupFacade {
+public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public Page<UserGroup> findPage(Specification<UserGroup> specification, PageRequest pageRequest) throws Exception {
-		return modelService.findDtoPage(specification, pageRequest, UserGroup.class);
+	public Page<UserPermission> findPage(Specification<UserPermission> specification, PageRequest pageRequest) throws Exception {
+		return modelService.findEntityPage(specification, pageRequest, UserPermission.class);
 	}
 
 	@Override
-	public UserGroup findOneDtoByUuid(UUID uuid) throws Exception {
-		return modelService.findOneDtoByUuid(uuid, UserGroup.class);
+	public UserPermission findOneDtoByUuid(UUID uuid) throws Exception {
+		return modelService.findOneDtoByUuid(uuid, UserPermission.class);
 	}
 
 	@Override
-	public UserGroup findOneDtoByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneDtoByProperties(properties, UserGroup.class);
+	public UserPermission findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneDtoByProperties(properties, UserPermission.class);
 	}
 
 	@Override
-	public UserGroup createDto(UserGroup model) throws BusinessException {
-		return (UserGroup) modelService.saveDto(model, UserGroup.class);
+	public UserPermission createDto(UserPermission model) throws BusinessException {
+		return (UserPermission) modelService.saveDto(model, UserPermission.class);
 	}
 
 	@Override
-	public UserGroup updateDto(UserGroup model) throws BusinessException {
-		return (UserGroup) modelService.saveDto(model, UserGroup.class);
+	public UserPermission updateDto(UserPermission model) throws BusinessException {
+		return (UserPermission) modelService.saveDto(model, UserPermission.class);
 	}
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		try {
-			modelService.deleteByUuid(uuid, UserGroup.class);
+			modelService.deleteByUuid(uuid, UserPermission.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -63,17 +63,18 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
-		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, UserGroup.class);
+		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, UserPermission.class);
 
 		return revisions;
 	}
 
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(UserGroupField.USER_GROUP).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(UserPermissionField.USER_PERMISSION).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
-		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, UserGroupField.class);
+		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, UserPermissionField.class);
 
 		return revisions;
 	}
+
 }

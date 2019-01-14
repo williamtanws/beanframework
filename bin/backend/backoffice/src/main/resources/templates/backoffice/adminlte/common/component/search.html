@@ -21,7 +21,11 @@
 							</span>
 						</div>
 					</form>
-					<span class="text-block" th:each="field : ${displayFields}" th:if="${!#strings.isEmpty(objectSearch.__${field}__)}" th:text="' ['+${field}+': '+${objectSearch.__${field}__}+']'"></span>
+					<th:block th:each="field,itrStat: ${displayFields}" th:if="${!#strings.isEmpty(objectSearch.__${field}__)}">
+						<span th:if="${itrStat.index > 0}">,</span>
+						<label class="text-block" th:text="#{module.search.__${field}__}+': '"></label>
+						<span class="text-block" th:text="${objectSearch.__${field}__}"></span>
+					</th:block>
 				</div>
 			</div>
 		</div>

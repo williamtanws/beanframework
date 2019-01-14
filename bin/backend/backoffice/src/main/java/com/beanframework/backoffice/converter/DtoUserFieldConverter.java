@@ -1,4 +1,4 @@
-package com.beanframework.user.converter;
+package com.beanframework.backoffice.converter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,30 +11,29 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.user.domain.UserPermissionField;
+import com.beanframework.user.domain.UserField;
 
-public class DtoUserPermissionFieldConverter implements DtoConverter<UserPermissionField, UserPermissionField> {
+public class DtoUserFieldConverter implements DtoConverter<UserField, UserField> {
 	
-	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserPermissionFieldConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserFieldConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public UserPermissionField convert(UserPermissionField source) throws ConverterException {
-		return convert(source, new UserPermissionField());
+	public UserField convert(UserField source) throws ConverterException {
+		return convert(source, new UserField());
 	}
 
-	public List<UserPermissionField> convert(List<UserPermissionField> sources) throws ConverterException {
-		List<UserPermissionField> convertedList = new ArrayList<UserPermissionField>();
-		for (UserPermissionField source : sources) {
+	public List<UserField> convert(List<UserField> sources) throws ConverterException {
+		List<UserField> convertedList = new ArrayList<UserField>();
+		for (UserField source : sources) {
 			convertedList.add(convert(source));
 		}
 		return convertedList;
 	}
 
-	public UserPermissionField convert(UserPermissionField source, UserPermissionField prototype)
-			throws ConverterException {
+	public UserField convert(UserField source, UserField prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());

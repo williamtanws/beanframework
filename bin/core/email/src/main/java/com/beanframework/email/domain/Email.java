@@ -15,7 +15,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.EmailEnum.Result;
 import com.beanframework.email.domain.EmailEnum.Status;
@@ -24,7 +24,7 @@ import com.beanframework.email.domain.EmailEnum.Status;
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = EmailConstants.Table.EMAIL)
-public class Email extends GenericDomain {
+public class Email extends GenericEntity {
 
 	/**
 	 * 

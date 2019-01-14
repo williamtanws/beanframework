@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.UserGroupConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Audited
 @Table(name = UserGroupConstants.Table.USER_GROUP_FIELD)
-public class UserGroupField extends GenericDomain {
+public class UserGroupField extends GenericEntity {
 
 
 	/**

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserGroupWebConstants;
+import com.beanframework.backoffice.facade.UserGroupFacade;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupFacade;
 
 @RestController
 public class UserGroupResource {

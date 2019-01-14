@@ -1,4 +1,4 @@
-package com.beanframework.user.service;
+package com.beanframework.backoffice.facade;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import com.beanframework.common.domain.Auditor;
+import com.beanframework.backoffice.data.AuditorDto;
 
 public interface AuditorFacade {
 
@@ -18,13 +18,13 @@ public interface AuditorFacade {
 	}
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public Page<Auditor> findDtoPage(Specification<Auditor> specification, PageRequest pageable) throws Exception;
+	public Page<AuditorDto> findDtoPage(Specification<AuditorDto> specification, PageRequest pageable) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public Auditor findOneDtoByUuid(UUID uuid) throws Exception;
+	public AuditorDto findOneDtoByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public Auditor findOneDtoByProperties(Map<String, Object> properties) throws Exception;
+	public AuditorDto findOneDtoByProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;

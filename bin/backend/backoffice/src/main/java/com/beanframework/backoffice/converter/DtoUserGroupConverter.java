@@ -1,4 +1,4 @@
-package com.beanframework.user.converter;
+package com.beanframework.backoffice.converter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,30 +11,30 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserAuthority;
-import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserRight;
+import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.domain.UserGroupField;
 
-public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, UserAuthority> {
-
-	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserAuthorityConverter.class);
+public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroup> {
+	
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserGroupConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public UserAuthority convert(UserAuthority source) throws ConverterException {
-		return convert(source, new UserAuthority());
+	public UserGroup convert(UserGroup source) throws ConverterException {
+		return convert(source, new UserGroup());
 	}
 
-	public List<UserAuthority> convert(List<UserAuthority> sources) throws ConverterException {
-		List<UserAuthority> convertedList = new ArrayList<UserAuthority>();
-		for (UserAuthority source : sources) {
+	public List<UserGroup> convert(List<UserGroup> sources) throws ConverterException {
+		List<UserGroup> convertedList = new ArrayList<UserGroup>();
+		for (UserGroup source : sources) {
 			convertedList.add(convert(source));
 		}
 		return convertedList;
 	}
 
-	private UserAuthority convert(UserAuthority source, UserAuthority prototype) throws ConverterException {
+	private UserGroup convert(UserGroup source, UserGroup prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -42,11 +42,13 @@ public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, Us
 		prototype.setCreatedDate(source.getCreatedDate());
 		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
+		
+		prototype.setName(source.getName());
 
-		prototype.setEnabled(source.getEnabled());
 		try {
-			prototype.setUserPermission(modelService.getDto(source.getUserPermission(), UserPermission.class));
-			prototype.setUserRight(modelService.getDto(source.getUserRight(), UserRight.class));
+			prototype.setUserGroups(source.getUserGroups());
+			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthority.class));
+			prototype.setFields(modelService.getDto(source.getFields(), UserGroupField.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);
@@ -54,5 +56,4 @@ public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, Us
 
 		return prototype;
 	}
-
 }

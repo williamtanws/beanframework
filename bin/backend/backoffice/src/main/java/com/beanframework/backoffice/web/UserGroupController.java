@@ -29,6 +29,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserGroupWebConstants;
 import com.beanframework.backoffice.data.UserGroupSearch;
 import com.beanframework.backoffice.data.UserGroupSpecification;
+import com.beanframework.backoffice.facade.UserGroupFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
@@ -36,7 +37,6 @@ import com.beanframework.common.utils.ParamUtils;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.service.UserGroupFacade;
 import com.beanframework.user.service.UserGroupService;
 import com.beanframework.user.service.UserPermissionService;
 import com.beanframework.user.service.UserRightService;
@@ -119,12 +119,12 @@ public class UserGroupController extends AbstractController {
 
 	@ModelAttribute(UserGroupWebConstants.ModelAttribute.CREATE)
 	public UserGroup populateUserGroupCreate(HttpServletRequest request) throws Exception {
-		return userGroupService.create();
+		return new UserGroup();
 	}
 
 	@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE)
 	public UserGroup populateUserGroupForm(HttpServletRequest request) throws Exception {
-		return userGroupService.create();
+		return new UserGroup();
 	}
 
 	@ModelAttribute(UserGroupWebConstants.ModelAttribute.SEARCH)

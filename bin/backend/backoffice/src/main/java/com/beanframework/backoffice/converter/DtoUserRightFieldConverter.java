@@ -1,4 +1,4 @@
-package com.beanframework.user.converter;
+package com.beanframework.backoffice.converter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,29 +11,29 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.user.domain.UserField;
+import com.beanframework.user.domain.UserRightField;
 
-public class DtoUserFieldConverter implements DtoConverter<UserField, UserField> {
+public class DtoUserRightFieldConverter implements DtoConverter<UserRightField, UserRightField> {
 	
-	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserFieldConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserRightFieldConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public UserField convert(UserField source) throws ConverterException {
-		return convert(source, new UserField());
+	public UserRightField convert(UserRightField source) throws ConverterException {
+		return convert(source, new UserRightField());
 	}
 
-	public List<UserField> convert(List<UserField> sources) throws ConverterException {
-		List<UserField> convertedList = new ArrayList<UserField>();
-		for (UserField source : sources) {
+	public List<UserRightField> convert(List<UserRightField> sources) throws ConverterException {
+		List<UserRightField> convertedList = new ArrayList<UserRightField>();
+		for (UserRightField source : sources) {
 			convertedList.add(convert(source));
 		}
 		return convertedList;
 	}
 
-	public UserField convert(UserField source, UserField prototype) throws ConverterException {
+	public UserRightField convert(UserRightField source, UserRightField prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());

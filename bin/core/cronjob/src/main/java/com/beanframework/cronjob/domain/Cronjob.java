@@ -21,7 +21,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.common.domain.GenericDomain;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.domain.CronjobEnum.JobTrigger;
 import com.beanframework.cronjob.domain.CronjobEnum.Result;
@@ -31,7 +31,7 @@ import com.beanframework.cronjob.domain.CronjobEnum.Status;
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = CronjobConstants.Table.CRONJOB)
-public class Cronjob extends GenericDomain {
+public class Cronjob extends GenericEntity {
 
 	/**
 	 * 
