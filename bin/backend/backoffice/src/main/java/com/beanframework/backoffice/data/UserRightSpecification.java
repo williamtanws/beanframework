@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.user.domain.UserRight;
 
 public class UserRightSpecification extends AbstractSpecification {
-	public static Specification<UserRight> findByCriteria(final UserRightSearch data) {
+	public static Specification<UserRightDto> findByCriteria(final UserRightSearch data) {
 
-		return new Specification<UserRight>() {
+		return new Specification<UserRightDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class UserRightSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = -6451054614872238142L;
 
 			@Override
-			public Predicate toPredicate(Root<UserRight> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<UserRightDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class UserRightSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<UserRight> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String name, Root<UserRightDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotBlank(id)) {
 			predicates.add(cb.or(cb.like(root.get(UserRight.ID), convertToPattern(id))));
 		}

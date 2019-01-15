@@ -43,7 +43,7 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 	}
 
 	@Override
-	public List<DynamicField> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findDtoByPropertiesAndSorts(null, sorts, null, null, DynamicField.class);
+	public List<DynamicField> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findCachedEntityByPropertiesAndSorts(null, sorts, null, null, DynamicField.class);
 	}
 }

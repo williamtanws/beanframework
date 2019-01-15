@@ -1,6 +1,5 @@
 package com.beanframework.cronjob.service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.STARTUP, true);
 		
-		List<Cronjob> jobList = modelService.findDtoByPropertiesAndSorts(properties, null, null, null, Cronjob.class);
+		List<Cronjob> jobList = modelService.findCachedEntityByPropertiesAndSorts(properties, null, null, null, Cronjob.class);
 		
 		for (Cronjob cronjob : jobList) {
 			cronjob.setJobTrigger(CronjobEnum.JobTrigger.START);
@@ -71,21 +70,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 
 	@Transactional
 	@Override
-	public void trigger(Cronjob cronjob) throws Exception {
-		
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Cronjob.UUID, cronjob.getUuid());
-		
-		Cronjob updateCronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
-
-		updateCronjob.setJobTrigger(cronjob.getJobTrigger());
-		updateCronjob.setTriggerStartDate(cronjob.getTriggerStartDate());
-		updateCronjob.setLastTriggeredDate(new Date());
-
-		updateJobAndSaveTrigger(updateCronjob);
-	}
-
-	private void updateJobAndSaveTrigger(Cronjob cronjob) throws Exception {
+	public void updateJobAndSaveTrigger(Cronjob cronjob) throws Exception {
 		if (cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE) || cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.START)) {
 			try {
 				quartzManager.startOrUpdateJob(cronjob);
@@ -174,7 +159,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.UUID, uuid);
 		
-		Cronjob cronjob = modelService.findOneDtoByProperties(properties, Cronjob.class);
+		Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
 
 		return cronjob;
 	}

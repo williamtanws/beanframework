@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.customer.domain.Customer;
 
 public class CustomerSpecification extends AbstractSpecification {
-	public static Specification<Customer> findByCriteria(final CustomerSearch data) {
+	public static Specification<CustomerDto> findByCriteria(final CustomerSearch data) {
 
-		return new Specification<Customer>() {
+		return new Specification<CustomerDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class CustomerSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = -6451054614872238142L;
 
 			@Override
-			public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<CustomerDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class CustomerSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<Customer> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String name, Root<CustomerDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotBlank(id)) {
 			predicates.add(cb.or(cb.like(root.get(Customer.ID), convertToPattern(id))));
 		}

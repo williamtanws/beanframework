@@ -14,24 +14,24 @@ public class SpringSecurityAuditorAware implements AuditorAware<Auditor> {
 
 	@Override
 	public Optional<Auditor> getCurrentAuditor() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		if (auth != null) {
-			User user = (User) auth.getPrincipal();
-			if (user.getUuid() == null) {
-				return Optional.empty();
+			if (auth != null) {
+				User user = (User) auth.getPrincipal();
+
+				if (user.getUuid() != null) {
+					Auditor auditor = new Auditor();
+					auditor.setUuid(user.getUuid());
+
+					return Optional.of(auditor);
+				}
 			}
-			try {
-				Auditor auditor = new Auditor();
-				auditor.setUuid(user.getUuid());
-				return Optional.of(auditor);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return Optional.empty();
-			}
-		} else {
-			return Optional.empty();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
+		return Optional.empty();
 	}
 
 }

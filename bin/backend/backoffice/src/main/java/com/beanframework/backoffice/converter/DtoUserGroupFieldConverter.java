@@ -7,13 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.backoffice.data.DynamicFieldDto;
+import com.beanframework.backoffice.data.UserGroupFieldDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.domain.UserGroupField;
 
-public class DtoUserGroupFieldConverter implements DtoConverter<UserGroupField, UserGroupField> {
+public class DtoUserGroupFieldConverter implements DtoConverter<UserGroupField, UserGroupFieldDto> {
 	
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserGroupFieldConverter.class);
 
@@ -21,19 +22,19 @@ public class DtoUserGroupFieldConverter implements DtoConverter<UserGroupField, 
 	private ModelService modelService;
 
 	@Override
-	public UserGroupField convert(UserGroupField source) throws ConverterException {
-		return convert(source, new UserGroupField());
+	public UserGroupFieldDto convert(UserGroupField source) throws ConverterException {
+		return convert(source, new UserGroupFieldDto());
 	}
 
-	public List<UserGroupField> convert(List<UserGroupField> sources) throws ConverterException {
-		List<UserGroupField> convertedList = new ArrayList<UserGroupField>();
+	public List<UserGroupFieldDto> convert(List<UserGroupField> sources) throws ConverterException {
+		List<UserGroupFieldDto> convertedList = new ArrayList<UserGroupFieldDto>();
 		for (UserGroupField source : sources) {
 			convertedList.add(convert(source));
 		}
 		return convertedList;
 	}
 
-	public UserGroupField convert(UserGroupField source, UserGroupField prototype) throws ConverterException {
+	public UserGroupFieldDto convert(UserGroupField source, UserGroupFieldDto prototype) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -44,7 +45,7 @@ public class DtoUserGroupFieldConverter implements DtoConverter<UserGroupField, 
 
 		prototype.setValue(source.getValue());
 		try {			
-			prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicField.class));
+			prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

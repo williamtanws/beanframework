@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserGroupWebConstants;
+import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.backoffice.facade.UserGroupFacade;
 import com.beanframework.user.domain.UserGroup;
 
@@ -30,16 +31,16 @@ public class UserGroupResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(UserGroup.ID, id);
 
-		UserGroup userGroup = userGroupFacade.findOneDtoByProperties(properties);
+		UserGroupDto data = userGroupFacade.findOneByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
-			if (userGroup != null && userGroup.getUuid().equals(uuid)) {
+			if (data != null && data.getUuid().equals(uuid)) {
 				return "true";
 			}
 		}
 
-		return userGroup != null ? "false" : "true";
+		return data != null ? "false" : "true";
 	}
 }

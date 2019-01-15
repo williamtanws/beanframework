@@ -15,8 +15,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
+import com.beanframework.backoffice.facade.EmployeeFacade;
 import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.employee.service.EmployeeFacade;
 
 @Controller
 public class EmployeeSessionController {

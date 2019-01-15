@@ -24,13 +24,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants;
+import com.beanframework.backoffice.data.LanguageDto;
 import com.beanframework.backoffice.data.LanguageSearch;
 import com.beanframework.backoffice.data.LanguageSpecification;
+import com.beanframework.backoffice.facade.LanguageFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
-import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageFacade;
 
 @Controller
 public class LanguageController extends AbstractController {
@@ -47,7 +47,7 @@ public class LanguageController extends AbstractController {
 	@Value(LanguageWebConstants.LIST_SIZE)
 	private int MODULE_LANGUAGE_LIST_SIZE;
 
-	private Page<Language> getPagination(LanguageSearch languageSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<LanguageDto> getPagination(LanguageSearch languageSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
@@ -62,11 +62,11 @@ public class LanguageController extends AbstractController {
 
 		if (properties == null) {
 			properties = new String[1];
-			properties[0] = Language.SORT;
+			properties[0] = LanguageDto.SORT;
 			direction = Sort.Direction.ASC;
 		}
 
-		Page<Language> pagination = languageFacade.findDtoPage(LanguageSpecification.findByCriteria(languageSearch),
+		Page<LanguageDto> pagination = languageFacade.findPage(LanguageSpecification.findByCriteria(languageSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
@@ -102,13 +102,13 @@ public class LanguageController extends AbstractController {
 	}
 
 	@ModelAttribute(LanguageWebConstants.ModelAttribute.CREATE)
-	public Language populateLanguageCreate(HttpServletRequest request) throws Exception {
-		return new Language();
+	public LanguageDto populateLanguageCreate(HttpServletRequest request) throws Exception {
+		return new LanguageDto();
 	}
 
 	@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE)
-	public Language populateLanguageForm(HttpServletRequest request) throws Exception {
-		return new Language();
+	public LanguageDto populateLanguageForm(HttpServletRequest request) throws Exception {
+		return new LanguageDto();
 	}
 
 	@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH)
@@ -118,14 +118,14 @@ public class LanguageController extends AbstractController {
 
 	@GetMapping(value = LanguageWebConstants.Path.LANGUAGE)
 	public String list(@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) Language languageUpdate, Model model,
+			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto languageUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(languageSearch, model, requestParams));
 
 		if (languageUpdate.getUuid() != null) {
 
-			Language existingLanguage = languageFacade.findOneDtoByUuid(languageUpdate.getUuid());
+			LanguageDto existingLanguage = languageFacade.findOneByUuid(languageUpdate.getUuid());
 			
 			List<Object[]> revisions = languageFacade.findHistoryByUuid(languageUpdate.getUuid(), null, null);
 			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
@@ -144,7 +144,7 @@ public class LanguageController extends AbstractController {
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "create")
 	public RedirectView create(
 			@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.CREATE) Language languageCreate, Model model,
+			@ModelAttribute(LanguageWebConstants.ModelAttribute.CREATE) LanguageDto languageCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
@@ -154,15 +154,15 @@ public class LanguageController extends AbstractController {
 		} else {
 
 			try {
-				languageCreate = languageFacade.createDto(languageCreate);
+				languageCreate = languageFacade.create(languageCreate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(Language.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(LanguageDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(Language.UUID, languageCreate.getUuid());
+		redirectAttributes.addAttribute(LanguageDto.UUID, languageCreate.getUuid());
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, languageSearch);
 
 		RedirectView redirectView = new RedirectView();
@@ -174,7 +174,7 @@ public class LanguageController extends AbstractController {
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "update")
 	public RedirectView update(
 			@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) Language languageUpdate, Model model,
+			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto languageUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
@@ -184,15 +184,15 @@ public class LanguageController extends AbstractController {
 		} else {
 
 			try {
-				languageUpdate = languageFacade.updateDto(languageUpdate);
+				languageUpdate = languageFacade.update(languageUpdate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(Language.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(LanguageDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(Language.UUID, languageUpdate.getUuid());
+		redirectAttributes.addAttribute(LanguageDto.UUID, languageUpdate.getUuid());
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, languageSearch);
 
 		RedirectView redirectView = new RedirectView();
@@ -204,7 +204,7 @@ public class LanguageController extends AbstractController {
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "delete")
 	public RedirectView delete(
 			@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) Language languageUpdate, Model model,
+			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto languageUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -213,8 +213,8 @@ public class LanguageController extends AbstractController {
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
-			addErrorMessage(Language.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(Language.UUID, languageUpdate.getUuid());
+			addErrorMessage(LanguageDto.class, e.getMessage(), bindingResult, redirectAttributes);
+			redirectAttributes.addAttribute(LanguageDto.UUID, languageUpdate.getUuid());
 		}
 
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, languageSearch);

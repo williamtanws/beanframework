@@ -29,26 +29,22 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
+import com.beanframework.backoffice.data.BackofficeConfigurationDto;
+import com.beanframework.backoffice.data.EmployeeDto;
+import com.beanframework.backoffice.facade.BackofficeConfigurationFacade;
+import com.beanframework.backoffice.facade.EmployeeFacade;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.common.service.ModelService;
-import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.employee.EmployeeConstants;
-import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeService;
 
 @Controller
 public class EmployeeProfileController {
 
 	@Autowired
-	private ModelService modelService;
+	private EmployeeFacade employeeFacade;
 
 	@Autowired
-	private EmployeeService employeeService;
-
-	@Autowired
-	private ConfigurationFacade configurationFacade;
+	private BackofficeConfigurationFacade configurationFacade;
 
 	@Autowired
 	private LocaleMessageService localeMessageService;
@@ -66,14 +62,14 @@ public class EmployeeProfileController {
 	public String CONFIGURATION_DEFAULT_AVATAR;
 
 	@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE)
-	public Employee populateEmployeeForm(HttpServletRequest request) throws Exception {
-		return modelService.create(Employee.class);
+	public EmployeeDto populateEmployeeForm(HttpServletRequest request) throws Exception {
+		return new EmployeeDto();
 	}
 
 	@GetMapping(value = EmployeeWebConstants.Path.PROFILE)
-	public String profile(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) Employee employeeProfile, Model model, @RequestParam Map<String, Object> requestParams) {
+	public String profile(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) EmployeeDto employeeProfile, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		employeeProfile = employeeService.getCurrentUser();
+		employeeProfile = employeeFacade.getProfile();
 
 		model.addAttribute(EmployeeWebConstants.ModelAttribute.PROFILE, employeeProfile);
 
@@ -88,7 +84,7 @@ public class EmployeeProfileController {
 		if (requestParams.get("uuid") != null) {
 			uuid = UUID.fromString((String) requestParams.get("uuid"));
 		} else {
-			Employee employee = employeeService.getCurrentUser();
+			EmployeeDto employee = employeeFacade.getProfile();
 			uuid = employee.getUuid();
 		}
 
@@ -107,7 +103,7 @@ public class EmployeeProfileController {
 			return IOUtils.toByteArray(targetStream);
 		} else {
 
-			Configuration configuration = configurationFacade.findOneDtoById(CONFIGURATION_DEFAULT_AVATAR);
+			BackofficeConfigurationDto configuration = configurationFacade.findOneDtoById(CONFIGURATION_DEFAULT_AVATAR);
 
 			if (configuration == null) {
 				return null;
@@ -123,19 +119,19 @@ public class EmployeeProfileController {
 	}
 
 	@PostMapping(value = EmployeeWebConstants.Path.PROFILE, params = "update")
-	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) Employee employeeProfile, Model model, BindingResult bindingResult,
+	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) EmployeeDto employeeProfile, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("picture") MultipartFile picture) throws Exception {
 
 		try {
-			Employee employee = employeeService.getCurrentUser();
+			EmployeeDto employee = employeeFacade.getProfile();
 			if (employee.getUuid().equals(employeeProfile.getUuid()) == false)
 				throw new Exception("Invalid attempted employee profile update.");
 
-			employeeProfile = employeeService.saveProfile(employeeProfile, picture);
+			employeeProfile = employeeFacade.saveProfile(employeeProfile, picture);
 
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS, localeMessageService.getMessage(BackofficeWebConstants.Locale.SAVE_SUCCESS));
 		} catch (BusinessException e) {
-			bindingResult.reject(Employee.class.getSimpleName(), e.getMessage());
+			bindingResult.reject(EmployeeDto.class.getSimpleName(), e.getMessage());
 
 			StringBuilder errorMessage = new StringBuilder();
 			List<ObjectError> errors = bindingResult.getAllErrors();

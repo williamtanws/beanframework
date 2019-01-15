@@ -9,8 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.user.domain.UserGroup;
 
 public interface UserGroupFacade {
 
@@ -22,19 +22,19 @@ public interface UserGroupFacade {
 	}
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	Page<UserGroup> findPage(Specification<UserGroup> specification, PageRequest pageRequest) throws Exception;
+	Page<UserGroupDto> findPage(Specification<UserGroupDto> specification, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	UserGroup findOneDtoByUuid(UUID uuid) throws Exception;
+	UserGroupDto findOneByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	UserGroup findOneDtoByProperties(Map<String, Object> properties) throws Exception;
+	UserGroupDto findOneByProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
-	UserGroup createDto(UserGroup model) throws BusinessException;
+	UserGroupDto create(UserGroupDto model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
-	UserGroup updateDto(UserGroup model) throws BusinessException;
+	UserGroupDto update(UserGroupDto model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
@@ -44,4 +44,6 @@ public interface UserGroupFacade {
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
+	List<UserGroupDto> findAllDtoUserGroups() throws Exception;
 }

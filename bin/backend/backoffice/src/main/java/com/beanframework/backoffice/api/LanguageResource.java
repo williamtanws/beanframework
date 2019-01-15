@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants;
+import com.beanframework.backoffice.data.LanguageDto;
+import com.beanframework.backoffice.facade.LanguageFacade;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageFacade;
 
 @RestController
 public class LanguageResource {
@@ -29,16 +30,16 @@ public class LanguageResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Language.ID, id);
 		
-		Language language = languageFacade.findOneDtoByProperties(properties);
+		LanguageDto data = languageFacade.findOneByProperties(properties);
 		
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
-			if (language != null && language.getUuid().equals(uuid)) {
+			if (data != null && data.getUuid().equals(uuid)) {
 				return "true";
 			}
 		}
 
-		return language != null ? "false" : "true";
+		return data != null ? "false" : "true";
 	}
 }

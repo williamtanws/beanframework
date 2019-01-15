@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.menu.domain.Menu;
 
 public class MenuSpecification extends AbstractSpecification {
-	public static Specification<Menu> findByCriteria(final MenuSearch data) {
+	public static Specification<MenuDto> findByCriteria(final MenuSearch data) {
 
-		return new Specification<Menu>() {
+		return new Specification<MenuDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class MenuSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = -6451054614872238142L;
 
 			@Override
-			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<MenuDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class MenuSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<Menu> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String name, Root<MenuDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotBlank(id)) {
 			predicates.add(cb.or(cb.like(root.get(Menu.ID), convertToPattern(id))));
 		}

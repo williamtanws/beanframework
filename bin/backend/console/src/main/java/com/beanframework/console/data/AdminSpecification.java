@@ -15,9 +15,9 @@ import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.data.AbstractSpecification;
 
 public class AdminSpecification extends AbstractSpecification {
-	public static Specification<Admin> findByCriteria(final AdminSearch data) {
+	public static Specification<AdminDto> findByCriteria(final AdminSearch data) {
 
-		return new Specification<Admin>() {
+		return new Specification<AdminDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class AdminSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = -6451054614872238142L;
 
 			@Override
-			public Predicate toPredicate(Root<Admin> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<AdminDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class AdminSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<Admin> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String name, Root<AdminDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotBlank(id)) {
 			predicates.add(cb.or(cb.like(root.get(Admin.ID), convertToPattern(id))));
 		}

@@ -24,8 +24,8 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	}
 
 	@Override
-	public List<UserPermission> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findDtoByPropertiesAndSorts(null, sorts, null, null, UserPermission.class);
+	public List<UserPermission> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findCachedEntityByPropertiesAndSorts(null, sorts, null, null, UserPermission.class);
 	}
 
 	@Override

@@ -16,5 +16,5 @@ public interface LanguageService {
 
 	public void deleteById(String id) throws BusinessException;
 
-	List<Language> findDtoBySorts(Map<String, Direction> sorts) throws Exception;
+	public List<Language> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 }

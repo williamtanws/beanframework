@@ -24,13 +24,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants;
+import com.beanframework.backoffice.data.UserPermissionDto;
 import com.beanframework.backoffice.data.UserPermissionSearch;
 import com.beanframework.backoffice.data.UserPermissionSpecification;
 import com.beanframework.backoffice.facade.UserPermissionFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
-import com.beanframework.user.domain.UserPermission;
 
 @Controller
 public class UserPermissionController extends AbstractController {
@@ -47,7 +47,7 @@ public class UserPermissionController extends AbstractController {
 	@Value(UserPermissionWebConstants.LIST_SIZE)
 	private int MODULE_USERPERMISSION_LIST_SIZE;
 
-	private Page<UserPermission> getPagination(UserPermissionSearch userPermissionSearch, Model model, @RequestParam Map<String, Object> requestParams)
+	private Page<UserPermissionDto> getPagination(UserPermissionSearch userPermissionSearch, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
@@ -63,11 +63,11 @@ public class UserPermissionController extends AbstractController {
 
 		if (properties == null) {
 			properties = new String[1];
-			properties[0] = UserPermission.CREATED_DATE;
+			properties[0] = UserPermissionDto.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<UserPermission> pagination = userPermissionFacade.findPage(
+		Page<UserPermissionDto> pagination = userPermissionFacade.findPage(
 				UserPermissionSpecification.findByCriteria(userPermissionSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
@@ -102,13 +102,13 @@ public class UserPermissionController extends AbstractController {
 	}
 
 	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.CREATE)
-	public UserPermission populateUserPermissionCreate(HttpServletRequest request) throws Exception {
-		return new UserPermission();
+	public UserPermissionDto populateUserPermissionCreate(HttpServletRequest request) throws Exception {
+		return new UserPermissionDto();
 	}
 
 	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE)
-	public UserPermission populateUserPermissionForm(HttpServletRequest request) throws Exception {
-		return new UserPermission();
+	public UserPermissionDto populateUserPermissionForm(HttpServletRequest request) throws Exception {
+		return new UserPermissionDto();
 	}
 
 	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.SEARCH)
@@ -119,14 +119,14 @@ public class UserPermissionController extends AbstractController {
 	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION)
 	public String list(
 			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
-			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermission userpermissionUpdate,
+			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermissionDto userpermissionUpdate,
 			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(userpermissionSearch, model, requestParams));
 
 		if (userpermissionUpdate.getUuid() != null) {
 
-			UserPermission existingUserPermission = userPermissionFacade.findOneDtoByUuid(userpermissionUpdate.getUuid());
+			UserPermissionDto existingUserPermission = userPermissionFacade.findOneByUuid(userpermissionUpdate.getUuid());
 			
 			List<Object[]> revisions = userPermissionFacade.findHistoryByUuid(userpermissionUpdate.getUuid(), null, null);
 			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
@@ -149,7 +149,7 @@ public class UserPermissionController extends AbstractController {
 	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "create")
 	public RedirectView create(
 			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
-			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.CREATE) UserPermission userpermissionCreate,
+			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.CREATE) UserPermissionDto userpermissionCreate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -159,15 +159,15 @@ public class UserPermissionController extends AbstractController {
 		} else {
 
 			try {
-				userpermissionCreate = userPermissionFacade.createDto(userpermissionCreate);
+				userpermissionCreate = userPermissionFacade.create(userpermissionCreate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(UserPermissionDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(UserPermission.UUID, userpermissionCreate.getUuid());
+		redirectAttributes.addAttribute(UserPermissionDto.UUID, userpermissionCreate.getUuid());
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, userpermissionSearch);
 
 		RedirectView redirectView = new RedirectView();
@@ -179,7 +179,7 @@ public class UserPermissionController extends AbstractController {
 	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "update")
 	public RedirectView update(
 			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
-			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermission userpermissionUpdate,
+			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermissionDto userpermissionUpdate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -188,15 +188,15 @@ public class UserPermissionController extends AbstractController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				userpermissionUpdate = userPermissionFacade.updateDto(userpermissionUpdate);
+				userpermissionUpdate = userPermissionFacade.update(userpermissionUpdate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(UserPermissionDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(UserPermission.UUID, userpermissionUpdate.getUuid());
+		redirectAttributes.addAttribute(UserPermissionDto.UUID, userpermissionUpdate.getUuid());
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, userpermissionSearch);
 
 		RedirectView redirectView = new RedirectView();
@@ -208,7 +208,7 @@ public class UserPermissionController extends AbstractController {
 	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "delete")
 	public RedirectView delete(
 			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
-			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermission userpermissionUpdate,
+			@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermissionDto userpermissionUpdate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -218,7 +218,7 @@ public class UserPermissionController extends AbstractController {
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
-			addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
+			addErrorMessage(UserPermissionDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE,
 					userpermissionUpdate);
 		}

@@ -12,7 +12,7 @@ public interface UserGroupService {
 
 	UserGroup create() throws Exception;
 	
-	List<UserGroup> findDtoBySorts(Map<String, Direction> sorts) throws Exception;
+	List<UserGroup> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	UserGroup saveEntity(UserGroup model) throws BusinessException;
 

@@ -26,20 +26,20 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	private ModelService modelService;
 
 	@Override
-	public Page<AuditorDto> findDtoPage(Specification<AuditorDto> findByCriteria, PageRequest pageable) throws Exception {
-		Page<Auditor> page = modelService.findEntityPage(findByCriteria, pageable, Auditor.class);
+	public Page<AuditorDto> findPage(Specification<AuditorDto> specification, PageRequest pageable) throws Exception {
+		Page<Auditor> page = modelService.findEntityPage(specification, pageable, Auditor.class);
 		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class);
 		return new PageImpl<AuditorDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
 	@Override
-	public AuditorDto findOneDtoByUuid(UUID uuid) throws Exception {
+	public AuditorDto findOneByUuid(UUID uuid) throws Exception {
 		Auditor entity = modelService.findOneEntityByUuid(uuid, Auditor.class);
 		return modelService.getDto(entity, AuditorDto.class);
 	}
 
 	@Override
-	public AuditorDto findOneDtoByProperties(Map<String, Object> properties) throws Exception {
+	public AuditorDto findOneByProperties(Map<String, Object> properties) throws Exception {
 		Auditor entity = modelService.findOneEntityByProperties(properties, AuditorDto.class);
 		return modelService.getDto(entity, AuditorDto.class);
 	}

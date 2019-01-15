@@ -8,6 +8,6 @@ public interface AuditorService {
 
 	public Auditor create() throws Exception;
 
-	Auditor saveDto(User model) throws BusinessException;
+	Auditor saveUser(User model) throws BusinessException;
 
 }

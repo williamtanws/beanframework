@@ -73,6 +73,8 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="sort" th:text="#{module.language.sort}"></label>
@@ -109,6 +111,9 @@
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
 		        $('#update-form').validate({
+		        	onkeyup: function(element) {
+		                this.element(element);
+		            },
 		        	onfocusout: false,
 		            invalidHandler: function(form, validator) {
 		                var errors = validator.numberOfInvalids();
@@ -150,6 +155,17 @@
 		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
 		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
 		                });
+		            },
+		            unhighlight: function(element) {
+		                /* $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').find('.help-block').html('');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+	                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','');
+	                    
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
+		                }); */
 		            },
 		            errorPlacement: function(error, element) {
 		                element.closest('.form-group').find('.help-block').html(error.text());

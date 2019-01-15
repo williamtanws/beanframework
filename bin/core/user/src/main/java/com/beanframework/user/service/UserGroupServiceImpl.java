@@ -24,8 +24,8 @@ public class UserGroupServiceImpl implements UserGroupService {
 	}
 
 	@Override
-	public List<UserGroup> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findDtoByPropertiesAndSorts(null, sorts, null, null, UserGroup.class);
+	public List<UserGroup> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findCachedEntityByPropertiesAndSorts(null, sorts, null, null, UserGroup.class);
 	}
 
 	@Override

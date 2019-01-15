@@ -25,7 +25,6 @@ import com.beanframework.backoffice.data.AuditorSearch;
 import com.beanframework.backoffice.data.AuditorSpecification;
 import com.beanframework.backoffice.facade.AuditorFacade;
 import com.beanframework.common.controller.AbstractController;
-import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.utils.ParamUtils;
 
 @Controller
@@ -58,11 +57,11 @@ public class AuditorController extends AbstractController {
 
 		if (properties == null) {
 			properties = new String[1];
-			properties[0] = Auditor.CREATED_DATE;
+			properties[0] = AuditorDto.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<AuditorDto> pagination = auditorFacade.findDtoPage(AuditorSpecification.findByCriteria(auditorSearch),
+		Page<AuditorDto> pagination = auditorFacade.findPage(AuditorSpecification.findByCriteria(auditorSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
@@ -72,8 +71,8 @@ public class AuditorController extends AbstractController {
 	}
 
 	@ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE)
-	public Auditor populateAuditorForm(HttpServletRequest request) throws Exception {
-		return new Auditor();
+	public AuditorDto populateAuditorForm(HttpServletRequest request) throws Exception {
+		return new AuditorDto();
 	}
 
 	@ModelAttribute(AuditorWebConstants.ModelAttribute.SEARCH)
@@ -83,14 +82,14 @@ public class AuditorController extends AbstractController {
 
 	@GetMapping(value = AuditorWebConstants.Path.LANGUAGE)
 	public String list(@ModelAttribute(AuditorWebConstants.ModelAttribute.SEARCH) AuditorSearch auditorSearch,
-			@ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE) Auditor auditorUpdate, Model model,
+			@ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE) AuditorDto auditorUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(auditorSearch, model, requestParams));
 
 		if (auditorUpdate.getUuid() != null) {
 
-			AuditorDto existingAuditor = auditorFacade.findOneDtoByUuid(auditorUpdate.getUuid());
+			AuditorDto existingAuditor = auditorFacade.findOneByUuid(auditorUpdate.getUuid());
 			
 			List<Object[]> revisions = auditorFacade.findHistoryByUuid(auditorUpdate.getUuid(), null, null);
 			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);

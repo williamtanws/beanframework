@@ -17,8 +17,9 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,8 @@ import com.beanframework.user.domain.UserGroup;
 
 @Service
 public class MenuServiceImpl implements MenuService {
+	
+	public static final String CACHE_MENU_NAVIGATION = "MenuNavigation";
 
 	@Autowired
 	private ModelService modelService;
@@ -116,7 +119,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<Menu> findDtoMenuTree() throws Exception {
+	public List<Menu> findEntityMenuTree() throws Exception {
 
 		// Find all root parents
 		Specification<Menu> spec = new Specification<Menu>() {
@@ -137,8 +140,6 @@ public class MenuServiceImpl implements MenuService {
 		List<Menu> menuTree = menuRepository.findAll(spec);
 
 		initializeChilds(menuTree);
-
-		menuTree = modelService.getDto(menuTree, Menu.class);
 
 		return menuTree;
 	}
@@ -176,50 +177,42 @@ public class MenuServiceImpl implements MenuService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<Menu> findDtoMenuTreeByCurrentUser() throws Exception {
+	public List<Menu> findEntityMenuTreeByCurrentUser(List<Menu> cachedMenuTree) throws Exception {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		User user = (User) auth.getPrincipal();
 
-		List<Menu> menuTree = modelService.getDto(findMenuTreeCached(), Menu.class);
-		filterMenuNavigation(menuTree, collectUserGroupUuid(user.getUserGroups()));
+		filterMenuNavigation(cachedMenuTree, collectUserGroupUuid(user.getUserGroups()));
 
-		return menuTree;
+		return cachedMenuTree;
 	}
 
-	@SuppressWarnings("unchecked")
-	private List<Menu> findMenuTreeCached() throws Exception {
+	@Cacheable(CACHE_MENU_NAVIGATION)
+	@Override
+	public List<Menu> findCachedMenuTree() throws Exception {
 
-		ValueWrapper valueWrapper = cacheManager.getCache(Menu.class.getName()).get("MenuTree");
-		if (valueWrapper == null) {
+		// Find all root parents
+		Specification<Menu> spec = new Specification<Menu>() {
+			private static final long serialVersionUID = 1L;
 
-			// Find all root parents
-			Specification<Menu> spec = new Specification<Menu>() {
-				private static final long serialVersionUID = 1L;
+			@Override
+			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-				@Override
-				public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicates = new ArrayList<Predicate>();
 
-					List<Predicate> predicates = new ArrayList<Predicate>();
+				predicates.add(cb.and(root.get(Menu.PARENT).isNull()));
 
-					predicates.add(cb.and(root.get(Menu.PARENT).isNull()));
+				query.orderBy(cb.asc(root.get(Menu.SORT)));
 
-					query.orderBy(cb.asc(root.get(Menu.SORT)));
+				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+			}
+		};
+		List<Menu> menuTree = menuRepository.findAll(spec);
 
-					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-				}
-			};
-			List<Menu> menuTree = menuRepository.findAll(spec);
+		initializeChilds(menuTree);
 
-			initializeChilds(menuTree);
-
-			cacheManager.getCache(Menu.class.getName()).put("MenuTree", menuTree);
-
-			return menuTree;
-		} else {
-			return (List<Menu>) valueWrapper.get();
-		}
+		return menuTree;
 	}
 
 	private Set<UUID> collectUserGroupUuid(List<UserGroup> userGroups) {
@@ -257,6 +250,7 @@ public class MenuServiceImpl implements MenuService {
 		}
 	}
 
+	@CacheEvict(value=CACHE_MENU_NAVIGATION, allEntries = true)
 	@Override
 	public void delete(UUID uuid) throws Exception {
 		modelService.deleteByUuid(uuid, Menu.class);
@@ -267,11 +261,14 @@ public class MenuServiceImpl implements MenuService {
 		return modelService.create(Menu.class);
 	}
 
+	@CacheEvict(value=CACHE_MENU_NAVIGATION, allEntries = true)
 	@Override
 	public Menu saveEntity(Menu model) throws BusinessException {
-		return (Menu) modelService.saveEntity(model, Menu.class);
+		Menu entity = (Menu) modelService.saveEntity(model, Menu.class);
+		return entity;
 	}
 
+	@CacheEvict(value=CACHE_MENU_NAVIGATION, allEntries = true)
 	@Override
 	public void deleteById(String id) throws BusinessException {
 

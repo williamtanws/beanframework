@@ -21,5 +21,7 @@ public interface EmailService {
 
 	Email create() throws Exception;
 
-	Email findOneDtoByProperties(Map<String, Object> properties) throws Exception;
+	Email findOneEntityByProperties(Map<String, Object> properties) throws Exception;
+
+	Email saveEntity(Email model) throws BusinessException;
 }

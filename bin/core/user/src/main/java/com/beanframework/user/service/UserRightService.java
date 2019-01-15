@@ -12,7 +12,7 @@ public interface UserRightService {
 
 	UserRight create() throws Exception;
 
-	List<UserRight> findDtoBySorts(Map<String, Direction> sorts) throws Exception;
+	List<UserRight> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	UserRight saveEntity(UserRight model) throws BusinessException;
 

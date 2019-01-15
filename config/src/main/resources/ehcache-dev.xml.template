@@ -5,6 +5,9 @@
 	<defaultCache maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
+	<cache name="com.beanframework.common.domain.Auditor" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
 	<cache name="com.beanframework.admin.domain.Admin" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
@@ -20,7 +23,7 @@
 	<cache name="com.beanframework.menu.domain.MenuField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 
-	<cache name="com.beanframework.menu.domain.MenuNavigation" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+	<cache name="MenuNavigation" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
 	<cache name="com.beanframework.configuration.domain.Configuration" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
@@ -33,6 +36,9 @@
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
 	<cache name="com.beanframework.dynamicfield.domain.DynamicField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="com.beanframework.dynamicfield.domain.DynamicFieldEnumValue" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 		
 	<cache name="com.beanframework.email.domain.Email" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
@@ -67,4 +73,23 @@
 		
 	<cache name="com.beanframework.user.domain.UserAuthority" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="com.beanframework.ppm.domain.PpmProject" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="com.beanframework.ppm.domain.PpmProjectField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="com.beanframework.ppm.domain.PpmInstruction" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
+		<cache name="com.beanframework.ppm.domain.PpmInstructionField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="com.beanframework.ppm.domain.PpmProjectTemplate" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
+	<cache name="com.beanframework.ppm.domain.PpmInstructionTemplate" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+		
 </ehcache>

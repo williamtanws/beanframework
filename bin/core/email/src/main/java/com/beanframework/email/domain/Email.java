@@ -1,7 +1,5 @@
 package com.beanframework.email.domain;
 
-import java.io.File;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -9,7 +7,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -37,7 +34,6 @@ public class Email extends GenericEntity {
 	public static final String SUBJECT = "subject";
 	public static final String TEXT = "text";
 	public static final String HTML = "html";
-	public static final String ATTACHMENTS = "attachments";
 	public static final String STATUS = "status";
 	public static final String RESULT = "result";
 	public static final String MESSAGE = "message";
@@ -77,9 +73,6 @@ public class Email extends GenericEntity {
 	@Lob
 	@Column(length = 100000)
 	private String message;
-
-	@Transient
-	private File[] attachments;
 
 	public String getName() {
 		return name;
@@ -160,13 +153,4 @@ public class Email extends GenericEntity {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
-	public File[] getAttachments() {
-		return attachments;
-	}
-
-	public void setAttachments(File[] attachments) {
-		this.attachments = attachments;
-	}
-
 }

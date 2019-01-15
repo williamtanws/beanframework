@@ -78,6 +78,8 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="target" th:text="#{module.menu.target}"></label>
@@ -93,6 +95,18 @@
 											<div class="form-group">
 												<label for="icon" th:text="#{module.menu.icon}"></label>
 												<input type="text" class="form-control" name="icon" th:value="*{icon}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="active" th:text="#{module.menu.enabled}"></label>
+												<select class="form-control" name="enabled">
+													<option value="1" th:selected="*{uuid != null} ? *{enabled == true} : true" th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="*{uuid != null} ? *{enabled == false} : false" th:text="#{module.backoffice.no}"></option>
+												</select>
 												<span class="help-block"></span>
 											</div>
 										</div>

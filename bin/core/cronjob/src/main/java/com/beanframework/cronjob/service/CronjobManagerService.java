@@ -13,8 +13,6 @@ public interface CronjobManagerService {
 	
 	void initCronJob() throws Exception;
 
-	void trigger(Cronjob cronjob) throws Exception;
-
 	void deleteJobByUuid(UUID uuid) throws BusinessException;
 
 	Cronjob findByUuid(UUID uuid) throws Exception;
@@ -22,4 +20,6 @@ public interface CronjobManagerService {
 	void stopAllCronjob() throws SchedulerException;
 	
 	void resumeAllCronjob() throws Exception;
+
+	void updateJobAndSaveTrigger(Cronjob cronjob) throws Exception;
 }

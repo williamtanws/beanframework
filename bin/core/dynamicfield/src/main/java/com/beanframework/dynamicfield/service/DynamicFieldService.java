@@ -16,5 +16,5 @@ public interface DynamicFieldService {
 
 	void deleteById(String id) throws BusinessException;
 
-	List<DynamicField> findDtoBySorts(Map<String, Direction> sorts) throws Exception;
+	List<DynamicField> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 }

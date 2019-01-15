@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.user.domain.UserPermission;
 
 public class UserPermissionSpecification extends AbstractSpecification {
-	public static Specification<UserPermission> findByCriteria(final UserPermissionSearch data) {
+	public static Specification<UserPermissionDto> findByCriteria(final UserPermissionSearch data) {
 
-		return new Specification<UserPermission>() {
+		return new Specification<UserPermissionDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class UserPermissionSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = -6451054614872238142L;
 
 			@Override
-			public Predicate toPredicate(Root<UserPermission> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<UserPermissionDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class UserPermissionSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<UserPermission> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String name, Root<UserPermissionDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotBlank(id)) {
 			predicates.add(cb.or(cb.like(root.get(UserPermission.ID), convertToPattern(id))));
 		}

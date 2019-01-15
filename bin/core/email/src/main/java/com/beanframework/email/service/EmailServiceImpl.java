@@ -89,7 +89,12 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public Email findOneDtoByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneDtoByProperties(properties, Email.class);
+	public Email findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneEntityByProperties(properties, Email.class);
+	}
+
+	@Override
+	public Email saveEntity(Email model) throws BusinessException {
+		return (Email) modelService.saveEntity(model, Email.class);
 	}
 }

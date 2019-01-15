@@ -6,6 +6,13 @@ import java.util.UUID;
 import com.beanframework.common.domain.Auditor;
 
 public class GenericDto {
+	public static final String UUID = "uuid";
+	public static final String ID = "id";
+	public static final String CREATED_DATE = "createdDate";
+	public static final String CREATED_BY = "createdBy";
+	public static final String LAST_MODIFIED_DATE = "lastModifiedDate";
+	public static final String LAST_MODIFIED_BY = "lastModifiedBy";
+
 	private UUID uuid;
 	private String id;
 	private Date createdDate;
@@ -59,6 +66,11 @@ public class GenericDto {
 
 	public void setLastModifiedBy(Auditor lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
+	}
+	
+	@Override
+	public String toString() {
+		return "ID: " + id;
 	}
 
 	@Override

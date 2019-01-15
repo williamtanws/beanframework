@@ -209,13 +209,13 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof EntityConverter) {
 				EntityConverter interceptor = (EntityConverter) interceptorMapping.getConverter();
-				if (interceptorMapping.getTypeCode().equals(model.getClass().getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
 					return interceptor.convert(model);
 				}
 			}
 		}
 
-		throw new ConverterException("Cannot find any entity convert to convert target model: " + model.getClass());
+		throw new ConverterException("Cannot find any entity convert to convert target model: " + modelClass.getSimpleName());
 	}
 
 	protected <T extends Collection> T dtoConverter(Collection models, Class modelClass) throws ConverterException, InterceptorException {
@@ -228,7 +228,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 			return (T) listModels;
 		}
-		throw new ConverterException("Cannot find available models type to convert target model: " + modelClass);
+		throw new ConverterException("Cannot find available models type to convert target model: " + modelClass.getSimpleName());
 	}
 
 	protected Object dtoConverter(Object model, Class modelClass) throws ConverterException {
@@ -241,7 +241,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		throw new ConverterException("Cannot find any dto convert to convert target model: " + modelClass);
+		throw new ConverterException("Cannot find any dto convert to convert target model: " + modelClass.getSimpleName());
 	}
 
 	protected <T> Page<T> page(@Nullable Specification spec, Pageable pageable, Class modelClass) {

@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
@@ -34,7 +33,10 @@ import com.beanframework.user.domain.UserGroup;
 @Table(name = MenuConstants.Table.MENU)
 public class Menu extends GenericEntity {
 
-	private static final long serialVersionUID = 8293422057240349702L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -443408642731245353L;
 	public static final String NAME = "name";
 	public static final String SORT = "sort";
 	public static final String DESCRIPTION = "description";
@@ -48,7 +50,7 @@ public class Menu extends GenericEntity {
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_GROUPS_UUID = "userGroups.uuid";
 	public static final String FIELDS = "fields";
-	
+
 	@Audited(withModifiedFlag = true)
 	private String name;
 
@@ -91,11 +93,6 @@ public class Menu extends GenericEntity {
 	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy(MenuField.DYNAMIC_FIELD)
 	private List<MenuField> fields = new ArrayList<MenuField>();
-
-	
-
-	@Transient
-	private Boolean active;
 
 	public String getName() {
 		return name;
@@ -176,13 +173,4 @@ public class Menu extends GenericEntity {
 	public void setFields(List<MenuField> fields) {
 		this.fields = fields;
 	}
-
-	public Boolean getActive() {
-		return active;
-	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
-
 }

@@ -47,24 +47,18 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		// Retrieve navigation tree by user group
 		if (auth != null && auth.getPrincipal() instanceof Employee && modelAndView != null) {
-			Employee employee = (Employee) auth.getPrincipal();
 
-			getMenuNavigation(request, modelAndView, employee);
+			getMenuNavigation(request, modelAndView);
 
 			getLanguage(modelAndView);
 		}
 	}
 
-	protected void getMenuNavigation(HttpServletRequest request, ModelAndView modelAndView, Employee employee) throws BusinessException {
+	protected void getMenuNavigation(HttpServletRequest request, ModelAndView modelAndView) throws BusinessException {
 		try {
-			if (employee.getUserGroups().isEmpty() == false) {
-
-				List<Menu> menuNavigation = menuService.findDtoMenuTreeByCurrentUser();
-				modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MENU_NAVIGATION, menuNavigation);
-
-			}
+			List<Menu> menuNavigation = menuService.findEntityMenuTreeByCurrentUser(menuService.findCachedMenuTree());
+			modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MENU_NAVIGATION, menuNavigation);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -75,7 +69,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 			sorts.put(Language.SORT, Sort.Direction.ASC);
 
-			List<Language> languages = languageService.findDtoBySorts(sorts);
+			List<Language> languages = languageService.findEntityBySorts(sorts);
 			modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MODULE_LANGUAGES, languages);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);

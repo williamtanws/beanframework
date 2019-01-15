@@ -18,13 +18,13 @@ public interface AuditorFacade {
 	}
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public Page<AuditorDto> findDtoPage(Specification<AuditorDto> specification, PageRequest pageable) throws Exception;
+	public Page<AuditorDto> findPage(Specification<AuditorDto> specification, PageRequest pageable) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public AuditorDto findOneDtoByUuid(UUID uuid) throws Exception;
+	public AuditorDto findOneByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public AuditorDto findOneDtoByProperties(Map<String, Object> properties) throws Exception;
+	public AuditorDto findOneByProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;

@@ -1,9 +1,7 @@
 package com.beanframework.user.domain;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -17,14 +15,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserConstants;
@@ -48,23 +44,23 @@ public abstract class User extends GenericEntity {
 	public static final String NAME = "name";
 
 	private static final long serialVersionUID = -7444894280894062710L;
-	
-	@Audited(withModifiedFlag=true)
+
+	@Audited(withModifiedFlag = true)
 	private String password;
-	
-	@Audited(withModifiedFlag=true)
+
+	@Audited(withModifiedFlag = true)
 	private Boolean accountNonExpired;
-	
-	@Audited(withModifiedFlag=true)
+
+	@Audited(withModifiedFlag = true)
 	private Boolean accountNonLocked;
-	
-	@Audited(withModifiedFlag=true)
+
+	@Audited(withModifiedFlag = true)
 	private Boolean credentialsNonExpired;
-	
-	@Audited(withModifiedFlag=true)
+
+	@Audited(withModifiedFlag = true)
 	private Boolean enabled;
-	
-	@Audited(withModifiedFlag=true)
+
+	@Audited(withModifiedFlag = true)
 	private String name;
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
@@ -77,9 +73,6 @@ public abstract class User extends GenericEntity {
 	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy(UserField.DYNAMIC_FIELD)
 	private List<UserField> fields = new ArrayList<UserField>();
-
-	@Transient
-	private Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
 	public String getPassword() {
 		return password;
@@ -135,14 +128,6 @@ public abstract class User extends GenericEntity {
 
 	public void setFields(List<UserField> fields) {
 		this.fields = fields;
-	}
-
-	public Set<GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
-
-	public void setAuthorities(Set<GrantedAuthority> authorities) {
-		this.authorities = authorities;
 	}
 
 	public String getName() {

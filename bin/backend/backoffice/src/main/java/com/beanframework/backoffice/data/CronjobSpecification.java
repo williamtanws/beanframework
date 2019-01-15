@@ -17,9 +17,9 @@ import com.beanframework.cronjob.domain.CronjobEnum.Result;
 import com.beanframework.cronjob.domain.CronjobEnum.Status;
 
 public class CronjobSpecification extends AbstractSpecification {
-	public static Specification<Cronjob> findByCriteria(final CronjobSearch data) {
+	public static Specification<CronjobDto> findByCriteria(final CronjobSearch data) {
 
-		return new Specification<Cronjob>() {
+		return new Specification<CronjobDto>() {
 
 			/**
 			 * 
@@ -27,7 +27,7 @@ public class CronjobSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = -7049600737876405604L;
 
 			@Override
-			public Predicate toPredicate(Root<Cronjob> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<CronjobDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -46,7 +46,7 @@ public class CronjobSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String jobClass, String jobName, String JobGroup, Boolean startup, Status status, Result result, Root<Cronjob> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String jobClass, String jobName, String JobGroup, Boolean startup, Status status, Result result, Root<CronjobDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
 			predicates.add(cb.or(cb.like(root.get(Cronjob.ID), convertToPattern(id))));
 		}

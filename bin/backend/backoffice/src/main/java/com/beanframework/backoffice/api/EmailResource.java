@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmailWebConstants;
+import com.beanframework.backoffice.data.EmailDto;
+import com.beanframework.backoffice.facade.EmailFacade;
 import com.beanframework.email.domain.Email;
-import com.beanframework.email.service.EmailFacade;
 
 @RestController
 public class EmailResource {
@@ -29,16 +30,16 @@ public class EmailResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Email.ID, id);
 
-		Email email = emailFacade.findOneDtoByProperties(properties);
+		EmailDto data = emailFacade.findOneByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
-			if (email != null && email.getUuid().equals(uuid)) {
+			if (data != null && data.getUuid().equals(uuid)) {
 				return "true";
 			}
 		}
 
-		return email != null ? "false" : "true";
+		return data != null ? "false" : "true";
 	}
 }

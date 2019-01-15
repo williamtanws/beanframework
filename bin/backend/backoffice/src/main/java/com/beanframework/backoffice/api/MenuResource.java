@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MenuWebConstants;
+import com.beanframework.backoffice.data.MenuDto;
+import com.beanframework.backoffice.data.MenuFieldDto;
 import com.beanframework.backoffice.data.TreeJson;
 import com.beanframework.backoffice.data.TreeJsonState;
+import com.beanframework.backoffice.facade.MenuFacade;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuField;
-import com.beanframework.menu.service.MenuFacade;
 
 @RestController
 public class MenuResource {
@@ -37,27 +38,27 @@ public class MenuResource {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.ID, id);
-		Menu menu = menuFacade.findOneDtoByProperties(properties);
+		MenuDto data = menuFacade.findOneByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
-			if (menu != null && menu.getUuid().equals(uuid)) {
+			if (data != null && data.getUuid().equals(uuid)) {
 				return "true";
 			}
 		}
 
-		return menu != null ? "false" : "true";
+		return data != null ? "false" : "true";
 	}
 
 	@RequestMapping(MenuWebConstants.Path.Api.TREE)
 	public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams) throws BusinessException {
 		String uuid = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 
-		List<Menu> rootMenu = menuFacade.findDtoMenuTree();
+		List<MenuDto> rootMenu = menuFacade.findMenuTree();
 		List<TreeJson> data = new ArrayList<TreeJson>();
 
-		for (Menu menu : rootMenu) {
+		for (MenuDto menu : rootMenu) {
 			if (StringUtils.isNotBlank(uuid)) {
 				data.add(convertToJson(menu, UUID.fromString(uuid)));
 			} else {
@@ -68,7 +69,7 @@ public class MenuResource {
 		return data;
 	}
 
-	public TreeJson convertToJson(Menu menu, UUID selectedUuid) {
+	public TreeJson convertToJson(MenuDto menu, UUID selectedUuid) {
 
 		TreeJson parent = new TreeJson();
 
@@ -85,7 +86,7 @@ public class MenuResource {
 		List<TreeJson> children = new ArrayList<TreeJson>();
 		if (menu.getChilds() != null && menu.getChilds().isEmpty() == false) {
 
-			for (Menu child : menu.getChilds()) {
+			for (MenuDto child : menu.getChilds()) {
 				children.add(convertToJson(child, selectedUuid));
 			}
 		}
@@ -94,11 +95,11 @@ public class MenuResource {
 		return parent;
 	}
 
-	public String convertName(Menu menu) {
+	public String convertName(MenuDto menu) {
 
 		Locale locale = LocaleContextHolder.getLocale();
 
-		for (MenuField menuField : menu.getFields()) {
+		for (MenuFieldDto menuField : menu.getFields()) {
 			if (menuField.getDynamicField().getLanguage().getId().equals(locale.toString())) {
 
 				String name = menuField.getValue();

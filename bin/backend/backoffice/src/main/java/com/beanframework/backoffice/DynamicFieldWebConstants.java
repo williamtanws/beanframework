@@ -10,7 +10,7 @@ public interface DynamicFieldWebConstants {
 			public static final String CHECKID = "${path.api.dynamicfield.checkid}";
 		}
 
-		public static final String LANGUAGE = "${path.dynamicfield}";
+		public static final String DYNAMICFIELD = "${path.dynamicfield}";
 	}
 
 	public interface View {

@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.configuration.domain.Configuration;
 
 public class ConfigurationSpecification extends AbstractSpecification {
-	public static Specification<Configuration> findByCriteria(final ConfigurationSearch data) {
+	public static Specification<ConfigurationDto> findByCriteria(final ConfigurationSearch data) {
 
-		return new Specification<Configuration>() {
+		return new Specification<ConfigurationDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class ConfigurationSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = 3546335730982207838L;
 
 			@Override
-			public Predicate toPredicate(Root<Configuration> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<ConfigurationDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class ConfigurationSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String value, Root<Configuration> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String value, Root<ConfigurationDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
 			predicates.add(cb.or(cb.like(root.get(Configuration.ID), convertToPattern(id))));
 		}

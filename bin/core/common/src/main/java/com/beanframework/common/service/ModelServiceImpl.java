@@ -3,7 +3,6 @@ package com.beanframework.common.service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.repository.ModelRepository;
 
@@ -88,81 +86,16 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> T findOneDtoByUuid(UUID uuid, Class modelClass) throws Exception {
-		Assert.notNull(uuid, "uuid was null");
-		Assert.notNull(modelClass, "modelClass was null");
-
-		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(GenericEntity.UUID, uuid);
-
-			Object model = (T) findOneEntityByProperties(properties, modelClass);
-			loadInterceptor(model, modelClass);
-
-			model = getDto(model, modelClass);
-
-			return (T) model;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception(e.getMessage(), e);
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
 	public <T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
-		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			return (T) findOneByProperties(properties, modelClass, false);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception(e.getMessage(), e);
-		}
-	}
+			Object model = createQuery(properties, null, null, null, null, modelClass).getSingleResult();
 
-	@Transactional(readOnly = true)
-	@Override
-	public <T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
-		Assert.notNull(properties, "properties was null");
-		Assert.notNull(modelClass, "modelClass was null");
-
-		try {
-			return findOneByProperties(properties, modelClass, true);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception(e.getMessage(), e);
-		}
-	}
-
-	@Transactional(readOnly = true)
-	private <T> T findOneByProperties(Map<String, Object> properties, Class modelClass, boolean dto) throws Exception {
-		Assert.notNull(properties, "properties was null");
-		Assert.notNull(modelClass, "modelClass was null");
-
-		try {
-			Object model = getCachedSingleResult(properties, null, null, modelClass);
-
-			if (model == null) {
-				try {
-					model = createQuery(properties, null, null, null, null, modelClass).getSingleResult();
-
-					setCachedSingleResult(properties, null, null, modelClass, model);
-
-				} catch (NoResultException e) {
-					return null;
-				}
-			}
-
-			if (model != null) {
-				loadInterceptor(model, modelClass);
-				if (dto) {
-					model = getDto(model, modelClass);
-				}
-			}
-
+			loadInterceptor(model, modelClass);
 			return (T) model;
+		} catch (NoResultException e) {
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -193,40 +126,29 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
+	public <T extends Collection> T findCachedEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
 			throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			return (T) createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception(e.getMessage(), e);
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public <T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
-			throws Exception {
-		Assert.notNull(modelClass, "modelClass was null");
-
-		try {
-			List<Object> models = getCachedResultList(properties, sorts, null, firstResult, maxResult, modelClass);
+			List<Object> models = getCachedSingleResult(properties, null, null, modelClass);
 
 			if (models == null) {
-				models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
+				try {
+					models = createQuery(properties, null, null, null, null, modelClass).getResultList();
 
-				setCachedResultList(properties, sorts, null, maxResult, modelClass, models);
+					setCachedSingleResult(properties, null, null, modelClass, models);
+
+				} catch (NoResultException e) {
+					return null;
+				}
 			}
 
-			if (models == null || models.isEmpty()) {
-				return (T) new ArrayList<T>();
+			if (models != null) {
+				loadInterceptor(models, modelClass);
 			}
 
-			loadInterceptor(models, modelClass);
-
-			return (T) getDto(models, modelClass);
+			return (T) models;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -236,14 +158,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Transactional(readOnly = true)
 	@Override
 	public <T extends Collection> T findAllEntity(Class modelClass) throws Exception {
-		return findEntityByPropertiesAndSorts(null, null, null, null, modelClass);
-
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public <T extends Collection> T findAllDto(Class modelClass) throws Exception {
-		return findDtoByPropertiesAndSorts(null, null, null, null, modelClass);
+		return findCachedEntityByPropertiesAndSorts(null, null, null, null, modelClass);
 	}
 
 	@Transactional(readOnly = true)
@@ -283,8 +198,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				loadInterceptor(i.next(), modelClass);
 			}
 
-//			List<T> content = getDto(page.getContent(), modelClass);
-//			PageImpl<T> pageImpl = new PageImpl<T>(content, page.getPageable(), page.getTotalElements());
 			PageImpl<T> pageImpl = new PageImpl<T>(page.getContent(), page.getPageable(), page.getTotalElements());
 
 			return pageImpl;
@@ -304,25 +217,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public Object saveEntity(Object model, Class modelClass) throws BusinessException {
 
 		try {
-			prepareInterceptor(model, modelClass);
-			validateInterceptor(model, modelClass);
-			modelRepository.save(model);
-
-			clearCache(modelClass);
-
-			return model;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-
-	@Transactional(rollbackFor = BusinessException.class)
-	@Override
-	public Object saveDto(Object model, Class modelClass) throws BusinessException {
-
-		try {
-			model = entityConverter(model, modelClass);
 			prepareInterceptor(model, modelClass);
 			validateInterceptor(model, modelClass);
 			modelRepository.save(model);
@@ -386,7 +280,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public void deleteAll(Class modelClass) throws BusinessException {
 		try {
-			List<Object> models = findEntityByPropertiesAndSorts(null, null, null, null, modelClass);
+			List<Object> models = findCachedEntityByPropertiesAndSorts(null, null, null, null, modelClass);
 			for (Object model : models) {
 				deleteEntity(model);
 			}
@@ -470,5 +364,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public void clearCache(Class modelClass) {
 		cacheManager.getCache(modelClass.getName()).clear();
+	}
+	
+	@Override
+	public void clearCache(String name) {
+		cacheManager.getCache(name).clear();
 	}
 }

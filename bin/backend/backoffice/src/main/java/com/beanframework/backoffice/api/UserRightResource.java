@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserRightWebConstants;
+import com.beanframework.backoffice.data.UserRightDto;
 import com.beanframework.backoffice.facade.UserRightFacade;
 import com.beanframework.user.domain.UserRight;
 
@@ -30,16 +31,16 @@ public class UserRightResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(UserRight.ID, id);
 
-		UserRight userRight = userRightFacade.findOneDtoByProperties(properties);
+		UserRightDto data = userRightFacade.findOneByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
-			if (userRight != null && userRight.getUuid().equals(uuid)) {
+			if (data != null && data.getUuid().equals(uuid)) {
 				return "true";
 			}
 		}
 
-		return userRight != null ? "false" : "true";
+		return data != null ? "false" : "true";
 	}
 }

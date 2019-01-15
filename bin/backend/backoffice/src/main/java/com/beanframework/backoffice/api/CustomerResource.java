@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CustomerWebConstants;
+import com.beanframework.backoffice.data.CustomerDto;
+import com.beanframework.backoffice.facade.CustomerFacade;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerFacade;
 
 @RestController
 public class CustomerResource {
@@ -29,16 +30,16 @@ public class CustomerResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Customer.ID, id);
 
-		Customer customer = customerFacade.findOneDtoByProperties(properties);
+		CustomerDto data = customerFacade.findOneByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
-			if (customer != null && customer.getUuid().equals(uuid)) {
+			if (data != null && data.getUuid().equals(uuid)) {
 				return "true";
 			}
 		}
 
-		return customer != null ? "false" : "true";
+		return data != null ? "false" : "true";
 	}
 }

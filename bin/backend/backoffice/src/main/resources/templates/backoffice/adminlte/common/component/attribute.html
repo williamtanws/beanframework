@@ -15,6 +15,7 @@
 					</th:block>
 					<th:block th:if="${field.dynamicField.fieldType == T(com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum).SELECT}">
 						<select class="form-control select2" th:name="'fields['+${itrStat.index}+'].value'" style="width: 100%;" th:required="${field.dynamicField.required}">
+							<option></option>
 							<option th:each="fieldValue : ${field.dynamicField.values}" th:value="${fieldValue.value}" th:text="${fieldValue.value}" th:selected="${fieldValue.value} == ${field.value}"></option>
 						</select>
 					</th:block>
