@@ -24,8 +24,8 @@ public class UserRightServiceImpl implements UserRightService {
 	}
 
 	@Override
-	public List<UserRight> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findDtoByPropertiesAndSorts(null, sorts, null, null, UserRight.class);
+	public List<UserRight> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findCachedEntityByPropertiesAndSorts(null, sorts, null, null, UserRight.class);
 	}
 
 	@Override

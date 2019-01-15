@@ -12,7 +12,7 @@ public interface UserPermissionService {
 
 	UserPermission create() throws Exception;
 
-	List<UserPermission> findDtoBySorts(Map<String, Direction> sorts) throws Exception;
+	List<UserPermission> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	UserPermission saveEntity(UserPermission model) throws BusinessException;
 

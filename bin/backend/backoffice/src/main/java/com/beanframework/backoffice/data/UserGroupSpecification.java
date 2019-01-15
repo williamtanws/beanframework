@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.user.domain.UserGroup;
 
 public class UserGroupSpecification extends AbstractSpecification {
-	public static Specification<UserGroup> findByCriteria(final UserGroupSearch data) {
+	public static Specification<UserGroupDto> findByCriteria(final UserGroupSearch data) {
 
-		return new Specification<UserGroup>() {
+		return new Specification<UserGroupDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class UserGroupSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = -6451054614872238142L;
 
 			@Override
-			public Predicate toPredicate(Root<UserGroup> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<UserGroupDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class UserGroupSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<UserGroup> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String name, Root<UserGroupDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotBlank(id)) {
 			predicates.add(cb.or(cb.like(root.get(UserGroup.ID), convertToPattern(id))));
 		}

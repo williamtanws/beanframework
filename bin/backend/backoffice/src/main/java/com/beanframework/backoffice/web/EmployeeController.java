@@ -1,7 +1,6 @@
 package com.beanframework.backoffice.web;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,17 +25,17 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
+import com.beanframework.backoffice.data.EmployeeDto;
 import com.beanframework.backoffice.data.EmployeeSearch;
 import com.beanframework.backoffice.data.EmployeeSpecification;
+import com.beanframework.backoffice.data.UserGroupDto;
+import com.beanframework.backoffice.facade.EmployeeFacade;
+import com.beanframework.backoffice.facade.UserGroupFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
-import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeFacade;
 import com.beanframework.employee.service.EmployeeService;
-import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupService;
 
 @Controller
 public class EmployeeController extends AbstractController {
@@ -48,7 +47,7 @@ public class EmployeeController extends AbstractController {
 	private EmployeeService employeeService;
 
 	@Autowired
-	private UserGroupService userGroupService;
+	private UserGroupFacade userGroupFacade;
 
 	@Value(EmployeeWebConstants.Path.EMPLOYEE)
 	private String PATH_EMPLOYEE;
@@ -59,7 +58,7 @@ public class EmployeeController extends AbstractController {
 	@Value(EmployeeWebConstants.LIST_SIZE)
 	private int MODULE_EMPLOYEE_LIST_SIZE;
 
-	private Page<Employee> getPagination(EmployeeSearch employeeSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<EmployeeDto> getPagination(EmployeeSearch employeeSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
@@ -73,11 +72,11 @@ public class EmployeeController extends AbstractController {
 
 		if (properties == null) {
 			properties = new String[1];
-			properties[0] = Employee.CREATED_DATE;
+			properties[0] = EmployeeDto.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Employee> pagination = employeeFacade.findPage(EmployeeSpecification.findByCriteria(employeeSearch),
+		Page<EmployeeDto> pagination = employeeFacade.findPage(EmployeeSpecification.findByCriteria(employeeSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
@@ -110,13 +109,13 @@ public class EmployeeController extends AbstractController {
 	}
 
 	@ModelAttribute(EmployeeWebConstants.ModelAttribute.CREATE)
-	public Employee populateEmployeeCreate(HttpServletRequest request) throws Exception {
-		return new Employee();
+	public EmployeeDto populateEmployeeCreate(HttpServletRequest request) throws Exception {
+		return new EmployeeDto();
 	}
 
 	@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE)
-	public Employee populateEmployeeForm(HttpServletRequest request) throws Exception {
-		return new Employee();
+	public EmployeeDto populateEmployeeForm(HttpServletRequest request) throws Exception {
+		return new EmployeeDto();
 	}
 
 	@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH)
@@ -125,24 +124,21 @@ public class EmployeeController extends AbstractController {
 	}
 
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
-	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch, @ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) Employee employeeUpdate,
+	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch, @ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) EmployeeDto employeeUpdate,
 			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(employeeSearch, model, requestParams));
 
 		if (employeeUpdate.getUuid() != null) {
 
-			Employee existingEmployee = employeeFacade.findOneDtoByUuid(employeeUpdate.getUuid());
+			EmployeeDto existingEmployee = employeeFacade.findOneByUuid(employeeUpdate.getUuid());
 
 			if (existingEmployee != null) {
 
-				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
-
-				List<UserGroup> userGroups = userGroupService.findDtoBySorts(sorts);
+				List<UserGroupDto> userGroups = userGroupFacade.findAllDtoUserGroups();
 
 				for (int i = 0; i < userGroups.size(); i++) {
-					for (UserGroup userGroup : existingEmployee.getUserGroups()) {
+					for (UserGroupDto userGroup : existingEmployee.getUserGroups()) {
 						if (userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
 							userGroups.get(i).setSelected("true");
 						}
@@ -168,7 +164,7 @@ public class EmployeeController extends AbstractController {
 
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
 	public RedirectView create(@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
-			@ModelAttribute(EmployeeWebConstants.ModelAttribute.CREATE) Employee employeeCreate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.CREATE) EmployeeDto employeeCreate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (employeeCreate.getUuid() != null) {
@@ -176,15 +172,15 @@ public class EmployeeController extends AbstractController {
 		} else {
 
 			try {
-				employeeCreate = employeeFacade.createDto(employeeCreate);
+				employeeCreate = employeeFacade.create(employeeCreate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(EmployeeDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(Employee.UUID, employeeCreate.getUuid());
+		redirectAttributes.addAttribute(EmployeeDto.UUID, employeeCreate.getUuid());
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, employeeSearch);
 
 		RedirectView redirectView = new RedirectView();
@@ -195,15 +191,15 @@ public class EmployeeController extends AbstractController {
 
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "update")
 	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
-			@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) EmployeeDto employeeUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (employeeUpdate.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
-			List<UserGroup> userGroups = new ArrayList<UserGroup>();
-			for (UserGroup userGroup : employeeUpdate.getUserGroups()) {
+			List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
+			for (UserGroupDto userGroup : employeeUpdate.getUserGroups()) {
 				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
 					userGroups.add(userGroup);
 				}
@@ -211,16 +207,16 @@ public class EmployeeController extends AbstractController {
 			employeeUpdate.setUserGroups(userGroups);
 
 			try {
-				employeeUpdate = employeeFacade.updateDto(employeeUpdate);
+				employeeUpdate = employeeFacade.update(employeeUpdate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(EmployeeDto.class, e.getMessage(), bindingResult, redirectAttributes);
 
 			}
 		}
 
-		redirectAttributes.addAttribute(Employee.UUID, employeeUpdate.getUuid());
+		redirectAttributes.addAttribute(EmployeeDto.UUID, employeeUpdate.getUuid());
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, employeeSearch);
 
 		RedirectView redirectView = new RedirectView();
@@ -231,7 +227,7 @@ public class EmployeeController extends AbstractController {
 
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "delete")
 	public RedirectView delete(@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
-			@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) Employee employeeUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) EmployeeDto employeeUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
@@ -240,7 +236,7 @@ public class EmployeeController extends AbstractController {
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
-			addErrorMessage(Employee.class, e.getMessage(), bindingResult, redirectAttributes);
+			addErrorMessage(EmployeeDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(EmployeeWebConstants.ModelAttribute.UPDATE, employeeUpdate);
 		}
 

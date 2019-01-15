@@ -15,20 +15,8 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.context.AutowiringSpringBeanJobFactory;
-import com.beanframework.cronjob.converter.DtoCronjobConverter;
-import com.beanframework.cronjob.converter.DtoCronjobDataConverter;
-import com.beanframework.cronjob.converter.EntityCronjobConverter;
-import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.domain.CronjobData;
-import com.beanframework.cronjob.interceptor.CronjobInitialDefaultsInterceptor;
-import com.beanframework.cronjob.interceptor.CronjobLoadInterceptor;
-import com.beanframework.cronjob.interceptor.CronjobPrepareInterceptor;
-import com.beanframework.cronjob.interceptor.CronjobRemoveInterceptor;
-import com.beanframework.cronjob.interceptor.CronjobValidateInterceptor;
 import com.beanframework.cronjob.listener.CronjobGlobalListener;
 
 @Configuration
@@ -84,115 +72,4 @@ public class CronjobConfig {
 		return schedulerFactory;
 	}
 
-	@Bean
-	public DtoCronjobConverter dtoCronjobConverter() {
-		return new DtoCronjobConverter();
-	}
-
-	@Bean
-	public ConverterMapping dtoCronjobConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoCronjobConverter());
-		mapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return mapping;
-	}
-
-	@Bean
-	public DtoCronjobDataConverter dtoCronjobDataConverter() {
-		return new DtoCronjobDataConverter();
-	}
-
-	@Bean
-	public ConverterMapping dtoCronjobDataConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoCronjobDataConverter());
-		mapping.setTypeCode(CronjobData.class.getSimpleName());
-
-		return mapping;
-	}
-
-	@Bean
-	public EntityCronjobConverter entityCronjobConverter() {
-		return new EntityCronjobConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCronjobConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCronjobConverter());
-		mapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return mapping;
-	}
-
-	@Bean
-	public CronjobInitialDefaultsInterceptor cronjobInitialDefaultsInterceptor() {
-		return new CronjobInitialDefaultsInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping cronjobInitialDefaultsInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobInitialDefaultsInterceptor());
-		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public CronjobValidateInterceptor cronjobValidateInterceptor() {
-		return new CronjobValidateInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping cronjobValidateInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobValidateInterceptor());
-		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public CronjobPrepareInterceptor cronjobPrepareInterceptor() {
-		return new CronjobPrepareInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping cronjobPrepareInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobPrepareInterceptor());
-		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public CronjobLoadInterceptor cronjobLoadInterceptor() {
-		return new CronjobLoadInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping cronjobLoadInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobLoadInterceptor());
-		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public CronjobRemoveInterceptor cronjobRemoveInterceptor() {
-		return new CronjobRemoveInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping cronjobRemoveInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobRemoveInterceptor());
-		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return interceptorMapping;
-	}
 }

@@ -23,7 +23,7 @@ public class AuditorServiceImpl implements AuditorService {
 	}
 
 	@Override
-	public Auditor saveDto(User user) throws BusinessException {
+	public Auditor saveUser(User user) throws BusinessException {
 		try {
 			Auditor auditor = modelService.findOneEntityByUuid(user.getUuid(), Auditor.class);
 

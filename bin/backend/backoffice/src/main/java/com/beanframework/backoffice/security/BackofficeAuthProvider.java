@@ -1,5 +1,8 @@
 package com.beanframework.backoffice.security;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,17 +51,17 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String id = authentication.getName();
 		String password = (String) authentication.getCredentials();
-		
-		if(StringUtils.stripToNull(id) == null || StringUtils.stripToNull(id) == "" ) {
+
+		if (StringUtils.stripToNull(id) == null) {
 			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		}
-		if(StringUtils.stripToNull(password) == null || StringUtils.stripToNull(password) == "" ) {
+		if (StringUtils.stripToNull(password) == null) {
 			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		}
 
 		Employee employee;
 		try {
-			employee = employeeService.findDtoAuthenticate(id, password);
+			employee = employeeService.findAuthenticate(id, password);
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		} catch (DisabledException e) {
@@ -73,24 +76,17 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 			e.printStackTrace();
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
+		
+		Set<GrantedAuthority> authorities = employeeService.getAuthorities(employee.getUserGroups(), new HashSet<String>());
+		authorities.add(new SimpleGrantedAuthority(BACKOFFICE_ACCESS));
 
-		employee.getAuthorities().add(new SimpleGrantedAuthority(BACKOFFICE_ACCESS));
-
-		logger.debug("Authenticated User: " + id);
-		StringBuilder authorized = new StringBuilder();
-		for (GrantedAuthority grantedAuthority : employee.getAuthorities()) {
-			if (authorized.length() != 0) {
-				authorized.append(",");
-			}
-			authorized.append(grantedAuthority.getAuthority());
-		}
-		logger.debug("Authorized: " + authorized.toString());
-
-		return new UsernamePasswordAuthenticationToken(employee, employee.getPassword(), employee.getAuthorities());
-
+		return new UsernamePasswordAuthenticationToken(employee, employee.getPassword(), authorities);
 	}
 
 	public boolean supports(Class<? extends Object> authentication) {
 		return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
 	}
+	
+	
+
 }

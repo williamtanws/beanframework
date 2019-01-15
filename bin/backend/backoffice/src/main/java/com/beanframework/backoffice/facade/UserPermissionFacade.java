@@ -9,8 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import com.beanframework.backoffice.data.UserPermissionDto;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.user.domain.UserPermission;
 
 public interface UserPermissionFacade {
 
@@ -22,19 +22,19 @@ public interface UserPermissionFacade {
 	}
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	Page<UserPermission> findPage(Specification<UserPermission> specification, PageRequest pageRequest) throws Exception;
+	Page<UserPermissionDto> findPage(Specification<UserPermissionDto> specification, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	UserPermission findOneDtoByUuid(UUID uuid) throws Exception;
+	UserPermissionDto findOneByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	UserPermission findOneDtoByProperties(Map<String, Object> properties) throws Exception;
+	UserPermissionDto findOneByProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
-	UserPermission createDto(UserPermission model) throws BusinessException;
+	UserPermissionDto create(UserPermissionDto model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
-	UserPermission updateDto(UserPermission model) throws BusinessException;
+	UserPermissionDto update(UserPermissionDto model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
@@ -44,5 +44,7 @@ public interface UserPermissionFacade {
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
+	List<UserPermissionDto> findAllDtoUserPermissions() throws Exception;
 
 }

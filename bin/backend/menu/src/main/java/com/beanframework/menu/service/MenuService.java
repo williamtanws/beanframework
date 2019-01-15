@@ -10,9 +10,11 @@ public interface MenuService {
 
 	void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception;
 
-	List<Menu> findDtoMenuTree() throws Exception;
+	List<Menu> findEntityMenuTree() throws Exception;
 
-	List<Menu> findDtoMenuTreeByCurrentUser() throws Exception;
+	List<Menu> findEntityMenuTreeByCurrentUser(List<Menu> cachedMenuTree) throws Exception;
+
+	List<Menu> findCachedMenuTree() throws Exception;
 
 	void delete(UUID uuid) throws Exception;
 

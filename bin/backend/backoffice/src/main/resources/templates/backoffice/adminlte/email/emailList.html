@@ -70,6 +70,9 @@
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
 		        $('#create-form').validate({
+		        	onkeyup: function(element) {
+		                this.element(element);
+		            },
 		        	onfocusout: false,
 		            invalidHandler: function(form, validator) {
 		                var errors = validator.numberOfInvalids();

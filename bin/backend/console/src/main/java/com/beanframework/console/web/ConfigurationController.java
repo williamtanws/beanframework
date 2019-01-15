@@ -25,12 +25,12 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
-import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationFacade;
 import com.beanframework.console.ConfigurationWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
+import com.beanframework.console.data.ConfigurationDto;
 import com.beanframework.console.data.ConfigurationSearch;
 import com.beanframework.console.data.ConfigurationSpecification;
+import com.beanframework.console.facade.ConfigurationFacade;
 
 @Controller
 public class ConfigurationController extends AbstractController {
@@ -47,7 +47,7 @@ public class ConfigurationController extends AbstractController {
 	@Value(ConfigurationWebConstants.LIST_SIZE)
 	private int MODULE_CONFIGURATION_LIST_SIZE;
 
-	private Page<Configuration> getPagination(ConfigurationSearch configurationSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<ConfigurationDto> getPagination(ConfigurationSearch configurationSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(ConsoleWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(ConsoleWebConstants.Pagination.SIZE));
@@ -62,11 +62,11 @@ public class ConfigurationController extends AbstractController {
 
 		if (properties == null) {
 			properties = new String[1];
-			properties[0] = Configuration.CREATED_DATE;
+			properties[0] = ConfigurationDto.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<Configuration> pagination = configurationFacade.findDtoPage(ConfigurationSpecification.findByCriteria(configurationSearch),
+		Page<ConfigurationDto> pagination = configurationFacade.findPage(ConfigurationSpecification.findByCriteria(configurationSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(ConsoleWebConstants.Pagination.PROPERTIES, propertiesStr);
@@ -100,13 +100,13 @@ public class ConfigurationController extends AbstractController {
 	}
 
 	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CREATE)
-	public Configuration populateConfigurationCreate(HttpServletRequest request) throws Exception {
-		return new Configuration();
+	public ConfigurationDto populateConfigurationCreate(HttpServletRequest request) throws Exception {
+		return new ConfigurationDto();
 	}
 
 	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE)
-	public Configuration populateConfigurationForm(HttpServletRequest request) throws Exception {
-		return new Configuration();
+	public ConfigurationDto populateConfigurationForm(HttpServletRequest request) throws Exception {
+		return new ConfigurationDto();
 	}
 
 	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH)
@@ -117,14 +117,14 @@ public class ConfigurationController extends AbstractController {
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION)
 	public String list(
 			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
-			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE) ConfigurationDto configurationUpdate,
 			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(ConsoleWebConstants.PAGINATION, getPagination(configurationSearch, model, requestParams));
 
 		if (configurationUpdate.getUuid() != null) {
 
-			Configuration existingConfiguration = configurationFacade.findOneDtoByUuid(configurationUpdate.getUuid());
+			ConfigurationDto existingConfiguration = configurationFacade.findOneByUuid(configurationUpdate.getUuid());
 			
 			if (existingConfiguration != null) {
 				
@@ -144,7 +144,7 @@ public class ConfigurationController extends AbstractController {
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "create")
 	public RedirectView create(
 			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
-			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CREATE) Configuration configurationCreate,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CREATE) ConfigurationDto configurationCreate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -157,11 +157,11 @@ public class ConfigurationController extends AbstractController {
 
 				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(ConfigurationDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(Configuration.UUID, configurationCreate.getUuid());
+		redirectAttributes.addAttribute(ConfigurationDto.UUID, configurationCreate.getUuid());
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, configurationSearch);
 
 		RedirectView redirectView = new RedirectView();
@@ -173,7 +173,7 @@ public class ConfigurationController extends AbstractController {
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "update")
 	public RedirectView update(
 			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
-			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE) ConfigurationDto configurationUpdate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -186,11 +186,11 @@ public class ConfigurationController extends AbstractController {
 
 				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(ConfigurationDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(Configuration.UUID, configurationUpdate.getUuid());
+		redirectAttributes.addAttribute(ConfigurationDto.UUID, configurationUpdate.getUuid());
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, configurationSearch);
 
 		RedirectView redirectView = new RedirectView();
@@ -202,7 +202,7 @@ public class ConfigurationController extends AbstractController {
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "delete")
 	public RedirectView delete(
 			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.SEARCH) ConfigurationSearch configurationSearch,
-			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE) Configuration configurationUpdate,
+			@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE) ConfigurationDto configurationUpdate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -211,7 +211,7 @@ public class ConfigurationController extends AbstractController {
 
 			addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
-			addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
+			addErrorMessage(ConfigurationDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE, configurationUpdate);
 		}
 

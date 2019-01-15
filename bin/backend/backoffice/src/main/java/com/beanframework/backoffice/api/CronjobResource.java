@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CronjobWebConstants;
+import com.beanframework.backoffice.data.CronjobDto;
+import com.beanframework.backoffice.facade.CronjobFacade;
 import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.service.CronjobFacade;
 
 @RestController
 public class CronjobResource {
@@ -31,17 +32,17 @@ public class CronjobResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.ID, id);
 
-		Cronjob cronjob = cronjobFacade.findOneDtoByProperties(properties);
+		CronjobDto data = cronjobFacade.findOneByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
-			if (cronjob != null && cronjob.getUuid().equals(uuid)) {
+			if (data != null && data.getUuid().equals(uuid)) {
 				return "true";
 			}
 		}
 
-		return cronjob != null ? "false" : "true";
+		return data != null ? "false" : "true";
 	}
 
 	@RequestMapping(CronjobWebConstants.Path.Api.CHECKJOBGROUPNAME)
@@ -55,7 +56,7 @@ public class CronjobResource {
 		properties.put(Cronjob.JOB_GROUP, jobGroup);
 		properties.put(Cronjob.JOB_NAME, jobName);
 
-		Cronjob cronjob = cronjobFacade.findOneDtoByProperties(properties);
+		CronjobDto cronjob = cronjobFacade.findOneByProperties(properties);
 
 		if (StringUtils.isNotBlank(uuidStr) && cronjob != null && cronjob.getUuid().equals(UUID.fromString(uuidStr))) {
 			return "true";

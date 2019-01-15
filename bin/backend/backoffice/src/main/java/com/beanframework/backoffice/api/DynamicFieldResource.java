@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
+import com.beanframework.backoffice.data.DynamicFieldDto;
+import com.beanframework.backoffice.facade.DynamicFieldFacade;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.service.DynamicFieldFacade;
 
 @RestController
 public class DynamicFieldResource {
@@ -29,7 +30,7 @@ public class DynamicFieldResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(DynamicField.ID, id);
 		
-		DynamicField data = dynamicFieldFacade.findOneDtoByProperties(properties);
+		DynamicFieldDto data = dynamicFieldFacade.findOneByProperties(properties);
 		
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

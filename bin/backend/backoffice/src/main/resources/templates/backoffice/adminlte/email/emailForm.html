@@ -279,6 +279,9 @@
 			
 		    $(document).ready(function() {
 		        $('#update-form').validate({
+		        	onkeyup: function(element) {
+		                this.element(element);
+		            },
 		        	onfocusout: false,
 		        	ignore: [],
 		            errorPlacement: function() {},
@@ -305,6 +308,10 @@
 		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
 		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
 		                });
+		            },
+		            unhighlight: function(element) {
+		                $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').find('.help-block').html('');
 		            },
 		            errorPlacement: function(error, element) {
 		                element.closest('.form-group').find('.help-block').html(error.text());

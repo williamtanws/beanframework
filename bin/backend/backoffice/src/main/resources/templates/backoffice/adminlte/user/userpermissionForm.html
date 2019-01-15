@@ -111,6 +111,9 @@
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
 		        $('#update-form').validate({
+		        	onkeyup: function(element) {
+		                this.element(element);
+		            },
 		        	onfocusout: false,
 		            invalidHandler: function(form, validator) {
 		                var errors = validator.numberOfInvalids();

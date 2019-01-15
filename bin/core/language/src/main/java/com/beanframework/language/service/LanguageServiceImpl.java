@@ -43,8 +43,7 @@ public class LanguageServiceImpl implements LanguageService {
 	}
 
 	@Override
-	public List<Language> findDtoBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findDtoByPropertiesAndSorts(null, sorts, null, null, Language.class);
+	public List<Language> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findCachedEntityByPropertiesAndSorts(null, sorts, null, null, Language.class);
 	}
-
 }

@@ -3,6 +3,8 @@ package com.beanframework.backoffice.data;
 import com.beanframework.common.data.GenericDto;
 
 public class AuditorDto extends GenericDto {
+	public static final String NAME = "name";
+	
 	private String name;
 
 	public String getName() {

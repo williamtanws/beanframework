@@ -24,6 +24,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserRightWebConstants;
+import com.beanframework.backoffice.data.UserRightDto;
 import com.beanframework.backoffice.data.UserRightSearch;
 import com.beanframework.backoffice.data.UserRightSpecification;
 import com.beanframework.backoffice.facade.UserRightFacade;
@@ -31,7 +32,6 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.utils.ParamUtils;
-import com.beanframework.user.domain.UserRight;
 
 @Controller
 public class UserRightController extends AbstractController {
@@ -51,7 +51,7 @@ public class UserRightController extends AbstractController {
 	@Value(UserRightWebConstants.LIST_SIZE)
 	private int MODULE_USERRIGHT_LIST_SIZE;
 
-	private Page<UserRight> getPagination(UserRightSearch userRightSearch, Model model, @RequestParam Map<String, Object> requestParams)
+	private Page<UserRightDto> getPagination(UserRightSearch userRightSearch, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
@@ -67,11 +67,11 @@ public class UserRightController extends AbstractController {
 
 		if (properties == null) {
 			properties = new String[1];
-			properties[0] = UserRight.CREATED_DATE;
+			properties[0] = UserRightDto.CREATED_DATE;
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<UserRight> pagination = userRightFacade.findPage(
+		Page<UserRightDto> pagination = userRightFacade.findPage(
 				UserRightSpecification.findByCriteria(userRightSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
@@ -106,13 +106,13 @@ public class UserRightController extends AbstractController {
 	}
 
 	@ModelAttribute(UserRightWebConstants.ModelAttribute.CREATE)
-	public UserRight populateUserRightCreate(HttpServletRequest request) throws Exception {
-		return new UserRight();
+	public UserRightDto populateUserRightCreate(HttpServletRequest request) throws Exception {
+		return new UserRightDto();
 	}
 
 	@ModelAttribute(UserRightWebConstants.ModelAttribute.UPDATE)
-	public UserRight populateUserRightForm(HttpServletRequest request) throws Exception {
-		return new UserRight();
+	public UserRightDto populateUserRightForm(HttpServletRequest request) throws Exception {
+		return new UserRightDto();
 	}
 
 	@ModelAttribute(UserRightWebConstants.ModelAttribute.SEARCH)
@@ -123,14 +123,14 @@ public class UserRightController extends AbstractController {
 	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT)
 	public String list(
 			@ModelAttribute(UserRightWebConstants.ModelAttribute.SEARCH) UserRightSearch userrightSearch,
-			@ModelAttribute(UserRightWebConstants.ModelAttribute.UPDATE) UserRight userrightUpdate,
+			@ModelAttribute(UserRightWebConstants.ModelAttribute.UPDATE) UserRightDto userrightUpdate,
 			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(userrightSearch, model, requestParams));
 
 		if (userrightUpdate.getUuid() != null) {
 
-			UserRight existingUserRight = userRightFacade.findOneDtoByUuid(userrightUpdate.getUuid());
+			UserRightDto existingUserRight = userRightFacade.findOneByUuid(userrightUpdate.getUuid());
 			
 			List<Object[]> revisions = userRightFacade.findHistoryByUuid(userrightUpdate.getUuid(), null, null);
 			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
@@ -153,7 +153,7 @@ public class UserRightController extends AbstractController {
 	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "create")
 	public RedirectView create(
 			@ModelAttribute(UserRightWebConstants.ModelAttribute.SEARCH) UserRightSearch userrightSearch,
-			@ModelAttribute(UserRightWebConstants.ModelAttribute.CREATE) UserRight userrightCreate,
+			@ModelAttribute(UserRightWebConstants.ModelAttribute.CREATE) UserRightDto userrightCreate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -163,15 +163,15 @@ public class UserRightController extends AbstractController {
 		} else {
 
 			try {
-				userrightCreate = userRightFacade.createDto(userrightCreate);
+				userrightCreate = userRightFacade.create(userrightCreate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(UserRight.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(UserRightDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(UserRight.UUID, userrightCreate.getUuid());
+		redirectAttributes.addAttribute(UserRightDto.UUID, userrightCreate.getUuid());
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, userrightSearch);
 
 		RedirectView redirectView = new RedirectView();
@@ -183,7 +183,7 @@ public class UserRightController extends AbstractController {
 	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "update")
 	public RedirectView update(
 			@ModelAttribute(UserRightWebConstants.ModelAttribute.SEARCH) UserRightSearch userrightSearch,
-			@ModelAttribute(UserRightWebConstants.ModelAttribute.UPDATE) UserRight userrightUpdate,
+			@ModelAttribute(UserRightWebConstants.ModelAttribute.UPDATE) UserRightDto userrightUpdate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -192,15 +192,15 @@ public class UserRightController extends AbstractController {
 					"Update record needed existing UUID.");
 		} else {
 			try {
-				userrightUpdate = userRightFacade.updateDto(userrightUpdate);
+				userrightUpdate = userRightFacade.update(userrightUpdate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(UserRight.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(UserRightDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(UserRight.UUID, userrightUpdate.getUuid());
+		redirectAttributes.addAttribute(UserRightDto.UUID, userrightUpdate.getUuid());
 		setPaginationRedirectAttributes(redirectAttributes, requestParams, userrightSearch);
 
 		RedirectView redirectView = new RedirectView();
@@ -212,7 +212,7 @@ public class UserRightController extends AbstractController {
 	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "delete")
 	public RedirectView delete(
 			@ModelAttribute(UserRightWebConstants.ModelAttribute.SEARCH) UserRightSearch userrightSearch,
-			@ModelAttribute(UserRightWebConstants.ModelAttribute.UPDATE) UserRight userrightUpdate,
+			@ModelAttribute(UserRightWebConstants.ModelAttribute.UPDATE) UserRightDto userrightUpdate,
 			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -222,7 +222,7 @@ public class UserRightController extends AbstractController {
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
-			addErrorMessage(UserRight.class, e.getMessage(), bindingResult, redirectAttributes);
+			addErrorMessage(UserRightDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(UserRightWebConstants.ModelAttribute.UPDATE,
 					userrightUpdate);
 		}

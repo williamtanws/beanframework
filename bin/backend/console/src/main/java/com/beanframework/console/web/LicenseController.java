@@ -1,6 +1,5 @@
 package com.beanframework.console.web;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,17 +17,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.common.controller.AbstractController;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
-import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.LicenseWebConstants;
+import com.beanframework.console.data.ConfigurationDto;
+import com.beanframework.console.facade.ConfigurationFacade;
 
 @Controller
 public class LicenseController extends AbstractController {
 	
 	@Autowired
-	private ModelService modelService;
+	private ConfigurationFacade configurationFacade;
 	
 	@Value(LicenseWebConstants.Path.LICENSE)
 	private String PATH_LICENSE;
@@ -38,10 +37,7 @@ public class LicenseController extends AbstractController {
 
 	public boolean isLicenseAccepted() throws Exception {
 		
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
-		
-		Configuration configuration = modelService.findOneDtoByProperties(properties, Configuration.class);
+		ConfigurationDto configuration = configurationFacade.findOneById(LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 		
 		if (configuration == null) {
 			return false;
@@ -53,15 +49,13 @@ public class LicenseController extends AbstractController {
 	}
 
 	@GetMapping(value = LicenseWebConstants.Path.LICENSE)
-	public String view(@ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) Configuration configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
+	public String view(@ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) ConfigurationDto configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			
-			configuration = modelService.findOneDtoByProperties(properties, Configuration.class);
+			configuration = configurationFacade.findOneById(LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			if(configuration == null) {
-				configuration = modelService.create(Configuration.class);
+				configuration = new ConfigurationDto();
 			}
 
 			model.addAttribute(LicenseWebConstants.Model.LICENSE, configuration);
@@ -73,17 +67,15 @@ public class LicenseController extends AbstractController {
 	}
 
 	@PostMapping(value = LicenseWebConstants.Path.LICENSE)
-	public RedirectView accept(@ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) Configuration configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
+	public RedirectView accept(@ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) ConfigurationDto configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 
 		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			
-			Configuration existingConfiguration = modelService.findOneDtoByProperties(properties, Configuration.class);
+			ConfigurationDto existingConfiguration = configurationFacade.findOneById(LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 						
 			if(existingConfiguration == null) {
-				existingConfiguration = modelService.create(Configuration.class);
+				existingConfiguration = new ConfigurationDto();
 				existingConfiguration.setId(LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			}
 			
@@ -94,10 +86,15 @@ public class LicenseController extends AbstractController {
 				existingConfiguration.setValue("false");
 			}
 			
-			modelService.saveDto(existingConfiguration, Configuration.class);
+			if(existingConfiguration.getUuid() == null) {
+				configurationFacade.createDto(existingConfiguration);
+			}
+			else {
+				configurationFacade.updateDto(existingConfiguration);
+			}
 			addSuccessMessage(redirectAttributes, LicenseWebConstants.Locale.ACCEPT_SUCCESS);
 		} catch (Exception e) {
-			addErrorMessage(Configuration.class, e.getMessage(), bindingResult, redirectAttributes);
+			addErrorMessage(ConfigurationDto.class, e.getMessage(), bindingResult, redirectAttributes);
 		}
 		
 		RedirectView redirectView = new RedirectView();

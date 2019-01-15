@@ -26,22 +26,14 @@ public interface ModelService {
 
 	<T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception;
 
-	<T> T findOneDtoByUuid(UUID uuid, Class modelClass) throws Exception;
-
-	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
-
-	<T> T findOneDtoByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
+	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClassd) throws Exception;
 	
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
-	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception;
-	
-	<T extends Collection> T findDtoByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception;
-	
+	<T extends Collection> T findCachedEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception;
+		
 	<T extends Collection> T findAllEntity(Class modelClass) throws Exception;
 	
-	<T extends Collection> T findAllDto(Class modelClass) throws Exception;
-
 	<T extends Collection> T findHistory(boolean selectDeletedEntities, AuditCriterion criterion, AuditOrder order, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
 
 	<T> Page<T> findEntityPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
@@ -49,8 +41,6 @@ public interface ModelService {
 	void refresh(Object model);
 
 	Object saveEntity(Object model, Class modelClass) throws BusinessException;
-
-	Object saveDto(Object model, Class modelClass) throws BusinessException;
 
 	void flush() throws BusinessException;
 
@@ -71,4 +61,6 @@ public interface ModelService {
 	void initDefaults(Object model, Class modelClass) throws Exception;
 
 	public void clearCache(Class modelClass);
+	
+	public void clearCache(String name);
 }

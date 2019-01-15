@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants;
+import com.beanframework.backoffice.data.UserPermissionDto;
 import com.beanframework.backoffice.facade.UserPermissionFacade;
 import com.beanframework.user.domain.UserPermission;
 
@@ -30,16 +31,16 @@ public class UserPermissionResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(UserPermission.ID, id);
 
-		UserPermission userPermission = userPermissionFacade.findOneDtoByProperties(properties);
+		UserPermissionDto data = userPermissionFacade.findOneByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
-			if (userPermission != null && userPermission.getUuid().equals(uuid)) {
+			if (data != null && data.getUuid().equals(uuid)) {
 				return "true";
 			}
 		}
 
-		return userPermission != null ? "false" : "true";
+		return data != null ? "false" : "true";
 	}
 }

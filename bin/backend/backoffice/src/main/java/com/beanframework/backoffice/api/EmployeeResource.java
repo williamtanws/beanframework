@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
+import com.beanframework.backoffice.data.EmployeeDto;
+import com.beanframework.backoffice.facade.EmployeeFacade;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeFacade;
 
 @RestController
 public class EmployeeResource {
@@ -29,16 +30,16 @@ public class EmployeeResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
 
-		Employee employee = employeeFacade.findOneDtoByProperties(properties);
+		EmployeeDto data = employeeFacade.findOneByProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
-			if (employee != null && employee.getUuid().equals(uuid)) {
+			if (data != null && data.getUuid().equals(uuid)) {
 				return "true";
 			}
 		}
 
-		return employee != null ? "false" : "true";
+		return data != null ? "false" : "true";
 	}
 }

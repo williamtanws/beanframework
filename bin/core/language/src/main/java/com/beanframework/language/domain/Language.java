@@ -23,8 +23,10 @@ public class Language extends GenericEntity {
 
 	@Audited(withModifiedFlag=true)
 	private String name;
+	
 	@Audited(withModifiedFlag=true)
 	private Boolean active;
+	
 	@Audited(withModifiedFlag=true)
 	private Integer sort;
 

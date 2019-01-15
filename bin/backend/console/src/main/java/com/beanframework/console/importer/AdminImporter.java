@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminFacade;
+import com.beanframework.admin.service.AdminService;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.ImportEntityAdminConverter;
 import com.beanframework.console.csv.AdminCsv;
@@ -35,7 +35,7 @@ public class AdminImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(AdminImporter.class);
 
 	@Autowired
-	private AdminFacade adminFacade;
+	private AdminService adminService;
 
 	@Autowired
 	private ImportEntityAdminConverter converter;
@@ -124,13 +124,13 @@ public class AdminImporter extends Importer {
 		for (AdminCsv csv : csvList) {
 
 			Admin model = converter.convert(csv);
-			adminFacade.saveEntity(model);
+			adminService.saveEntity(model);
 		}
 	}
 
 	public void remove(List<AdminCsv> csvList) throws Exception {
 		for (AdminCsv csv : csvList) {
-			adminFacade.deleteById(csv.getId());
+			adminService.deleteById(csv.getId());
 		}
 	}
 

@@ -31,8 +31,9 @@ public class ConfigurationInterceptor extends HandlerInterceptorAdapter {
 
 			Map<String, String> maps = new HashMap<String, String>();
 
-			List<Configuration> models = modelService.findAllDto(Configuration.class);
-			for (Configuration configuration : models) {
+			List<Configuration> entities = modelService.findAllEntity(Configuration.class);
+						
+			for (Configuration configuration : entities) {
 				maps.put(configuration.getId(), configuration.getValue());
 			}
 

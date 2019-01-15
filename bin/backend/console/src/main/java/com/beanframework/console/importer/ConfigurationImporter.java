@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationFacade;
+import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.converter.ImportEntityConfigurationConverter;
 import com.beanframework.console.csv.ConfigurationCsv;
@@ -35,7 +35,7 @@ public class ConfigurationImporter extends Importer {
 	protected static Logger LOGGER = LoggerFactory.getLogger(ConfigurationImporter.class);
 
 	@Autowired
-	private ConfigurationFacade configurationFacade;
+	private ConfigurationService configurationService;
 	
 	@Autowired
 	private ImportEntityConfigurationConverter converter;
@@ -124,13 +124,13 @@ public class ConfigurationImporter extends Importer {
 		for (ConfigurationCsv csv : csvList) {
 
 			Configuration model = converter.convert(csv);
-			configurationFacade.saveEntity(model);
+			configurationService.saveEntity(model);
 		}
 	}
 
 	public void remove(List<ConfigurationCsv> csvList) throws Exception {
 		for (ConfigurationCsv csv : csvList) {
-			configurationFacade.deleteById(csv.getId());
+			configurationService.deleteById(csv.getId());
 		}
 	}
 

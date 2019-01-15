@@ -24,13 +24,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
+import com.beanframework.backoffice.data.DynamicFieldDto;
 import com.beanframework.backoffice.data.DynamicFieldSearch;
 import com.beanframework.backoffice.data.DynamicFieldSpecification;
+import com.beanframework.backoffice.facade.DynamicFieldFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.service.DynamicFieldFacade;
 
 @Controller
 public class DynamicFieldController extends AbstractController {
@@ -38,20 +38,20 @@ public class DynamicFieldController extends AbstractController {
 	@Autowired
 	private DynamicFieldFacade dynamicFieldFacade;
 
-	@Value(DynamicFieldWebConstants.Path.LANGUAGE)
-	private String PATH_LANGUAGE;
+	@Value(DynamicFieldWebConstants.Path.DYNAMICFIELD)
+	private String PATH_DYNAMICFIELD;
 
 	@Value(DynamicFieldWebConstants.View.LIST)
-	private String VIEW_LANGUAGE_LIST;
+	private String VIEW_DYNAMICFIELD_LIST;
 
 	@Value(DynamicFieldWebConstants.LIST_SIZE)
-	private int MODULE_LANGUAGE_LIST_SIZE;
+	private int MODULE_DYNAMICFIELD_LIST_SIZE;
 
-	private Page<DynamicField> getPagination(DynamicFieldSearch languageSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	private Page<DynamicFieldDto> getPagination(DynamicFieldSearch dynamicFieldSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
-		size = size <= 0 ? MODULE_LANGUAGE_LIST_SIZE : size;
+		size = size <= 0 ? MODULE_DYNAMICFIELD_LIST_SIZE : size;
 
 		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
 		String[] properties = StringUtils.isBlank(propertiesStr) ? null
@@ -62,11 +62,11 @@ public class DynamicFieldController extends AbstractController {
 
 		if (properties == null) {
 			properties = new String[1];
-			properties[0] = DynamicField.SORT;
+			properties[0] = DynamicFieldDto.SORT;
 			direction = Sort.Direction.ASC;
 		}
 
-		Page<DynamicField> pagination = dynamicFieldFacade.findDtoPage(DynamicFieldSpecification.findByCriteria(languageSearch),
+		Page<DynamicFieldDto> pagination = dynamicFieldFacade.findPage(DynamicFieldSpecification.findByCriteria(dynamicFieldSearch),
 				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
@@ -76,16 +76,16 @@ public class DynamicFieldController extends AbstractController {
 	}
 
 	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
-			@RequestParam Map<String, Object> requestParams, DynamicFieldSearch languageSearch) {
+			@RequestParam Map<String, Object> requestParams, DynamicFieldSearch dynamicFieldSearch) {
 		
-		languageSearch.setSearchAll((String)requestParams.get("languageSearch.searchAll"));
-		languageSearch.setId((String)requestParams.get("languageSearch.id"));
-		languageSearch.setName((String)requestParams.get("languageSearch.name"));
+		dynamicFieldSearch.setSearchAll((String)requestParams.get("dynamicFieldSearch.searchAll"));
+		dynamicFieldSearch.setId((String)requestParams.get("dynamicFieldSearch.id"));
+		dynamicFieldSearch.setName((String)requestParams.get("dynamicFieldSearch.name"));
 		
 		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
-		size = size <= 0 ? MODULE_LANGUAGE_LIST_SIZE : size;
+		size = size <= 0 ? MODULE_DYNAMICFIELD_LIST_SIZE : size;
 
 		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
 		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
@@ -94,21 +94,21 @@ public class DynamicFieldController extends AbstractController {
 		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.SIZE, size);
 		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
 		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute("searchAll", languageSearch.getSearchAll());
-		redirectAttributes.addAttribute("id", languageSearch.getId());
-		redirectAttributes.addAttribute("name", languageSearch.getName());
+		redirectAttributes.addAttribute("searchAll", dynamicFieldSearch.getSearchAll());
+		redirectAttributes.addAttribute("id", dynamicFieldSearch.getId());
+		redirectAttributes.addAttribute("name", dynamicFieldSearch.getName());
 
 		return redirectAttributes;
 	}
 
 	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.CREATE)
-	public DynamicField populateDynamicFieldCreate(HttpServletRequest request) throws Exception {
-		return new DynamicField();
+	public DynamicFieldDto populateDynamicFieldCreate(HttpServletRequest request) throws Exception {
+		return new DynamicFieldDto();
 	}
 
 	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE)
-	public DynamicField populateDynamicFieldForm(HttpServletRequest request) throws Exception {
-		return new DynamicField();
+	public DynamicFieldDto populateDynamicFieldForm(HttpServletRequest request) throws Exception {
+		return new DynamicFieldDto();
 	}
 
 	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH)
@@ -116,112 +116,112 @@ public class DynamicFieldController extends AbstractController {
 		return new DynamicFieldSearch();
 	}
 
-	@GetMapping(value = DynamicFieldWebConstants.Path.LANGUAGE)
-	public String list(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch languageSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicField languageUpdate, Model model,
+	@GetMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD)
+	public String list(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(languageSearch, model, requestParams));
+		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(dynamicFieldSearch, model, requestParams));
 
-		if (languageUpdate.getUuid() != null) {
+		if (dynamicFieldUpdate.getUuid() != null) {
 
-			DynamicField existingDynamicField = dynamicFieldFacade.findOneDtoByUuid(languageUpdate.getUuid());
+			DynamicFieldDto existingDynamicField = dynamicFieldFacade.findOneByUuid(dynamicFieldUpdate.getUuid());
 			
-			List<Object[]> revisions = dynamicFieldFacade.findHistoryByUuid(languageUpdate.getUuid(), null, null);
+			List<Object[]> revisions = dynamicFieldFacade.findHistoryByUuid(dynamicFieldUpdate.getUuid(), null, null);
 			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
 
 			if (existingDynamicField != null) {
 				model.addAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE, existingDynamicField);
 			} else {
-				languageUpdate.setUuid(null);
+				dynamicFieldUpdate.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 		
-		return VIEW_LANGUAGE_LIST;
+		return VIEW_DYNAMICFIELD_LIST;
 	}
 
-	@PostMapping(value = DynamicFieldWebConstants.Path.LANGUAGE, params = "create")
+	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "create")
 	public RedirectView create(
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch languageSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.CREATE) DynamicField languageCreate, Model model,
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.CREATE) DynamicFieldDto dynamicFieldCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
-		if (languageCreate.getUuid() != null) {
+		if (dynamicFieldCreate.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
 					"Create new record doesn't need UUID.");
 		} else {
 
 			try {
-				languageCreate = dynamicFieldFacade.createDto(languageCreate);
+				dynamicFieldCreate = dynamicFieldFacade.create(dynamicFieldCreate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(DynamicField.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(DynamicFieldDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(DynamicField.UUID, languageCreate.getUuid());
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, languageSearch);
+		redirectAttributes.addAttribute(DynamicFieldDto.UUID, dynamicFieldCreate.getUuid());
+		setPaginationRedirectAttributes(redirectAttributes, requestParams, dynamicFieldSearch);
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_LANGUAGE);
+		redirectView.setUrl(PATH_DYNAMICFIELD);
 		return redirectView;
 	}
 
-	@PostMapping(value = DynamicFieldWebConstants.Path.LANGUAGE, params = "update")
+	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "update")
 	public RedirectView update(
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch languageSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicField languageUpdate, Model model,
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
-		if (languageUpdate.getUuid() == null) {
+		if (dynamicFieldUpdate.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
 					"Update record needed existing UUID.");
 		} else {
 
 			try {
-				languageUpdate = dynamicFieldFacade.updateDto(languageUpdate);
+				dynamicFieldUpdate = dynamicFieldFacade.update(dynamicFieldUpdate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(DynamicField.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(DynamicFieldDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(DynamicField.UUID, languageUpdate.getUuid());
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, languageSearch);
+		redirectAttributes.addAttribute(DynamicFieldDto.UUID, dynamicFieldUpdate.getUuid());
+		setPaginationRedirectAttributes(redirectAttributes, requestParams, dynamicFieldSearch);
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_LANGUAGE);
+		redirectView.setUrl(PATH_DYNAMICFIELD);
 		return redirectView;
 	}
 
-	@PostMapping(value = DynamicFieldWebConstants.Path.LANGUAGE, params = "delete")
+	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "delete")
 	public RedirectView delete(
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch languageSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicField languageUpdate, Model model,
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			dynamicFieldFacade.delete(languageUpdate.getUuid());
+			dynamicFieldFacade.delete(dynamicFieldUpdate.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
-			addErrorMessage(DynamicField.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(DynamicField.UUID, languageUpdate.getUuid());
+			addErrorMessage(DynamicFieldDto.class, e.getMessage(), bindingResult, redirectAttributes);
+			redirectAttributes.addAttribute(DynamicFieldDto.UUID, dynamicFieldUpdate.getUuid());
 		}
 
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, languageSearch);
+		setPaginationRedirectAttributes(redirectAttributes, requestParams, dynamicFieldSearch);
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_LANGUAGE);
+		redirectView.setUrl(PATH_DYNAMICFIELD);
 		return redirectView;
 
 	}

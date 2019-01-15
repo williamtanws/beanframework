@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.employee.domain.Employee;
 
 public class EmployeeSpecification extends AbstractSpecification {
-	public static Specification<Employee> findByCriteria(final EmployeeSearch data) {
+	public static Specification<EmployeeDto> findByCriteria(final EmployeeSearch data) {
 
-		return new Specification<Employee>() {
+		return new Specification<EmployeeDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class EmployeeSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = -6451054614872238142L;
 
 			@Override
-			public Predicate toPredicate(Root<Employee> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<EmployeeDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class EmployeeSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<Employee> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String name, Root<EmployeeDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotBlank(id)) {
 			predicates.add(cb.or(cb.like(root.get(Employee.ID), convertToPattern(id))));
 		}

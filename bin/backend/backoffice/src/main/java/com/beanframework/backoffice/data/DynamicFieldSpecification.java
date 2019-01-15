@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.dynamicfield.domain.DynamicField;
 
 public class DynamicFieldSpecification extends AbstractSpecification {
-	public static Specification<DynamicField> findByCriteria(final DynamicFieldSearch data) {
+	public static Specification<DynamicFieldDto> findByCriteria(final DynamicFieldSearch data) {
 
-		return new Specification<DynamicField>() {
+		return new Specification<DynamicFieldDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class DynamicFieldSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = 3617871778212990102L;
 
 			@Override
-			public Predicate toPredicate(Root<DynamicField> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<DynamicFieldDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class DynamicFieldSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<DynamicField> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String name, Root<DynamicFieldDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
 			predicates.add(cb.or(cb.like(root.get(DynamicField.ID), convertToPattern(id))));
 		}

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,13 +24,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MenuWebConstants;
+import com.beanframework.backoffice.data.MenuDto;
+import com.beanframework.backoffice.data.UserGroupDto;
+import com.beanframework.backoffice.facade.MenuFacade;
+import com.beanframework.backoffice.facade.UserGroupFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
-import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.service.MenuFacade;
-import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupService;
 
 @Controller
 public class MenuController extends AbstractController {
@@ -40,7 +39,7 @@ public class MenuController extends AbstractController {
 	private MenuFacade menuFacade;
 
 	@Autowired
-	private UserGroupService userGroupService;
+	private UserGroupFacade userGroupFacade;
 
 	@Value(MenuWebConstants.Path.MENU)
 	private String PATH_MENU;
@@ -52,31 +51,28 @@ public class MenuController extends AbstractController {
 	private int MODULE_MENU_LIST_SIZE;
 
 	@ModelAttribute(MenuWebConstants.ModelAttribute.CREATE)
-	public Menu populateMenuCreate(HttpServletRequest request) throws Exception {
-		return new Menu();
+	public MenuDto populateMenuCreate(HttpServletRequest request) throws Exception {
+		return new MenuDto();
 	}
 
 	@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE)
-	public Menu populateMenuForm(HttpServletRequest request) throws Exception {
-		return new Menu();
+	public MenuDto populateMenuForm(HttpServletRequest request) throws Exception {
+		return new MenuDto();
 	}
 
 	@GetMapping(value = MenuWebConstants.Path.MENU)
-	public String list(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) Menu menuUpdate, Model model,
+	public String list(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto menuUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		if (menuUpdate.getUuid() != null) {
 			
-			Menu existingMenu = menuFacade.findOneDtoByUuid(menuUpdate.getUuid());
+			MenuDto existingMenu = menuFacade.findOneByUuid(menuUpdate.getUuid());
 			if (existingMenu != null) {
 
-				Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-				sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
-
-				List<UserGroup> userGroups = userGroupService.findDtoBySorts(sorts);
+				List<UserGroupDto> userGroups = userGroupFacade.findAllDtoUserGroups();
 
 				for (int i = 0; i < userGroups.size(); i++) {
-					for (UserGroup userGroup : existingMenu.getUserGroups()) {
+					for (UserGroupDto userGroup : existingMenu.getUserGroups()) {
 						if (userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
 							userGroups.get(i).setSelected("true");
 						}
@@ -103,7 +99,7 @@ public class MenuController extends AbstractController {
 	}
 
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "create")
-	public RedirectView create(@ModelAttribute(MenuWebConstants.ModelAttribute.CREATE) Menu menuCreate, Model model,
+	public RedirectView create(@ModelAttribute(MenuWebConstants.ModelAttribute.CREATE) MenuDto menuCreate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -112,8 +108,8 @@ public class MenuController extends AbstractController {
 					"Create new record doesn't need UUID.");
 		} else {
 
-			List<UserGroup> userGroups = new ArrayList<UserGroup>();
-			for (UserGroup userGroup : menuCreate.getUserGroups()) {
+			List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
+			for (UserGroupDto userGroup : menuCreate.getUserGroups()) {
 				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
 					userGroups.add(userGroup);
 				}
@@ -121,15 +117,15 @@ public class MenuController extends AbstractController {
 			menuCreate.setUserGroups(userGroups);
 
 			try {
-				menuCreate = menuFacade.updateDto(menuCreate);
+				menuCreate = menuFacade.update(menuCreate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(MenuDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(Menu.UUID, menuCreate.getUuid());
+		redirectAttributes.addAttribute(MenuDto.UUID, menuCreate.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -138,7 +134,7 @@ public class MenuController extends AbstractController {
 	}
 
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "update")
-	public RedirectView update(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) Menu menuUpdate, Model model,
+	public RedirectView update(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto menuUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -147,8 +143,8 @@ public class MenuController extends AbstractController {
 					"Update record needed existing UUID.");
 		} else {
 
-			List<UserGroup> userGroups = new ArrayList<UserGroup>();
-			for (UserGroup userGroup : menuUpdate.getUserGroups()) {
+			List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
+			for (UserGroupDto userGroup : menuUpdate.getUserGroups()) {
 				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
 					userGroups.add(userGroup);
 				}
@@ -156,15 +152,15 @@ public class MenuController extends AbstractController {
 			menuUpdate.setUserGroups(userGroups);
 
 			try {
-				menuUpdate = menuFacade.updateDto(menuUpdate);
+				menuUpdate = menuFacade.update(menuUpdate);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(MenuDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(Menu.UUID, menuUpdate.getUuid());
+		redirectAttributes.addAttribute(MenuDto.UUID, menuUpdate.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -173,7 +169,7 @@ public class MenuController extends AbstractController {
 	}
 
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "delete")
-	public RedirectView delete(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) Menu menuUpdate, Model model,
+	public RedirectView delete(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto menuUpdate, Model model,
 			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
@@ -182,7 +178,7 @@ public class MenuController extends AbstractController {
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
-			addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
+			addErrorMessage(MenuDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			redirectAttributes.addFlashAttribute(MenuWebConstants.ModelAttribute.UPDATE, menuUpdate);
 		}
 
@@ -201,7 +197,7 @@ public class MenuController extends AbstractController {
 		String toUuid = (String) requestParams.get("toUuid");
 		String toIndex = (String) requestParams.get("toIndex");
 
-		MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(), Menu.class.getName());
+		MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(), MenuDto.class.getName());
 
 		try {
 			menuFacade.changePosition(UUID.fromString(fromUuid),
@@ -209,7 +205,7 @@ public class MenuController extends AbstractController {
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 		} catch (BusinessException e) {
-			addErrorMessage(Menu.class, e.getMessage(), bindingResult, redirectAttributes);
+			addErrorMessage(MenuDto.class, e.getMessage(), bindingResult, redirectAttributes);
 		}
 
 		redirectAttributes.addAttribute("menuSelectedUuid", fromUuid);

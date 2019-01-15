@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.email.domain.Email;
 
 public class EmailSpecification extends AbstractSpecification {
-	public static Specification<Email> findByCriteria(final EmailSearch data) {
+	public static Specification<EmailDto> findByCriteria(final EmailSearch data) {
 
-		return new Specification<Email>() {
+		return new Specification<EmailDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class EmailSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = -6116377294874765960L;
 
 			@Override
-			public Predicate toPredicate(Root<Email> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<EmailDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class EmailSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String name, String subject, Root<Email> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String name, String subject, Root<EmailDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(name)) {
 			predicates.add(cb.or(cb.like(root.get(Email.NAME), convertToPattern(name))));
 		}

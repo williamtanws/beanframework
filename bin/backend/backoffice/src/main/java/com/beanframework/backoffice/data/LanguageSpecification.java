@@ -15,9 +15,9 @@ import com.beanframework.common.data.AbstractSpecification;
 import com.beanframework.language.domain.Language;
 
 public class LanguageSpecification extends AbstractSpecification {
-	public static Specification<Language> findByCriteria(final LanguageSearch data) {
+	public static Specification<LanguageDto> findByCriteria(final LanguageSearch data) {
 
-		return new Specification<Language>() {
+		return new Specification<LanguageDto>() {
 
 			/**
 			 * 
@@ -25,7 +25,7 @@ public class LanguageSpecification extends AbstractSpecification {
 			private static final long serialVersionUID = -5242475835563326841L;
 
 			@Override
-			public Predicate toPredicate(Root<Language> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<LanguageDto> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -44,7 +44,7 @@ public class LanguageSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static void addPredicates(String id, String name, Root<Language> root, CriteriaBuilder cb, List<Predicate> predicates) {
+	public static void addPredicates(String id, String name, Root<LanguageDto> root, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (StringUtils.isNotEmpty(id)) {
 			predicates.add(cb.or(cb.like(root.get(Language.ID), convertToPattern(id))));
 		}

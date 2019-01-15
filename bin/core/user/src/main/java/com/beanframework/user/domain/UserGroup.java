@@ -12,7 +12,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -59,9 +58,6 @@ public class UserGroup extends GenericEntity {
 	@OrderBy(UserGroupField.DYNAMIC_FIELD)
 	private List<UserGroupField> fields = new ArrayList<UserGroupField>();
 
-	@Transient
-	private String selected;
-
 	public String getName() {
 		return name;
 	}
@@ -93,13 +89,4 @@ public class UserGroup extends GenericEntity {
 	public void setFields(List<UserGroupField> fields) {
 		this.fields = fields;
 	}
-
-	public String getSelected() {
-		return selected;
-	}
-
-	public void setSelected(String selected) {
-		this.selected = selected;
-	}
-
 }
