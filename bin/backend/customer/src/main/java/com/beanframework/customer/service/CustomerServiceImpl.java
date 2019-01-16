@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
+import com.beanframework.user.domain.UserField;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -51,13 +52,13 @@ public class CustomerServiceImpl implements CustomerService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Customer.class);
 	}
 
-	@Cacheable(value = "CustomersPage", key = "{#query}")
+	@Cacheable(value = "CustomersPage", key = "#query")
 	@Override
 	public <T> Page<Customer> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Customer.class);
 	}
 
-	@Cacheable(value = "CustomersHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "CustomersHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
@@ -65,12 +66,12 @@ public class CustomerServiceImpl implements CustomerService {
 		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Customer.class);
 	}
 
-	@Cacheable(value = "CustomersRelatedHistory", key = "{#relatedEntity, #uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "CustomersRelatedHistory", key = "'relatedEntity:'+#relatedEntity+',uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Customer.class);
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, UserField.class);
 	}
 
 	@Caching(evict = { //

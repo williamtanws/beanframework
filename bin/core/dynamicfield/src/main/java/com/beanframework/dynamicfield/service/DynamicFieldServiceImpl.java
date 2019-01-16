@@ -51,13 +51,13 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, DynamicField.class);
 	}
 
-	@Cacheable(value = "DynamicFieldsPage", key = "{#query}")
+	@Cacheable(value = "DynamicFieldsPage", key = "#query")
 	@Override
 	public <T> Page<DynamicField> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, DynamicField.class);
 	}
 
-	@Cacheable(value = "DynamicFieldsHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "DynamicFieldsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));

@@ -1,7 +1,7 @@
 package com.beanframework.menu.service;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -9,12 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import org.hibernate.Hibernate;
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
@@ -23,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -32,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.repository.MenuRepository;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
@@ -62,7 +57,7 @@ public class MenuServiceImpl implements MenuService {
 		return modelService.findOneEntityByProperties(properties, Menu.class);
 	}
 
-	@Cacheable(value = "MenusHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "MenusHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
@@ -70,12 +65,12 @@ public class MenuServiceImpl implements MenuService {
 		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Menu.class);
 	}
 
-	@Cacheable(value = "MenusRelatedHistory", key = "{#relatedEntity, #uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "MenusRelatedHistory", key = "'relatedEntity:'+#relatedEntity+',uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Menu.class);
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, MenuField.class);
 	}
 
 	@Caching(evict = { //
@@ -186,59 +181,16 @@ public class MenuServiceImpl implements MenuService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findEntityMenuTree() throws Exception {
-
-		// Find all root parents
-		Specification<Menu> spec = new Specification<Menu>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-				List<Predicate> predicates = new ArrayList<Predicate>();
-
-				predicates.add(cb.and(root.get(Menu.PARENT).isNull()));
-
-				query.orderBy(cb.asc(root.get(Menu.SORT)));
-
-				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-			}
-		};
-		List<Menu> menuTree = menuRepository.findAll(spec);
-
-		initializeChilds(menuTree);
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Menu.PARENT, null);
+		
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Menu.SORT, Sort.Direction.ASC);
+		
+		List<Menu> menuTree = modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
 
 		return menuTree;
-	}
-
-	private void initializeChilds(List<Menu> parents) throws Exception {
-
-		for (Menu parent : parents) {
-			Hibernate.initialize(parent.getUserGroups());
-			Hibernate.initialize(parent.getFields());
-
-			// Find all childs
-			Specification<Menu> spec = new Specification<Menu>() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-					List<Predicate> predicates = new ArrayList<Predicate>();
-
-					predicates.add(cb.and(root.get(Menu.PARENT).get("uuid").in(parent.getUuid())));
-
-					query.orderBy(cb.asc(root.get(Menu.SORT)));
-
-					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-				}
-			};
-			List<Menu> childs = menuRepository.findAll(spec);
-			if (childs != null && childs.isEmpty()) {
-				parent.setChilds(childs);
-
-				initializeChilds(parent.getChilds());
-			}
-		}
 	}
 
 	@Override

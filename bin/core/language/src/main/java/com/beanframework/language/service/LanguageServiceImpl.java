@@ -51,13 +51,13 @@ public class LanguageServiceImpl implements LanguageService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Language.class);
 	}
 
-	@Cacheable(value = "LanguagesPage", key = "{#query}")
+	@Cacheable(value = "LanguagesPage", key = "#query")
 	@Override
 	public <T> Page<Language> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Language.class);
 	}
 
-	@Cacheable(value = "LanguagesHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "LanguagesHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));

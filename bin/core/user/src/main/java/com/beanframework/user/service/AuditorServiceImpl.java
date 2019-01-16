@@ -54,13 +54,13 @@ public class AuditorServiceImpl implements AuditorService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Auditor.class);
 	}
 
-	@Cacheable(value = "AuditorsPage", key = "{#query}")
+	@Cacheable(value = "AuditorsPage", key = "#query")
 	@Override
 	public <T> Page<Auditor> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Auditor.class);
 	}
 
-	@Cacheable(value = "AuditorsHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "AuditorsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
