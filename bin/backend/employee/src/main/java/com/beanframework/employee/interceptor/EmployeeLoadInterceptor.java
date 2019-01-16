@@ -6,6 +6,7 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.LoadInterceptor;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserRightField;
 
@@ -24,6 +25,10 @@ public class EmployeeLoadInterceptor implements LoadInterceptor<Employee> {
 				Hibernate.initialize(userAuthority.getUserPermission());
 			}
 			initializeUserGroups(userGroup);
+		}
+		
+		for (UserField field : model.getFields()) {
+			Hibernate.initialize(field.getDynamicField().getValues());
 		}
 	}
 	

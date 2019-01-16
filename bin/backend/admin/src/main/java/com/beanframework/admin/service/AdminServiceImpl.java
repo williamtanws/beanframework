@@ -32,6 +32,7 @@ import com.beanframework.admin.AdminConstants;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.utils.PasswordUtils;
 
@@ -73,13 +74,13 @@ public class AdminServiceImpl implements AdminService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Admin.class);
 	}
 
-	@Cacheable(value = "AdminsPage", key = "{#query}")
+	@Cacheable(value = "AdminsPage", key = "#query")
 	@Override
 	public <T> Page<Admin> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Admin.class);
 	}
 
-	@Cacheable(value = "AdminsHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "AdminsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
@@ -87,12 +88,12 @@ public class AdminServiceImpl implements AdminService {
 		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Admin.class);
 	}
 
-	@Cacheable(value = "AdminsRelatedHistory", key = "{#relatedEntity, #uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "AdminsRelatedHistory", key = "'relatedEntity:'+#relatedEntity+',uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
 		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Admin.class);
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, UserField.class);
 	}
 
 	@Caching(evict = { //

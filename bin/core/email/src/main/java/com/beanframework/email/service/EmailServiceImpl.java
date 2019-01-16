@@ -60,13 +60,13 @@ public class EmailServiceImpl implements EmailService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Email.class);
 	}
 
-	@Cacheable(value = "EmailsPage", key = "{#query}")
+	@Cacheable(value = "EmailsPage", key = "#query")
 	@Override
 	public <T> Page<Email> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Email.class);
 	}
 
-	@Cacheable(value = "EmailsHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "EmailsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));

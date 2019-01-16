@@ -57,13 +57,13 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Configuration.class);
 	}
 
-	@Cacheable(value = "ConfigurationsPage", key = "{#query}")
+	@Cacheable(value = "ConfigurationsPage", key = "#query")
 	@Override
 	public <T> Page<Configuration> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Configuration.class);
 	}
 
-	@Cacheable(value = "ConfigurationsHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Cacheable(value = "ConfigurationsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));

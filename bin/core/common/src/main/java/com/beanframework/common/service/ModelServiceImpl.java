@@ -146,7 +146,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			List<Object> models = createQuery(properties, null, null, null, null, modelClass).getResultList();
+			List<Object> models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
 
 			if (models != null) {
 				loadInterceptor(models, modelClass);
@@ -365,7 +365,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			if (models == null)
 				return null;
 			if (models.isEmpty()) {
-				return (T) models;
+				return (T) new ArrayList<T>();
 			}
 
 			return (T) dtoConverter(models, modelClass);
