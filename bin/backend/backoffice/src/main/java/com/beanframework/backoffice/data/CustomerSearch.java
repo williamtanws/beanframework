@@ -17,5 +17,9 @@ public class CustomerSearch extends Customer {
 	public void setSearchAll(String searchAll) {
 		this.searchAll = searchAll;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "CustomerSearch [getSearchAll()=" + getSearchAll() + ", getName()=" + getName() + ", getId()=" + getId() + "]";
+	}
 }

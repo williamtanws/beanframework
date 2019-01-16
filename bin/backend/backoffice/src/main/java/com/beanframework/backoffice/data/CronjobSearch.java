@@ -17,4 +17,10 @@ public class CronjobSearch extends Cronjob {
 	public void setSearchAll(String searchAll) {
 		this.searchAll = searchAll;
 	}
+
+	@Override
+	public String toString() {
+		return "CronjobSearch [getSearchAll()=" + getSearchAll() + ", getJobName()=" + getJobName() + ", getId()=" + getId() + "]";
+	}
+
 }

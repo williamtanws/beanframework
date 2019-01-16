@@ -1,25 +1,21 @@
 package com.beanframework.backoffice.facade;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.envers.RevisionType;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.criteria.AuditCriterion;
-import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.CronjobDataDto;
 import com.beanframework.backoffice.data.CronjobDto;
+import com.beanframework.backoffice.data.CronjobSearch;
+import com.beanframework.backoffice.data.CronjobSpecification;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
@@ -40,29 +36,28 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Autowired
 	private LocaleMessageService localeMessageService;
-	
+
 	@Autowired
 	private CronjobService cronjobService;
 
 	@Override
-	public Page<CronjobDto> findPage(Specification<CronjobDto> specification, PageRequest pageable) throws Exception {
-		Page<Cronjob> page = modelService.findEntityPage(specification, pageable, Cronjob.class);
+	public Page<CronjobDto> findPage(CronjobSearch search, PageRequest pageable) throws Exception {
+		Page<Cronjob> page = cronjobService.findEntityPage(search.toString(), CronjobSpecification.findByCriteria(search), pageable);
 		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class);
 		return new PageImpl<CronjobDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
 	@Override
 	public CronjobDto findOneByUuid(UUID uuid) throws Exception {
-		Cronjob entity = modelService.findOneEntityByUuid(uuid, Cronjob.class);
+		Cronjob entity = cronjobService.findOneEntityByUuid(uuid);
 		return modelService.getDto(entity, CronjobDto.class);
 	}
 
 	@Override
-	public CronjobDto findOneByProperties(Map<String, Object> properties) throws Exception {
-		Cronjob entity = modelService.findOneEntityByProperties(properties, Cronjob.class);
+	public CronjobDto findOneProperties(Map<String, Object> properties) throws Exception {
+		Cronjob entity = cronjobService.findOneEntityByProperties(properties);
 		return modelService.getDto(entity, CronjobDto.class);
 	}
-	
 
 	@Override
 	public CronjobDto create(CronjobDto model) throws BusinessException {
@@ -74,7 +69,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 		return save(model);
 	}
 
-	private CronjobDto save(CronjobDto dto) throws BusinessException {
+	public CronjobDto save(CronjobDto dto) throws BusinessException {
 		try {
 			Cronjob entity = modelService.getEntity(dto, Cronjob.class);
 			entity = (Cronjob) cronjobService.saveEntity(entity);
@@ -87,20 +82,23 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		try {
-			modelService.deleteByUuid(uuid, Cronjob.class);
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
+		cronjobService.deleteByUuid(uuid);
+	}
+
+	@Override
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		List<Object[]> revisions = cronjobService.findHistoryByUuid(uuid, firstResult, maxResults);
+		for (int i = 0; i < revisions.size(); i++) {
+			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], CronjobDto.class);
 		}
+
+		return revisions;
 	}
 
 	@Override
 	public void trigger(CronjobDto cronjob) throws BusinessException {
 		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.UUID, cronjob.getUuid());
-
-			Cronjob updateCronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+			Cronjob updateCronjob = cronjobService.findOneEntityByUuid(cronjob.getUuid());
 
 			updateCronjob.setJobTrigger(cronjob.getJobTrigger());
 			updateCronjob.setTriggerStartDate(cronjob.getTriggerStartDate());
@@ -116,10 +114,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public CronjobDto addCronjobData(UUID uuid, String name, String value) throws BusinessException {
 
 		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.UUID, uuid);
-
-			Cronjob updateCronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+			Cronjob updateCronjob = cronjobService.findOneEntityByUuid(uuid);
 
 			List<CronjobData> datas = updateCronjob.getCronjobDatas();
 
@@ -136,7 +131,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 			updateCronjob.getCronjobDatas().add(data);
 
-			updateCronjob = (Cronjob) modelService.saveEntity(updateCronjob, Cronjob.class);
+			updateCronjob = (Cronjob) cronjobService.saveEntity(updateCronjob);
 
 			return modelService.getDto(updateCronjob, Cronjob.class);
 		} catch (Exception e) {
@@ -148,11 +143,9 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public void updateCronjobData(UUID cronjobUuid, CronjobDataDto dto) throws BusinessException {
 
 		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.UUID, cronjobUuid);
 
-			Cronjob entityCronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
-			
+			Cronjob entityCronjob = cronjobService.findOneEntityByUuid(cronjobUuid);
+
 			CronjobData entityCronjobData = modelService.getEntity(dto, CronjobData.class);
 			entityCronjobData.setCronjob(entityCronjob);
 
@@ -168,34 +161,20 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public void removeCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException {
 
 		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Cronjob.UUID, cronjobUuid);
 
-			Cronjob cronjob = modelService.findOneEntityByProperties(properties, Cronjob.class);
+			Cronjob entityCronjob = cronjobService.findOneEntityByUuid(cronjobUuid);
 
-			Iterator<CronjobData> cronjobDatas = cronjob.getCronjobDatas().iterator();
+			Iterator<CronjobData> cronjobDatas = entityCronjob.getCronjobDatas().iterator();
 			while (cronjobDatas.hasNext()) {
 				if (cronjobDatas.next().getUuid().equals(cronjobDataUuid)) {
 					cronjobDatas.remove();
 				}
 			}
 
-			modelService.saveEntity(cronjob, Cronjob.class);
+			cronjobService.saveEntity(entityCronjob);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
-	}
-
-	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, Cronjob.class);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], CronjobDto.class);
-		}
-
-		return revisions;
 	}
 
 }

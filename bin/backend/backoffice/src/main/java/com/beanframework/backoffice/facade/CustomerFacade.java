@@ -6,10 +6,10 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.backoffice.data.CustomerDto;
+import com.beanframework.backoffice.data.CustomerSearch;
 import com.beanframework.common.exception.BusinessException;
 
 public interface CustomerFacade {
@@ -22,13 +22,13 @@ public interface CustomerFacade {
 	}
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	Page<CustomerDto> findPage(Specification<CustomerDto> findByCriteria, PageRequest of) throws Exception;
+	Page<CustomerDto> findPage(CustomerSearch search, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	CustomerDto findOneByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	CustomerDto findOneByProperties(Map<String, Object> properties) throws Exception;
+	CustomerDto findOneProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
 	CustomerDto create(CustomerDto model) throws BusinessException;
@@ -44,4 +44,6 @@ public interface CustomerFacade {
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
+	List<CustomerDto> findAllDtoCustomers() throws Exception;
 }

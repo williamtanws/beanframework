@@ -9,7 +9,10 @@
 		<section class="content">
 			<!-- Search Form-->
 			<div class="row">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.dynamicfield')}}, objectSearch=${dynamicfieldSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
+				<div class="col-md-6">
+					<th:block
+						layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.dynamicfield')}}, objectSearch=${dynamicfieldSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
+				</div>
 			</div>
 			<!-- Alert Notification-->
 			<div class="row">
@@ -17,10 +20,12 @@
 			</div>
 			<!-- List Table-->
 			<div class="row" th:with="dynamicfieldName=#{module.dynamicfield.name}">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.dynamicfield}, objectUpdate=${dynamicfieldUpdate}, objectSearch=${dynamicfieldSearch}, icon=@{${@environment.getProperty('module.dynamicfield.icon')}}, createAuthority='dynamicfield_create', updateAuthority='dynamicfield_update', listFields=${ {{'id', 'ID'},{'name', dynamicfieldName}} }, paginationAction=@{${@environment.getProperty('path.dynamicfield')}}, searchFields=${ {'id','name'} }, updateForm='/backoffice/adminlte/dynamicfield/dynamicfieldForm')}"></th:block>
+				<th:block
+					layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.dynamicfield}, objectUpdate=${dynamicfieldUpdate}, objectSearch=${dynamicfieldSearch}, icon=@{${@environment.getProperty('module.dynamicfield.icon')}}, createAuthority='dynamicfield_create', updateAuthority='dynamicfield_update', listFields=${ {{'id', 'ID'},{'name', dynamicfieldName}} }, paginationAction=@{${@environment.getProperty('path.dynamicfield')}}, searchFields=${ {'id','name'} }, updateForm='/backoffice/adminlte/dynamicfield/dynamicfieldForm')}"></th:block>
 			</div>
 			<!-- Create Modal-->
-			<th:block sec:authorize="hasAuthority('dynamicfield_create')" layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.dynamicfield')}}, createObject=${dynamicfieldCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.dynamicfield.checkid')})}"></th:block>
+			<th:block sec:authorize="hasAuthority('dynamicfield_create')"
+				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.dynamicfield')}}, createObject=${dynamicfieldCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.dynamicfield.checkid')})}"></th:block>
 		</section>
 	</th:block>
 </body>

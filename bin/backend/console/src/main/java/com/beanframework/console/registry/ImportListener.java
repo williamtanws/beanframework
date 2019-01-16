@@ -1,6 +1,10 @@
 package com.beanframework.console.registry;
 
-public class Importer {
+public abstract class ImportListener {
+
+	public abstract void update() throws Exception;
+
+	public abstract void remove() throws Exception;
 
 	private String key;
 	private String name;
@@ -44,9 +48,4 @@ public class Importer {
 		this.description = description;
 	}
 
-	public void update() throws Exception {
-	}
-	
-	public void remove() throws Exception {
-	}
 }

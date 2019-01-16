@@ -6,10 +6,10 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.backoffice.data.UserRightDto;
+import com.beanframework.backoffice.data.UserRightSearch;
 import com.beanframework.common.exception.BusinessException;
 
 public interface UserRightFacade {
@@ -22,13 +22,13 @@ public interface UserRightFacade {
 	}
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	Page<UserRightDto> findPage(Specification<UserRightDto> specification, PageRequest pageRequest) throws Exception;
+	Page<UserRightDto> findPage(UserRightSearch search, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	UserRightDto findOneByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	UserRightDto findOneByProperties(Map<String, Object> properties) throws Exception;
+	UserRightDto findOneProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
 	UserRightDto create(UserRightDto model) throws BusinessException;

@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -24,34 +24,34 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminService;
-import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.ImportEntityAdminConverter;
-import com.beanframework.console.csv.AdminCsv;
-import com.beanframework.console.registry.Importer;
+import com.beanframework.console.ConsoleImportListenerConstants;
+import com.beanframework.console.converter.ImportEntityUserPermissionConverter;
+import com.beanframework.console.csv.UserPermissionCsv;
+import com.beanframework.console.registry.ImportListener;
+import com.beanframework.user.domain.UserPermission;
+import com.beanframework.user.service.UserPermissionService;
 
-public class AdminImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(AdminImporter.class);
-
-	@Autowired
-	private AdminService adminService;
+public class UserPermissionImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(UserPermissionImportListener.class);
 
 	@Autowired
-	private ImportEntityAdminConverter converter;
+	private UserPermissionService userPermissionService;
 
-	@Value("${module.console.import.update.admin}")
+	@Autowired
+	private ImportEntityUserPermissionConverter converter;
+
+	@Value("${module.console.import.update.userpermission}")
 	private String IMPORT_UPDATE;
 
-	@Value("${module.console.import.remove.admin}")
+	@Value("${module.console.import.remove.userpermission}")
 	private String IMPORT_REMOVE;
 
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.AdminImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.AdminImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.AdminImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.AdminImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.UserPermissionImportListener.KEY);
+		setName(ConsoleImportListenerConstants.UserPermissionImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.UserPermissionImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.UserPermissionImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -64,8 +64,8 @@ public class AdminImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<AdminCsv> adminCsvList = readCSVFile(reader, AdminCsv.getUpdateProcessors());
-			save(adminCsvList);
+			List<UserPermissionCsv> userPermissionCsvList = readCSVFile(reader, UserPermissionCsv.getUpdateProcessors());
+			save(userPermissionCsvList);
 		}
 	}
 
@@ -79,15 +79,15 @@ public class AdminImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<AdminCsv> adminCsvList = readCSVFile(reader, AdminCsv.getRemoveProcessors());
-			remove(adminCsvList);
+			List<UserPermissionCsv> csvList = readCSVFile(reader, UserPermissionCsv.getRemoveProcessors());
+			remove(csvList);
 		}
 	}
 
-	public List<AdminCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
+	public List<UserPermissionCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
-		List<AdminCsv> csvList = new ArrayList<AdminCsv>();
+		List<UserPermissionCsv> csvList = new ArrayList<UserPermissionCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -96,13 +96,13 @@ public class AdminImporter extends Importer {
 			// must match)
 			final String[] header = beanReader.getHeader(true);
 
-			AdminCsv csv;
-			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.AdminImporter.NAME);
-			while ((csv = beanReader.read(AdminCsv.class, header, processors)) != null) {
+			UserPermissionCsv csv;
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.UserPermissionImportListener.NAME);
+			while ((csv = beanReader.read(UserPermissionCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.AdminImporter.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.UserPermissionImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -119,19 +119,15 @@ public class AdminImporter extends Importer {
 		return csvList;
 	}
 
-	public void save(List<AdminCsv> csvList) throws Exception {
+	public void save(List<UserPermissionCsv> csvList) throws Exception {
 
-		for (AdminCsv csv : csvList) {
-
-			Admin model = converter.convert(csv);
-			adminService.saveEntity(model);
+		for (UserPermissionCsv csv : csvList) {
+			UserPermission model = converter.convert(csv);
+			userPermissionService.saveEntity(model);
 		}
 	}
 
-	public void remove(List<AdminCsv> csvList) throws Exception {
-		for (AdminCsv csv : csvList) {
-			adminService.deleteById(csv.getId());
-		}
-	}
+	public void remove(List<UserPermissionCsv> csvList) throws Exception {
 
+	}
 }

@@ -13,7 +13,7 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.CronjobCsv;
-import com.beanframework.console.registry.Importer;
+import com.beanframework.console.registry.ImportListener;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 
@@ -62,11 +62,11 @@ public class ImportEntityCronjobConverter implements EntityConverter<CronjobCsv,
 			// Cronjob Data
 			for (int i = 0; i < prototype.getCronjobDatas().size(); i++) {
 				if (source.getCronjobData() != null) {
-					String[] cronjobDataList = source.getCronjobData().split(Importer.SPLITTER);
+					String[] cronjobDataList = source.getCronjobData().split(ImportListener.SPLITTER);
 
 					for (String cronjobDataString : cronjobDataList) {
-						String name = cronjobDataString.split(Importer.EQUALS)[0];
-						String value = cronjobDataString.split(Importer.EQUALS)[1];
+						String name = cronjobDataString.split(ImportListener.EQUALS)[0];
+						String value = cronjobDataString.split(ImportListener.EQUALS)[1];
 
 						if (prototype.getCronjobDatas().get(i).getName().equals(name)) {
 							prototype.getCronjobDatas().get(i).setValue(value);
@@ -77,11 +77,11 @@ public class ImportEntityCronjobConverter implements EntityConverter<CronjobCsv,
 			
 			if (source.getCronjobData() != null) {
 
-				String[] cronjobDataList = source.getCronjobData().split(Importer.SPLITTER);
+				String[] cronjobDataList = source.getCronjobData().split(ImportListener.SPLITTER);
 
 				for (String cronjobDataString : cronjobDataList) {
-					String name = cronjobDataString.split(Importer.EQUALS)[0];
-					String value = cronjobDataString.split(Importer.EQUALS)[1];
+					String name = cronjobDataString.split(ImportListener.EQUALS)[0];
+					String value = cronjobDataString.split(ImportListener.EQUALS)[1];
 					
 					boolean add = true;
 					for (CronjobData cronjobData : prototype.getCronjobDatas()) {

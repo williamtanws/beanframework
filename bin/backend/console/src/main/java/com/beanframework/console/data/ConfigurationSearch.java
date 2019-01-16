@@ -17,4 +17,10 @@ public class ConfigurationSearch extends Configuration {
 	public void setSearchAll(String searchAll) {
 		this.searchAll = searchAll;
 	}
+
+	@Override
+	public String toString() {
+		return "ConfigurationSearch [getSearchAll()=" + getSearchAll() + ", getValue()=" + getValue() + ", getId()=" + getId() + "]";
+	}
+
 }

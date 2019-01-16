@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -24,34 +24,34 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.ImportEntityDynamicFieldConverter;
-import com.beanframework.console.csv.DynamicFieldCsv;
-import com.beanframework.console.registry.Importer;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.service.DynamicFieldService;
+import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.configuration.service.ConfigurationService;
+import com.beanframework.console.ConsoleImportListenerConstants;
+import com.beanframework.console.converter.ImportEntityConfigurationConverter;
+import com.beanframework.console.csv.ConfigurationCsv;
+import com.beanframework.console.registry.ImportListener;
 
-public class DynamicFieldImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldImporter.class);
-
-	@Autowired
-	private DynamicFieldService dynamicFieldService;
+public class ConfigurationImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(ConfigurationImportListener.class);
 
 	@Autowired
-	private ImportEntityDynamicFieldConverter converter;
+	private ConfigurationService configurationService;
+	
+	@Autowired
+	private ImportEntityConfigurationConverter converter;
 
-	@Value("${module.console.import.update.dynamicfield}")
+	@Value("${module.console.import.update.configuration}")
 	private String IMPORT_UPDATE;
 
-	@Value("${module.console.import.remove.dynamicfield}")
+	@Value("${module.console.import.remove.configuration}")
 	private String IMPORT_REMOVE;
 
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.DynamicFieldImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.DynamicFieldImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.DynamicFieldImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.DynamicFieldImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.ConfigurationImportListener.KEY);
+		setName(ConsoleImportListenerConstants.ConfigurationImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.ConfigurationImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.ConfigurationImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -64,8 +64,8 @@ public class DynamicFieldImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<DynamicFieldCsv> cronjobCsvList = readCSVFile(reader, DynamicFieldCsv.getUpdateProcessors());
-			save(cronjobCsvList);
+			List<ConfigurationCsv> configurationCsvList = readCSVFile(reader, ConfigurationCsv.getUpdateProcessors());
+			save(configurationCsvList);
 		}
 	}
 
@@ -79,15 +79,15 @@ public class DynamicFieldImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<DynamicFieldCsv> cronjobCsvList = readCSVFile(reader, DynamicFieldCsv.getRemoveProcessors());
-			remove(cronjobCsvList);
+			List<ConfigurationCsv> configurationCsvList = readCSVFile(reader, ConfigurationCsv.getRemoveProcessors());
+			remove(configurationCsvList);
 		}
 	}
 
-	public List<DynamicFieldCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
+	public List<ConfigurationCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
-		List<DynamicFieldCsv> csvList = new ArrayList<DynamicFieldCsv>();
+		List<ConfigurationCsv> csvList = new ArrayList<ConfigurationCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -96,13 +96,13 @@ public class DynamicFieldImporter extends Importer {
 			// must match)
 			final String[] header = beanReader.getHeader(true);
 
-			DynamicFieldCsv csv;
-			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.DynamicFieldImporter.NAME);
-			while ((csv = beanReader.read(DynamicFieldCsv.class, header, processors)) != null) {
+			ConfigurationCsv csv;
+			LOGGER.info("Start import "+ConsoleImportListenerConstants.ConfigurationImportListener.NAME);
+			while ((csv = beanReader.read(ConfigurationCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.DynamicFieldImporter.NAME);
+			LOGGER.info("Finished import "+ConsoleImportListenerConstants.ConfigurationImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -119,19 +119,16 @@ public class DynamicFieldImporter extends Importer {
 		return csvList;
 	}
 
-	public void save(List<DynamicFieldCsv> csvList) throws Exception {
+	public void save(List<ConfigurationCsv> csvList) throws Exception {
 
-		for (DynamicFieldCsv csv : csvList) {
+		for (ConfigurationCsv csv : csvList) {
 
-			DynamicField model = converter.convert(csv);
-			dynamicFieldService.saveEntity(model);
+			Configuration model = converter.convert(csv);
+			configurationService.saveEntity(model);
 		}
 	}
 
-	private void remove(List<DynamicFieldCsv> csvList) throws Exception {
-		for (DynamicFieldCsv csv : csvList) {
-			dynamicFieldService.deleteById(csv.getId());
-		}
+	public void remove(List<ConfigurationCsv> csvList) throws Exception {
 	}
 
 }

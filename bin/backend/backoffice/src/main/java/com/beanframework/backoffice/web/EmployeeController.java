@@ -27,7 +27,6 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.backoffice.data.EmployeeDto;
 import com.beanframework.backoffice.data.EmployeeSearch;
-import com.beanframework.backoffice.data.EmployeeSpecification;
 import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.backoffice.facade.EmployeeFacade;
 import com.beanframework.backoffice.facade.UserGroupFacade;
@@ -42,7 +41,7 @@ public class EmployeeController extends AbstractController {
 
 	@Autowired
 	private EmployeeFacade employeeFacade;
-	
+
 	@Autowired
 	private EmployeeService employeeService;
 
@@ -76,8 +75,7 @@ public class EmployeeController extends AbstractController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<EmployeeDto> pagination = employeeFacade.findPage(EmployeeSpecification.findByCriteria(employeeSearch),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
+		Page<EmployeeDto> pagination = employeeFacade.findPage(employeeSearch, PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
@@ -124,8 +122,8 @@ public class EmployeeController extends AbstractController {
 	}
 
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
-	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch, @ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) EmployeeDto employeeUpdate,
-			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.SEARCH) EmployeeSearch employeeSearch,
+			@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) EmployeeDto employeeUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(employeeSearch, model, requestParams));
 

@@ -17,4 +17,11 @@ public class UserPermissionSearch extends UserPermission {
 	public void setSearchAll(String searchAll) {
 		this.searchAll = searchAll;
 	}
+	
+	@Override
+	public String toString() {
+		return "UserPermissionSearch [getSearchAll()=" + getSearchAll() + ", getName()=" + getName() + ", getId()=" + getId() + "]";
+	}
+	
+	
 }

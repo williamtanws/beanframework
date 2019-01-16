@@ -17,4 +17,9 @@ public class UserGroupSearch extends UserGroup {
 	public void setSearchAll(String searchAll) {
 		this.searchAll = searchAll;
 	}
+	
+	@Override
+	public String toString() {
+		return "UserGroupSearch [getSearchAll()=" + getSearchAll() + ", getName()=" + getName() + ", getId()=" + getId() + "]";
+	}
 }

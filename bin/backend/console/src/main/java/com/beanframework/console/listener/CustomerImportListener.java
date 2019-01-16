@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -24,34 +24,34 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationService;
-import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.ImportEntityConfigurationConverter;
-import com.beanframework.console.csv.ConfigurationCsv;
-import com.beanframework.console.registry.Importer;
+import com.beanframework.console.ConsoleImportListenerConstants;
+import com.beanframework.console.converter.ImportEntityCustomerConverter;
+import com.beanframework.console.csv.CustomerCsv;
+import com.beanframework.console.registry.ImportListener;
+import com.beanframework.customer.domain.Customer;
+import com.beanframework.customer.service.CustomerService;
 
-public class ConfigurationImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(ConfigurationImporter.class);
+public class CustomerImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(CustomerImportListener.class);
 
 	@Autowired
-	private ConfigurationService configurationService;
-	
-	@Autowired
-	private ImportEntityConfigurationConverter converter;
+	private CustomerService customerService;
 
-	@Value("${module.console.import.update.configuration}")
+	@Autowired
+	private ImportEntityCustomerConverter converter;
+
+	@Value("${module.console.import.update.customer}")
 	private String IMPORT_UPDATE;
 
-	@Value("${module.console.import.remove.configuration}")
+	@Value("${module.console.import.remove.customer}")
 	private String IMPORT_REMOVE;
 
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.ConfigurationImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.ConfigurationImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.ConfigurationImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.ConfigurationImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.CustomerImportListener.KEY);
+		setName(ConsoleImportListenerConstants.CustomerImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.CustomerImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.CustomerImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -64,8 +64,8 @@ public class ConfigurationImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<ConfigurationCsv> configurationCsvList = readCSVFile(reader, ConfigurationCsv.getUpdateProcessors());
-			save(configurationCsvList);
+			List<CustomerCsv> customerCsvList = readCSVFile(reader, CustomerCsv.getUpdateProcessors());
+			save(customerCsvList);
 		}
 	}
 
@@ -79,15 +79,15 @@ public class ConfigurationImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<ConfigurationCsv> configurationCsvList = readCSVFile(reader, ConfigurationCsv.getRemoveProcessors());
-			remove(configurationCsvList);
+			List<CustomerCsv> customerCsvList = readCSVFile(reader, CustomerCsv.getRemoveProcessors());
+			remove(customerCsvList);
 		}
 	}
 
-	public List<ConfigurationCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
+	public List<CustomerCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
-		List<ConfigurationCsv> csvList = new ArrayList<ConfigurationCsv>();
+		List<CustomerCsv> csvList = new ArrayList<CustomerCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -96,13 +96,13 @@ public class ConfigurationImporter extends Importer {
 			// must match)
 			final String[] header = beanReader.getHeader(true);
 
-			ConfigurationCsv csv;
-			LOGGER.info("Start import "+PlatformUpdateWebConstants.Importer.ConfigurationImporter.NAME);
-			while ((csv = beanReader.read(ConfigurationCsv.class, header, processors)) != null) {
+			CustomerCsv csv;
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.CustomerImportListener.NAME);
+			while ((csv = beanReader.read(CustomerCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+PlatformUpdateWebConstants.Importer.ConfigurationImporter.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.CustomerImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -119,19 +119,16 @@ public class ConfigurationImporter extends Importer {
 		return csvList;
 	}
 
-	public void save(List<ConfigurationCsv> csvList) throws Exception {
+	public void save(List<CustomerCsv> customerCsvList) throws Exception {
 
-		for (ConfigurationCsv csv : csvList) {
+		for (CustomerCsv csv : customerCsvList) {
 
-			Configuration model = converter.convert(csv);
-			configurationService.saveEntity(model);
+			Customer model = converter.convert(csv);
+			customerService.saveEntity(model);
 		}
 	}
 
-	public void remove(List<ConfigurationCsv> csvList) throws Exception {
-		for (ConfigurationCsv csv : csvList) {
-			configurationService.deleteById(csv.getId());
-		}
+	public void remove(List<CustomerCsv> csvList) throws Exception {
 	}
 
 }

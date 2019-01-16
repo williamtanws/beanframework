@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -24,15 +24,15 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.console.PlatformUpdateWebConstants;
+import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.ImportEntityUserRightConverter;
 import com.beanframework.console.csv.UserRightCsv;
-import com.beanframework.console.registry.Importer;
+import com.beanframework.console.registry.ImportListener;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserRightService;
 
-public class UserRightImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(UserRightImporter.class);
+public class UserRightImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(UserRightImportListener.class);
 	
 	@Autowired
 	private UserRightService userRightService;
@@ -48,10 +48,10 @@ public class UserRightImporter extends Importer {
 
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.UserRightImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.UserRightImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.UserRightImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.UserRightImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.UserRightImportListener.KEY);
+		setName(ConsoleImportListenerConstants.UserRightImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.UserRightImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.UserRightImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -97,12 +97,12 @@ public class UserRightImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			UserRightCsv csv;
-			LOGGER.info("Start import UserRight Csv.");
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.UserRightImportListener.NAME);
 			while ((csv = beanReader.read(UserRightCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import UserRight Csv.");
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.UserRightImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -128,9 +128,7 @@ public class UserRightImporter extends Importer {
 	}
 
 	public void remove(List<UserRightCsv> csvList) throws Exception {
-		for (UserRightCsv csv : csvList) {
-			userRightService.deleteById(csv.getId());
-		}
+
 	}
 
 }

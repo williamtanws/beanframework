@@ -20,7 +20,7 @@ import com.beanframework.cronjob.service.QuartzManager;
 @Component
 public class CronjobGlobalListener implements JobListener {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CronjobGlobalListener.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(CronjobGlobalListener.class);
 
 	public static final String LISTENER_NAME = "quartJobSchedulingListener";
 

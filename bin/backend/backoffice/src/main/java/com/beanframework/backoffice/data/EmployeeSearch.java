@@ -18,4 +18,8 @@ public class EmployeeSearch extends Employee {
 		this.searchAll = searchAll;
 	}
 
+	@Override
+	public String toString() {
+		return "EmployeeSearch [getSearchAll()=" + getSearchAll() + ", getName()=" + getName() + ", getId()=" + getId() + "]";
+	}
 }

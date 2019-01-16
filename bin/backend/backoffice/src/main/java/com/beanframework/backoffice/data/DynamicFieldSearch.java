@@ -17,4 +17,9 @@ public class DynamicFieldSearch extends DynamicField {
 	public void setSearchAll(String searchAll) {
 		this.searchAll = searchAll;
 	}
+	
+	@Override
+	public String toString() {
+		return "DynamicFieldSearch [getSearchAll()=" + getSearchAll() + ", getName()=" + getName() + ", getId()=" + getId() + "]";
+	}
 }

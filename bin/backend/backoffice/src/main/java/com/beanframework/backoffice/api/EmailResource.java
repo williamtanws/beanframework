@@ -30,7 +30,7 @@ public class EmailResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Email.ID, id);
 
-		EmailDto data = emailFacade.findOneByProperties(properties);
+		EmailDto data = emailFacade.findOneProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

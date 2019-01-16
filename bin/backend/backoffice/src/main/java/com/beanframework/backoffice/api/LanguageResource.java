@@ -30,7 +30,7 @@ public class LanguageResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Language.ID, id);
 		
-		LanguageDto data = languageFacade.findOneByProperties(properties);
+		LanguageDto data = languageFacade.findOneProperties(properties);
 		
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

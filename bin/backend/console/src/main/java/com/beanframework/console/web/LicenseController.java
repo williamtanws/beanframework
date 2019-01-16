@@ -1,5 +1,6 @@
 package com.beanframework.console.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.utils.BooleanUtils;
+import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.LicenseWebConstants;
 import com.beanframework.console.data.ConfigurationDto;
@@ -37,7 +39,9 @@ public class LicenseController extends AbstractController {
 
 	public boolean isLicenseAccepted() throws Exception {
 		
-		ConfigurationDto configuration = configurationFacade.findOneById(LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+		ConfigurationDto configuration = configurationFacade.findOneProperties(properties);
 		
 		if (configuration == null) {
 			return false;
@@ -53,7 +57,9 @@ public class LicenseController extends AbstractController {
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 		try {
 			
-			configuration = configurationFacade.findOneById(LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+			configuration = configurationFacade.findOneProperties(properties);
 			if(configuration == null) {
 				configuration = new ConfigurationDto();
 			}
@@ -71,9 +77,10 @@ public class LicenseController extends AbstractController {
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 
 		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+			ConfigurationDto existingConfiguration = configurationFacade.findOneProperties(properties);
 			
-			ConfigurationDto existingConfiguration = configurationFacade.findOneById(LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
-						
 			if(existingConfiguration == null) {
 				existingConfiguration = new ConfigurationDto();
 				existingConfiguration.setId(LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
@@ -87,10 +94,10 @@ public class LicenseController extends AbstractController {
 			}
 			
 			if(existingConfiguration.getUuid() == null) {
-				configurationFacade.createDto(existingConfiguration);
+				configurationFacade.create(existingConfiguration);
 			}
 			else {
-				configurationFacade.updateDto(existingConfiguration);
+				configurationFacade.update(existingConfiguration);
 			}
 			addSuccessMessage(redirectAttributes, LicenseWebConstants.Locale.ACCEPT_SUCCESS);
 		} catch (Exception e) {

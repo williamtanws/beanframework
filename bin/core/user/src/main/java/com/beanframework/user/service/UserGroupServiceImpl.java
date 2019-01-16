@@ -1,11 +1,21 @@
 package com.beanframework.user.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.exception.BusinessException;
@@ -23,23 +33,72 @@ public class UserGroupServiceImpl implements UserGroupService {
 		return modelService.create(UserGroup.class);
 	}
 
+	@Cacheable(value = "UserGroupOne", key = "#uuid")
 	@Override
-	public List<UserGroup> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findCachedEntityByPropertiesAndSorts(null, sorts, null, null, UserGroup.class);
+	public UserGroup findOneEntityByUuid(UUID uuid) throws Exception {
+		return modelService.findOneEntityByUuid(uuid, UserGroup.class);
 	}
 
+	@Cacheable(value = "UserGroupOneProperties", key = "#properties")
+	@Override
+	public UserGroup findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneEntityByProperties(properties, UserGroup.class);
+	}
+
+	@Cacheable(value = "UserGroupsSorts", key = "#sorts")
+	@Override
+	public List<UserGroup> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserGroup.class);
+	}
+
+	@Cacheable(value = "UserGroupsPage", key = "{#query}")
+	@Override
+	public <T> Page<UserGroup> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
+		return modelService.findEntityPage(specification, pageable, UserGroup.class);
+	}
+
+	@Cacheable(value = "UserGroupsHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Override
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, UserGroup.class);
+	}
+
+	@Cacheable(value = "UserGroupsRelatedHistory", key = "{#relatedEntity, #uuid, #firstResult, #maxResults}")
+	@Override
+	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, UserGroup.class);
+	}
+
+	@Caching(evict = { //
+			@CacheEvict(value = "UserGroupOne", key = "#model.uuid", condition = "#model.uuid != null"), //
+			@CacheEvict(value = "UserGroupOneProperties", allEntries = true), //
+			@CacheEvict(value = "UserGroupsSorts", allEntries = true), //
+			@CacheEvict(value = "UserGroupsPage", allEntries = true), //
+			@CacheEvict(value = "UserGroupsHistory", allEntries = true), //
+			@CacheEvict(value = "UserGroupsRelatedHistory", allEntries = true) }) //
 	@Override
 	public UserGroup saveEntity(UserGroup model) throws BusinessException {
 		return (UserGroup) modelService.saveEntity(model, UserGroup.class);
 	}
 
+	@Caching(evict = { //
+			@CacheEvict(value = "UserGroupOne", key = "#uuid"), //
+			@CacheEvict(value = "UserGroupOneProperties", allEntries = true), //
+			@CacheEvict(value = "UserGroupsSorts", allEntries = true), //
+			@CacheEvict(value = "UserGroupsPage", allEntries = true), //
+			@CacheEvict(value = "UserGroupsHistory", allEntries = true), //
+			@CacheEvict(value = "UserGroupsRelatedHistory", allEntries = true) })
 	@Override
-	public void deleteById(String id) throws BusinessException {
+	public void deleteByUuid(UUID uuid) throws BusinessException {
+
 		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(UserGroup.ID, id);
-			UserGroup model = modelService.findOneEntityByProperties(properties, UserGroup.class);
+			UserGroup model = modelService.findOneEntityByUuid(uuid, UserGroup.class);
 			modelService.deleteByEntity(model, UserGroup.class);
+
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}

@@ -30,7 +30,7 @@ public class DynamicFieldResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(DynamicField.ID, id);
 		
-		DynamicFieldDto data = dynamicFieldFacade.findOneByProperties(properties);
+		DynamicFieldDto data = dynamicFieldFacade.findOneProperties(properties);
 		
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

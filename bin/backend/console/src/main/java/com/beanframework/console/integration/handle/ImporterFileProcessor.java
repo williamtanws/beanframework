@@ -22,17 +22,17 @@ import com.beanframework.console.csv.UserGroupCsv;
 import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.csv.UserRightCsv;
 import com.beanframework.console.data.FileProcessor;
-import com.beanframework.console.importer.AdminImporter;
-import com.beanframework.console.importer.ConfigurationImporter;
-import com.beanframework.console.importer.CronjobImporter;
-import com.beanframework.console.importer.CustomerImporter;
-import com.beanframework.console.importer.EmployeeImporter;
-import com.beanframework.console.importer.LanguageImporter;
-import com.beanframework.console.importer.MenuImporter;
-import com.beanframework.console.importer.UserAuthorityImporter;
-import com.beanframework.console.importer.UserGroupImporter;
-import com.beanframework.console.importer.UserPermissionImporter;
-import com.beanframework.console.importer.UserRightImporter;
+import com.beanframework.console.listener.AdminImportListener;
+import com.beanframework.console.listener.ConfigurationImportListener;
+import com.beanframework.console.listener.CronjobImportListener;
+import com.beanframework.console.listener.CustomerImportListener;
+import com.beanframework.console.listener.EmployeeImportListener;
+import com.beanframework.console.listener.LanguageImportListener;
+import com.beanframework.console.listener.MenuImportListener;
+import com.beanframework.console.listener.UserAuthorityImportListener;
+import com.beanframework.console.listener.UserGroupImportListener;
+import com.beanframework.console.listener.UserPermissionImportListener;
+import com.beanframework.console.listener.UserRightImportListener;
 
 @Component
 public class ImporterFileProcessor implements FileProcessor{
@@ -40,37 +40,37 @@ public class ImporterFileProcessor implements FileProcessor{
 	private static final String MSG = "%s received. Path: %s";
 
 	@Autowired
-	private AdminImporter adminImporter;
+	private AdminImportListener adminImporter;
 
 	@Autowired
-	private ConfigurationImporter configurationImporter;
+	private ConfigurationImportListener configurationImporter;
 
 	@Autowired
-	private CronjobImporter cronjobImporter;
+	private CronjobImportListener cronjobImporter;
 
 	@Autowired
-	private CustomerImporter customerImporter;
+	private CustomerImportListener customerImporter;
 
 	@Autowired
-	private EmployeeImporter employeeImporter;
+	private EmployeeImportListener employeeImporter;
 
 	@Autowired
-	private LanguageImporter languageImporter;
+	private LanguageImportListener languageImporter;
 
 	@Autowired
-	private MenuImporter menuImporter;
+	private MenuImportListener menuImporter;
 
 	@Autowired
-	private UserAuthorityImporter userAuthorityImporter;
+	private UserAuthorityImportListener userAuthorityImporter;
 
 	@Autowired
-	private UserGroupImporter userGroupImporter;
+	private UserGroupImportListener userGroupImporter;
 
 	@Autowired
-	private UserPermissionImporter userPermissionImporter;
+	private UserPermissionImportListener userPermissionImporter;
 
 	@Autowired
-	private UserRightImporter userRightImporter;
+	private UserRightImportListener userRightImporter;
 
 	@Override
 	public void process(Message<String> msg) throws Exception {

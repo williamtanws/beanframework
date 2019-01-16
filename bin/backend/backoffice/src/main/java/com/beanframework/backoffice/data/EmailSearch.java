@@ -17,4 +17,9 @@ public class EmailSearch extends Email {
 	public void setSearchAll(String searchAll) {
 		this.searchAll = searchAll;
 	}
+	
+	@Override
+	public String toString() {
+		return "EmailSearch [getSearchAll()=" + getSearchAll() + ", getName()=" + getName() + ", getSubject()=" + getSubject() + "]";
+	}
 }

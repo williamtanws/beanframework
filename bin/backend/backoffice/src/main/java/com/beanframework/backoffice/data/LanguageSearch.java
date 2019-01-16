@@ -17,4 +17,9 @@ public class LanguageSearch extends Language {
 	public void setSearchAll(String searchAll) {
 		this.searchAll = searchAll;
 	}
+	
+	@Override
+	public String toString() {
+		return "LanguageSearch [getSearchAll()=" + getSearchAll() + ", getName()=" + getName() + ", getId()=" + getId() + "]";
+	}
 }

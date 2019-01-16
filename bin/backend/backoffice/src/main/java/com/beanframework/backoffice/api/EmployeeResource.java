@@ -30,7 +30,7 @@ public class EmployeeResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
 
-		EmployeeDto data = employeeFacade.findOneByProperties(properties);
+		EmployeeDto data = employeeFacade.findOneProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -24,34 +24,38 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.ImportEntityLanguageConverter;
-import com.beanframework.console.csv.LanguageCsv;
-import com.beanframework.console.registry.Importer;
-import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
+import com.beanframework.console.ConsoleImportListenerConstants;
+import com.beanframework.console.converter.ImportEntityCronjobConverter;
+import com.beanframework.console.csv.CronjobCsv;
+import com.beanframework.console.registry.ImportListener;
+import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.service.CronjobManagerService;
+import com.beanframework.cronjob.service.CronjobService;
 
-public class LanguageImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(LanguageImporter.class);
-
-	@Autowired
-	private LanguageService languageService;
+public class CronjobImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(CronjobImportListener.class);
 
 	@Autowired
-	private ImportEntityLanguageConverter converter;
+	private CronjobService cronjobService;
 
-	@Value("${module.console.import.update.language}")
+	@Autowired
+	private ImportEntityCronjobConverter converter;
+
+	@Autowired
+	private CronjobManagerService cronjobManagerService;
+
+	@Value("${module.console.import.update.cronjob}")
 	private String IMPORT_UPDATE;
 
-	@Value("${module.console.import.remove.language}")
+	@Value("${module.console.import.remove.cronjob}")
 	private String IMPORT_REMOVE;
 
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.LanguageImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.LanguageImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.LanguageImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.LanguageImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.CronjobImportListener.KEY);
+		setName(ConsoleImportListenerConstants.CronjobImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.CronjobImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.CronjobImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -64,8 +68,8 @@ public class LanguageImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<LanguageCsv> languageCsvList = readCSVFile(reader, LanguageCsv.getUpdateProcessors());
-			save(languageCsvList);
+			List<CronjobCsv> cronjobCsvList = readCSVFile(reader, CronjobCsv.getUpdateProcessors());
+			save(cronjobCsvList);
 		}
 	}
 
@@ -79,15 +83,15 @@ public class LanguageImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<LanguageCsv> languageCsvList = readCSVFile(reader, LanguageCsv.getRemoveProcessors());
-			remove(languageCsvList);
+			List<CronjobCsv> cronjobCsvList = readCSVFile(reader, CronjobCsv.getRemoveProcessors());
+			remove(cronjobCsvList);
 		}
 	}
 
-	public List<LanguageCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
+	public List<CronjobCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
-		List<LanguageCsv> csvList = new ArrayList<LanguageCsv>();
+		List<CronjobCsv> csvList = new ArrayList<CronjobCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -96,13 +100,13 @@ public class LanguageImporter extends Importer {
 			// must match)
 			final String[] header = beanReader.getHeader(true);
 
-			LanguageCsv csv;
-			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.LanguageImporter.NAME);
-			while ((csv = beanReader.read(LanguageCsv.class, header, processors)) != null) {
+			CronjobCsv csv;
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.CronjobImportListener.NAME);
+			while ((csv = beanReader.read(CronjobCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.LanguageImporter.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.CronjobImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -119,19 +123,19 @@ public class LanguageImporter extends Importer {
 		return csvList;
 	}
 
-	public void save(List<LanguageCsv> csvList) throws Exception {
+	public void save(List<CronjobCsv> csvList) throws Exception {
 
-		for (LanguageCsv csv : csvList) {
+		cronjobManagerService.clearAllScheduler();
 
-			Language model = converter.convert(csv);
-			languageService.saveEntity(model);
+		for (CronjobCsv csv : csvList) {
+
+			Cronjob model = converter.convert(csv);
+			cronjobService.saveEntity(model);
 		}
+
+		cronjobManagerService.initCronJob();
 	}
 
-	public void remove(List<LanguageCsv> csvList) throws Exception {
-		for (LanguageCsv csv : csvList) {
-			languageService.deleteById(csv.getId());
-		}
+	public void remove(List<CronjobCsv> configurationCsvList) throws Exception {
 	}
-
 }

@@ -1,13 +1,10 @@
 package com.beanframework.backoffice.facade;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.envers.RevisionType;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.criteria.AuditCriterion;
-import org.hibernate.envers.query.order.AuditOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +31,13 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
-		Menu entity = modelService.findOneEntityByUuid(uuid, Menu.class);
+		Menu entity = menuService.findOneEntityByUuid(uuid);
 		return modelService.getDto(entity, MenuDto.class);
 	}
 
 	@Override
-	public MenuDto findOneByProperties(Map<String, Object> properties) throws Exception {
-		Menu entity = modelService.findOneEntityByProperties(properties, Menu.class);
+	public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
+		Menu entity = menuService.findOneEntityByProperties(properties);
 		return modelService.getDto(entity, MenuDto.class);
 	}
 
@@ -53,7 +50,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	public MenuDto update(MenuDto model) throws BusinessException {
 		return save(model);
 	}
-	
+
 	public MenuDto save(MenuDto dto) throws BusinessException {
 		try {
 			Menu entity = modelService.getEntity(dto, Menu.class);
@@ -77,7 +74,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		try {
-			menuService.delete(uuid);
+			menuService.deleteByUuid(uuid);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -95,9 +92,7 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, Menu.class);
+		List<Object[]> revisions = menuService.findHistoryByUuid(uuid, firstResult, maxResults);
 		for (int i = 0; i < revisions.size(); i++) {
 			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], MenuDto.class);
 		}
@@ -107,13 +102,19 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(MenuField.MENU).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, MenuField.class);
+		List<Object[]> revisions = menuService.findHistoryByRelatedUuid(MenuField.MENU, uuid, firstResult, maxResults);
 		for (int i = 0; i < revisions.size(); i++) {
 			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], MenuFieldDto.class);
 		}
 
 		return revisions;
+	}
+
+	@Override
+	public List<Menu> findMenuTreeByCurrentUser() throws Exception {
+		List<Menu> menuTree = new ArrayList<Menu>();
+		menuTree.addAll(menuService.findEntityMenuTree());
+		
+		return menuService.filterEntityMenuTreeByCurrentUser(menuTree);
 	}
 }

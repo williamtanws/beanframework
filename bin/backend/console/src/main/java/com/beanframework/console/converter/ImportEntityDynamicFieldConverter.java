@@ -13,7 +13,7 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldCsv;
-import com.beanframework.console.registry.Importer;
+import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldEnumValue;
 import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
@@ -71,7 +71,7 @@ public class ImportEntityDynamicFieldConverter implements EntityConverter<Dynami
 
 			// Enum Values
 			if (StringUtils.isNotBlank(source.getEnumValues())) {
-				String[] values = source.getEnumValues().split(Importer.SPLITTER);
+				String[] values = source.getEnumValues().split(ImportListener.SPLITTER);
 				for (int i = 0; i < values.length; i++) {
 
 					boolean add = true;

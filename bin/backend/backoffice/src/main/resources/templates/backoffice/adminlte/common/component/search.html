@@ -2,31 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
 	<th:block layout:fragment="search (searchAction, objectSearch, searchFields, displayFields, searchForm )">
-		<div class="col-md-6">
-			<div class="box box-solid">
-				<div class="box-body">
-					<!-- search form -->
-					<form th:action="${searchAction}" method="get" th:object="${objectSearch}">
-						<input type="hidden" name="size" th:value="${pagination.size}">
-						<div class="input-group">
-							<input type="text" name="searchAll" th:value="${objectSearch.searchAll}" class="form-control">
-							<span class="input-group-btn">
-								<button type="submit" id="search-btn" class="btn btn-primary" th:text="#{module.backoffice.search}"></button>
-								<button type="button" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-search" th:title="#{module.backoffice.search.advanced}">
-									<span class="fa fa-search-plus"></span>
-								</button>
-								<a th:href="${searchAction}" class="btn btn-default btn-flat" th:title="#{module.backoffice.refresh}">
-									<span class="fa fa-refresh"></span>
-								</a>
-							</span>
-						</div>
-					</form>
-					<th:block th:each="field,itrStat: ${displayFields}" th:if="${!#strings.isEmpty(objectSearch.__${field}__)}">
-						<span th:if="${itrStat.index > 0}">,</span>
-						<label class="text-block" th:text="#{module.search.__${field}__}+': '"></label>
-						<span class="text-block" th:text="${objectSearch.__${field}__}"></span>
-					</th:block>
-				</div>
+		<div class="box box-solid">
+			<div class="box-body">
+				<!-- search form -->
+				<form th:action="${searchAction}" method="get" th:object="${objectSearch}">
+					<input type="hidden" name="size" th:value="${pagination.size}">
+					<div class="input-group">
+						<input type="text" name="searchAll" th:value="${objectSearch.searchAll}" class="form-control">
+						<span class="input-group-btn">
+							<button type="submit" id="search-btn" class="btn btn-primary" th:text="#{module.backoffice.search}"></button>
+							<button type="button" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-search" th:title="#{module.backoffice.search.advanced}">
+								<span class="fa fa-search-plus"></span>
+							</button>
+							<a th:href="${searchAction}" class="btn btn-default btn-flat" th:title="#{module.backoffice.refresh}">
+								<span class="fa fa-refresh"></span>
+							</a>
+						</span>
+					</div>
+				</form>
+				<th:block th:each="field,itrStat: ${displayFields}" th:if="${!#strings.isEmpty(objectSearch.__${field}__)}">
+					<span th:if="${itrStat.index > 0}">,</span>
+					<label class="text-block" th:text="#{module.search.__${field}__}+': '"></label>
+					<span class="text-block" th:text="${objectSearch.__${field}__}"></span>
+				</th:block>
 			</div>
 		</div>
 		<div class="modal fade" id="modal-search">
