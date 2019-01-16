@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -24,34 +24,34 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.ImportEntityMenuConverter;
-import com.beanframework.console.csv.MenuCsv;
-import com.beanframework.console.registry.Importer;
-import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.service.MenuService;
+import com.beanframework.console.ConsoleImportListenerConstants;
+import com.beanframework.console.converter.ImportEntityLanguageConverter;
+import com.beanframework.console.csv.LanguageCsv;
+import com.beanframework.console.registry.ImportListener;
+import com.beanframework.language.domain.Language;
+import com.beanframework.language.service.LanguageService;
 
-public class MenuImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(MenuImporter.class);
+public class LanguageImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(LanguageImportListener.class);
 
 	@Autowired
-	private MenuService menuService;
-	
-	@Autowired
-	private ImportEntityMenuConverter converter;
+	private LanguageService languageService;
 
-	@Value("${module.console.import.update.menu}")
+	@Autowired
+	private ImportEntityLanguageConverter converter;
+
+	@Value("${module.console.import.update.language}")
 	private String IMPORT_UPDATE;
-	
-	@Value("${module.console.import.remove.menu}")
+
+	@Value("${module.console.import.remove.language}")
 	private String IMPORT_REMOVE;
 
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.MenuImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.MenuImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.MenuImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.MenuImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.LanguageImportListener.KEY);
+		setName(ConsoleImportListenerConstants.LanguageImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.LanguageImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.LanguageImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -64,11 +64,11 @@ public class MenuImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<MenuCsv> menuCsvList = readCSVFile(reader, MenuCsv.getUpdateProcessors());
-			save(menuCsvList);
+			List<LanguageCsv> languageCsvList = readCSVFile(reader, LanguageCsv.getUpdateProcessors());
+			save(languageCsvList);
 		}
 	}
-	
+
 	@Override
 	public void remove() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -79,15 +79,15 @@ public class MenuImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<MenuCsv> menuCsvList = readCSVFile(reader, MenuCsv.getRemoveProcessors());
-			remove(menuCsvList);
+			List<LanguageCsv> languageCsvList = readCSVFile(reader, LanguageCsv.getRemoveProcessors());
+			remove(languageCsvList);
 		}
 	}
-	
-	public List<MenuCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
+
+	public List<LanguageCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
-		List<MenuCsv> csvList = new ArrayList<MenuCsv>();
+		List<LanguageCsv> csvList = new ArrayList<LanguageCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -96,13 +96,13 @@ public class MenuImporter extends Importer {
 			// must match)
 			final String[] header = beanReader.getHeader(true);
 
-			MenuCsv csv;
-			LOGGER.info("Start import "+PlatformUpdateWebConstants.Importer.MenuImporter.NAME);
-			while ((csv = beanReader.read(MenuCsv.class, header, processors)) != null) {
+			LanguageCsv csv;
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.LanguageImportListener.NAME);
+			while ((csv = beanReader.read(LanguageCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+PlatformUpdateWebConstants.Importer.MenuImporter.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.LanguageImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -119,17 +119,17 @@ public class MenuImporter extends Importer {
 		return csvList;
 	}
 
-	public void save(List<MenuCsv> csvList) throws Exception {
+	public void save(List<LanguageCsv> csvList) throws Exception {
 
-		for (MenuCsv csv : csvList) {
-			Menu menu = converter.convert(csv);
-			menuService.saveEntity(menu);
-		}
-	}	
-	
-	public void remove(List<MenuCsv> csvList) throws Exception {
-		for (MenuCsv csv : csvList) {
-			menuService.deleteById(csv.getId());
+		for (LanguageCsv csv : csvList) {
+
+			Language model = converter.convert(csv);
+			languageService.saveEntity(model);
 		}
 	}
+
+	public void remove(List<LanguageCsv> csvList) throws Exception {
+
+	}
+
 }

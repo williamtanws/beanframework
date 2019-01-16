@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -24,34 +24,34 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.ImportEntityUserPermissionConverter;
-import com.beanframework.console.csv.UserPermissionCsv;
-import com.beanframework.console.registry.Importer;
-import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.service.UserPermissionService;
+import com.beanframework.console.ConsoleImportListenerConstants;
+import com.beanframework.console.converter.ImportEntityDynamicFieldConverter;
+import com.beanframework.console.csv.DynamicFieldCsv;
+import com.beanframework.console.registry.ImportListener;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.service.DynamicFieldService;
 
-public class UserPermissionImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(UserPermissionImporter.class);
-
-	@Autowired
-	private UserPermissionService userPermissionService;
+public class DynamicFieldImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldImportListener.class);
 
 	@Autowired
-	private ImportEntityUserPermissionConverter converter;
+	private DynamicFieldService dynamicFieldService;
 
-	@Value("${module.console.import.update.userpermission}")
+	@Autowired
+	private ImportEntityDynamicFieldConverter converter;
+
+	@Value("${module.console.import.update.dynamicfield}")
 	private String IMPORT_UPDATE;
 
-	@Value("${module.console.import.remove.userpermission}")
+	@Value("${module.console.import.remove.dynamicfield}")
 	private String IMPORT_REMOVE;
 
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.UserPermissionImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.UserPermissionImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.UserPermissionImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.UserPermissionImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.DynamicFieldImportListener.KEY);
+		setName(ConsoleImportListenerConstants.DynamicFieldImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.DynamicFieldImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.DynamicFieldImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -64,8 +64,8 @@ public class UserPermissionImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<UserPermissionCsv> userPermissionCsvList = readCSVFile(reader, UserPermissionCsv.getUpdateProcessors());
-			save(userPermissionCsvList);
+			List<DynamicFieldCsv> cronjobCsvList = readCSVFile(reader, DynamicFieldCsv.getUpdateProcessors());
+			save(cronjobCsvList);
 		}
 	}
 
@@ -79,15 +79,15 @@ public class UserPermissionImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<UserPermissionCsv> csvList = readCSVFile(reader, UserPermissionCsv.getRemoveProcessors());
-			remove(csvList);
+			List<DynamicFieldCsv> cronjobCsvList = readCSVFile(reader, DynamicFieldCsv.getRemoveProcessors());
+			remove(cronjobCsvList);
 		}
 	}
 
-	public List<UserPermissionCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
+	public List<DynamicFieldCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
-		List<UserPermissionCsv> csvList = new ArrayList<UserPermissionCsv>();
+		List<DynamicFieldCsv> csvList = new ArrayList<DynamicFieldCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -96,13 +96,13 @@ public class UserPermissionImporter extends Importer {
 			// must match)
 			final String[] header = beanReader.getHeader(true);
 
-			UserPermissionCsv csv;
-			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.UserPermissionImporter.NAME);
-			while ((csv = beanReader.read(UserPermissionCsv.class, header, processors)) != null) {
+			DynamicFieldCsv csv;
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.DynamicFieldImportListener.NAME);
+			while ((csv = beanReader.read(DynamicFieldCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.UserPermissionImporter.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.DynamicFieldImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -119,17 +119,17 @@ public class UserPermissionImporter extends Importer {
 		return csvList;
 	}
 
-	public void save(List<UserPermissionCsv> csvList) throws Exception {
+	public void save(List<DynamicFieldCsv> csvList) throws Exception {
 
-		for (UserPermissionCsv csv : csvList) {
-			UserPermission model = converter.convert(csv);
-			userPermissionService.saveEntity(model);
+		for (DynamicFieldCsv csv : csvList) {
+
+			DynamicField model = converter.convert(csv);
+			dynamicFieldService.saveEntity(model);
 		}
 	}
 
-	public void remove(List<UserPermissionCsv> csvList) throws Exception {
-		for (UserPermissionCsv csv : csvList) {
-			userPermissionService.deleteById(csv.getId());
-		}
+	private void remove(List<DynamicFieldCsv> csvList) throws Exception {
+
 	}
+
 }

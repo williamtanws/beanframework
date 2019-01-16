@@ -107,7 +107,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AngularFileManagerServlet extends HttpServlet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AngularFileManagerServlet.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(AngularFileManagerServlet.class);
 
     private static final long serialVersionUID = -8453502699403909016L;
 

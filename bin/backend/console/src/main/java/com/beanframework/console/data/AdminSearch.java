@@ -17,4 +17,10 @@ public class AdminSearch extends Admin {
 	public void setSearchAll(String searchAll) {
 		this.searchAll = searchAll;
 	}
+
+	@Override
+	public String toString() {
+		return "AdminSearch [getSearchAll()=" + getSearchAll() + ", getName()=" + getName() + ", getId()=" + getId() + "]";
+	}
+
 }

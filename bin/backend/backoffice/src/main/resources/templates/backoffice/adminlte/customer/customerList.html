@@ -9,7 +9,10 @@
 		<section class="content">
 			<!-- Search Form-->
 			<div class="row">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.customer')}}, objectSearch=${customerSearch}, searchFields=${ {'id'} }, displayFields=${ {'id'} } )}"></th:block>
+				<div class="col-md-6">
+					<th:block
+						layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.customer')}}, objectSearch=${customerSearch}, searchFields=${ {'id'} }, displayFields=${ {'id'} } )}"></th:block>
+				</div>
 			</div>
 			<!-- Alert Notification-->
 			<div class="row">
@@ -17,10 +20,12 @@
 			</div>
 			<!-- List Table-->
 			<div class="row">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.customer}, objectUpdate=${customerUpdate}, objectSearch=${customerSearch}, icon=@{${@environment.getProperty('module.customer.icon')}}, createAuthority='customer_create', updateAuthority='customer_update', paginationAction=@{${@environment.getProperty('path.customer')}}, searchFields=${ {'id'} }, updateForm='/backoffice/adminlte/customer/customerForm')}"></th:block>
+				<th:block
+					layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.customer}, objectUpdate=${customerUpdate}, objectSearch=${customerSearch}, icon=@{${@environment.getProperty('module.customer.icon')}}, createAuthority='customer_create', updateAuthority='customer_update', paginationAction=@{${@environment.getProperty('path.customer')}}, searchFields=${ {'id'} }, updateForm='/backoffice/adminlte/customer/customerForm')}"></th:block>
 			</div>
 			<!-- Create Modal-->
-			<th:block sec:authorize="hasAuthority('customer_create')" layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.customer')}}, createObject=${customerCreate}, createForm='/backoffice/adminlte/customer/customerForm', createCheckId=${@environment.getProperty('path.api.customer.checkid')})}"></th:block>
+			<th:block sec:authorize="hasAuthority('customer_create')"
+				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.customer')}}, createObject=${customerCreate}, createForm='/backoffice/adminlte/customer/customerForm', createCheckId=${@environment.getProperty('path.api.customer.checkid')})}"></th:block>
 		</section>
 	</th:block>
 </body>

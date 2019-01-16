@@ -15,7 +15,7 @@ public class CronjobInit implements ApplicationListener<ApplicationReadyEvent> {
 	@Autowired
 	private CronjobManagerService cronjobManagerService;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CronjobInit.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(CronjobInit.class);
 
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {

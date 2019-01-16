@@ -1,9 +1,21 @@
 package com.beanframework.customer.service;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.exception.BusinessException;
@@ -21,23 +33,74 @@ public class CustomerServiceImpl implements CustomerService {
 		return modelService.create(Customer.class);
 	}
 
+	@Cacheable(value = "CustomerOne", key = "#uuid")
+	@Override
+	public Customer findOneEntityByUuid(UUID uuid) throws Exception {
+		return modelService.findOneEntityByUuid(uuid, Customer.class);
+	}
+
+	@Cacheable(value = "CustomerOneProperties", key = "#properties")
+	@Override
+	public Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneEntityByProperties(properties, Customer.class);
+	}
+
+	@Cacheable(value = "CustomersSorts", key = "#sorts")
+	@Override
+	public List<Customer> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Customer.class);
+	}
+
+	@Cacheable(value = "CustomersPage", key = "{#query}")
+	@Override
+	public <T> Page<Customer> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
+		return modelService.findEntityPage(specification, pageable, Customer.class);
+	}
+
+	@Cacheable(value = "CustomersHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Override
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Customer.class);
+	}
+
+	@Cacheable(value = "CustomersRelatedHistory", key = "{#relatedEntity, #uuid, #firstResult, #maxResults}")
+	@Override
+	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Customer.class);
+	}
+
+	@Caching(evict = { //
+			@CacheEvict(value = "CustomerOne", key = "#model.uuid", condition = "#model.uuid != null"), //
+			@CacheEvict(value = "CustomerOneProperties", allEntries = true), //
+			@CacheEvict(value = "CustomersSorts", allEntries = true), //
+			@CacheEvict(value = "CustomersPage", allEntries = true), //
+			@CacheEvict(value = "CustomersHistory", allEntries = true), //
+			@CacheEvict(value = "CustomersRelatedHistory", allEntries = true) }) //
 	@Override
 	public Customer saveEntity(Customer model) throws BusinessException {
 		return (Customer) modelService.saveEntity(model, Customer.class);
 	}
 
+	@Caching(evict = { //
+			@CacheEvict(value = "CustomerOne", key = "#uuid"), //
+			@CacheEvict(value = "CustomerOneProperties", allEntries = true), //
+			@CacheEvict(value = "CustomersSorts", allEntries = true), //
+			@CacheEvict(value = "CustomersPage", allEntries = true), //
+			@CacheEvict(value = "CustomersHistory", allEntries = true), //
+			@CacheEvict(value = "CustomersRelatedHistory", allEntries = true) })
 	@Override
-	public void deleteById(String id) throws BusinessException {
+	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Customer.ID, id);
-			Customer model = modelService.findOneEntityByProperties(properties, Customer.class);
+			Customer model = modelService.findOneEntityByUuid(uuid, Customer.class);
 			modelService.deleteByEntity(model, Customer.class);
 
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-
 }

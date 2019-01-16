@@ -31,7 +31,7 @@ public class UserRightResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(UserRight.ID, id);
 
-		UserRightDto data = userRightFacade.findOneByProperties(properties);
+		UserRightDto data = userRightFacade.findOneProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

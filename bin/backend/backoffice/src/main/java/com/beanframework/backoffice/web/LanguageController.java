@@ -26,7 +26,6 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants;
 import com.beanframework.backoffice.data.LanguageDto;
 import com.beanframework.backoffice.data.LanguageSearch;
-import com.beanframework.backoffice.data.LanguageSpecification;
 import com.beanframework.backoffice.facade.LanguageFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
@@ -37,7 +36,7 @@ public class LanguageController extends AbstractController {
 
 	@Autowired
 	private LanguageFacade languageFacade;
-	
+
 	@Value(LanguageWebConstants.Path.LANGUAGE)
 	private String PATH_LANGUAGE;
 
@@ -54,8 +53,7 @@ public class LanguageController extends AbstractController {
 		size = size <= 0 ? MODULE_LANGUAGE_LIST_SIZE : size;
 
 		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
-		String[] properties = StringUtils.isBlank(propertiesStr) ? null
-				: propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
+		String[] properties = StringUtils.isBlank(propertiesStr) ? null : propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
 
 		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
@@ -66,8 +64,7 @@ public class LanguageController extends AbstractController {
 			direction = Sort.Direction.ASC;
 		}
 
-		Page<LanguageDto> pagination = languageFacade.findPage(LanguageSpecification.findByCriteria(languageSearch),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
+		Page<LanguageDto> pagination = languageFacade.findPage(languageSearch, PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
@@ -75,13 +72,12 @@ public class LanguageController extends AbstractController {
 		return pagination;
 	}
 
-	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
-			@RequestParam Map<String, Object> requestParams, LanguageSearch languageSearch) {
-		
-		languageSearch.setSearchAll((String)requestParams.get("languageSearch.searchAll"));
-		languageSearch.setId((String)requestParams.get("languageSearch.id"));
-		languageSearch.setName((String)requestParams.get("languageSearch.name"));
-		
+	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes, @RequestParam Map<String, Object> requestParams, LanguageSearch languageSearch) {
+
+		languageSearch.setSearchAll((String) requestParams.get("languageSearch.searchAll"));
+		languageSearch.setId((String) requestParams.get("languageSearch.id"));
+		languageSearch.setName((String) requestParams.get("languageSearch.name"));
+
 		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
@@ -118,15 +114,14 @@ public class LanguageController extends AbstractController {
 
 	@GetMapping(value = LanguageWebConstants.Path.LANGUAGE)
 	public String list(@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto languageUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) throws Exception {
+			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto languageUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(languageSearch, model, requestParams));
 
 		if (languageUpdate.getUuid() != null) {
 
 			LanguageDto existingLanguage = languageFacade.findOneByUuid(languageUpdate.getUuid());
-			
+
 			List<Object[]> revisions = languageFacade.findHistoryByUuid(languageUpdate.getUuid(), null, null);
 			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
 
@@ -137,20 +132,17 @@ public class LanguageController extends AbstractController {
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
-		
+
 		return VIEW_LANGUAGE_LIST;
 	}
 
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "create")
-	public RedirectView create(
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.CREATE) LanguageDto languageCreate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView create(@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
+			@ModelAttribute(LanguageWebConstants.ModelAttribute.CREATE) LanguageDto languageCreate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (languageCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-					"Create new record doesn't need UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
@@ -172,15 +164,12 @@ public class LanguageController extends AbstractController {
 	}
 
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "update")
-	public RedirectView update(
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto languageUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView update(@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
+			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto languageUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (languageUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-					"Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			try {
@@ -202,10 +191,8 @@ public class LanguageController extends AbstractController {
 	}
 
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "delete")
-	public RedirectView delete(
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
-			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto languageUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView delete(@ModelAttribute(LanguageWebConstants.ModelAttribute.SEARCH) LanguageSearch languageSearch,
+			@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto languageUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {

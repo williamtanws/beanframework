@@ -31,7 +31,6 @@ import com.beanframework.backoffice.CronjobWebConstants;
 import com.beanframework.backoffice.data.CronjobDataDto;
 import com.beanframework.backoffice.data.CronjobDto;
 import com.beanframework.backoffice.data.CronjobSearch;
-import com.beanframework.backoffice.data.CronjobSpecification;
 import com.beanframework.backoffice.data.CustomerDto;
 import com.beanframework.backoffice.facade.CronjobFacade;
 import com.beanframework.common.controller.AbstractController;
@@ -76,7 +75,7 @@ public class CronjobController extends AbstractController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<CronjobDto> pagination = cronjobFacade.findPage(CronjobSpecification.findByCriteria(cronjobSearch), PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
+		Page<CronjobDto> pagination = cronjobFacade.findPage(cronjobSearch, PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);

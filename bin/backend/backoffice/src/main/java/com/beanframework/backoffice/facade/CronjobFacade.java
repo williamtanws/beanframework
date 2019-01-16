@@ -6,11 +6,11 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.backoffice.data.CronjobDataDto;
 import com.beanframework.backoffice.data.CronjobDto;
+import com.beanframework.backoffice.data.CronjobSearch;
 import com.beanframework.common.exception.BusinessException;
 
 public interface CronjobFacade {
@@ -23,13 +23,13 @@ public interface CronjobFacade {
 	}
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	Page<CronjobDto> findPage(Specification<CronjobDto> specification, PageRequest of) throws Exception;
+	Page<CronjobDto> findPage(CronjobSearch search, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	CronjobDto findOneByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	CronjobDto findOneByProperties(Map<String, Object> properties) throws Exception;
+	CronjobDto findOneProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
 	CronjobDto create(CronjobDto model) throws BusinessException;
@@ -39,6 +39,9 @@ public interface CronjobFacade {
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
+
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
 	void trigger(CronjobDto model) throws BusinessException;
@@ -52,6 +55,4 @@ public interface CronjobFacade {
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
 	void removeCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 }

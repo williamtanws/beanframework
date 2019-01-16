@@ -14,7 +14,7 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.MenuCsv;
-import com.beanframework.console.registry.Importer;
+import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
@@ -94,14 +94,14 @@ public class ImportEntityMenuConverter implements EntityConverter<MenuCsv, Menu>
 			
 			// Dynamic Field
 			if (source.getDynamicField() != null) {
-				String[] dynamicFields = source.getDynamicField().split(Importer.SPLITTER);
+				String[] dynamicFields = source.getDynamicField().split(ImportListener.SPLITTER);
 				for (String dynamicField : dynamicFields) {
-					String dynamicFieldId = dynamicField.split(Importer.EQUALS)[0];
-					String value = dynamicField.split(Importer.EQUALS)[1];
+					String dynamicFieldId = dynamicField.split(ImportListener.EQUALS)[0];
+					String value = dynamicField.split(ImportListener.EQUALS)[1];
 
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
-						if (prototype.getFields().get(i).getId().equals(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId)) {
+						if (prototype.getFields().get(i).getId().equals(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId)) {
 							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
@@ -114,7 +114,7 @@ public class ImportEntityMenuConverter implements EntityConverter<MenuCsv, Menu>
 						
 						if(entityDynamicField != null) {
 							MenuField field = new MenuField();
-							field.setId(prototype.getId() + Importer.UNDERSCORE + dynamicFieldId);
+							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setMenu(prototype);
@@ -125,7 +125,7 @@ public class ImportEntityMenuConverter implements EntityConverter<MenuCsv, Menu>
 			}
 			
 			// User Group
-			String[] userGroupIds = source.getUserGroupIds().split(Importer.SPLITTER);
+			String[] userGroupIds = source.getUserGroupIds().split(ImportListener.SPLITTER);
 			for (int i = 0; i < userGroupIds.length; i++) {
 				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);

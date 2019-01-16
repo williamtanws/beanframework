@@ -26,7 +26,6 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
 import com.beanframework.backoffice.data.DynamicFieldDto;
 import com.beanframework.backoffice.data.DynamicFieldSearch;
-import com.beanframework.backoffice.data.DynamicFieldSpecification;
 import com.beanframework.backoffice.facade.DynamicFieldFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
@@ -54,8 +53,7 @@ public class DynamicFieldController extends AbstractController {
 		size = size <= 0 ? MODULE_DYNAMICFIELD_LIST_SIZE : size;
 
 		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
-		String[] properties = StringUtils.isBlank(propertiesStr) ? null
-				: propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
+		String[] properties = StringUtils.isBlank(propertiesStr) ? null : propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
 
 		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
@@ -66,8 +64,7 @@ public class DynamicFieldController extends AbstractController {
 			direction = Sort.Direction.ASC;
 		}
 
-		Page<DynamicFieldDto> pagination = dynamicFieldFacade.findPage(DynamicFieldSpecification.findByCriteria(dynamicFieldSearch),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
+		Page<DynamicFieldDto> pagination = dynamicFieldFacade.findPage(dynamicFieldSearch, PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
@@ -75,13 +72,12 @@ public class DynamicFieldController extends AbstractController {
 		return pagination;
 	}
 
-	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
-			@RequestParam Map<String, Object> requestParams, DynamicFieldSearch dynamicFieldSearch) {
-		
-		dynamicFieldSearch.setSearchAll((String)requestParams.get("dynamicFieldSearch.searchAll"));
-		dynamicFieldSearch.setId((String)requestParams.get("dynamicFieldSearch.id"));
-		dynamicFieldSearch.setName((String)requestParams.get("dynamicFieldSearch.name"));
-		
+	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes, @RequestParam Map<String, Object> requestParams, DynamicFieldSearch dynamicFieldSearch) {
+
+		dynamicFieldSearch.setSearchAll((String) requestParams.get("dynamicFieldSearch.searchAll"));
+		dynamicFieldSearch.setId((String) requestParams.get("dynamicFieldSearch.id"));
+		dynamicFieldSearch.setName((String) requestParams.get("dynamicFieldSearch.name"));
+
 		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
@@ -118,15 +114,14 @@ public class DynamicFieldController extends AbstractController {
 
 	@GetMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD)
 	public String list(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) throws Exception {
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(dynamicFieldSearch, model, requestParams));
 
 		if (dynamicFieldUpdate.getUuid() != null) {
 
 			DynamicFieldDto existingDynamicField = dynamicFieldFacade.findOneByUuid(dynamicFieldUpdate.getUuid());
-			
+
 			List<Object[]> revisions = dynamicFieldFacade.findHistoryByUuid(dynamicFieldUpdate.getUuid(), null, null);
 			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
 
@@ -137,20 +132,17 @@ public class DynamicFieldController extends AbstractController {
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
-		
+
 		return VIEW_DYNAMICFIELD_LIST;
 	}
 
 	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "create")
-	public RedirectView create(
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.CREATE) DynamicFieldDto dynamicFieldCreate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) throws Exception {
+	public RedirectView create(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.CREATE) DynamicFieldDto dynamicFieldCreate, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (dynamicFieldCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-					"Create new record doesn't need UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
@@ -172,15 +164,12 @@ public class DynamicFieldController extends AbstractController {
 	}
 
 	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "update")
-	public RedirectView update(
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) throws Exception {
+	public RedirectView update(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (dynamicFieldUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-					"Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			try {
@@ -202,11 +191,9 @@ public class DynamicFieldController extends AbstractController {
 	}
 
 	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "delete")
-	public RedirectView delete(
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
+			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {
 			dynamicFieldFacade.delete(dynamicFieldUpdate.getUuid());

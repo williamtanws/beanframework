@@ -22,7 +22,6 @@ import com.beanframework.backoffice.AuditorWebConstants;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.data.AuditorDto;
 import com.beanframework.backoffice.data.AuditorSearch;
-import com.beanframework.backoffice.data.AuditorSpecification;
 import com.beanframework.backoffice.facade.AuditorFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.utils.ParamUtils;
@@ -49,8 +48,7 @@ public class AuditorController extends AbstractController {
 		size = size <= 0 ? MODULE_LANGUAGE_LIST_SIZE : size;
 
 		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
-		String[] properties = StringUtils.isBlank(propertiesStr) ? null
-				: propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
+		String[] properties = StringUtils.isBlank(propertiesStr) ? null : propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
 
 		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
@@ -61,8 +59,7 @@ public class AuditorController extends AbstractController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<AuditorDto> pagination = auditorFacade.findPage(AuditorSpecification.findByCriteria(auditorSearch),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
+		Page<AuditorDto> pagination = auditorFacade.findPage(auditorSearch, PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
@@ -81,16 +78,15 @@ public class AuditorController extends AbstractController {
 	}
 
 	@GetMapping(value = AuditorWebConstants.Path.LANGUAGE)
-	public String list(@ModelAttribute(AuditorWebConstants.ModelAttribute.SEARCH) AuditorSearch auditorSearch,
-			@ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE) AuditorDto auditorUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@ModelAttribute(AuditorWebConstants.ModelAttribute.SEARCH) AuditorSearch auditorSearch, @ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE) AuditorDto auditorUpdate,
+			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(auditorSearch, model, requestParams));
 
 		if (auditorUpdate.getUuid() != null) {
 
 			AuditorDto existingAuditor = auditorFacade.findOneByUuid(auditorUpdate.getUuid());
-			
+
 			List<Object[]> revisions = auditorFacade.findHistoryByUuid(auditorUpdate.getUuid(), null, null);
 			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
 
@@ -101,7 +97,7 @@ public class AuditorController extends AbstractController {
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
-		
+
 		return VIEW_LANGUAGE_LIST;
 	}
 }

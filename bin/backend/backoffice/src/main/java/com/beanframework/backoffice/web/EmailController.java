@@ -27,7 +27,6 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmailWebConstants;
 import com.beanframework.backoffice.data.EmailDto;
 import com.beanframework.backoffice.data.EmailSearch;
-import com.beanframework.backoffice.data.EmailSpecification;
 import com.beanframework.backoffice.facade.EmailFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
@@ -55,8 +54,7 @@ public class EmailController extends AbstractController {
 		size = size <= 0 ? MODULE_EMAIL_LIST_SIZE : size;
 
 		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
-		String[] properties = StringUtils.isBlank(propertiesStr) ? null
-				: propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
+		String[] properties = StringUtils.isBlank(propertiesStr) ? null : propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
 
 		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
 		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
@@ -67,8 +65,7 @@ public class EmailController extends AbstractController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<EmailDto> pagination = emailFacade.findPage(EmailSpecification.findByCriteria(emailSearch),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
+		Page<EmailDto> pagination = emailFacade.findPage(emailSearch, PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
@@ -76,12 +73,11 @@ public class EmailController extends AbstractController {
 		return pagination;
 	}
 
-	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
-			@RequestParam Map<String, Object> requestParams, EmailSearch emailSearch) {
-		
-		emailSearch.setSearchAll((String)requestParams.get("emailSearch.searchAll"));
-		emailSearch.setId((String)requestParams.get("emailSearch.id"));
-		
+	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes, @RequestParam Map<String, Object> requestParams, EmailSearch emailSearch) {
+
+		emailSearch.setSearchAll((String) requestParams.get("emailSearch.searchAll"));
+		emailSearch.setId((String) requestParams.get("emailSearch.id"));
+
 		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
 		page = page <= 0 ? 1 : page;
 		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
@@ -116,8 +112,7 @@ public class EmailController extends AbstractController {
 	}
 
 	@GetMapping(value = EmailWebConstants.Path.EMAIL)
-	public String list(@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
-			@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model,
+	public String list(@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch, @ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(emailSearch, model, requestParams));
@@ -127,10 +122,10 @@ public class EmailController extends AbstractController {
 			EmailDto existingEmail = emailFacade.findOneByUuid(emailUpdate.getUuid());
 
 			if (existingEmail != null) {
-				
+
 				List<Object[]> revisions = emailFacade.findHistoryByUuid(emailUpdate.getUuid(), null, null);
 				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
-				
+
 				model.addAttribute(EmailWebConstants.ModelAttribute.UPDATE, existingEmail);
 			} else {
 				emailUpdate.setUuid(null);
@@ -142,14 +137,11 @@ public class EmailController extends AbstractController {
 	}
 
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
-	public RedirectView create(@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
-			@ModelAttribute(EmailWebConstants.ModelAttribute.CREATE) EmailDto emailCreate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) throws Exception {
+	public RedirectView create(@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch, @ModelAttribute(EmailWebConstants.ModelAttribute.CREATE) EmailDto emailCreate,
+			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (emailCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-					"Create new record doesn't need UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 			try {
 				emailCreate = emailFacade.create(emailCreate);
@@ -170,14 +162,11 @@ public class EmailController extends AbstractController {
 	}
 
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "update")
-	public RedirectView update(@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
-			@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) throws Exception {
+	public RedirectView update(@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch, @ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate,
+			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (emailUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-					"Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 			try {
 				emailUpdate = emailFacade.update(emailUpdate);
@@ -198,10 +187,8 @@ public class EmailController extends AbstractController {
 	}
 
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "delete")
-	public RedirectView delete(@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
-			@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch, @ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate,
+			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {
 			emailFacade.delete(emailUpdate.getUuid());
@@ -220,18 +207,14 @@ public class EmailController extends AbstractController {
 		return redirectView;
 
 	}
-	
+
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "createattachment")
-	public RedirectView createAttachment(
-			@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
-			@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes,
-			@RequestParam("uploadAttachments") MultipartFile[] uploadAttachments) {
+	public RedirectView createAttachment(@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
+			@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+			RedirectAttributes redirectAttributes, @RequestParam("uploadAttachments") MultipartFile[] uploadAttachments) {
 
 		if (emailUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-					"Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 			try {
 				emailFacade.saveAttachment(emailUpdate, uploadAttachments);
@@ -250,17 +233,14 @@ public class EmailController extends AbstractController {
 		redirectView.setUrl(PATH_EMAIL);
 		return redirectView;
 	}
-	
+
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "deleteattachment")
-	public RedirectView deleteAttachment(
-			@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
-			@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView deleteAttachment(@ModelAttribute(EmailWebConstants.ModelAttribute.SEARCH) EmailSearch emailSearch,
+			@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes, @RequestParam("filename") String filename) {
 
 		if (emailUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-					"Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 			try {
 				emailFacade.deleteAttachment(emailUpdate.getUuid(), filename);

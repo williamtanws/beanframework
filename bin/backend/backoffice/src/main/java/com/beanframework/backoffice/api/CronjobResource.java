@@ -32,7 +32,7 @@ public class CronjobResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.ID, id);
 
-		CronjobDto data = cronjobFacade.findOneByProperties(properties);
+		CronjobDto data = cronjobFacade.findOneProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
@@ -56,7 +56,7 @@ public class CronjobResource {
 		properties.put(Cronjob.JOB_GROUP, jobGroup);
 		properties.put(Cronjob.JOB_NAME, jobName);
 
-		CronjobDto cronjob = cronjobFacade.findOneByProperties(properties);
+		CronjobDto cronjob = cronjobFacade.findOneProperties(properties);
 
 		if (StringUtils.isNotBlank(uuidStr) && cronjob != null && cronjob.getUuid().equals(UUID.fromString(uuidStr))) {
 			return "true";

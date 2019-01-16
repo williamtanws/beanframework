@@ -6,10 +6,10 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.backoffice.data.LanguageDto;
+import com.beanframework.backoffice.data.LanguageSearch;
 import com.beanframework.common.exception.BusinessException;
 
 public interface LanguageFacade {
@@ -22,25 +22,25 @@ public interface LanguageFacade {
 	}
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public Page<LanguageDto> findPage(Specification<LanguageDto> specification, PageRequest pageable) throws Exception;
+	Page<LanguageDto> findPage(LanguageSearch search, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public LanguageDto findOneByUuid(UUID uuid) throws Exception;
+	LanguageDto findOneByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public LanguageDto findOneByProperties(Map<String, Object> properties) throws Exception;
+	LanguageDto findOneProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
-	public LanguageDto create(LanguageDto model) throws BusinessException;
+	LanguageDto create(LanguageDto model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
-	public LanguageDto update(LanguageDto model) throws BusinessException;
+	LanguageDto update(LanguageDto model) throws BusinessException;
 
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
-	public void delete(UUID uuid) throws BusinessException;
-	
+	void delete(UUID uuid) throws BusinessException;
+
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
-
+	List<LanguageDto> findAllDtoLanguages() throws Exception;
 }

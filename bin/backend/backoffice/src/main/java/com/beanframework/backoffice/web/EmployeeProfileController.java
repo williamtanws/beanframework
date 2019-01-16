@@ -115,7 +115,6 @@ public class EmployeeProfileController {
 				return IOUtils.toByteArray(targetStream);
 			}
 		}
-
 	}
 
 	@PostMapping(value = EmployeeWebConstants.Path.PROFILE, params = "update")

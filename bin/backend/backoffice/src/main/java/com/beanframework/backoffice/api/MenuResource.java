@@ -38,7 +38,7 @@ public class MenuResource {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.ID, id);
-		MenuDto data = menuFacade.findOneByProperties(properties);
+		MenuDto data = menuFacade.findOneProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

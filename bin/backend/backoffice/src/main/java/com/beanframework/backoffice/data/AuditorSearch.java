@@ -11,4 +11,10 @@ public class AuditorSearch extends AuditorDto {
 	public void setSearchAll(String searchAll) {
 		this.searchAll = searchAll;
 	}
+
+	@Override
+	public String toString() {
+		return "AuditorSearch [getSearchAll()=" + getSearchAll() + ", getName()=" + getName() + ", getId()=" + getId() + "]";
+	}
+
 }

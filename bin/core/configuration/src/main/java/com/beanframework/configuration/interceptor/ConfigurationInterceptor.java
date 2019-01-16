@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.configuration.service.ConfigurationService;
 
 public class ConfigurationInterceptor extends HandlerInterceptorAdapter {
 
 	@Autowired
-	private ModelService modelService;
+	private ConfigurationService configurationService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -31,7 +31,7 @@ public class ConfigurationInterceptor extends HandlerInterceptorAdapter {
 
 			Map<String, String> maps = new HashMap<String, String>();
 
-			List<Configuration> entities = modelService.findAllEntity(Configuration.class);
+			List<Configuration> entities = configurationService.findAllEntity();
 						
 			for (Configuration configuration : entities) {
 				maps.put(configuration.getId(), configuration.getValue());

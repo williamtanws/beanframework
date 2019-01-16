@@ -2,7 +2,6 @@ package com.beanframework.menu.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -16,10 +15,14 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Hibernate;
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,8 +38,6 @@ import com.beanframework.user.domain.UserGroup;
 
 @Service
 public class MenuServiceImpl implements MenuService {
-	
-	public static final String CACHE_MENU_NAVIGATION = "MenuNavigation";
 
 	@Autowired
 	private ModelService modelService;
@@ -44,9 +45,75 @@ public class MenuServiceImpl implements MenuService {
 	@Autowired
 	private MenuRepository menuRepository;
 
-	@Autowired
-	protected CacheManager cacheManager;
+	@Override
+	public Menu create() throws Exception {
+		return modelService.create(Menu.class);
+	}
 
+	@Cacheable(value = "MenuOne", key = "#uuid")
+	@Override
+	public Menu findOneEntityByUuid(UUID uuid) throws Exception {
+		return modelService.findOneEntityByUuid(uuid, Menu.class);
+	}
+
+	@Cacheable(value = "MenuOneProperties", key = "#properties")
+	@Override
+	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneEntityByProperties(properties, Menu.class);
+	}
+
+	@Cacheable(value = "MenusHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Override
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Menu.class);
+	}
+
+	@Cacheable(value = "MenusRelatedHistory", key = "{#relatedEntity, #uuid, #firstResult, #maxResults}")
+	@Override
+	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Menu.class);
+	}
+
+	@Caching(evict = { //
+			@CacheEvict(value = "MenuOne", key = "#model.uuid", condition = "#model.uuid != null"), //
+			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
+			@CacheEvict(value = "MenusHistory", allEntries = true), //
+			@CacheEvict(value = "MenusRelatedHistory", allEntries = true), //
+			@CacheEvict(value = "MenuTree", allEntries = true) }) //
+	@Override
+	public Menu saveEntity(Menu model) throws BusinessException {
+		return (Menu) modelService.saveEntity(model, Menu.class);
+	}
+
+	@Caching(evict = { //
+			@CacheEvict(value = "MenuOne", key = "#uuid"), //
+			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
+			@CacheEvict(value = "MenusHistory", allEntries = true), //
+			@CacheEvict(value = "MenusRelatedHistory", allEntries = true), //
+			@CacheEvict(value = "MenuTree", allEntries = true) })
+	@Override
+	public void deleteByUuid(UUID uuid) throws BusinessException {
+
+		try {
+			Menu model = modelService.findOneEntityByUuid(uuid, Menu.class);
+			modelService.deleteByEntity(model, Menu.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@Caching(evict = { //
+			@CacheEvict(value = "MenuOne", key = "#fromUuid"), //
+			@CacheEvict(value = "MenuOne", key = "#toUuid", condition = "#toUuid != null"), //
+			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
+			@CacheEvict(value = "MenusHistory", allEntries = true), //
+			@CacheEvict(value = "MenusRelatedHistory", allEntries = true), //
+			@CacheEvict(value = "MenuTree", allEntries = true) })
 	@Transactional
 	@Override
 	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) {
@@ -70,8 +137,6 @@ public class MenuServiceImpl implements MenuService {
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
 			menuRepository.saveAll(menus);
 		}
-
-		modelService.clearCache(Menu.class);
 	}
 
 	private List<Menu> changePosition(List<Menu> menuList, UUID fromId, int toIndex) {
@@ -117,6 +182,7 @@ public class MenuServiceImpl implements MenuService {
 		return menuList;
 	}
 
+	@Cacheable(value = "MenuTree")
 	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findEntityMenuTree() throws Exception {
@@ -175,9 +241,8 @@ public class MenuServiceImpl implements MenuService {
 		}
 	}
 
-	@Transactional(readOnly = true)
 	@Override
-	public List<Menu> findEntityMenuTreeByCurrentUser(List<Menu> cachedMenuTree) throws Exception {
+	public List<Menu> filterEntityMenuTreeByCurrentUser(List<Menu> cachedMenuTree) throws Exception {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -186,33 +251,6 @@ public class MenuServiceImpl implements MenuService {
 		filterMenuNavigation(cachedMenuTree, collectUserGroupUuid(user.getUserGroups()));
 
 		return cachedMenuTree;
-	}
-
-	@Cacheable(CACHE_MENU_NAVIGATION)
-	@Override
-	public List<Menu> findCachedMenuTree() throws Exception {
-
-		// Find all root parents
-		Specification<Menu> spec = new Specification<Menu>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-				List<Predicate> predicates = new ArrayList<Predicate>();
-
-				predicates.add(cb.and(root.get(Menu.PARENT).isNull()));
-
-				query.orderBy(cb.asc(root.get(Menu.SORT)));
-
-				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-			}
-		};
-		List<Menu> menuTree = menuRepository.findAll(spec);
-
-		initializeChilds(menuTree);
-
-		return menuTree;
 	}
 
 	private Set<UUID> collectUserGroupUuid(List<UserGroup> userGroups) {
@@ -247,39 +285,6 @@ public class MenuServiceImpl implements MenuService {
 			if (menuNext.getChilds() != null && menuNext.getChilds().isEmpty() == false) {
 				filterMenuNavigation(menuNext.getChilds(), userGroupUuids);
 			}
-		}
-	}
-
-	@CacheEvict(value=CACHE_MENU_NAVIGATION, allEntries = true)
-	@Override
-	public void delete(UUID uuid) throws Exception {
-		modelService.deleteByUuid(uuid, Menu.class);
-	}
-
-	@Override
-	public Menu create() throws Exception {
-		return modelService.create(Menu.class);
-	}
-
-	@CacheEvict(value=CACHE_MENU_NAVIGATION, allEntries = true)
-	@Override
-	public Menu saveEntity(Menu model) throws BusinessException {
-		Menu entity = (Menu) modelService.saveEntity(model, Menu.class);
-		return entity;
-	}
-
-	@CacheEvict(value=CACHE_MENU_NAVIGATION, allEntries = true)
-	@Override
-	public void deleteById(String id) throws BusinessException {
-
-		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Menu.ID, id);
-			Menu model = modelService.findOneEntityByProperties(properties, Menu.class);
-			modelService.deleteByEntity(model, Menu.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
 		}
 	}
 }

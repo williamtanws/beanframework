@@ -26,8 +26,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.registry.Importer;
-import com.beanframework.console.registry.ImporterRegistry;
+import com.beanframework.console.registry.ImportListener;
+import com.beanframework.console.registry.ImportListenerRegistry;
 
 import net.sf.ehcache.CacheManager;
 
@@ -43,7 +43,7 @@ public class PlatformUpdateController {
 	private String VIEW_UPDATE;
 
 	@Autowired
-	private ImporterRegistry importerRegistry;
+	private ImportListenerRegistry importerRegistry;
 
 	@Autowired
 	private CacheManager cacheManager;
@@ -54,11 +54,11 @@ public class PlatformUpdateController {
 	@GetMapping(value = PlatformUpdateWebConstants.Path.UPDATE)
 	public String list(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
-		Set<Entry<String, Importer>> mapEntries = importerRegistry.getImporters().entrySet();
-		List<Entry<String, Importer>> aList = new LinkedList<Entry<String, Importer>>(mapEntries);
-		Collections.sort(aList, new Comparator<Entry<String, Importer>>() {
+		Set<Entry<String, ImportListener>> mapEntries = importerRegistry.getListeners().entrySet();
+		List<Entry<String, ImportListener>> aList = new LinkedList<Entry<String, ImportListener>>(mapEntries);
+		Collections.sort(aList, new Comparator<Entry<String, ImportListener>>() {
 			@Override
-			public int compare(Entry<String, Importer> ele1, Entry<String, Importer> ele2) {
+			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
 				Integer sort1 = ele1.getValue().getSort();
 				Integer sort2 = ele2.getValue().getSort();
 				return sort1.compareTo(sort2);
@@ -88,18 +88,18 @@ public class PlatformUpdateController {
 		StringBuilder successMessages = new StringBuilder();
 		StringBuilder errorMessages = new StringBuilder();
 
-		Set<Entry<String, Importer>> mapEntries = importerRegistry.getImporters().entrySet();
-		List<Entry<String, Importer>> aList = new LinkedList<Entry<String, Importer>>(mapEntries);
-		Collections.sort(aList, new Comparator<Entry<String, Importer>>() {
+		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
+		List<Entry<String, ImportListener>> sortedImportListeners = new LinkedList<Entry<String, ImportListener>>(importListeners);
+		Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
 			@Override
-			public int compare(Entry<String, Importer> ele1, Entry<String, Importer> ele2) {
+			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
 				Integer sort1 = ele1.getValue().getSort();
 				Integer sort2 = ele2.getValue().getSort();
 				return sort1.compareTo(sort2);
 			}
 		});
 
-		for (Entry<String, Importer> entry : aList) {
+		for (Entry<String, ImportListener> entry : sortedImportListeners) {
 			if (requestParams.get(entry.getKey()) != null) {
 				String keyValue = requestParams.get(entry.getKey()).toString();
 				if (parseBoolean(keyValue)) {

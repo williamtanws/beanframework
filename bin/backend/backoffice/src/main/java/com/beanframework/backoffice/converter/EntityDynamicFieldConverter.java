@@ -106,7 +106,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				if (prototype.getLanguage() == null || prototype.getLanguage().getUuid() != source.getLanguage().getUuid()) {
+				if (prototype.getLanguage() == null || prototype.getLanguage().getUuid().equals(source.getLanguage().getUuid()) == false) {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(Language.UUID, source.getLanguage().getUuid());
 					Language language = modelService.findOneEntityByProperties(properties, Language.class);

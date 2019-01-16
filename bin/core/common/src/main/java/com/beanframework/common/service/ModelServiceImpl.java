@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.NoResultException;
@@ -25,7 +27,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.exception.InterceptorException;
+import com.beanframework.common.registry.AfterRemoveListener;
+import com.beanframework.common.registry.AfterRemoveListenerRegistry;
+import com.beanframework.common.registry.AfterSaveEvent;
+import com.beanframework.common.registry.AfterSaveListener;
+import com.beanframework.common.registry.AfterSaveListenerRegistry;
 import com.beanframework.common.repository.ModelRepository;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -34,6 +43,12 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Autowired
 	private ModelRepository modelRepository;
+
+	@Autowired
+	private AfterSaveListenerRegistry afterSaveListenerRegistry;
+	
+	@Autowired
+	private AfterRemoveListenerRegistry afterRemoveListenerRegistry;
 
 	@Transactional
 	@Override
@@ -123,26 +138,15 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-
+	
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findCachedEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
+	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
 			throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			List<Object> models = getCachedSingleResult(properties, null, null, modelClass);
-
-			if (models == null) {
-				try {
-					models = createQuery(properties, null, null, null, null, modelClass).getResultList();
-
-					setCachedSingleResult(properties, null, null, modelClass, models);
-
-				} catch (NoResultException e) {
-					return null;
-				}
-			}
+			List<Object> models = createQuery(properties, null, null, null, null, modelClass).getResultList();
 
 			if (models != null) {
 				loadInterceptor(models, modelClass);
@@ -155,11 +159,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = true)
-	@Override
-	public <T extends Collection> T findAllEntity(Class modelClass) throws Exception {
-		return findCachedEntityByPropertiesAndSorts(null, null, null, null, modelClass);
-	}
+//	@Transactional(readOnly = true)
+//	@Override
+//	public <T extends Collection> T findAllEntity(Class modelClass) throws Exception {
+//		return findCachedEntityByPropertiesAndSorts(null, null, null, null, modelClass);
+//	}
 
 	@Transactional(readOnly = true)
 	@Override
@@ -217,9 +221,22 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public Object saveEntity(Object model, Class modelClass) throws BusinessException {
 
 		try {
+			AfterSaveEvent event;
+			if(((GenericEntity) model).getUuid() == null) {
+				event = new AfterSaveEvent(1);
+			}
+			else {
+				event = new AfterSaveEvent(2);
+			}
+			
 			prepareInterceptor(model, modelClass);
 			validateInterceptor(model, modelClass);
 			modelRepository.save(model);
+
+			Set<Entry<String, AfterSaveListener>> afterSaveListeners = afterSaveListenerRegistry.getListeners().entrySet();
+			for (Entry<String, AfterSaveListener> entry : afterSaveListeners) {
+				entry.getValue().afterSave(model, event);
+			}
 
 			clearCache(modelClass);
 
@@ -241,9 +258,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void deleteByEntity(Object entityModel, Class modelClass) throws BusinessException {
 		try {
 
-			deleteEntity(entityModel);
-
-			removeInterceptor(entityModel, modelClass);
+			deleteEntity(entityModel, modelClass);
 
 			clearCache(modelClass);
 		} catch (SQLException e) {
@@ -262,9 +277,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			Object model = findOneEntityByUuid(uuid, modelClass);
 
-			deleteEntity(model);
-
-			removeInterceptor(model, modelClass);
+			deleteEntity(model, modelClass);
 
 			clearCache(modelClass);
 		} catch (SQLException e) {
@@ -276,29 +289,35 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(rollbackFor = BusinessException.class)
-	@Override
-	public void deleteAll(Class modelClass) throws BusinessException {
-		try {
-			List<Object> models = findCachedEntityByPropertiesAndSorts(null, null, null, null, modelClass);
-			for (Object model : models) {
-				deleteEntity(model);
-			}
-
-			clearCache(modelClass);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new BusinessException(e.getMessage(), e);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
+//	@Transactional(rollbackFor = BusinessException.class)
+//	@Override
+//	public void deleteAll(Class modelClass) throws BusinessException {
+//		try {
+//			List<Object> models = findCachedEntityByPropertiesAndSorts(null, null, null, null, modelClass);
+//			for (Object model : models) {
+//				deleteEntity(model, modelClass);
+//			}
+//
+//			clearCache(modelClass);
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			throw new BusinessException(e.getMessage(), e);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw new BusinessException(e.getMessage(), e);
+//		}
+//	}
 
 	@Transactional(rollbackFor = SQLException.class)
-	private void deleteEntity(Object model) throws SQLException {
+	private void deleteEntity(Object model, Class modelClass) throws SQLException, InterceptorException, BusinessException {
+		removeInterceptor(model, modelClass);
 		modelRepository.delete(model);
+		
+		Set<Entry<String, AfterRemoveListener>> afterRemoveListeners = afterRemoveListenerRegistry.getListeners().entrySet();
+		for (Entry<String, AfterRemoveListener> entry : afterRemoveListeners) {
+			entry.getValue().afterRemove(model);
+		}
 	}
 
 	@Override
@@ -361,11 +380,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		initialDefaultsInterceptor(model, modelClass);
 	}
 
-	@Override
+//	@Override
 	public void clearCache(Class modelClass) {
-		cacheManager.getCache(modelClass.getName()).clear();
+//		cacheManager.getCache(modelClass.getName()).clear();
 	}
-	
+
 	@Override
 	public void clearCache(String name) {
 		cacheManager.getCache(name).clear();

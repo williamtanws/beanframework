@@ -14,6 +14,10 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
@@ -23,7 +27,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -48,7 +56,7 @@ import com.beanframework.user.utils.PasswordUtils;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-	
+
 	public static final String CACHE_EMPLOYEE_PROFILE = "EmployeeProfile";
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
@@ -67,6 +75,84 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Value("${module.employee.profile.picture.thumbnail.weight:100}")
 	public int PROFILE_PICTURE_THUMBNAIL_WEIGHT;
+
+	@Override
+	public Employee create() throws Exception {
+		return modelService.create(Employee.class);
+	}
+
+	@Cacheable(value = "EmployeeOne", key = "#uuid")
+	@Override
+	public Employee findOneEntityByUuid(UUID uuid) throws Exception {
+		return modelService.findOneEntityByUuid(uuid, Employee.class);
+	}
+
+	@Cacheable(value = "EmployeeOneProperties", key = "#properties")
+	@Override
+	public Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneEntityByProperties(properties, Employee.class);
+	}
+
+	@Cacheable(value = "EmployeesSorts", key = "#sorts")
+	@Override
+	public List<Employee> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Employee.class);
+	}
+
+	@Cacheable(value = "EmployeesPage", key = "{#query}")
+	@Override
+	public <T> Page<Employee> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
+		return modelService.findEntityPage(specification, pageable, Employee.class);
+	}
+
+	@Cacheable(value = "EmployeesHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Override
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Employee.class);
+	}
+
+	@Cacheable(value = "EmployeesRelatedHistory", key = "{#relatedEntity, #uuid, #firstResult, #maxResults}")
+	@Override
+	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Employee.class);
+	}
+
+	@Caching(evict = { //
+			@CacheEvict(value = "EmployeeOne", key = "#model.uuid", condition = "#model.uuid != null"), //
+			@CacheEvict(value = "EmployeeOneProperties", allEntries = true), //
+			@CacheEvict(value = "EmployeesSorts", allEntries = true), //
+			@CacheEvict(value = "EmployeesPage", allEntries = true), //
+			@CacheEvict(value = "EmployeesHistory", allEntries = true), //
+			@CacheEvict(value = "EmployeesRelatedHistory", allEntries = true) }) //
+	@Override
+	public Employee saveEntity(Employee model) throws BusinessException {
+		model = (Employee) modelService.saveEntity(model, Employee.class);
+		auditorService.saveEntity(model);
+		return model;
+	}
+
+	@Caching(evict = { //
+			@CacheEvict(value = "EmployeeOne", key = "#uuid"), //
+			@CacheEvict(value = "EmployeeOneProperties", allEntries = true), //
+			@CacheEvict(value = "EmployeesSorts", allEntries = true), //
+			@CacheEvict(value = "EmployeesPage", allEntries = true), //
+			@CacheEvict(value = "EmployeesHistory", allEntries = true), //
+			@CacheEvict(value = "EmployeesRelatedHistory", allEntries = true) })
+	@Override
+	public void deleteByUuid(UUID uuid) throws BusinessException {
+
+		try {
+			Employee model = modelService.findOneEntityByUuid(uuid, Employee.class);
+			modelService.deleteByEntity(model, Employee.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
 
 	@Override
 	public void saveProfilePicture(Employee employee, MultipartFile picture) throws IOException {
@@ -101,36 +187,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
-	@Override
-	public void deleteAllEmployeeProfilePicture() {
-		File employeeProfilePictureFolder = new File(PROFILE_PICTURE_LOCATION);
-		try {
-			if (employeeProfilePictureFolder.exists()) {
-				FileUtils.deleteDirectory(employeeProfilePictureFolder);
-			}
-		} catch (IOException e) {
-			LOGGER.error(e.toString(), e);
-		}
-	}
-
-	@Override
-	public List<Employee> findEntityBySorts(Map<String, Direction> employeeSorts) throws Exception {
-		return modelService.findCachedEntityByPropertiesAndSorts(null, employeeSorts, null, null, Employee.class);
-	}
-
-	@Override
-	public Employee create() throws Exception {
-		return modelService.create(Employee.class);
-	}
-
-	@CacheEvict(value=CACHE_EMPLOYEE_PROFILE, key="#employee.uuid")
-	@Override
-	public Employee saveEntity(Employee employee) throws BusinessException {
-		Employee entity = (Employee) modelService.saveEntity(employee, Employee.class);
-		auditorService.saveUser(entity);
-		return entity;
-	}
-	
 	@Override
 	public Employee findAuthenticate(String id, String password) throws Exception {
 
@@ -169,7 +225,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return entity;
 	}
 
-	
 	@Override
 	public Employee getCurrentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -190,13 +245,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 		employeePrincipal.setId(employee.getId());
 		employeePrincipal.setName(employee.getName());
 		employeePrincipal.setPassword(employee.getPassword());
-		
+
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal, employeePrincipal.getPassword(), auth.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(token);
 
 		return employeePrincipal;
 	}
-	
+
 	@Override
 	public Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids) {
 
@@ -227,18 +282,5 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return authorities;
-	}
-	
-	@Cacheable(value=CACHE_EMPLOYEE_PROFILE, key="#uuid")
-	@Override
-	public Employee findCachedOneEntityByUuid(UUID uuid) throws Exception {
-		Employee entity = modelService.findOneEntityByUuid(uuid, Employee.class);
-		return entity;
-	}
-
-	@CacheEvict(value=CACHE_EMPLOYEE_PROFILE, key="#employee.uuid")
-	@Override
-	public void deleteByUuid(UUID uuid) throws BusinessException {
-		modelService.deleteByUuid(uuid, Employee.class);
 	}
 }

@@ -31,7 +31,7 @@ public class UserPermissionResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(UserPermission.ID, id);
 
-		UserPermissionDto data = userPermissionFacade.findOneByProperties(properties);
+		UserPermissionDto data = userPermissionFacade.findOneProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

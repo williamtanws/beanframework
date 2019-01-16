@@ -27,7 +27,6 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CustomerWebConstants;
 import com.beanframework.backoffice.data.CustomerDto;
 import com.beanframework.backoffice.data.CustomerSearch;
-import com.beanframework.backoffice.data.CustomerSpecification;
 import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.backoffice.facade.CustomerFacade;
 import com.beanframework.backoffice.facade.UserGroupFacade;
@@ -72,8 +71,7 @@ public class CustomerController extends AbstractController {
 			direction = Sort.Direction.DESC;
 		}
 
-		Page<CustomerDto> pagination = customerFacade.findPage(CustomerSpecification.findByCriteria(customerSearch),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
+		Page<CustomerDto> pagination = customerFacade.findPage(customerSearch, PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
 
 		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
 		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);

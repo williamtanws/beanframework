@@ -29,10 +29,10 @@ public interface ModelService {
 	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClassd) throws Exception;
 	
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
+	
+	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception;
 
-	<T extends Collection> T findCachedEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception;
-		
-	<T extends Collection> T findAllEntity(Class modelClass) throws Exception;
+//	<T extends Collection> T findAllEntity(Class modelClass) throws Exception;
 	
 	<T extends Collection> T findHistory(boolean selectDeletedEntities, AuditCriterion criterion, AuditOrder order, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
 
@@ -48,7 +48,7 @@ public interface ModelService {
 
 	void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
-	void deleteAll(Class modelClass) throws BusinessException;
+//	void deleteAll(Class modelClass) throws BusinessException;
 
 	<T> T getEntity(Object model, Class modelClass) throws Exception;
 
@@ -60,7 +60,8 @@ public interface ModelService {
 
 	void initDefaults(Object model, Class modelClass) throws Exception;
 
-	public void clearCache(Class modelClass);
+//	public void clearCache(Class modelClass);
 	
 	public void clearCache(String name);
+
 }

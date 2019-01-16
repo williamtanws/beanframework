@@ -6,10 +6,10 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.backoffice.data.AuditorDto;
+import com.beanframework.backoffice.data.AuditorSearch;
 
 public interface AuditorFacade {
 
@@ -18,15 +18,17 @@ public interface AuditorFacade {
 	}
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public Page<AuditorDto> findPage(Specification<AuditorDto> specification, PageRequest pageable) throws Exception;
+	Page<AuditorDto> findPage(AuditorSearch search, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public AuditorDto findOneByUuid(UUID uuid) throws Exception;
+	AuditorDto findOneByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public AuditorDto findOneByProperties(Map<String, Object> properties) throws Exception;
+	AuditorDto findOneProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+
+	List<AuditorDto> findAllDtoAuditors() throws Exception;
 
 }

@@ -1,11 +1,24 @@
 package com.beanframework.admin.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -19,6 +32,7 @@ import com.beanframework.admin.AdminConstants;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.utils.PasswordUtils;
 
 @Service
@@ -26,6 +40,9 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private AuditorService auditorService;
 
 	@Value(AdminConstants.Admin.DEFAULT_ID)
 	private String defaultAdminId;
@@ -38,18 +55,72 @@ public class AdminServiceImpl implements AdminService {
 		return modelService.create(Admin.class);
 	}
 
+	@Cacheable(value = "AdminOne", key = "#uuid")
 	@Override
-	public Admin saveEntity(Admin model) throws BusinessException {
-		return (Admin) modelService.saveEntity(model, Admin.class);
+	public Admin findOneEntityByUuid(UUID uuid) throws Exception {
+		return modelService.findOneEntityByUuid(uuid, Admin.class);
 	}
 
+	@Cacheable(value = "AdminOneProperties", key = "#properties")
 	@Override
-	public void deleteById(String id) throws BusinessException {
+	public Admin findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneEntityByProperties(properties, Admin.class);
+	}
+
+	@Cacheable(value = "AdminsSorts", key = "#sorts")
+	@Override
+	public List<Admin> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Admin.class);
+	}
+
+	@Cacheable(value = "AdminsPage", key = "{#query}")
+	@Override
+	public <T> Page<Admin> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
+		return modelService.findEntityPage(specification, pageable, Admin.class);
+	}
+
+	@Cacheable(value = "AdminsHistory", key = "{#uuid, #firstResult, #maxResults}")
+	@Override
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Admin.class);
+	}
+
+	@Cacheable(value = "AdminsRelatedHistory", key = "{#relatedEntity, #uuid, #firstResult, #maxResults}")
+	@Override
+	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
+		AuditOrder order = AuditEntity.revisionNumber().desc();
+		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Admin.class);
+	}
+
+	@Caching(evict = { //
+			@CacheEvict(value = "AdminOne", key = "#model.uuid", condition = "#model.uuid != null"), //
+			@CacheEvict(value = "AdminOneProperties", allEntries = true), //
+			@CacheEvict(value = "AdminsSorts", allEntries = true), //
+			@CacheEvict(value = "AdminsPage", allEntries = true), //
+			@CacheEvict(value = "AdminsHistory", allEntries = true), //
+			@CacheEvict(value = "AdminsRelatedHistory", allEntries = true) }) //
+	@Override
+	public Admin saveEntity(Admin model) throws BusinessException {
+		model = (Admin) modelService.saveEntity(model, Admin.class);
+		auditorService.saveEntity(model);
+		return model;
+	}
+
+	@Caching(evict = { //
+			@CacheEvict(value = "AdminOne", key = "#uuid"), //
+			@CacheEvict(value = "AdminOneProperties", allEntries = true), //
+			@CacheEvict(value = "AdminsSorts", allEntries = true), //
+			@CacheEvict(value = "AdminsPage", allEntries = true), //
+			@CacheEvict(value = "AdminsHistory", allEntries = true), //
+			@CacheEvict(value = "AdminsRelatedHistory", allEntries = true) })
+	@Override
+	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Admin.ID, id);
-			Admin model = modelService.findOneEntityByProperties(properties, Admin.class);
+			Admin model = modelService.findOneEntityByUuid(uuid, Admin.class);
 			modelService.deleteByEntity(model, Admin.class);
 
 		} catch (Exception e) {

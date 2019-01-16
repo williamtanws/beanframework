@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -30,16 +30,16 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.PlatformUpdateWebConstants;
+import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.csv.UserAuthorityCsv;
-import com.beanframework.console.registry.Importer;
+import com.beanframework.console.registry.ImportListener;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 
-public class UserAuthorityImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(UserAuthorityImporter.class);
+public class UserAuthorityImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(UserAuthorityImportListener.class);
 
 	@Autowired
 	private ModelService modelService;
@@ -52,10 +52,10 @@ public class UserAuthorityImporter extends Importer {
 	
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.UserAuthorityImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.UserAuthorityImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.UserAuthorityImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.UserAuthorityImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.UserAuthorityImportListener.KEY);
+		setName(ConsoleImportListenerConstants.UserAuthorityImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.UserAuthorityImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.UserAuthorityImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -101,12 +101,12 @@ public class UserAuthorityImporter extends Importer {
 			final String[] header = beanReader.getHeader(true);
 
 			UserAuthorityCsv csv;
-			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.UserAuthorityImporter.NAME);
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.UserAuthorityImportListener.NAME);
 			while ((csv = beanReader.read(UserAuthorityCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.UserAuthorityImporter.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.UserAuthorityImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -187,11 +187,11 @@ public class UserAuthorityImporter extends Importer {
 
 			Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
 			userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
-			List<UserPermission> userPermissions = modelService.findCachedEntityByPropertiesAndSorts(null, userPermissionSorts, null, null, UserPermission.class);
+			List<UserPermission> userPermissions = modelService.findEntityByPropertiesAndSorts(null, userPermissionSorts, null, null, UserPermission.class);
 
 			Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
 			userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
-			List<UserRight> userRights = modelService.findCachedEntityByPropertiesAndSorts(null, userRightSorts, null, null, UserRight.class);
+			List<UserRight> userRights = modelService.findEntityByPropertiesAndSorts(null, userRightSorts, null, null, UserRight.class);
 
 			for (UserPermission userPermission : userPermissions) {
 				for (UserRight userRight : userRights) {

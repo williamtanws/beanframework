@@ -1,21 +1,20 @@
 package com.beanframework.backoffice.facade;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.envers.RevisionType;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.criteria.AuditCriterion;
-import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.LanguageDto;
+import com.beanframework.backoffice.data.LanguageSearch;
+import com.beanframework.backoffice.data.LanguageSpecification;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
@@ -31,34 +30,22 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	private LanguageService languageService;
 
 	@Override
-	public Page<LanguageDto> findPage(Specification<LanguageDto> specification, PageRequest pageable) throws Exception {
-		Page<Language> page = modelService.findEntityPage(specification, pageable, Language.class);
+	public Page<LanguageDto> findPage(LanguageSearch search, PageRequest pageable) throws Exception {
+		Page<Language> page = languageService.findEntityPage(search.toString(), LanguageSpecification.findByCriteria(search), pageable);
 		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class);
 		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
 	@Override
 	public LanguageDto findOneByUuid(UUID uuid) throws Exception {
-		Language entity = modelService.findOneEntityByUuid(uuid, Language.class);
+		Language entity = languageService.findOneEntityByUuid(uuid);
 		return modelService.getDto(entity, LanguageDto.class);
 	}
 
 	@Override
-	public LanguageDto findOneByProperties(Map<String, Object> properties) throws Exception {
-		Language entity = modelService.findOneEntityByProperties(properties, Language.class);
+	public LanguageDto findOneProperties(Map<String, Object> properties) throws Exception {
+		Language entity = languageService.findOneEntityByProperties(properties);
 		return modelService.getDto(entity, LanguageDto.class);
-	}
-
-	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, Language.class);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], LanguageDto.class);
-		}
-
-		return revisions;
 	}
 
 	@Override
@@ -84,11 +71,24 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		try {
-			modelService.deleteByUuid(uuid, Language.class);
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
+		languageService.deleteByUuid(uuid);
+	}
+
+	@Override
+	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
+		List<Object[]> revisions = languageService.findHistoryByUuid(uuid, firstResult, maxResults);
+		for (int i = 0; i < revisions.size(); i++) {
+			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], LanguageDto.class);
 		}
+
+		return revisions;
+	}
+
+	@Override
+	public List<LanguageDto> findAllDtoLanguages() throws Exception {
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(LanguageDto.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(languageService.findEntityBySorts(sorts), LanguageDto.class);
 	}
 
 }

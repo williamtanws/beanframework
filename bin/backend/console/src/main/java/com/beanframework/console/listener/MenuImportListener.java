@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -8,9 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -26,38 +24,34 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.service.ModelService;
-import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.ImportEntityEmployeeConverter;
-import com.beanframework.console.csv.EmployeeCsv;
-import com.beanframework.console.registry.Importer;
-import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeService;
+import com.beanframework.console.ConsoleImportListenerConstants;
+import com.beanframework.console.converter.ImportEntityMenuConverter;
+import com.beanframework.console.csv.MenuCsv;
+import com.beanframework.console.registry.ImportListener;
+import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.service.MenuService;
 
-public class EmployeeImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(EmployeeImporter.class);
+public class MenuImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(MenuImportListener.class);
 
 	@Autowired
-	private ModelService modelService;
+	private MenuService menuService;
 	
 	@Autowired
-	private EmployeeService employeeService;
+	private ImportEntityMenuConverter converter;
 
-	@Autowired
-	private ImportEntityEmployeeConverter converter;
-
-	@Value("${module.console.import.update.employee}")
+	@Value("${module.console.import.update.menu}")
 	private String IMPORT_UPDATE;
-
-	@Value("${module.console.import.remove.employee}")
+	
+	@Value("${module.console.import.remove.menu}")
 	private String IMPORT_REMOVE;
 
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.EmployeeImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.EmployeeImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.EmployeeImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.EmployeeImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.MenuImportListener.KEY);
+		setName(ConsoleImportListenerConstants.MenuImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.MenuImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.MenuImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -70,11 +64,11 @@ public class EmployeeImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<EmployeeCsv> employeeCsvList = readCSVFile(reader, EmployeeCsv.getUpdateProcessors());
-			save(employeeCsvList);
+			List<MenuCsv> menuCsvList = readCSVFile(reader, MenuCsv.getUpdateProcessors());
+			save(menuCsvList);
 		}
 	}
-
+	
 	@Override
 	public void remove() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -85,15 +79,15 @@ public class EmployeeImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<EmployeeCsv> employeeCsvList = readCSVFile(reader, EmployeeCsv.getRemoveProcessors());
-			remove(employeeCsvList);
+			List<MenuCsv> menuCsvList = readCSVFile(reader, MenuCsv.getRemoveProcessors());
+			remove(menuCsvList);
 		}
 	}
-
-	public List<EmployeeCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
+	
+	public List<MenuCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
-		List<EmployeeCsv> csvList = new ArrayList<EmployeeCsv>();
+		List<MenuCsv> csvList = new ArrayList<MenuCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -102,13 +96,13 @@ public class EmployeeImporter extends Importer {
 			// must match)
 			final String[] header = beanReader.getHeader(true);
 
-			EmployeeCsv csv;
-			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.EmployeeImporter.NAME);
-			while ((csv = beanReader.read(EmployeeCsv.class, header, processors)) != null) {
+			MenuCsv csv;
+			LOGGER.info("Start import "+ConsoleImportListenerConstants.MenuImportListener.NAME);
+			while ((csv = beanReader.read(MenuCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.EmployeeImporter.NAME);
+			LOGGER.info("Finished import "+ConsoleImportListenerConstants.MenuImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -125,22 +119,15 @@ public class EmployeeImporter extends Importer {
 		return csvList;
 	}
 
-	public void save(List<EmployeeCsv> csvList) throws Exception {
+	public void save(List<MenuCsv> csvList) throws Exception {
 
-		for (EmployeeCsv csv : csvList) {
-
-			Employee model = converter.convert(csv);
-			employeeService.saveEntity(model);
+		for (MenuCsv csv : csvList) {
+			Menu menu = converter.convert(csv);
+			menuService.saveEntity(menu);
 		}
-	}
+	}	
+	
+	public void remove(List<MenuCsv> csvList) throws Exception {
 
-	public void remove(List<EmployeeCsv> csvList) throws Exception {
-		for (EmployeeCsv csv : csvList) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Employee.ID, csv.getId());
-			Employee model = modelService.findOneEntityByProperties(properties, Employee.class);
-			modelService.deleteByEntity(model, Employee.class);
-		}
 	}
-
 }

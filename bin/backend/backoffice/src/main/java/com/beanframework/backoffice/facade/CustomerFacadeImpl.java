@@ -1,21 +1,20 @@
 package com.beanframework.backoffice.facade;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.envers.RevisionType;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.criteria.AuditCriterion;
-import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.CustomerDto;
+import com.beanframework.backoffice.data.CustomerSearch;
+import com.beanframework.backoffice.data.CustomerSpecification;
 import com.beanframework.backoffice.data.UserFieldDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -33,22 +32,22 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	private CustomerService customerService;
 
 	@Override
-	public Page<CustomerDto> findPage(Specification<CustomerDto> specification, PageRequest pageable) throws Exception {
-		Page<Customer> page = modelService.findEntityPage(specification, pageable, Customer.class);
+	public Page<CustomerDto> findPage(CustomerSearch search, PageRequest pageable) throws Exception {
+		Page<Customer> page = customerService.findEntityPage(search.toString(), CustomerSpecification.findByCriteria(search), pageable);
 		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class);
 		return new PageImpl<CustomerDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
 	@Override
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
-		Customer entity = modelService.findOneEntityByUuid(uuid, Customer.class);
+		Customer entity = customerService.findOneEntityByUuid(uuid);
 		return modelService.getDto(entity, CustomerDto.class);
 	}
 
 	@Override
-	public CustomerDto findOneByProperties(Map<String, Object> properties) throws Exception {
-		List<Customer> entities = modelService.findOneEntityByProperties(properties, Customer.class);
-		return modelService.getDto(entities, CustomerDto.class);
+	public CustomerDto findOneProperties(Map<String, Object> properties) throws Exception {
+		Customer entity = customerService.findOneEntityByProperties(properties);
+		return modelService.getDto(entity, CustomerDto.class);
 	}
 
 	@Override
@@ -74,18 +73,12 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		try {
-			modelService.deleteByUuid(uuid, CustomerDto.class);
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
+		customerService.deleteByUuid(uuid);
 	}
 
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, Customer.class);
+		List<Object[]> revisions = customerService.findHistoryByUuid(uuid, firstResult, maxResults);
 		for (int i = 0; i < revisions.size(); i++) {
 			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], CustomerDto.class);
 		}
@@ -95,13 +88,19 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(UserField.USER).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		List<Object[]> revisions = modelService.findHistory(false, criterion, order, null, null, UserField.class);
+		List<Object[]> revisions = customerService.findHistoryByRelatedUuid(UserField.USER, uuid, firstResult, maxResults);
 		for (int i = 0; i < revisions.size(); i++) {
 			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserFieldDto.class);
 		}
 
 		return revisions;
 	}
+
+	@Override
+	public List<CustomerDto> findAllDtoCustomers() throws Exception {
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(CustomerDto.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(customerService.findEntityBySorts(sorts), CustomerDto.class);
+	}
+
 }

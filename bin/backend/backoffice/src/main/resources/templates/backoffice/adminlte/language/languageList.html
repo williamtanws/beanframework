@@ -9,7 +9,10 @@
 		<section class="content">
 			<!-- Search Form-->
 			<div class="row">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.language')}}, objectSearch=${languageSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
+				<div class="col-md-6">
+					<th:block
+						layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.language')}}, objectSearch=${languageSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
+				</div>
 			</div>
 			<!-- Alert Notification-->
 			<div class="row">
@@ -17,10 +20,12 @@
 			</div>
 			<!-- List Table-->
 			<div class="row" th:with="languageName=#{module.language.name}, languageActive=#{module.language.active}, languageSort=#{module.language.sort}">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.language}, objectUpdate=${languageUpdate}, objectSearch=${languageSearch}, icon=@{${@environment.getProperty('module.language.icon')}}, createAuthority='language_create', updateAuthority='language_update', listFields=${ {{'id', 'ID'},{'name', languageName}, {'active', languageActive}, {'sort', languageSort}} }, paginationAction=@{${@environment.getProperty('path.language')}}, searchFields=${ {'id','name'} }, updateForm='/backoffice/adminlte/language/languageForm')}"></th:block>
+				<th:block
+					layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.language}, objectUpdate=${languageUpdate}, objectSearch=${languageSearch}, icon=@{${@environment.getProperty('module.language.icon')}}, createAuthority='language_create', updateAuthority='language_update', listFields=${ {{'id', 'ID'},{'name', languageName}, {'active', languageActive}, {'sort', languageSort}} }, paginationAction=@{${@environment.getProperty('path.language')}}, searchFields=${ {'id','name'} }, updateForm='/backoffice/adminlte/language/languageForm')}"></th:block>
 			</div>
 			<!-- Create Modal-->
-			<th:block sec:authorize="hasAuthority('language_create')" layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.language')}}, createObject=${languageCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.language.checkid')})}"></th:block>
+			<th:block sec:authorize="hasAuthority('language_create')"
+				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.language')}}, createObject=${languageCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.language.checkid')})}"></th:block>
 		</section>
 	</th:block>
 </body>

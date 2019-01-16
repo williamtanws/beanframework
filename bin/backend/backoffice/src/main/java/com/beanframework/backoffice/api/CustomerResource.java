@@ -30,7 +30,7 @@ public class CustomerResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Customer.ID, id);
 
-		CustomerDto data = customerFacade.findOneByProperties(properties);
+		CustomerDto data = customerFacade.findOneProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

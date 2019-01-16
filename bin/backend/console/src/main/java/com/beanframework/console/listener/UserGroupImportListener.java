@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -24,34 +24,34 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.ImportEntityCustomerConverter;
-import com.beanframework.console.csv.CustomerCsv;
-import com.beanframework.console.registry.Importer;
-import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerService;
+import com.beanframework.console.ConsoleImportListenerConstants;
+import com.beanframework.console.converter.ImportEntityUserGroupConverter;
+import com.beanframework.console.csv.UserGroupCsv;
+import com.beanframework.console.registry.ImportListener;
+import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.service.UserGroupService;
 
-public class CustomerImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(CustomerImporter.class);
-
-	@Autowired
-	private CustomerService customerService;
+public class UserGroupImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(UserGroupImportListener.class);
 
 	@Autowired
-	private ImportEntityCustomerConverter converter;
+	private UserGroupService userGroupService;
 
-	@Value("${module.console.import.update.customer}")
+	@Autowired
+	private ImportEntityUserGroupConverter converter;
+
+	@Value("${module.console.import.update.usergroup}")
 	private String IMPORT_UPDATE;
 
-	@Value("${module.console.import.remove.customer}")
+	@Value("${module.console.import.remove.usergroup}")
 	private String IMPORT_REMOVE;
 
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.CustomerImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.CustomerImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.CustomerImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.CustomerImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.UserGroupImportListener.KEY);
+		setName(ConsoleImportListenerConstants.UserGroupImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.UserGroupImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.UserGroupImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -64,8 +64,8 @@ public class CustomerImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<CustomerCsv> customerCsvList = readCSVFile(reader, CustomerCsv.getUpdateProcessors());
-			save(customerCsvList);
+			List<UserGroupCsv> csvList = readCSVFile(reader, UserGroupCsv.getUpdateProcessors());
+			save(csvList);
 		}
 	}
 
@@ -79,15 +79,15 @@ public class CustomerImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<CustomerCsv> customerCsvList = readCSVFile(reader, CustomerCsv.getRemoveProcessors());
-			remove(customerCsvList);
+			List<UserGroupCsv> csvList = readCSVFile(reader, UserGroupCsv.getRemoveProcessors());
+			remove(csvList);
 		}
 	}
 
-	public List<CustomerCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
+	public List<UserGroupCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
-		List<CustomerCsv> csvList = new ArrayList<CustomerCsv>();
+		List<UserGroupCsv> csvList = new ArrayList<UserGroupCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -96,13 +96,13 @@ public class CustomerImporter extends Importer {
 			// must match)
 			final String[] header = beanReader.getHeader(true);
 
-			CustomerCsv csv;
-			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.CustomerImporter.NAME);
-			while ((csv = beanReader.read(CustomerCsv.class, header, processors)) != null) {
+			UserGroupCsv csv;
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.UserGroupImportListener.NAME);
+			while ((csv = beanReader.read(UserGroupCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.CustomerImporter.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.UserGroupImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -119,19 +119,16 @@ public class CustomerImporter extends Importer {
 		return csvList;
 	}
 
-	public void save(List<CustomerCsv> customerCsvList) throws Exception {
+	public void save(List<UserGroupCsv> userGroupCsvList) throws Exception {
 
-		for (CustomerCsv csv : customerCsvList) {
+		for (UserGroupCsv csv : userGroupCsvList) {
 
-			Customer model = converter.convert(csv);
-			customerService.saveEntity(model);
+			UserGroup model = converter.convert(csv);
+			userGroupService.saveEntity(model);
 		}
 	}
 
-	public void remove(List<CustomerCsv> csvList) throws Exception {
-		for (CustomerCsv csv : csvList) {
-			customerService.deleteById(csv.getId());
-		}
-	}
+	public void remove(List<UserGroupCsv> csvList) throws Exception {
 
+	}
 }

@@ -31,7 +31,7 @@ public class UserGroupResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(UserGroup.ID, id);
 
-		UserGroupDto data = userGroupFacade.findOneByProperties(properties);
+		UserGroupDto data = userGroupFacade.findOneProperties(properties);
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

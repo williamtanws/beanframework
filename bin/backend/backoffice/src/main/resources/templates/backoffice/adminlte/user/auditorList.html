@@ -9,8 +9,10 @@
 		<section class="content">
 			<!-- Search Form-->
 			<div class="row">
-				<th:block
-					layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.auditor')}}, objectSearch=${auditorSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
+				<div class="col-md-6">
+					<th:block
+						layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.auditor')}}, objectSearch=${auditorSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
+				</div>
 			</div>
 			<!-- Alert Notification-->
 			<div class="row">

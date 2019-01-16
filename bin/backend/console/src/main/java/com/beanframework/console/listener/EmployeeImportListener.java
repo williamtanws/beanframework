@@ -1,4 +1,4 @@
-package com.beanframework.console.importer;
+package com.beanframework.console.listener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -24,38 +26,38 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.converter.ImportEntityCronjobConverter;
-import com.beanframework.console.csv.CronjobCsv;
-import com.beanframework.console.registry.Importer;
-import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.service.CronjobManagerService;
-import com.beanframework.cronjob.service.CronjobService;
+import com.beanframework.common.service.ModelService;
+import com.beanframework.console.ConsoleImportListenerConstants;
+import com.beanframework.console.converter.ImportEntityEmployeeConverter;
+import com.beanframework.console.csv.EmployeeCsv;
+import com.beanframework.console.registry.ImportListener;
+import com.beanframework.employee.domain.Employee;
+import com.beanframework.employee.service.EmployeeService;
 
-public class CronjobImporter extends Importer {
-	protected static Logger LOGGER = LoggerFactory.getLogger(CronjobImporter.class);
-
-	@Autowired
-	private CronjobService cronjobService;
+public class EmployeeImportListener extends ImportListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(EmployeeImportListener.class);
 
 	@Autowired
-	private ImportEntityCronjobConverter converter;
+	private ModelService modelService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 
 	@Autowired
-	private CronjobManagerService cronjobManagerService;
+	private ImportEntityEmployeeConverter converter;
 
-	@Value("${module.console.import.update.cronjob}")
+	@Value("${module.console.import.update.employee}")
 	private String IMPORT_UPDATE;
 
-	@Value("${module.console.import.remove.cronjob}")
+	@Value("${module.console.import.remove.employee}")
 	private String IMPORT_REMOVE;
 
 	@PostConstruct
 	public void importer() {
-		setKey(PlatformUpdateWebConstants.Importer.CronjobImporter.KEY);
-		setName(PlatformUpdateWebConstants.Importer.CronjobImporter.NAME);
-		setSort(PlatformUpdateWebConstants.Importer.CronjobImporter.SORT);
-		setDescription(PlatformUpdateWebConstants.Importer.CronjobImporter.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.EmployeeImportListener.KEY);
+		setName(ConsoleImportListenerConstants.EmployeeImportListener.NAME);
+		setSort(ConsoleImportListenerConstants.EmployeeImportListener.SORT);
+		setDescription(ConsoleImportListenerConstants.EmployeeImportListener.DESCRIPTION);
 	}
 
 	@Override
@@ -68,8 +70,8 @@ public class CronjobImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<CronjobCsv> cronjobCsvList = readCSVFile(reader, CronjobCsv.getUpdateProcessors());
-			save(cronjobCsvList);
+			List<EmployeeCsv> employeeCsvList = readCSVFile(reader, EmployeeCsv.getUpdateProcessors());
+			save(employeeCsvList);
 		}
 	}
 
@@ -83,15 +85,15 @@ public class CronjobImporter extends Importer {
 			IOUtils.copy(in, baos);
 			BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
-			List<CronjobCsv> cronjobCsvList = readCSVFile(reader, CronjobCsv.getRemoveProcessors());
-			remove(cronjobCsvList);
+			List<EmployeeCsv> employeeCsvList = readCSVFile(reader, EmployeeCsv.getRemoveProcessors());
+			remove(employeeCsvList);
 		}
 	}
 
-	public List<CronjobCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
+	public List<EmployeeCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
-		List<CronjobCsv> csvList = new ArrayList<CronjobCsv>();
+		List<EmployeeCsv> csvList = new ArrayList<EmployeeCsv>();
 
 		try {
 			beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
@@ -100,13 +102,13 @@ public class CronjobImporter extends Importer {
 			// must match)
 			final String[] header = beanReader.getHeader(true);
 
-			CronjobCsv csv;
-			LOGGER.info("Start import " + PlatformUpdateWebConstants.Importer.CronjobImporter.NAME);
-			while ((csv = beanReader.read(CronjobCsv.class, header, processors)) != null) {
+			EmployeeCsv csv;
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.EmployeeImportListener.NAME);
+			while ((csv = beanReader.read(EmployeeCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + PlatformUpdateWebConstants.Importer.CronjobImporter.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.EmployeeImportListener.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -123,22 +125,22 @@ public class CronjobImporter extends Importer {
 		return csvList;
 	}
 
-	public void save(List<CronjobCsv> csvList) throws Exception {
+	public void save(List<EmployeeCsv> csvList) throws Exception {
 
-		cronjobManagerService.clearAllScheduler();
+		for (EmployeeCsv csv : csvList) {
 
-		for (CronjobCsv csv : csvList) {
-
-			Cronjob model = converter.convert(csv);
-			cronjobService.saveEntity(model);
-		}
-
-		cronjobManagerService.initCronJob();
-	}
-
-	public void remove(List<CronjobCsv> configurationCsvList) throws Exception {
-		for (CronjobCsv csv : configurationCsvList) {
-			cronjobService.deleteById(csv.getId());
+			Employee model = converter.convert(csv);
+			employeeService.saveEntity(model);
 		}
 	}
+
+	public void remove(List<EmployeeCsv> csvList) throws Exception {
+		for (EmployeeCsv csv : csvList) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Employee.ID, csv.getId());
+			Employee model = modelService.findOneEntityByProperties(properties, Employee.class);
+			modelService.deleteByEntity(model, Employee.class);
+		}
+	}
+
 }

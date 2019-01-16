@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.backoffice.data.MenuDto;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.menu.domain.Menu;
 
 public interface MenuFacade {
 
@@ -22,7 +23,7 @@ public interface MenuFacade {
 	MenuDto findOneByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
-	MenuDto findOneByProperties(Map<String, Object> properties) throws Exception;
+	MenuDto findOneProperties(Map<String, Object> properties) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.CREATE)
 	MenuDto create(MenuDto model) throws BusinessException;
@@ -44,4 +45,6 @@ public interface MenuFacade {
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	
+	List<Menu> findMenuTreeByCurrentUser() throws Exception;
 }

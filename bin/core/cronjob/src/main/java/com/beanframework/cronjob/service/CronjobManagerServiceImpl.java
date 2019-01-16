@@ -20,7 +20,7 @@ import com.beanframework.cronjob.domain.CronjobEnum;
 @Service
 public class CronjobManagerServiceImpl implements CronjobManagerService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CronjobManagerServiceImpl.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(CronjobManagerServiceImpl.class);
 	
 	@Autowired
 	private ModelService modelService;
@@ -48,7 +48,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.STARTUP, true);
 		
-		List<Cronjob> jobList = modelService.findCachedEntityByPropertiesAndSorts(properties, null, null, null, Cronjob.class);
+		List<Cronjob> jobList = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, Cronjob.class);
 		
 		for (Cronjob cronjob : jobList) {
 			cronjob.setJobTrigger(CronjobEnum.JobTrigger.START);
