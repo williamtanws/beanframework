@@ -36,6 +36,8 @@ public class DynamicFieldDto extends GenericDto {
 	private List<DynamicFieldEnumValueDto> values = new ArrayList<DynamicFieldEnumValueDto>();
 
 	private String selected;
+	
+	private String languageUuid;
 
 	public String getName() {
 		return name;
@@ -115,6 +117,14 @@ public class DynamicFieldDto extends GenericDto {
 
 	public void setSelected(String selected) {
 		this.selected = selected;
+	}
+
+	public String getLanguageUuid() {
+		return languageUuid;
+	}
+
+	public void setLanguageUuid(String languageUuid) {
+		this.languageUuid = languageUuid;
 	}
 
 }

@@ -26,7 +26,9 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
 import com.beanframework.backoffice.data.DynamicFieldDto;
 import com.beanframework.backoffice.data.DynamicFieldSearch;
+import com.beanframework.backoffice.data.LanguageDto;
 import com.beanframework.backoffice.facade.DynamicFieldFacade;
+import com.beanframework.backoffice.facade.LanguageFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.ParamUtils;
@@ -36,6 +38,9 @@ public class DynamicFieldController extends AbstractController {
 
 	@Autowired
 	private DynamicFieldFacade dynamicFieldFacade;
+
+	@Autowired
+	private LanguageFacade languageFacade;
 
 	@Value(DynamicFieldWebConstants.Path.DYNAMICFIELD)
 	private String PATH_DYNAMICFIELD;
@@ -117,6 +122,9 @@ public class DynamicFieldController extends AbstractController {
 			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(dynamicFieldSearch, model, requestParams));
+
+		List<LanguageDto> languages = languageFacade.findAllDtoLanguages();
+		model.addAttribute("languages", languages);
 
 		if (dynamicFieldUpdate.getUuid() != null) {
 

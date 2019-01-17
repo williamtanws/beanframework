@@ -88,8 +88,8 @@
 												<label for="enabled" th:text="#{module.customer.enabled}"></label>
 												<small th:text="#{module.customer.enabled.indicate}"></small>
 												<select class="form-control" name="enabled">
-													<option value="1" th:selected="${customerUpdate.uuid != null} ? ${customerUpdate.enabled == true} : true" th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="${customerUpdate.uuid != null} ? ${customerUpdate.enabled == false} : false" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="${customerUpdate.enabled == true}" th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="${customerUpdate.enabled == false}" th:text="#{module.backoffice.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -99,8 +99,8 @@
 												<label for="accountNonLocked" th:text="#{module.customer.locked}"></label>
 												<small th:text="#{module.customer.locked.indicate}"></small>
 												<select class="form-control" name="accountNonLocked">
-													<option value="1" th:selected="${customerUpdate.uuid != null} ? ${customerNonLocked == true} : true" th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="${customerUpdate.uuid != null} ? ${customerNonLocked == false} : false" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="${customerNonLocked == true}" th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="${customerNonLocked == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -110,8 +110,8 @@
 												<label for="accountNonExpired" th:text="#{module.customer.expired}"></label>
 												<small th:text="#{module.customer.expired.indicate}"></small>
 												<select class="form-control" name="accountNonExpired">
-													<option value="1" th:selected="${customerUpdate.uuid != null} ? ${customerNonExpired == true} : true" th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="${customerUpdate.uuid != null} ? ${customerNonExpired == false} : false" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="${customerNonExpired == true}" th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="${customerNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -121,8 +121,8 @@
 												<label for="credentialsNonExpired" th:text="#{module.customer.credentials.expired}"></label>
 												<small th:text="#{module.customer.credentials.expired.indicate}"></small>
 												<select class="form-control" name="credentialsNonExpired">
-													<option value="1" th:selected="${customerUpdate.uuid != null} ? ${customerUpdate.credentialsNonExpired == true}: true" th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="${customerUpdate.uuid != null} ? ${customerUpdate.credentialsNonExpired == false} : false" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="${customerUpdate.credentialsNonExpired == true}" th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="${customerUpdate.credentialsNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>

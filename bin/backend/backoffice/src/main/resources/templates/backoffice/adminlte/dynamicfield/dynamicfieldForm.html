@@ -63,6 +63,70 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="label" th:text="#{module.dynamicfield.label}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="label" th:value="*{label}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="fieldGroup" th:text="#{module.dynamicfield.fieldGroup}"></label>
+												<input type="text" class="form-control" name="fieldGroup" th:value="*{fieldGroup}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="language" th:text="#{module.dynamicfield.language}"></label>
+												<select class="form-control select2" name="languageUuid" style="width: 100%;">
+													<option th:each="language: ${languages}" th:selected="${language.uuid} == *{language.uuid}" th:value="${language.uuid}" th:text="${language.name}+' ['+${language.id}+']'"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="fieldType" th:text="#{module.dynamicfield.fieldType}"></label>
+												<span>*</span>
+												<select name="jobTrigger" class="form-control">
+													<option th:each="state: ${T(com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum).values()}" th:value="${state.name()}" th:text="${state}"></option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="sort" th:text="#{module.dynamicfield.sort}"></label>
+												<input type="text" class="form-control" name="sort" th:value="*{sort}" min="0" step="1" onkeypress="return isNumberKey(event)">
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="required" th:text="#{module.dynamicfield.required}"></label>
+												<select class="form-control" name="active">
+													<option value="1" th:selected="*{required == true}" th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="*{required == false}" th:text="#{module.backoffice.no}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="rule" th:text="#{module.dynamicfield.rule}"></label>
+												<input type="text" class="form-control" name="rule" th:value="*{rule}">
+												<span class="help-block"></span>
+											</div>
+										</div>
 									</div>
 								</div>
 								<!-- /.box-body -->
