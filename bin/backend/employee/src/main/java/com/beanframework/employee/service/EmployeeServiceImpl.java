@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,12 +43,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
+import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserField;
@@ -57,8 +61,6 @@ import com.beanframework.user.utils.PasswordUtils;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-
-	public static final String CACHE_EMPLOYEE_PROFILE = "EmployeeProfile";
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
@@ -76,6 +78,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Value("${module.employee.profile.picture.thumbnail.weight:100}")
 	public int PROFILE_PICTURE_THUMBNAIL_WEIGHT;
+
+	@Autowired
+	private SessionRegistry sessionRegistry;
 
 	@Override
 	public Employee create() throws Exception {
@@ -227,7 +232,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Employee getCurrentUser() {
+	public Employee getProfile() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (auth != null) {
@@ -283,5 +288,48 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return authorities;
+	}
+
+	@Override
+	public Set<EmployeeSession> findAllSessions() {
+		final List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
+		Set<EmployeeSession> sessions = new LinkedHashSet<EmployeeSession>();
+
+		for (final Object principal : allPrincipals) {
+			if (principal instanceof Employee) {
+				final Employee principalEmployee = (Employee) principal;
+				if (principalEmployee.getUuid() != null) {
+					List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principalEmployee, false);
+					sessions.add(new EmployeeSession(principalEmployee, sessionInformations));
+				}
+			}
+		}
+		return sessions;
+	}
+
+	@Override
+	public void expireAllSessionsByUuid(UUID uuid) {
+		Set<EmployeeSession> userList = findAllSessions();
+
+		for (EmployeeSession employeeSession : userList) {
+			if (employeeSession.getPrincipalEmployee().getUuid().equals(uuid)) {
+				List<SessionInformation> session = sessionRegistry.getAllSessions(employeeSession.getPrincipalEmployee(), false);
+				for (SessionInformation sessionInformation : session) {
+					sessionInformation.expireNow();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void expireAllSessions() {
+		Set<EmployeeSession> userList = findAllSessions();
+
+		for (EmployeeSession employeeSession : userList) {
+			List<SessionInformation> session = sessionRegistry.getAllSessions(employeeSession.getPrincipalEmployee(), false);
+			for (SessionInformation sessionInformation : session) {
+				sessionInformation.expireNow();
+			}
+		}
 	}
 }
