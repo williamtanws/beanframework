@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.console.ConsoleImportListenerConstants;
-import com.beanframework.console.converter.ImportEntityUserPermissionConverter;
+import com.beanframework.console.converter.EntityCsvUserPermissionConverter;
 import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.user.domain.UserPermission;
@@ -38,7 +38,7 @@ public class UserPermissionImportListener extends ImportListener {
 	private UserPermissionService userPermissionService;
 
 	@Autowired
-	private ImportEntityUserPermissionConverter converter;
+	private EntityCsvUserPermissionConverter converter;
 
 	@Value("${module.console.import.update.userpermission}")
 	private String IMPORT_UPDATE;

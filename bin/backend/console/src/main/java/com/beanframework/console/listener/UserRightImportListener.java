@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.console.ConsoleImportListenerConstants;
-import com.beanframework.console.converter.ImportEntityUserRightConverter;
+import com.beanframework.console.converter.EntityCsvUserRightConverter;
 import com.beanframework.console.csv.UserRightCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.user.domain.UserRight;
@@ -38,7 +38,7 @@ public class UserRightImportListener extends ImportListener {
 	private UserRightService userRightService;
 
 	@Autowired
-	private ImportEntityUserRightConverter converter;
+	private EntityCsvUserRightConverter converter;
 
 	@Value("${module.console.import.update.userright}")
 	private String IMPORT_UPDATE;

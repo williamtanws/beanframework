@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.console.ConsoleImportListenerConstants;
-import com.beanframework.console.converter.ImportEntityMenuConverter;
+import com.beanframework.console.converter.EntityCsvMenuConverter;
 import com.beanframework.console.csv.MenuCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.menu.domain.Menu;
@@ -38,7 +38,7 @@ public class MenuImportListener extends ImportListener {
 	private MenuService menuService;
 	
 	@Autowired
-	private ImportEntityMenuConverter converter;
+	private EntityCsvMenuConverter converter;
 
 	@Value("${module.console.import.update.menu}")
 	private String IMPORT_UPDATE;

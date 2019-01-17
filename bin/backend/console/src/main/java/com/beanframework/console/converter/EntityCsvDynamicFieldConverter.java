@@ -20,9 +20,9 @@ import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
 import com.beanframework.language.domain.Language;
 
 @Component
-public class ImportEntityDynamicFieldConverter implements EntityConverter<DynamicFieldCsv, DynamicField> {
+public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFieldCsv, DynamicField> {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger(ImportEntityDynamicFieldConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvDynamicFieldConverter.class);
 
 	@Autowired
 	private ModelService modelService;

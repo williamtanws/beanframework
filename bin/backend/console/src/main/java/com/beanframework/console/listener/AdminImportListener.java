@@ -27,7 +27,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.service.AdminService;
 import com.beanframework.console.ConsoleImportListenerConstants;
-import com.beanframework.console.converter.ImportEntityAdminConverter;
+import com.beanframework.console.converter.EntityCsvAdminConverter;
 import com.beanframework.console.csv.AdminCsv;
 import com.beanframework.console.registry.ImportListener;
 
@@ -38,7 +38,7 @@ public class AdminImportListener extends ImportListener {
 	private AdminService adminService;
 
 	@Autowired
-	private ImportEntityAdminConverter converter;
+	private EntityCsvAdminConverter converter;
 
 	@Value("${module.console.import.update.admin}")
 	private String IMPORT_UPDATE;

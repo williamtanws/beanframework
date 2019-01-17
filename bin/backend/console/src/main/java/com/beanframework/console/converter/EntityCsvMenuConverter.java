@@ -22,9 +22,9 @@ import com.beanframework.menu.domain.MenuTargetTypeEnum;
 import com.beanframework.user.domain.UserGroup;
 
 @Component
-public class ImportEntityMenuConverter implements EntityConverter<MenuCsv, Menu> {
+public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger(ImportEntityMenuConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvMenuConverter.class);
 
 	@Autowired
 	private ModelService modelService;
