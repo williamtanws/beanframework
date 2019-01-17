@@ -77,9 +77,9 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = dynamicFieldService.findHistoryByUuid(uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], DynamicFieldDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], DynamicFieldDto.class);
+//		}
 
 		return revisions;
 	}

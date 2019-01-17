@@ -77,9 +77,9 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = languageService.findHistoryByUuid(uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], LanguageDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], LanguageDto.class);
+//		}
 
 		return revisions;
 	}

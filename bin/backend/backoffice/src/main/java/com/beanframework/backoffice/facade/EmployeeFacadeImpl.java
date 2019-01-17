@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.beanframework.backoffice.data.EmployeeDto;
 import com.beanframework.backoffice.data.EmployeeSearch;
 import com.beanframework.backoffice.data.EmployeeSpecification;
-import com.beanframework.backoffice.data.UserFieldDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeSession;
@@ -82,9 +81,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = employeeService.findHistoryByUuid(uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], EmployeeDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], EmployeeDto.class);
+//		}
 
 		return revisions;
 	}
@@ -92,9 +91,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = employeeService.findHistoryByRelatedUuid(UserField.USER, uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserFieldDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserFieldDto.class);
+//		}
 
 		return revisions;
 	}

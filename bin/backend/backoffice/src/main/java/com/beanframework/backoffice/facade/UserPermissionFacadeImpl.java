@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.UserPermissionDto;
-import com.beanframework.backoffice.data.UserPermissionFieldDto;
 import com.beanframework.backoffice.data.UserPermissionSearch;
 import com.beanframework.backoffice.data.UserPermissionSpecification;
 import com.beanframework.common.exception.BusinessException;
@@ -79,9 +78,9 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = userPermissionService.findHistoryByUuid(uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserPermissionDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserPermissionDto.class);
+//		}
 
 		return revisions;
 	}
@@ -89,9 +88,9 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = userPermissionService.findHistoryByRelatedUuid(UserPermissionField.USER_PERMISSION, uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserPermissionFieldDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserPermissionFieldDto.class);
+//		}
 
 		return revisions;
 	}

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.MenuDto;
-import com.beanframework.backoffice.data.MenuFieldDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
@@ -93,9 +92,9 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = menuService.findHistoryByUuid(uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], MenuDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], MenuDto.class);
+//		}
 
 		return revisions;
 	}
@@ -103,9 +102,9 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = menuService.findHistoryByRelatedUuid(MenuField.MENU, uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], MenuFieldDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], MenuFieldDto.class);
+//		}
 
 		return revisions;
 	}

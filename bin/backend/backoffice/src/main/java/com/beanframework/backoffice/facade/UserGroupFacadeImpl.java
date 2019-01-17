@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.UserGroupDto;
-import com.beanframework.backoffice.data.UserGroupFieldDto;
 import com.beanframework.backoffice.data.UserGroupSearch;
 import com.beanframework.backoffice.data.UserGroupSpecification;
 import com.beanframework.common.exception.BusinessException;
@@ -79,9 +78,9 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = userGroupService.findHistoryByUuid(uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserGroupDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserGroupDto.class);
+//		}
 
 		return revisions;
 	}
@@ -89,9 +88,9 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = userGroupService.findHistoryByRelatedUuid(UserGroupField.USER_GROUP, uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserGroupFieldDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserGroupFieldDto.class);
+//		}
 
 		return revisions;
 	}

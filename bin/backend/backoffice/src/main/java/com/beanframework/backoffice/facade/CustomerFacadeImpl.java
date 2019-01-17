@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import com.beanframework.backoffice.data.CustomerDto;
 import com.beanframework.backoffice.data.CustomerSearch;
 import com.beanframework.backoffice.data.CustomerSpecification;
-import com.beanframework.backoffice.data.UserFieldDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
@@ -79,9 +78,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = customerService.findHistoryByUuid(uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], CustomerDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], CustomerDto.class);
+//		}
 
 		return revisions;
 	}
@@ -89,9 +88,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = customerService.findHistoryByRelatedUuid(UserField.USER, uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserFieldDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserFieldDto.class);
+//		}
 
 		return revisions;
 	}
