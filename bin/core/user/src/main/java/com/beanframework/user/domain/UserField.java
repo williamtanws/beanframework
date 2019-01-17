@@ -43,6 +43,7 @@ public class UserField extends GenericEntity {
 	@OrderBy(DynamicField.SORT+" ASC")
 	private DynamicField dynamicField;
 
+	@Audited(withModifiedFlag = true)
 	private String value;
 
 	public User getUser() {
