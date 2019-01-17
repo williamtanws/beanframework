@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserGroup;
 
@@ -43,10 +44,16 @@ public interface EmployeeService {
 
 	Employee findAuthenticate(String id, String password) throws Exception;
 
-	Employee getCurrentUser() throws Exception;
+	Employee getProfile() throws Exception;
 
 	Employee updatePrincipal(Employee employee);
 
 	Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids);
+
+	Set<EmployeeSession> findAllSessions();
+
+	void expireAllSessionsByUuid(UUID uuid);
+
+	void expireAllSessions();
 
 }

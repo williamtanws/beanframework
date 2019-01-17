@@ -1,7 +1,6 @@
 package com.beanframework.backoffice.facade;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.session.SessionInformation;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,11 +32,8 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	private ModelService modelService;
 
 	@Autowired
-	private SessionRegistry sessionRegistry;
-
-	@Autowired
 	private EmployeeService employeeService;
-	
+
 	@Override
 	public Page<EmployeeDto> findPage(EmployeeSearch search, PageRequest pageable) throws Exception {
 		Page<Employee> page = employeeService.findEntityPage(search.toString(), EmployeeSpecification.findByCriteria(search), pageable);
@@ -114,45 +108,18 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public Set<EmployeeSession> findAllSessions() {
-		final List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
-		Set<EmployeeSession> sessions = new LinkedHashSet<EmployeeSession>();
+		return employeeService.findAllSessions();
 
-		for (final Object principal : allPrincipals) {
-			if (principal instanceof Employee) {
-				final Employee principalEmployee = (Employee) principal;
-				if (principalEmployee.getUuid() != null) {
-					List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principalEmployee, false);
-					sessions.add(new EmployeeSession(principalEmployee, sessionInformations));
-				}
-			}
-		}
-		return sessions;
 	}
 
 	@Override
 	public void expireAllSessionsByUuid(UUID uuid) {
-		Set<EmployeeSession> userList = findAllSessions();
-
-		for (EmployeeSession employeeSession : userList) {
-			if (employeeSession.getPrincipalEmployee().getUuid().equals(uuid)) {
-				List<SessionInformation> session = sessionRegistry.getAllSessions(employeeSession.getPrincipalEmployee(), false);
-				for (SessionInformation sessionInformation : session) {
-					sessionInformation.expireNow();
-				}
-			}
-		}
+		employeeService.expireAllSessionsByUuid(uuid);
 	}
 
 	@Override
 	public void expireAllSessions() {
-		Set<EmployeeSession> userList = findAllSessions();
-
-		for (EmployeeSession employeeSession : userList) {
-			List<SessionInformation> session = sessionRegistry.getAllSessions(employeeSession.getPrincipalEmployee(), false);
-			for (SessionInformation sessionInformation : session) {
-				sessionInformation.expireNow();
-			}
-		}
+		employeeService.expireAllSessions();
 	}
 
 	@Override
@@ -172,18 +139,16 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			employeeService.updatePrincipal(entity);
 			employeeService.saveProfilePicture(entity, picture);
 
-			dto = modelService.getDto(entity, EmployeeDto.class);
+			return modelService.getDto(entity, EmployeeDto.class);
 
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
-
-		return dto;
 	}
-	
+
 	@Override
 	public EmployeeDto getProfile() throws Exception {
-		Employee employee = employeeService.getCurrentUser();
+		Employee employee = employeeService.getProfile();
 		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), EmployeeDto.class);
 	}
 }

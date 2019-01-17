@@ -8,6 +8,8 @@ import com.beanframework.customer.domain.Customer;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.domain.UserGroupField;
+import com.beanframework.user.domain.UserPermissionField;
 import com.beanframework.user.domain.UserRightField;
 
 public class CustomerLoadInterceptor implements LoadInterceptor<Customer> {
@@ -17,12 +19,18 @@ public class CustomerLoadInterceptor implements LoadInterceptor<Customer> {
 		Hibernate.initialize(model.getUserGroups());
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
+			for (UserGroupField field : userGroup.getFields()) {
+				Hibernate.initialize(field.getDynamicField().getValues());
+			}
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
-				for (UserRightField userRightField : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(userRightField.getDynamicField().getValues());
+				for (UserRightField field : userAuthority.getUserRight().getFields()) {
+					Hibernate.initialize(field.getDynamicField().getValues());
 				}
 				Hibernate.initialize(userAuthority.getUserPermission());
+				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
+					Hibernate.initialize(field.getDynamicField().getValues());
+				}
 			}
 			initializeUserGroups(userGroup);
 		}
@@ -36,12 +44,18 @@ public class CustomerLoadInterceptor implements LoadInterceptor<Customer> {
 		Hibernate.initialize(model.getUserGroups());
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
+			for (UserGroupField field : userGroup.getFields()) {
+				Hibernate.initialize(field.getDynamicField().getValues());
+			}
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
-				for (UserRightField userRightField : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(userRightField.getDynamicField().getValues());
+				for (UserRightField field : userAuthority.getUserRight().getFields()) {
+					Hibernate.initialize(field.getDynamicField().getValues());
 				}
 				Hibernate.initialize(userAuthority.getUserPermission());
+				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
+					Hibernate.initialize(field.getDynamicField().getValues());
+				}
 			}
 			initializeUserGroups(userGroup);
 		}
