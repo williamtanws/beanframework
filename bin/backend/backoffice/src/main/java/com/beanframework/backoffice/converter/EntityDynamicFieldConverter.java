@@ -3,6 +3,7 @@ package com.beanframework.backoffice.converter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +84,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
-		
+
 		if (source.getFieldType() == source.getFieldType() == false) {
 			prototype.setFieldType(source.getFieldType());
 			prototype.setLastModifiedDate(lastModifiedDate);
@@ -100,22 +101,21 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 		}
 
 		try {
-			if (source.getLanguage() == null) {
+			if (StringUtils.isBlank(source.getLanguageUuid())) {
 				if (prototype.getLanguage() != null) {
 					prototype.setLanguage(null);
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
-			} else {
-				if (prototype.getLanguage() == null || prototype.getLanguage().getUuid().equals(source.getLanguage().getUuid()) == false) {
-					Map<String, Object> properties = new HashMap<String, Object>();
-					properties.put(Language.UUID, source.getLanguage().getUuid());
-					Language language = modelService.findOneEntityByProperties(properties, Language.class);
-					if (language != null) {
-						prototype.setLanguage(language);
-						prototype.setLastModifiedDate(lastModifiedDate);
-					}
+			} else if (prototype.getLanguage() == null || prototype.getLanguage().getUuid().equals(UUID.fromString(source.getLanguageUuid())) == false) {
+
+				Language entityLanguage = modelService.findOneEntityByUuid(UUID.fromString(source.getLanguageUuid()), Language.class);
+
+				if (entityLanguage != null) {
+					prototype.setLanguage(entityLanguage);
+					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}

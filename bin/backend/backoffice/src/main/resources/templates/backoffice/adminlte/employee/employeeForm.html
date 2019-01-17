@@ -88,8 +88,8 @@
 												<label for="enabled" th:text="#{module.employee.enabled}"></label>
 												<small th:text="#{module.employee.enabled.indicate}"></small>
 												<select class="form-control" name="enabled">
-													<option value="1" th:selected="${employeeUpdate.uuid != null} ? ${employeeUpdate.enabled == true} : true" th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="${employeeUpdate.uuid != null} ? ${employeeUpdate.enabled == false} : false" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="${employeeUpdate.enabled == true} " th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="${employeeUpdate.enabled == false}" th:text="#{module.backoffice.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -99,8 +99,8 @@
 												<label for="accountNonLocked" th:text="#{module.employee.locked}"></label>
 												<small th:text="#{module.employee.locked.indicate}"></small>
 												<select class="form-control" name="accountNonLocked">
-													<option value="1" th:selected="${employeeUpdate.uuid != null} ? ${employeeNonLocked == true} : true" th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="${employeeUpdate.uuid != null} ? ${employeeNonLocked == false} : false" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="${employeeNonLocked == true} " th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="${employeeNonLocked == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -110,8 +110,8 @@
 												<label for="accountNonExpired" th:text="#{module.employee.expired}"></label>
 												<small th:text="#{module.employee.expired.indicate}"></small>
 												<select class="form-control" name="accountNonExpired">
-													<option value="1" th:selected="${employeeUpdate.uuid != null} ? ${employeeNonExpired == true} : true" th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="${employeeUpdate.uuid != null} ? ${employeeNonExpired == false} : false" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="${employeeNonExpired == true} " th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="${employeeNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -121,8 +121,8 @@
 												<label for="credentialsNonExpired" th:text="#{module.employee.credentials.expired}"></label>
 												<small th:text="#{module.employee.credentials.expired.indicate}"></small>
 												<select class="form-control" name="credentialsNonExpired">
-													<option value="1" th:selected="${employeeUpdate.uuid != null} ? ${employeeUpdate.credentialsNonExpired == true}: true" th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="${employeeUpdate.uuid != null} ? ${employeeUpdate.credentialsNonExpired == false} : false" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="${employeeUpdate.credentialsNonExpired == true}" th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="${employeeUpdate.credentialsNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
