@@ -85,6 +85,7 @@
 												<label for="target" th:text="#{module.menu.target}"></label>
 												<small th:text="#{module.menu.target.indicate}"></small>
 												<select class="form-control" name="target">
+													<option></option>
 													<option th:each="targetEnum : ${T(com.beanframework.menu.domain.MenuTargetTypeEnum).values()}" th:value="${target}" th:selected="*{target} == ${targetEnum} ? true : false"
 														th:text="${targetEnum.toString()}"></option>
 												</select>

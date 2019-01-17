@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.UserRightDto;
-import com.beanframework.backoffice.data.UserRightFieldDto;
 import com.beanframework.backoffice.data.UserRightSearch;
 import com.beanframework.backoffice.data.UserRightSpecification;
 import com.beanframework.common.exception.BusinessException;
@@ -79,9 +78,9 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	@Override
 	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = userRightService.findHistoryByUuid(uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserRightDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserRightDto.class);
+//		}
 
 		return revisions;
 	}
@@ -89,9 +88,9 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	@Override
 	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
 		List<Object[]> revisions = userRightService.findHistoryByRelatedUuid(UserRightField.USER_RIGHT, uuid, firstResult, maxResults);
-		for (int i = 0; i < revisions.size(); i++) {
-			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserRightFieldDto.class);
-		}
+//		for (int i = 0; i < revisions.size(); i++) {
+//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserRightFieldDto.class);
+//		}
 
 		return revisions;
 	}
