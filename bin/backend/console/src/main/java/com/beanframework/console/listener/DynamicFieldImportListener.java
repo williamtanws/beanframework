@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.console.ConsoleImportListenerConstants;
-import com.beanframework.console.converter.ImportEntityDynamicFieldConverter;
+import com.beanframework.console.converter.EntityCsvDynamicFieldConverter;
 import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
@@ -38,7 +38,7 @@ public class DynamicFieldImportListener extends ImportListener {
 	private DynamicFieldService dynamicFieldService;
 
 	@Autowired
-	private ImportEntityDynamicFieldConverter converter;
+	private EntityCsvDynamicFieldConverter converter;
 
 	@Value("${module.console.import.update.dynamicfield}")
 	private String IMPORT_UPDATE;

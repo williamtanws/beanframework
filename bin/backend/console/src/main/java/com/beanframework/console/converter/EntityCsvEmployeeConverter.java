@@ -12,50 +12,48 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.console.csv.CustomerCsv;
+import com.beanframework.console.csv.EmployeeCsv;
 import com.beanframework.console.registry.ImportListener;
-import com.beanframework.customer.domain.Customer;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;
 
 @Component
-public class ImportEntityCustomerConverter implements EntityConverter<CustomerCsv, Customer> {
+public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, Employee> {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger(ImportEntityCustomerConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvEmployeeConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public Customer convert(CustomerCsv source) throws ConverterException {
+	public Employee convert(EmployeeCsv source) throws ConverterException {
 
 		try {
 
 			if (source.getId() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Customer.ID, source.getId());
+				properties.put(Employee.ID, source.getId());
 
-				Customer prototype = modelService.findOneEntityByProperties(properties, Customer.class);
+				Employee prototype = modelService.findOneEntityByProperties(properties, Employee.class);
 
 				if (prototype != null) {
-
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Customer.class));
+			return convert(source, modelService.create(Employee.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
 		}
 	}
 
-	private Customer convert(CustomerCsv source, Customer prototype) throws ConverterException {
+	private Employee convert(EmployeeCsv source, Employee prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
-
 			prototype.setAccountNonExpired(source.isAccountNonExpired());
 			prototype.setAccountNonLocked(source.isAccountNonLocked());
 			prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());

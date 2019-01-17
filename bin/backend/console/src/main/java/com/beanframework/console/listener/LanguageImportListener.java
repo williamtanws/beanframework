@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.console.ConsoleImportListenerConstants;
-import com.beanframework.console.converter.ImportEntityLanguageConverter;
+import com.beanframework.console.converter.EntityCsvLanguageConverter;
 import com.beanframework.console.csv.LanguageCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.language.domain.Language;
@@ -38,7 +38,7 @@ public class LanguageImportListener extends ImportListener {
 	private LanguageService languageService;
 
 	@Autowired
-	private ImportEntityLanguageConverter converter;
+	private EntityCsvLanguageConverter converter;
 
 	@Value("${module.console.import.update.language}")
 	private String IMPORT_UPDATE;

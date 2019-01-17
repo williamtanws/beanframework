@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.console.ConsoleImportListenerConstants;
-import com.beanframework.console.converter.ImportEntityCustomerConverter;
+import com.beanframework.console.converter.EntityCsvCustomerConverter;
 import com.beanframework.console.csv.CustomerCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.customer.domain.Customer;
@@ -38,7 +38,7 @@ public class CustomerImportListener extends ImportListener {
 	private CustomerService customerService;
 
 	@Autowired
-	private ImportEntityCustomerConverter converter;
+	private EntityCsvCustomerConverter converter;
 
 	@Value("${module.console.import.update.customer}")
 	private String IMPORT_UPDATE;

@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.console.ConsoleImportListenerConstants;
-import com.beanframework.console.converter.ImportEntityUserGroupConverter;
+import com.beanframework.console.converter.EntityCsvUserGroupConverter;
 import com.beanframework.console.csv.UserGroupCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.user.domain.UserGroup;
@@ -38,7 +38,7 @@ public class UserGroupImportListener extends ImportListener {
 	private UserGroupService userGroupService;
 
 	@Autowired
-	private ImportEntityUserGroupConverter converter;
+	private EntityCsvUserGroupConverter converter;
 
 	@Value("${module.console.import.update.usergroup}")
 	private String IMPORT_UPDATE;

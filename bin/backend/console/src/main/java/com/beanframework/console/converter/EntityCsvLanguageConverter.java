@@ -12,46 +12,48 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.console.csv.ConfigurationCsv;
+import com.beanframework.console.csv.LanguageCsv;
+import com.beanframework.language.domain.Language;
 
 @Component
-public class ImportEntityConfigurationConverter implements EntityConverter<ConfigurationCsv, Configuration> {
+public class EntityCsvLanguageConverter implements EntityConverter<LanguageCsv, Language> {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger(ImportEntityConfigurationConverter.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvLanguageConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public Configuration convert(ConfigurationCsv source) throws ConverterException {
+	public Language convert(LanguageCsv source) throws ConverterException {
 
 		try {
 
 			if (source.getId() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Configuration.ID, source.getId());
+				properties.put(Language.ID, source.getId());
 
-				Configuration prototype = modelService.findOneEntityByProperties(properties, Configuration.class);
+				Language prototype = modelService.findOneEntityByProperties(properties, Language.class);
 
 				if (prototype != null) {
 
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Configuration.class));
+			return convert(source, modelService.create(Language.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), this);
 		}
 	}
 
-	private Configuration convert(ConfigurationCsv source, Configuration prototype) throws ConverterException {
+	private Language convert(LanguageCsv source, Language prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setValue(StringUtils.stripToNull(source.getValue()));
-			
+			prototype.setName(StringUtils.stripToNull(source.getName()));
+			prototype.setActive(source.isActive());
+			prototype.setSort(source.getSort());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ConverterException(e.getMessage(), e);
