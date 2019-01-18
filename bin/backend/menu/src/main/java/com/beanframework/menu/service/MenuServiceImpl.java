@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
@@ -201,8 +202,8 @@ public class MenuServiceImpl implements MenuService {
 
 		User user = (User) auth.getPrincipal();
 
-		filterMenuNavigation(cachedMenuTree, collectUserGroupUuid(user.getUserGroups()));
-
+		filterAuthorizedMenu(cachedMenuTree, collectUserGroupUuid(user.getUserGroups()));
+		filterEmptyChildMenu(cachedMenuTree);
 		return cachedMenuTree;
 	}
 
@@ -217,7 +218,7 @@ public class MenuServiceImpl implements MenuService {
 		return userGroupUuids;
 	}
 
-	private void filterMenuNavigation(List<Menu> menu, Set<UUID> userGroupUuids) {
+	private void filterAuthorizedMenu(List<Menu> menu, Set<UUID> userGroupUuids) {
 		Iterator<Menu> parent = menu.iterator();
 		while (parent.hasNext()) {
 			Menu menuNext = parent.next();
@@ -248,7 +249,21 @@ public class MenuServiceImpl implements MenuService {
 			}
 
 			if (menuNext.getChilds() != null && menuNext.getChilds().isEmpty() == false) {
-				filterMenuNavigation(menuNext.getChilds(), userGroupUuids);
+				filterAuthorizedMenu(menuNext.getChilds(), userGroupUuids);
+			}
+		}
+	}
+	
+	private void filterEmptyChildMenu(List<Menu> parent) {
+		Iterator<Menu> menu = parent.iterator();
+		while (menu.hasNext()) {
+			Menu menuNext = menu.next();
+			if(StringUtils.isBlank(menuNext.getPath()) && menuNext.getChilds().isEmpty()) {
+				menu.remove();
+			}
+			
+			if(menuNext.getChilds().isEmpty() == false) {
+				filterEmptyChildMenu(menuNext.getChilds());
 			}
 		}
 	}
