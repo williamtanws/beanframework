@@ -56,7 +56,7 @@ public class CronjobServiceImpl implements CronjobService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Cronjob.class);
 	}
 
-	@Cacheable(value = "CronjobsPage", key = "#query")
+	@Cacheable(value = "CronjobsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Cronjob> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Cronjob.class);

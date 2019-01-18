@@ -52,7 +52,7 @@ public class UserRightServiceImpl implements UserRightService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserRight.class);
 	}
 
-	@Cacheable(value = "UserRightsPage", key = "#query")
+	@Cacheable(value = "UserRightsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<UserRight> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, UserRight.class);

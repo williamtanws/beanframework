@@ -48,7 +48,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 			return convert(source, modelService.create(Menu.class));
 			
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 

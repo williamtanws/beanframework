@@ -33,7 +33,7 @@ public class DtoCronjobConverter implements DtoConverter<Cronjob, CronjobDto> {
 				convertedList.add(convert(source));
 			}
 		} catch (ConverterException e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 		return convertedList;
 	}

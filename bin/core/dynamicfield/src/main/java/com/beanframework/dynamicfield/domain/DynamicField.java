@@ -40,7 +40,6 @@ public class DynamicField extends GenericEntity {
 	public static final String SORT = "sort";
 	public static final String REQUIRED = "required";
 	public static final String RULE = "rule";
-	public static final String FIELD_GROUP = "fieldGroup";
 	public static final String LABEL = "label";
 	public static final String LANGUAGE = "language";
 
@@ -50,7 +49,7 @@ public class DynamicField extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	private DynamicFieldTypeEnum fieldType;
+	private DynamicFieldType type;
 
 	@Audited(withModifiedFlag = true)
 	private Integer sort;
@@ -60,10 +59,7 @@ public class DynamicField extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	private String rule;
-
-	@Audited(withModifiedFlag = true)
-	private String fieldGroup;
-
+	
 	@Audited(withModifiedFlag = true)
 	private String label;
 
@@ -73,9 +69,9 @@ public class DynamicField extends GenericEntity {
 	private Language language;
 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = DynamicFieldEnumValue.DYNAMIC_FIELD, orphanRemoval = true, fetch = FetchType.LAZY)
-	@OrderBy(DynamicFieldEnumValue.SORT + " ASC")
-	private List<DynamicFieldEnumValue> values = new ArrayList<DynamicFieldEnumValue>();
+	@OneToMany(mappedBy = DynamicFieldEnum.DYNAMIC_FIELD, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OrderBy(DynamicFieldEnum.SORT + " ASC")
+	private List<DynamicFieldEnum> enums = new ArrayList<DynamicFieldEnum>();
 
 	public String getName() {
 		return name;
@@ -85,12 +81,12 @@ public class DynamicField extends GenericEntity {
 		this.name = name;
 	}
 
-	public DynamicFieldTypeEnum getFieldType() {
-		return fieldType;
+	public DynamicFieldType getType() {
+		return type;
 	}
 
-	public void setFieldType(DynamicFieldTypeEnum fieldType) {
-		this.fieldType = fieldType;
+	public void setType(DynamicFieldType type) {
+		this.type = type;
 	}
 
 	public Integer getSort() {
@@ -117,14 +113,6 @@ public class DynamicField extends GenericEntity {
 		this.rule = rule;
 	}
 
-	public String getFieldGroup() {
-		return fieldGroup;
-	}
-
-	public void setFieldGroup(String fieldGroup) {
-		this.fieldGroup = fieldGroup;
-	}
-
 	public String getLabel() {
 		return label;
 	}
@@ -141,11 +129,11 @@ public class DynamicField extends GenericEntity {
 		this.language = language;
 	}
 
-	public List<DynamicFieldEnumValue> getValues() {
-		return values;
+	public List<DynamicFieldEnum> getEnums() {
+		return enums;
 	}
 
-	public void setValues(List<DynamicFieldEnumValue> values) {
-		this.values = values;
+	public void setEnums(List<DynamicFieldEnum> enums) {
+		this.enums = enums;
 	}
 }

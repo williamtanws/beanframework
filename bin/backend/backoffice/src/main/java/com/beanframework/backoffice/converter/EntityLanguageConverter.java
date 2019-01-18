@@ -36,7 +36,7 @@ public class EntityLanguageConverter implements EntityConverter<LanguageDto, Lan
 			return convert(source, modelService.create(Language.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 

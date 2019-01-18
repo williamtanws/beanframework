@@ -15,8 +15,8 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldEnumValue;
-import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
+import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
+import com.beanframework.dynamicfield.domain.DynamicFieldType;
 import com.beanframework.language.domain.Language;
 
 @Component
@@ -46,7 +46,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 			return convert(source, modelService.create(DynamicField.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
@@ -55,39 +55,43 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setName(StringUtils.stripToNull(source.getName()));
-			prototype.setFieldType(DynamicFieldTypeEnum.valueOf(source.getType()));
+			prototype.setType(DynamicFieldType.valueOf(source.getType()));
 			prototype.setSort(source.getSort());
 			prototype.setRequired(source.isRequired());
 			prototype.setRule(StringUtils.stripToNull(StringUtils.stripToNull(source.getRule())));
-			prototype.setFieldGroup(StringUtils.stripToNull(source.getGroup()));
 			prototype.setLabel(StringUtils.stripToNull(source.getLabel()));
 
 			if (StringUtils.isNotBlank(source.getLanguage())) {
 				Map<String, Object> languageProperties = new HashMap<String, Object>();
 				languageProperties.put(Language.ID, source.getLanguage());
-				Language modelLanguage = modelService.findOneEntityByProperties(languageProperties, Language.class);
-				prototype.setLanguage(modelLanguage);
+				Language entityLanguage = modelService.findOneEntityByProperties(languageProperties, Language.class);
+				
+				if(entityLanguage != null) {
+					prototype.setLanguage(entityLanguage);
+				}
 			}
 
 			// Enum Values
-			if (StringUtils.isNotBlank(source.getEnumValues())) {
-				String[] values = source.getEnumValues().split(ImportListener.SPLITTER);
+			if (StringUtils.isNotBlank(source.getEnumIds())) {
+				String[] values = source.getEnumIds().split(ImportListener.SPLITTER);
 				for (int i = 0; i < values.length; i++) {
 
 					boolean add = true;
-					for (DynamicFieldEnumValue prototypeValue : prototype.getValues()) {
-						if (values[i].equals(prototypeValue.getValue())) {
+					for (DynamicFieldEnum prototypeValue : prototype.getEnums()) {
+						if (prototypeValue.getId().equals(values[i])) {
 							add = false;
 						}
 					}
 
 					if (add) {
-						DynamicFieldEnumValue dynamicFieldEnumValue = new DynamicFieldEnumValue();
-						dynamicFieldEnumValue.setValue(StringUtils.upperCase(values[i]));
-						dynamicFieldEnumValue.setSort(i);
-
-						dynamicFieldEnumValue.setDynamicField(prototype);
-						prototype.getValues().add(dynamicFieldEnumValue);
+						Map<String, Object> enumProperties = new HashMap<String, Object>();
+						enumProperties.put(DynamicFieldEnum.ID, values[i]);
+						DynamicFieldEnum entityEnum = modelService.findOneEntityByProperties(enumProperties, DynamicFieldEnum.class);
+						
+						if(entityEnum != null) {
+							entityEnum.setDynamicField(prototype);
+							prototype.getEnums().add(entityEnum);
+						}
 					}
 				}
 			}

@@ -22,6 +22,13 @@ public interface ConsoleImportListenerConstants {
 		public static final int SORT = 10;
 		public static final String DESCRIPTION = "Update/Remove Language Data";
 	}
+	
+	public interface DynamicFieldEnumImportListener {
+		public static final String KEY = "dynamicfieldenum";
+		public static final String NAME = "Dynamic Field Enum";
+		public static final int SORT = 19;
+		public static final String DESCRIPTION = "Update/Remove Dynamic Field Enum Data";
+	}
 
 	public interface DynamicFieldImportListener {
 		public static final String KEY = "dynamicfield";

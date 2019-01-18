@@ -74,7 +74,7 @@ public class AdminServiceImpl implements AdminService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Admin.class);
 	}
 
-	@Cacheable(value = "AdminsPage", key = "#query")
+	@Cacheable(value = "AdminsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Admin> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Admin.class);

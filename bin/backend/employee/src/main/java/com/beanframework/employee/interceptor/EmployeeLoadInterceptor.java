@@ -20,23 +20,23 @@ public class EmployeeLoadInterceptor implements LoadInterceptor<Employee> {
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
 			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getValues());
+				Hibernate.initialize(field.getDynamicField().getEnums());
 			}
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
 				for (UserRightField field : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getValues());
+					Hibernate.initialize(field.getDynamicField().getEnums());
 				}
 				Hibernate.initialize(userAuthority.getUserPermission());
 				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getValues());
+					Hibernate.initialize(field.getDynamicField().getEnums());
 				}
 			}
 			initializeUserGroups(userGroup);
 		}
 		
 		for (UserField field : model.getFields()) {
-			Hibernate.initialize(field.getDynamicField().getValues());
+			Hibernate.initialize(field.getDynamicField().getEnums());
 		}
 	}
 	
@@ -45,16 +45,16 @@ public class EmployeeLoadInterceptor implements LoadInterceptor<Employee> {
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
 			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getValues());
+				Hibernate.initialize(field.getDynamicField().getEnums());
 			}
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
 				for (UserRightField field : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getValues());
+					Hibernate.initialize(field.getDynamicField().getEnums());
 				}
 				Hibernate.initialize(userAuthority.getUserPermission());
 				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getValues());
+					Hibernate.initialize(field.getDynamicField().getEnums());
 				}
 			}
 			initializeUserGroups(userGroup);

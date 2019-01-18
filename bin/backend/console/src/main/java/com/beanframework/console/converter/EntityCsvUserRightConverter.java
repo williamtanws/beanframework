@@ -45,7 +45,7 @@ public class EntityCsvUserRightConverter implements EntityConverter<UserRightCsv
 			return convert(source, modelService.create(UserRight.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 

@@ -52,7 +52,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserPermission.class);
 	}
 
-	@Cacheable(value = "UserPermissionsPage", key = "#query")
+	@Cacheable(value = "UserPermissionsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<UserPermission> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, UserPermission.class);

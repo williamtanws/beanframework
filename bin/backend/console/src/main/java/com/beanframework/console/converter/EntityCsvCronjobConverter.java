@@ -44,7 +44,7 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 			return convert(source, modelService.create(Cronjob.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 

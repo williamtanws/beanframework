@@ -32,7 +32,7 @@
 		<div class="form-group">
 			<label for="startup" th:text="#{module.cronjob.startup}"></label>
 			<select class="form-control" name="startup">
-				<option></option>
+				<option th:text="#{module.backoffice.empty}"></option>
 				<option value="1" th:selected="*{startup == true}" th:text="#{module.backoffice.yes}"></option>
 				<option value="0" th:selected="*{startup == false}" th:text="#{module.backoffice.no}"></option>
 			</select>
@@ -41,7 +41,7 @@
 		<div class="form-group">
 			<label for="status" th:text="#{module.cronjob.status}"></label>
 			<select class="form-control" name="status">
-				<option></option>
+				<option th:text="#{module.backoffice.empty}"></option>
 				<option th:each="statusEnum : ${T(com.beanframework.cronjob.domain.CronjobEnum.Status).values()}" th:value="${statusEnum.name()}" th:selected="*{status} == ${statusEnum} ? true : false"
 					th:text="${statusEnum.toString()}"></option>
 			</select>
@@ -50,7 +50,7 @@
 		<div class="form-group">
 			<label for="result" th:text="#{module.cronjob.result}"></label>
 			<select class="form-control" name="result">
-				<option></option>
+				<option th:text="#{module.backoffice.empty}"></option>
 				<option th:each="resultEnum : ${T(com.beanframework.cronjob.domain.CronjobEnum.Result).values()}" th:value="${resultEnum.name()}" th:selected="*{result} == ${resultEnum} ? true : false"
 					th:text="${resultEnum.toString()}"></option>
 			</select>

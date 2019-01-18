@@ -105,7 +105,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Employee.class);
 	}
 
-	@Cacheable(value = "EmployeesPage", key = "#query")
+	@Cacheable(value = "EmployeesPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Employee> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Employee.class);

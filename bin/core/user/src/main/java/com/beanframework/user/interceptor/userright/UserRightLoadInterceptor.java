@@ -13,7 +13,7 @@ public class UserRightLoadInterceptor implements LoadInterceptor<UserRight> {
 	public void onLoad(UserRight model) throws InterceptorException {
 		
 		for (UserRightField field : model.getFields()) {
-			Hibernate.initialize(field.getDynamicField().getValues());
+			Hibernate.initialize(field.getDynamicField().getEnums());
 		}
 	}
 }

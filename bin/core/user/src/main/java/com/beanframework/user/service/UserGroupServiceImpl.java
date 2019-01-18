@@ -52,7 +52,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupsPage", key = "#query")
+	@Cacheable(value = "UserGroupsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<UserGroup> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, UserGroup.class);

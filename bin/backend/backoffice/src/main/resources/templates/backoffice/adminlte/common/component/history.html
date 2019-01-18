@@ -11,7 +11,7 @@
 					<img th:with="defaultavatar=${@environment.getProperty('module.backoffice.configuration.avatar.default')}" th:if="${revision[0].lastModifiedBy == null}"
 						th:src="@{${configurationService.get(defaultavatar)}}" alt="user image" class="online">
 
-					<p class="message">
+					<p class="message" style="min-height:35px">
 						<span class="name">
 							<th:block th:if="${revision[0].lastModifiedBy == null}">
 								<span th:text="#{module.backoffice.system}+': '"></span>

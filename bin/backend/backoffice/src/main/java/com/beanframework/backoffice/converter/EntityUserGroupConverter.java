@@ -38,7 +38,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 			return convert(source, modelService.create(UserGroup.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 	}
@@ -50,7 +50,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 				convertedList.add(convert(source));
 			}
 		} catch (ConverterException e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 		return convertedList;
 	}

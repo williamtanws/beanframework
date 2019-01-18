@@ -35,7 +35,7 @@ public class EntityEmailConverter implements EntityConverter<EmailDto, Email> {
 			return convert(source, modelService.create(Email.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 	}

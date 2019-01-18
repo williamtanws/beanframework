@@ -39,7 +39,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 			return convert(source, modelService.create(UserRight.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 

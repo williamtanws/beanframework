@@ -54,7 +54,7 @@ public class AuditorServiceImpl implements AuditorService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Auditor.class);
 	}
 
-	@Cacheable(value = "AuditorsPage", key = "#query")
+	@Cacheable(value = "AuditorsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Auditor> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Auditor.class);

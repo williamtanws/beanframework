@@ -39,7 +39,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 			return convert(source, modelService.create(Menu.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 	}

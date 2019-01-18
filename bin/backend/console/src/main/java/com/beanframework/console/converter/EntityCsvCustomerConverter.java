@@ -47,7 +47,7 @@ public class EntityCsvCustomerConverter implements EntityConverter<CustomerCsv, 
 			return convert(source, modelService.create(Customer.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 

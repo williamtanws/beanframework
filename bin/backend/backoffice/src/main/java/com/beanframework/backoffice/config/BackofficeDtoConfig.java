@@ -9,7 +9,7 @@ import com.beanframework.backoffice.converter.DtoCronjobConverter;
 import com.beanframework.backoffice.converter.DtoCronjobDataConverter;
 import com.beanframework.backoffice.converter.DtoCustomerConverter;
 import com.beanframework.backoffice.converter.DtoDynamicFieldConverter;
-import com.beanframework.backoffice.converter.DtoDynamicFieldEnumValueConverter;
+import com.beanframework.backoffice.converter.DtoDynamicFieldEnumConverter;
 import com.beanframework.backoffice.converter.DtoEmailConverter;
 import com.beanframework.backoffice.converter.DtoEmployeeConverter;
 import com.beanframework.backoffice.converter.DtoLanguageConverter;
@@ -29,7 +29,7 @@ import com.beanframework.backoffice.data.CronjobDataDto;
 import com.beanframework.backoffice.data.CronjobDto;
 import com.beanframework.backoffice.data.CustomerDto;
 import com.beanframework.backoffice.data.DynamicFieldDto;
-import com.beanframework.backoffice.data.DynamicFieldEnumValueDto;
+import com.beanframework.backoffice.data.DynamicFieldEnumDto;
 import com.beanframework.backoffice.data.EmailDto;
 import com.beanframework.backoffice.data.EmployeeDto;
 import com.beanframework.backoffice.data.LanguageDto;
@@ -285,6 +285,20 @@ public class BackofficeDtoConfig {
 
 		return mapping;
 	}
+	
+	@Bean
+	public DtoDynamicFieldEnumConverter dtoDynamicFieldEnumConverter() {
+		return new DtoDynamicFieldEnumConverter();
+	}
+
+	@Bean
+	public ConverterMapping dtoDynamicFieldEnumConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dtoDynamicFieldEnumConverter());
+		mapping.setTypeCode(DynamicFieldEnumDto.class.getSimpleName());
+
+		return mapping;
+	}
 
 	@Bean
 	public DtoDynamicFieldConverter dtoDynamicFieldConverter() {
@@ -301,15 +315,15 @@ public class BackofficeDtoConfig {
 	}
 
 	@Bean
-	public DtoDynamicFieldEnumValueConverter dtoDynamicFieldEnumValueConverter() {
-		return new DtoDynamicFieldEnumValueConverter();
+	public DtoDynamicFieldEnumConverter dtoDynamicFieldEnumValueConverter() {
+		return new DtoDynamicFieldEnumConverter();
 	}
 
 	@Bean
 	public ConverterMapping dtoDynamicFieldEnumValueConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoDynamicFieldEnumValueConverter());
-		mapping.setTypeCode(DynamicFieldEnumValueDto.class.getSimpleName());
+		mapping.setTypeCode(DynamicFieldEnumDto.class.getSimpleName());
 
 		return mapping;
 	}

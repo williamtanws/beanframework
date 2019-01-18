@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.beanframework.common.data.GenericDto;
-import com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum;
+import com.beanframework.dynamicfield.domain.DynamicFieldType;
 import com.beanframework.language.domain.Language;
 
 public class DynamicFieldDto extends GenericDto {
@@ -13,13 +13,12 @@ public class DynamicFieldDto extends GenericDto {
 	public static final String SORT = "sort";
 	public static final String REQUIRED = "required";
 	public static final String RULE = "rule";
-	public static final String FIELD_GROUP = "fieldGroup";
 	public static final String LABEL = "label";
 	public static final String LANGUAGE = "language";
 	
 	private String name;
 
-	private DynamicFieldTypeEnum fieldType;
+	private DynamicFieldType type;
 
 	private Integer sort;
 
@@ -27,13 +26,11 @@ public class DynamicFieldDto extends GenericDto {
 
 	private String rule;
 
-	private String fieldGroup;
-
 	private String label;
 
 	private Language language;
 
-	private List<DynamicFieldEnumValueDto> values = new ArrayList<DynamicFieldEnumValueDto>();
+	private List<DynamicFieldEnumDto> enums = new ArrayList<DynamicFieldEnumDto>();
 
 	private String selected;
 	
@@ -47,12 +44,12 @@ public class DynamicFieldDto extends GenericDto {
 		this.name = name;
 	}
 
-	public DynamicFieldTypeEnum getFieldType() {
-		return fieldType;
+	public DynamicFieldType getType() {
+		return type;
 	}
 
-	public void setFieldType(DynamicFieldTypeEnum fieldType) {
-		this.fieldType = fieldType;
+	public void setType(DynamicFieldType type) {
+		this.type = type;
 	}
 
 	public Integer getSort() {
@@ -79,14 +76,6 @@ public class DynamicFieldDto extends GenericDto {
 		this.rule = rule;
 	}
 
-	public String getFieldGroup() {
-		return fieldGroup;
-	}
-
-	public void setFieldGroup(String fieldGroup) {
-		this.fieldGroup = fieldGroup;
-	}
-
 	public String getLabel() {
 		return label;
 	}
@@ -103,12 +92,12 @@ public class DynamicFieldDto extends GenericDto {
 		this.language = language;
 	}
 
-	public List<DynamicFieldEnumValueDto> getValues() {
-		return values;
+	public List<DynamicFieldEnumDto> getEnums() {
+		return enums;
 	}
 
-	public void setValues(List<DynamicFieldEnumValueDto> values) {
-		this.values = values;
+	public void setEnums(List<DynamicFieldEnumDto> values) {
+		this.enums = values;
 	}
 
 	public String getSelected() {
