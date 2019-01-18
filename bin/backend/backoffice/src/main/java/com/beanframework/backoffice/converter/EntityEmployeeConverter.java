@@ -42,7 +42,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 			return convert(source, modelService.create(Employee.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 	}

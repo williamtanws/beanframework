@@ -29,6 +29,7 @@ import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.repository.MenuRepository;
 import com.beanframework.user.domain.User;
+import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
 
 @Service
@@ -181,13 +182,13 @@ public class MenuServiceImpl implements MenuService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findEntityMenuTree() throws Exception {
-		
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.PARENT, null);
-		
+
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
-		
+
 		List<Menu> menuTree = modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
 
 		return menuTree;
@@ -225,11 +226,23 @@ public class MenuServiceImpl implements MenuService {
 			}
 
 			boolean remove = true;
-			for (UserGroup userGroup : menuNext.getUserGroups()) {
-				if (userGroupUuids.contains(userGroup.getUuid())) {
-					remove = false;
+			if (menuNext.getChilds().isEmpty()) {
+				for (UserGroup userGroup : menuNext.getUserGroups()) {
+					if (userGroupUuids.contains(userGroup.getUuid())) {
+						for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+							if (userAuthority.getUserPermission().getId().equals(menuNext.getId())) {
+								if (userAuthority.getEnabled().equals(Boolean.TRUE)) {
+									remove = false;
+								}
+							}
+						}
+					}
 				}
 			}
+			else {
+				remove = false;
+			}
+			
 			if (remove) {
 				parent.remove();
 			}

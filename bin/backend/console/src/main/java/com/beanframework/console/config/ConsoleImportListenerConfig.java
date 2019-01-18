@@ -15,6 +15,7 @@ import com.beanframework.console.listener.AdminImportListener;
 import com.beanframework.console.listener.ConfigurationImportListener;
 import com.beanframework.console.listener.CronjobImportListener;
 import com.beanframework.console.listener.CustomerImportListener;
+import com.beanframework.console.listener.DynamicFieldEnumImportListener;
 import com.beanframework.console.listener.DynamicFieldImportListener;
 import com.beanframework.console.listener.EmployeeImportListener;
 import com.beanframework.console.listener.LanguageImportListener;
@@ -42,6 +43,11 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	@Bean
 	public ConfigurationImportListener configurationImportListener() {
 		return new ConfigurationImportListener();
+	}
+	
+	@Bean
+	public DynamicFieldEnumImportListener dynamicFieldEnumImportListener() {
+		return new DynamicFieldEnumImportListener();
 	}
 
 	@Bean
@@ -108,6 +114,9 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.CustomerImportListener.KEY))
 			importListenerRegistry.addListener(customerImportListener());
+		
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldEnumImportListener.KEY))
+			importListenerRegistry.addListener(dynamicFieldEnumImportListener());
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldImportListener.KEY))
 			importListenerRegistry.addListener(dynamicFieldImportListener());

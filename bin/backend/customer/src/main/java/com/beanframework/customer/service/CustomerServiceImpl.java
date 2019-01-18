@@ -52,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Customer.class);
 	}
 
-	@Cacheable(value = "CustomersPage", key = "#query")
+	@Cacheable(value = "CustomersPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Customer> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Customer.class);

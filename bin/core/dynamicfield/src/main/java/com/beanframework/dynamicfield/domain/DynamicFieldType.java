@@ -1,6 +1,6 @@
 package com.beanframework.dynamicfield.domain;
 
-public enum DynamicFieldTypeEnum {
+public enum DynamicFieldType {
 	INTEGER("Integer"),
 	FLOATING_POINT("Floating Point"),
 	TEXT("Text"),
@@ -11,7 +11,7 @@ public enum DynamicFieldTypeEnum {
 
 	private String type;
 
-	DynamicFieldTypeEnum(String type) {
+	DynamicFieldType(String type) {
 		this.type = type;
 	}
 

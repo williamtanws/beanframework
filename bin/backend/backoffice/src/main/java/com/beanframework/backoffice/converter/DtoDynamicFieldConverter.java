@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.backoffice.data.DynamicFieldDto;
-import com.beanframework.backoffice.data.DynamicFieldEnumValueDto;
+import com.beanframework.backoffice.data.DynamicFieldEnumDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -44,11 +44,10 @@ public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, Dyna
 			prototype.setRequired(source.getRequired());
 			prototype.setRule(source.getRule());
 			prototype.setSort(source.getSort());
-			prototype.setFieldType(source.getFieldType());
-			prototype.setFieldGroup(source.getFieldGroup());
+			prototype.setType(source.getType());
 			prototype.setLabel(source.getLabel());
 			prototype.setLanguage(source.getLanguage());
-			prototype.setValues(modelService.getDto(source.getValues(), DynamicFieldEnumValueDto.class));
+			prototype.setEnums(modelService.getDto(source.getEnums(), DynamicFieldEnumDto.class));
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}

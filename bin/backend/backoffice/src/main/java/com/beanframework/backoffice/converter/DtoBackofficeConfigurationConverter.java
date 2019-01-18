@@ -23,7 +23,7 @@ public class DtoBackofficeConfigurationConverter implements DtoConverter<Configu
 				convertedList.add(convert(source));
 			}
 		} catch (ConverterException e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 		return convertedList;
 	}

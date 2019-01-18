@@ -44,7 +44,7 @@ public class EntityCsvUserGroupConverter implements EntityConverter<UserGroupCsv
 			return convert(source, modelService.create(UserGroup.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 

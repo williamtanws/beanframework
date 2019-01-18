@@ -10,13 +10,13 @@
 					<span th:if="${field.dynamicField.required}">*</span>
 					<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
 					<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicField.uuid'" th:value="${field.dynamicField.uuid}">
-					<th:block th:if="${field.dynamicField.fieldType == T(com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum).TEXT}">
+					<th:block th:if="${field.dynamicField.type == T(com.beanframework.dynamicfield.domain.DynamicFieldType).TEXT}">
 						<input type="text" class="form-control" th:name="'fields['+${itrStat.index}+'].value'" th:value="${field.value}" th:required="${field.dynamicField.required}">
 					</th:block>
-					<th:block th:if="${field.dynamicField.fieldType == T(com.beanframework.dynamicfield.domain.DynamicFieldTypeEnum).SELECT}">
+					<th:block th:if="${field.dynamicField.type == T(com.beanframework.dynamicfield.domain.DynamicFieldType).SELECT}">
 						<select class="form-control select2" th:name="'fields['+${itrStat.index}+'].value'" style="width: 100%;" th:required="${field.dynamicField.required}">
-							<option></option>
-							<option th:each="fieldValue : ${field.dynamicField.values}" th:value="${fieldValue.value}" th:text="${fieldValue.value}" th:selected="${fieldValue.value} == ${field.value}"></option>
+							<option th:text="#{module.backoffice.empty}"></option>
+							<option th:each="fieldValue : ${field.dynamicField.enums}" th:value="${fieldValue.value}" th:text="${fieldValue.value}" th:selected="${fieldValue.value} == ${field.value}"></option>
 						</select>
 					</th:block>
 					<span class="help-block"></span>

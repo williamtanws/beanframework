@@ -42,7 +42,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 			return convert(source, modelService.create(Customer.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 	}

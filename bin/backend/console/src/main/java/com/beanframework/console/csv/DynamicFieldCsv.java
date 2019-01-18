@@ -14,10 +14,9 @@ public class DynamicFieldCsv extends AbstractCsv {
 	private int sort;
 	private boolean required;
 	private String rule;
-	private String group;
 	private String label;
 	private String language;
-	private String enumValues;
+	private String enumIds;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
@@ -27,10 +26,9 @@ public class DynamicFieldCsv extends AbstractCsv {
 				new ParseInt(), // sort
 				new ParseBool(), // required
 				new Optional(), // rule
-				new Optional(), // group
 				new NotNull(), // label
 				new Optional(), // language
-				new Optional(), // enumValues
+				new Optional(), // enumIds
 		};
 
 		return processors;
@@ -76,14 +74,6 @@ public class DynamicFieldCsv extends AbstractCsv {
 		this.rule = rule;
 	}
 
-	public String getGroup() {
-		return group;
-	}
-
-	public void setGroup(String group) {
-		this.group = group;
-	}
-
 	public String getLabel() {
 		return label;
 	}
@@ -100,11 +90,13 @@ public class DynamicFieldCsv extends AbstractCsv {
 		this.language = language;
 	}
 
-	public String getEnumValues() {
-		return enumValues;
+	public String getEnumIds() {
+		return enumIds;
 	}
 
-	public void setEnumValues(String enumValues) {
-		this.enumValues = enumValues;
+	public void setEnumIds(String enumIds) {
+		this.enumIds = enumIds;
 	}
+
+	
 }

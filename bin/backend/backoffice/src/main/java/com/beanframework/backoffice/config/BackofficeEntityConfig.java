@@ -7,6 +7,7 @@ import com.beanframework.backoffice.converter.EntityCronjobConverter;
 import com.beanframework.backoffice.converter.EntityCronjobDataConverter;
 import com.beanframework.backoffice.converter.EntityCustomerConverter;
 import com.beanframework.backoffice.converter.EntityDynamicFieldConverter;
+import com.beanframework.backoffice.converter.EntityDynamicFieldEnumConverter;
 import com.beanframework.backoffice.converter.EntityEmailConverter;
 import com.beanframework.backoffice.converter.EntityEmployeeConverter;
 import com.beanframework.backoffice.converter.EntityLanguageConverter;
@@ -19,6 +20,7 @@ import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
 import com.beanframework.email.domain.Email;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.language.domain.Language;
@@ -152,6 +154,20 @@ public class BackofficeEntityConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(entityCronjobDataConverter());
 		mapping.setTypeCode(CronjobData.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
+	public EntityDynamicFieldEnumConverter entityDynamicFieldEnumConverter() {
+		return new EntityDynamicFieldEnumConverter();
+	}
+
+	@Bean
+	public ConverterMapping entityDynamicFieldEnumConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(entityDynamicFieldEnumConverter());
+		mapping.setTypeCode(DynamicFieldEnum.class.getSimpleName());
 
 		return mapping;
 	}

@@ -17,16 +17,16 @@ import com.beanframework.dynamicfield.DynamicFieldConstants;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
-@Table(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUM_VALUE)
-public class DynamicFieldEnumValue extends GenericEntity {
+@Table(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUM)
+public class DynamicFieldEnum extends GenericEntity {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4128353177768556514L;
-
+	private static final long serialVersionUID = 6419266217361908724L;
 	public static final String DYNAMIC_FIELD = "dynamicField";
-	public static final String VALUE = "value";
+	public static final String ENUM_GROUP = "enumGroup";
+	public static final String NAME = "name";
 	public static final String SORT = "sort";
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
@@ -35,17 +35,28 @@ public class DynamicFieldEnumValue extends GenericEntity {
 	private DynamicField dynamicField;
 
 	@Audited(withModifiedFlag = true)
-	private String value;
+	private String enumGroup;
+
+	@Audited(withModifiedFlag = true)
+	private String name;
 
 	@Audited(withModifiedFlag = true)
 	private Integer sort;
 
-	public String getValue() {
-		return value;
+	public String getEnumGroup() {
+		return enumGroup;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setEnumGroup(String enumGroup) {
+		this.enumGroup = enumGroup;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Integer getSort() {

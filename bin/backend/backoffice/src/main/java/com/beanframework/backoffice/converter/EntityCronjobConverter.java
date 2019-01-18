@@ -38,7 +38,7 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 			return convert(source, modelService.create(Cronjob.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 	}

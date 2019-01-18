@@ -51,7 +51,7 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, DynamicField.class);
 	}
 
-	@Cacheable(value = "DynamicFieldsPage", key = "#query")
+	@Cacheable(value = "DynamicFieldsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<DynamicField> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, DynamicField.class);

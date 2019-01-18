@@ -14,12 +14,12 @@ public class UserAuthorityLoadInterceptor implements LoadInterceptor<UserAuthori
 	public void onLoad(UserAuthority model) throws InterceptorException {
 		Hibernate.initialize(model.getUserPermission());
 		for (UserPermissionField field : model.getUserPermission().getFields()) {
-			Hibernate.initialize(field.getDynamicField().getValues());
+			Hibernate.initialize(field.getDynamicField().getEnums());
 		}
 		
 		Hibernate.initialize(model.getUserRight());
 		for (UserRightField field : model.getUserRight().getFields()) {
-			Hibernate.initialize(field.getDynamicField().getValues());
+			Hibernate.initialize(field.getDynamicField().getEnums());
 		}
 	}
 

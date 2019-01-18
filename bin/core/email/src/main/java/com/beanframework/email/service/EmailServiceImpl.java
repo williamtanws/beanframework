@@ -60,7 +60,7 @@ public class EmailServiceImpl implements EmailService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Email.class);
 	}
 
-	@Cacheable(value = "EmailsPage", key = "#query")
+	@Cacheable(value = "EmailsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Email> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Email.class);

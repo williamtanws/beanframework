@@ -10,7 +10,7 @@ public class DynamicFieldLoadInterceptor implements LoadInterceptor<DynamicField
 
 	@Override
 	public void onLoad(DynamicField model) throws InterceptorException {
-		Hibernate.initialize(model.getValues());
+		Hibernate.initialize(model.getEnums());
 	}
 
 }

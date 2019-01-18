@@ -1,14 +1,15 @@
 id,name,sort,dynamicField
-dynamicfield,Dynamic Field,10,userpermission_name_en=Dynamic Field;userpermission_name_cn=动态场
-language,Language,20,userpermission_name_en=Language;userpermission_name_cn=语言
-userpermission,User Permission,30,userpermission_name_en=User Permission;userpermission_name_cn=用户权利
-userright,User Right,40,userpermission_name_en=User Right;userpermission_name_cn=用户权限
-usergroup,User Group,50,userpermission_name_en=User Group;userpermission_name_cn=用户组
-menu,Menu,60,userpermission_name_en=Menu;userpermission_name_cn=菜单
-employeesession,Employee Session,70,userpermission_name_en=Employee Session;userpermission_name_cn=员工会话
-employee,Employee,80,userpermission_name_en=Employee;userpermission_name_cn=雇员
-customer,Customer,90,userpermission_name_en=Customer;userpermission_name_cn=顾客
-cronjob,Cronjob,100,userpermission_name_en=Cronjob;userpermission_name_cn=定时任务
-filemanager,File Manager,110,userpermission_name_en=File Manager;userpermission_name_cn=文件管理器
-email,Email,120,userpermission_name_en=Email;userpermission_name_cn=电子邮件
-auditor,Auditor,130,userpermission_name_en=Auditor;userpermission_name_cn=稽核员
+dynamicfieldenum,Dynamic Field Enum,9,name_en=Dynamic Field Enum;name_cn=动态列举
+dynamicfield,Dynamic Field,10,name_en=Dynamic Field;name_cn=动态场
+language,Language,20,name_en=Language;name_cn=语言
+userpermission,User Permission,30,name_en=User Permission;name_cn=用户权利
+userright,User Right,40,name_en=User Right;name_cn=用户权限
+usergroup,User Group,50,name_en=User Group;name_cn=用户组
+menu,Menu,60,name_en=Menu;name_cn=菜单
+employeesession,Employee Session,70,name_en=Employee Session;name_cn=员工会话
+employee,Employee,80,name_en=Employee;name_cn=雇员
+customer,Customer,90,name_en=Customer;name_cn=顾客
+cronjob,Cronjob,100,name_en=Cronjob;name_cn=定时任务
+filemanager,File Manager,110,name_en=File Manager;name_cn=文件管理器
+email,Email,120,name_en=Email;name_cn=电子邮件
+auditor,Auditor,130,name_en=Auditor;name_cn=稽核员

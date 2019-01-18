@@ -39,7 +39,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 			return convert(source, modelService.create(UserPermission.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 	}

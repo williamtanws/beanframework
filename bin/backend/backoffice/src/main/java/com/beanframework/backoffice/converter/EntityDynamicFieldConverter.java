@@ -38,7 +38,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 			return convert(source, modelService.create(DynamicField.class));
 
 		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), this);
+			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
@@ -85,13 +85,8 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 			}
 		}
 
-		if (source.getFieldType() == source.getFieldType() == false) {
-			prototype.setFieldType(source.getFieldType());
-			prototype.setLastModifiedDate(lastModifiedDate);
-		}
-
-		if (StringUtils.equals(StringUtils.stripToNull(source.getFieldGroup()), prototype.getFieldGroup()) == false) {
-			prototype.setFieldGroup(StringUtils.stripToNull(source.getFieldGroup()));
+		if (source.getType() == source.getType() == false) {
+			prototype.setType(source.getType());
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 

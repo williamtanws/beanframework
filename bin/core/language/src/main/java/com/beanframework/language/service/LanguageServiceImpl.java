@@ -51,7 +51,7 @@ public class LanguageServiceImpl implements LanguageService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Language.class);
 	}
 
-	@Cacheable(value = "LanguagesPage", key = "#query")
+	@Cacheable(value = "LanguagesPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Language> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
 		return modelService.findEntityPage(specification, pageable, Language.class);
