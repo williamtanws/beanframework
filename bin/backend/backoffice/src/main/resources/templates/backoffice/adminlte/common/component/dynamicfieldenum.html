@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="dynamicfieldenum">
+		<table id="dynamicfieldenumTable" class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th th:text="#{module.backoffice.id}"></th>
+					<th th:text="#{module.dynamicfieldenum.name}"></th>
+					<th th:text="#{module.backoffice.select}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="dynamicFieldEnum,itrStat : *{enums}">
+					<th>
+						<a sec:authorize="hasAuthority('dynamicfieldenum_read')" th:href="@{${@environment.getProperty('path.dynamicfieldenum')}(uuid=${dynamicFieldEnum.uuid})}" th:text="${dynamicFieldEnum.id}"></a>
+						<span sec:authorize="!hasAuthority('dynamicfieldenum_read')" th:text="${dynamicFieldEnum.id}"></span>
+					</th>
+					<td th:text="${dynamicFieldEnum.name}"></td>
+					<td>
+						<input type="hidden" th:name="'enums['+${itrStat.index}+'].uuid'" th:value="${dynamicFieldEnum.uuid}">
+						<input type="checkbox" th:name="'enums['+${itrStat.index}+'].selected'" th:checked="${dynamicFieldEnum.selected}">
+						<script th:inline="javascript">
+							$('input').iCheck({
+								checkboxClass : 'icheckbox_square-blue',
+								radioClass : 'iradio_square-blue',
+								increaseArea : '20%' // optional
+							});
+						</script>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    var locale = /*[[${#locale}]]*/;
+		    
+		    $(document).ready(function() {
+		    	
+		    	$('#dynamicfieldenumTable').DataTable({
+		    		  'language' : {
+				        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+				      },
+		    	      'pageLength'  : 10,
+		    	      'paging'      : true,
+		    	      'lengthChange': false,
+		    	      'searching'   : true,
+		    	      'ordering'    : true,
+		    	      'info'        : false,
+		    	      'autoWidth'   : true
+		    	})
+		    });
+		    /*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>

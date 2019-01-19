@@ -42,6 +42,9 @@
 								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li>
+								<a href="#tab_dynamicfieldenum" data-toggle="tab" th:text="#{module.dynamicfieldenum}" onclick="changeTab('dynamicfieldenum')"></a>
+							</li>
+							<li>
 								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
 							</li>
 							<li>
@@ -126,6 +129,12 @@
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_dynamicfieldenum">
+								<div class="box-body">
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/dynamicfieldenum :: dynamicfieldenum}"></th:block>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history">
 								<div class="box-body">
 									<th:block layout:insert="~{/backoffice/adminlte/common/component/history :: history}"></th:block>
@@ -194,6 +203,19 @@
 		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
 		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
 		                });
+		            },
+		            unhighlight: function(element) {
+		                $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').find('.help-block').html('');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+		                var noError = true;
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    noError = false;
+		                });
+		                if(noError){
+			                $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','black');
+		                }
 		            },
 		            errorPlacement: function(error, element) {
 		                element.closest('.form-group').find('.help-block').html(error.text());

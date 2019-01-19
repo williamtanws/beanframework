@@ -40,6 +40,7 @@ public class DtoAdminConverter implements DtoConverter<Admin, AdminDto> {
 		prototype.setAccountNonLocked(source.getAccountNonLocked());
 		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 		prototype.setEnabled(source.getEnabled());
+		prototype.setName(source.getName());
 
 		return prototype;
 	}

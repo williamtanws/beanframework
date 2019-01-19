@@ -4,8 +4,18 @@
 	<th:block layout:fragment="general">
 		<div class="col-md-6">
 			<div class="form-group">
-				<label for="id" th:text="#{module.console.id} + ': '"></label>
+				<label for="id" th:text="#{module.backoffice.id}+': '"></label>
 				<span class="text-block" th:text="*{id}"></span>
+				<input type="hidden" class="form-control" name="id" th:value="*{id}">
+			</div>
+		</div>
+	</th:block>
+	<th:block layout:fragment="input">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="id" th:text="#{module.backoffice.id}"></label>
+				<input type="text" class="form-control" name="id" th:value="*{id}">
+				<span class="help-block"></span>
 			</div>
 		</div>
 	</th:block>

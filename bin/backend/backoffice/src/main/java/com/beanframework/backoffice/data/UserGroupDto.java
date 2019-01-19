@@ -7,9 +7,7 @@ import com.beanframework.common.data.GenericDto;
 
 public class UserGroupDto extends GenericDto {
 	public static final String NAME = "name";
-	public static final String PARENT = "parent";
-	public static final String PARENTS = "parents";
-	public static final String CHILDS = "childs";
+	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_AUTHORITIES = "userAuthorities";
 	public static final String FIELDS = "fields";
 
