@@ -87,8 +87,8 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	@Override
 	public List<LanguageDto> findAllDtoLanguages() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(LanguageDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(languageService.findEntityBySorts(sorts), LanguageDto.class);
+		sorts.put(Language.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(languageService.findEntityBySorts(sorts, false), LanguageDto.class);
 	}
 
 }

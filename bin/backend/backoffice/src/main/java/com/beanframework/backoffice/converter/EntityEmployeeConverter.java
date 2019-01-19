@@ -32,7 +32,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.UUID, source.getUuid());
-				Employee prototype = modelService.findOneEntityByProperties(properties, Employee.class);
+				Employee prototype = modelService.findOneEntityByProperties(properties, true,Employee.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);
@@ -159,7 +159,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 				}
 
 				if (add) {
-					UserGroup entityUserGroup = modelService.findOneEntityByUuid(sourceUserGroup.getUuid(), UserGroup.class);
+					UserGroup entityUserGroup = modelService.findOneEntityByUuid(sourceUserGroup.getUuid(), true, UserGroup.class);
 					if (entityUserGroup != null) {
 						prototype.getUserGroups().add(entityUserGroup);
 						prototype.setLastModifiedDate(lastModifiedDate);

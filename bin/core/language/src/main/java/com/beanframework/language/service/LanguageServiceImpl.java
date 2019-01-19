@@ -36,25 +36,25 @@ public class LanguageServiceImpl implements LanguageService {
 	@Cacheable(value = "LanguageOne", key = "#uuid")
 	@Override
 	public Language findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Language.class);
+		return modelService.findOneEntityByUuid(uuid, true, Language.class);
 	}
 
 	@Cacheable(value = "LanguageOneProperties", key = "#properties")
 	@Override
 	public Language findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Language.class);
+		return modelService.findOneEntityByProperties(properties, true,Language.class);
 	}
 
-	@Cacheable(value = "LanguagesSorts", key = "#sorts")
+	@Cacheable(value = "LanguagesSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<Language> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Language.class);
+	public List<Language> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Language.class);
 	}
 
 	@Cacheable(value = "LanguagesPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Language> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, Language.class);
+		return modelService.findEntityPage(specification, pageable, false, Language.class);
 	}
 
 	@Cacheable(value = "LanguagesHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -88,7 +88,7 @@ public class LanguageServiceImpl implements LanguageService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Language model = modelService.findOneEntityByUuid(uuid, Language.class);
+			Language model = modelService.findOneEntityByUuid(uuid, true, Language.class);
 			modelService.deleteByEntity(model, Language.class);
 
 		} catch (Exception e) {

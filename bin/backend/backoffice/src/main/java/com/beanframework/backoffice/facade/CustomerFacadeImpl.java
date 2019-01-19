@@ -98,8 +98,8 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public List<CustomerDto> findAllDtoCustomers() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(CustomerDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(customerService.findEntityBySorts(sorts), CustomerDto.class);
+		sorts.put(Customer.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(customerService.findEntityBySorts(sorts, false), CustomerDto.class);
 	}
 
 }

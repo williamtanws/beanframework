@@ -20,7 +20,7 @@ public interface LanguageService {
 
 	Language findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Language> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
+	List<Language> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
 
 	<T> Page<Language> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception;
 

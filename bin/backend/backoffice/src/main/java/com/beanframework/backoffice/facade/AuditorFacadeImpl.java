@@ -60,8 +60,8 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	@Override
 	public List<AuditorDto> findAllDtoAuditors() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(AuditorDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(auditorService.findEntityBySorts(sorts), AuditorDto.class);
+		sorts.put(Auditor.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(auditorService.findEntityBySorts(sorts, false), AuditorDto.class);
 	}
 
 }

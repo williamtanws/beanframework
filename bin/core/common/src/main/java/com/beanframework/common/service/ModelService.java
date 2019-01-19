@@ -24,19 +24,17 @@ public interface ModelService {
 
 	<T> T create(Class modelClass) throws Exception;
 
-	<T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception;
+	<T> T findOneEntityByUuid(UUID uuid, boolean initialize, Class modelClass) throws Exception;
 
-	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClassd) throws Exception;
+	<T> T findOneEntityByProperties(Map<String, Object> properties, boolean initialize, Class modelClassd) throws Exception;
 	
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 	
-	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception;
-
-//	<T extends Collection> T findAllEntity(Class modelClass) throws Exception;
+	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, boolean initialize, Class modelClass) throws Exception;
 	
 	<T extends Collection> T findHistory(boolean selectDeletedEntities, AuditCriterion criterion, AuditOrder order, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
 
-	<T> Page<T> findEntityPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
+	<T> Page<T> findEntityPage(Specification specification, Pageable pageable, boolean initialize, Class modelClass) throws Exception;
 
 	void refresh(Object model);
 

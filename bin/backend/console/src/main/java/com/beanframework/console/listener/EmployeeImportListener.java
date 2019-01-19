@@ -138,7 +138,7 @@ public class EmployeeImportListener extends ImportListener {
 		for (EmployeeCsv csv : csvList) {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Employee.ID, csv.getId());
-			Employee model = modelService.findOneEntityByProperties(properties, Employee.class);
+			Employee model = modelService.findOneEntityByProperties(properties, true,Employee.class);
 			modelService.deleteByEntity(model, Employee.class);
 		}
 	}

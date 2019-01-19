@@ -98,7 +98,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	@Override
 	public List<UserGroupDto> findAllDtoUserGroups() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(UserGroupDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(userGroupService.findEntityBySorts(sorts), UserGroupDto.class);
+		sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(userGroupService.findEntityBySorts(sorts, false), UserGroupDto.class);
 	}
 }

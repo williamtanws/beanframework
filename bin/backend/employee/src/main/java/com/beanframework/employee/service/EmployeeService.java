@@ -26,7 +26,7 @@ public interface EmployeeService {
 
 	Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Employee> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
+	List<Employee> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
 
 	<T> Page<Employee> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception;
 

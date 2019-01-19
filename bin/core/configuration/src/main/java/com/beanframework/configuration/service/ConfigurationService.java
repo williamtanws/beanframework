@@ -22,7 +22,7 @@ public interface ConfigurationService {
 
 	List<Configuration> findAllEntity() throws Exception;
 
-	List<Configuration> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
+	List<Configuration> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
 
 	<T> Page<Configuration> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception;
 

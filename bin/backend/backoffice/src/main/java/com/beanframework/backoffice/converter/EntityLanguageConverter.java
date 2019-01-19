@@ -26,7 +26,7 @@ public class EntityLanguageConverter implements EntityConverter<LanguageDto, Lan
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Language.UUID, source.getUuid());
-				Language prototype = modelService.findOneEntityByProperties(properties, Language.class);
+				Language prototype = modelService.findOneEntityByProperties(properties, true,Language.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);

@@ -36,25 +36,25 @@ public class DynamicFieldEnumServiceImpl implements DynamicFieldEnumService {
 	@Cacheable(value = "DynamicFieldEnumOne", key = "#uuid")
 	@Override
 	public DynamicFieldEnum findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, DynamicFieldEnum.class);
+		return modelService.findOneEntityByUuid(uuid, true, DynamicFieldEnum.class);
 	}
 
 	@Cacheable(value = "DynamicFieldEnumOneProperties", key = "#properties")
 	@Override
 	public DynamicFieldEnum findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, DynamicFieldEnum.class);
+		return modelService.findOneEntityByProperties(properties, true,DynamicFieldEnum.class);
 	}
 
-	@Cacheable(value = "DynamicFieldEnumsSorts", key = "#sorts")
+	@Cacheable(value = "DynamicFieldEnumsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<DynamicFieldEnum> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, DynamicFieldEnum.class);
+	public List<DynamicFieldEnum> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, DynamicFieldEnum.class);
 	}
 
 	@Cacheable(value = "DynamicFieldEnumsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<DynamicFieldEnum> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, DynamicFieldEnum.class);
+		return modelService.findEntityPage(specification, pageable, false, DynamicFieldEnum.class);
 	}
 
 	@Cacheable(value = "DynamicFieldEnumsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -88,7 +88,7 @@ public class DynamicFieldEnumServiceImpl implements DynamicFieldEnumService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			DynamicFieldEnum model = modelService.findOneEntityByUuid(uuid, DynamicFieldEnum.class);
+			DynamicFieldEnum model = modelService.findOneEntityByUuid(uuid, true, DynamicFieldEnum.class);
 			modelService.deleteByEntity(model, DynamicFieldEnum.class);
 
 		} catch (Exception e) {

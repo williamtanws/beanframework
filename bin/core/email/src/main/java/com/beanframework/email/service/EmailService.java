@@ -22,7 +22,7 @@ public interface EmailService {
 
 	Email findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Email> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
+	List<Email> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
 
 	<T> Page<Email> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception;
 

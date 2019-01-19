@@ -20,7 +20,7 @@ public interface DynamicFieldEnumService {
 
 	DynamicFieldEnum findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<DynamicFieldEnum> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
+	List<DynamicFieldEnum> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
 
 	<T> Page<DynamicFieldEnum> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception;
 

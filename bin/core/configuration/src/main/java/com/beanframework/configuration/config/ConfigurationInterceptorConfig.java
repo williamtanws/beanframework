@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.configuration.interceptor.ConfigurationInitialDefaultsInterceptor;
+import com.beanframework.configuration.interceptor.ConfigurationInitializeInterceptor;
 import com.beanframework.configuration.interceptor.ConfigurationLoadInterceptor;
 import com.beanframework.configuration.interceptor.ConfigurationPrepareInterceptor;
 import com.beanframework.configuration.interceptor.ConfigurationRemoveInterceptor;
@@ -12,6 +13,11 @@ import com.beanframework.configuration.interceptor.ConfigurationValidateIntercep
 
 @Configuration
 public class ConfigurationInterceptorConfig {
+
+	//////////////////////////////////
+	// Initial Defaults Interceptor //
+	//////////////////////////////////
+
 	@Bean
 	public ConfigurationInitialDefaultsInterceptor configurationInitialDefaultsInterceptor() {
 		return new ConfigurationInitialDefaultsInterceptor();
@@ -19,40 +25,34 @@ public class ConfigurationInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping configurationInitialDefaultsInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(configurationInitialDefaultsInterceptor());
-		interceptorMapping.setTypeCode(Configuration.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(configurationInitialDefaultsInterceptor());
+		mapping.setTypeCode(Configuration.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
+	}
+
+	////////////////////////////
+	// Initialize Interceptor //
+	////////////////////////////
+
+	@Bean
+	public ConfigurationInitializeInterceptor configurationInitializeInterceptor() {
+		return new ConfigurationInitializeInterceptor();
 	}
 
 	@Bean
-	public ConfigurationValidateInterceptor configurationValidateInterceptor() {
-		return new ConfigurationValidateInterceptor();
+	public InterceptorMapping configurationInitializeInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(configurationInitializeInterceptor());
+		mapping.setTypeCode(Configuration.class.getSimpleName());
+
+		return mapping;
 	}
 
-	@Bean
-	public InterceptorMapping configurationValidateInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(configurationValidateInterceptor());
-		interceptorMapping.setTypeCode(Configuration.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public ConfigurationPrepareInterceptor configurationPrepareInterceptor() {
-		return new ConfigurationPrepareInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping configurationPrepareInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(configurationPrepareInterceptor());
-		interceptorMapping.setTypeCode(Configuration.class.getSimpleName());
-
-		return interceptorMapping;
-	}
+	//////////////////////
+	// Load Interceptor //
+	//////////////////////
 
 	@Bean
 	public ConfigurationLoadInterceptor configurationLoadInterceptor() {
@@ -61,12 +61,52 @@ public class ConfigurationInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping configurationLoadInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(configurationLoadInterceptor());
-		interceptorMapping.setTypeCode(Configuration.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(configurationLoadInterceptor());
+		mapping.setTypeCode(Configuration.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
 	}
+
+	/////////////////////////
+	// Prepare Interceptor //
+	/////////////////////////
+
+	@Bean
+	public ConfigurationPrepareInterceptor configurationPrepareInterceptor() {
+		return new ConfigurationPrepareInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping configurationPrepareInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(configurationPrepareInterceptor());
+		mapping.setTypeCode(Configuration.class.getSimpleName());
+
+		return mapping;
+	}
+
+	//////////////////////////
+	// Validate Interceptor //
+	//////////////////////////
+
+	@Bean
+	public ConfigurationValidateInterceptor configurationValidateInterceptor() {
+		return new ConfigurationValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping configurationValidateInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(configurationValidateInterceptor());
+		mapping.setTypeCode(Configuration.class.getSimpleName());
+
+		return mapping;
+	}
+
+	////////////////////////
+	// Remove Interceptor //
+	////////////////////////
 
 	@Bean
 	public ConfigurationRemoveInterceptor configurationRemoveInterceptor() {
@@ -75,10 +115,10 @@ public class ConfigurationInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping configurationRemoveInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(configurationRemoveInterceptor());
-		interceptorMapping.setTypeCode(Configuration.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(configurationRemoveInterceptor());
+		mapping.setTypeCode(Configuration.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
 	}
 }

@@ -26,7 +26,7 @@ public class EntityDynamicFieldEnumConverter implements EntityConverter<DynamicF
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldEnum.UUID, source.getUuid());
-				DynamicFieldEnum prototype = modelService.findOneEntityByProperties(properties, DynamicFieldEnum.class);
+				DynamicFieldEnum prototype = modelService.findOneEntityByProperties(properties, true,DynamicFieldEnum.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);

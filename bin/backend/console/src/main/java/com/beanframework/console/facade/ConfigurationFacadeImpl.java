@@ -87,7 +87,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	@Override
 	public List<ConfigurationDto> findAllDtoConfigurations() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(ConfigurationDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(configurationService.findEntityBySorts(sorts), ConfigurationDto.class);
+		sorts.put(Configuration.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(configurationService.findEntityBySorts(sorts, false), ConfigurationDto.class);
 	}
 }

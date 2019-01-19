@@ -59,25 +59,25 @@ public class AdminServiceImpl implements AdminService {
 	@Cacheable(value = "AdminOne", key = "#uuid")
 	@Override
 	public Admin findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Admin.class);
+		return modelService.findOneEntityByUuid(uuid, true, Admin.class);
 	}
 
 	@Cacheable(value = "AdminOneProperties", key = "#properties")
 	@Override
 	public Admin findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Admin.class);
+		return modelService.findOneEntityByProperties(properties, true,Admin.class);
 	}
 
-	@Cacheable(value = "AdminsSorts", key = "#sorts")
+	@Cacheable(value = "AdminsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<Admin> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Admin.class);
+	public List<Admin> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Admin.class);
 	}
 
 	@Cacheable(value = "AdminsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Admin> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, Admin.class);
+		return modelService.findEntityPage(specification, pageable, false, Admin.class);
 	}
 
 	@Cacheable(value = "AdminsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -121,7 +121,7 @@ public class AdminServiceImpl implements AdminService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Admin model = modelService.findOneEntityByUuid(uuid, Admin.class);
+			Admin model = modelService.findOneEntityByUuid(uuid, true, Admin.class);
 			modelService.deleteByEntity(model, Admin.class);
 
 		} catch (Exception e) {
@@ -136,9 +136,9 @@ public class AdminServiceImpl implements AdminService {
 			return null;
 		}
 
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(Admin.ID, id);
-		Admin entity = modelService.findOneEntityByProperties(map, Admin.class);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Admin.ID, id);
+		Admin entity = modelService.findOneEntityByProperties(properties, true, Admin.class);
 
 		if (entity == null) {
 			if (StringUtils.compare(password, defaultAdminPassword) != 0) {

@@ -87,8 +87,8 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Override
 	public List<AdminDto> findAllDtoAdmins() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(AdminDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(adminService.findEntityBySorts(sorts), AdminDto.class);
+		sorts.put(Admin.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(adminService.findEntityBySorts(sorts, false), AdminDto.class);
 	}
 
 }

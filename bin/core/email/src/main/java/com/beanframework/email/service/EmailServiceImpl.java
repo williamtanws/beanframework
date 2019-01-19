@@ -45,25 +45,25 @@ public class EmailServiceImpl implements EmailService {
 	@Cacheable(value = "EmailOne", key = "#uuid")
 	@Override
 	public Email findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Email.class);
+		return modelService.findOneEntityByUuid(uuid, true, Email.class);
 	}
 
 	@Cacheable(value = "EmailOneProperties", key = "#properties")
 	@Override
 	public Email findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Email.class);
+		return modelService.findOneEntityByProperties(properties, true,Email.class);
 	}
 
-	@Cacheable(value = "EmailsSorts", key = "#sorts")
+	@Cacheable(value = "EmailsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<Email> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Email.class);
+	public List<Email> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Email.class);
 	}
 
 	@Cacheable(value = "EmailsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Email> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, Email.class);
+		return modelService.findEntityPage(specification, pageable, false, Email.class);
 	}
 
 	@Cacheable(value = "EmailsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -97,7 +97,7 @@ public class EmailServiceImpl implements EmailService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Email model = modelService.findOneEntityByUuid(uuid, Email.class);
+			Email model = modelService.findOneEntityByUuid(uuid, true, Email.class);
 			modelService.deleteByEntity(model, Email.class);
 
 			String workingDir = System.getProperty("user.dir");

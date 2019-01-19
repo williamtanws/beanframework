@@ -32,7 +32,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Customer.UUID, source.getUuid());
-				Customer prototype = modelService.findOneEntityByProperties(properties, Customer.class);
+				Customer prototype = modelService.findOneEntityByProperties(properties, true,Customer.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);
@@ -159,7 +159,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 				}
 
 				if (add) {
-					UserGroup entityUserGroup = modelService.findOneEntityByUuid(sourceUserGroup.getUuid(), UserGroup.class);
+					UserGroup entityUserGroup = modelService.findOneEntityByUuid(sourceUserGroup.getUuid(), true, UserGroup.class);
 					if (entityUserGroup != null) {
 						prototype.getUserGroups().add(entityUserGroup);
 						prototype.setLastModifiedDate(lastModifiedDate);

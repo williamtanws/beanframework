@@ -87,8 +87,8 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 	@Override
 	public List<DynamicFieldEnumDto> findAllDtoDynamicFieldEnums() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(DynamicFieldEnumDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(dynamicFieldEnumService.findEntityBySorts(sorts), DynamicFieldEnumDto.class);
+		sorts.put(DynamicFieldEnum.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(dynamicFieldEnumService.findEntityBySorts(sorts, false), DynamicFieldEnumDto.class);
 	}
 
 }
