@@ -18,17 +18,19 @@
     	<module>core/common</module>
     	<module>core/language</module>
     	<module>core/user</module>
+    	<module>core/employee</module>
+    	<module>core/admin</module>
     	<module>core/email</module>
     	<module>core/cronjob</module>
     	<module>core/configuration</module>
     	<module>core/dynamicfield</module>
+    	<module>core/menu</module>
+        <module>core/filemanager</module>
+        <module>core/media</module>
+        <module>core/comment</module>
 		<module>ui/adminlte</module>
-    	<module>backend/admin</module>
         <module>backend/console</module>
-    	<module>backend/menu</module>
-    	<module>backend/employee</module>
     	<module>backend/customer</module>
-        <module>backend/filemanager</module>
         <module>backend/backoffice</module>
         <module>backend/cockpit</module>
         <module>platform</module>
