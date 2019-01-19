@@ -189,8 +189,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		if (firstResult != null)
 			auditQuery.setFirstResult(firstResult);
 
-		if (maxResults != null)
-			auditQuery.setMaxResults(maxResults);
+//		if (maxResults != null)
+//			auditQuery.setMaxResults(maxResults);
+		auditQuery.setMaxResults(50);
 
 		return (T) auditQuery.getResultList();
 	}
