@@ -43,5 +43,4 @@ public interface ConfigurationFacade {
 	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
 
 	List<ConfigurationDto> findAllDtoConfigurations() throws Exception;
-
 }

@@ -3,25 +3,26 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.beanframework.backoffice.data.DynamicFieldEnumDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
 
-public class DtoDynamicFieldEnumConverter implements DtoConverter<DynamicFieldEnum, DynamicFieldEnum> {
+public class DtoDynamicFieldEnumConverter implements DtoConverter<DynamicFieldEnum, DynamicFieldEnumDto> {
 
 	@Override
-	public DynamicFieldEnum convert(DynamicFieldEnum source) {
-		return convert(source, new DynamicFieldEnum());
+	public DynamicFieldEnumDto convert(DynamicFieldEnum source) {
+		return convert(source, new DynamicFieldEnumDto());
 	}
 
-	public List<DynamicFieldEnum> convert(List<DynamicFieldEnum> sources) {
-		List<DynamicFieldEnum> convertedList = new ArrayList<DynamicFieldEnum>();
+	public List<DynamicFieldEnumDto> convert(List<DynamicFieldEnum> sources) {
+		List<DynamicFieldEnumDto> convertedList = new ArrayList<DynamicFieldEnumDto>();
 		for (DynamicFieldEnum source : sources) {
 			convertedList.add(convert(source));
 		}
 		return convertedList;
 	}
 
-	private DynamicFieldEnum convert(DynamicFieldEnum source, DynamicFieldEnum prototype) {
+	private DynamicFieldEnumDto convert(DynamicFieldEnum source, DynamicFieldEnumDto prototype) {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());

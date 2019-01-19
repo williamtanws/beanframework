@@ -9,7 +9,7 @@
 					<img th:if="${revision[0].lastModifiedBy != null}" th:src="@{${@environment.getProperty('path.employee.profile.picture')}(type='thumbnail',uuid=${revision[0].lastModifiedBy.uuid})}"
 						alt="user image" class="online">
 					<img th:with="defaultavatar=${@environment.getProperty('module.backoffice.configuration.avatar.default')}" th:if="${revision[0].lastModifiedBy == null}"
-						th:src="@{${configurationService.get(defaultavatar)}}" alt="user image" class="online">
+						th:src="@{${@Config.get('defaultavatar','/static/common/img/avatar.png')}}" alt="user image" class="online">
 
 					<p class="message">
 						<span class="name">

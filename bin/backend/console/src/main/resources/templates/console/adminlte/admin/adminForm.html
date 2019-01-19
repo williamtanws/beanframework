@@ -21,11 +21,11 @@
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block layout:insert="~{/console/adminlte/common/component/delete :: button}"></th:block>
+									<th:block layout:insert="~{/console/adminlte/common/component/delete :: button (deleteAuthority='admin_delete')}"></th:block>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="~{/console/adminlte/common/component/refresh :: button}"></th:block>
-									<th:block layout:insert="~{/console/adminlte/common/component/update :: button}"></th:block>
+									<th:block layout:insert="~{/console/adminlte/common/component/refresh :: button (deleteAuthority='admin_delete')}"></th:block>
+									<th:block layout:insert="~{/console/adminlte/common/component/update :: button (updateAuthority='admin_update')}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -82,7 +82,7 @@
 												<label for="enabled" th:text="#{module.admin.enabled}"></label>
 												<small th:text="#{module.admin.enabled.indicate}"></small>
 												<select class="form-control" name="enabled">
-													<option value="1" th:selected="${adminUpdate.enabled == true} : true" th:text="#{module.console.yes}"></option>
+													<option value="1" th:selected="${adminUpdate.enabled == true} " th:text="#{module.console.yes}"></option>
 													<option value="0" th:selected="${adminUpdate.enabled == false}" th:text="#{module.console.no}"></option>
 												</select>
 												<span class="help-block"></span>
@@ -93,7 +93,7 @@
 												<label for="accountNonLocked" th:text="#{module.admin.locked}"></label>
 												<small th:text="#{module.admin.locked.indicate}"></small>
 												<select class="form-control" name="accountNonLocked">
-													<option value="1" th:selected="${adminNonLocked == true} : true" th:text="#{module.console.no}"></option>
+													<option value="1" th:selected="${adminNonLocked == true} " th:text="#{module.console.no}"></option>
 													<option value="0" th:selected="${adminNonLocked == false}" th:text="#{module.console.yes}"></option>
 												</select>
 												<span class="help-block"></span>
@@ -104,7 +104,7 @@
 												<label for="accountNonExpired" th:text="#{module.admin.expired}"></label>
 												<small th:text="#{module.admin.expired.indicate}"></small>
 												<select class="form-control" name="accountNonExpired">
-													<option value="1" th:selected="${adminNonExpired == true} : true" th:text="#{module.console.no}"></option>
+													<option value="1" th:selected="${adminNonExpired == true} " th:text="#{module.console.no}"></option>
 													<option value="0" th:selected="${adminNonExpired == false}" th:text="#{module.console.yes}"></option>
 												</select>
 												<span class="help-block"></span>
@@ -155,7 +155,7 @@
 		            },
 		        	onfocusout: false,
 		        	ignore: [],
-		            errorPlacement: function() {},
+		            
 		            invalidHandler: function(form, validator) {
 		                var errors = validator.numberOfInvalids();
 		                if (errors) {                    
@@ -211,6 +211,19 @@
 		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
 		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
 		                });
+		            },
+		            unhighlight: function(element) {
+		                $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').find('.help-block').html('');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+		                var noError = true;
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    noError = false;
+		                });
+		                if(noError){
+			                $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','black');
+		                }
 		            },
 		            errorPlacement: function(error, element) {
 		                element.closest('.form-group').find('.help-block').html(error.text());

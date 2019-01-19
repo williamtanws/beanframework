@@ -211,6 +211,7 @@ public class UserGroupController extends AbstractController {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
+			// User Group
 			List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
 			for (UserGroupDto userGroup : usergroupUpdate.getUserGroups()) {
 				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {

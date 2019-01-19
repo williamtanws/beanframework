@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,12 +26,15 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
 import com.beanframework.backoffice.data.DynamicFieldDto;
+import com.beanframework.backoffice.data.DynamicFieldEnumDto;
 import com.beanframework.backoffice.data.DynamicFieldSearch;
 import com.beanframework.backoffice.data.LanguageDto;
+import com.beanframework.backoffice.facade.DynamicFieldEnumFacade;
 import com.beanframework.backoffice.facade.DynamicFieldFacade;
 import com.beanframework.backoffice.facade.LanguageFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.common.utils.ParamUtils;
 
 @Controller
@@ -38,6 +42,9 @@ public class DynamicFieldController extends AbstractController {
 
 	@Autowired
 	private DynamicFieldFacade dynamicFieldFacade;
+
+	@Autowired
+	private DynamicFieldEnumFacade dynamicFieldEnumFacade;
 
 	@Autowired
 	private LanguageFacade languageFacade;
@@ -130,10 +137,23 @@ public class DynamicFieldController extends AbstractController {
 
 			DynamicFieldDto existingDynamicField = dynamicFieldFacade.findOneByUuid(dynamicFieldUpdate.getUuid());
 
-			List<Object[]> revisions = dynamicFieldFacade.findHistoryByUuid(dynamicFieldUpdate.getUuid(), null, null);
-			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
-
 			if (existingDynamicField != null) {
+				// DynamicFieldEnum
+				List<DynamicFieldEnumDto> enums = dynamicFieldEnumFacade.findAllDtoDynamicFieldEnums();
+
+				for (int i = 0; i < enums.size(); i++) {
+					for (DynamicFieldEnumDto dynamicFieldEnum : existingDynamicField.getEnums()) {
+						if (enums.get(i).getUuid().equals(dynamicFieldEnum.getUuid())) {
+							enums.get(i).setSelected("true");
+						}
+					}
+				}
+				existingDynamicField.setEnums(enums);
+
+				// History
+				List<Object[]> revisions = dynamicFieldFacade.findHistoryByUuid(dynamicFieldUpdate.getUuid(), null, null);
+				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
+
 				model.addAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE, existingDynamicField);
 			} else {
 				dynamicFieldUpdate.setUuid(null);
@@ -179,6 +199,15 @@ public class DynamicFieldController extends AbstractController {
 		if (dynamicFieldUpdate.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
+
+			// Dynamic Field Enum
+			List<DynamicFieldEnumDto> enums = new ArrayList<DynamicFieldEnumDto>();
+			for (DynamicFieldEnumDto dynamicFieldEnum : dynamicFieldUpdate.getEnums()) {
+				if (BooleanUtils.parseBoolean(dynamicFieldEnum.getSelected())) {
+					enums.add(dynamicFieldEnum);
+				}
+			}
+			dynamicFieldUpdate.setEnums(enums);
 
 			try {
 				dynamicFieldUpdate = dynamicFieldFacade.update(dynamicFieldUpdate);

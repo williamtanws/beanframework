@@ -1,6 +1,7 @@
 package com.beanframework.user.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -79,6 +80,11 @@ public class AuditorServiceImpl implements AuditorService {
 	public Auditor saveEntity(User model) throws BusinessException {
 		try {
 			Auditor auditor = modelService.findOneEntityByUuid(model.getUuid(), Auditor.class);
+			if (auditor == null) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Auditor.ID, model.getId());
+				auditor = modelService.findOneEntityByProperties(properties, Auditor.class);
+			}
 
 			if (auditor == null) {
 				auditor = modelService.create(Auditor.class);

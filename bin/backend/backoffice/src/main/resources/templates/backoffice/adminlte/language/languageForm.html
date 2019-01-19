@@ -157,15 +157,17 @@
 		                });
 		            },
 		            unhighlight: function(element) {
-		                /* $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').removeClass('has-error');
 		                $(element).closest('.form-group').find('.help-block').html('');
 		                
 		                var id = $(element).closest('.tab-pane').attr('id');
-	                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','');
-	                    
+		                var noError = true;
 		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
-		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
-		                }); */
+		                    noError = false;
+		                });
+		                if(noError){
+			                $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','black');
+		                }
 		            },
 		            errorPlacement: function(error, element) {
 		                element.closest('.form-group').find('.help-block').html(error.text());
