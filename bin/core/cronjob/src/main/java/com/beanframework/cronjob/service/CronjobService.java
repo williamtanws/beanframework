@@ -20,7 +20,7 @@ public interface CronjobService {
 
 	Cronjob findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Cronjob> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
+	List<Cronjob> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
 
 	<T> Page<Cronjob> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception;
 

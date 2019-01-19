@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.interceptor.MenuInitialDefaultsInterceptor;
+import com.beanframework.menu.interceptor.MenuInitializeInterceptor;
 import com.beanframework.menu.interceptor.MenuLoadInterceptor;
 import com.beanframework.menu.interceptor.MenuPrepareInterceptor;
 import com.beanframework.menu.interceptor.MenuRemoveInterceptor;
@@ -13,6 +14,10 @@ import com.beanframework.menu.interceptor.MenuValidateInterceptor;
 
 @Configuration
 public class MenuInterceptorConfig {
+
+	//////////////////////////////////
+	// Initial Defaults Interceptor //
+	//////////////////////////////////
 
 	@Bean
 	public MenuInitialDefaultsInterceptor menuInitialDefaultsInterceptor() {
@@ -28,19 +33,45 @@ public class MenuInterceptorConfig {
 		return interceptorMapping;
 	}
 
+	////////////////////////////
+	// Initialize Interceptor //
+	////////////////////////////
+
 	@Bean
-	public MenuValidateInterceptor menuValidateInterceptor() {
-		return new MenuValidateInterceptor();
+	public MenuInitializeInterceptor menuInitializeInterceptor() {
+		return new MenuInitializeInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping menuValidateInterceptorMapping() {
+	public InterceptorMapping menuInitializeInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(menuValidateInterceptor());
+		interceptorMapping.setInterceptor(menuInitializeInterceptor());
 		interceptorMapping.setTypeCode(Menu.class.getSimpleName());
 
 		return interceptorMapping;
 	}
+
+	//////////////////////
+	// Load Interceptor //
+	//////////////////////
+
+	@Bean
+	public MenuLoadInterceptor menuLoadInterceptor() {
+		return new MenuLoadInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping menuLoadInterceptorMapping() {
+		InterceptorMapping interceptorMapping = new InterceptorMapping();
+		interceptorMapping.setInterceptor(menuLoadInterceptor());
+		interceptorMapping.setTypeCode(Menu.class.getSimpleName());
+
+		return interceptorMapping;
+	}
+
+	/////////////////////////
+	// Prepare Interceptor //
+	/////////////////////////
 
 	@Bean
 	public MenuPrepareInterceptor menuPrepareInterceptor() {
@@ -56,19 +87,27 @@ public class MenuInterceptorConfig {
 		return interceptorMapping;
 	}
 
+	//////////////////////////
+	// Validate Interceptor //
+	//////////////////////////
+
 	@Bean
-	public MenuLoadInterceptor menuLoadInterceptor() {
-		return new MenuLoadInterceptor();
+	public MenuValidateInterceptor menuValidateInterceptor() {
+		return new MenuValidateInterceptor();
 	}
 
 	@Bean
-	public InterceptorMapping menuLoadInterceptorMapping() {
+	public InterceptorMapping menuValidateInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(menuLoadInterceptor());
+		interceptorMapping.setInterceptor(menuValidateInterceptor());
 		interceptorMapping.setTypeCode(Menu.class.getSimpleName());
 
 		return interceptorMapping;
 	}
+
+	////////////////////////
+	// Remove Interceptor //
+	////////////////////////
 
 	@Bean
 	public MenuRemoveInterceptor menuRemoveInterceptor() {

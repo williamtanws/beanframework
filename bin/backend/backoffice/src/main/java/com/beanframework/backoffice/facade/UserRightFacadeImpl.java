@@ -98,7 +98,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	@Override
 	public List<UserRightDto> findAllDtoUserRights() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(UserRightDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(userRightService.findEntityBySorts(sorts), UserRightDto.class);
+		sorts.put(UserRight.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(userRightService.findEntityBySorts(sorts, false), UserRightDto.class);
 	}
 }

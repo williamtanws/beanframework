@@ -38,7 +38,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Menu.ID, source.getId());
 
-				Menu prototype = modelService.findOneEntityByProperties(properties, Menu.class);
+				Menu prototype = modelService.findOneEntityByProperties(properties, true,Menu.class);
 
 				if (prototype != null) {
 
@@ -72,7 +72,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 			if (StringUtils.isNotBlank(source.getParent())) {
 				Map<String, Object> parentProperties = new HashMap<String, Object>();
 				parentProperties.put(Menu.ID, source.getParent());
-				Menu parent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
+				Menu parent = modelService.findOneEntityByProperties(parentProperties, true, Menu.class);
 
 				if (parent == null) {
 					LOGGER.error("Parent not exists: " + source.getParent());
@@ -110,7 +110,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 					if(add) {
 						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
-						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
+						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, true, DynamicField.class);
 						
 						if(entityDynamicField != null) {
 							MenuField field = new MenuField();
@@ -129,7 +129,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 			for (int i = 0; i < userGroupIds.length; i++) {
 				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, true, UserGroup.class);
 
 				if (userGroup == null) {
 					LOGGER.error("UserGroup not exists: " + userGroupIds[i]);

@@ -46,7 +46,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Autowired
 	private AfterSaveListenerRegistry afterSaveListenerRegistry;
-	
+
 	@Autowired
 	private AfterRemoveListenerRegistry afterRemoveListenerRegistry;
 
@@ -84,14 +84,19 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception {
+	public <T> T findOneEntityByUuid(UUID uuid, boolean initialize, Class modelClass) throws Exception {
 		Assert.notNull(uuid, "uuid was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
 
 			Object model = entityManager.find(modelClass, uuid);
-			loadInterceptor(model, modelClass);
+
+			if (initialize)
+				initializeInterceptor(model, modelClass);
+			if (model != null)
+				loadInterceptor(model, modelClass);
+
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,13 +106,17 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
+	public <T> T findOneEntityByProperties(Map<String, Object> properties, boolean initialize, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
 			Object model = createQuery(properties, null, null, null, null, modelClass).getSingleResult();
 
-			loadInterceptor(model, modelClass);
+			if (initialize)
+				initializeInterceptor(model, modelClass);
+			if (model != null)
+				loadInterceptor(model, modelClass);
+
 			return (T) model;
 		} catch (NoResultException e) {
 			return null;
@@ -138,19 +147,20 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
-			throws Exception {
+	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, boolean initialize,
+			Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
 			List<Object> models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
 
-			if (models != null) {
+			if (initialize)
+				initializeInterceptor(models, modelClass);
+			if (models != null)
 				loadInterceptor(models, modelClass);
-			}
 
 			return (T) models;
 		} catch (Exception e) {
@@ -158,12 +168,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-
-//	@Transactional(readOnly = true)
-//	@Override
-//	public <T extends Collection> T findAllEntity(Class modelClass) throws Exception {
-//		return findCachedEntityByPropertiesAndSorts(null, null, null, null, modelClass);
-//	}
 
 	@Transactional(readOnly = true)
 	@Override
@@ -193,9 +197,16 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> Page<T> findEntityPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
+	public <T> Page<T> findEntityPage(Specification spec, Pageable pageable, boolean initialize, Class modelClass) throws Exception {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
+
+			if (initialize) {
+				Iterator<T> i = page.getContent().iterator();
+				while (i.hasNext()) {
+					initializeInterceptor(i.next(), modelClass);
+				}
+			}
 
 			Iterator<T> i = page.getContent().iterator();
 			while (i.hasNext()) {
@@ -205,7 +216,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			PageImpl<T> pageImpl = new PageImpl<T>(page.getContent(), page.getPageable(), page.getTotalElements());
 
 			return pageImpl;
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
 		}
@@ -222,13 +235,12 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 		try {
 			AfterSaveEvent event;
-			if(((GenericEntity) model).getUuid() == null) {
+			if (((GenericEntity) model).getUuid() == null) {
 				event = new AfterSaveEvent(1);
-			}
-			else {
+			} else {
 				event = new AfterSaveEvent(2);
 			}
-			
+
 			prepareInterceptor(model, modelClass);
 			validateInterceptor(model, modelClass);
 			modelRepository.save(model);
@@ -275,7 +287,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException {
 		try {
 
-			Object model = findOneEntityByUuid(uuid, modelClass);
+			Object model = findOneEntityByUuid(uuid, false, modelClass);
 
 			deleteEntity(model, modelClass);
 
@@ -313,7 +325,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	private void deleteEntity(Object model, Class modelClass) throws SQLException, InterceptorException, BusinessException {
 		removeInterceptor(model, modelClass);
 		modelRepository.delete(model);
-		
+
 		Set<Entry<String, AfterRemoveListener>> afterRemoveListeners = afterRemoveListenerRegistry.getListeners().entrySet();
 		for (Entry<String, AfterRemoveListener> entry : afterRemoveListeners) {
 			entry.getValue().afterRemove(model);

@@ -98,8 +98,8 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Override
 	public List<UserPermissionDto> findAllDtoUserPermissions() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(UserPermissionDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(userPermissionService.findEntityBySorts(sorts), UserPermissionDto.class);
+		sorts.put(UserPermission.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(userPermissionService.findEntityBySorts(sorts, false), UserPermissionDto.class);
 	}
 
 }

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.interceptor.AdminInitialDefaultsInterceptor;
+import com.beanframework.admin.interceptor.AdminInitializeInterceptor;
 import com.beanframework.admin.interceptor.AdminLoadInterceptor;
 import com.beanframework.admin.interceptor.AdminPrepareInterceptor;
 import com.beanframework.admin.interceptor.AdminRemoveInterceptor;
@@ -13,6 +14,11 @@ import com.beanframework.common.interceptor.InterceptorMapping;
 
 @Configuration
 public class AdminInterceptorConfig {
+
+	//////////////////////////////////
+	// Initial Defaults Interceptor //
+	//////////////////////////////////
+
 	@Bean
 	public AdminInitialDefaultsInterceptor adminInitialDefaultsInterceptor() {
 		return new AdminInitialDefaultsInterceptor();
@@ -20,40 +26,34 @@ public class AdminInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping adminInitialDefaultsInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(adminInitialDefaultsInterceptor());
-		interceptorMapping.setTypeCode(Admin.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(adminInitialDefaultsInterceptor());
+		mapping.setTypeCode(Admin.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
+	}
+
+	////////////////////////////
+	// Initialize Interceptor //
+	////////////////////////////
+
+	@Bean
+	public AdminInitializeInterceptor adminInitializeInterceptor() {
+		return new AdminInitializeInterceptor();
 	}
 
 	@Bean
-	public AdminValidateInterceptor adminValidateInterceptor() {
-		return new AdminValidateInterceptor();
+	public InterceptorMapping adminInitializeInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(adminInitializeInterceptor());
+		mapping.setTypeCode(Admin.class.getSimpleName());
+
+		return mapping;
 	}
 
-	@Bean
-	public InterceptorMapping adminValidateInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(adminValidateInterceptor());
-		interceptorMapping.setTypeCode(Admin.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public AdminPrepareInterceptor adminPrepareInterceptor() {
-		return new AdminPrepareInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping adminPrepareInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(adminPrepareInterceptor());
-		interceptorMapping.setTypeCode(Admin.class.getSimpleName());
-
-		return interceptorMapping;
-	}
+	//////////////////////
+	// Load Interceptor //
+	//////////////////////
 
 	@Bean
 	public AdminLoadInterceptor adminLoadInterceptor() {
@@ -62,12 +62,52 @@ public class AdminInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping adminLoadInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(adminLoadInterceptor());
-		interceptorMapping.setTypeCode(Admin.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(adminLoadInterceptor());
+		mapping.setTypeCode(Admin.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
 	}
+
+	/////////////////////////
+	// Prepare Interceptor //
+	/////////////////////////
+
+	@Bean
+	public AdminPrepareInterceptor adminPrepareInterceptor() {
+		return new AdminPrepareInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping adminPrepareInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(adminPrepareInterceptor());
+		mapping.setTypeCode(Admin.class.getSimpleName());
+
+		return mapping;
+	}
+
+	//////////////////////////
+	// Validate Interceptor //
+	//////////////////////////
+
+	@Bean
+	public AdminValidateInterceptor adminValidateInterceptor() {
+		return new AdminValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping adminValidateInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(adminValidateInterceptor());
+		mapping.setTypeCode(Admin.class.getSimpleName());
+
+		return mapping;
+	}
+
+	////////////////////////
+	// Remove Interceptor //
+	////////////////////////
 
 	@Bean
 	public AdminRemoveInterceptor adminRemoveInterceptor() {
@@ -76,10 +116,10 @@ public class AdminInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping adminRemoveInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(adminRemoveInterceptor());
-		interceptorMapping.setTypeCode(Admin.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(adminRemoveInterceptor());
+		mapping.setTypeCode(Admin.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
 	}
 }

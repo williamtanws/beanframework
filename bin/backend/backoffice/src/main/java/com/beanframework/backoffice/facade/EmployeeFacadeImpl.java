@@ -101,8 +101,8 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public List<EmployeeDto> findAllDtoEmployees() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(EmployeeDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(employeeService.findEntityBySorts(sorts), EmployeeDto.class);
+		sorts.put(Employee.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(employeeService.findEntityBySorts(sorts, false), EmployeeDto.class);
 	}
 
 	@Override

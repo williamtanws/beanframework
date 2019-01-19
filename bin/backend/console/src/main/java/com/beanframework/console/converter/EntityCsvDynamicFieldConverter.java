@@ -36,7 +36,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicField.ID, source.getId());
 
-				DynamicField prototype = modelService.findOneEntityByProperties(properties, DynamicField.class);
+				DynamicField prototype = modelService.findOneEntityByProperties(properties, true,DynamicField.class);
 
 				if (prototype != null) {
 
@@ -64,7 +64,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 			if (StringUtils.isNotBlank(source.getLanguage())) {
 				Map<String, Object> languageProperties = new HashMap<String, Object>();
 				languageProperties.put(Language.ID, source.getLanguage());
-				Language entityLanguage = modelService.findOneEntityByProperties(languageProperties, Language.class);
+				Language entityLanguage = modelService.findOneEntityByProperties(languageProperties, true, Language.class);
 				
 				if(entityLanguage != null) {
 					prototype.setLanguage(entityLanguage);
@@ -86,7 +86,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 					if (add) {
 						Map<String, Object> enumProperties = new HashMap<String, Object>();
 						enumProperties.put(DynamicFieldEnum.ID, values[i]);
-						DynamicFieldEnum entityEnum = modelService.findOneEntityByProperties(enumProperties, DynamicFieldEnum.class);
+						DynamicFieldEnum entityEnum = modelService.findOneEntityByProperties(enumProperties, true, DynamicFieldEnum.class);
 						
 						if(entityEnum != null) {
 							entityEnum.setDynamicField(prototype);

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.interceptor.CustomerInitialDefaultsInterceptor;
+import com.beanframework.customer.interceptor.CustomerInitializeInterceptor;
 import com.beanframework.customer.interceptor.CustomerLoadInterceptor;
 import com.beanframework.customer.interceptor.CustomerPrepareInterceptor;
 import com.beanframework.customer.interceptor.CustomerRemoveInterceptor;
@@ -13,6 +14,11 @@ import com.beanframework.customer.interceptor.CustomerValidateInterceptor;
 
 @Configuration
 public class CustomerInterceptorConfig {
+
+	//////////////////////////////////
+	// Initial Defaults Interceptor //
+	//////////////////////////////////
+
 	@Bean
 	public CustomerInitialDefaultsInterceptor customerInitialDefaultsInterceptor() {
 		return new CustomerInitialDefaultsInterceptor();
@@ -20,40 +26,34 @@ public class CustomerInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping customerInitialDefaultsInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(customerInitialDefaultsInterceptor());
-		interceptorMapping.setTypeCode(Customer.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(customerInitialDefaultsInterceptor());
+		mapping.setTypeCode(Customer.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
+	}
+
+	////////////////////////////
+	// Initialize Interceptor //
+	////////////////////////////
+
+	@Bean
+	public CustomerInitializeInterceptor customerInitializeInterceptor() {
+		return new CustomerInitializeInterceptor();
 	}
 
 	@Bean
-	public CustomerValidateInterceptor customerValidateInterceptor() {
-		return new CustomerValidateInterceptor();
+	public InterceptorMapping customerInitializeInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(customerInitializeInterceptor());
+		mapping.setTypeCode(Customer.class.getSimpleName());
+
+		return mapping;
 	}
 
-	@Bean
-	public InterceptorMapping customerValidateInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(customerValidateInterceptor());
-		interceptorMapping.setTypeCode(Customer.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public CustomerPrepareInterceptor customerPrepareInterceptor() {
-		return new CustomerPrepareInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping customerPrepareInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(customerPrepareInterceptor());
-		interceptorMapping.setTypeCode(Customer.class.getSimpleName());
-
-		return interceptorMapping;
-	}
+	//////////////////////
+	// Load Interceptor //
+	//////////////////////
 
 	@Bean
 	public CustomerLoadInterceptor customerLoadInterceptor() {
@@ -62,12 +62,52 @@ public class CustomerInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping customerLoadInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(customerLoadInterceptor());
-		interceptorMapping.setTypeCode(Customer.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(customerLoadInterceptor());
+		mapping.setTypeCode(Customer.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
 	}
+
+	/////////////////////////
+	// Prepare Interceptor //
+	/////////////////////////
+
+	@Bean
+	public CustomerPrepareInterceptor customerPrepareInterceptor() {
+		return new CustomerPrepareInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping customerPrepareInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(customerPrepareInterceptor());
+		mapping.setTypeCode(Customer.class.getSimpleName());
+
+		return mapping;
+	}
+
+	//////////////////////////
+	// Validate Interceptor //
+	//////////////////////////
+
+	@Bean
+	public CustomerValidateInterceptor customerValidateInterceptor() {
+		return new CustomerValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping customerValidateInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(customerValidateInterceptor());
+		mapping.setTypeCode(Customer.class.getSimpleName());
+
+		return mapping;
+	}
+
+	////////////////////////
+	// Remove Interceptor //
+	////////////////////////
 
 	@Bean
 	public CustomerRemoveInterceptor customerRemoveInterceptor() {
@@ -76,10 +116,10 @@ public class CustomerInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping customerRemoveInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(customerRemoveInterceptor());
-		interceptorMapping.setTypeCode(Customer.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(customerRemoveInterceptor());
+		mapping.setTypeCode(Customer.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
 	}
 }

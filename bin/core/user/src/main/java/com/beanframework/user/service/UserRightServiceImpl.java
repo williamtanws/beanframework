@@ -37,25 +37,25 @@ public class UserRightServiceImpl implements UserRightService {
 	@Cacheable(value = "UserRightOne", key = "#uuid")
 	@Override
 	public UserRight findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, UserRight.class);
+		return modelService.findOneEntityByUuid(uuid, true, UserRight.class);
 	}
 
 	@Cacheable(value = "UserRightOneProperties", key = "#properties")
 	@Override
 	public UserRight findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, UserRight.class);
+		return modelService.findOneEntityByProperties(properties, true,UserRight.class);
 	}
 
-	@Cacheable(value = "UserRightsSorts", key = "#sorts")
+	@Cacheable(value = "UserRightsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<UserRight> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserRight.class);
+	public List<UserRight> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, UserRight.class);
 	}
 
 	@Cacheable(value = "UserRightsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<UserRight> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, UserRight.class);
+		return modelService.findEntityPage(specification, pageable, false, UserRight.class);
 	}
 
 	@Cacheable(value = "UserRightsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -97,7 +97,7 @@ public class UserRightServiceImpl implements UserRightService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			UserRight model = modelService.findOneEntityByUuid(uuid, UserRight.class);
+			UserRight model = modelService.findOneEntityByUuid(uuid, true, UserRight.class);
 			modelService.deleteByEntity(model, UserRight.class);
 
 		} catch (Exception e) {

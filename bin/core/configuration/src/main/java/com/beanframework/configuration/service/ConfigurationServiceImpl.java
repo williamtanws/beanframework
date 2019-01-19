@@ -36,31 +36,31 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	@Cacheable(value = "ConfigurationOne", key = "#uuid")
 	@Override
 	public Configuration findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Configuration.class);
+		return modelService.findOneEntityByUuid(uuid, true, Configuration.class);
 	}
 
 	@Cacheable(value = "ConfigurationOneProperties", key = "#properties")
 	@Override
 	public Configuration findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Configuration.class);
+		return modelService.findOneEntityByProperties(properties, true,Configuration.class);
 	}
 
 	@Cacheable(value = "ConfigurationsAll")
 	@Override
 	public List<Configuration> findAllEntity() throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, null, null, null, Configuration.class);
+		return modelService.findEntityByPropertiesAndSorts(null, null, null, null, true, Configuration.class);
 	}
 
-	@Cacheable(value = "ConfigurationsSorts", key = "#sorts")
+	@Cacheable(value = "ConfigurationsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<Configuration> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Configuration.class);
+	public List<Configuration> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Configuration.class);
 	}
 
 	@Cacheable(value = "ConfigurationsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Configuration> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, Configuration.class);
+		return modelService.findEntityPage(specification, pageable, false, Configuration.class);
 	}
 
 	@Cacheable(value = "ConfigurationsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -96,7 +96,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Configuration model = modelService.findOneEntityByUuid(uuid, Configuration.class);
+			Configuration model = modelService.findOneEntityByUuid(uuid, true, Configuration.class);
 			modelService.deleteByEntity(model, Configuration.class);
 
 		} catch (Exception e) {

@@ -69,7 +69,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 			sorts.put(Language.SORT, Sort.Direction.ASC);
 
-			List<Language> languages = languageService.findEntityBySorts(sorts);
+			List<Language> languages = languageService.findEntityBySorts(sorts, false);
 			modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MODULE_LANGUAGES, languages);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);

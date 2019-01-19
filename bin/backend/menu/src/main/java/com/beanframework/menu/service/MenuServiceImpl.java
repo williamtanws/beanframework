@@ -50,13 +50,13 @@ public class MenuServiceImpl implements MenuService {
 	@Cacheable(value = "MenuOne", key = "#uuid")
 	@Override
 	public Menu findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Menu.class);
+		return modelService.findOneEntityByUuid(uuid, true, Menu.class);
 	}
 
 	@Cacheable(value = "MenuOneProperties", key = "#properties")
 	@Override
 	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Menu.class);
+		return modelService.findOneEntityByProperties(properties, true,Menu.class);
 	}
 
 	@Cacheable(value = "MenusHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -96,7 +96,7 @@ public class MenuServiceImpl implements MenuService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Menu model = modelService.findOneEntityByUuid(uuid, Menu.class);
+			Menu model = modelService.findOneEntityByUuid(uuid, true, Menu.class);
 			modelService.deleteByEntity(model, Menu.class);
 
 		} catch (Exception e) {
@@ -190,7 +190,7 @@ public class MenuServiceImpl implements MenuService {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
 
-		List<Menu> menuTree = modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
+		List<Menu> menuTree = modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, true, Menu.class);
 
 		return menuTree;
 	}

@@ -28,7 +28,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 
 			if (source.getUuid() != null) {
 
-				UserGroup prototype = modelService.findOneEntityByUuid(source.getUuid(), UserGroup.class);
+				UserGroup prototype = modelService.findOneEntityByUuid(source.getUuid(), true, UserGroup.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);
@@ -132,7 +132,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 				}
 
 				if (add) {
-					UserGroup entityUserGroup = modelService.findOneEntityByUuid(sourceUserGroup.getUuid(), UserGroup.class);
+					UserGroup entityUserGroup = modelService.findOneEntityByUuid(sourceUserGroup.getUuid(), true, UserGroup.class);
 					if (entityUserGroup != null) {
 						prototype.getUserGroups().add(entityUserGroup);
 						prototype.setLastModifiedDate(lastModifiedDate);

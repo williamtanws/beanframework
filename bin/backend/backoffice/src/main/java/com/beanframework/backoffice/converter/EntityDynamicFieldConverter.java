@@ -28,7 +28,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicField.UUID, source.getUuid());
-				DynamicField prototype = modelService.findOneEntityByProperties(properties, DynamicField.class);
+				DynamicField prototype = modelService.findOneEntityByProperties(properties, true,DynamicField.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);
@@ -103,7 +103,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 				}
 			} else if (prototype.getLanguage() == null || prototype.getLanguage().getUuid().equals(UUID.fromString(source.getLanguageUuid())) == false) {
 
-				Language entityLanguage = modelService.findOneEntityByUuid(UUID.fromString(source.getLanguageUuid()), Language.class);
+				Language entityLanguage = modelService.findOneEntityByUuid(UUID.fromString(source.getLanguageUuid()), true, Language.class);
 
 				if (entityLanguage != null) {
 					prototype.setLanguage(entityLanguage);

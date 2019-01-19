@@ -30,7 +30,7 @@ public class ConfigurationResource {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
 		
-		Configuration configuration = modelService.findOneEntityByProperties(properties, Configuration.class);
+		Configuration configuration = modelService.findOneEntityByProperties(properties, true,Configuration.class);
 
 		String uuidStr = (String) requestParams.get(ConsoleWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {

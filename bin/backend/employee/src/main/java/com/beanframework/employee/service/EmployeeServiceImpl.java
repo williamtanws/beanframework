@@ -90,25 +90,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Cacheable(value = "EmployeeOne", key = "#uuid")
 	@Override
 	public Employee findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Employee.class);
+		return modelService.findOneEntityByUuid(uuid, true, Employee.class);
 	}
 
 	@Cacheable(value = "EmployeeOneProperties", key = "#properties")
 	@Override
 	public Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Employee.class);
+		return modelService.findOneEntityByProperties(properties, true,Employee.class);
 	}
 
-	@Cacheable(value = "EmployeesSorts", key = "#sorts")
+	@Cacheable(value = "EmployeesSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<Employee> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Employee.class);
+	public List<Employee> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Employee.class);
 	}
 
 	@Cacheable(value = "EmployeesPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Employee> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, Employee.class);
+		return modelService.findEntityPage(specification, pageable, false, Employee.class);
 	}
 
 	@Cacheable(value = "EmployeesHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -152,7 +152,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Employee model = modelService.findOneEntityByUuid(uuid, Employee.class);
+			Employee model = modelService.findOneEntityByUuid(uuid, true, Employee.class);
 			modelService.deleteByEntity(model, Employee.class);
 
 		} catch (Exception e) {
@@ -202,7 +202,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
-		Employee entity = modelService.findOneEntityByProperties(properties, Employee.class);
+		Employee entity = modelService.findOneEntityByProperties(properties, true,Employee.class);
 
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");

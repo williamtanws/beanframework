@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.interceptor.CronjobInitialDefaultsInterceptor;
+import com.beanframework.cronjob.interceptor.CronjobInitializeInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobLoadInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobPrepareInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobRemoveInterceptor;
@@ -13,6 +14,11 @@ import com.beanframework.cronjob.interceptor.CronjobValidateInterceptor;
 
 @Configuration
 public class CronjobInterceptorConfig {
+
+	//////////////////////////////////
+	// Initial Defaults Interceptor //
+	//////////////////////////////////
+
 	@Bean
 	public CronjobInitialDefaultsInterceptor cronjobInitialDefaultsInterceptor() {
 		return new CronjobInitialDefaultsInterceptor();
@@ -20,40 +26,34 @@ public class CronjobInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping cronjobInitialDefaultsInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobInitialDefaultsInterceptor());
-		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(cronjobInitialDefaultsInterceptor());
+		mapping.setTypeCode(Cronjob.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
+	}
+
+	////////////////////////////
+	// Initialize Interceptor //
+	////////////////////////////
+
+	@Bean
+	public CronjobInitializeInterceptor cronjobInitializeInterceptor() {
+		return new CronjobInitializeInterceptor();
 	}
 
 	@Bean
-	public CronjobValidateInterceptor cronjobValidateInterceptor() {
-		return new CronjobValidateInterceptor();
+	public InterceptorMapping cronjobInitializeInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(cronjobInitializeInterceptor());
+		mapping.setTypeCode(Cronjob.class.getSimpleName());
+
+		return mapping;
 	}
 
-	@Bean
-	public InterceptorMapping cronjobValidateInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobValidateInterceptor());
-		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public CronjobPrepareInterceptor cronjobPrepareInterceptor() {
-		return new CronjobPrepareInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping cronjobPrepareInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobPrepareInterceptor());
-		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return interceptorMapping;
-	}
+	//////////////////////
+	// Load Interceptor //
+	//////////////////////
 
 	@Bean
 	public CronjobLoadInterceptor cronjobLoadInterceptor() {
@@ -62,12 +62,52 @@ public class CronjobInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping cronjobLoadInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobLoadInterceptor());
-		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(cronjobLoadInterceptor());
+		mapping.setTypeCode(Cronjob.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
 	}
+
+	/////////////////////////
+	// Prepare Interceptor //
+	/////////////////////////
+
+	@Bean
+	public CronjobPrepareInterceptor cronjobPrepareInterceptor() {
+		return new CronjobPrepareInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping cronjobPrepareInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(cronjobPrepareInterceptor());
+		mapping.setTypeCode(Cronjob.class.getSimpleName());
+
+		return mapping;
+	}
+
+	//////////////////////////
+	// Validate Interceptor //
+	//////////////////////////
+
+	@Bean
+	public CronjobValidateInterceptor cronjobValidateInterceptor() {
+		return new CronjobValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping cronjobValidateInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(cronjobValidateInterceptor());
+		mapping.setTypeCode(Cronjob.class.getSimpleName());
+
+		return mapping;
+	}
+
+	////////////////////////
+	// Remove Interceptor //
+	////////////////////////
 
 	@Bean
 	public CronjobRemoveInterceptor cronjobRemoveInterceptor() {
@@ -76,10 +116,10 @@ public class CronjobInterceptorConfig {
 
 	@Bean
 	public InterceptorMapping cronjobRemoveInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(cronjobRemoveInterceptor());
-		interceptorMapping.setTypeCode(Cronjob.class.getSimpleName());
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(cronjobRemoveInterceptor());
+		mapping.setTypeCode(Cronjob.class.getSimpleName());
 
-		return interceptorMapping;
+		return mapping;
 	}
 }

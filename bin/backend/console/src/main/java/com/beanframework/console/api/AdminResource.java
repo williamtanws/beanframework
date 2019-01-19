@@ -26,11 +26,11 @@ public class AdminResource {
 	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(ConsoleWebConstants.Param.ID).toString();
-		
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Admin.ID, id);
-		Admin admin = modelService.findOneEntityByProperties(properties, Admin.class);
-		
+		Admin admin = modelService.findOneEntityByProperties(properties, true, Admin.class);
+
 		String uuidStr = (String) requestParams.get(ConsoleWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);

@@ -37,25 +37,25 @@ public class CustomerServiceImpl implements CustomerService {
 	@Cacheable(value = "CustomerOne", key = "#uuid")
 	@Override
 	public Customer findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Customer.class);
+		return modelService.findOneEntityByUuid(uuid, true, Customer.class);
 	}
 
 	@Cacheable(value = "CustomerOneProperties", key = "#properties")
 	@Override
 	public Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Customer.class);
+		return modelService.findOneEntityByProperties(properties, true,Customer.class);
 	}
 
-	@Cacheable(value = "CustomersSorts", key = "#sorts")
+	@Cacheable(value = "CustomersSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<Customer> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Customer.class);
+	public List<Customer> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Customer.class);
 	}
 
 	@Cacheable(value = "CustomersPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<Customer> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, Customer.class);
+		return modelService.findEntityPage(specification, pageable, false, Customer.class);
 	}
 
 	@Cacheable(value = "CustomersHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -97,7 +97,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Customer model = modelService.findOneEntityByUuid(uuid, Customer.class);
+			Customer model = modelService.findOneEntityByUuid(uuid, true, Customer.class);
 			modelService.deleteByEntity(model, Customer.class);
 
 		} catch (Exception e) {

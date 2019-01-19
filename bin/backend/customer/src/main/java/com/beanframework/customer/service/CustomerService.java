@@ -20,7 +20,7 @@ public interface CustomerService {
 
 	Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Customer> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
+	List<Customer> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
 
 	<T> Page<Customer> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception;
 

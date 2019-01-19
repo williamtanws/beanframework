@@ -32,7 +32,7 @@ public class EntityCsvDynamicFieldEnumConverter implements EntityConverter<Dynam
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldEnum.ID, source.getId());
 
-				DynamicFieldEnum prototype = modelService.findOneEntityByProperties(properties, DynamicFieldEnum.class);
+				DynamicFieldEnum prototype = modelService.findOneEntityByProperties(properties, true,DynamicFieldEnum.class);
 
 				if (prototype != null) {
 

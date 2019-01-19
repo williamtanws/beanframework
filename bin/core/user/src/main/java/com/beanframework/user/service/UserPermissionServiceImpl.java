@@ -37,25 +37,25 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	@Cacheable(value = "UserPermissionOne", key = "#uuid")
 	@Override
 	public UserPermission findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, UserPermission.class);
+		return modelService.findOneEntityByUuid(uuid, true, UserPermission.class);
 	}
 
 	@Cacheable(value = "UserPermissionOneProperties", key = "#properties")
 	@Override
 	public UserPermission findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, UserPermission.class);
+		return modelService.findOneEntityByProperties(properties, true,UserPermission.class);
 	}
 
-	@Cacheable(value = "UserPermissionsSorts", key = "#sorts")
+	@Cacheable(value = "UserPermissionsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<UserPermission> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserPermission.class);
+	public List<UserPermission> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, UserPermission.class);
 	}
 
 	@Cacheable(value = "UserPermissionsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<UserPermission> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, UserPermission.class);
+		return modelService.findEntityPage(specification, pageable, false, UserPermission.class);
 	}
 
 	@Cacheable(value = "UserPermissionsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -97,7 +97,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			UserPermission model = modelService.findOneEntityByUuid(uuid, UserPermission.class);
+			UserPermission model = modelService.findOneEntityByUuid(uuid, true, UserPermission.class);
 			modelService.deleteByEntity(model, UserPermission.class);
 
 		} catch (Exception e) {

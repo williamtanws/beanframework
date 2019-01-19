@@ -29,7 +29,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserRight.UUID, source.getUuid());
 
-				UserRight prototype = modelService.findOneEntityByProperties(properties, UserRight.class);
+				UserRight prototype = modelService.findOneEntityByProperties(properties, true,UserRight.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);

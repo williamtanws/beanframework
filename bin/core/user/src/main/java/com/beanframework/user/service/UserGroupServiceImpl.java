@@ -37,25 +37,25 @@ public class UserGroupServiceImpl implements UserGroupService {
 	@Cacheable(value = "UserGroupOne", key = "#uuid")
 	@Override
 	public UserGroup findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, UserGroup.class);
+		return modelService.findOneEntityByUuid(uuid, true, UserGroup.class);
 	}
 
 	@Cacheable(value = "UserGroupOneProperties", key = "#properties")
 	@Override
 	public UserGroup findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, UserGroup.class);
+		return modelService.findOneEntityByProperties(properties, true,UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupsSorts", key = "#sorts")
+	@Cacheable(value = "UserGroupsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<UserGroup> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserGroup.class);
+	public List<UserGroup> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, UserGroup.class);
 	}
 
 	@Cacheable(value = "UserGroupsPage", key = "'query:'+#query+',pageable'+#pageable")
 	@Override
 	public <T> Page<UserGroup> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, UserGroup.class);
+		return modelService.findEntityPage(specification, pageable, false, UserGroup.class);
 	}
 
 	@Cacheable(value = "UserGroupsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
@@ -97,7 +97,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			UserGroup model = modelService.findOneEntityByUuid(uuid, UserGroup.class);
+			UserGroup model = modelService.findOneEntityByUuid(uuid, true, UserGroup.class);
 			modelService.deleteByEntity(model, UserGroup.class);
 
 		} catch (Exception e) {

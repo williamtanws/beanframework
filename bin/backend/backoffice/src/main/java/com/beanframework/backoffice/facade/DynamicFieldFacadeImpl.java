@@ -87,8 +87,8 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	@Override
 	public List<DynamicFieldDto> findAllDtoDynamicFields() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(DynamicFieldDto.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(dynamicFieldService.findEntityBySorts(sorts), DynamicFieldDto.class);
+		sorts.put(DynamicField.CREATED_DATE, Sort.Direction.DESC);
+		return modelService.getDto(dynamicFieldService.findEntityBySorts(sorts, false), DynamicFieldDto.class);
 	}
 
 }
