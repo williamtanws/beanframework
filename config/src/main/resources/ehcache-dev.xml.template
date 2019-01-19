@@ -4,92 +4,353 @@
 
 	<defaultCache maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.common.domain.Auditor" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
-		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.admin.domain.Admin" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
-		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.customer.domain.Customer" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
-		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.employee.domain.Employee" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<!-- Menu -->
+	<cache name="MenuOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 
-	<cache name="com.beanframework.menu.domain.Menu" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+	<cache name="MenuOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 
-	<cache name="com.beanframework.menu.domain.MenuField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+	<cache name="MenusSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 
-	<cache name="MenuNavigation" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+	<cache name="MenusPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.configuration.domain.Configuration" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="MenusHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.cronjob.domain.Cronjob" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="MenusRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.cronjob.domain.CronjobData" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="MenuTree" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.dynamicfield.domain.DynamicField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<!-- Auditor -->
+	<cache name="AuditorOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.dynamicfield.domain.DynamicFieldEnumValue" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="AuditorOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.email.domain.Email" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="AuditorsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-	
-	<cache name="com.beanframework.language.domain.Language" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="AuditorsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.user.domain.User" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="AuditorsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.user.domain.UserField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="AuditorsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.user.domain.UserGroup" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<!-- Admin -->
+	<cache name="AdminOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.user.domain.UserGroupField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="AdminOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.user.domain.UserPermission" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="AdminsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.user.domain.UserPermissionField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="AdminsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.user.domain.UserRight" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="AdminsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.user.domain.UserRightField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="AdminsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.user.domain.UserAuthority" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<!-- Customer -->
+	<cache name="CustomerOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.ppm.domain.PpmProject" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="CustomerOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.ppm.domain.PpmProjectField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="CustomersSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.ppm.domain.PpmInstruction" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="CustomersPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-		<cache name="com.beanframework.ppm.domain.PpmInstructionField" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="CustomersHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.ppm.domain.PpmProjectTemplate" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<cache name="CustomersRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
-	<cache name="com.beanframework.ppm.domain.PpmInstructionTemplate" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+
+	<!-- Employee -->
+	<cache name="EmployeeOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-		
+
+	<cache name="EmployeeOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="EmployeesSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="EmployeesPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="EmployeesHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="EmployeesRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- Configuration -->
+	<cache name="ConfigurationOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="ConfigurationOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="ConfigurationsAll" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="ConfigurationsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="ConfigurationsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="ConfigurationsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="ConfigurationsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- Cronjob -->
+	<cache name="CronjobOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="CronjobOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="CronjobsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="CronjobsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="CronjobsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="CronjobsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- DynamicField -->
+	<cache name="DynamicFieldOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="DynamicFieldOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="DynamicFieldsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="DynamicFieldsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="DynamicFieldsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="DynamicFieldsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- DynamicFieldEnum -->
+	<cache name="DynamicFieldEnumOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="DynamicFieldEnumOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="DynamicFieldEnumsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="DynamicFieldEnumsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="DynamicFieldEnumsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="DynamicFieldEnumsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- Email -->
+	<cache name="EmailOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="EmailOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="EmailsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="EmailsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="EmailsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="EmailsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- Language -->
+	<cache name="LanguageOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="LanguageOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="LanguagesSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="LanguagesPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="LanguagesHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="LanguagesRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- UserPermission -->
+	<cache name="UserPermissionOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserPermissionOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserPermissionsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserPermissionsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserPermissionsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserPermissionsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- UserRight -->
+	<cache name="UserRightOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserRightOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserRightsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserRightsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserRightsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserRightsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- UserGroup -->
+	<cache name="UserGroupOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserGroupOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserGroupsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserGroupsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserGroupsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="UserGroupsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- PPM Project -->
+	<cache name="PpmProjectOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmProjectOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmProjectsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmProjectsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmProjectsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmProjectsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- PPM Project Template -->
+	<cache name="PpmProjectTemplateOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmProjectTemplateOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmProjectTemplatesSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmProjectTemplatesPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmProjectTemplatesHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmProjectTemplatesRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- PPM Instruction -->
+	<cache name="PpmInstructionOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmInstructionOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmInstructionsSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmInstructionsPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmInstructionsHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmInstructionsRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<!-- PPM Instruction Template -->
+	<cache name="PpmInstructionTemplateOne" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmInstructionTemplateOneProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmInstructionTemplatesSorts" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmInstructionTemplatesPage" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmInstructionTemplatesHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
+	<cache name="PpmInstructionTemplatesRelatedHistory" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
+
 </ehcache>
