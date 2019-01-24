@@ -5,12 +5,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.backoffice.data.CronjobDataDto;
 import com.beanframework.backoffice.data.CronjobDto;
-import com.beanframework.backoffice.data.CronjobSearch;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 
 public interface CronjobFacade {
@@ -21,9 +20,6 @@ public interface CronjobFacade {
 		public static final String UPDATE = "hasAuthority('cronjob_update')";
 		public static final String DELETE = "hasAuthority('cronjob_delete')";
 	}
-
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	Page<CronjobDto> findPage(CronjobSearch search, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	CronjobDto findOneByUuid(UUID uuid) throws Exception;
@@ -40,8 +36,9 @@ public interface CronjobFacade {
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	Page<CronjobDto> findPage(DataTableRequest<CronjobDto> dataTableRequest) throws Exception;
+
+	int count() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
 	void trigger(CronjobDto model) throws BusinessException;
@@ -54,5 +51,9 @@ public interface CronjobFacade {
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
 	void removeCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException;
+
+	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
+	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
 
 }

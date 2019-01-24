@@ -17,6 +17,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -38,7 +39,7 @@ public class Cronjob extends GenericEntity {
 	 */
 	private static final long serialVersionUID = 8939913795649500178L;
 	public static final String JOB_CLASS = "jobClass";
-	public static final String JOB_NAME = "jobName";
+	public static final String NAME = "name";
 	public static final String JOB_GROUP = "jobGroup";
 	public static final String DESCRIPTION = "description";
 	public static final String CRON_EXPRESSION = "cronExpression";
@@ -54,13 +55,13 @@ public class Cronjob extends GenericEntity {
 	public static final String STATUS = "status";
 
 	@Audited(withModifiedFlag = true)
+	private String name;
+
+	@Audited(withModifiedFlag = true)
 	private String jobClass;
 
 	@Audited(withModifiedFlag = true)
 	private String jobGroup;
-
-	@Audited(withModifiedFlag = true)
-	private String jobName;
 
 	@Audited(withModifiedFlag = true)
 	private String description;
@@ -100,10 +101,19 @@ public class Cronjob extends GenericEntity {
 	@NotAudited
 	private Date lastFinishExecutedDate;
 
+	@AuditMappedBy(mappedBy = CronjobData.CRONJOB) 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = CronjobData.CRONJOB, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy("createdDate DESC")
 	private List<CronjobData> cronjobDatas = new ArrayList<CronjobData>(0);
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getJobClass() {
 		return jobClass;
@@ -119,14 +129,6 @@ public class Cronjob extends GenericEntity {
 
 	public void setJobGroup(String jobGroup) {
 		this.jobGroup = jobGroup;
-	}
-
-	public String getJobName() {
-		return jobName;
-	}
-
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
 	}
 
 	public String getDescription() {

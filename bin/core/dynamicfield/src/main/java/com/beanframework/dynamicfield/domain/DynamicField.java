@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -36,7 +37,7 @@ public class DynamicField extends GenericEntity {
 	 */
 	private static final long serialVersionUID = 4733112810509713059L;
 	public static final String NAME = "name";
-	public static final String FIELD_TYPE = "fieldType";
+	public static final String TYPE = "type";
 	public static final String SORT = "sort";
 	public static final String REQUIRED = "required";
 	public static final String RULE = "rule";
@@ -68,6 +69,7 @@ public class DynamicField extends GenericEntity {
 	@JoinColumn(name = "language_uuid")
 	private Language language;
 
+	@AuditMappedBy(mappedBy = DynamicFieldEnum.DYNAMIC_FIELD) 
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = DynamicFieldEnum.DYNAMIC_FIELD, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(DynamicFieldEnum.SORT + " ASC")

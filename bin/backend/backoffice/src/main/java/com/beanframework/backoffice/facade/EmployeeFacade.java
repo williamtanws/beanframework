@@ -6,12 +6,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.backoffice.data.EmployeeDto;
-import com.beanframework.backoffice.data.EmployeeSearch;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.employee.EmployeeSession;
 
@@ -30,9 +29,6 @@ public interface EmployeeFacade {
 	}
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
-	Page<EmployeeDto> findPage(EmployeeSearch search, PageRequest pageRequest) throws Exception;
-
-	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
 	EmployeeDto findOneByUuid(UUID uuid) throws Exception;
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
@@ -47,11 +43,9 @@ public interface EmployeeFacade {
 	@PreAuthorize(EmployeePreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	Page<EmployeeDto> findPage(DataTableRequest<EmployeeDto> dataTableRequest) throws Exception;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
-	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	int count() throws Exception;
 
 	List<EmployeeDto> findAllDtoEmployees() throws Exception;
 
@@ -67,5 +61,9 @@ public interface EmployeeFacade {
 	EmployeeDto saveProfile(EmployeeDto employee, MultipartFile picture) throws BusinessException;
 
 	EmployeeDto getProfile() throws Exception;
+
+	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
+	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
 
 }

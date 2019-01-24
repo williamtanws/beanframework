@@ -2,12 +2,12 @@ package com.beanframework.backoffice;
 
 public interface CustomerWebConstants {
 
-	public static final String LIST_SIZE = "${module.customer.list.size}";
-
 	public interface Path {
 
 		public interface Api {
 			public static final String CHECKID = "${path.api.customer.checkid}";
+			public static final String PAGE = "${path.api.customer.page}";
+			public static final String HISTORY = "${path.api.customer.history}";
 		}
 
 		public static final String CUSTOMER = "${path.customer}";
@@ -23,6 +23,5 @@ public interface CustomerWebConstants {
 		public static final String CREATE = "customerCreate";
 		public static final String UPDATE = "customerUpdate";
 		public static final String PROFILE = "customerProfile";
-		public static final String SEARCH = "customerSearch";
 	}
 }

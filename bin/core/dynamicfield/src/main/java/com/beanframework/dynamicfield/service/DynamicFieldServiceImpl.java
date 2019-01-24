@@ -1,10 +1,10 @@
 package com.beanframework.dynamicfield.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -13,11 +13,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
@@ -42,7 +41,7 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 	@Cacheable(value = "DynamicFieldOneProperties", key = "#properties")
 	@Override
 	public DynamicField findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true,DynamicField.class);
+		return modelService.findOneEntityByProperties(properties, true, DynamicField.class);
 	}
 
 	@Cacheable(value = "DynamicFieldsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
@@ -51,27 +50,12 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, DynamicField.class);
 	}
 
-	@Cacheable(value = "DynamicFieldsPage", key = "'query:'+#query+',pageable'+#pageable")
-	@Override
-	public <T> Page<DynamicField> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, false, DynamicField.class);
-	}
-
-	@Cacheable(value = "DynamicFieldsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
-	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, DynamicField.class);
-	}
-
 	@Caching(evict = { //
 			@CacheEvict(value = "DynamicFieldOneProperties", key = "#model.uuid", condition = "#model.uuid != null"), //
 			@CacheEvict(value = "DynamicFieldOneProperties", allEntries = true), //
 			@CacheEvict(value = "DynamicFieldsSorts", allEntries = true), //
 			@CacheEvict(value = "DynamicFieldsPage", allEntries = true), //
-			@CacheEvict(value = "DynamicFieldsHistory", allEntries = true), //
-			@CacheEvict(value = "DynamicFieldsRelatedHistory", allEntries = true) }) //
+			@CacheEvict(value = "DynamicFieldsHistory", allEntries = true) }) //
 	@Override
 	public DynamicField saveEntity(DynamicField model) throws BusinessException {
 		return (DynamicField) modelService.saveEntity(model, DynamicField.class);
@@ -82,8 +66,7 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 			@CacheEvict(value = "DynamicFieldOneProperties", allEntries = true), //
 			@CacheEvict(value = "DynamicFieldsSorts", allEntries = true), //
 			@CacheEvict(value = "DynamicFieldsPage", allEntries = true), //
-			@CacheEvict(value = "DynamicFieldsHistory", allEntries = true), //
-			@CacheEvict(value = "DynamicFieldsRelatedHistory", allEntries = true) })
+			@CacheEvict(value = "DynamicFieldsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
@@ -94,5 +77,44 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
+
+	@Cacheable(value = "DynamicFieldsPage", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public <T> Page<DynamicField> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception {
+		return modelService.findEntityPage(dataTableRequest.getSpecification(), dataTableRequest.getPageable(), false, DynamicField.class);
+	}
+
+	@Cacheable(value = "DynamicFieldsPage", key = "'count'")
+	@Override
+	public int count() throws Exception {
+		return modelService.count(DynamicField.class);
+	}
+
+	@Cacheable(value = "DynamicFieldsHistory", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(dataTableRequest.getAuditCriterion());
+
+		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
+		if (dataTableRequest.getAuditOrder() != null)
+			auditOrders.add(dataTableRequest.getAuditOrder());
+
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), DynamicField.class);
+
+	}
+
+	@Cacheable(value = "DynamicFieldsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
+	@Override
+	public int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
+
+		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), DynamicField.class);
 	}
 }

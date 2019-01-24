@@ -8,13 +8,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.LanguageDto;
-import com.beanframework.backoffice.data.LanguageSearch;
-import com.beanframework.backoffice.data.LanguageSpecification;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
@@ -28,13 +26,6 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	
 	@Autowired
 	private LanguageService languageService;
-
-	@Override
-	public Page<LanguageDto> findPage(LanguageSearch search, PageRequest pageable) throws Exception {
-		Page<Language> page = languageService.findEntityPage(search.toString(), LanguageSpecification.findByCriteria(search), pageable);
-		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class);
-		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());
-	}
 
 	@Override
 	public LanguageDto findOneByUuid(UUID uuid) throws Exception {
@@ -73,15 +64,36 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		languageService.deleteByUuid(uuid);
 	}
+	
+	@Override
+	public Page<LanguageDto> findPage(DataTableRequest<LanguageDto> dataTableRequest) throws Exception {
+		Page<Language> page = languageService.findEntityPage(dataTableRequest);
+		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class);
+		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());
+	}
 
 	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = languageService.findHistoryByUuid(uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], LanguageDto.class);
-//		}
+	public int count() throws Exception {
+		return languageService.count();
+	}
+	
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<Object[]> revisions = languageService.findHistory(dataTableRequest);
+		for (int i = 0; i < revisions.size(); i++) {
+			Object[] entityObject = revisions.get(i);
+			if (entityObject[0] instanceof Language)
+				entityObject[0] = modelService.getDto(entityObject[0], LanguageDto.class);
+			revisions.set(i, entityObject);
+		}
 
 		return revisions;
+	}
+
+	@Override
+	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+		return languageService.findCountHistory(dataTableRequest);
 	}
 
 	@Override

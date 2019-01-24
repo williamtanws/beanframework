@@ -8,13 +8,15 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.MenuDto;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.service.MenuService;
 
 @Component
@@ -90,30 +92,41 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 
 	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = menuService.findHistoryByUuid(uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], MenuDto.class);
-//		}
-
-		return revisions;
-	}
-
-	@Override
-	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = menuService.findHistoryByRelatedUuid(MenuField.MENU, uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], MenuFieldDto.class);
-//		}
-
-		return revisions;
-	}
-
-	@Override
 	public List<Menu> findMenuTreeByCurrentUser() throws Exception {
 		List<Menu> menuTree = new ArrayList<Menu>();
 		menuTree.addAll(menuService.findEntityMenuTree());
 		
 		return menuService.filterEntityMenuTreeByCurrentUser(menuTree);
+	}
+	
+	@Override
+	public Page<MenuDto> findPage(DataTableRequest<MenuDto> dataTableRequest) throws Exception {
+		Page<Menu> page = menuService.findEntityPage(dataTableRequest);
+		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class);
+		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());
+	}
+
+	@Override
+	public int count() throws Exception {
+		return menuService.count();
+	}
+	
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<Object[]> revisions = menuService.findHistory(dataTableRequest);
+		for (int i = 0; i < revisions.size(); i++) {
+			Object[] entityObject = revisions.get(i);
+			if (entityObject[0] instanceof Menu)
+				entityObject[0] = modelService.getDto(entityObject[0], MenuDto.class);
+			revisions.set(i, entityObject);
+		}
+
+		return revisions;
+	}
+
+	@Override
+	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+		return menuService.findCountHistory(dataTableRequest);
 	}
 }

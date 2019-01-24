@@ -1,12 +1,12 @@
 package com.beanframework.admin.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -16,9 +16,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -30,9 +28,9 @@ import org.springframework.stereotype.Service;
 
 import com.beanframework.admin.AdminConstants;
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.user.domain.UserField;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.utils.PasswordUtils;
 
@@ -65,7 +63,7 @@ public class AdminServiceImpl implements AdminService {
 	@Cacheable(value = "AdminOneProperties", key = "#properties")
 	@Override
 	public Admin findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true,Admin.class);
+		return modelService.findOneEntityByProperties(properties, true, Admin.class);
 	}
 
 	@Cacheable(value = "AdminsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
@@ -74,35 +72,12 @@ public class AdminServiceImpl implements AdminService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Admin.class);
 	}
 
-	@Cacheable(value = "AdminsPage", key = "'query:'+#query+',pageable'+#pageable")
-	@Override
-	public <T> Page<Admin> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, false, Admin.class);
-	}
-
-	@Cacheable(value = "AdminsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
-	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Admin.class);
-	}
-
-	@Cacheable(value = "AdminsRelatedHistory", key = "'relatedEntity:'+#relatedEntity+',uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
-	@Override
-	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, UserField.class);
-	}
-
 	@Caching(evict = { //
 			@CacheEvict(value = "AdminOne", key = "#model.uuid", condition = "#model.uuid != null"), //
 			@CacheEvict(value = "AdminOneProperties", allEntries = true), //
 			@CacheEvict(value = "AdminsSorts", allEntries = true), //
 			@CacheEvict(value = "AdminsPage", allEntries = true), //
-			@CacheEvict(value = "AdminsHistory", allEntries = true), //
-			@CacheEvict(value = "AdminsRelatedHistory", allEntries = true) }) //
+			@CacheEvict(value = "AdminsHistory", allEntries = true) }) //
 	@Override
 	public Admin saveEntity(Admin model) throws BusinessException {
 		model = (Admin) modelService.saveEntity(model, Admin.class);
@@ -115,8 +90,7 @@ public class AdminServiceImpl implements AdminService {
 			@CacheEvict(value = "AdminOneProperties", allEntries = true), //
 			@CacheEvict(value = "AdminsSorts", allEntries = true), //
 			@CacheEvict(value = "AdminsPage", allEntries = true), //
-			@CacheEvict(value = "AdminsHistory", allEntries = true), //
-			@CacheEvict(value = "AdminsRelatedHistory", allEntries = true) })
+			@CacheEvict(value = "AdminsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
@@ -127,6 +101,18 @@ public class AdminServiceImpl implements AdminService {
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
+
+	@Cacheable(value = "AdminsPage", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public <T> Page<Admin> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception {
+		return modelService.findEntityPage(dataTableRequest.getSpecification(), dataTableRequest.getPageable(), false, Admin.class);
+	}
+
+	@Cacheable(value = "AdminsPage", key = "'count'")
+	@Override
+	public int count() throws Exception {
+		return modelService.count(Admin.class);
 	}
 
 	@Override
@@ -183,6 +169,33 @@ public class AdminServiceImpl implements AdminService {
 		} else {
 			return null;
 		}
+	}
+	
+	@Cacheable(value = "AdminsHistory", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(dataTableRequest.getAuditCriterion());
+
+		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
+		if (dataTableRequest.getAuditOrder() != null)
+			auditOrders.add(dataTableRequest.getAuditOrder());
+		
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Admin.class);
+
+	}
+
+	@Cacheable(value = "AdminsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
+	@Override
+	public int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
+
+		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Admin.class);
 	}
 
 }

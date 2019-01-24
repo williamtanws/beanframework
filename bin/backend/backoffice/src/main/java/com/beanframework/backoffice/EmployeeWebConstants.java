@@ -1,8 +1,6 @@
 package com.beanframework.backoffice;
 
 public interface EmployeeWebConstants {
-
-	public static final String LIST_SIZE = "${module.employee.list.size}";
 	
 	public interface Session {
 		public interface Path {
@@ -18,6 +16,8 @@ public interface EmployeeWebConstants {
 
 		public interface Api {
 			public static final String CHECKID = "${path.api.employee.checkid}";
+			public static final String PAGE = "${path.api.employee.page}";
+			public static final String HISTORY = "${path.api.employee.history}";
 		}
 
 		public static final String EMPLOYEE = "${path.employee}";
@@ -35,7 +35,6 @@ public interface EmployeeWebConstants {
 		public static final String CREATE = "employeeCreate";
 		public static final String UPDATE = "employeeUpdate";
 		public static final String PROFILE = "employeeProfile";
-		public static final String SEARCH = "employeeSearch";
 	}
 	
 	public interface Locale {

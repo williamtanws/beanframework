@@ -10,13 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.backoffice.data.EmailDto;
-import com.beanframework.backoffice.data.EmailSearch;
-import com.beanframework.backoffice.data.EmailSpecification;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.email.domain.Email;
@@ -32,13 +30,6 @@ public class EmailFacadeImpl implements EmailFacade {
 
 	@Autowired
 	private ModelService modelService;
-	
-	@Override
-	public Page<EmailDto> findPage(EmailSearch search, PageRequest pageable) throws Exception {
-		Page<Email> page = emailService.findEntityPage(search.toString(), EmailSpecification.findByCriteria(search), pageable);
-		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class);
-		return new PageImpl<EmailDto>(dtos, page.getPageable(), page.getTotalElements());
-	}
 
 	@Override
 	public EmailDto findOneByUuid(UUID uuid) throws Exception {
@@ -79,13 +70,15 @@ public class EmailFacadeImpl implements EmailFacade {
 	}
 
 	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = emailService.findHistoryByUuid(uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], EmailDto.class);
-//		}
+	public Page<EmailDto> findPage(DataTableRequest<EmailDto> dataTableRequest) throws Exception {
+		Page<Email> page = emailService.findEntityPage(dataTableRequest);
+		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class);
+		return new PageImpl<EmailDto>(dtos, page.getPageable(), page.getTotalElements());
+	}
 
-		return revisions;
+	@Override
+	public int count() throws Exception {
+		return emailService.count();
 	}
 
 	@Override
@@ -104,5 +97,24 @@ public class EmailFacadeImpl implements EmailFacade {
 		} catch (IOException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<Object[]> revisions = emailService.findHistory(dataTableRequest);
+		for (int i = 0; i < revisions.size(); i++) {
+			Object[] entityObject = revisions.get(i);
+			if (entityObject[0] instanceof Email)
+				entityObject[0] = modelService.getDto(entityObject[0], EmailDto.class);
+			revisions.set(i, entityObject);
+		}
+
+		return revisions;
+	}
+
+	@Override
+	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+		return emailService.findCountHistory(dataTableRequest);
 	}
 }

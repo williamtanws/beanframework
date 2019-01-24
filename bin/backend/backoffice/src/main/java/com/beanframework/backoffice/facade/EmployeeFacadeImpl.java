@@ -9,20 +9,17 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.backoffice.data.EmployeeDto;
-import com.beanframework.backoffice.data.EmployeeSearch;
-import com.beanframework.backoffice.data.EmployeeSpecification;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
-import com.beanframework.user.domain.UserField;
 
 @Component
 public class EmployeeFacadeImpl implements EmployeeFacade {
@@ -32,13 +29,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private EmployeeService employeeService;
-
-	@Override
-	public Page<EmployeeDto> findPage(EmployeeSearch search, PageRequest pageable) throws Exception {
-		Page<Employee> page = employeeService.findEntityPage(search.toString(), EmployeeSpecification.findByCriteria(search), pageable);
-		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class);
-		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
-	}
 
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
@@ -76,26 +66,19 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		employeeService.deleteByUuid(uuid);
+		employeeService.deleteEmployeeProfilePictureByUuid(uuid);
 	}
 
 	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = employeeService.findHistoryByUuid(uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], EmployeeDto.class);
-//		}
-
-		return revisions;
+	public Page<EmployeeDto> findPage(DataTableRequest<EmployeeDto> dataTableRequest) throws Exception {
+		Page<Employee> page = employeeService.findEntityPage(dataTableRequest);
+		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class);
+		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
 	@Override
-	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = employeeService.findHistoryByRelatedUuid(UserField.USER, uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserFieldDto.class);
-//		}
-
-		return revisions;
+	public int count() throws Exception {
+		return employeeService.count();
 	}
 
 	@Override
@@ -149,5 +132,24 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public EmployeeDto getProfile() throws Exception {
 		Employee employee = employeeService.getProfile();
 		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), EmployeeDto.class);
+	}
+
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<Object[]> revisions = employeeService.findHistory(dataTableRequest);
+		for (int i = 0; i < revisions.size(); i++) {
+			Object[] entityObject = revisions.get(i);
+			if (entityObject[0] instanceof Employee)
+				entityObject[0] = modelService.getDto(entityObject[0], EmployeeDto.class);
+			revisions.set(i, entityObject);
+		}
+
+		return revisions;
+	}
+
+	@Override
+	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+		return employeeService.findCountHistory(dataTableRequest);
 	}
 }

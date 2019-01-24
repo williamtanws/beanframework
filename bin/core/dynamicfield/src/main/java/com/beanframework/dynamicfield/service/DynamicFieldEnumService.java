@@ -5,10 +5,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
 
@@ -22,11 +21,15 @@ public interface DynamicFieldEnumService {
 
 	List<DynamicFieldEnum> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
 
-	<T> Page<DynamicFieldEnum> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception;
-
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-
 	DynamicFieldEnum saveEntity(DynamicFieldEnum model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
+
+	<T> Page<DynamicFieldEnum> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception;
+
+	int count() throws Exception;
+
+	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
+	int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
 }

@@ -4,19 +4,9 @@ import com.beanframework.common.data.GenericDto;
 
 public class MenuFieldDto extends GenericDto {
 
-	private MenuDto menu;
-
 	private DynamicFieldDto dynamicField;
 
 	private String value;
-
-	public MenuDto getMenu() {
-		return menu;
-	}
-
-	public void setMenu(MenuDto menu) {
-		this.menu = menu;
-	}
 
 	public DynamicFieldDto getDynamicField() {
 		return dynamicField;

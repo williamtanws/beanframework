@@ -8,13 +8,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.DynamicFieldEnumDto;
-import com.beanframework.backoffice.data.DynamicFieldEnumSearch;
-import com.beanframework.backoffice.data.DynamicFieldEnumSpecification;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
@@ -25,16 +23,9 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private DynamicFieldEnumService dynamicFieldEnumService;
-
-	@Override
-	public Page<DynamicFieldEnumDto> findPage(DynamicFieldEnumSearch search, PageRequest pageable) throws Exception {
-		Page<DynamicFieldEnum> page = dynamicFieldEnumService.findEntityPage(search.toString(), DynamicFieldEnumSpecification.findByCriteria(search), pageable);
-		List<DynamicFieldEnumDto> dtos = modelService.getDto(page.getContent(), DynamicFieldEnumDto.class);
-		return new PageImpl<DynamicFieldEnumDto>(dtos, page.getPageable(), page.getTotalElements());
-	}
 
 	@Override
 	public DynamicFieldEnumDto findOneByUuid(UUID uuid) throws Exception {
@@ -75,13 +66,34 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 	}
 
 	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = dynamicFieldEnumService.findHistoryByUuid(uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], DynamicFieldEnumDto.class);
-//		}
+	public Page<DynamicFieldEnumDto> findPage(DataTableRequest<DynamicFieldEnumDto> dataTableRequest) throws Exception {
+		Page<DynamicFieldEnum> page = dynamicFieldEnumService.findEntityPage(dataTableRequest);
+		List<DynamicFieldEnumDto> dtos = modelService.getDto(page.getContent(), DynamicFieldEnumDto.class);
+		return new PageImpl<DynamicFieldEnumDto>(dtos, page.getPageable(), page.getTotalElements());
+	}
+
+	@Override
+	public int count() throws Exception {
+		return dynamicFieldEnumService.count();
+	}
+	
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<Object[]> revisions = dynamicFieldEnumService.findHistory(dataTableRequest);
+		for (int i = 0; i < revisions.size(); i++) {
+			Object[] entityObject = revisions.get(i);
+			if (entityObject[0] instanceof DynamicFieldEnum)
+				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldEnumDto.class);
+			revisions.set(i, entityObject);
+		}
 
 		return revisions;
+	}
+	
+	@Override
+	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+		return dynamicFieldEnumService.findCountHistory(dataTableRequest);
 	}
 
 	@Override

@@ -10,12 +10,6 @@
 			<input type="hidden" name="update" />
 			<input type="hidden" name="status" th:value="${emailUpdate.status.name()}">
 			<input type="hidden" name="uuid" th:value="${emailUpdate.uuid}" />
-			<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
-			<input type="hidden" name="size" th:value="${pagination.getSize()}">
-			<input type="hidden" name="direction" th:value="${direction}">
-			<input type="hidden" name="properties" th:value="${properties}">
-			<input type="hidden" name="emailSearch.searchAll" th:value="${objectSearch.searchAll}" class="form-control">
-			<input type="hidden" th:each="field : ${searchFields}" th:name="'emailSearch.'+${field}" th:value="${objectSearch.__${field}__}" class="form-control">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -169,7 +163,7 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history">
 								<div class="box-body">
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/history :: history}"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.email.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -198,10 +192,6 @@
 					</div>
 					<form id="email-createattachment-form" role="form" th:action="@{${@environment.getProperty('path.email')}}" method="post" th:object="${emailUpdate}" enctype="multipart/form-data">
 						<input type="hidden" name="createattachment">
-						<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
-						<input type="hidden" name="size" th:value="${pagination.getSize()}">
-						<input type="hidden" name="direction" th:value="${direction}">
-						<input type="hidden" name="properties" th:value="${properties}">
 						<input type="hidden" name="uuid" th:value="${emailUpdate.uuid}">
 						<div class="modal-body">
 							<div class="modal-body">
@@ -242,10 +232,6 @@
 						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.no}+'  '"></button>
 						<form id="delete-email-form" th:action="@{${@environment.getProperty('path.email')}}" method="post" th:object="${emailSearch}">
 							<input type="hidden" name="deleteattachment">
-							<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
-							<input type="hidden" name="size" th:value="${pagination.getSize()}">
-							<input type="hidden" name="direction" th:value="${direction}">
-							<input type="hidden" name="properties" th:value="${properties}">
 							<input type="hidden" name="uuid" th:value="${emailUpdate.uuid}">
 							<input type="hidden" name="filename">
 							<button type="submit" class="btn btn-danger" th:text="#{module.backoffice.delete}"></button>

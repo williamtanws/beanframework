@@ -5,12 +5,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.backoffice.data.EmailDto;
-import com.beanframework.backoffice.data.EmailSearch;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 
 public interface EmailFacade {
@@ -21,9 +20,6 @@ public interface EmailFacade {
 		public static final String UPDATE = "hasAuthority('email_update')";
 		public static final String DELETE = "hasAuthority('email_delete')";
 	}
-
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	Page<EmailDto> findPage(EmailSearch search, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	EmailDto findOneByUuid(UUID uuid) throws Exception;
@@ -40,8 +36,9 @@ public interface EmailFacade {
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	Page<EmailDto> findPage(DataTableRequest<EmailDto> dataTableRequest) throws Exception;
+
+	int count() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
 	void saveAttachment(EmailDto email, MultipartFile[] attachments) throws BusinessException;
@@ -49,5 +46,8 @@ public interface EmailFacade {
 	@PreAuthorize(PreAuthorizeEnum.UPDATE)
 	void deleteAttachment(UUID uuid, String filename) throws BusinessException;
 
+	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
+	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
 
 }

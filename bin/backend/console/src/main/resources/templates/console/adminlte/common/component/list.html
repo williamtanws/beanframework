@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="list (title, objectUpdate, objectSearch, icon, listFields, paginationAction, searchFields, updateForm)">
+	<th:block layout:fragment="list (title, objectUpdate, objectSearch, icon, listFields, editFormAction, searchFields, editForm)">
 		<div class="col-md-12">
 			<div class="box box-solid">
 				<!-- /.box-header -->
@@ -73,7 +73,7 @@
 						</div>
 						<div id="collapseTwo" th:class="'panel-collapse collapse '+${objectUpdate.uuid == null ? '':'in'}">
 							<div class="box-body">
-								<th:block layout:insert="~{${updateForm} :: update}" th:if="${objectUpdate.uuid != null}"></th:block>
+								<th:block layout:insert="~{${editForm} :: update}" th:if="${objectUpdate.uuid != null}"></th:block>
 							</div>
 						</div>
 					</div>
@@ -81,7 +81,7 @@
 				<!-- /.box-body -->
 			</div>
 		</div>
-		<form id="pagination-sort-form" th:action="${paginationAction}" method="get" th:object="${objectSearch}" style="display: none">
+		<form id="pagination-sort-form" th:action="${editFormAction}" method="get" th:object="${objectSearch}" style="display: none">
 			<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
 			<input type="hidden" name="size" th:value="${pagination.getSize()}">
 			<input type="hidden" name="direction" th:value="${direction}">
@@ -89,7 +89,7 @@
 			<input type="hidden" name="searchAll" th:value="${objectSearch.searchAll}" class="form-control">
 			<input type="hidden" th:each="field : ${searchFields}" th:name="${field}" th:value="${objectSearch.__${field}__}" class="form-control">
 		</form>
-		<form id="get-form" th:action="${paginationAction}+'#tab_general'" method="get" th:object="${objectSearch}" style="display: none">
+		<form id="get-form" th:action="${editFormAction}+'#tab_general'" method="get" th:object="${objectSearch}" style="display: none">
 			<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
 			<input type="hidden" name="size" th:value="${pagination.getSize()}">
 			<input type="hidden" name="direction" th:value="${direction}">
@@ -98,7 +98,7 @@
 			<input type="hidden" name="searchAll" th:value="${objectSearch.searchAll}" class="form-control">
 			<input type="hidden" th:each="field : ${searchFields}" th:name="${field}" th:value="${objectSearch.__${field}__}" class="form-control">
 		</form>
-		<form id="pagination-form" th:action="${paginationAction}" method="get" th:object="${objectSearch}" style="display: none">
+		<form id="pagination-form" th:action="${editFormAction}" method="get" th:object="${objectSearch}" style="display: none">
 			<input type="hidden" name="page">
 			<input type="hidden" name="size" th:value="${pagination.getSize()}">
 			<input type="hidden" name="direction" th:value="${direction}">

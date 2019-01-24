@@ -1,8 +1,8 @@
 id,name,sort,icon,path,target,enabled,parent,userGroupIds,dynamicField
 system,System,10,fa fa-gears,,,true,,employeegroup,name_en=System;name_cn=系统
 field,Field,10,fa fa-columns,,,true,system,employeegroup,name_en=Field;name_cn=输入
-dynamicfieldenum,Dynamic Field Enum,10,fa fa-list-ol,/backoffice/dynamicfieldenum,,true,field,employeegroup,name_en=Dynamic Field Enum;name_cn=输入列举
-dynamicfield,Dynamic Field,20,fa fa-list-alt,/backoffice/dynamicfield,,true,field,employeegroup,name_en=Dynamic Field;name_cn=动态输入
+dynamicfield,Dynamic Field,10,fa fa-list-alt,/backoffice/dynamicfield,,true,field,employeegroup,name_en=Dynamic Field;name_cn=动态输入
+dynamicfieldenum,Dynamic Field Enum,20,fa fa-list-ol,/backoffice/dynamicfield/enum,,true,field,employeegroup,name_en=Dynamic Field Enum;name_cn=输入列举
 language,Language,20,fa fa-language,/backoffice/language,,true,system,employeegroup,name_en=Language;name_cn=语言
 userright,User Right,30,fa fa-user-plus,/backoffice/userright,,true,system,employeegroup,name_en=User Right;name_cn=用户权利
 userpermission,User Permission,40,fa fa-key,/backoffice/userpermission,,true,system,employeegroup,name_en=User Permission;name_cn=用户权限

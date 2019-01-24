@@ -3,6 +3,7 @@ package com.beanframework.employee.service;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -15,7 +16,6 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -30,9 +30,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -48,13 +46,13 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserAuthority;
-import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.utils.PasswordUtils;
@@ -105,35 +103,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Employee.class);
 	}
 
-	@Cacheable(value = "EmployeesPage", key = "'query:'+#query+',pageable'+#pageable")
-	@Override
-	public <T> Page<Employee> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, false, Employee.class);
-	}
-
-	@Cacheable(value = "EmployeesHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
-	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Employee.class);
-	}
-
-	@Cacheable(value = "EmployeesRelatedHistory", key = "'relatedEntity:'+#relatedEntity+',uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
-	@Override
-	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, UserField.class);
-	}
-
 	@Caching(evict = { //
 			@CacheEvict(value = "EmployeeOne", key = "#model.uuid", condition = "#model.uuid != null"), //
 			@CacheEvict(value = "EmployeeOneProperties", allEntries = true), //
 			@CacheEvict(value = "EmployeesSorts", allEntries = true), //
 			@CacheEvict(value = "EmployeesPage", allEntries = true), //
-			@CacheEvict(value = "EmployeesHistory", allEntries = true), //
-			@CacheEvict(value = "EmployeesRelatedHistory", allEntries = true) }) //
+			@CacheEvict(value = "EmployeesHistory", allEntries = true) }) //
 	@Override
 	public Employee saveEntity(Employee model) throws BusinessException {
 		model = (Employee) modelService.saveEntity(model, Employee.class);
@@ -146,8 +121,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			@CacheEvict(value = "EmployeeOneProperties", allEntries = true), //
 			@CacheEvict(value = "EmployeesSorts", allEntries = true), //
 			@CacheEvict(value = "EmployeesPage", allEntries = true), //
-			@CacheEvict(value = "EmployeesHistory", allEntries = true), //
-			@CacheEvict(value = "EmployeesRelatedHistory", allEntries = true) })
+			@CacheEvict(value = "EmployeesHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
@@ -158,6 +132,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
+	
+	@Cacheable(value = "EmployeesPage", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public <T> Page<Employee> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception {
+		return modelService.findEntityPage(dataTableRequest.getSpecification(), dataTableRequest.getPageable(), false, Employee.class);
+	}
+
+	@Cacheable(value = "EmployeesPage", key = "'count'")
+	@Override
+	public int count() throws Exception {
+		return modelService.count(Employee.class);
 	}
 
 	@Override
@@ -331,5 +317,32 @@ public class EmployeeServiceImpl implements EmployeeService {
 				sessionInformation.expireNow();
 			}
 		}
+	}
+	
+	@Cacheable(value = "EmployeesHistory", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(dataTableRequest.getAuditCriterion());
+
+		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
+		if (dataTableRequest.getAuditOrder() != null)
+			auditOrders.add(dataTableRequest.getAuditOrder());
+		
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
+
+	}
+
+	@Cacheable(value = "EmployeesHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
+	@Override
+	public int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
+
+		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
 	}
 }

@@ -25,12 +25,12 @@ public class CronjobDto extends GenericDto {
 	public static final String LAST_FINISH_EXECUTED_DATE = "lastFinishExecutedDate";
 	public static final String CRONJOB_DATAS = "cronjobDatas";
 	public static final String STATUS = "status";
+
+	private String name;
 	
 	private String jobClass;
 
 	private String jobGroup;
-
-	private String jobName;
 
 	private String description;
 
@@ -55,6 +55,16 @@ public class CronjobDto extends GenericDto {
 	private Date lastFinishExecutedDate;
 
 	private List<CronjobDataDto> cronjobDatas = new ArrayList<CronjobDataDto>(0);
+	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 
 	public String getJobClass() {
 		return jobClass;
@@ -70,14 +80,6 @@ public class CronjobDto extends GenericDto {
 
 	public void setJobGroup(String jobGroup) {
 		this.jobGroup = jobGroup;
-	}
-
-	public String getJobName() {
-		return jobName;
-	}
-
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
 	}
 
 	public String getDescription() {

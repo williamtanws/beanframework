@@ -2,8 +2,6 @@ package com.beanframework.backoffice;
 
 public interface HistoryWebConstants {
 
-	public static final String LIST_SIZE = "${module.history.list.size}";
-
 	public interface Path {
 
 		public interface Api {
@@ -21,7 +19,6 @@ public interface HistoryWebConstants {
 
 		public static final String CREATE = "historyCreate";
 		public static final String UPDATE = "historyUpdate";
-		public static final String SEARCH = "historySearch";
 	}
 	
 	public static interface PreAuthorize {

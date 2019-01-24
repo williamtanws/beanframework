@@ -44,7 +44,7 @@ public class DtoCronjobConverter implements DtoConverter<Cronjob, CronjobDto> {
 		prototype.setId(source.getId());
 		prototype.setJobClass(source.getJobClass());
 		prototype.setJobGroup(source.getJobGroup());
-		prototype.setJobName(source.getJobName());
+		prototype.setName(source.getName());
 
 		prototype.setDescription(source.getDescription());
 		prototype.setCronExpression(source.getCronExpression());

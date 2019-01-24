@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.dynamicfield.domain.DynamicFieldType;
-import com.beanframework.language.domain.Language;
 
 public class DynamicFieldDto extends GenericDto {
 	public static final String NAME = "name";
@@ -15,7 +14,7 @@ public class DynamicFieldDto extends GenericDto {
 	public static final String RULE = "rule";
 	public static final String LABEL = "label";
 	public static final String LANGUAGE = "language";
-	
+
 	private String name;
 
 	private DynamicFieldType type;
@@ -28,13 +27,15 @@ public class DynamicFieldDto extends GenericDto {
 
 	private String label;
 
-	private Language language;
+	private LanguageDto language;
 
 	private List<DynamicFieldEnumDto> enums = new ArrayList<DynamicFieldEnumDto>();
 
-	private String selected;
-	
 	private String languageUuid;
+
+	private String[] tableEnums;
+
+	private String[] tableSelectedEnums;
 
 	public String getName() {
 		return name;
@@ -84,11 +85,11 @@ public class DynamicFieldDto extends GenericDto {
 		this.label = label;
 	}
 
-	public Language getLanguage() {
+	public LanguageDto getLanguage() {
 		return language;
 	}
 
-	public void setLanguage(Language language) {
+	public void setLanguage(LanguageDto language) {
 		this.language = language;
 	}
 
@@ -100,20 +101,28 @@ public class DynamicFieldDto extends GenericDto {
 		this.enums = values;
 	}
 
-	public String getSelected() {
-		return selected;
-	}
-
-	public void setSelected(String selected) {
-		this.selected = selected;
-	}
-
 	public String getLanguageUuid() {
 		return languageUuid;
 	}
 
 	public void setLanguageUuid(String languageUuid) {
 		this.languageUuid = languageUuid;
+	}
+
+	public String[] getTableEnums() {
+		return tableEnums;
+	}
+
+	public void setTableEnums(String[] tableEnums) {
+		this.tableEnums = tableEnums;
+	}
+
+	public String[] getTableSelectedEnums() {
+		return tableSelectedEnums;
+	}
+
+	public void setTableSelectedEnums(String[] tableSelectedEnums) {
+		this.tableSelectedEnums = tableSelectedEnums;
 	}
 
 }

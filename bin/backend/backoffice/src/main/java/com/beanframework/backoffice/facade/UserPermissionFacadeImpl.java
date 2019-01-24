@@ -8,17 +8,14 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.UserPermissionDto;
-import com.beanframework.backoffice.data.UserPermissionSearch;
-import com.beanframework.backoffice.data.UserPermissionSpecification;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserPermissionField;
 import com.beanframework.user.service.UserPermissionService;
 
 @Component
@@ -29,13 +26,6 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Autowired
 	private UserPermissionService userPermissionService;
-
-	@Override
-	public Page<UserPermissionDto> findPage(UserPermissionSearch search, PageRequest pageable) throws Exception {
-		Page<UserPermission> page = userPermissionService.findEntityPage(search.toString(), UserPermissionSpecification.findByCriteria(search), pageable);
-		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class);
-		return new PageImpl<UserPermissionDto>(dtos, page.getPageable(), page.getTotalElements());
-	}
 
 	@Override
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
@@ -74,25 +64,36 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		userPermissionService.deleteByUuid(uuid);
 	}
+	
+	@Override
+	public Page<UserPermissionDto> findPage(DataTableRequest<UserPermissionDto> dataTableRequest) throws Exception {
+		Page<UserPermission> page = userPermissionService.findEntityPage(dataTableRequest);
+		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class);
+		return new PageImpl<UserPermissionDto>(dtos, page.getPageable(), page.getTotalElements());
+	}
 
 	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = userPermissionService.findHistoryByUuid(uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserPermissionDto.class);
-//		}
+	public int count() throws Exception {
+		return userPermissionService.count();
+	}
+	
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<Object[]> revisions = userPermissionService.findHistory(dataTableRequest);
+		for (int i = 0; i < revisions.size(); i++) {
+			Object[] entityObject = revisions.get(i);
+			if (entityObject[0] instanceof UserPermission)
+				entityObject[0] = modelService.getDto(entityObject[0], UserPermissionDto.class);
+			revisions.set(i, entityObject);
+		}
 
 		return revisions;
 	}
 
 	@Override
-	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = userPermissionService.findHistoryByRelatedUuid(UserPermissionField.USER_PERMISSION, uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserPermissionFieldDto.class);
-//		}
-
-		return revisions;
+	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+		return userPermissionService.findCountHistory(dataTableRequest);
 	}
 
 	@Override
@@ -101,5 +102,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 		sorts.put(UserPermission.CREATED_DATE, Sort.Direction.DESC);
 		return modelService.getDto(userPermissionService.findEntityBySorts(sorts, false), UserPermissionDto.class);
 	}
+
+
 
 }

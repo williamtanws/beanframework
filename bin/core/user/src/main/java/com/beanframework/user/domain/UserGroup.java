@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -46,11 +47,12 @@ public class UserGroup extends GenericEntity {
 	@JoinTable(name = UserGroupConstants.Table.USER_GROUP_USER_GROUP_REL, joinColumns = @JoinColumn(name = "uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@AuditMappedBy(mappedBy = UserAuthority.USER_GROUP)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserAuthority.USER_GROUP, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
 
+	@AuditMappedBy(mappedBy = UserGroupField.USER_GROUP)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy(UserGroupField.DYNAMIC_FIELD)

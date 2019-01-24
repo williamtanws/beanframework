@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.menu.domain.Menu;
 
@@ -15,10 +18,6 @@ public interface MenuService {
 
 	Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-
-	List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-
 	Menu saveEntity(Menu model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws Exception;
@@ -28,4 +27,12 @@ public interface MenuService {
 	List<Menu> findEntityMenuTree() throws Exception;
 
 	List<Menu> filterEntityMenuTreeByCurrentUser(List<Menu> cachedMenuTree) throws Exception;
+
+	<T> Page<Menu> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception;
+
+	int count() throws Exception;
+
+	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
+	int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
 }

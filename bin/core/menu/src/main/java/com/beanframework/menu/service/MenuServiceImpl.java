@@ -1,5 +1,6 @@
 package com.beanframework.menu.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,7 +11,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -18,16 +18,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.repository.MenuRepository;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
@@ -59,27 +60,10 @@ public class MenuServiceImpl implements MenuService {
 		return modelService.findOneEntityByProperties(properties, true,Menu.class);
 	}
 
-	@Cacheable(value = "MenusHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
-	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Menu.class);
-	}
-
-	@Cacheable(value = "MenusRelatedHistory", key = "'relatedEntity:'+#relatedEntity+',uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
-	@Override
-	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, MenuField.class);
-	}
-
 	@Caching(evict = { //
 			@CacheEvict(value = "MenuOne", key = "#model.uuid", condition = "#model.uuid != null"), //
 			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
 			@CacheEvict(value = "MenusHistory", allEntries = true), //
-			@CacheEvict(value = "MenusRelatedHistory", allEntries = true), //
 			@CacheEvict(value = "MenuTree", allEntries = true) }) //
 	@Override
 	public Menu saveEntity(Menu model) throws BusinessException {
@@ -90,7 +74,6 @@ public class MenuServiceImpl implements MenuService {
 			@CacheEvict(value = "MenuOne", key = "#uuid"), //
 			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
 			@CacheEvict(value = "MenusHistory", allEntries = true), //
-			@CacheEvict(value = "MenusRelatedHistory", allEntries = true), //
 			@CacheEvict(value = "MenuTree", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
@@ -109,7 +92,6 @@ public class MenuServiceImpl implements MenuService {
 			@CacheEvict(value = "MenuOne", key = "#toUuid", condition = "#toUuid != null"), //
 			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
 			@CacheEvict(value = "MenusHistory", allEntries = true), //
-			@CacheEvict(value = "MenusRelatedHistory", allEntries = true), //
 			@CacheEvict(value = "MenuTree", allEntries = true) })
 	@Transactional
 	@Override
@@ -266,5 +248,44 @@ public class MenuServiceImpl implements MenuService {
 				filterEmptyChildMenu(menuNext.getChilds());
 			}
 		}
+	}
+	
+	@Cacheable(value = "MenusPage", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public <T> Page<Menu> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception {
+		return modelService.findEntityPage(dataTableRequest.getSpecification(), dataTableRequest.getPageable(), false, Menu.class);
+	}
+
+	@Cacheable(value = "MenusPage", key = "'count'")
+	@Override
+	public int count() throws Exception {
+		return modelService.count(Menu.class);
+	}
+	
+	@Cacheable(value = "MenusHistory", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(dataTableRequest.getAuditCriterion());
+
+		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
+		if (dataTableRequest.getAuditOrder() != null)
+			auditOrders.add(dataTableRequest.getAuditOrder());
+		
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
+
+	}
+
+	@Cacheable(value = "MenusHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
+	@Override
+	public int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
+
+		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
 	}
 }

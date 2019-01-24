@@ -2,12 +2,12 @@ package com.beanframework.console;
 
 public interface AdminWebConstants {
 
-	public static final String LIST_SIZE = "${module.admin.list.size}";
-
 	public interface Path {
 
 		public interface Api {
 			public static final String CHECKID = "${path.api.admin.checkid}";
+			public static final String PAGE = "${path.api.admin.page}";
+			public static final String HISTORY = "${path.api.admin.history}";
 		}
 
 		public static final String PROFILE = "${path.admin.profile}";
@@ -24,7 +24,6 @@ public interface AdminWebConstants {
 		public static final String CREATE = "adminCreate";
 		public static final String UPDATE = "adminUpdate";
 		public static final String PROFILE = "adminProfile";
-		public static final String SEARCH = "adminSearch";
 	}
 	
 	public interface Locale {
