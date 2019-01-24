@@ -30,7 +30,6 @@ import com.beanframework.backoffice.facade.MenuFacade.MenuPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
-import com.beanframework.ppmbackoffice.facade.PpmProjectFacade.PpmProjectPreAuthorizeEnum;
 
 @Controller
 public class MenuController extends AbstractController {
