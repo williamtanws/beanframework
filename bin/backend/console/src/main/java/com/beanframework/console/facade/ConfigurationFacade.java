@@ -13,26 +13,26 @@ import com.beanframework.console.data.ConfigurationDto;
 
 public interface ConfigurationFacade {
 
-	public static interface PreAuthorizeEnum {
+	public static interface ConfigurationPreAuthorizeEnum {
 		public static final String READ = "hasAuthority('configuration_read')";
 		public static final String CREATE = "hasAuthority('configuration_create')";
 		public static final String UPDATE = "hasAuthority('configuration_update')";
 		public static final String DELETE = "hasAuthority('configuration_delete')";
 	}
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
 	ConfigurationDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
 	ConfigurationDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.CREATE)
 	ConfigurationDto create(ConfigurationDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.UPDATE)
 	ConfigurationDto update(ConfigurationDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
 	Page<ConfigurationDto> findPage(DataTableRequest<ConfigurationDto> dataTableRequest) throws Exception;

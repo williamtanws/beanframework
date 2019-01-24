@@ -14,36 +14,36 @@ import com.beanframework.common.exception.BusinessException;
 
 public interface EmailFacade {
 
-	public static interface PreAuthorizeEnum {
+	public static interface EmailPreAuthorizeEnum {
 		public static final String READ = "hasAuthority('email_read')";
 		public static final String CREATE = "hasAuthority('email_create')";
 		public static final String UPDATE = "hasAuthority('email_update')";
 		public static final String DELETE = "hasAuthority('email_delete')";
 	}
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(EmailPreAuthorizeEnum.READ)
 	EmailDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(EmailPreAuthorizeEnum.READ)
 	EmailDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	@PreAuthorize(EmailPreAuthorizeEnum.CREATE)
 	EmailDto create(EmailDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	@PreAuthorize(EmailPreAuthorizeEnum.UPDATE)
 	EmailDto update(EmailDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	@PreAuthorize(EmailPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
 	Page<EmailDto> findPage(DataTableRequest<EmailDto> dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	@PreAuthorize(EmailPreAuthorizeEnum.UPDATE)
 	void saveAttachment(EmailDto email, MultipartFile[] attachments) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	@PreAuthorize(EmailPreAuthorizeEnum.UPDATE)
 	void deleteAttachment(UUID uuid, String filename) throws BusinessException;
 
 	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;

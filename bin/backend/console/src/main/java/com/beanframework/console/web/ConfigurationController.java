@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,7 @@ import com.beanframework.console.ConfigurationWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.data.ConfigurationDto;
 import com.beanframework.console.facade.ConfigurationFacade;
+import com.beanframework.console.facade.ConfigurationFacade.ConfigurationPreAuthorizeEnum;
 
 @Controller
 public class ConfigurationController extends AbstractController {
@@ -45,6 +47,7 @@ public class ConfigurationController extends AbstractController {
 		return new ConfigurationDto();
 	}
 
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION)
 	public String list(@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE) ConfigurationDto configurationUpdate, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
@@ -54,9 +57,6 @@ public class ConfigurationController extends AbstractController {
 			ConfigurationDto existingConfiguration = configurationFacade.findOneByUuid(configurationUpdate.getUuid());
 
 			if (existingConfiguration != null) {
-
-//				List<Object[]> revisions = configurationFacade.findHistoryByUuid(configurationUpdate.getUuid(), null, null);
-//				model.addAttribute(ConsoleWebConstants.Model.REVISIONS, revisions);
 
 				model.addAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE, existingConfiguration);
 			} else {

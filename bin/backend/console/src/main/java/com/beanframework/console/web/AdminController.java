@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,7 @@ import com.beanframework.console.AdminWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.data.AdminDto;
 import com.beanframework.console.facade.AdminFacade;
+import com.beanframework.console.facade.AdminFacade.AdminPreAuthorizeEnum;
 
 @Controller
 public class AdminController extends AbstractController {
@@ -45,6 +47,7 @@ public class AdminController extends AbstractController {
 		return new AdminDto();
 	}
 
+	@PreAuthorize(AdminPreAuthorizeEnum.READ)
 	@GetMapping(value = AdminWebConstants.Path.ADMIN)
 	public String list(@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE) AdminDto adminUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -52,9 +55,6 @@ public class AdminController extends AbstractController {
 			AdminDto existingAdmin = adminFacade.findOneByUuid(adminUpdate.getUuid());
 
 			if (existingAdmin != null) {
-
-//				List<Object[]> revisions = adminFacade.findHistoryByUuid(adminUpdate.getUuid(), null, null);
-//				model.addAttribute(ConsoleWebConstants.Model.REVISIONS, revisions);
 
 				model.addAttribute(AdminWebConstants.ModelAttribute.UPDATE, existingAdmin);
 			} else {

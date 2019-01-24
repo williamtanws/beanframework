@@ -13,26 +13,26 @@ import com.beanframework.common.exception.BusinessException;
 
 public interface UserGroupFacade {
 
-	public static interface PreAuthorizeEnum {
+	public static interface UserGroupPreAuthorizeEnum {
 		public static final String READ = "hasAuthority('usergroup_read')";
 		public static final String CREATE = "hasAuthority('usergroup_create')";
 		public static final String UPDATE = "hasAuthority('usergroup_update')";
 		public static final String DELETE = "hasAuthority('usergroup_delete')";
 	}
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(UserGroupPreAuthorizeEnum.READ)
 	UserGroupDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(UserGroupPreAuthorizeEnum.READ)
 	UserGroupDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	@PreAuthorize(UserGroupPreAuthorizeEnum.CREATE)
 	UserGroupDto create(UserGroupDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	@PreAuthorize(UserGroupPreAuthorizeEnum.UPDATE)
 	UserGroupDto update(UserGroupDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	@PreAuthorize(UserGroupPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
 	Page<UserGroupDto> findPage(DataTableRequest<UserGroupDto> dataTableRequest) throws Exception;

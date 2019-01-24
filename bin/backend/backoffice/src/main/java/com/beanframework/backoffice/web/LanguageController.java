@@ -2,6 +2,7 @@ package com.beanframework.backoffice.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants;
 import com.beanframework.backoffice.data.LanguageDto;
 import com.beanframework.backoffice.facade.LanguageFacade;
+import com.beanframework.backoffice.facade.LanguageFacade.LanguagePreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 
@@ -40,6 +42,7 @@ public class LanguageController extends AbstractController {
 		return new LanguageDto();
 	}
 
+	@PreAuthorize(LanguagePreAuthorizeEnum.READ)
 	@GetMapping(value = LanguageWebConstants.Path.LANGUAGE)
 	public String list(@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto updateDto, Model model) throws Exception {
 

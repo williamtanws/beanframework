@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants;
 import com.beanframework.backoffice.data.UserPermissionDto;
 import com.beanframework.backoffice.facade.UserPermissionFacade;
+import com.beanframework.backoffice.facade.UserPermissionFacade.UserPermissionPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 
@@ -45,6 +47,7 @@ public class UserPermissionController extends AbstractController {
 		return new UserPermissionDto();
 	}
 
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.READ)
 	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION)
 	public String list(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermissionDto userpermissionUpdate, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
@@ -52,12 +55,6 @@ public class UserPermissionController extends AbstractController {
 		if (userpermissionUpdate.getUuid() != null) {
 
 			UserPermissionDto existingUserPermission = userPermissionFacade.findOneByUuid(userpermissionUpdate.getUuid());
-
-//			List<Object[]> revisions = userPermissionFacade.findHistoryByUuid(userpermissionUpdate.getUuid(), null, null);
-//			model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
-//
-//			List<Object[]> fieldRevisions = userPermissionFacade.findFieldHistoryByUuid(userpermissionUpdate.getUuid(), null, null);
-//			model.addAttribute(BackofficeWebConstants.Model.FIELD_REVISIONS, fieldRevisions);
 
 			if (existingUserPermission != null) {
 				model.addAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE, existingUserPermission);

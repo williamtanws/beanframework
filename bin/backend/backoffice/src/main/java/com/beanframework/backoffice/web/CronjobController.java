@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import com.beanframework.backoffice.data.CronjobDataDto;
 import com.beanframework.backoffice.data.CronjobDto;
 import com.beanframework.backoffice.data.CustomerDto;
 import com.beanframework.backoffice.facade.CronjobFacade;
+import com.beanframework.backoffice.facade.CronjobFacade.CronjobPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.cronjob.service.CronjobManagerService;
@@ -56,6 +58,7 @@ public class CronjobController extends AbstractController {
 		return new CronjobDto();
 	}
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.READ)
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB)
 	public String list(@ModelAttribute(CronjobWebConstants.ModelAttribute.UPDATE) CronjobDto cronjobUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -64,9 +67,6 @@ public class CronjobController extends AbstractController {
 			CronjobDto existingCronjob = cronjobFacade.findOneByUuid(cronjobUpdate.getUuid());
 
 			if (existingCronjob != null) {
-
-//				List<Object[]> revisions = cronjobFacade.findHistoryByUuid(cronjobUpdate.getUuid(), null, null);
-//				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
 
 				model.addAttribute(CronjobWebConstants.ModelAttribute.UPDATE, existingCronjob);
 			} else {

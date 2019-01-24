@@ -13,26 +13,26 @@ import com.beanframework.common.exception.BusinessException;
 
 public interface CustomerFacade {
 
-	public static interface PreAuthorizeEnum {
+	public static interface CustomerPreAuthorizeEnum {
 		public static final String READ = "hasAuthority('customer_read')";
 		public static final String CREATE = "hasAuthority('customer_create')";
 		public static final String UPDATE = "hasAuthority('customer_update')";
 		public static final String DELETE = "hasAuthority('customer_delete')";
 	}
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(CustomerPreAuthorizeEnum.READ)
 	CustomerDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(CustomerPreAuthorizeEnum.READ)
 	CustomerDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	@PreAuthorize(CustomerPreAuthorizeEnum.CREATE)
 	CustomerDto create(CustomerDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	@PreAuthorize(CustomerPreAuthorizeEnum.UPDATE)
 	CustomerDto update(CustomerDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	@PreAuthorize(CustomerPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
 	Page<CustomerDto> findPage(DataTableRequest<CustomerDto> dataTableRequest) throws Exception;

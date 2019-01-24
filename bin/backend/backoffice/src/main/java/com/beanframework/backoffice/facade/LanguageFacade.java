@@ -13,26 +13,26 @@ import com.beanframework.common.exception.BusinessException;
 
 public interface LanguageFacade {
 
-	public static interface PreAuthorizeEnum {
+	public static interface LanguagePreAuthorizeEnum {
 		public static final String READ = "hasAuthority('language_read')";
 		public static final String CREATE = "hasAuthority('language_create')";
 		public static final String UPDATE = "hasAuthority('language_update')";
 		public static final String DELETE = "hasAuthority('language_delete')";
 	}
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(LanguagePreAuthorizeEnum.READ)
 	LanguageDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(LanguagePreAuthorizeEnum.READ)
 	LanguageDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	@PreAuthorize(LanguagePreAuthorizeEnum.CREATE)
 	LanguageDto create(LanguageDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	@PreAuthorize(LanguagePreAuthorizeEnum.UPDATE)
 	LanguageDto update(LanguageDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	@PreAuthorize(LanguagePreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
 	Page<LanguageDto> findPage(DataTableRequest<LanguageDto> dataTableRequest) throws Exception;

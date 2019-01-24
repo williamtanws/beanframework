@@ -14,32 +14,32 @@ import com.beanframework.menu.domain.Menu;
 
 public interface MenuFacade {
 
-	public static interface PreAuthorizeEnum {
+	public static interface MenuPreAuthorizeEnum {
 		public static final String READ = "hasAuthority('menu_read')";
 		public static final String CREATE = "hasAuthority('menu_create')";
 		public static final String UPDATE = "hasAuthority('menu_update')";
 		public static final String DELETE = "hasAuthority('menu_delete')";
 	}
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	MenuDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	MenuDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	@PreAuthorize(MenuPreAuthorizeEnum.CREATE)
 	MenuDto create(MenuDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	@PreAuthorize(MenuPreAuthorizeEnum.UPDATE)
 	MenuDto update(MenuDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	@PreAuthorize(MenuPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	@PreAuthorize(MenuPreAuthorizeEnum.UPDATE)
 	void changePosition(UUID fromUuid, UUID toUuid, int toIndex) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	List<MenuDto> findMenuTree() throws BusinessException;
 
 	List<Menu> findMenuTreeByCurrentUser() throws Exception;

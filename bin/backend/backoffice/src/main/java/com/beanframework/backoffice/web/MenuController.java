@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,9 +26,11 @@ import com.beanframework.backoffice.MenuWebConstants;
 import com.beanframework.backoffice.data.MenuDto;
 import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.backoffice.facade.MenuFacade;
+import com.beanframework.backoffice.facade.MenuFacade.MenuPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
+import com.beanframework.ppmbackoffice.facade.PpmProjectFacade.PpmProjectPreAuthorizeEnum;
 
 @Controller
 public class MenuController extends AbstractController {
@@ -51,6 +54,7 @@ public class MenuController extends AbstractController {
 		return new MenuDto();
 	}
 
+	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	@GetMapping(value = MenuWebConstants.Path.MENU)
 	public String list(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
