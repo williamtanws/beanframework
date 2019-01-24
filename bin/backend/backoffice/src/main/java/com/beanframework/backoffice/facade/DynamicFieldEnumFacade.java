@@ -13,26 +13,26 @@ import com.beanframework.common.exception.BusinessException;
 
 public interface DynamicFieldEnumFacade {
 
-	public static interface PreAuthorizeEnum {
+	public static interface DynamicFieldEnumPreAuthorizeEnum {
 		public static final String READ = "hasAuthority('dynamicfieldenum_read')";
 		public static final String CREATE = "hasAuthority('dynamicfieldenum_create')";
 		public static final String UPDATE = "hasAuthority('dynamicfieldenum_update')";
 		public static final String DELETE = "hasAuthority('dynamicfieldenum_delete')";
 	}
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(DynamicFieldEnumPreAuthorizeEnum.READ)
 	DynamicFieldEnumDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
+	@PreAuthorize(DynamicFieldEnumPreAuthorizeEnum.READ)
 	DynamicFieldEnumDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.CREATE)
+	@PreAuthorize(DynamicFieldEnumPreAuthorizeEnum.CREATE)
 	DynamicFieldEnumDto create(DynamicFieldEnumDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.UPDATE)
+	@PreAuthorize(DynamicFieldEnumPreAuthorizeEnum.UPDATE)
 	DynamicFieldEnumDto update(DynamicFieldEnumDto model) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.DELETE)
+	@PreAuthorize(DynamicFieldEnumPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
 	Page<DynamicFieldEnumDto> findPage(DataTableRequest<DynamicFieldEnumDto> dataTableRequest) throws Exception;

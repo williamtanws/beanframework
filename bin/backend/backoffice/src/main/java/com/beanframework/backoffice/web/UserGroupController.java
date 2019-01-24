@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ import com.beanframework.backoffice.data.UserRightDto;
 import com.beanframework.backoffice.facade.UserGroupFacade;
 import com.beanframework.backoffice.facade.UserPermissionFacade;
 import com.beanframework.backoffice.facade.UserRightFacade;
+import com.beanframework.backoffice.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
@@ -57,6 +59,7 @@ public class UserGroupController extends AbstractController {
 		return new UserGroupDto();
 	}
 
+	@PreAuthorize(UserGroupPreAuthorizeEnum.READ)
 	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP)
 	public String list(@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE) UserGroupDto usergroupUpdate, Model model) throws Exception {
 

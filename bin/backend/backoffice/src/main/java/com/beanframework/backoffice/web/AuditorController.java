@@ -2,10 +2,9 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +15,7 @@ import com.beanframework.backoffice.AuditorWebConstants;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.data.AuditorDto;
 import com.beanframework.backoffice.facade.AuditorFacade;
+import com.beanframework.backoffice.facade.AuditorFacade.PreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 
 @Controller
@@ -24,18 +24,19 @@ public class AuditorController extends AbstractController {
 	@Autowired
 	private AuditorFacade auditorFacade;
 
-	@Value(AuditorWebConstants.Path.LANGUAGE)
+	@Value(AuditorWebConstants.Path.AUDITOR)
 	private String PATH_LANGUAGE;
 
 	@Value(AuditorWebConstants.View.LIST)
 	private String VIEW_LANGUAGE_LIST;
 
 	@ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE)
-	public AuditorDto populateAuditorForm(HttpServletRequest request) throws Exception {
+	public AuditorDto update() throws Exception {
 		return new AuditorDto();
 	}
 
-	@GetMapping(value = AuditorWebConstants.Path.LANGUAGE)
+	@PreAuthorize(PreAuthorizeEnum.READ)
+	@GetMapping(value = AuditorWebConstants.Path.AUDITOR)
 	public String list(@ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE) AuditorDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		if (updateDto.getUuid() != null) {

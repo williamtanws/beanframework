@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import com.beanframework.backoffice.data.DynamicFieldDto;
 import com.beanframework.backoffice.data.DynamicFieldEnumDto;
 import com.beanframework.backoffice.data.LanguageDto;
 import com.beanframework.backoffice.facade.DynamicFieldFacade;
+import com.beanframework.backoffice.facade.DynamicFieldFacade.DynamicFieldPreAuthorizeEnum;
 import com.beanframework.backoffice.facade.LanguageFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
@@ -51,6 +53,7 @@ public class DynamicFieldController extends AbstractController {
 		return new DynamicFieldDto();
 	}
 
+	@PreAuthorize(DynamicFieldPreAuthorizeEnum.READ)
 	@GetMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD)
 	public String list(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto updateDto, Model model) throws Exception {
 
@@ -62,10 +65,6 @@ public class DynamicFieldController extends AbstractController {
 			DynamicFieldDto existsDto = dynamicFieldFacade.findOneByUuid(updateDto.getUuid());
 
 			if (existsDto != null) {
-
-				// History
-//				List<Object[]> revisions = dynamicFieldFacade.findHistoryByUuid(updateDto.getUuid(), null, null);
-//				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
 
 				model.addAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE, existsDto);
 			} else {

@@ -4,7 +4,7 @@ public interface AuditorWebConstants {
 
 	public interface Path {
 
-		public static final String LANGUAGE = "${path.auditor}";
+		public static final String AUDITOR = "${path.auditor}";
 		
 		public interface Api {
 			public static final String PAGE = "${path.api.auditor.page}";

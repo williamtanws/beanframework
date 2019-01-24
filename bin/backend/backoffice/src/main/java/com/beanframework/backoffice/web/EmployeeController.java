@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,7 @@ import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.backoffice.data.EmployeeDto;
 import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.backoffice.facade.EmployeeFacade;
+import com.beanframework.backoffice.facade.EmployeeFacade.EmployeePreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
@@ -50,6 +52,7 @@ public class EmployeeController extends AbstractController {
 		return new EmployeeDto();
 	}
 
+	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
 	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) EmployeeDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
