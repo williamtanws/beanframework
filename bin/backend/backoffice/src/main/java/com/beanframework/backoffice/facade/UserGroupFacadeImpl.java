@@ -8,17 +8,14 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.UserGroupDto;
-import com.beanframework.backoffice.data.UserGroupSearch;
-import com.beanframework.backoffice.data.UserGroupSpecification;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupField;
 import com.beanframework.user.service.UserGroupService;
 
 @Component
@@ -29,13 +26,6 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	
 	@Autowired
 	private UserGroupService userGroupService;
-
-	@Override
-	public Page<UserGroupDto> findPage(UserGroupSearch search, PageRequest pageable) throws Exception {
-		Page<UserGroup> page = userGroupService.findEntityPage(search.toString(), UserGroupSpecification.findByCriteria(search), pageable);
-		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class);
-		return new PageImpl<UserGroupDto>(dtos, page.getPageable(), page.getTotalElements());
-	}
 
 	@Override
 	public UserGroupDto findOneByUuid(UUID uuid) throws Exception {
@@ -74,25 +64,36 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		userGroupService.deleteByUuid(uuid);
 	}
+	
+	@Override
+	public Page<UserGroupDto> findPage(DataTableRequest<UserGroupDto> dataTableRequest) throws Exception {
+		Page<UserGroup> page = userGroupService.findEntityPage(dataTableRequest);
+		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class);
+		return new PageImpl<UserGroupDto>(dtos, page.getPageable(), page.getTotalElements());
+	}
 
 	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = userGroupService.findHistoryByUuid(uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserGroupDto.class);
-//		}
+	public int count() throws Exception {
+		return userGroupService.count();
+	}
+	
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<Object[]> revisions = userGroupService.findHistory(dataTableRequest);
+		for (int i = 0; i < revisions.size(); i++) {
+			Object[] entityObject = revisions.get(i);
+			if (entityObject[0] instanceof UserGroup)
+				entityObject[0] = modelService.getDto(entityObject[0], UserGroupDto.class);
+			revisions.set(i, entityObject);
+		}
 
 		return revisions;
 	}
 
 	@Override
-	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = userGroupService.findHistoryByRelatedUuid(UserGroupField.USER_GROUP, uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserGroupFieldDto.class);
-//		}
-
-		return revisions;
+	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+		return userGroupService.findCountHistory(dataTableRequest);
 	}
 
 	@Override

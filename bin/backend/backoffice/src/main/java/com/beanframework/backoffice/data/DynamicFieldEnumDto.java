@@ -16,8 +16,6 @@ public class DynamicFieldEnumDto extends GenericDto {
 
 	private Integer sort;
 
-	private String selected;
-
 	public DynamicFieldDto getDynamicField() {
 		return dynamicField;
 	}
@@ -49,13 +47,4 @@ public class DynamicFieldEnumDto extends GenericDto {
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
-
-	public String getSelected() {
-		return selected;
-	}
-
-	public void setSelected(String selected) {
-		this.selected = selected;
-	}
-
 }

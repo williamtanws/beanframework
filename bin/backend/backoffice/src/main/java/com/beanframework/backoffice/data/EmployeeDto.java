@@ -15,7 +15,7 @@ public class EmployeeDto extends GenericDto {
 	public static final String USER_ROLES = "userRoles";
 	public static final String FIELDS = "fields";
 	public static final String NAME = "name";
-	
+
 	private String password;
 
 	private Boolean accountNonExpired;
@@ -32,7 +32,9 @@ public class EmployeeDto extends GenericDto {
 
 	private List<UserFieldDto> fields = new ArrayList<UserFieldDto>();
 
-	private String selected;
+	private String[] tableUserGroups;
+
+	private String[] tableSelectedUserGroups;
 
 	public String getPassword() {
 		return password;
@@ -98,12 +100,20 @@ public class EmployeeDto extends GenericDto {
 		this.fields = fields;
 	}
 
-	public String getSelected() {
-		return selected;
+	public String[] getTableUserGroups() {
+		return tableUserGroups;
 	}
 
-	public void setSelected(String selected) {
-		this.selected = selected;
+	public void setTableUserGroups(String[] tableUserGroups) {
+		this.tableUserGroups = tableUserGroups;
+	}
+
+	public String[] getTableSelectedUserGroups() {
+		return tableSelectedUserGroups;
+	}
+
+	public void setTableSelectedUserGroups(String[] tableSelectedUserGroups) {
+		this.tableSelectedUserGroups = tableSelectedUserGroups;
 	}
 
 }

@@ -62,8 +62,8 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getJobName()), prototype.getJobName()) == false) {
-			prototype.setJobName(StringUtils.stripToNull(source.getJobName()));
+		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 

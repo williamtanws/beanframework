@@ -1,25 +1,17 @@
 package com.beanframework.backoffice.web;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -27,24 +19,18 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
 import com.beanframework.backoffice.data.DynamicFieldDto;
 import com.beanframework.backoffice.data.DynamicFieldEnumDto;
-import com.beanframework.backoffice.data.DynamicFieldSearch;
 import com.beanframework.backoffice.data.LanguageDto;
-import com.beanframework.backoffice.facade.DynamicFieldEnumFacade;
 import com.beanframework.backoffice.facade.DynamicFieldFacade;
 import com.beanframework.backoffice.facade.LanguageFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
-import com.beanframework.common.utils.ParamUtils;
 
 @Controller
 public class DynamicFieldController extends AbstractController {
 
 	@Autowired
 	private DynamicFieldFacade dynamicFieldFacade;
-
-	@Autowired
-	private DynamicFieldEnumFacade dynamicFieldEnumFacade;
 
 	@Autowired
 	private LanguageFacade languageFacade;
@@ -55,108 +41,35 @@ public class DynamicFieldController extends AbstractController {
 	@Value(DynamicFieldWebConstants.View.LIST)
 	private String VIEW_DYNAMICFIELD_LIST;
 
-	@Value(DynamicFieldWebConstants.LIST_SIZE)
-	private int MODULE_DYNAMICFIELD_LIST_SIZE;
-
-	private Page<DynamicFieldDto> getPagination(DynamicFieldSearch dynamicFieldSearch, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
-		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
-		size = size <= 0 ? MODULE_DYNAMICFIELD_LIST_SIZE : size;
-
-		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
-		String[] properties = StringUtils.isBlank(propertiesStr) ? null : propertiesStr.split(BackofficeWebConstants.Pagination.PROPERTIES_SPLIT);
-
-		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
-		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
-
-		if (properties == null) {
-			properties = new String[1];
-			properties[0] = DynamicFieldDto.SORT;
-			direction = Sort.Direction.ASC;
-		}
-
-		Page<DynamicFieldDto> pagination = dynamicFieldFacade.findPage(dynamicFieldSearch, PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
-
-		model.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
-		model.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
-
-		return pagination;
-	}
-
-	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes, @RequestParam Map<String, Object> requestParams, DynamicFieldSearch dynamicFieldSearch) {
-
-		dynamicFieldSearch.setSearchAll((String) requestParams.get("dynamicFieldSearch.searchAll"));
-		dynamicFieldSearch.setId((String) requestParams.get("dynamicFieldSearch.id"));
-		dynamicFieldSearch.setName((String) requestParams.get("dynamicFieldSearch.name"));
-
-		int page = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.PAGE));
-		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(BackofficeWebConstants.Pagination.SIZE));
-		size = size <= 0 ? MODULE_DYNAMICFIELD_LIST_SIZE : size;
-
-		String propertiesStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.PROPERTIES));
-		String directionStr = ParamUtils.parseString(requestParams.get(BackofficeWebConstants.Pagination.DIRECTION));
-
-		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.PAGE, page);
-		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.SIZE, size);
-		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.PROPERTIES, propertiesStr);
-		redirectAttributes.addAttribute(BackofficeWebConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute("searchAll", dynamicFieldSearch.getSearchAll());
-		redirectAttributes.addAttribute("id", dynamicFieldSearch.getId());
-		redirectAttributes.addAttribute("name", dynamicFieldSearch.getName());
-
-		return redirectAttributes;
-	}
-
 	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.CREATE)
-	public DynamicFieldDto populateDynamicFieldCreate(HttpServletRequest request) throws Exception {
+	public DynamicFieldDto create() throws Exception {
 		return new DynamicFieldDto();
 	}
 
 	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE)
-	public DynamicFieldDto populateDynamicFieldForm(HttpServletRequest request) throws Exception {
+	public DynamicFieldDto update() throws Exception {
 		return new DynamicFieldDto();
 	}
 
-	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH)
-	public DynamicFieldSearch populateDynamicFieldSearch(HttpServletRequest request) {
-		return new DynamicFieldSearch();
-	}
-
 	@GetMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD)
-	public String list(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-
-		model.addAttribute(BackofficeWebConstants.PAGINATION, getPagination(dynamicFieldSearch, model, requestParams));
+	public String list(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto updateDto, Model model) throws Exception {
 
 		List<LanguageDto> languages = languageFacade.findAllDtoLanguages();
 		model.addAttribute("languages", languages);
 
-		if (dynamicFieldUpdate.getUuid() != null) {
+		if (updateDto.getUuid() != null) {
 
-			DynamicFieldDto existingDynamicField = dynamicFieldFacade.findOneByUuid(dynamicFieldUpdate.getUuid());
+			DynamicFieldDto existsDto = dynamicFieldFacade.findOneByUuid(updateDto.getUuid());
 
-			if (existingDynamicField != null) {
-				// DynamicFieldEnum
-				List<DynamicFieldEnumDto> enums = dynamicFieldEnumFacade.findAllDtoDynamicFieldEnums();
-
-				for (int i = 0; i < enums.size(); i++) {
-					for (DynamicFieldEnumDto dynamicFieldEnum : existingDynamicField.getEnums()) {
-						if (enums.get(i).getUuid().equals(dynamicFieldEnum.getUuid())) {
-							enums.get(i).setSelected("true");
-						}
-					}
-				}
-				existingDynamicField.setEnums(enums);
+			if (existsDto != null) {
 
 				// History
-				List<Object[]> revisions = dynamicFieldFacade.findHistoryByUuid(dynamicFieldUpdate.getUuid(), null, null);
-				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
+//				List<Object[]> revisions = dynamicFieldFacade.findHistoryByUuid(updateDto.getUuid(), null, null);
+//				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
 
-				model.addAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE, existingDynamicField);
+				model.addAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE, existsDto);
 			} else {
-				dynamicFieldUpdate.setUuid(null);
+				updateDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
@@ -165,16 +78,15 @@ public class DynamicFieldController extends AbstractController {
 	}
 
 	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "create")
-	public RedirectView create(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.CREATE) DynamicFieldDto dynamicFieldCreate, Model model, BindingResult bindingResult,
-			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
+	public RedirectView create(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.CREATE) DynamicFieldDto createDto, Model model, BindingResult bindingResult,
+			RedirectAttributes redirectAttributes) throws Exception {
 
-		if (dynamicFieldCreate.getUuid() != null) {
+		if (createDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
-				dynamicFieldCreate = dynamicFieldFacade.create(dynamicFieldCreate);
+				createDto = dynamicFieldFacade.create(createDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -182,8 +94,7 @@ public class DynamicFieldController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(DynamicFieldDto.UUID, dynamicFieldCreate.getUuid());
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, dynamicFieldSearch);
+		redirectAttributes.addAttribute(DynamicFieldDto.UUID, createDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -192,25 +103,50 @@ public class DynamicFieldController extends AbstractController {
 	}
 
 	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "update")
-	public RedirectView update(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model, BindingResult bindingResult,
-			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
+	public RedirectView update(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto updateDto, Model model, BindingResult bindingResult,
+			RedirectAttributes redirectAttributes) throws Exception {
 
-		if (dynamicFieldUpdate.getUuid() == null) {
+		if (updateDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
-			// Dynamic Field Enum
-			List<DynamicFieldEnumDto> enums = new ArrayList<DynamicFieldEnumDto>();
-			for (DynamicFieldEnumDto dynamicFieldEnum : dynamicFieldUpdate.getEnums()) {
-				if (BooleanUtils.parseBoolean(dynamicFieldEnum.getSelected())) {
-					enums.add(dynamicFieldEnum);
+			// DynamicFieldEnum
+			if (updateDto.getTableEnums() != null) {
+				List<DynamicFieldEnumDto> enums = dynamicFieldFacade.findOneByUuid(updateDto.getUuid()).getEnums();
+
+				for (int i = 0; i < updateDto.getTableEnums().length; i++) {
+
+					boolean remove = true;
+					if (updateDto.getTableSelectedEnums() != null && updateDto.getTableSelectedEnums().length > i && BooleanUtils.parseBoolean(updateDto.getTableSelectedEnums()[i])) {
+						remove = false;
+					}
+
+					if (remove) {
+						for (Iterator<DynamicFieldEnumDto> childsIterator = enums.listIterator(); childsIterator.hasNext();) {
+							if (childsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableEnums()[i]))) {
+								childsIterator.remove();
+							}
+						}
+					} else {
+						boolean add = true;
+						for (Iterator<DynamicFieldEnumDto> childsIterator = enums.listIterator(); childsIterator.hasNext();) {
+							if (childsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableEnums()[i]))) {
+								add = false;
+							}
+						}
+
+						if (add) {
+							DynamicFieldEnumDto child = new DynamicFieldEnumDto();
+							child.setUuid(UUID.fromString(updateDto.getTableEnums()[i]));
+							enums.add(child);
+						}
+					}
 				}
+				updateDto.setEnums(enums);
 			}
-			dynamicFieldUpdate.setEnums(enums);
 
 			try {
-				dynamicFieldUpdate = dynamicFieldFacade.update(dynamicFieldUpdate);
+				updateDto = dynamicFieldFacade.update(updateDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -218,8 +154,7 @@ public class DynamicFieldController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(DynamicFieldDto.UUID, dynamicFieldUpdate.getUuid());
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, dynamicFieldSearch);
+		redirectAttributes.addAttribute(DynamicFieldDto.UUID, updateDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -228,20 +163,16 @@ public class DynamicFieldController extends AbstractController {
 	}
 
 	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "delete")
-	public RedirectView delete(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.SEARCH) DynamicFieldSearch dynamicFieldSearch,
-			@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto dynamicFieldUpdate, Model model, BindingResult bindingResult,
-			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto updateDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
-			dynamicFieldFacade.delete(dynamicFieldUpdate.getUuid());
+			dynamicFieldFacade.delete(updateDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(DynamicFieldDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(DynamicFieldDto.UUID, dynamicFieldUpdate.getUuid());
+			redirectAttributes.addAttribute(DynamicFieldDto.UUID, updateDto.getUuid());
 		}
-
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, dynamicFieldSearch);
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);

@@ -1,9 +1,6 @@
 package com.beanframework.backoffice;
 
-public interface BackofficeWebConstants {
-
-	public static final String PAGINATION = "pagination";
-	
+public interface BackofficeWebConstants {	
 
 	public interface Configuration {
 		public static final String DEFAULT_AVATAR = "${module.backoffice.configuration.avatar.default}";

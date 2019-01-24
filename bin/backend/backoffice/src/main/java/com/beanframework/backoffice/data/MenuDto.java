@@ -6,6 +6,7 @@ import java.util.List;
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuTargetTypeEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class MenuDto extends GenericDto {
 	private String name;
@@ -20,8 +21,10 @@ public class MenuDto extends GenericDto {
 
 	private Boolean enabled;
 
+	@JsonIgnore
 	private Menu parent;
 
+	@JsonIgnore
 	private List<MenuDto> childs = new ArrayList<MenuDto>();
 
 	private List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
@@ -29,6 +32,10 @@ public class MenuDto extends GenericDto {
 	private List<MenuFieldDto> fields = new ArrayList<MenuFieldDto>();
 
 	private Boolean active;
+
+	private String[] tableUserGroups;
+
+	private String[] tableSelectedUserGroups;
 
 	public String getName() {
 		return name;
@@ -116,6 +123,22 @@ public class MenuDto extends GenericDto {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+
+	public String[] getTableUserGroups() {
+		return tableUserGroups;
+	}
+
+	public void setTableUserGroups(String[] tableUserGroups) {
+		this.tableUserGroups = tableUserGroups;
+	}
+
+	public String[] getTableSelectedUserGroups() {
+		return tableSelectedUserGroups;
+	}
+
+	public void setTableSelectedUserGroups(String[] tableSelectedUserGroups) {
+		this.tableSelectedUserGroups = tableSelectedUserGroups;
 	}
 
 }

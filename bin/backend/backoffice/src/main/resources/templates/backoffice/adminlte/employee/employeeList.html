@@ -6,27 +6,25 @@
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<section class="content">
-			<!-- Search Form-->
-			<div class="row">
-				<div class="col-md-6">
-					<th:block
-						layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.employee')}}, objectSearch=${employeeSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
-				</div>
-			</div>
-			<!-- Alert Notification-->
-			<div class="row">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/alert :: custom}"></th:block>
-			</div>
+		<section class="content" th:with="employeeName=#{module.employee.name}">
 			<!-- List Table-->
-			<div class="row" th:with="employeeName=#{module.employee.name}">
-				<th:block
-					layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.employee}, objectUpdate=${employeeUpdate}, objectSearch=${employeeSearch}, icon=@{${@environment.getProperty('module.employee.icon')}}, createAuthority='employee_create', updateAuthority='employee_update', listFields=${ {{'id', 'ID'},{'name', employeeName}} }, paginationAction=@{${@environment.getProperty('path.employee')}}, searchFields=${ {'id','name'} }, updateForm='/backoffice/adminlte/employee/employeeForm')}"></th:block>
-			</div>
+			<th:block
+				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.employee.icon')}}, title=#{module.employee}, objectUpdate=${employeeUpdate}, createAuthority='employee_create', updateAuthority='employee_update', tableName='employee', listUrl=@{${@environment.getProperty('path.api.employee.page')}}, listFields=${ {{'id', 'ID'},{'name', employeeName}} }, editFormAction=@{${@environment.getProperty('path.employee')}}, editForm=@{${@environment.getProperty('view.employee.form')}} )}"></th:block>
 			<!-- Create Modal-->
 			<th:block sec:authorize="hasAuthority('employee_create')"
 				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.employee')}}, createObject=${employeeCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.employee.checkid')})}"></th:block>
 		</section>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+			$('#mainTable thead tr:eq(1) th').each(function(index) {
+				if(index < 2){
+			    	var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
+			    	var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+	            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+				}
+			});
+			/*]]>*/
+		</script>
 	</th:block>
 </body>
 </html>

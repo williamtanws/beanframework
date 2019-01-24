@@ -6,27 +6,25 @@
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<section class="content">
-			<!-- Search Form-->
-			<div class="row">
-				<div class="col-md-6">
-					<th:block
-						layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.dynamicfield')}}, objectSearch=${dynamicfieldSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
-				</div>
-			</div>
-			<!-- Alert Notification-->
-			<div class="row">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/alert :: custom}"></th:block>
-			</div>
+		<section class="content" th:with="dynamicfieldName=#{module.dynamicfield.name}, dynamicfieldType=#{module.dynamicfield.type}, dynamicfieldSort=#{module.dynamicfield.sort}">
 			<!-- List Table-->
-			<div class="row" th:with="dynamicfieldName=#{module.dynamicfield.name}">
-				<th:block
-					layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.dynamicfield}, objectUpdate=${dynamicfieldUpdate}, objectSearch=${dynamicfieldSearch}, icon=@{${@environment.getProperty('module.dynamicfield.icon')}}, createAuthority='dynamicfield_create', updateAuthority='dynamicfield_update', listFields=${ {{'id', 'ID'},{'name', dynamicfieldName}} }, paginationAction=@{${@environment.getProperty('path.dynamicfield')}}, searchFields=${ {'id','name'} }, updateForm='/backoffice/adminlte/dynamicfield/dynamicfieldForm')}"></th:block>
-			</div>
+			<th:block
+				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.dynamicfield.icon')}}, title=#{module.dynamicfield}, objectUpdate=${dynamicfieldUpdate}, createAuthority='dynamicfield_create', updateAuthority='dynamicfield_update', tableName='dynamicfield', listUrl=@{${@environment.getProperty('path.api.dynamicfield.page')}}, listFields=${ {{'id', 'ID'}, {'name', dynamicfieldName}, {'type', dynamicfieldType}, {'sort', dynamicfieldSort}} }, editFormAction=@{${@environment.getProperty('path.dynamicfield')}}, editForm=@{${@environment.getProperty('view.dynamicfield.form')}} )}"></th:block>
 			<!-- Create Modal-->
 			<th:block sec:authorize="hasAuthority('dynamicfield_create')"
 				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.dynamicfield')}}, createObject=${dynamicfieldCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.dynamicfield.checkid')})}"></th:block>
 		</section>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+			$('#mainTable thead tr:eq(1) th').each(function(index) {
+				if(index < 3){
+			    	var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
+			    	var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+	            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+				}
+			});
+			/*]]>*/
+		</script>
 	</th:block>
 </body>
 </html>

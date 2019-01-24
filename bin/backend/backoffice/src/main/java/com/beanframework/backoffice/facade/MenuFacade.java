@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.backoffice.data.MenuDto;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.menu.domain.Menu;
 
@@ -40,11 +42,14 @@ public interface MenuFacade {
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	List<MenuDto> findMenuTree() throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-	
 	List<Menu> findMenuTreeByCurrentUser() throws Exception;
+
+	Page<MenuDto> findPage(DataTableRequest<MenuDto> dataTableRequest) throws Exception;
+
+	int count() throws Exception;
+
+	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
+	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
 }

@@ -1,18 +1,27 @@
 package com.beanframework.backoffice.api;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
@@ -22,6 +31,10 @@ import com.beanframework.backoffice.data.MenuFieldDto;
 import com.beanframework.backoffice.data.TreeJson;
 import com.beanframework.backoffice.data.TreeJsonState;
 import com.beanframework.backoffice.facade.MenuFacade;
+import com.beanframework.common.data.DataTableRequest;
+import com.beanframework.common.data.DataTableResponse;
+import com.beanframework.common.data.DataTableResponseData;
+import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.menu.domain.Menu;
 
@@ -121,5 +134,64 @@ public class MenuResource {
 		}
 
 		return "[" + menu.getId() + "]";
+	}
+	
+	@RequestMapping(value = MenuWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
+
+		DataTableRequest<MenuDto> dataTableRequest = new DataTableRequest<MenuDto>(request);
+
+		Page<MenuDto> pagination = menuFacade.findPage(dataTableRequest);
+
+		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();
+		dataTableResponse.setDraw(dataTableRequest.getDraw());
+		dataTableResponse.setRecordsTotal(menuFacade.count());
+		dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
+
+		for (MenuDto dto : pagination.getContent()) {
+
+			DataTableResponseData data = new DataTableResponseData();
+			data.setUuid(dto.getUuid());
+			data.setId(dto.getId());
+			data.setName(dto.getName());
+			data.setSort(dto.getSort());
+			dataTableResponse.getData().add(data);
+		}
+		return dataTableResponse;
+	}
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = MenuWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
+
+		DataTableRequest<Object[]> dataTableRequest = new DataTableRequest<Object[]>(request);
+		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
+
+		List<Object[]> history = menuFacade.findHistory(dataTableRequest);
+
+		DataTableResponse<HistoryDataResponse> dataTableResponse = new DataTableResponse<HistoryDataResponse>();
+		dataTableResponse.setDraw(dataTableRequest.getDraw());
+		dataTableResponse.setRecordsTotal(menuFacade.countHistory(dataTableRequest));
+		dataTableResponse.setRecordsFiltered(history.size());
+
+		for (Object[] object : history) {
+
+			MenuDto dto = (MenuDto) object[0];
+			DefaultRevisionEntity revisionEntity = (DefaultRevisionEntity) object[1];
+			RevisionType eevisionType = (RevisionType) object[2];
+			Set<String> propertiesChanged = (Set<String>) object[3];
+
+			HistoryDataResponse data = new HistoryDataResponse();
+			data.setEntity(dto);
+			data.setRevisionId(String.valueOf(revisionEntity.getId()));
+			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
+			data.setRevisionType(eevisionType.name());
+			data.setPropertiesChanged(propertiesChanged);
+
+			dataTableResponse.getData().add(data);
+		}
+		return dataTableResponse;
 	}
 }

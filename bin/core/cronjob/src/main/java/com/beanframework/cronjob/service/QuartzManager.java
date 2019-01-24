@@ -41,13 +41,13 @@ public class QuartzManager {
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
 
 		// Get trigger key
-		TriggerKey triggerKey = TriggerKey.triggerKey(job.getJobName(), job.getJobGroup());
+		TriggerKey triggerKey = TriggerKey.triggerKey(job.getName(), job.getJobGroup());
 		CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
 
 		if (null == trigger) {// There is no task
 
 			// Create a task
-			JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(job.getJobName(), job.getJobGroup()).build();
+			JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(job.getName(), job.getJobGroup()).build();
 
 			// The JobDataMap can be used to hold any number of (serializable)
 			// objects which you wish
@@ -68,10 +68,10 @@ public class QuartzManager {
 				
 				Trigger runOnceTrigger;
 				if(job.getTriggerStartDate() != null){
-					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getJobName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).build();
+					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).build();
 				}
 				else{
-					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getJobName(), job.getJobGroup()).startNow().build();
+					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startNow().build();
 				}
 				scheduler.scheduleJob(jobDetail, runOnceTrigger);
 			}
@@ -81,11 +81,11 @@ public class QuartzManager {
 	
 				// According to the new cronExpression expression to build a new trigger
 				if(job.getTriggerStartDate() != null){
-					trigger = TriggerBuilder.newTrigger().withIdentity(job.getJobName(), job.getJobGroup()).startAt(job.getTriggerStartDate())
+					trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate())
 							.withSchedule(scheduleBuilder).build();
 				}
 				else{
-					trigger = TriggerBuilder.newTrigger().withIdentity(job.getJobName(), job.getJobGroup())
+					trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup())
 							.withSchedule(scheduleBuilder).build();
 				}
 				
@@ -113,19 +113,19 @@ public class QuartzManager {
 
 	public void pauseJob(Cronjob job) throws SchedulerException {
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
-		JobKey jobKey = JobKey.jobKey(job.getJobName(), job.getJobGroup());
+		JobKey jobKey = JobKey.jobKey(job.getName(), job.getJobGroup());
 		scheduler.pauseJob(jobKey);
 	}
 
 	public void resumeJob(Cronjob job) throws SchedulerException {
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
-		JobKey jobKey = JobKey.jobKey(job.getJobName(), job.getJobGroup());
+		JobKey jobKey = JobKey.jobKey(job.getName(), job.getJobGroup());
 		scheduler.resumeJob(jobKey);
 	}
 
 	public boolean deleteJob(Cronjob job) throws SchedulerException {
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
-		JobKey jobKey = JobKey.jobKey(job.getJobName(), job.getJobGroup());
+		JobKey jobKey = JobKey.jobKey(job.getName(), job.getJobGroup());
 
 		return scheduler.deleteJob(jobKey);
 	}

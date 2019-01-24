@@ -5,11 +5,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.backoffice.data.DynamicFieldDto;
-import com.beanframework.backoffice.data.DynamicFieldSearch;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 
 public interface DynamicFieldFacade {
@@ -20,9 +19,6 @@ public interface DynamicFieldFacade {
 		public static final String UPDATE = "hasAuthority('dynamicfield_update')";
 		public static final String DELETE = "hasAuthority('dynamicfield_delete')";
 	}
-
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	Page<DynamicFieldDto> findPage(DynamicFieldSearch search, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	DynamicFieldDto findOneByUuid(UUID uuid) throws Exception;
@@ -39,8 +35,13 @@ public interface DynamicFieldFacade {
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	Page<DynamicFieldDto> findPage(DataTableRequest<DynamicFieldDto> dataTableRequest) throws Exception;
+
+	int count() throws Exception;
+
+	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
+	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
 
 	List<DynamicFieldDto> findAllDtoDynamicFields() throws Exception;
 

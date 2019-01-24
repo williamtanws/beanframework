@@ -1,10 +1,10 @@
 package com.beanframework.user.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -13,15 +13,13 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightField;
 
 @Service
 public class UserRightServiceImpl implements UserRightService {
@@ -50,28 +48,6 @@ public class UserRightServiceImpl implements UserRightService {
 	@Override
 	public List<UserRight> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, UserRight.class);
-	}
-
-	@Cacheable(value = "UserRightsPage", key = "'query:'+#query+',pageable'+#pageable")
-	@Override
-	public <T> Page<UserRight> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, false, UserRight.class);
-	}
-
-	@Cacheable(value = "UserRightsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
-	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, UserRight.class);
-	}
-
-	@Cacheable(value = "UserRightsRelatedHistory", key = "'relatedEntity:'+#relatedEntity+',uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
-	@Override
-	public List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.relatedId(relatedEntity).eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, UserRightField.class);
 	}
 
 	@Caching(evict = { //
@@ -103,5 +79,44 @@ public class UserRightServiceImpl implements UserRightService {
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
+	
+	@Cacheable(value = "UserRightsPage", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public <T> Page<UserRight> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception {
+		return modelService.findEntityPage(dataTableRequest.getSpecification(), dataTableRequest.getPageable(), false, UserRight.class);
+	}
+
+	@Cacheable(value = "UserRightsPage", key = "'count'")
+	@Override
+	public int count() throws Exception {
+		return modelService.count(UserRight.class);
+	}
+	
+	@Cacheable(value = "UserRightsHistory", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(dataTableRequest.getAuditCriterion());
+
+		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
+		if (dataTableRequest.getAuditOrder() != null)
+			auditOrders.add(dataTableRequest.getAuditOrder());
+		
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), UserRight.class);
+
+	}
+
+	@Cacheable(value = "UserRightsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
+	@Override
+	public int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
+
+		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), UserRight.class);
 	}
 }

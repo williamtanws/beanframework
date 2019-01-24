@@ -7,19 +7,18 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserGroup;
 
 public interface EmployeeService {
-	
+
 	Employee create() throws Exception;
 
 	Employee findOneEntityByUuid(UUID uuid) throws Exception;
@@ -28,15 +27,13 @@ public interface EmployeeService {
 
 	List<Employee> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
 
-	<T> Page<Employee> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception;
-
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-
-	List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-
 	Employee saveEntity(Employee model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
+
+	<T> Page<Employee> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception;
+
+	int count() throws Exception;
 
 	void saveProfilePicture(Employee employee, MultipartFile picture) throws IOException;
 
@@ -55,5 +52,9 @@ public interface EmployeeService {
 	void expireAllSessionsByUuid(UUID uuid);
 
 	void expireAllSessions();
+
+	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
+	int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
 
 }

@@ -6,24 +6,22 @@
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<section class="content">
-			<!-- Search Form-->
-			<div class="row">
-				<div class="col-md-6">
-					<th:block
-						layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.auditor')}}, objectSearch=${auditorSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
-				</div>
-			</div>
-			<!-- Alert Notification-->
-			<div class="row">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/alert :: custom}"></th:block>
-			</div>
+		<section class="content" th:with="auditorName=#{module.auditor.name}">
 			<!-- List Table-->
-			<div class="row" th:with="auditorName=#{module.auditor.name}">
-				<th:block
-					layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.auditor}, objectUpdate=${auditorUpdate}, objectSearch=${auditorSearch}, updateAuthority='auditor_read', icon=@{${@environment.getProperty('module.auditor.icon')}}, listFields=${ {{'id', 'ID'},{'name', auditorName}} }, paginationAction=@{${@environment.getProperty('path.auditor')}}, searchFields=${ {'id','name'} }, updateForm='/backoffice/adminlte/user/auditorForm')}"></th:block>
-			</div>
+			<th:block
+				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.auditor.icon')}}, title=#{module.auditor}, objectUpdate=${auditorUpdate}, createAuthority='auditor_create', updateAuthority='auditor_update', tableName='auditor', listUrl=@{${@environment.getProperty('path.api.auditor.page')}}, listFields=${ {{'id', 'ID'},{'name', auditorName}} }, editFormAction=@{${@environment.getProperty('path.auditor')}}, editForm=@{${@environment.getProperty('view.auditor.form')}} )}"></th:block>
 		</section>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+			$('#mainTable thead tr:eq(1) th').each(function(index) {
+				if(index < 2){
+			    	var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
+			    	var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+	            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+				}
+			});
+			/*]]>*/
+		</script>
 	</th:block>
 </body>
 </html>

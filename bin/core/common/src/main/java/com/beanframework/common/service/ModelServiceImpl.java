@@ -14,6 +14,7 @@ import javax.persistence.NoResultException;
 
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -128,18 +129,25 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
+	public int count(Class modelClass) throws Exception {
+		try {
+			Long count = (Long) createQuery(null, null, "count(o)", null, null, modelClass).getSingleResult();
+
+			return count.intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage(), e);
+		}
+	}
+
+	@Transactional(readOnly = true)
+	@Override
 	public boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
-			Long count = getCachedSingleResult(properties, null, "count(o)", modelClass);
-
-			if (count == null) {
-				count = (Long) createQuery(properties, null, "count(o)", null, null, modelClass).getSingleResult();
-
-				setCachedSingleResult(properties, null, "count(o)", modelClass, count);
-			}
+			Long count = (Long) createQuery(properties, null, "count(o)", null, null, modelClass).getSingleResult();
 
 			return count.equals(0L) ? false : true;
 		} catch (Exception e) {
@@ -171,7 +179,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findHistory(boolean selectDeletedEntities, AuditCriterion criterion, AuditOrder order, Integer firstResult, Integer maxResults, Class modelClass) throws Exception {
+	public List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
+			throws Exception {
 
 		// Create the Audit Reader. It uses the EntityManager, which will be opened when
 		// starting the new Transation and closed when the Transaction finishes.
@@ -180,20 +189,60 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		// Create the Query:
 		AuditQuery auditQuery = auditReader.createQuery().forRevisionsOfEntityWithChanges(modelClass, selectDeletedEntities);
 
-		if (criterion != null)
-			auditQuery.add(criterion);
+		if (auditCriterions != null) {
+			for (AuditCriterion auditCriterion : auditCriterions) {
+				auditQuery.add(auditCriterion);
+			}
+		}
 
-		if (order != null)
-			auditQuery.addOrder(order);
+		if (auditOrders != null) {
+			for (AuditOrder auditOrder : auditOrders) {
+				auditQuery.addOrder(auditOrder);
+			}
+		}
 
 		if (firstResult != null)
 			auditQuery.setFirstResult(firstResult);
 
-//		if (maxResults != null)
-//			auditQuery.setMaxResults(maxResults);
-		auditQuery.setMaxResults(50);
+		if (maxResults != null)
+			auditQuery.setMaxResults(maxResults);
 
-		return (T) auditQuery.getResultList();
+		List<Object[]> result = auditQuery.getResultList();
+		return result;
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public int findCountHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
+			throws Exception {
+
+		// Create the Audit Reader. It uses the EntityManager, which will be opened when
+		// starting the new Transation and closed when the Transaction finishes.
+		AuditReader auditReader = AuditReaderFactory.get(entityManager);
+
+		// Create the Query:
+		AuditQuery auditQuery = auditReader.createQuery().forRevisionsOfEntityWithChanges(modelClass, selectDeletedEntities).addProjection(AuditEntity.id().count());
+
+		if (auditCriterions != null) {
+			for (AuditCriterion auditCriterion : auditCriterions) {
+				auditQuery.add(auditCriterion);
+			}
+		}
+
+		if (auditOrders != null) {
+			for (AuditOrder auditOrder : auditOrders) {
+				auditQuery.addOrder(auditOrder);
+			}
+		}
+
+		if (firstResult != null)
+			auditQuery.setFirstResult(firstResult);
+
+		if (maxResults != null)
+			auditQuery.setMaxResults(maxResults);
+
+		Long count = (Long) auditQuery.getSingleResult();
+		return count.intValue();
 	}
 
 	@Transactional(readOnly = true)
@@ -217,9 +266,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			PageImpl<T> pageImpl = new PageImpl<T>(page.getContent(), page.getPageable(), page.getTotalElements());
 
 			return pageImpl;
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
 		}
@@ -251,8 +298,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				entry.getValue().afterSave(model, event);
 			}
 
-			clearCache(modelClass);
-
 			return model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -273,7 +318,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			deleteEntity(entityModel, modelClass);
 
-			clearCache(modelClass);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage(), e);
@@ -292,7 +336,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			deleteEntity(model, modelClass);
 
-			clearCache(modelClass);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage(), e);
@@ -391,15 +434,5 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public void initDefaults(Object model, Class modelClass) throws Exception {
 		initialDefaultsInterceptor(model, modelClass);
-	}
-
-//	@Override
-	public void clearCache(Class modelClass) {
-//		cacheManager.getCache(modelClass.getName()).clear();
-	}
-
-	@Override
-	public void clearCache(String name) {
-		cacheManager.getCache(name).clear();
 	}
 }

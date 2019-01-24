@@ -8,13 +8,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.DynamicFieldDto;
-import com.beanframework.backoffice.data.DynamicFieldSearch;
-import com.beanframework.backoffice.data.DynamicFieldSpecification;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
@@ -25,16 +23,9 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private DynamicFieldService dynamicFieldService;
-
-	@Override
-	public Page<DynamicFieldDto> findPage(DynamicFieldSearch search, PageRequest pageable) throws Exception {
-		Page<DynamicField> page = dynamicFieldService.findEntityPage(search.toString(), DynamicFieldSpecification.findByCriteria(search), pageable);
-		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), DynamicFieldDto.class);
-		return new PageImpl<DynamicFieldDto>(dtos, page.getPageable(), page.getTotalElements());
-	}
 
 	@Override
 	public DynamicFieldDto findOneByUuid(UUID uuid) throws Exception {
@@ -75,13 +66,34 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	}
 
 	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = dynamicFieldService.findHistoryByUuid(uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], DynamicFieldDto.class);
-//		}
+	public Page<DynamicFieldDto> findPage(DataTableRequest<DynamicFieldDto> dataTableRequest) throws Exception {
+		Page<DynamicField> page = dynamicFieldService.findEntityPage(dataTableRequest);
+		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), DynamicFieldDto.class);
+		return new PageImpl<DynamicFieldDto>(dtos, page.getPageable(), page.getTotalElements());
+	}
+
+	@Override
+	public int count() throws Exception {
+		return dynamicFieldService.count();
+	}
+
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<Object[]> revisions = dynamicFieldService.findHistory(dataTableRequest);
+		for (int i = 0; i < revisions.size(); i++) {
+			Object[] entityObject = revisions.get(i);
+			if (entityObject[0] instanceof DynamicField)
+				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldDto.class);
+			revisions.set(i, entityObject);
+		}
 
 		return revisions;
+	}
+
+	@Override
+	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+		return dynamicFieldService.findCountHistory(dataTableRequest);
 	}
 
 	@Override

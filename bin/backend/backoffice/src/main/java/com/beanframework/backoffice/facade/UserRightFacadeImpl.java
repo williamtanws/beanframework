@@ -8,17 +8,14 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.backoffice.data.UserRightDto;
-import com.beanframework.backoffice.data.UserRightSearch;
-import com.beanframework.backoffice.data.UserRightSpecification;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightField;
 import com.beanframework.user.service.UserRightService;
 
 @Component
@@ -29,13 +26,6 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Autowired
 	private UserRightService userRightService;
-
-	@Override
-	public Page<UserRightDto> findPage(UserRightSearch search, PageRequest pageable) throws Exception {
-		Page<UserRight> page = userRightService.findEntityPage(search.toString(), UserRightSpecification.findByCriteria(search), pageable);
-		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class);
-		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());
-	}
 
 	@Override
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
@@ -74,25 +64,36 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		userRightService.deleteByUuid(uuid);
 	}
+	
+	@Override
+	public Page<UserRightDto> findPage(DataTableRequest<UserRightDto> dataTableRequest) throws Exception {
+		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest);
+		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class);
+		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());
+	}
 
 	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = userRightService.findHistoryByUuid(uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserRightDto.class);
-//		}
+	public int count() throws Exception {
+		return userRightService.count();
+	}
+	
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<Object[]> revisions = userRightService.findHistory(dataTableRequest);
+		for (int i = 0; i < revisions.size(); i++) {
+			Object[] entityObject = revisions.get(i);
+			if (entityObject[0] instanceof UserRight)
+				entityObject[0] = modelService.getDto(entityObject[0], UserRightDto.class);
+			revisions.set(i, entityObject);
+		}
 
 		return revisions;
 	}
 
 	@Override
-	public List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = userRightService.findHistoryByRelatedUuid(UserRightField.USER_RIGHT, uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], UserRightFieldDto.class);
-//		}
-
-		return revisions;
+	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+		return userRightService.findCountHistory(dataTableRequest);
 	}
 
 	@Override

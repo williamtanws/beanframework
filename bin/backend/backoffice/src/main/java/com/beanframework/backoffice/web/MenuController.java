@@ -1,12 +1,10 @@
 package com.beanframework.backoffice.web;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,6 @@ import com.beanframework.backoffice.MenuWebConstants;
 import com.beanframework.backoffice.data.MenuDto;
 import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.backoffice.facade.MenuFacade;
-import com.beanframework.backoffice.facade.UserGroupFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
@@ -38,57 +35,33 @@ public class MenuController extends AbstractController {
 	@Autowired
 	private MenuFacade menuFacade;
 
-	@Autowired
-	private UserGroupFacade userGroupFacade;
-
 	@Value(MenuWebConstants.Path.MENU)
 	private String PATH_MENU;
 
 	@Value(MenuWebConstants.View.LIST)
 	private String VIEW_MENU_LIST;
 
-	@Value(MenuWebConstants.LIST_SIZE)
-	private int MODULE_MENU_LIST_SIZE;
-
 	@ModelAttribute(MenuWebConstants.ModelAttribute.CREATE)
-	public MenuDto populateMenuCreate(HttpServletRequest request) throws Exception {
+	public MenuDto create() throws Exception {
 		return new MenuDto();
 	}
 
 	@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE)
-	public MenuDto populateMenuForm(HttpServletRequest request) throws Exception {
+	public MenuDto update() throws Exception {
 		return new MenuDto();
 	}
 
 	@GetMapping(value = MenuWebConstants.Path.MENU)
-	public String list(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto menuUpdate, Model model,
-			@RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		if (menuUpdate.getUuid() != null) {
-			
-			MenuDto existingMenu = menuFacade.findOneByUuid(menuUpdate.getUuid());
+		if (updateDto.getUuid() != null) {
+
+			MenuDto existingMenu = menuFacade.findOneByUuid(updateDto.getUuid());
 			if (existingMenu != null) {
-
-				List<UserGroupDto> userGroups = userGroupFacade.findAllDtoUserGroups();
-
-				for (int i = 0; i < userGroups.size(); i++) {
-					for (UserGroupDto userGroup : existingMenu.getUserGroups()) {
-						if (userGroups.get(i).getUuid().equals(userGroup.getUuid())) {
-							userGroups.get(i).setSelected("true");
-						}
-					}
-				}
-				existingMenu.setUserGroups(userGroups);
-				
-				List<Object[]> revisions = menuFacade.findHistoryByUuid(menuUpdate.getUuid(), null, null);
-				model.addAttribute(BackofficeWebConstants.Model.REVISIONS, revisions);
-				
-				List<Object[]> fieldRevisions = menuFacade.findFieldHistoryByUuid(menuUpdate.getUuid(), null, null);
-				model.addAttribute(BackofficeWebConstants.Model.FIELD_REVISIONS, fieldRevisions);
 
 				model.addAttribute(MenuWebConstants.ModelAttribute.UPDATE, existingMenu);
 			} else {
-				menuUpdate.setUuid(null);
+				updateDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
@@ -99,25 +72,15 @@ public class MenuController extends AbstractController {
 	}
 
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "create")
-	public RedirectView create(@ModelAttribute(MenuWebConstants.ModelAttribute.CREATE) MenuDto menuCreate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView create(@ModelAttribute(MenuWebConstants.ModelAttribute.CREATE) MenuDto createDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		if (menuCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-					"Create new record doesn't need UUID.");
+		if (createDto.getUuid() != null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
-			List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
-			for (UserGroupDto userGroup : menuCreate.getUserGroups()) {
-				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
-					userGroups.add(userGroup);
-				}
-			}
-			menuCreate.setUserGroups(userGroups);
-
 			try {
-				menuCreate = menuFacade.update(menuCreate);
+				createDto = menuFacade.update(createDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -125,7 +88,7 @@ public class MenuController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(MenuDto.UUID, menuCreate.getUuid());
+		redirectAttributes.addAttribute(MenuDto.UUID, createDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -134,25 +97,50 @@ public class MenuController extends AbstractController {
 	}
 
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "update")
-	public RedirectView update(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto menuUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+	public RedirectView update(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto updateDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+			RedirectAttributes redirectAttributes) throws Exception {
 
-		if (menuUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-					"Update record needed existing UUID.");
+		if (updateDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
-			List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
-			for (UserGroupDto userGroup : menuUpdate.getUserGroups()) {
-				if (BooleanUtils.parseBoolean(userGroup.getSelected())) {
-					userGroups.add(userGroup);
+			// UserGroup
+			if (updateDto.getTableUserGroups() != null) {
+				List<UserGroupDto> userGroups = menuFacade.findOneByUuid(updateDto.getUuid()).getUserGroups();
+
+				for (int i = 0; i < updateDto.getTableUserGroups().length; i++) {
+
+					boolean remove = true;
+					if (updateDto.getTableSelectedUserGroups() != null && updateDto.getTableSelectedUserGroups().length > i && BooleanUtils.parseBoolean(updateDto.getTableSelectedUserGroups()[i])) {
+						remove = false;
+					}
+
+					if (remove) {
+						for (Iterator<UserGroupDto> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext();) {
+							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableUserGroups()[i]))) {
+								userGroupsIterator.remove();
+							}
+						}
+					} else {
+						boolean add = true;
+						for (Iterator<UserGroupDto> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext();) {
+							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableUserGroups()[i]))) {
+								add = false;
+							}
+						}
+
+						if (add) {
+							UserGroupDto userGroup = new UserGroupDto();
+							userGroup.setUuid(UUID.fromString(updateDto.getTableUserGroups()[i]));
+							userGroups.add(userGroup);
+						}
+					}
 				}
+				updateDto.setUserGroups(userGroups);
 			}
-			menuUpdate.setUserGroups(userGroups);
 
 			try {
-				menuUpdate = menuFacade.update(menuUpdate);
+				updateDto = menuFacade.update(updateDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -160,7 +148,7 @@ public class MenuController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(MenuDto.UUID, menuUpdate.getUuid());
+		redirectAttributes.addAttribute(MenuDto.UUID, updateDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -169,17 +157,16 @@ public class MenuController extends AbstractController {
 	}
 
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "delete")
-	public RedirectView delete(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto menuUpdate, Model model,
-			BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView delete(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto updateDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			menuFacade.delete(menuUpdate.getUuid());
+			menuFacade.delete(updateDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(MenuDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(MenuWebConstants.ModelAttribute.UPDATE, menuUpdate);
+			redirectAttributes.addFlashAttribute(MenuWebConstants.ModelAttribute.UPDATE, updateDto);
 		}
 
 		RedirectView redirectView = new RedirectView();
@@ -188,10 +175,9 @@ public class MenuController extends AbstractController {
 		return redirectView;
 
 	}
-	
+
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "move")
-	public RedirectView move(Model model, @RequestParam Map<String, Object> requestParams,
-			final RedirectAttributes redirectAttributes) {
+	public RedirectView move(Model model, @RequestParam Map<String, Object> requestParams, final RedirectAttributes redirectAttributes) {
 
 		String fromUuid = (String) requestParams.get("fromUuid");
 		String toUuid = (String) requestParams.get("toUuid");
@@ -200,8 +186,7 @@ public class MenuController extends AbstractController {
 		MapBindingResult bindingResult = new MapBindingResult(new HashMap<String, Object>(), MenuDto.class.getName());
 
 		try {
-			menuFacade.changePosition(UUID.fromString(fromUuid),
-					StringUtils.isNotBlank(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex));
+			menuFacade.changePosition(UUID.fromString(fromUuid), StringUtils.isNotBlank(toUuid) ? UUID.fromString(toUuid) : null, Integer.valueOf(toIndex));
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 		} catch (BusinessException e) {

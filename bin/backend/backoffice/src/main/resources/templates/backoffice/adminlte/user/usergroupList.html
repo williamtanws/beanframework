@@ -6,27 +6,25 @@
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<section class="content">
-			<!-- Search Form-->
-			<div class="row">
-				<div class="col-md-6">
-					<th:block
-						layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.usergroup')}}, objectSearch=${usergroupSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
-				</div>
-			</div>
-			<!-- Alert Notification-->
-			<div class="row">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/alert :: custom}"></th:block>
-			</div>
+		<section class="content" th:with="usergroupName=#{module.usergroup.name}">
 			<!-- List Table-->
-			<div class="row" th:with="usergroupName=#{module.usergroup.name}">
-				<th:block
-					layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.usergroup}, objectUpdate=${usergroupUpdate}, objectSearch=${usergroupSearch}, icon=@{${@environment.getProperty('module.usergroup.icon')}}, createAuthority='usergroup_create', updateAuthority='usergroup_update', listFields=${ {{'id', 'ID'},{'name', usergroupName}} }, paginationAction=@{${@environment.getProperty('path.usergroup')}}, searchFields=${ {'id','name'} }, updateForm='/backoffice/adminlte/user/usergroupForm')}"></th:block>
-			</div>
+			<th:block
+				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.usergroup.icon')}}, title=#{module.usergroup}, objectUpdate=${usergroupUpdate}, createAuthority='usergroup_create', updateAuthority='usergroup_update', tableName='usergroup', listUrl=@{${@environment.getProperty('path.api.usergroup.page')}}, listFields=${ {{'id', 'ID'},{'name', usergroupName}} }, editFormAction=@{${@environment.getProperty('path.usergroup')}}, editForm=@{${@environment.getProperty('view.usergroup.form')}} )}"></th:block>
 			<!-- Create Modal-->
 			<th:block sec:authorize="hasAuthority('usergroup_create')"
 				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.usergroup')}}, createObject=${usergroupCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.usergroup.checkid')})}"></th:block>
 		</section>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+			$('#mainTable thead tr:eq(1) th').each(function(index) {
+				if(index < 2){
+			    	var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
+			    	var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+	            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+				}
+			});
+			/*]]>*/
+		</script>
 	</th:block>
 </body>
 </html>

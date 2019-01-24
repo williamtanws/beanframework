@@ -1,5 +1,6 @@
 package com.beanframework.user.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +8,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -16,11 +16,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -46,7 +45,7 @@ public class AuditorServiceImpl implements AuditorService {
 	@Cacheable(value = "AuditorOneProperties", key = "#properties")
 	@Override
 	public Auditor findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true,Auditor.class);
+		return modelService.findOneEntityByProperties(properties, true, Auditor.class);
 	}
 
 	@Cacheable(value = "AuditorsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
@@ -55,27 +54,12 @@ public class AuditorServiceImpl implements AuditorService {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Auditor.class);
 	}
 
-	@Cacheable(value = "AuditorsPage", key = "'query:'+#query+',pageable'+#pageable")
-	@Override
-	public <T> Page<Auditor> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception {
-		return modelService.findEntityPage(specification, pageable, false, Auditor.class);
-	}
-
-	@Cacheable(value = "AuditorsHistory", key = "'uuid:'+#uuid+',firstResult:'+#firstResult+',maxResults:'+#maxResults")
-	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		AuditCriterion criterion = AuditEntity.conjunction().add(AuditEntity.id().eq(uuid)).add(AuditEntity.revisionType().ne(RevisionType.DEL));
-		AuditOrder order = AuditEntity.revisionNumber().desc();
-		return modelService.findHistory(false, criterion, order, firstResult, maxResults, Auditor.class);
-	}
-
 	@Caching(evict = { //
 			@CacheEvict(value = "AuditorOne", key = "#model.uuid", condition = "#model.uuid != null"), //
 			@CacheEvict(value = "AuditorOneProperties", allEntries = true), //
 			@CacheEvict(value = "AuditorsSorts", allEntries = true), //
 			@CacheEvict(value = "AuditorsPage", allEntries = true), //
-			@CacheEvict(value = "AuditorsHistory", allEntries = true), //
-			@CacheEvict(value = "AuditorsRelatedHistory", allEntries = true) }) //
+			@CacheEvict(value = "AuditorsHistory", allEntries = true) }) //
 	@Override
 	public Auditor saveEntity(User model) throws BusinessException {
 		try {
@@ -83,7 +67,7 @@ public class AuditorServiceImpl implements AuditorService {
 			if (auditor == null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Auditor.ID, model.getId());
-				auditor = modelService.findOneEntityByProperties(properties, true,Auditor.class);
+				auditor = modelService.findOneEntityByProperties(properties, true, Auditor.class);
 			}
 
 			if (auditor == null) {
@@ -117,8 +101,7 @@ public class AuditorServiceImpl implements AuditorService {
 			@CacheEvict(value = "AuditorOneProperties", allEntries = true), //
 			@CacheEvict(value = "AuditorsSorts", allEntries = true), //
 			@CacheEvict(value = "AuditorsPage", allEntries = true), //
-			@CacheEvict(value = "AuditorsHistory", allEntries = true), //
-			@CacheEvict(value = "AuditorsRelatedHistory", allEntries = true) })
+			@CacheEvict(value = "AuditorsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
@@ -129,5 +112,44 @@ public class AuditorServiceImpl implements AuditorService {
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
+
+	@Cacheable(value = "AuditorsPage", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public <T> Page<Auditor> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception {
+		return modelService.findEntityPage(dataTableRequest.getSpecification(), dataTableRequest.getPageable(), false, Auditor.class);
+	}	
+
+	@Cacheable(value = "AuditorsPage", key = "'count'")
+	@Override
+	public int count() throws Exception {
+		return modelService.count(Auditor.class);
+	}
+	
+	@Cacheable(value = "AuditorsHistory", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(dataTableRequest.getAuditCriterion());
+
+		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
+		if (dataTableRequest.getAuditOrder() != null)
+			auditOrders.add(dataTableRequest.getAuditOrder());
+		
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Auditor.class);
+
+	}
+
+	@Cacheable(value = "AuditorsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
+	@Override
+	public int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
+
+		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Auditor.class);
 	}
 }

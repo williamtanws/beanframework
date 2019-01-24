@@ -1,55 +1,114 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="dynamicfieldenum">
-		<table id="dynamicfieldenumTable" class="table table-bordered table-hover">
+	<th:block layout:fragment="dynamicfieldenum (objectsName)">
+		<table id="dynamicfieldenumTable" class="table table-bordered table-hover" style="width:100%">
 			<thead>
 				<tr>
-					<th th:text="#{module.backoffice.id}"></th>
-					<th th:text="#{module.dynamicfieldenum.name}"></th>
-					<th th:text="#{module.backoffice.select}"></th>
+					<th th:text="#{module.backoffice.id}" class="text-center"></th>
+					<th th:text="#{module.dynamicfieldenum.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.select}" class="text-center"></th>
 				</tr>
 			</thead>
-			<tbody>
-				<tr th:each="dynamicFieldEnum,itrStat : *{enums}">
-					<th>
-						<a sec:authorize="hasAuthority('dynamicfieldenum_read')" th:href="@{${@environment.getProperty('path.dynamicfieldenum')}(uuid=${dynamicFieldEnum.uuid})}" th:text="${dynamicFieldEnum.id}"></a>
-						<span sec:authorize="!hasAuthority('dynamicfieldenum_read')" th:text="${dynamicFieldEnum.id}"></span>
-					</th>
-					<td th:text="${dynamicFieldEnum.name}"></td>
-					<td>
-						<input type="hidden" th:name="'enums['+${itrStat.index}+'].uuid'" th:value="${dynamicFieldEnum.uuid}">
-						<input type="checkbox" th:name="'enums['+${itrStat.index}+'].selected'" th:checked="${dynamicFieldEnum.selected}">
-						<script th:inline="javascript">
-							$('input').iCheck({
-								checkboxClass : 'icheckbox_square-blue',
-								radioClass : 'iradio_square-blue',
-								increaseArea : '20%' // optional
-							});
-						</script>
-					</td>
+			<thead>
+				<tr>
+					<th th:text="#{module.backoffice.id}" class="text-center"></th>
+					<th th:text="#{module.dynamicfieldenum.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.select}" class="text-center"></th>
 				</tr>
-			</tbody>
+			</thead>
 		</table>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    	
 		    var locale = /*[[${#locale}]]*/;
 		    
-		    $(document).ready(function() {
+		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.dynamicfieldenum.page')}}]]*/;
+		    
+		    var objectsName = [];
+		    /*[# th:each="object : *{__${objectsName}__}"]*/  	    
+		    objectsName.push(/*[[${object.uuid}]]*/); 	    
+		    /*[/]*/
+		    
+		    var dynamicfieldenumTable = $('#dynamicfieldenumTable').DataTable({
+	    		  'language' : {
+			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+			      },
+	    	      'pageLength'  : 10,
+	    	      'paging'      : true,
+	    	      'lengthChange': true,
+	    	      'searching'   : true,
+	    	      'ordering'    : true,
+	    	      'info'        : false,
+	    	      'autoWidth'   : true,
+	    	      'processing': true,
+	    	      'serverSide': true,
+	    	      'searchDelay': 1000,
+	    	      'ajax': {
+	                    'url': ajaxUrl
+	              },
+	              'columns': [
+	                    { "data": "id" },
+	                    { "data": "name" },
+	                    { "data": "" }
+	              ],
+	    	      'columnDefs': [
+	    	            { 
+	    	                targets: 2,
+	    	                'searchable': false,
+	    	                'orderable': false,
+	    	                'className': 'text-center',
+	    	                render: function(data, type, row, meta)
+	    	                {
+	    	                   var selected = objectsName.includes(row.uuid);
+	    	                   if(selected){
+	    	                	   return "<input type='hidden' name='tableEnums["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEnums["+meta.row+"]' checked>"; 
+	    	                   }
+	    	                   else{
+	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
+	    	                	   if(preventSelfUuid == row.uuid){
+		    	                	   return "<input type='hidden' name='tableEnums["+meta.row+"]' value='"+row.uuid+"'/>"; 
+	    	                	   }
+	    	                	   else{
+		    	                	   return "<input type='hidden' name='tableEnums["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEnums["+meta.row+"]'>"; 
+	    	                	   }
+	    	                   }
+	    	                    
+	    	                }
+	    	            }            
+	    	       ],
+	    	       'fnDrawCallback': function() {
+	    	           icheck();
+	    	       }
+	    	});
+		    
+		    function icheck() {
+		    	$('input').iCheck({
+					checkboxClass : 'icheckbox_square-blue',
+					radioClass : 'iradio_square-blue',
+					increaseArea : '20%' // optional
+				});
+		    }
+		    
+		    $(document).ready(function ()
+		    {
+		    	$('#dynamicfieldenumTable thead tr:eq(1) th').each(function(index){
+		    		if(index < 2){
+		    			var title = $('#dynamicfieldenumTable thead tr:eq(0) th').eq( $(this).index() ).text();
+		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+		    		} else{
+			            $(this).html('');
+		    		}
+		        });
 		    	
-		    	$('#dynamicfieldenumTable').DataTable({
-		    		  'language' : {
-				        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
-				      },
-		    	      'pageLength'  : 10,
-		    	      'paging'      : true,
-		    	      'lengthChange': false,
-		    	      'searching'   : true,
-		    	      'ordering'    : true,
-		    	      'info'        : false,
-		    	      'autoWidth'   : true
-		    	})
+		    	dynamicfieldenumTable.columns().every(function (index) {
+		    	    $('#dynamicfieldenumTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+		    	    	dynamicfieldenumTable.column($(this).parent().index() + ':visible')
+		    	            .search(this.value)
+		    	            .draw();
+		    	    });
+		    	});
 		    });
 		    /*]]>*/
 		</script>

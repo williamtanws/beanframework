@@ -54,7 +54,7 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setJobClass(StringUtils.stripToNull(source.getJobClass()));
 			prototype.setJobGroup(StringUtils.stripToNull(source.getJobGroup()));
-			prototype.setJobName(StringUtils.stripToNull(source.getJobName()));
+			prototype.setName(StringUtils.stripToNull(source.getJobName()));
 			prototype.setDescription(StringUtils.stripToNull(source.getDescription()));
 			prototype.setCronExpression(StringUtils.stripToNull(source.getCronExpression()));
 			prototype.setStartup(source.isStartup());

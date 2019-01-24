@@ -134,7 +134,7 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history">
 								<div class="box-body">
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/history :: history}"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.menu.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->

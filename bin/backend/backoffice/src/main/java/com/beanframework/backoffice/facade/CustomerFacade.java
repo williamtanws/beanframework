@@ -5,11 +5,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.beanframework.backoffice.data.CustomerDto;
-import com.beanframework.backoffice.data.CustomerSearch;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 
 public interface CustomerFacade {
@@ -20,9 +19,6 @@ public interface CustomerFacade {
 		public static final String UPDATE = "hasAuthority('customer_update')";
 		public static final String DELETE = "hasAuthority('customer_delete')";
 	}
-
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	Page<CustomerDto> findPage(CustomerSearch search, PageRequest pageRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	CustomerDto findOneByUuid(UUID uuid) throws Exception;
@@ -39,11 +35,14 @@ public interface CustomerFacade {
 	@PreAuthorize(PreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	Page<CustomerDto> findPage(DataTableRequest<CustomerDto> dataTableRequest) throws Exception;
 
-	@PreAuthorize(PreAuthorizeEnum.READ)
-	List<Object[]> findFieldHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
+	int count() throws Exception;
 
 	List<CustomerDto> findAllDtoCustomers() throws Exception;
+
+	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
+	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
 }

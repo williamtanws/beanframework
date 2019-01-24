@@ -6,27 +6,25 @@
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<section class="content">
-			<!-- Search Form-->
-			<div class="row">
-				<div class="col-md-6">
-					<th:block
-						layout:insert="~{/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.customer')}}, objectSearch=${customerSearch}, searchFields=${ {'id'} }, displayFields=${ {'id'} } )}"></th:block>
-				</div>
-			</div>
-			<!-- Alert Notification-->
-			<div class="row">
-				<th:block layout:insert="~{/backoffice/adminlte/common/component/alert :: custom}"></th:block>
-			</div>
+		<section class="content" th:with="customerName=#{module.customer.name}">
 			<!-- List Table-->
-			<div class="row">
-				<th:block
-					layout:insert="~{/backoffice/adminlte/common/component/list :: list (title=#{module.customer}, objectUpdate=${customerUpdate}, objectSearch=${customerSearch}, icon=@{${@environment.getProperty('module.customer.icon')}}, createAuthority='customer_create', updateAuthority='customer_update', paginationAction=@{${@environment.getProperty('path.customer')}}, searchFields=${ {'id'} }, updateForm='/backoffice/adminlte/customer/customerForm')}"></th:block>
-			</div>
+			<th:block
+				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.customer.icon')}}, title=#{module.customer}, objectUpdate=${customerUpdate}, createAuthority='customer_create', updateAuthority='customer_update', tableName='customer', listUrl=@{${@environment.getProperty('path.api.customer.page')}}, listFields=${ {{'id', 'ID'},{'name', customerName}} }, editFormAction=@{${@environment.getProperty('path.customer')}}, editForm=@{${@environment.getProperty('view.customer.form')}} )}"></th:block>
 			<!-- Create Modal-->
 			<th:block sec:authorize="hasAuthority('customer_create')"
-				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.customer')}}, createObject=${customerCreate}, createForm='/backoffice/adminlte/customer/customerForm', createCheckId=${@environment.getProperty('path.api.customer.checkid')})}"></th:block>
+				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.customer')}}, createObject=${customerCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.customer.checkid')})}"></th:block>
 		</section>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+			$('#mainTable thead tr:eq(1) th').each(function(index) {
+				if(index < 2){
+			    	var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
+			    	var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+	            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+				}
+			});
+			/*]]>*/
+		</script>
 	</th:block>
 </body>
 </html>

@@ -115,7 +115,7 @@
 			sessionStorage.setItem("tabUrl", '#tab_'+tab);
 		}
 		
-		function activaTab(){
+		function activeTab(){
 			if(window.location.hash != ''){
 				var baseUrl = window.location.href.split('#')[0];
 				window.location.replace( baseUrl + window.location.hash );
@@ -129,13 +129,11 @@
 					window.location.replace( baseUrl + tabUrl );
 					
 				    $('.nav-tabs a[href="' + tabUrl + '"]').tab('show');
-				    
-				    sessionStorage.removeItem("tabUrl");
 				}
 			}
 		}
 		
-		activaTab();
+		activeTab();
 		
 		$(document).ready(function() {
 			

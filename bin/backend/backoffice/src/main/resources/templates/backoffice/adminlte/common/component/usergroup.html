@@ -1,55 +1,114 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="usergroup">
-		<table id="usergroupTable" class="table table-bordered table-hover">
+	<th:block layout:fragment="usergroup (userGroups)">
+		<table id="usergroupTable" class="table table-bordered table-hover" style="width:100%">
 			<thead>
 				<tr>
-					<th th:text="#{module.backoffice.id}"></th>
-					<th th:text="#{module.usergroup.name}"></th>
-					<th th:text="#{module.backoffice.select}"></th>
+					<th th:text="#{module.backoffice.id}" class="text-center"></th>
+					<th th:text="#{module.backoffice.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.select}" class="text-center"></th>
 				</tr>
 			</thead>
-			<tbody>
-				<tr th:each="userGroup,itrStat : *{userGroups}">
-					<th>
-						<a sec:authorize="hasAuthority('usergroup_read')" th:href="@{${@environment.getProperty('path.usergroup')}(uuid=${userGroup.uuid})}" th:text="${userGroup.id}"></a>
-						<span sec:authorize="!hasAuthority('usergroup_read')" th:text="${userGroup.id}"></span>
-					</th>
-					<td th:text="${userGroup.name}"></td>
-					<td>
-						<input type="hidden" th:name="'userGroups['+${itrStat.index}+'].uuid'" th:value="${userGroup.uuid}">
-						<input type="checkbox" th:name="'userGroups['+${itrStat.index}+'].selected'" th:checked="${userGroup.selected}">
-						<script th:inline="javascript">
-							$('input').iCheck({
-								checkboxClass : 'icheckbox_square-blue',
-								radioClass : 'iradio_square-blue',
-								increaseArea : '20%' // optional
-							});
-						</script>
-					</td>
+			<thead>
+				<tr>
+					<th th:text="#{module.backoffice.id}" class="text-center"></th>
+					<th th:text="#{module.backoffice.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.select}" class="text-center"></th>
 				</tr>
-			</tbody>
+			</thead>
 		</table>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    	
 		    var locale = /*[[${#locale}]]*/;
 		    
-		    $(document).ready(function() {
+		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.usergroup.page')}}]]*/;
+
+		    var userGroups = [];
+		    /*[# th:each="object : *{__${userGroups}__}"]*/  	    
+		    userGroups.push(/*[[${object.uuid}]]*/); 	    
+		    /*[/]*/
+		    
+		    var usergroupTable = $('#usergroupTable').DataTable({
+	    		  'language' : {
+			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+			      },
+	    	      'pageLength'  : 10,
+	    	      'paging'      : true,
+	    	      'lengthChange': true,
+	    	      'searching'   : true,
+	    	      'ordering'    : true,
+	    	      'info'        : false,
+	    	      'autoWidth'   : true,
+	    	      'processing': true,
+	    	      'serverSide': true,
+	    	      'searchDelay': 1000,
+	    	      'ajax': {
+	                    'url': ajaxUrl
+	              },
+	              'columns': [
+	                    { "data": "id" },
+	                    { "data": "name" },
+	                    { "data": "" }
+	              ],
+	    	      'columnDefs': [
+	    	            { 
+	    	                targets: 2,
+	    	                'searchable': false,
+	    	                'orderable': false,
+	    	                'className': 'text-center',
+	    	                render: function(data, type, row, meta)
+	    	                {
+	    	                   var selected = userGroups.includes(row.uuid);
+	    	                   if(selected){
+	    	                	   return "<input type='hidden' name='tableUserGroups["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedUserGroups["+meta.row+"]' checked>"; 
+	    	                   }
+	    	                   else{
+	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
+	    	                	   if(preventSelfUuid == row.uuid){
+		    	                	   return "<input type='hidden' name='tableUserGroups["+meta.row+"]' value='"+row.uuid+"'/>"; 
+	    	                	   }
+	    	                	   else{
+		    	                	   return "<input type='hidden' name='tableUserGroups["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedUserGroups["+meta.row+"]'>"; 
+	    	                	   }
+	    	                   }
+	    	                    
+	    	                }
+	    	            }            
+	    	       ],
+	    	       'fnDrawCallback': function() {
+	    	           icheck();
+	    	       }
+	    	});
+		    
+		    function icheck() {
+		    	$('input').iCheck({
+					checkboxClass : 'icheckbox_square-blue',
+					radioClass : 'iradio_square-blue',
+					increaseArea : '20%' // optional
+				});
+		    }
+		    
+		    $(document).ready(function ()
+		    {
+		    	$('#usergroupTable thead tr:eq(1) th').each(function(index){
+		    		if(index < 2){
+		    			var title = $('#usergroupTable thead tr:eq(0) th').eq( $(this).index() ).text();
+		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+		    		} else{
+			            $(this).html('');
+		    		}
+		        });
 		    	
-		    	$('#usergroupTable').DataTable({
-		    		  'language' : {
-				        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
-				      },
-		    	      'pageLength'  : 10,
-		    	      'paging'      : true,
-		    	      'lengthChange': false,
-		    	      'searching'   : true,
-		    	      'ordering'    : true,
-		    	      'info'        : false,
-		    	      'autoWidth'   : true
-		    	})
+		    	usergroupTable.columns().every(function (index) {
+		    	    $('#usergroupTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+		    	    	usergroupTable.column($(this).parent().index() + ':visible')
+		    	            .search(this.value)
+		    	            .draw();
+		    	    });
+		    	});
 		    });
 		    /*]]>*/
 		</script>

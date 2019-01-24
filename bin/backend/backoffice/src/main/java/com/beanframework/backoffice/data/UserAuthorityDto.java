@@ -4,21 +4,11 @@ import com.beanframework.common.data.GenericDto;
 
 public class UserAuthorityDto extends GenericDto {
 
-	private UserGroupDto userGroup;
-
 	private UserPermissionDto userPermission;
 
 	private UserRightDto userRight;
 
 	private Boolean enabled;
-
-	public UserGroupDto getUserGroup() {
-		return userGroup;
-	}
-
-	public void setUserGroup(UserGroupDto userGroup) {
-		this.userGroup = userGroup;
-	}
 
 	public UserPermissionDto getUserPermission() {
 		return userPermission;

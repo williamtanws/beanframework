@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -77,7 +78,7 @@ public class Menu extends GenericEntity {
 	@JoinColumn(name = "parent_uuid")
 	private Menu parent;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@AuditMappedBy(mappedBy = PARENT)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = PARENT, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(SORT + " ASC")
@@ -89,6 +90,7 @@ public class Menu extends GenericEntity {
 	@JoinTable(name = MenuConstants.Table.MENU_USER_GROUP_REL, joinColumns = @JoinColumn(name = "menu_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
+	@AuditMappedBy(mappedBy = MenuField.MENU)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy(MenuField.DYNAMIC_FIELD)

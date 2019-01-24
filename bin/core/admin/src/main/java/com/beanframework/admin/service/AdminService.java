@@ -5,11 +5,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 
 public interface AdminService {
@@ -22,12 +21,6 @@ public interface AdminService {
 
 	List<Admin> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
 
-	<T> Page<Admin> findEntityPage(String query, Specification<T> specification, PageRequest pageable) throws Exception;
-
-	List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-
-	List<Object[]> findHistoryByRelatedUuid(String relatedEntity, UUID uuid, Integer firstResult, Integer maxResults) throws Exception;
-
 	Admin saveEntity(Admin model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
@@ -35,5 +28,13 @@ public interface AdminService {
 	Admin findAuthenticate(String id, String password) throws Exception;
 
 	Admin getCurrentUser() throws Exception;
+
+	<T> Page<Admin> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception;
+
+	int count() throws Exception;
+
+	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+
+	int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
 
 }

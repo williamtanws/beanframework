@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<head>
+<title th:utext="#{module.dynamicfieldenum}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<section class="content" th:with="dynamicfieldenumName=#{module.dynamicfieldenum.name}, dynamicfieldenumEnumGroup=#{module.dynamicfieldenum.enumGroup}, dynamicfieldenumSort=#{module.dynamicfieldenum.sort}">
+			<!-- List Table-->
+			<th:block
+				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.dynamicfieldenum.icon')}}, title=#{module.dynamicfieldenum}, objectUpdate=${dynamicfieldenumUpdate}, createAuthority='dynamicfieldenum_create', updateAuthority='dynamicfieldenum_update', tableName='dynamicfieldenum', listUrl=@{${@environment.getProperty('path.api.dynamicfieldenum.page')}}, listFields=${ {{'id', 'ID'},{'name', dynamicfieldenumName}, {'enumGroup', dynamicfieldenumEnumGroup}, {'sort', dynamicfieldenumSort}} }, editFormAction=@{${@environment.getProperty('path.dynamicfieldenum')}}, editForm=@{${@environment.getProperty('view.dynamicfieldenum.form')}} )}"></th:block>
+			<!-- Create Modal-->
+			<th:block sec:authorize="hasAuthority('dynamicfieldenum_create')"
+				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.dynamicfieldenum')}}, createObject=${dynamicfieldenumCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.dynamicfieldenum.checkid')})}"></th:block>
+		</section>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+			$('#mainTable thead tr:eq(1) th').each(function(index) {
+				if(index < 3){
+			    	var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
+			    	var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+	            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+				}
+			});
+			/*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>

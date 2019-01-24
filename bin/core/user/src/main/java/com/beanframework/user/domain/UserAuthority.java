@@ -9,6 +9,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -29,21 +31,27 @@ public class UserAuthority extends GenericEntity {
 	public static final String USER_PERMISSION_UUID = "userPermission.uuid";
 	public static final String USER_RIGHT = "userRight";
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usergroup_uuid")
 	private UserGroup userGroup;
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@NotAudited
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userpermission_uuid")
 	private UserPermission userPermission;
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@NotAudited
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userright_uuid")
 	private UserRight userRight;
 
+	@Audited(withModifiedFlag = true)
 	@NotNull
 	private Boolean enabled;
 

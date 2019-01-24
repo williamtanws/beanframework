@@ -8,17 +8,15 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.service.AdminService;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.data.AdminDto;
-import com.beanframework.console.data.AdminSearch;
-import com.beanframework.console.data.AdminSpecification;
 
 @Component
 public class AdminFacadeImpl implements AdminFacade {
@@ -28,13 +26,6 @@ public class AdminFacadeImpl implements AdminFacade {
 	
 	@Autowired
 	private AdminService adminService;
-
-	@Override
-	public Page<AdminDto> findPage(AdminSearch search, PageRequest pageable) throws Exception {
-		Page<Admin> page = adminService.findEntityPage(search.toString(), AdminSpecification.findByCriteria(search), pageable);
-		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class);
-		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
-	}
 
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
@@ -73,15 +64,17 @@ public class AdminFacadeImpl implements AdminFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		adminService.deleteByUuid(uuid);
 	}
+	
+	@Override
+	public Page<AdminDto> findPage(DataTableRequest<AdminDto> dataTableRequest) throws Exception {
+		Page<Admin> page = adminService.findEntityPage(dataTableRequest);
+		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class);
+		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
+	}
 
 	@Override
-	public List<Object[]> findHistoryByUuid(UUID uuid, Integer firstResult, Integer maxResults) throws Exception {
-		List<Object[]> revisions = adminService.findHistoryByUuid(uuid, firstResult, maxResults);
-//		for (int i = 0; i < revisions.size(); i++) {
-//			revisions.get(i)[0] = modelService.getDto(revisions.get(i)[0], AdminDto.class);
-//		}
-
-		return revisions;
+	public int count() throws Exception {
+		return adminService.count();
 	}
 
 	@Override
@@ -89,6 +82,25 @@ public class AdminFacadeImpl implements AdminFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Admin.CREATED_DATE, Sort.Direction.DESC);
 		return modelService.getDto(adminService.findEntityBySorts(sorts, false), AdminDto.class);
+	}
+	
+	@Override
+	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+
+		List<Object[]> revisions = adminService.findHistory(dataTableRequest);
+		for (int i = 0; i < revisions.size(); i++) {
+			Object[] entityObject = revisions.get(i);
+			if (entityObject[0] instanceof Admin)
+				entityObject[0] = modelService.getDto(entityObject[0], AdminDto.class);
+			revisions.set(i, entityObject);
+		}
+
+		return revisions;
+	}
+
+	@Override
+	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+		return adminService.findCountHistory(dataTableRequest);
 	}
 
 }
