@@ -1,19 +1,21 @@
 package com.beanframework.backoffice.web;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -76,8 +77,8 @@ public class EmployeeProfileController {
 		return VIEW_EMPLOYEE_PROFILE;
 	}
 
-	@GetMapping(value = EmployeeWebConstants.Path.PROFILE_PICTURE)
-	public @ResponseBody byte[] getImage(@RequestParam Map<String, Object> requestParams) throws Exception {
+	@GetMapping(value = EmployeeWebConstants.Path.PROFILE_PICTURE, produces = MediaType.ALL_VALUE)
+	public ResponseEntity<byte[]> getImage(@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		UUID uuid = null;
 
@@ -94,13 +95,11 @@ public class EmployeeProfileController {
 			type = "thumbnail";
 		}
 
-		InputStream targetStream;
-		File picture = new File(PROFILE_PICTURE_LOCATION + File.separator + uuid + File.separator + type + ".png");
+		File profilePicture = new File(PROFILE_PICTURE_LOCATION + File.separator + uuid + File.separator + type + ".png");
+		profilePicture = new File(profilePicture.getAbsolutePath());
+		if (profilePicture.exists()) {
 
-		if (picture.exists()) {
-			targetStream = new FileInputStream(picture);
-
-			return IOUtils.toByteArray(targetStream);
+			return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(Files.readAllBytes(profilePicture.toPath()));
 		} else {
 
 			BackofficeConfigurationDto configuration = configurationFacade.findOneDtoById(CONFIGURATION_DEFAULT_AVATAR);
@@ -110,9 +109,9 @@ public class EmployeeProfileController {
 			} else {
 
 				ClassPathResource resource = new ClassPathResource(configuration.getValue());
-				targetStream = resource.getInputStream();
+				Path defaultImage = Paths.get(resource.getURI());
 
-				return IOUtils.toByteArray(targetStream);
+				return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(Files.readAllBytes(defaultImage));
 			}
 		}
 	}

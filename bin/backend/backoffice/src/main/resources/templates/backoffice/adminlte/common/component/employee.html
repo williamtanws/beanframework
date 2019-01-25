@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
 	<th:block layout:fragment="employee (employees)">
-		<table id="employeeTable" class="table table-bordered table-hover" style="width:100%">
+		<table id="employeeTable" class="table table-bordered table-hover" style="width: 100%">
 			<thead>
 				<tr>
 					<th th:text="#{module.backoffice.id}" class="text-center"></th>
@@ -112,6 +112,21 @@
 		    });
 		    /*]]>*/
 		</script>
+		<th:block sec:authorize="hasAuthority('employee_read')">
+			<script th:inline="javascript">
+		    	/*<![CDATA[*/
+		    		$('#employeeTable').on('click', 'tbody tr', function() {
+						//console.log('API row values : ', mainTable.row(this).data());
+						var uuid = employeeTable.row(this).data().uuid;
+						if(uuid){
+							var url = /*[[@{${@environment.getProperty('path.employee')}}]]*/;
+							url += '?uuid='+uuid+'#tab_general';
+							window.open(url, '_blank');
+						}
+					});
+		    	/*]]>*/
+			</script>
+		</th:block>
 	</th:block>
 </body>
 </html>

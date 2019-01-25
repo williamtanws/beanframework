@@ -32,7 +32,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.UUID, source.getUuid());
-				Employee prototype = modelService.findOneEntityByProperties(properties, true,Employee.class);
+				Employee prototype = modelService.findOneEntityByProperties(properties, true, Employee.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);
@@ -68,7 +68,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
-			
+
 			if (source.getAccountNonLocked() == null) {
 				if (prototype.getAccountNonLocked() != null) {
 					prototype.setAccountNonLocked(null);
@@ -80,7 +80,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
-			
+
 			if (source.getCredentialsNonExpired() == null) {
 				if (prototype.getCredentialsNonExpired() != null) {
 					prototype.setCredentialsNonExpired(null);
@@ -92,7 +92,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
-			
+
 			if (source.getEnabled() == null) {
 				if (prototype.getEnabled() != null) {
 					prototype.setEnabled(null);
@@ -130,8 +130,12 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 			}
 
 			// User Group
-			if (source.getUserGroups() == null || source.getUserGroups().isEmpty())
-				prototype.setUserGroups(new ArrayList<UserGroup>());
+			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
+				if (prototype.getUserGroups().isEmpty()) {
+					prototype.setUserGroups(new ArrayList<UserGroup>());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			}
 
 			Iterator<UserGroup> itr = prototype.getUserGroups().iterator();
 			while (itr.hasNext()) {
@@ -166,7 +170,6 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 					}
 				}
 			}
-
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}

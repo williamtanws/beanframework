@@ -55,8 +55,7 @@ public class UserRightServiceImpl implements UserRightService {
 			@CacheEvict(value = "UserRightOneProperties", allEntries = true), //
 			@CacheEvict(value = "UserRightsSorts", allEntries = true), //
 			@CacheEvict(value = "UserRightsPage", allEntries = true), //
-			@CacheEvict(value = "UserRightsHistory", allEntries = true), //
-			@CacheEvict(value = "UserRightsRelatedHistory", allEntries = true) }) //
+			@CacheEvict(value = "UserRightsHistory", allEntries = true) }) //
 	@Override
 	public UserRight saveEntity(UserRight model) throws BusinessException {
 		return (UserRight) modelService.saveEntity(model, UserRight.class);
@@ -67,8 +66,7 @@ public class UserRightServiceImpl implements UserRightService {
 			@CacheEvict(value = "UserRightOneProperties", allEntries = true), //
 			@CacheEvict(value = "UserRightsSorts", allEntries = true), //
 			@CacheEvict(value = "UserRightsPage", allEntries = true), //
-			@CacheEvict(value = "UserRightsHistory", allEntries = true), //
-			@CacheEvict(value = "UserRightsRelatedHistory", allEntries = true) })
+			@CacheEvict(value = "UserRightsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 

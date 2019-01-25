@@ -58,7 +58,7 @@ public class DataTableRequest<T> {
 	private List<DataTableColumnSpecs> columns;
 
 	/** The order. */
-	private DataTableColumnSpecs order;
+	private List<DataTableColumnSpecs> orders;
 
 	/** The is global search. */
 	private boolean isGlobalSearch;
@@ -185,8 +185,8 @@ public class DataTableRequest<T> {
 	 *
 	 * @return the order
 	 */
-	public DataTableColumnSpecs getOrder() {
-		return order;
+	public List<DataTableColumnSpecs> getOrders() {
+		return orders;
 	}
 
 	/**
@@ -194,8 +194,8 @@ public class DataTableRequest<T> {
 	 *
 	 * @param order the order to set
 	 */
-	public void setOrder(DataTableColumnSpecs order) {
-		this.order = order;
+	public void setOrders(List<DataTableColumnSpecs> orders) {
+		this.orders = orders;
 	}
 
 	/**
@@ -247,15 +247,13 @@ public class DataTableRequest<T> {
 
 			this.setStart(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_NO)));
 			this.setLength(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_SIZE)));
-			this.setUniqueId(request.getParameter("_"));
 			this.setDraw(request.getParameter(PaginationCriteria.DRAW));
 
 			this.setSearch(request.getParameter("search[value]"));
 			this.setRegex(Boolean.valueOf(request.getParameter("search[regex]")));
 
-			int sortableCol = Integer.parseInt(request.getParameter("order[0][column]"));
-
 			List<DataTableColumnSpecs> columns = new ArrayList<DataTableColumnSpecs>();
+			List<DataTableColumnSpecs> orders = new ArrayList<DataTableColumnSpecs>();
 
 			if (!AppUtil.isObjectEmpty(this.getSearch())) {
 				this.setGlobalSearch(true);
@@ -267,9 +265,13 @@ public class DataTableRequest<T> {
 				if (null != request.getParameter("columns[" + i + "][data]") && !"null".equalsIgnoreCase(request.getParameter("columns[" + i + "][data]"))
 						&& !AppUtil.isObjectEmpty(request.getParameter("columns[" + i + "][data]"))) {
 					DataTableColumnSpecs colSpec = new DataTableColumnSpecs(request, i);
-					if (i == sortableCol) {
-						this.setOrder(colSpec);
+
+					if (request.getParameter("order[" + i + "][column]") != null) {
+						String sortDir = request.getParameter("order[" + i + "][dir]");
+						colSpec.setSortDir(sortDir);
+						orders.add(colSpec);
 					}
+					
 					columns.add(colSpec);
 
 					if (!AppUtil.isObjectEmpty(colSpec.getSearch())) {
@@ -280,6 +282,9 @@ public class DataTableRequest<T> {
 
 			if (!AppUtil.isObjectEmpty(columns)) {
 				this.setColumns(columns);
+			}
+			if (!AppUtil.isObjectEmpty(orders)) {
+				this.setOrders(orders);
 			}
 		}
 	}
@@ -311,9 +316,9 @@ public class DataTableRequest<T> {
 		pagination.setPageSize(this.getLength());
 
 		SortBy sortBy = null;
-		if (!AppUtil.isObjectEmpty(this.getOrder())) {
+		for (DataTableColumnSpecs colSpec : this.getOrders()) {
 			sortBy = new SortBy();
-			sortBy.addSort(this.getOrder().getData(), SortOrder.fromValue(this.getOrder().getSortDir()));
+			sortBy.addSort(colSpec.getData(), SortOrder.fromValue(colSpec.getSortDir()));
 		}
 
 		FilterBy filterBy = new FilterBy();
@@ -336,14 +341,14 @@ public class DataTableRequest<T> {
 	private int maxParamsToCheck = 0;
 
 	public Pageable getPageable() {
-		List<Order> orders = new ArrayList<Order>();
-		for (DataTableColumnSpecs spec : columns) {
+		List<Order> sortOrders = new ArrayList<Order>();
+		for (DataTableColumnSpecs spec : orders) {
 			if (StringUtils.isNotBlank(spec.getSortDir())) {
 				Order order = new Order(Direction.fromString(spec.getSortDir()), spec.getData());
-				orders.add(order);
+				sortOrders.add(order);
 			}
 		}
-		return PageRequest.of(this.getPaginationRequest().getPageNumber(), this.getPaginationRequest().getPageSize(), Sort.by(orders));
+		return PageRequest.of(this.getPaginationRequest().getPageNumber(), this.getPaginationRequest().getPageSize(), Sort.by(sortOrders));
 	}
 
 	public Specification<T> getSpecification() {
@@ -420,8 +425,8 @@ public class DataTableRequest<T> {
 
 	@Override
 	public String toString() {
-		return "DataTableRequest [uniqueId=" + uniqueId + ", start=" + start + ", length=" + length + ", search=" + search + ", regex=" + regex + ", columns=" + columns + ", order="
-				+ order + ", isGlobalSearch=" + isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + "]";
+		return "DataTableRequest [uniqueId=" + uniqueId + ", start=" + start + ", length=" + length + ", search=" + search + ", regex=" + regex + ", columns=" + columns + ", orders=" + orders
+				+ ", isGlobalSearch=" + isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + "]";
 	}
 
 }

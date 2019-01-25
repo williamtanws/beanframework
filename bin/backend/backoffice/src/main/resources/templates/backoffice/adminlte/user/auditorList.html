@@ -9,7 +9,7 @@
 		<section class="content" th:with="auditorName=#{module.auditor.name}">
 			<!-- List Table-->
 			<th:block
-				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.auditor.icon')}}, title=#{module.auditor}, objectUpdate=${auditorUpdate}, createAuthority='auditor_create', updateAuthority='auditor_update', tableName='auditor', listUrl=@{${@environment.getProperty('path.api.auditor.page')}}, listFields=${ {{'id', 'ID'},{'name', auditorName}} }, editFormAction=@{${@environment.getProperty('path.auditor')}}, editForm=@{${@environment.getProperty('view.auditor.form')}} )}"></th:block>
+				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.auditor.icon')}}, title=#{module.auditor}, objectUpdate=${auditorUpdate}, createAuthority='auditor_create', updateAuthority='auditor_update', tableName='auditor', listUrl=@{${@environment.getProperty('path.api.auditor.page')}}, listFields=${ {{'id', 'ID'},{'name', auditorName}} }, editFormAction=@{${@environment.getProperty('path.auditor')}}, editForm=@{${@environment.getProperty('view.auditor.form')}}, createButton='0' )}"></th:block>
 		</section>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/

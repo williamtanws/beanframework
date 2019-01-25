@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="list (icon, title, objectUpdate, createAuthority, updateAuthority, tableName, listUrl, listFields, editFormAction, editForm)">
+	<th:block layout:fragment="list (icon, title, objectUpdate, createAuthority, updateAuthority, tableName, listUrl, listFields, editFormAction, editForm, createButton)">
 		<!-- Search Form
 		<div class="row">
 			<div class="col-md-6">
@@ -48,9 +48,11 @@
 											<div class="box-body bg-gray">
 												<div class="row">
 													<div class="col-md-6">
-														<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-create" th:if="${#authorization.expression('hasAuthority('''+createAuthority+''')')}">
-															<span class="fa fa-plus color"></span>
-														</button>
+														<th:block th:if="${createButton == '1'}">
+															<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-create" th:if="${#authorization.expression('hasAuthority('''+createAuthority+''')')}">
+																<span class="fa fa-plus color"></span>
+															</button>
+														</th:block>
 													</div>
 													<div class="col-md-6" style="text-align: right; line-height: 34px;">
 														<span th:text="#{module.backoffice.show}"></span>

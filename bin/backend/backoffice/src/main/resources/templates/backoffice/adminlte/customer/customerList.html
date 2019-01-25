@@ -9,7 +9,7 @@
 		<section class="content" th:with="customerName=#{module.customer.name}">
 			<!-- List Table-->
 			<th:block
-				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.customer.icon')}}, title=#{module.customer}, objectUpdate=${customerUpdate}, createAuthority='customer_create', updateAuthority='customer_update', tableName='customer', listUrl=@{${@environment.getProperty('path.api.customer.page')}}, listFields=${ {{'id', 'ID'},{'name', customerName}} }, editFormAction=@{${@environment.getProperty('path.customer')}}, editForm=@{${@environment.getProperty('view.customer.form')}} )}"></th:block>
+				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.customer.icon')}}, title=#{module.customer}, objectUpdate=${customerUpdate}, createAuthority='customer_create', updateAuthority='customer_update', tableName='customer', listUrl=@{${@environment.getProperty('path.api.customer.page')}}, listFields=${ {{'id', 'ID'},{'name', customerName}} }, editFormAction=@{${@environment.getProperty('path.customer')}}, editForm=@{${@environment.getProperty('view.customer.form')}}, createButton='1' )}"></th:block>
 			<!-- Create Modal-->
 			<th:block sec:authorize="hasAuthority('customer_create')"
 				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.customer')}}, createObject=${customerCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.customer.checkid')})}"></th:block>

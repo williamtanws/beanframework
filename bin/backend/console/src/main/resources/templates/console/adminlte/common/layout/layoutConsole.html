@@ -120,7 +120,13 @@
 				var baseUrl = window.location.href.split('#')[0];
 				window.location.replace( baseUrl + window.location.hash );
 				
-			    $('.nav-tabs a[href="' + window.location.hash + '"]').tab('show');
+				if($('.nav-tabs a[href="' + window.location.hash + '"]').length == 0) {
+					sessionStorage.removeItem("tabUrl");
+					window.location.hash = '';
+				}
+				else{
+				    $('.nav-tabs a[href="' + window.location.hash + '"]').tab('show');
+				}
 			}
 			else{
 				var tabUrl = sessionStorage.getItem("tabUrl");
@@ -128,7 +134,14 @@
 					var baseUrl = window.location.href.split('#')[0];
 					window.location.replace( baseUrl + tabUrl );
 					
-				    $('.nav-tabs a[href="' + tabUrl + '"]').tab('show');
+				    
+				    if($('.nav-tabs a[href="' + tabUrl + '"]').length == 0) {
+						sessionStorage.removeItem("tabUrl");
+						window.location.hash = '';
+					}
+					else{
+						$('.nav-tabs a[href="' + tabUrl + '"]').tab('show');
+					}
 				}
 			}
 		}

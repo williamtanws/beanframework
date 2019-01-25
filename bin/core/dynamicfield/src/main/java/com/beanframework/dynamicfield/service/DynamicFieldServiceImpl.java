@@ -51,7 +51,7 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 	}
 
 	@Caching(evict = { //
-			@CacheEvict(value = "DynamicFieldOneProperties", key = "#model.uuid", condition = "#model.uuid != null"), //
+			@CacheEvict(value = "DynamicFieldOne", key = "#model.uuid", condition = "#model.uuid != null"), //
 			@CacheEvict(value = "DynamicFieldOneProperties", allEntries = true), //
 			@CacheEvict(value = "DynamicFieldsSorts", allEntries = true), //
 			@CacheEvict(value = "DynamicFieldsPage", allEntries = true), //

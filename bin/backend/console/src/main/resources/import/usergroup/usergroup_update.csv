@@ -1,5 +1,5 @@
-id,userGroupIds,dynamicField
-employeegroup,,name_en=Employee Group;name_cn=雇员组
-customergroup,generalcustomer;vipcustomer,name_en=Customer Group;name_cn=客户组
-generalcustomer,,name_en=General Customer;name_cn=一般客户
-vipcustomer,,name_en=VIP Customer;name_cn=VIP客户
+id,name,userGroupIds,dynamicField
+employeegroup,Employee Group,,name_en=Employee Group;name_cn=雇员组
+customergroup,Customer Group,generalcustomer;vipcustomer,name_en=Customer Group;name_cn=客户组
+generalcustomer,General Customer,,name_en=General Customer;name_cn=一般客户
+vipcustomer,VIP Customer,,name_en=VIP Customer;name_cn=VIP客户

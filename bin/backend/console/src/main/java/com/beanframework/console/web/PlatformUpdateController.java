@@ -52,7 +52,7 @@ public class PlatformUpdateController {
 	private SessionRegistry sessionRegistry;
 
 	@GetMapping(value = PlatformUpdateWebConstants.Path.UPDATE)
-	public String list(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	public String list(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
 		Set<Entry<String, ImportListener>> mapEntries = importerRegistry.getListeners().entrySet();
 		List<Entry<String, ImportListener>> aList = new LinkedList<Entry<String, ImportListener>>(mapEntries);
@@ -67,8 +67,8 @@ public class PlatformUpdateController {
 
 		model.addAttribute("updates", aList);
 		
-		if(allRequestParams.get("clearsessions") != null) {
-			String clearsessions = (String) allRequestParams.get("clearsessions");
+		if(requestParams.get("clearsessions") != null) {
+			String clearsessions = (String) requestParams.get("clearsessions");
 			if(clearsessions.equals("1")) {
 				for (Object principal : sessionRegistry.getAllPrincipals()) {
 					List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principal, false);
@@ -127,7 +127,13 @@ public class PlatformUpdateController {
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_UPDATE+"?clearsessions=0");
+		
+		if(requestParams.get("clearsessions") == null) {
+			redirectView.setUrl(PATH_UPDATE+"?clearsessions=0");
+		}
+		else {
+			redirectView.setUrl(PATH_UPDATE+"?clearsessions=1");
+		}
 		return redirectView;
 	}
 

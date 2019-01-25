@@ -17,3 +17,4 @@ employeesession,Employee Session,10,fa fa-clock-o,/backoffice/employee/session,,
 usergroup,User Group,20,fa fa-users,/backoffice/usergroup,,true,user,employeegroup,name_en=User Group;name_cn=用户组
 employee,Employee,30,fa fa-user,/backoffice/employee,,true,user,employeegroup,name_en=Employee;name_cn=雇员
 customer,Customer,40,fa fa-user,/backoffice/customer,,true,user,customergroup,name_en=Customer;name_cn=顾客
+comment,Comment,40,fa fa-commenting-o,/backoffice/comment,,true,,employeegroup,name_en=Comment;name_cn=留言

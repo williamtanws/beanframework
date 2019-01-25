@@ -70,7 +70,7 @@ public class DynamicField extends GenericEntity {
 	private Language language;
 
 	@AuditMappedBy(mappedBy = DynamicFieldEnum.DYNAMIC_FIELD) 
-	@Cascade({ CascadeType.ALL })
+	@Cascade({ CascadeType.REFRESH })
 	@OneToMany(mappedBy = DynamicFieldEnum.DYNAMIC_FIELD, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(DynamicFieldEnum.SORT + " ASC")
 	private List<DynamicFieldEnum> enums = new ArrayList<DynamicFieldEnum>();
