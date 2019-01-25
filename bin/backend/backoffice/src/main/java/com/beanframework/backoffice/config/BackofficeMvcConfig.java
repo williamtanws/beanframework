@@ -51,7 +51,7 @@ public class BackofficeMvcConfig implements WebMvcConfigurer {
 
 		converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
 
-		// Media
+		// Comment
 		final ByteArrayHttpMessageConverter arrayHttpMessageConverter = new ByteArrayHttpMessageConverter();
 	    final List<MediaType> list = new ArrayList<>();
 	    list.add(MediaType.ALL);

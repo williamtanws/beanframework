@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.backoffice.data.CommentDto;
 import com.beanframework.backoffice.data.UserDto;
-import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.comment.domain.Comment;
 
 public class DtoCommentConverter implements DtoConverter<Comment, CommentDto> {
 
