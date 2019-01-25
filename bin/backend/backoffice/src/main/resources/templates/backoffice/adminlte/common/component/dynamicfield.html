@@ -62,15 +62,15 @@
 	    	                {
 	    	                   var selected = dynamicFields.includes(row.uuid);
 	    	                   if(selected){
-	    	                	   return "<input type='hidden' name='tableEnums["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEnums["+meta.row+"]' checked>"; 
+	    	                	   return "<input type='hidden' name='tableDynamicFields["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedDynamicFields["+meta.row+"]' checked>"; 
 	    	                   }
 	    	                   else{
 	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
 	    	                	   if(preventSelfUuid == row.uuid){
-		    	                	   return "<input type='hidden' name='tableEnums["+meta.row+"]' value='"+row.uuid+"'/>"; 
+		    	                	   return "<input type='hidden' name='tableDynamicFields["+meta.row+"]' value='"+row.uuid+"'/>"; 
 	    	                	   }
 	    	                	   else{
-		    	                	   return "<input type='hidden' name='tableEnums["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEnums["+meta.row+"]'>"; 
+		    	                	   return "<input type='hidden' name='tableDynamicFields["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedDynamicFields["+meta.row+"]'>"; 
 	    	                	   }
 	    	                   }
 	    	                    

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -12,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.backoffice.data.MenuDto;
 import com.beanframework.backoffice.data.MenuFieldDto;
-import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
 
@@ -124,46 +125,34 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				}
 			}
 
-			// User Group
-			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
-				if (prototype.getUserGroups().isEmpty()) {
-					prototype.setUserGroups(new ArrayList<UserGroup>());
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			}
+			// UserGroup
+			if (source.getTableUserGroups() != null) {
 
-			Iterator<UserGroup> userGroupItr = prototype.getUserGroups().iterator();
-			while (userGroupItr.hasNext()) {
-				UserGroup userGroup = userGroupItr.next();
+				for (int i = 0; i < source.getTableUserGroups().length; i++) {
 
-				boolean remove = true;
-				for (UserGroupDto sourceUserGroup : source.getUserGroups()) {
-					if (userGroup.getUuid().equals(sourceUserGroup.getUuid())) {
+					boolean remove = true;
+					if (source.getTableSelectedUserGroups() != null && source.getTableSelectedUserGroups().length > i && BooleanUtils.parseBoolean(source.getTableSelectedUserGroups()[i])) {
 						remove = false;
 					}
-				}
 
-				if (remove) {
-					userGroupItr.remove();
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			}
-
-			for (UserGroupDto sourceUserGroup : source.getUserGroups()) {
-
-				boolean add = true;
-				for (UserGroup userGroup : prototype.getUserGroups()) {
-					if (sourceUserGroup.getUuid().equals(userGroup.getUuid()))
-						add = false;
-				}
-
-				if (add) {
-					UserGroup entityUserGroup = modelService.findOneEntityByUuid(sourceUserGroup.getUuid(), true, UserGroup.class);
-					if (entityUserGroup == null) {
-						LOGGER.error("User Group UUID not exists: " + sourceUserGroup.getUuid());
+					if (remove) {
+						for (Iterator<UserGroup> userGroupsIterator = prototype.getUserGroups().listIterator(); userGroupsIterator.hasNext();) {
+							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(source.getTableUserGroups()[i]))) {
+								userGroupsIterator.remove();
+							}
+						}
 					} else {
-						prototype.getUserGroups().add(entityUserGroup);
-						prototype.setLastModifiedDate(lastModifiedDate);
+						boolean add = true;
+						for (Iterator<UserGroup> userGroupsIterator = prototype.getUserGroups().listIterator(); userGroupsIterator.hasNext();) {
+							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(source.getTableUserGroups()[i]))) {
+								add = false;
+							}
+						}
+
+						if (add) {
+							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), false, UserGroup.class);
+							prototype.getUserGroups().add(entityUserGroups);
+						}
 					}
 				}
 			}
