@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.backoffice.converter.DtoAuditorConverter;
 import com.beanframework.backoffice.converter.DtoBackofficeConfigurationConverter;
+import com.beanframework.backoffice.converter.DtoCommentConverter;
 import com.beanframework.backoffice.converter.DtoCronjobConverter;
 import com.beanframework.backoffice.converter.DtoCronjobDataConverter;
 import com.beanframework.backoffice.converter.DtoCustomerConverter;
@@ -16,6 +17,7 @@ import com.beanframework.backoffice.converter.DtoLanguageConverter;
 import com.beanframework.backoffice.converter.DtoMenuConverter;
 import com.beanframework.backoffice.converter.DtoMenuFieldConverter;
 import com.beanframework.backoffice.converter.DtoUserAuthorityConverter;
+import com.beanframework.backoffice.converter.DtoUserConverter;
 import com.beanframework.backoffice.converter.DtoUserFieldConverter;
 import com.beanframework.backoffice.converter.DtoUserGroupConverter;
 import com.beanframework.backoffice.converter.DtoUserGroupFieldConverter;
@@ -25,6 +27,7 @@ import com.beanframework.backoffice.converter.DtoUserRightConverter;
 import com.beanframework.backoffice.converter.DtoUserRightFieldConverter;
 import com.beanframework.backoffice.data.AuditorDto;
 import com.beanframework.backoffice.data.BackofficeConfigurationDto;
+import com.beanframework.backoffice.data.CommentDto;
 import com.beanframework.backoffice.data.CronjobDataDto;
 import com.beanframework.backoffice.data.CronjobDto;
 import com.beanframework.backoffice.data.CustomerDto;
@@ -36,6 +39,7 @@ import com.beanframework.backoffice.data.LanguageDto;
 import com.beanframework.backoffice.data.MenuDto;
 import com.beanframework.backoffice.data.MenuFieldDto;
 import com.beanframework.backoffice.data.UserAuthorityDto;
+import com.beanframework.backoffice.data.UserDto;
 import com.beanframework.backoffice.data.UserFieldDto;
 import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.backoffice.data.UserGroupFieldDto;
@@ -338,6 +342,34 @@ public class BackofficeDtoConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoEmailConverter());
 		mapping.setTypeCode(EmailDto.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
+	public DtoCommentConverter dtoCommentConverter() {
+		return new DtoCommentConverter();
+	}
+
+	@Bean
+	public ConverterMapping DtoCommentConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dtoCommentConverter());
+		mapping.setTypeCode(CommentDto.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
+	public DtoUserConverter dtoUserConverter() {
+		return new DtoUserConverter();
+	}
+
+	@Bean
+	public ConverterMapping dtoUserConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dtoUserConverter());
+		mapping.setTypeCode(UserDto.class.getSimpleName());
 
 		return mapping;
 	}

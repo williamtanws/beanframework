@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.backoffice.converter.EntityEmployeeProfileConverter;
 import com.beanframework.backoffice.data.EmployeeDto;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -29,6 +30,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
 
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
@@ -115,7 +119,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 					throw new Exception("Wrong picture format");
 				}
 			}
-			Employee entity = modelService.getEntity(dto, Employee.class);
+			Employee entity = entityEmployeeProfileConverter.convert(dto);
 
 			entity = (Employee) employeeService.saveEntity(entity);
 			employeeService.updatePrincipal(entity);

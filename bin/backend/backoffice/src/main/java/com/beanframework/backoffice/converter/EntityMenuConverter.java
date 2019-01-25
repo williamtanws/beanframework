@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.backoffice.data.MenuDto;
@@ -18,6 +20,8 @@ import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
+
+	protected static Logger LOGGER = LoggerFactory.getLogger(EntityMenuConverter.class);
 
 	@Autowired
 	private ModelService modelService;
@@ -128,9 +132,9 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				}
 			}
 
-			Iterator<UserGroup> itr = prototype.getUserGroups().iterator();
-			while (itr.hasNext()) {
-				UserGroup userGroup = itr.next();
+			Iterator<UserGroup> userGroupItr = prototype.getUserGroups().iterator();
+			while (userGroupItr.hasNext()) {
+				UserGroup userGroup = userGroupItr.next();
 
 				boolean remove = true;
 				for (UserGroupDto sourceUserGroup : source.getUserGroups()) {
@@ -140,7 +144,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				}
 
 				if (remove) {
-					itr.remove();
+					userGroupItr.remove();
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
@@ -155,7 +159,9 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 
 				if (add) {
 					UserGroup entityUserGroup = modelService.findOneEntityByUuid(sourceUserGroup.getUuid(), true, UserGroup.class);
-					if (entityUserGroup != null) {
+					if (entityUserGroup == null) {
+						LOGGER.error("User Group UUID not exists: " + sourceUserGroup.getUuid());
+					} else {
 						prototype.getUserGroups().add(entityUserGroup);
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}

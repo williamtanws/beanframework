@@ -10,12 +10,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.backoffice.data.CustomerDto;
+import com.beanframework.backoffice.data.UserFieldDto;
 import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;
 
@@ -32,7 +32,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Customer.UUID, source.getUuid());
-				Customer prototype = modelService.findOneEntityByProperties(properties, true,Customer.class);
+				Customer prototype = modelService.findOneEntityByProperties(properties, true, Customer.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);
@@ -68,7 +68,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
-			
+
 			if (source.getAccountNonLocked() == null) {
 				if (prototype.getAccountNonLocked() != null) {
 					prototype.setAccountNonLocked(null);
@@ -80,7 +80,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
-			
+
 			if (source.getCredentialsNonExpired() == null) {
 				if (prototype.getCredentialsNonExpired() != null) {
 					prototype.setCredentialsNonExpired(null);
@@ -92,7 +92,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
-			
+
 			if (source.getEnabled() == null) {
 				if (prototype.getEnabled() != null) {
 					prototype.setEnabled(null);
@@ -118,7 +118,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 			// Field
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
-					for (UserField sourceField : source.getFields()) {
+					for (UserFieldDto sourceField : source.getFields()) {
 						if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
 							prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
@@ -130,8 +130,12 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 			}
 
 			// User Group
-			if (source.getUserGroups() == null || source.getUserGroups().isEmpty())
-				prototype.setUserGroups(new ArrayList<UserGroup>());
+			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
+				if (prototype.getUserGroups().isEmpty()) {
+					prototype.setUserGroups(new ArrayList<UserGroup>());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			}
 
 			Iterator<UserGroup> itr = prototype.getUserGroups().iterator();
 			while (itr.hasNext()) {

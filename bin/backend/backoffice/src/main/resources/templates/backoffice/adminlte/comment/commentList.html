@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<head>
+<title th:utext="#{module.comment}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<section class="content" th:with="user=#{module.comment.user}, commentHtml=#{module.comment.html}, commentVisibled=#{module.comment.visibled}, lastUpdatedDate=#{module.comment.lastUpdatedDate}">
+			<!-- List Table-->
+			<th:block
+				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.comment.icon')}}, title=#{module.comment}, objectUpdate=${commentUpdate}, createAuthority='comment_create', updateAuthority='comment_update', tableName='comment', listUrl=@{${@environment.getProperty('path.api.comment.page')}}, listFields=${ {{'user', user},{'html', commentHtml}, {'visibled', commentVisibled}, {'lastUpdatedDate', lastUpdatedDate}} }, editFormAction=@{${@environment.getProperty('path.comment')}}, editForm=@{${@environment.getProperty('view.comment.form')}}, createButton='0' )}"></th:block>
+		</section>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+			$('#mainTable thead tr:eq(1) th').each(function(index) {
+				if(index == 1){
+					var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
+				    var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+		            $(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+				}
+			});
+			/*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>

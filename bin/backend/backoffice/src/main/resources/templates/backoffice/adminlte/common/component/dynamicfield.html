@@ -112,6 +112,21 @@
 		    });
 		    /*]]>*/
 		</script>
+		<th:block sec:authorize="hasAuthority('dynamicfield_read')">
+			<script th:inline="javascript">
+		    	/*<![CDATA[*/
+		    		$('#dynamicfieldTable').on('click', 'tbody tr', function() {
+						//console.log('API row values : ', mainTable.row(this).data());
+						var uuid = dynamicfieldTable.row(this).data().uuid;
+						if(uuid){
+							var url = /*[[@{${@environment.getProperty('path.dynamicfield')}}]]*/;
+							url += '?uuid='+uuid+'#tab_general';
+							window.open(url, '_blank');
+						}
+					});
+		    	/*]]>*/
+			</script>
+		</th:block>
 	</th:block>
 </body>
 </html>

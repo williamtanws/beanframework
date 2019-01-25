@@ -51,7 +51,7 @@ public class DynamicFieldEnumServiceImpl implements DynamicFieldEnumService {
 	}
 
 	@Caching(evict = { //
-			@CacheEvict(value = "DynamicFieldEnumOneProperties", key = "#model.uuid", condition = "#model.uuid != null"), //
+			@CacheEvict(value = "DynamicFieldEnumOne", key = "#model.uuid", condition = "#model.uuid != null"), //
 			@CacheEvict(value = "DynamicFieldEnumOneProperties", allEntries = true), //
 			@CacheEvict(value = "DynamicFieldEnumsSorts", allEntries = true), //
 			@CacheEvict(value = "DynamicFieldEnumsPage", allEntries = true), //

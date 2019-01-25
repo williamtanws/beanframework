@@ -3,6 +3,7 @@ package com.beanframework.backoffice.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.beanframework.backoffice.converter.EntityCommentConverter;
 import com.beanframework.backoffice.converter.EntityCronjobConverter;
 import com.beanframework.backoffice.converter.EntityCronjobDataConverter;
 import com.beanframework.backoffice.converter.EntityCustomerConverter;
@@ -15,6 +16,7 @@ import com.beanframework.backoffice.converter.EntityMenuConverter;
 import com.beanframework.backoffice.converter.EntityUserGroupConverter;
 import com.beanframework.backoffice.converter.EntityUserPermissionConverter;
 import com.beanframework.backoffice.converter.EntityUserRightConverter;
+import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
@@ -196,6 +198,20 @@ public class BackofficeEntityConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(entityEmailConverter());
 		mapping.setTypeCode(Email.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
+	public EntityCommentConverter entityCommentConverter() {
+		return new EntityCommentConverter();
+	}
+
+	@Bean
+	public ConverterMapping entityCommentConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(entityCommentConverter());
+		mapping.setTypeCode(Comment.class.getSimpleName());
 
 		return mapping;
 	}

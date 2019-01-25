@@ -33,6 +33,18 @@
 										data-keyboard="false"></button>
 								</div>
 							</div>
+							<div class="col-md-12">
+								<div class="form-group checkbox icheck">
+									<label>
+										<input type="checkbox" name="clearsessions">
+										&nbsp;
+										<span th:text="#{module.console.platform.update.clearsessions}"></span>
+										<br>
+										<span style="padding-left: 40px" th:text="#{module.console.platform.update.clearsessions.description}"></span>
+									</label>
+
+								</div>
+							</div>
 							<div class="col-md-12" th:each="update : ${updates}">
 								<div class="form-group checkbox icheck">
 									<label>

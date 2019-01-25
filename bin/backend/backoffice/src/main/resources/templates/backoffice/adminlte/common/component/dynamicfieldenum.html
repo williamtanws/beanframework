@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="dynamicfieldenum (objectsName)">
+	<th:block layout:fragment="dynamicfieldenum (dynamicFieldEnums)">
 		<table id="dynamicfieldenumTable" class="table table-bordered table-hover" style="width:100%">
 			<thead>
 				<tr>
+					<th th:text="#{module.dynamicfieldenum.sort}" class="text-center"></th>
+					<th th:text="#{module.dynamicfieldenum.enumGroup}" class="text-center"></th>
 					<th th:text="#{module.backoffice.id}" class="text-center"></th>
-					<th th:text="#{module.dynamicfieldenum.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.name}" class="text-center"></th>
 					<th th:text="#{module.backoffice.select}" class="text-center"></th>
 				</tr>
 			</thead>
 			<thead>
 				<tr>
+					<th th:text="#{module.dynamicfieldenum.sort}" class="text-center"></th>
+					<th th:text="#{module.dynamicfieldenum.enumGroup}" class="text-center"></th>
 					<th th:text="#{module.backoffice.id}" class="text-center"></th>
-					<th th:text="#{module.dynamicfieldenum.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.name}" class="text-center"></th>
 					<th th:text="#{module.backoffice.select}" class="text-center"></th>
 				</tr>
 			</thead>
@@ -25,12 +29,13 @@
 		    
 		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.dynamicfieldenum.page')}}]]*/;
 		    
-		    var objectsName = [];
-		    /*[# th:each="object : *{__${objectsName}__}"]*/  	    
-		    objectsName.push(/*[[${object.uuid}]]*/); 	    
+		    var dynamicFieldEnums = [];
+		    /*[# th:each="object : *{__${dynamicFieldEnums}__}"]*/  	    
+		    dynamicFieldEnums.push(/*[[${object.uuid}]]*/); 	    
 		    /*[/]*/
 		    
 		    var dynamicfieldenumTable = $('#dynamicfieldenumTable').DataTable({
+		    	  "aaSorting": [ [0,'asc'], [1,'asc'] ],
 	    		  'language' : {
 			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
 			      },
@@ -48,19 +53,21 @@
 	                    'url': ajaxUrl
 	              },
 	              'columns': [
+	                    { "data": "sort" },
+	                    { "data": "enumGroup" },
 	                    { "data": "id" },
 	                    { "data": "name" },
 	                    { "data": "" }
 	              ],
 	    	      'columnDefs': [
 	    	            { 
-	    	                targets: 2,
+	    	                targets: 4,
 	    	                'searchable': false,
 	    	                'orderable': false,
 	    	                'className': 'text-center',
 	    	                render: function(data, type, row, meta)
 	    	                {
-	    	                   var selected = objectsName.includes(row.uuid);
+	    	                   var selected = dynamicFieldEnums.includes(row.uuid);
 	    	                   if(selected){
 	    	                	   return "<input type='hidden' name='tableEnums["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEnums["+meta.row+"]' checked>"; 
 	    	                   }
@@ -93,7 +100,7 @@
 		    $(document).ready(function ()
 		    {
 		    	$('#dynamicfieldenumTable thead tr:eq(1) th').each(function(index){
-		    		if(index < 2){
+		    		if(index != 0 && index != 4){
 		    			var title = $('#dynamicfieldenumTable thead tr:eq(0) th').eq( $(this).index() ).text();
 		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
 		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
@@ -112,6 +119,21 @@
 		    });
 		    /*]]>*/
 		</script>
+		<th:block sec:authorize="hasAuthority('dynamicfieldenum_read')">
+			<script th:inline="javascript">
+		    	/*<![CDATA[*/
+		    		$('#dynamicfieldenumTable').on('click', 'tbody tr', function() {
+						//console.log('API row values : ', mainTable.row(this).data());
+						var uuid = dynamicfieldenumTable.row(this).data().uuid;
+						if(uuid){
+							var url = /*[[@{${@environment.getProperty('path.dynamicfieldenum')}}]]*/;
+							url += '?uuid='+uuid+'#tab_general';
+							window.open(url, '_blank');
+						}
+					});
+		    	/*]]>*/
+			</script>
+		</th:block>
 	</th:block>
 </body>
 </html>

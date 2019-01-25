@@ -20,7 +20,7 @@
 						</th:block>
 						<th:block th:if="*{lastModifiedBy != null}">
 							<span sec:authorize="!hasAuthority('employee_read')" class="text-block" th:text="*{lastModifiedBy.name}"></span>
-							<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=*{lastModifiedBy.uuid})}+'#tab_general'" th:text="*{lastModifiedBy.name}"></a>
+							<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=*{lastModifiedBy.uuid})}+'#tab_general'" th:text="*{lastModifiedBy.name}" target="_blank"></a>
 						</th:block>
 					</div>
 				</div>
@@ -36,7 +36,7 @@
 						</th:block>
 						<th:block th:if="*{createdBy != null}">
 							<span sec:authorize="!hasAuthority('employee_read')" class="text-block" th:text="*{createdBy.name}"></span>
-							<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=*{createdBy.uuid})}+'#tab_general'" th:text="*{createdBy.name}"></a>
+							<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=*{createdBy.uuid})}+'#tab_general'" th:text="*{createdBy.name}" target="_blank"></a>
 						</th:block>
 					</div>
 				</div>

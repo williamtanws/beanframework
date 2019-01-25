@@ -1,6 +1,6 @@
 id,name,sort,group
 task_en,Task,10,type
-subtask_en,Sub Task,2,type
+subtask_en,Sub Task,20,type
 incident_en,Incident,30,type
 service_request_en,Service Request,40,type
 problem_en,Problem,50,type

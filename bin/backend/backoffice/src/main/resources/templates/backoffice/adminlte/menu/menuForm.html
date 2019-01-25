@@ -85,7 +85,6 @@
 												<label for="target" th:text="#{module.menu.target}"></label>
 												<small th:text="#{module.menu.target.indicate}"></small>
 												<select class="form-control" name="target">
-													<option th:text="#{module.backoffice.empty}"></option>
 													<option th:each="targetEnum : ${T(com.beanframework.menu.domain.MenuTargetTypeEnum).values()}" th:value="${target}" th:selected="*{target} == ${targetEnum} ? true : false"
 														th:text="${targetEnum.toString()}"></option>
 												</select>
@@ -127,7 +126,7 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_usergroup">
 								<div class="box-body">
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/usergroup :: usergroup}"></th:block>
+									<th:block layout:insert="~{/backoffice/adminlte/common/component/usergroup :: usergroup (userGroups='userGroups')}"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
