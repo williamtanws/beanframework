@@ -75,7 +75,7 @@ import org.slf4j.LoggerFactory;
  * </pre>
  *
  * that catch all request to path /fm/*<br>
- * in angular-filemanager-master/index.html uncomment links to js files<br>
+ * in angular-filemanager-master/index.html unmedia links to js files<br>
  * in my assest/config.js I have :
  *
  * <pre>

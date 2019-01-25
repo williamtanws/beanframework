@@ -26,10 +26,10 @@ import com.beanframework.backoffice.CommentWebConstants;
 import com.beanframework.backoffice.data.CommentDataResponse;
 import com.beanframework.backoffice.data.CommentDto;
 import com.beanframework.backoffice.facade.CommentFacade;
-import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.comment.domain.Comment;
 
 @RestController
 public class CommentResource {
