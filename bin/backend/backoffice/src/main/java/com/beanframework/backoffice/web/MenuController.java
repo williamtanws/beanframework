@@ -1,8 +1,6 @@
 package com.beanframework.backoffice.web;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,12 +22,10 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MenuWebConstants;
 import com.beanframework.backoffice.data.MenuDto;
-import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.backoffice.facade.MenuFacade;
 import com.beanframework.backoffice.facade.MenuFacade.MenuPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.utils.BooleanUtils;
 
 @Controller
 public class MenuController extends AbstractController {
@@ -106,41 +102,6 @@ public class MenuController extends AbstractController {
 		if (updateDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
-
-			// UserGroup
-			if (updateDto.getTableUserGroups() != null) {
-				List<UserGroupDto> userGroups = menuFacade.findOneByUuid(updateDto.getUuid()).getUserGroups();
-
-				for (int i = 0; i < updateDto.getTableUserGroups().length; i++) {
-
-					boolean remove = true;
-					if (updateDto.getTableSelectedUserGroups() != null && updateDto.getTableSelectedUserGroups().length > i && BooleanUtils.parseBoolean(updateDto.getTableSelectedUserGroups()[i])) {
-						remove = false;
-					}
-
-					if (remove) {
-						for (Iterator<UserGroupDto> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext();) {
-							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableUserGroups()[i]))) {
-								userGroupsIterator.remove();
-							}
-						}
-					} else {
-						boolean add = true;
-						for (Iterator<UserGroupDto> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext();) {
-							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableUserGroups()[i]))) {
-								add = false;
-							}
-						}
-
-						if (add) {
-							UserGroupDto userGroup = new UserGroupDto();
-							userGroup.setUuid(UUID.fromString(updateDto.getTableUserGroups()[i]));
-							userGroups.add(userGroup);
-						}
-					}
-				}
-				updateDto.setUserGroups(userGroups);
-			}
 
 			try {
 				updateDto = menuFacade.update(updateDto);

@@ -1,20 +1,20 @@
 package com.beanframework.backoffice.converter;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.backoffice.data.EmployeeDto;
 import com.beanframework.backoffice.data.UserFieldDto;
-import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.utils.PasswordUtils;
@@ -129,47 +129,38 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 				}
 			}
 
-			// User Group
-			if (source.getUserGroups() == null || source.getUserGroups().isEmpty()) {
-				if (prototype.getUserGroups().isEmpty()) {
-					prototype.setUserGroups(new ArrayList<UserGroup>());
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			}
+			// UserGroup
+			if (source.getTableUserGroups() != null) {
 
-			Iterator<UserGroup> itr = prototype.getUserGroups().iterator();
-			while (itr.hasNext()) {
-				UserGroup userGroup = itr.next();
+				for (int i = 0; i < source.getTableUserGroups().length; i++) {
 
-				boolean remove = true;
-				for (UserGroupDto sourceUserGroup : source.getUserGroups()) {
-					if (userGroup.getUuid().equals(sourceUserGroup.getUuid())) {
+					boolean remove = true;
+					if (source.getTableSelectedUserGroups() != null && source.getTableSelectedUserGroups().length > i && BooleanUtils.parseBoolean(source.getTableSelectedUserGroups()[i])) {
 						remove = false;
 					}
-				}
 
-				if (remove) {
-					itr.remove();
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			}
+					if (remove) {
+						for (Iterator<UserGroup> userGroupsIterator = prototype.getUserGroups().listIterator(); userGroupsIterator.hasNext();) {
+							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(source.getTableUserGroups()[i]))) {
+								userGroupsIterator.remove();
+							}
+						}
+					} else {
+						boolean add = true;
+						for (Iterator<UserGroup> userGroupsIterator = prototype.getUserGroups().listIterator(); userGroupsIterator.hasNext();) {
+							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(source.getTableUserGroups()[i]))) {
+								add = false;
+							}
+						}
 
-			for (UserGroupDto sourceUserGroup : source.getUserGroups()) {
-
-				boolean add = true;
-				for (UserGroup userGroup : prototype.getUserGroups()) {
-					if (sourceUserGroup.getUuid().equals(userGroup.getUuid()))
-						add = false;
-				}
-
-				if (add) {
-					UserGroup entityUserGroup = modelService.findOneEntityByUuid(sourceUserGroup.getUuid(), true, UserGroup.class);
-					if (entityUserGroup != null) {
-						prototype.getUserGroups().add(entityUserGroup);
-						prototype.setLastModifiedDate(lastModifiedDate);
+						if (add) {
+							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), false, UserGroup.class);
+							prototype.getUserGroups().add(entityUserGroups);
+						}
 					}
 				}
 			}
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
