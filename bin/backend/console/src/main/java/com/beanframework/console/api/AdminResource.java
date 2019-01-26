@@ -39,7 +39,7 @@ public class AdminResource {
 	private AdminFacade adminFacade;
 
 	@GetMapping(AdminWebConstants.Path.Api.CHECKID)
-	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public boolean checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(ConsoleWebConstants.Param.ID).toString();
 
@@ -51,11 +51,11 @@ public class AdminResource {
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (admin != null && admin.getUuid().equals(uuid)) {
-				return "true";
+				return true;
 			}
 		}
 
-		return admin != null ? "false" : "true";
+		return admin != null ? false : true;
 	}
 
 	@RequestMapping(value = AdminWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")

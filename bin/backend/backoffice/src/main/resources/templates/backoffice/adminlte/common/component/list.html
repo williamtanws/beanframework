@@ -159,7 +159,11 @@
 	            	  { 
 	    	                targets: 0,
 	    	                'className': 'text-bold'
-	            	  }
+	            	  },
+	            	  {                                 
+	                      "targets": '_all',
+	                      "render": $.fn.dataTable.render.text()
+	                  }
 	              ],
 	    	      'fnDrawCallback': function() {
 	    	           initialSearch();

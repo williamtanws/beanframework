@@ -82,7 +82,11 @@
 	    	                   }
 	    	                    
 	    	                }
-	    	            }            
+	    	            },
+		            	{                                 
+		                	"targets": '_all',
+		                	"render": $.fn.dataTable.render.text()
+		                }              
 	    	       ],
 	    	       'fnDrawCallback': function() {
 	    	           icheck();

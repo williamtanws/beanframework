@@ -1,57 +1,120 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="history">
-		<div class="row">
-			<div class="box-body chat">
-				<!-- chat item -->
-				<div class="item" th:each="revision : ${revisions}" >
-					<img th:if="${revision[0].lastModifiedBy != null}" th:src="@{${@environment.getProperty('path.employee.profile.picture')}(type='thumbnail',uuid=${revision[0].lastModifiedBy.uuid})}"
-						alt="user image" class="online">
-					<img th:with="defaultavatar=${@environment.getProperty('module.backoffice.configuration.avatar.default')}" th:if="${revision[0].lastModifiedBy == null}"
-						th:src="@{${@Config.get('defaultavatar','/static/common/img/avatar.png')}}" alt="user image" class="online">
+	<th:block layout:fragment="history (historyListUrl)">
+		<table id="historyTable" class="table table-bordered table-hover" style="width:100%">
+			<thead>
+				<tr>
+					<th th:text="#{module.history.user}" class="text-center" style="min-width: 100px;"></th>
+					<th th:text="#{module.history.revisionDate}" class="text-center" style="min-width: 150px;"></th>
+					<th th:text="#{module.history.revisionType}" class="text-center" style="min-width: 100px;"></th>
+					<th th:text="#{module.history.propertiesChanged}" class="text-center"></th>
+				</tr>
+			</thead>
+		</table>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    var locale = /*[[${#locale}]]*/;
+		    
+		    var objectsName = [];
+		    /*[# th:each="object : *{__${objectsName}__}"]*/  	    
+		    objectsName.push(/*[[${object.uuid}]]*/); 	    
+		    /*[/]*/
+		    
+		    var historyTable = $('#historyTable').DataTable({
+	    		  'language' : {
+			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+			      },
+	    	      'pageLength'  : 10,
+	    	      'paging'      : true,
+	    	      'lengthChange': true,
+	    	      'searching'   : false,
+	    	      'ordering'    : true,
+	    	      'info'        : false,
+	    	      'autoWidth'   : true,
+	    	      'processing': true,
+	    	      'serverSide': true,
+	    	      'searchDelay': 1000,
+	    	      'ajax': {
+	                    'url':/*[[${historyListUrl}]]*/
+	              },
+	              "columnDefs": [
+	                  {
+	                      "targets": 0,
+	                      "render": function ( data, type, row ) {
+	                    	  if(row.entity.lastModifiedBy){
+	                    		  return row.entity.lastModifiedBy.name + ' ['+row.entity.lastModifiedBy.id+']';
+	                    	  }
+	                    	  else{
+		                          return 'System';
+	                    	  }
+	                      }
+	                  },
+	                  {
+	                      "targets": 1,
+	                      "render": function ( data, type, row ) {
+	                          return row.revisionDate;
+	                      }
+	                  },
+	                  {
+	                      "targets": 2,
+	                      "render": function ( data, type, row ) {
+	                          return row.revisionType;
+	                      }
+	                  },
+	                  {
+	                      "targets": 3,
+	                      "render": function ( data, type, row ) {
+	                    	  var message = "";
+	                    	  for (var key in row.propertiesChanged) {
+	                    		  var property = row.propertiesChanged[key];
+	                    		  var value = row.entity[property];
+	                    		  var changedValue = value;
 
-					<p class="message">
-						<span class="name">
-							<th:block th:if="${revision[0].lastModifiedBy == null}">
-								<span th:text="#{module.backoffice.system}+': '"></span>
-							</th:block>
-							<th:block th:if="${revision[0].lastModifiedBy != null}">
-								<span sec:authorize="!hasAuthority('employee_read')" th:text="${revision[0].lastModifiedBy.name}+': '"></span>
-								<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=${revision[0].lastModifiedBy.uuid})}+'#tab_general'"
-									th:text="${revision[0].lastModifiedBy.name}+': '"></a>
-							</th:block>
-							<span class="text-muted" th:text="#{module.backoffice.history.__${revision[2]}__}"></span>
-							<small class="text-muted pull-right">
-								<i class="fa fa-clock-o"></i>
-								<span th:if="${revision[0].lastModifiedDate == null}" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy, hh:mma')}"></span>
-								<span th:if="${revision[0].lastModifiedDate != null}" th:text="${#dates.format(revision[0].lastModifiedDate, ' dd MMMM yyyy, hh:mma')}"></span>
-							</small>
-						</span>
-						<th:block th:each="property : ${revision[3]}">
-							<th:block th:if="${property == 'password'}">
-								<span th:text="#{module.history.__${property}__}+' '"></span>
-								<span class="fa fa-long-arrow-right"></span>
-								<span>******</span>
-							</th:block>
-							<th:block th:if="${property != 'password'}">
-								<span th:text="#{module.history.__${property}__}+' '"></span>
-								<span class="fa fa-long-arrow-right"></span>
-								<span th:text="' '+${revision[0].__${property}__}"></span>
-							</th:block>
-							<br>
-						</th:block>
-						<th:block th:each="field : ${fieldRevisions}" th:if="${field[1].id == revision[1].id}">
-							<th:block th:each="property : ${field[3]}">
-								<span th:text="${field[0].dynamicField.name} + '('+${field[0].dynamicField.language.id}+') '"></span><span class="fa fa-long-arrow-right"></span><span th:text="' '+${field[0].__${property}__}"></span>
-								<br>
-							</th:block>
-						</th:block>
-					</p>
-				</div>
-				<!-- /.item -->
-			</div>
-		</div>
+	                    		  if(value instanceof Array){
+	                    			  changedValue = "";
+	                    			  for (i = 0; i < value.length; i++) { 
+	                    				  if(i > 0){
+	                    					  changedValue += ', ';
+	                    				  }
+	                    				  changedValue += value[i].id;
+	                    			  }
+	                    		  }
+	                    		  
+	                    		  if(property != 'password' && value != null){
+		                    		  message = message + property + " <span class='fa fa-long-arrow-right'></span> " + changedValue + "\n";	
+		                    	  }
+	                    		  else{
+		                    		  message = message + property + "\n";
+	                    		  }
+	                    	  }
+	                          return message;
+	                      }
+	                  },
+		              {                                 
+		              	"targets": '_all',
+		              	"render": $.fn.dataTable.render.text()
+		              }  
+	              ]
+	    	});
+		    /*]]>*/
+		</script>
+		<th:block sec:authorize="hasAuthority('employee_read')">
+			<script th:inline="javascript">
+		    	/*<![CDATA[*/
+		    		$('#historyTable').on('click', 'tbody tr', function() {
+						//console.log('API row values : ', mainTable.row(this).data());
+						var uuid = historyTable.row(this).data().uuid;
+						if(uuid){
+							var url = /*[[@{${@environment.getProperty('path.employee')}}]]*/;
+							url += '?uuid='+uuid+'#tab_general';
+							window.open(url, '_blank');
+						}
+					});
+		    	/*]]>*/
+			</script>
+		</th:block>
 	</th:block>
 </body>
 </html>

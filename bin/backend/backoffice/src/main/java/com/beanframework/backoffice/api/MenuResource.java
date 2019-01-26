@@ -45,7 +45,7 @@ public class MenuResource {
 	private MenuFacade menuFacade;
 
 	@RequestMapping(MenuWebConstants.Path.Api.CHECKID)
-	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = (String) requestParams.get(BackofficeWebConstants.Param.ID);
 
@@ -57,11 +57,11 @@ public class MenuResource {
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (data != null && data.getUuid().equals(uuid)) {
-				return "true";
+				return true;
 			}
 		}
 
-		return data != null ? "false" : "true";
+		return data != null ? false : true;
 	}
 
 	@RequestMapping(MenuWebConstants.Path.Api.TREE)

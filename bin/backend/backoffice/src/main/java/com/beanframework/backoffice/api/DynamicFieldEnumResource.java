@@ -38,7 +38,7 @@ public class DynamicFieldEnumResource {
 	private DynamicFieldEnumFacade dynamicFieldEnumFacade;
 
 	@RequestMapping(DynamicFieldEnumWebConstants.Path.Api.CHECKID)
-	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
 
@@ -51,11 +51,11 @@ public class DynamicFieldEnumResource {
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (data != null && data.getUuid().equals(uuid)) {
-				return "true";
+				return true;
 			}
 		}
 
-		return data != null ? "false" : "true";
+		return data != null ? false : true;
 	}
 
 	@RequestMapping(value = DynamicFieldEnumWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")

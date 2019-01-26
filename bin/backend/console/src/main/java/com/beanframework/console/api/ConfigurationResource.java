@@ -40,7 +40,7 @@ public class ConfigurationResource {
 	private ConfigurationFacade configurationFacade;
 
 	@GetMapping(ConfigurationWebConstants.Path.Api.CHECKID)
-	public String checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public boolean checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(ConsoleWebConstants.Param.ID).toString();
 
@@ -53,11 +53,11 @@ public class ConfigurationResource {
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (configuration != null && configuration.getUuid().equals(uuid)) {
-				return "true";
+				return true;
 			}
 		}
 
-		return configuration != null ? "false" : "true";
+		return configuration != null ? false : true;
 	}
 
 	@RequestMapping(value = ConfigurationWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
