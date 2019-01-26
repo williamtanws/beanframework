@@ -8,7 +8,7 @@
 	<th:block layout:fragment="update">
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.admin')}" method="post" th:object="${adminUpdate}">
 			<input type="hidden" name="update" />
-			<input type="hidden" name="uuid" th:value="${adminUpdate.uuid}" />
+			<input type="hidden" name="uuid" th:value="${adminUpdate.uuid}"/>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -122,7 +122,7 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history">
 								<div class="box-body">
-									<th:block layout:insert="~{/console/adminlte/common/component/history :: history}"></th:block>
+									<th:block layout:insert="~{/console/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.admin.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->

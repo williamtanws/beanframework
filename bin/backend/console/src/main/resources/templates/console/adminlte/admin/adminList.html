@@ -6,22 +6,25 @@
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<section class="content">
-			<!-- Search Form-->
-			<div class="row">
-				<th:block layout:insert="~{/console/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.admin')}}, objectSearch=${adminSearch}, searchFields=${ {'id','name'} }, displayFields=${ {'id','name'} } )}"></th:block>
-			</div>
-			<!-- Alert Notification-->
-			<div class="row">
-				<th:block layout:insert="~{/console/adminlte/common/component/alert :: custom}"></th:block>
-			</div>
+		<section class="content" th:with="adminName=#{module.admin.name}">
 			<!-- List Table-->
-			<div class="row" th:with="adminName=#{module.admin.name}">
-				<th:block layout:insert="~{/console/adminlte/common/component/list :: list (title=#{module.admin}, objectUpdate=${adminUpdate}, objectSearch=${adminSearch}, icon=@{${@environment.getProperty('module.admin.icon')}}, editFormAction=@{${@environment.getProperty('path.admin')}}, listFields=${ {{'id', 'ID'}, {'name', adminName}} }, searchFields=${ {'id','name'} }, editForm='/console/adminlte/admin/adminForm')}"></th:block>
-			</div>
+			<th:block
+				layout:insert="~{/console/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.admin.icon')}}, title=#{module.admin}, objectUpdate=${adminUpdate}, createAuthority='admin_create', updateAuthority='admin_update', tableName='admin', listUrl=@{${@environment.getProperty('path.api.admin.page')}}, listFields=${ {{'id', 'ID'},{'name', adminName}} }, editFormAction=@{${@environment.getProperty('path.admin')}}, editForm=@{${@environment.getProperty('view.admin.form')}}, createButton='1' )}"></th:block>
 			<!-- Create Modal-->
-			<th:block layout:insert="~{/console/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.admin')}}, createObject=${adminCreate}, createForm='/console/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.admin.checkid')})}"></th:block>
+			<th:block sec:authorize="hasAuthority('admin_create')"
+				layout:insert="~{/console/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.admin')}}, createObject=${adminCreate}, createForm='/console/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.admin.checkid')})}"></th:block>
 		</section>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+			$('#mainTable thead tr:eq(1) th').each(function(index) {
+				if(index < 2){
+			    	var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
+			    	var searchPlaceHolder = /*[[#{module.console.search}]]*/;
+	            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+				}
+			});
+			/*]]>*/
+		</script>
 	</th:block>
 </body>
 </html>

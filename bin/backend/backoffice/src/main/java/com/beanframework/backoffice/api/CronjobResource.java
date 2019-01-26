@@ -39,7 +39,7 @@ public class CronjobResource {
 	private CronjobFacade cronjobFacade;
 
 	@RequestMapping(CronjobWebConstants.Path.Api.CHECKID)
-	public String checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
 
@@ -52,11 +52,11 @@ public class CronjobResource {
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
 			if (data != null && data.getUuid().equals(uuid)) {
-				return "true";
+				return true;
 			}
 		}
 
-		return data != null ? "false" : "true";
+		return data != null ? false : true;
 	}
 	
 	@RequestMapping(value = CronjobWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
@@ -118,7 +118,7 @@ public class CronjobResource {
 	}
 
 	@RequestMapping(CronjobWebConstants.Path.Api.CHECKJOBGROUPNAME)
-	public String checkName(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public boolean checkName(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		String jobGroup = (String) requestParams.get("jobGroup");
@@ -131,38 +131,38 @@ public class CronjobResource {
 		CronjobDto cronjob = cronjobFacade.findOneProperties(properties);
 
 		if (StringUtils.isNotBlank(uuidStr) && cronjob != null && cronjob.getUuid().equals(UUID.fromString(uuidStr))) {
-			return "true";
+			return true;
 		} else if (cronjob == null) {
-			return "true";
+			return true;
 		} else {
-			return "false";
+			return false;
 		}
 	}
 
 	@RequestMapping(CronjobWebConstants.Path.Api.CHECKJOBCLASS)
-	public String checkJobClass(Model model, @RequestParam Map<String, Object> requestParams) {
+	public boolean checkJobClass(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String jobClass = (String) requestParams.get("jobClass");
 
 		try {
 			Class.forName(jobClass).newInstance();
 		} catch (Exception e) {
-			return "false";
+			return false;
 		}
 
-		return "true";
+		return true;
 	}
 
 	@RequestMapping(CronjobWebConstants.Path.Api.CHECKCRONEXPRESSION)
-	public String checkConExpression(Model model, @RequestParam Map<String, Object> requestParams) {
+	public boolean checkConExpression(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String conExpression = (String) requestParams.get("conExpression");
 
 		if (StringUtils.isNotBlank(conExpression)) {
 			boolean isValid = CronExpression.isValidExpression(conExpression);
-			return isValid ? "true" : "false";
+			return isValid;
 		} else {
-			return "true";
+			return true;
 		}
 	}
 }
