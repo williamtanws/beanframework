@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.console.converter.DtoAdminConverter;
 import com.beanframework.console.converter.DtoConfigurationConverter;
-import com.beanframework.console.data.AdminDto;
-import com.beanframework.console.data.ConfigurationDto;
+import com.beanframework.core.data.AdminDto;
+import com.beanframework.core.data.ConfigurationDto;
 
 @Configuration
 public class ConsoleDtoConfig {

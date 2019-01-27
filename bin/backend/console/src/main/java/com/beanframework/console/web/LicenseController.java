@@ -22,8 +22,8 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.LicenseWebConstants;
-import com.beanframework.console.data.ConfigurationDto;
-import com.beanframework.console.facade.ConfigurationFacade;
+import com.beanframework.core.data.ConfigurationDto;
+import com.beanframework.core.facade.ConfigurationFacade;
 
 @Controller
 public class LicenseController extends AbstractController {

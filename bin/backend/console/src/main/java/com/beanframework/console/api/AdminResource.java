@@ -29,8 +29,8 @@ import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.console.AdminWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
-import com.beanframework.console.data.AdminDto;
-import com.beanframework.console.facade.AdminFacade;
+import com.beanframework.core.data.AdminDto;
+import com.beanframework.core.facade.AdminFacade;
 
 @RestController
 public class AdminResource {

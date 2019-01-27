@@ -26,16 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MenuWebConstants;
-import com.beanframework.backoffice.data.MenuDto;
-import com.beanframework.backoffice.data.MenuFieldDto;
-import com.beanframework.backoffice.data.TreeJson;
-import com.beanframework.backoffice.data.TreeJsonState;
-import com.beanframework.backoffice.facade.MenuFacade;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.data.MenuDto;
+import com.beanframework.core.data.MenuFieldDto;
+import com.beanframework.core.data.TreeJson;
+import com.beanframework.core.data.TreeJsonState;
+import com.beanframework.core.facade.MenuFacade;
 import com.beanframework.menu.domain.Menu;
 
 @RestController

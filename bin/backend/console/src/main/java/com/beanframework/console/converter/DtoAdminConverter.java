@@ -6,7 +6,7 @@ import java.util.List;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
-import com.beanframework.console.data.AdminDto;
+import com.beanframework.core.data.AdminDto;
 
 public class DtoAdminConverter implements DtoConverter<Admin, AdminDto> {
 

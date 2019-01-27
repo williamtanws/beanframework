@@ -24,12 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CronjobWebConstants;
-import com.beanframework.backoffice.data.CronjobDto;
-import com.beanframework.backoffice.facade.CronjobFacade;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.core.data.CronjobDto;
+import com.beanframework.core.facade.CronjobFacade;
 import com.beanframework.cronjob.domain.Cronjob;
 
 @RestController

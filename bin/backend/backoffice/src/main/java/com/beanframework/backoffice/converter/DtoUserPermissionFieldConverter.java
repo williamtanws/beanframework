@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.backoffice.data.DynamicFieldDto;
-import com.beanframework.backoffice.data.UserPermissionFieldDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.data.DynamicFieldDto;
+import com.beanframework.core.data.UserPermissionFieldDto;
 import com.beanframework.user.domain.UserPermissionField;
 
 public class DtoUserPermissionFieldConverter implements DtoConverter<UserPermissionField, UserPermissionFieldDto> {

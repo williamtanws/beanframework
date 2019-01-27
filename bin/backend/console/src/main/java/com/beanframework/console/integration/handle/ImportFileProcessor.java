@@ -21,7 +21,6 @@ import com.beanframework.console.csv.UserAuthorityCsv;
 import com.beanframework.console.csv.UserGroupCsv;
 import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.csv.UserRightCsv;
-import com.beanframework.console.data.FileProcessor;
 import com.beanframework.console.listener.AdminImportListener;
 import com.beanframework.console.listener.ConfigurationImportListener;
 import com.beanframework.console.listener.CronjobImportListener;
@@ -33,6 +32,7 @@ import com.beanframework.console.listener.UserAuthorityImportListener;
 import com.beanframework.console.listener.UserGroupImportListener;
 import com.beanframework.console.listener.UserPermissionImportListener;
 import com.beanframework.console.listener.UserRightImportListener;
+import com.beanframework.core.data.FileProcessor;
 
 @Component
 public class ImportFileProcessor implements FileProcessor{

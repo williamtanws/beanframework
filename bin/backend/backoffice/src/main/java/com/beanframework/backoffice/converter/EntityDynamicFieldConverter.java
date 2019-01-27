@@ -10,12 +10,12 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.backoffice.data.DynamicFieldDto;
-import com.beanframework.backoffice.data.DynamicFieldEnumDto;
 import com.beanframework.language.domain.Language;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.data.DynamicFieldDto;
+import com.beanframework.core.data.DynamicFieldEnumDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
 

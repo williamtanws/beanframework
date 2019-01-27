@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.backoffice.data.DynamicFieldDto;
-import com.beanframework.backoffice.data.MenuFieldDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.data.DynamicFieldDto;
+import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.menu.domain.MenuField;
 
 public class DtoMenuFieldConverter implements DtoConverter<MenuField, MenuFieldDto> {

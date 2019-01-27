@@ -7,11 +7,11 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.backoffice.data.UserRightDto;
-import com.beanframework.backoffice.data.UserRightFieldDto;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.data.UserRightDto;
+import com.beanframework.core.data.UserRightFieldDto;
 import com.beanframework.user.domain.UserRight;
 
 public class EntityUserRightConverter implements EntityConverter<UserRightDto, UserRight> {

@@ -14,11 +14,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CommentWebConstants;
-import com.beanframework.backoffice.data.CommentDto;
-import com.beanframework.backoffice.facade.CommentFacade;
-import com.beanframework.backoffice.facade.CommentFacade.CommentPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.data.CommentDto;
+import com.beanframework.core.facade.CommentFacade;
+import com.beanframework.core.facade.CommentFacade.CommentPreAuthorizeEnum;
 
 @Controller
 public class CommentController extends AbstractController {

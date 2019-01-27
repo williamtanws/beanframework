@@ -3,9 +3,9 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.beanframework.backoffice.data.DynamicFieldEnumDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.core.data.DynamicFieldEnumDto;
 import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
 
 public class DtoDynamicFieldEnumConverter implements DtoConverter<DynamicFieldEnum, DynamicFieldEnumDto> {

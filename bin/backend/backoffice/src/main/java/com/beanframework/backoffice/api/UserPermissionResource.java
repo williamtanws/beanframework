@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants;
-import com.beanframework.backoffice.data.UserPermissionDto;
-import com.beanframework.backoffice.facade.UserPermissionFacade;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.core.data.UserPermissionDto;
+import com.beanframework.core.facade.UserPermissionFacade;
 import com.beanframework.user.domain.UserPermission;
 
 @RestController

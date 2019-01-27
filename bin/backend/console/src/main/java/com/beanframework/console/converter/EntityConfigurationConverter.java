@@ -11,7 +11,7 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.console.data.ConfigurationDto;
+import com.beanframework.core.data.ConfigurationDto;
 
 public class EntityConfigurationConverter implements EntityConverter<ConfigurationDto, Configuration> {
 

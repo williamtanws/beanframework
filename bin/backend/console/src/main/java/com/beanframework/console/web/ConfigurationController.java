@@ -21,9 +21,9 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.console.ConfigurationWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
-import com.beanframework.console.data.ConfigurationDto;
-import com.beanframework.console.facade.ConfigurationFacade;
-import com.beanframework.console.facade.ConfigurationFacade.ConfigurationPreAuthorizeEnum;
+import com.beanframework.core.data.ConfigurationDto;
+import com.beanframework.core.facade.ConfigurationFacade;
+import com.beanframework.core.facade.ConfigurationFacade.ConfigurationPreAuthorizeEnum;
 
 @Controller
 public class ConfigurationController extends AbstractController {

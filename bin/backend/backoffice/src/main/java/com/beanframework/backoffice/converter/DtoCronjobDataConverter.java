@@ -3,8 +3,8 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.beanframework.backoffice.data.CronjobDataDto;
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.cronjob.domain.CronjobData;
 
 public class DtoCronjobDataConverter implements DtoConverter<CronjobData, CronjobDataDto> {

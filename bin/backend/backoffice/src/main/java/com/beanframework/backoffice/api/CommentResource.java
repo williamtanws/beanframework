@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CommentWebConstants;
-import com.beanframework.backoffice.data.CommentDataResponse;
-import com.beanframework.backoffice.data.CommentDto;
-import com.beanframework.backoffice.facade.CommentFacade;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.core.data.CommentDataResponse;
+import com.beanframework.core.data.CommentDto;
+import com.beanframework.core.facade.CommentFacade;
 import com.beanframework.comment.domain.Comment;
 
 @RestController

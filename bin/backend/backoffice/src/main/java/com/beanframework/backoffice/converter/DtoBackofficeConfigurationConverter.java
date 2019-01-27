@@ -3,10 +3,10 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.beanframework.backoffice.data.BackofficeConfigurationDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.core.data.BackofficeConfigurationDto;
 
 public class DtoBackofficeConfigurationConverter implements DtoConverter<Configuration, BackofficeConfigurationDto> {
 

@@ -22,13 +22,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
-import com.beanframework.backoffice.data.EmployeeDto;
-import com.beanframework.backoffice.data.UserGroupDto;
-import com.beanframework.backoffice.facade.EmployeeFacade;
-import com.beanframework.backoffice.facade.EmployeeFacade.EmployeePreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
+import com.beanframework.core.data.EmployeeDto;
+import com.beanframework.core.data.UserGroupDto;
+import com.beanframework.core.facade.EmployeeFacade;
+import com.beanframework.core.facade.EmployeeFacade.EmployeePreAuthorizeEnum;
 
 @Controller
 public class EmployeeController extends AbstractController {

@@ -7,12 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.backoffice.data.UserDto;
-import com.beanframework.backoffice.data.UserFieldDto;
-import com.beanframework.backoffice.data.UserGroupDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.data.UserDto;
+import com.beanframework.core.data.UserFieldDto;
+import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.user.domain.User;
 
 public class DtoUserConverter implements DtoConverter<User, UserDto> {
