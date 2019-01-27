@@ -8,7 +8,7 @@ public class DataTableResponse<T> {
 	private String draw;
 	private int recordsTotal;
 	private int recordsFiltered;
-	private List<T> data = new ArrayList<T>();
+	private List<Object> data = new ArrayList<Object>();
 
 	public String getDraw() {
 		return draw;
@@ -34,11 +34,11 @@ public class DataTableResponse<T> {
 		this.recordsFiltered = recordsFiltered;
 	}
 
-	public List<T> getData() {
+	public List<Object> getData() {
 		return data;
 	}
 
-	public void setData(List<T> data) {
+	public void setData(List<Object> data) {
 		this.data = data;
 	}
 
