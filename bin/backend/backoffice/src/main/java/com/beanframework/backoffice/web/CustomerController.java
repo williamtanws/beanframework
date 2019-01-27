@@ -20,13 +20,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CustomerWebConstants;
-import com.beanframework.backoffice.data.CustomerDto;
-import com.beanframework.backoffice.data.UserGroupDto;
-import com.beanframework.backoffice.facade.CustomerFacade;
-import com.beanframework.backoffice.facade.CustomerFacade.CustomerPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
+import com.beanframework.core.data.CustomerDto;
+import com.beanframework.core.data.UserGroupDto;
+import com.beanframework.core.facade.CustomerFacade;
+import com.beanframework.core.facade.CustomerFacade.CustomerPreAuthorizeEnum;
 
 @Controller
 public class CustomerController extends AbstractController {

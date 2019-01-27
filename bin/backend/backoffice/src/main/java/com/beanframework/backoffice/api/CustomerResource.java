@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CustomerWebConstants;
-import com.beanframework.backoffice.data.CustomerDto;
-import com.beanframework.backoffice.facade.CustomerFacade;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.core.data.CustomerDto;
+import com.beanframework.core.facade.CustomerFacade;
 import com.beanframework.customer.domain.Customer;
 
 @RestController

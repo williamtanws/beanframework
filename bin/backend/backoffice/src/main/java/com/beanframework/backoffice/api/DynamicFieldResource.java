@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
-import com.beanframework.backoffice.data.DynamicFieldDataResponse;
-import com.beanframework.backoffice.data.DynamicFieldDto;
-import com.beanframework.backoffice.facade.DynamicFieldFacade;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.core.data.DynamicFieldDataResponse;
+import com.beanframework.core.data.DynamicFieldDto;
+import com.beanframework.core.facade.DynamicFieldFacade;
 import com.beanframework.dynamicfield.domain.DynamicField;
 
 @RestController

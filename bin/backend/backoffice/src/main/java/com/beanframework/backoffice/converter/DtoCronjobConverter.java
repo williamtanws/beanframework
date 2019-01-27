@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.backoffice.data.CronjobDataDto;
-import com.beanframework.backoffice.data.CronjobDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.data.CronjobDataDto;
+import com.beanframework.core.data.CronjobDto;
 import com.beanframework.cronjob.domain.Cronjob;
 
 public class DtoCronjobConverter implements DtoConverter<Cronjob, CronjobDto> {

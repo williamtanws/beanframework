@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import com.beanframework.backoffice.data.EmailDto;
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.core.data.EmailDto;
 import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.Email;
 

@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmailWebConstants;
-import com.beanframework.backoffice.data.EmailDto;
-import com.beanframework.backoffice.facade.EmailFacade;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.core.data.EmailDto;
+import com.beanframework.core.facade.EmailFacade;
 import com.beanframework.email.domain.Email;
 
 @RestController

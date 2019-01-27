@@ -7,10 +7,10 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.backoffice.data.CronjobDataDto;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.cronjob.domain.CronjobData;
 
 public class EntityCronjobDataConverter implements EntityConverter<CronjobDataDto, CronjobData> {

@@ -21,11 +21,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MenuWebConstants;
-import com.beanframework.backoffice.data.MenuDto;
-import com.beanframework.backoffice.facade.MenuFacade;
-import com.beanframework.backoffice.facade.MenuFacade.MenuPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.data.MenuDto;
+import com.beanframework.core.facade.MenuFacade;
+import com.beanframework.core.facade.MenuFacade.MenuPreAuthorizeEnum;
 
 @Controller
 public class MenuController extends AbstractController {

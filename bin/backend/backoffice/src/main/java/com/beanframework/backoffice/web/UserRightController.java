@@ -17,12 +17,12 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserRightWebConstants;
-import com.beanframework.backoffice.data.UserRightDto;
-import com.beanframework.backoffice.facade.UserRightFacade;
-import com.beanframework.backoffice.facade.UserRightFacade.UserRightPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.core.data.UserRightDto;
+import com.beanframework.core.facade.UserRightFacade;
+import com.beanframework.core.facade.UserRightFacade.UserRightPreAuthorizeEnum;
 
 @Controller
 public class UserRightController extends AbstractController {

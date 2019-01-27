@@ -6,10 +6,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beanframework.backoffice.data.AuditorDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.core.data.AuditorDto;
 
 public class DtoAuditorConverter implements DtoConverter<Auditor, AuditorDto> {
 

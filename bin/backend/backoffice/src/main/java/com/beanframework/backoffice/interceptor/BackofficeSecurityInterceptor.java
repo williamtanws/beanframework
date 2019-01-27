@@ -18,10 +18,10 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
-import com.beanframework.backoffice.facade.MenuFacade;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.service.LanguageService;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.facade.MenuFacade;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.menu.domain.Menu;
 

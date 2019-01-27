@@ -6,7 +6,7 @@ import java.util.List;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.console.data.ConfigurationDto;
+import com.beanframework.core.data.ConfigurationDto;
 
 public class DtoConfigurationConverter implements DtoConverter<Configuration, ConfigurationDto> {
 

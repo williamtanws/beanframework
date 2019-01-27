@@ -18,13 +18,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldEnumWebConstants;
-import com.beanframework.backoffice.data.DynamicFieldEnumDto;
-import com.beanframework.backoffice.data.LanguageDto;
-import com.beanframework.backoffice.facade.DynamicFieldEnumFacade;
-import com.beanframework.backoffice.facade.DynamicFieldEnumFacade.DynamicFieldEnumPreAuthorizeEnum;
-import com.beanframework.backoffice.facade.LanguageFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.data.DynamicFieldEnumDto;
+import com.beanframework.core.data.LanguageDto;
+import com.beanframework.core.facade.DynamicFieldEnumFacade;
+import com.beanframework.core.facade.LanguageFacade;
+import com.beanframework.core.facade.DynamicFieldEnumFacade.DynamicFieldEnumPreAuthorizeEnum;
 
 @Controller
 public class DynamicFieldEnumController extends AbstractController {

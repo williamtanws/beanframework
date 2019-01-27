@@ -11,12 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.backoffice.data.MenuDto;
-import com.beanframework.backoffice.data.MenuFieldDto;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
+import com.beanframework.core.data.MenuDto;
+import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
 

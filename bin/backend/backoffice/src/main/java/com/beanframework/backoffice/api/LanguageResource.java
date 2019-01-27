@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants;
-import com.beanframework.backoffice.data.LanguageDataResponse;
-import com.beanframework.backoffice.data.LanguageDto;
-import com.beanframework.backoffice.facade.LanguageFacade;
 import com.beanframework.language.domain.Language;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.core.data.LanguageDataResponse;
+import com.beanframework.core.data.LanguageDto;
+import com.beanframework.core.facade.LanguageFacade;
 
 @RestController
 public class LanguageResource {

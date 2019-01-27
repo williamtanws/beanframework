@@ -3,9 +3,9 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.beanframework.backoffice.data.LanguageDto;
 import com.beanframework.language.domain.Language;
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.core.data.LanguageDto;
 
 public class DtoLanguageConverter implements DtoConverter<Language, LanguageDto> {
 

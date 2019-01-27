@@ -9,13 +9,13 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.backoffice.data.UserAuthorityDto;
-import com.beanframework.backoffice.data.UserGroupDto;
-import com.beanframework.backoffice.data.UserGroupFieldDto;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
+import com.beanframework.core.data.UserAuthorityDto;
+import com.beanframework.core.data.UserGroupDto;
+import com.beanframework.core.data.UserGroupFieldDto;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, UserGroup> {

@@ -18,15 +18,15 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserGroupWebConstants;
-import com.beanframework.backoffice.data.UserGroupDto;
-import com.beanframework.backoffice.data.UserPermissionDto;
-import com.beanframework.backoffice.data.UserRightDto;
-import com.beanframework.backoffice.facade.UserGroupFacade;
-import com.beanframework.backoffice.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
-import com.beanframework.backoffice.facade.UserPermissionFacade;
-import com.beanframework.backoffice.facade.UserRightFacade;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.data.UserGroupDto;
+import com.beanframework.core.data.UserPermissionDto;
+import com.beanframework.core.data.UserRightDto;
+import com.beanframework.core.facade.UserGroupFacade;
+import com.beanframework.core.facade.UserPermissionFacade;
+import com.beanframework.core.facade.UserRightFacade;
+import com.beanframework.core.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
 
 @Controller
 public class UserGroupController extends AbstractController {

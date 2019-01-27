@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.backoffice.data.DynamicFieldDto;
-import com.beanframework.backoffice.data.DynamicFieldEnumDto;
-import com.beanframework.backoffice.data.LanguageDto;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.data.DynamicFieldDto;
+import com.beanframework.core.data.DynamicFieldEnumDto;
+import com.beanframework.core.data.LanguageDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
 
 public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, DynamicFieldDto> {

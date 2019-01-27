@@ -298,7 +298,7 @@ public class FilemanagerResource {
 			String path = json.getString("item");
 			File srcFile = new File(STORAGE, path);
 
-			String content = FileUtils.readFileToString(srcFile);
+			String content = FileUtils.readFileToString(srcFile, "UTF-8");
 
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("result", content);
@@ -319,7 +319,7 @@ public class FilemanagerResource {
 			String content = json.getString("content");
 
 			File srcFile = new File(STORAGE, path);
-			FileUtils.writeStringToFile(srcFile, content);
+			FileUtils.writeStringToFile(srcFile, content, "UTF-8");
 
 			return success();
 		} catch (Exception e) {
