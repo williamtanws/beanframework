@@ -35,13 +35,13 @@ public interface UserPermissionFacade {
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	Page<UserPermissionDto> findPage(DataTableRequest<UserPermissionDto> dataTableRequest) throws Exception;
+	Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	List<UserPermissionDto> findAllDtoUserPermissions() throws Exception;
 

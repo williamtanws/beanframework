@@ -4,6 +4,8 @@ public interface BackofficeWebConstants {
 
 	public interface Configuration {
 		public static final String DEFAULT_AVATAR = "${module.backoffice.configuration.avatar.default}";
+		public static final String USERGROUP = "${module.backoffice.configuration.usergroup}";
+		public static final String USERGROUP_SPLITTER = "${module.backoffice.configuration.usergroup.splitter}";
 	}
 
 	public interface Pagination {

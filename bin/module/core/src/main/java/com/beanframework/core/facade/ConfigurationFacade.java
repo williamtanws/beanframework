@@ -35,14 +35,14 @@ public interface ConfigurationFacade {
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	Page<ConfigurationDto> findPage(DataTableRequest<ConfigurationDto> dataTableRequest) throws Exception;
+	Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
 	List<ConfigurationDto> findAllDtoConfigurations() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 }

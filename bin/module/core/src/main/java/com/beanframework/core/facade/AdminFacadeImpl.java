@@ -17,6 +17,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.AdminDto;
+import com.beanframework.core.specification.AdminSpecification;
 
 @Component
 public class AdminFacadeImpl implements AdminFacade {
@@ -66,8 +67,8 @@ public class AdminFacadeImpl implements AdminFacade {
 	}
 	
 	@Override
-	public Page<AdminDto> findPage(DataTableRequest<AdminDto> dataTableRequest) throws Exception {
-		Page<Admin> page = adminService.findEntityPage(dataTableRequest);
+	public Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<Admin> page = adminService.findEntityPage(dataTableRequest, AdminSpecification.getSpecification(dataTableRequest));
 		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class);
 		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -85,7 +86,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	}
 	
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = adminService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -99,7 +100,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return adminService.findCountHistory(dataTableRequest);
 	}
 

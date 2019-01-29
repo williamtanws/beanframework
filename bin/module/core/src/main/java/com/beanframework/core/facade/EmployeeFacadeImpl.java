@@ -18,6 +18,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.EntityEmployeeProfileConverter;
 import com.beanframework.core.data.EmployeeDto;
+import com.beanframework.core.specification.EmployeeSpecification;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
@@ -74,8 +75,8 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	}
 
 	@Override
-	public Page<EmployeeDto> findPage(DataTableRequest<EmployeeDto> dataTableRequest) throws Exception {
-		Page<Employee> page = employeeService.findEntityPage(dataTableRequest);
+	public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<Employee> page = employeeService.findEntityPage(dataTableRequest, EmployeeSpecification.getSpecification(dataTableRequest));
 		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class);
 		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -133,13 +134,13 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	}
 
 	@Override
-	public EmployeeDto getProfile() throws Exception {
-		Employee employee = employeeService.getProfile();
+	public EmployeeDto getCurrentUser() throws Exception {
+		Employee employee = employeeService.getCurrentUser();
 		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), EmployeeDto.class);
 	}
 
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = employeeService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -153,7 +154,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return employeeService.findCountHistory(dataTableRequest);
 	}
 }

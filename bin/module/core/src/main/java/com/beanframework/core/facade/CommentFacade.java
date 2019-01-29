@@ -35,13 +35,13 @@ public interface CommentFacade {
 	@PreAuthorize(CommentPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	Page<CommentDto> findPage(DataTableRequest<CommentDto> dataTableRequest) throws Exception;
+	Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	List<CommentDto> findAllDtoComments() throws Exception;
 

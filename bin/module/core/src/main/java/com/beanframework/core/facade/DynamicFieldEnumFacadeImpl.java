@@ -15,6 +15,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldEnumDto;
+import com.beanframework.core.specification.DynamicFieldEnumSpecification;
 import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
 import com.beanframework.dynamicfield.service.DynamicFieldEnumService;
 
@@ -66,8 +67,8 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 	}
 
 	@Override
-	public Page<DynamicFieldEnumDto> findPage(DataTableRequest<DynamicFieldEnumDto> dataTableRequest) throws Exception {
-		Page<DynamicFieldEnum> page = dynamicFieldEnumService.findEntityPage(dataTableRequest);
+	public Page<DynamicFieldEnumDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<DynamicFieldEnum> page = dynamicFieldEnumService.findEntityPage(dataTableRequest, DynamicFieldEnumSpecification.getSpecification(dataTableRequest));
 		List<DynamicFieldEnumDto> dtos = modelService.getDto(page.getContent(), DynamicFieldEnumDto.class);
 		return new PageImpl<DynamicFieldEnumDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -78,7 +79,7 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 	}
 	
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = dynamicFieldEnumService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -92,7 +93,7 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 	}
 	
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return dynamicFieldEnumService.findCountHistory(dataTableRequest);
 	}
 

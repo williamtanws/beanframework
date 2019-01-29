@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -28,11 +29,11 @@ public interface MenuService {
 
 	List<Menu> filterEntityMenuTreeByCurrentUser(List<Menu> cachedMenuTree) throws Exception;
 
-	<T> Page<Menu> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception;
+	<T> Page<Menu> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
 
 	int count() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 }

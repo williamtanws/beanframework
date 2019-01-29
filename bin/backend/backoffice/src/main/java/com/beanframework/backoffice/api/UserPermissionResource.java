@@ -62,7 +62,7 @@ public class UserPermissionResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<UserPermissionDto> dataTableRequest = new DataTableRequest<UserPermissionDto>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 
 		Page<UserPermissionDto> pagination = userPermissionFacade.findPage(dataTableRequest);
 
@@ -88,7 +88,7 @@ public class UserPermissionResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<Object[]> dataTableRequest = new DataTableRequest<Object[]>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = userPermissionFacade.findHistory(dataTableRequest);

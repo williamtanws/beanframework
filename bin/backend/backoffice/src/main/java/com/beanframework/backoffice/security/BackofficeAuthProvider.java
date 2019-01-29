@@ -1,6 +1,9 @@
 package com.beanframework.backoffice.security;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,8 +28,11 @@ import org.springframework.stereotype.Component;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
+import com.beanframework.user.domain.UserGroup;
 
 @Component
 public class BackofficeAuthProvider implements AuthenticationProvider {
@@ -44,6 +50,15 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private ConfigurationService configurationService;
+	
+	@Value(BackofficeWebConstants.Configuration.USERGROUP)
+	private String BACKOFFICE_CONFIGURATION_USERGROUP;
+
+	@Value(BackofficeWebConstants.Configuration.USERGROUP_SPLITTER)
+	private String BACKOFFICE_CONFIGURATION_SPLITTER;
 
 	@Value(BackofficeWebConstants.Authority.BACKOFFICE)
 	private String BACKOFFICE_ACCESS;
@@ -62,6 +77,11 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 		Employee employee;
 		try {
 			employee = employeeService.findAuthenticate(id, password);
+			
+			if (isAuthorized(employee) == false) {
+				throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
+			}
+			
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		} catch (DisabledException e) {
@@ -87,6 +107,37 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 		return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
 	}
 	
+	boolean isAuthorized(Employee employee) throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, BACKOFFICE_CONFIGURATION_USERGROUP);
+		Configuration usergroupConfiguration = configurationService.findOneEntityByProperties(properties);
+		if (usergroupConfiguration != null) {
+			Set<String> usergroups = new HashSet<String>(Arrays.asList(usergroupConfiguration.getValue().split(BACKOFFICE_CONFIGURATION_SPLITTER)));
+
+			for (UserGroup userGroup : employee.getUserGroups()) {
+				if (usergroups.contains(userGroup.getId())) {
+					return true;
+				}
+				else if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false){
+					return isAuthorized(userGroup, usergroups);
+				}
+			}
+		}
+		
+		return false;
+	}
 	
+	boolean isAuthorized(UserGroup model, Set<String> usergroups) {
+		for (UserGroup userGroup : model.getUserGroups()) {
+			if (usergroups.contains(userGroup.getId())) {
+				return true;
+			}
+			else if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false){
+				return isAuthorized(userGroup, usergroups);
+			}
+		}
+		
+		return false;
+	}
 
 }

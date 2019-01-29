@@ -11,12 +11,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.comment.domain.Comment;
+import com.beanframework.comment.service.CommentService;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CommentDto;
-import com.beanframework.comment.domain.Comment;
-import com.beanframework.comment.service.CommentService;
+import com.beanframework.core.specification.CommentSpecification;
 
 @Component
 public class CommentFacadeImpl implements CommentFacade {
@@ -66,8 +67,8 @@ public class CommentFacadeImpl implements CommentFacade {
 	}
 	
 	@Override
-	public Page<CommentDto> findPage(DataTableRequest<CommentDto> dataTableRequest) throws Exception {
-		Page<Comment> page = commentService.findEntityPage(dataTableRequest);
+	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<Comment> page = commentService.findEntityPage(dataTableRequest, CommentSpecification.getSpecification(dataTableRequest));
 		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class);
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -78,7 +79,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	}
 	
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = commentService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -92,7 +93,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return commentService.findCountHistory(dataTableRequest);
 	}
 

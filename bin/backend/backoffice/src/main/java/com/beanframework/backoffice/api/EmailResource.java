@@ -61,7 +61,7 @@ public class EmailResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<EmailDto> dataTableRequest = new DataTableRequest<EmailDto>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 
 		Page<EmailDto> pagination = emailFacade.findPage(dataTableRequest);
 
@@ -85,7 +85,7 @@ public class EmailResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<Object[]> dataTableRequest = new DataTableRequest<Object[]>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = emailFacade.findHistory(dataTableRequest);

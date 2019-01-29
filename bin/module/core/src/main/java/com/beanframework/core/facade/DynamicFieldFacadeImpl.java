@@ -15,6 +15,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldDto;
+import com.beanframework.core.specification.DynamicFieldSpecification;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.service.DynamicFieldService;
 
@@ -66,8 +67,8 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	}
 
 	@Override
-	public Page<DynamicFieldDto> findPage(DataTableRequest<DynamicFieldDto> dataTableRequest) throws Exception {
-		Page<DynamicField> page = dynamicFieldService.findEntityPage(dataTableRequest);
+	public Page<DynamicFieldDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<DynamicField> page = dynamicFieldService.findEntityPage(dataTableRequest, DynamicFieldSpecification.getSpecification(dataTableRequest));
 		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), DynamicFieldDto.class);
 		return new PageImpl<DynamicFieldDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -78,7 +79,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	}
 
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = dynamicFieldService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -92,7 +93,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return dynamicFieldService.findCountHistory(dataTableRequest);
 	}
 

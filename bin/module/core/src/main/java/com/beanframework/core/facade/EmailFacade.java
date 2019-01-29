@@ -36,7 +36,7 @@ public interface EmailFacade {
 	@PreAuthorize(EmailPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	Page<EmailDto> findPage(DataTableRequest<EmailDto> dataTableRequest) throws Exception;
+	Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
@@ -46,8 +46,8 @@ public interface EmailFacade {
 	@PreAuthorize(EmailPreAuthorizeEnum.UPDATE)
 	void deleteAttachment(UUID uuid, String filename) throws BusinessException;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 }

@@ -15,6 +15,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CustomerDto;
+import com.beanframework.core.specification.CustomerSpecification;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerService;
 
@@ -66,8 +67,8 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	}
 
 	@Override
-	public Page<CustomerDto> findPage(DataTableRequest<CustomerDto> dataTableRequest) throws Exception {
-		Page<Customer> page = customerService.findEntityPage(dataTableRequest);
+	public Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<Customer> page = customerService.findEntityPage(dataTableRequest, CustomerSpecification.getSpecification(dataTableRequest));
 		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class);
 		return new PageImpl<CustomerDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -85,7 +86,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	}
 
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = customerService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -99,7 +100,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return customerService.findCountHistory(dataTableRequest);
 	}
 

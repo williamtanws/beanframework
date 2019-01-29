@@ -15,7 +15,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.UserPermissionConstants;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -33,7 +32,6 @@ public class UserPermissionField extends GenericEntity {
 	public static final String DYNAMIC_FIELD = "dynamicField";
 	
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userPermission_uuid")
 	private UserPermission userPermission;

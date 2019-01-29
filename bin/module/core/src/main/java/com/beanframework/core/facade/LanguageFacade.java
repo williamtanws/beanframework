@@ -35,13 +35,13 @@ public interface LanguageFacade {
 	@PreAuthorize(LanguagePreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	Page<LanguageDto> findPage(DataTableRequest<LanguageDto> dataTableRequest) throws Exception;
+	Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	List<LanguageDto> findAllDtoLanguages() throws Exception;
 

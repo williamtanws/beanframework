@@ -37,11 +37,11 @@ public interface AdminFacade {
 
 	List<AdminDto> findAllDtoAdmins() throws Exception;
 
-	Page<AdminDto> findPage(DataTableRequest<AdminDto> dataTableRequest) throws Exception;
+	Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 }

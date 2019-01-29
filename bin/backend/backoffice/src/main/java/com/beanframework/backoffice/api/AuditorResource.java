@@ -33,7 +33,7 @@ public class AuditorResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<AuditorDto> dataTableRequest = new DataTableRequest<AuditorDto>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 
 		Page<AuditorDto> pagination = auditorFacade.findPage(dataTableRequest);
 
@@ -58,7 +58,7 @@ public class AuditorResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<Object[]> dataTableRequest = new DataTableRequest<Object[]>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = auditorFacade.findHistory(dataTableRequest);

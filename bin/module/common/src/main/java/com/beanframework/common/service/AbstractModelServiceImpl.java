@@ -288,7 +288,12 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
 
-		Root root = applySpecificationToCriteria(spec, domainClass, query);
+		Root root = query.from(domainClass);
+        Predicate predicate = spec.toPredicate(root, query, builder);
+
+        if (predicate != null) {
+			query.where(predicate);
+		}
 
 		if (query.isDistinct()) {
 			query.select(builder.countDistinct(root));
@@ -309,38 +314,24 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	protected <T> TypedQuery getQuery(@Nullable Specification spec, Class domainClass, Sort sort) {
+		Assert.notNull(domainClass, "Domain class must not be null!");
+		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery query = builder.createQuery(domainClass);
-
-		Root root = applySpecificationToCriteria(spec, domainClass, query);
-		query.select(root);
-
-		if (sort.isSorted()) {
+        CriteriaQuery query = builder.createQuery(domainClass);
+        Root root = query.from(domainClass);
+        Predicate predicate = spec.toPredicate(root, query, builder);
+        
+        if (predicate != null) {
+			query.where(predicate);
+		}
+		
+        query.select(root);
+        
+        if (sort.isSorted()) {
 			query.orderBy(toOrders(sort, root, builder));
 		}
 
 		return entityManager.createQuery(query);
-	}
-
-	protected <S, U extends T, T> Root<U> applySpecificationToCriteria(@Nullable Specification<U> spec, Class<U> domainClass, CriteriaQuery<S> query) {
-
-		Assert.notNull(domainClass, "Domain class must not be null!");
-		Assert.notNull(query, "CriteriaQuery must not be null!");
-
-		Root<U> root = query.from(domainClass);
-
-		if (spec == null) {
-			return root;
-		}
-
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		Predicate predicate = spec.toPredicate(root, query, builder);
-
-		if (predicate != null) {
-			query.where(predicate);
-		}
-
-		return root;
 	}
 
 	protected static long executeCountQuery(TypedQuery<Long> query) {

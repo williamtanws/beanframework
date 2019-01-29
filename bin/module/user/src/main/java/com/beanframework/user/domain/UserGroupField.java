@@ -13,7 +13,6 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.UserGroupConstants;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Audited
@@ -30,7 +29,6 @@ public class UserGroupField extends GenericEntity {
 	public static final String DYNAMIC_FIELD = "dynamicField";
 	
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usergroup_uuid")
 	private UserGroup userGroup;

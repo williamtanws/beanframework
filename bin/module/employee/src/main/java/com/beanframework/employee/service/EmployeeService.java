@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +32,7 @@ public interface EmployeeService {
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
 
-	<T> Page<Employee> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception;
+	<T> Page<Employee> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
 
 	int count() throws Exception;
 
@@ -41,7 +42,7 @@ public interface EmployeeService {
 
 	Employee findAuthenticate(String id, String password) throws Exception;
 
-	Employee getProfile() throws Exception;
+	Employee getCurrentUser() throws Exception;
 
 	Employee updatePrincipal(Employee employee);
 
@@ -53,8 +54,8 @@ public interface EmployeeService {
 
 	void expireAllSessions();
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
 }

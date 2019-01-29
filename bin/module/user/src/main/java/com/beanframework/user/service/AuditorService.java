@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
@@ -26,11 +27,11 @@ public interface AuditorService {
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
 
-	<T> Page<Auditor> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception;
+	<T> Page<Auditor> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
 
 	int count() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 }

@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.data.DataTableRequest;
@@ -82,8 +83,8 @@ public class MediaServiceImpl implements MediaService {
 
 	@Cacheable(value = "MediasPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
-	public <T> Page<Media> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception {
-		return modelService.findEntityPage(dataTableRequest.getSpecification(), dataTableRequest.getPageable(), false, Media.class);
+	public <T> Page<Media> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Media.class);
 	}
 
 	@Cacheable(value = "MediasPage", key = "'count'")
@@ -94,7 +95,7 @@ public class MediaServiceImpl implements MediaService {
 
 	@Cacheable(value = "MediasHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
 		if (dataTableRequest.getAuditCriterion() != null)
@@ -115,7 +116,7 @@ public class MediaServiceImpl implements MediaService {
 
 	@Cacheable(value = "MediasHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
-	public int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
 		if (dataTableRequest.getAuditCriterion() != null)

@@ -15,6 +15,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.AuditorDto;
+import com.beanframework.core.specification.AuditorSpecification;
 import com.beanframework.user.service.AuditorService;
 
 @Component
@@ -39,8 +40,8 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	}
 	
 	@Override
-	public Page<AuditorDto> findPage(DataTableRequest<AuditorDto> dataTableRequest) throws Exception {
-		Page<Auditor> page = auditorService.findEntityPage(dataTableRequest);
+	public Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<Auditor> page = auditorService.findEntityPage(dataTableRequest, AuditorSpecification.getSpecification(dataTableRequest));
 		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class);
 		return new PageImpl<AuditorDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -58,7 +59,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	}
 	
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = auditorService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -72,7 +73,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return auditorService.findCountHistory(dataTableRequest);
 	}
 

@@ -36,6 +36,9 @@ public class DataTableColumnSpecs {
 	/** The sort dir. */
 	private String sortDir;
 
+	public DataTableColumnSpecs() {
+	}
+
 	/**
 	 * Instantiates a new data table column specs.
 	 *
