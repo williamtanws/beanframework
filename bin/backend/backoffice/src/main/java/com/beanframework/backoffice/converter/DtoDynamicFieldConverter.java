@@ -3,6 +3,7 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
@@ -33,22 +34,25 @@ public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, Dyna
 
 	private DynamicFieldDto convert(DynamicField source, DynamicFieldDto prototype) throws ConverterException {
 
-		try {
-			prototype.setUuid(source.getUuid());
-			prototype.setId(source.getId());
-			prototype.setCreatedBy(source.getCreatedBy());
-			prototype.setCreatedDate(source.getCreatedDate());
-			prototype.setLastModifiedBy(source.getLastModifiedBy());
-			prototype.setLastModifiedDate(source.getLastModifiedDate());
+		prototype.setUuid(source.getUuid());
+		prototype.setId(source.getId());
+		prototype.setCreatedBy(source.getCreatedBy());
+		prototype.setCreatedDate(source.getCreatedDate());
+		prototype.setLastModifiedBy(source.getLastModifiedBy());
+		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
-			prototype.setName(source.getName());
-			prototype.setRequired(source.getRequired());
-			prototype.setRule(source.getRule());
-			prototype.setSort(source.getSort());
-			prototype.setType(source.getType());
-			prototype.setLabel(source.getLabel());
-			prototype.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class));
-			prototype.setEnums(modelService.getDto(source.getEnums(), DynamicFieldEnumDto.class));
+		prototype.setName(source.getName());
+		prototype.setRequired(source.getRequired());
+		prototype.setRule(source.getRule());
+		prototype.setSort(source.getSort());
+		prototype.setType(source.getType());
+		prototype.setLabel(source.getLabel());
+		try {
+			if (Hibernate.isInitialized(source.getLanguage()))
+				prototype.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class));
+
+			if (Hibernate.isInitialized(source.getEnums()))
+				prototype.setEnums(modelService.getDto(source.getEnums(), DynamicFieldEnumDto.class));
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}

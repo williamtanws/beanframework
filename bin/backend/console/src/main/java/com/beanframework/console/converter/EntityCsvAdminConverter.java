@@ -29,7 +29,7 @@ public class EntityCsvAdminConverter implements EntityConverter<AdminCsv, Admin>
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Admin.ID, source.getId());
 
-				Admin prototype = modelService.findOneEntityByProperties(properties, true,Admin.class);
+				Admin prototype = modelService.findOneEntityByProperties(properties, true, Admin.class);
 
 				if (prototype != null) {
 
@@ -53,9 +53,8 @@ public class EntityCsvAdminConverter implements EntityConverter<AdminCsv, Admin>
 			prototype.setEnabled(source.isEnabled());
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-			
 			prototype.setName(source.getName());
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ConverterException(e.getMessage(), e);

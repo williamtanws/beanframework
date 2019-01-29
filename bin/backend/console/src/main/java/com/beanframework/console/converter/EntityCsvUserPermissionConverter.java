@@ -57,7 +57,7 @@ public class EntityCsvUserPermissionConverter implements EntityConverter<UserPer
 			prototype.setSort(source.getSort());
 
 			// Dynamic Field
-			if (source.getDynamicField() != null) {
+			if (StringUtils.isNotBlank(source.getDynamicField())) {
 				String[] dynamicFields = source.getDynamicField().split(ImportListener.SPLITTER);
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split(ImportListener.EQUALS)[0];
@@ -76,7 +76,9 @@ public class EntityCsvUserPermissionConverter implements EntityConverter<UserPer
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, true, DynamicField.class);
 
-						if(entityDynamicField != null) {
+						if (entityDynamicField == null) {
+							LOGGER.error("DynamicField ID not exists: " + dynamicFieldId);
+						} else {
 							UserPermissionField field = new UserPermissionField();
 							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));

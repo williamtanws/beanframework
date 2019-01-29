@@ -36,7 +36,7 @@ public class MenuField extends GenericEntity {
 	private Menu menu;
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dynamicfield_uuid")
 	@OrderBy(DynamicField.SORT+" ASC")
 	private DynamicField dynamicField;

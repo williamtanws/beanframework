@@ -37,7 +37,7 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.ID, source.getId());
 
-				Employee prototype = modelService.findOneEntityByProperties(properties, true,Employee.class);
+				Employee prototype = modelService.findOneEntityByProperties(properties, true, Employee.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);
@@ -60,11 +60,11 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 			prototype.setEnabled(source.isEnabled());
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
-			
+
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 
 			// Dynamic Field
-			if (source.getDynamicField() != null) {
+			if (StringUtils.isNotBlank(source.getDynamicField())) {
 				String[] dynamicFields = source.getDynamicField().split(ImportListener.SPLITTER);
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split(ImportListener.EQUALS)[0];
@@ -83,7 +83,9 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, true, DynamicField.class);
 
-						if (entityDynamicField != null) {
+						if (entityDynamicField == null) {
+							LOGGER.error("DynamicField Id not exists: " + dynamicFieldId);
+						} else {
 							UserField field = new UserField();
 							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));
@@ -96,17 +98,25 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 			}
 
 			// User Group
-			if (source.getUserGroupIds() != null) {
+			if (StringUtils.isNotBlank(source.getUserGroupIds())) {
 				String[] userGroupIds = source.getUserGroupIds().split(ImportListener.SPLITTER);
 				for (int i = 0; i < userGroupIds.length; i++) {
-					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, true, UserGroup.class);
+					boolean add = true;
+					for (UserGroup userGroup : prototype.getUserGroups()) {
+						if (StringUtils.equals(userGroup.getId(), userGroupIds[i]))
+							add = false;
+					}
 
-					if (userGroup == null) {
-						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-					} else {
-						prototype.getUserGroups().add(userGroup);
+					if (add) {
+						Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+						userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+						UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, true, UserGroup.class);
+
+						if (userGroup == null) {
+							LOGGER.error("UserGroup ID not exists: " + userGroupIds[i]);
+						} else {
+							prototype.getUserGroups().add(userGroup);
+						}
 					}
 				}
 			}

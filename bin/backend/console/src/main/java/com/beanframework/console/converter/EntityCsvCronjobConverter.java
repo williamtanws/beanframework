@@ -34,10 +34,10 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Cronjob.ID, source.getId());
 
-				Cronjob prototype = modelService.findOneEntityByProperties(properties, true,Cronjob.class);
+				Cronjob prototype = modelService.findOneEntityByProperties(properties, true, Cronjob.class);
 
 				if (prototype != null) {
-					
+
 					return convert(source, prototype);
 				}
 			}
@@ -58,10 +58,10 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 			prototype.setDescription(StringUtils.stripToNull(source.getDescription()));
 			prototype.setCronExpression(StringUtils.stripToNull(source.getCronExpression()));
 			prototype.setStartup(source.isStartup());
-			
+
 			// Cronjob Data
 			for (int i = 0; i < prototype.getCronjobDatas().size(); i++) {
-				if (source.getCronjobData() != null) {
+				if (StringUtils.isNotBlank(source.getCronjobData())) {
 					String[] cronjobDataList = source.getCronjobData().split(ImportListener.SPLITTER);
 
 					for (String cronjobDataString : cronjobDataList) {
@@ -74,23 +74,23 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 					}
 				}
 			}
-			
-			if (source.getCronjobData() != null) {
+
+			if (StringUtils.isNotBlank(source.getCronjobData())) {
 
 				String[] cronjobDataList = source.getCronjobData().split(ImportListener.SPLITTER);
 
 				for (String cronjobDataString : cronjobDataList) {
 					String name = cronjobDataString.split(ImportListener.EQUALS)[0];
 					String value = cronjobDataString.split(ImportListener.EQUALS)[1];
-					
+
 					boolean add = true;
 					for (CronjobData cronjobData : prototype.getCronjobDatas()) {
 						if (cronjobData.getName().equals(name)) {
 							add = false;
 						}
 					}
-					
-					if(add) {
+
+					if (add) {
 						CronjobData cronjobData = new CronjobData();
 						cronjobData.setName(name);
 						cronjobData.setValue(value);
@@ -99,7 +99,7 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 					}
 				}
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ConverterException(e.getMessage(), e);

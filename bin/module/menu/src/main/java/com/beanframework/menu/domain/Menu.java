@@ -92,7 +92,7 @@ public class Menu extends GenericEntity {
 
 	@AuditMappedBy(mappedBy = MenuField.MENU)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(MenuField.DYNAMIC_FIELD)
 	private List<MenuField> fields = new ArrayList<MenuField>();
 

@@ -43,32 +43,11 @@ public class UserGroupInitializeInterceptor implements InitializeInterceptor<Use
 					Hibernate.initialize(field.getDynamicField().getEnums());
 				}
 			}
-			initializeUserGroups(userGroup);
 		}
-		
+
+		Hibernate.initialize(model.getFields());
 		for (UserGroupField field : model.getFields()) {
 			Hibernate.initialize(field.getDynamicField().getEnums());
-		}
-	}
-
-	private void initializeUserGroups(UserGroup model) {
-		Hibernate.initialize(model.getUserGroups());
-		for (UserGroup userGroup : model.getUserGroups()) {
-			Hibernate.initialize(userGroup.getUserAuthorities());
-			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnums());
-			}
-			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-				Hibernate.initialize(userAuthority.getUserRight());
-				for (UserRightField field : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnums());
-				}
-				Hibernate.initialize(userAuthority.getUserPermission());
-				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnums());
-				}
-			}
-			initializeUserGroups(userGroup);
 		}
 	}
 }

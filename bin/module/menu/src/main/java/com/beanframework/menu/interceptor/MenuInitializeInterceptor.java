@@ -17,11 +17,6 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 	@Override
 	public void onInitialize(Menu model) throws InterceptorException {
 
-		Hibernate.initialize(model.getParent());
-		if (model.getParent() != null) {
-			initializeParent(model.getParent().getParent());
-		}
-
 		Hibernate.initialize(model.getChilds());
 		for (Menu menu : model.getChilds()) {
 			initializeChilds(menu);
@@ -49,23 +44,13 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 			initializeUserGroups(userGroup);
 		}
 		
+		Hibernate.initialize(model.getFields());
 		for (MenuField field : model.getFields()) {
 			Hibernate.initialize(field.getDynamicField().getEnums());
 		}
 	}
 
-	private void initializeParent(Menu parent) {
-		Hibernate.initialize(parent);
-		if (parent != null) {
-			initializeParent(parent.getParent());
-		}
-	}
-
 	private void initializeChilds(Menu model) {
-		Hibernate.initialize(model.getParent());
-		if (model.getParent() != null) {
-			initializeParent(model.getParent());
-		}
 		
 		Hibernate.initialize(model.getChilds());
 		for (Menu menu : model.getChilds()) {
@@ -94,6 +79,7 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 			initializeUserGroups(userGroup);
 		}
 		
+		Hibernate.initialize(model.getFields());
 		for (MenuField field : model.getFields()) {
 			Hibernate.initialize(field.getDynamicField().getEnums());
 		}

@@ -35,7 +35,7 @@ public class EntityCsvUserRightConverter implements EntityConverter<UserRightCsv
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserRight.ID, source.getId());
 
-				UserRight prototype = modelService.findOneEntityByProperties(properties, true,UserRight.class);
+				UserRight prototype = modelService.findOneEntityByProperties(properties, true, UserRight.class);
 
 				if (prototype != null) {
 
@@ -57,12 +57,12 @@ public class EntityCsvUserRightConverter implements EntityConverter<UserRightCsv
 			prototype.setSort(source.getSort());
 
 			// Dynamic Field
-			if (source.getDynamicField() != null) {
+			if (StringUtils.isNotBlank(source.getDynamicField())) {
 				String[] dynamicFields = source.getDynamicField().split(ImportListener.SPLITTER);
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split(ImportListener.EQUALS)[0];
 					String value = dynamicField.split(ImportListener.EQUALS)[1];
-					
+
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
 						if (prototype.getFields().get(i).getId().equals(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId)) {
@@ -70,13 +70,15 @@ public class EntityCsvUserRightConverter implements EntityConverter<UserRightCsv
 							add = false;
 						}
 					}
-					
-					if(add) {
+
+					if (add) {
 						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, true, DynamicField.class);
-						
-						if(entityDynamicField != null) {
+
+						if (entityDynamicField == null) {
+							LOGGER.error("DynamicField ID not exists: " + dynamicFieldId);
+						} else {
 							UserRightField field = new UserRightField();
 							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));
