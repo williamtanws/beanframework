@@ -62,7 +62,7 @@ public class UserRightResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<UserRightDto> dataTableRequest = new DataTableRequest<UserRightDto>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 
 		Page<UserRightDto> pagination = userRightFacade.findPage(dataTableRequest);
 
@@ -88,7 +88,7 @@ public class UserRightResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<Object[]> dataTableRequest = new DataTableRequest<Object[]>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = userRightFacade.findHistory(dataTableRequest);

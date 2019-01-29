@@ -11,12 +11,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.LanguageDto;
+import com.beanframework.core.specification.LanguageSpecification;
+import com.beanframework.language.domain.Language;
+import com.beanframework.language.service.LanguageService;
 
 @Component
 public class LanguageFacadeImpl implements LanguageFacade {
@@ -66,8 +67,8 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	}
 	
 	@Override
-	public Page<LanguageDto> findPage(DataTableRequest<LanguageDto> dataTableRequest) throws Exception {
-		Page<Language> page = languageService.findEntityPage(dataTableRequest);
+	public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<Language> page = languageService.findEntityPage(dataTableRequest, LanguageSpecification.getSpecification(dataTableRequest));
 		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class);
 		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -78,7 +79,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	}
 	
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = languageService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -92,7 +93,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return languageService.findCountHistory(dataTableRequest);
 	}
 

@@ -17,6 +17,7 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.core.data.CronjobDto;
+import com.beanframework.core.specification.CronjobSpecification;
 import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
@@ -87,8 +88,8 @@ public class CronjobFacadeImpl implements CronjobFacade {
 //	}
 
 	@Override
-	public Page<CronjobDto> findPage(DataTableRequest<CronjobDto> dataTableRequest) throws Exception {
-		Page<Cronjob> page = cronjobService.findEntityPage(dataTableRequest);
+	public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<Cronjob> page = cronjobService.findEntityPage(dataTableRequest, CronjobSpecification.getSpecification(dataTableRequest));
 		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class);
 		return new PageImpl<CronjobDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -181,7 +182,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	}
 
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = cronjobService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -195,7 +196,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return cronjobService.findCountHistory(dataTableRequest);
 	}
 

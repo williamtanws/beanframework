@@ -16,6 +16,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MenuDto;
+import com.beanframework.core.specification.MenuSpecification;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
 
@@ -100,8 +101,8 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 	
 	@Override
-	public Page<MenuDto> findPage(DataTableRequest<MenuDto> dataTableRequest) throws Exception {
-		Page<Menu> page = menuService.findEntityPage(dataTableRequest);
+	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<Menu> page = menuService.findEntityPage(dataTableRequest, MenuSpecification.getSpecification(dataTableRequest));
 		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class);
 		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -112,7 +113,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 	
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = menuService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -126,7 +127,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return menuService.findCountHistory(dataTableRequest);
 	}
 }

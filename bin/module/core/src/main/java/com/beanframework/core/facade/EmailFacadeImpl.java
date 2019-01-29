@@ -17,6 +17,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EmailDto;
+import com.beanframework.core.specification.EmailSpecification;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.service.EmailService;
 
@@ -70,8 +71,8 @@ public class EmailFacadeImpl implements EmailFacade {
 	}
 
 	@Override
-	public Page<EmailDto> findPage(DataTableRequest<EmailDto> dataTableRequest) throws Exception {
-		Page<Email> page = emailService.findEntityPage(dataTableRequest);
+	public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<Email> page = emailService.findEntityPage(dataTableRequest, EmailSpecification.getSpecification(dataTableRequest));
 		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class);
 		return new PageImpl<EmailDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -100,7 +101,7 @@ public class EmailFacadeImpl implements EmailFacade {
 	}
 
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = emailService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -114,7 +115,7 @@ public class EmailFacadeImpl implements EmailFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return emailService.findCountHistory(dataTableRequest);
 	}
 }

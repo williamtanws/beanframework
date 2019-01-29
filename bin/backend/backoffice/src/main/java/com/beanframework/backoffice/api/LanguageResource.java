@@ -61,7 +61,7 @@ public class LanguageResource {
 	@ResponseBody
 	public DataTableResponse<LanguageDataResponse> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<LanguageDto> dataTableRequest = new DataTableRequest<LanguageDto>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 
 		Page<LanguageDto> pagination = languageFacade.findPage(dataTableRequest);
 
@@ -88,7 +88,7 @@ public class LanguageResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<Object[]> dataTableRequest = new DataTableRequest<Object[]>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = languageFacade.findHistory(dataTableRequest);

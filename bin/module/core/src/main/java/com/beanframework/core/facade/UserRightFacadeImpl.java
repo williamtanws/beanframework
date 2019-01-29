@@ -15,6 +15,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserRightDto;
+import com.beanframework.core.specification.UserRightSpecification;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserRightService;
 
@@ -66,8 +67,8 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	}
 	
 	@Override
-	public Page<UserRightDto> findPage(DataTableRequest<UserRightDto> dataTableRequest) throws Exception {
-		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest);
+	public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest, UserRightSpecification.getSpecification(dataTableRequest));
 		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class);
 		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -78,7 +79,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	}
 	
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = userRightService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -92,7 +93,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return userRightService.findCountHistory(dataTableRequest);
 	}
 

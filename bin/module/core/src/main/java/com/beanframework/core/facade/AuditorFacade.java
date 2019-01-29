@@ -22,14 +22,14 @@ public interface AuditorFacade {
 	@PreAuthorize(PreAuthorizeEnum.READ)
 	AuditorDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	Page<AuditorDto> findPage(DataTableRequest<AuditorDto> dataTableRequest) throws Exception;
+	Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
 	List<AuditorDto> findAllDtoAuditors() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 }

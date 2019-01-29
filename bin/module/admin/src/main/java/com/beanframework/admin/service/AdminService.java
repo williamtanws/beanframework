@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.data.DataTableRequest;
@@ -29,12 +30,12 @@ public interface AdminService {
 
 	Admin getCurrentUser() throws Exception;
 
-	<T> Page<Admin> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception;
+	<T> Page<Admin> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
 
 	int count() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
 }

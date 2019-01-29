@@ -15,7 +15,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.UserConstants;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -32,7 +31,6 @@ public class UserField extends GenericEntity {
 	public static final String DYNAMIC_FIELD = "dynamicField";
 	
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_uuid")
 	private User user;

@@ -10,10 +10,6 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,8 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.data.jpa.domain.Specification;
 
+import com.beanframework.common.utils.AbstractSpecification;
 import com.beanframework.common.utils.AppUtil;
 
 /**
@@ -34,7 +30,7 @@ import com.beanframework.common.utils.AppUtil;
  *
  * @author pavan.solapure
  */
-public class DataTableRequest<T> {
+public class DataTableRequest {
 
 	/** The unique id. */
 	private String uniqueId;
@@ -62,6 +58,9 @@ public class DataTableRequest<T> {
 
 	/** The is global search. */
 	private boolean isGlobalSearch;
+		
+	/** The cache queries. */
+	private List<DataTableColumnSpecs> cacheQueries = new ArrayList<DataTableColumnSpecs>(0);
 
 	/**
 	 * Instantiates a new data table request.
@@ -351,59 +350,18 @@ public class DataTableRequest<T> {
 		return PageRequest.of(this.getPaginationRequest().getPageNumber(), this.getPaginationRequest().getPageSize(), Sort.by(sortOrders));
 	}
 
-	public Specification<T> getSpecification() {
-		return new Specification<T>() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				List<Predicate> predicates = new ArrayList<Predicate>();
-
-				if (isGlobalSearch() && StringUtils.isNotEmpty(getSearch())) {
-					for (DataTableColumnSpecs specs : columns) {
-						predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(getSearch()))));
-					}
-				} else {
-					for (DataTableColumnSpecs specs : columns) {
-						if (StringUtils.isNotBlank(specs.getSearch())) {
-							predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(specs.getSearch()))));
-						}
-					}
-				}
-
-				if (predicates.isEmpty()) {
-					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-				} else {
-					return cb.or(predicates.toArray(new Predicate[predicates.size()]));
-				}
-			}
-
-		};
-	}
-
-	public static String convertToLikePattern(String value) {
-		if (value.contains("%") == false) {
-			value = "%" + value + "%";
-		}
-		return value;
-	}
-
 	public AuditCriterion getAuditCriterion() {
 
 		AuditCriterion orCriterion = null;
 
 		if (isGlobalSearch() && StringUtils.isNotEmpty(getSearch())) {
 			for (DataTableColumnSpecs specs : columns) {
-				orCriterion = AuditEntity.or(orCriterion, AuditEntity.property(specs.getData()).like(convertToLikePattern(getSearch())));
+				orCriterion = AuditEntity.or(orCriterion, AuditEntity.property(specs.getData()).like(AbstractSpecification.convertToLikePattern(getSearch())));
 			}
 		} else {
 			for (DataTableColumnSpecs specs : columns) {
 				if (StringUtils.isNotBlank(specs.getSearch())) {
-					orCriterion = AuditEntity.or(orCriterion, AuditEntity.property(specs.getData()).like(convertToLikePattern(specs.getSearch())));
+					orCriterion = AuditEntity.or(orCriterion, AuditEntity.property(specs.getData()).like(AbstractSpecification.convertToLikePattern(specs.getSearch())));
 				}
 			}
 		}
@@ -426,7 +384,14 @@ public class DataTableRequest<T> {
 	@Override
 	public String toString() {
 		return "DataTableRequest [uniqueId=" + uniqueId + ", start=" + start + ", length=" + length + ", search=" + search + ", regex=" + regex + ", columns=" + columns + ", orders=" + orders
-				+ ", isGlobalSearch=" + isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + "]";
+				+ ", cacheQueries=" + cacheQueries + ", isGlobalSearch=" + isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + "]";
 	}
 
+	public List<DataTableColumnSpecs> getCacheQueries() {
+		return cacheQueries;
+	}
+
+	public void setCacheQueries(List<DataTableColumnSpecs> cacheQueries) {
+		this.cacheQueries = cacheQueries;
+	}
 }

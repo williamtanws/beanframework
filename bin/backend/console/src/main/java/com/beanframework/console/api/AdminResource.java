@@ -62,7 +62,7 @@ public class AdminResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<AdminDto> dataTableRequest = new DataTableRequest<AdminDto>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 
 		Page<AdminDto> pagination = adminFacade.findPage(dataTableRequest);
 
@@ -87,7 +87,7 @@ public class AdminResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<Object[]> dataTableRequest = new DataTableRequest<Object[]>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = adminFacade.findHistory(dataTableRequest);

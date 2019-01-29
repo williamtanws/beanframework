@@ -44,12 +44,12 @@ public interface MenuFacade {
 
 	List<Menu> findMenuTreeByCurrentUser() throws Exception;
 
-	Page<MenuDto> findPage(DataTableRequest<MenuDto> dataTableRequest) throws Exception;
+	Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 }

@@ -15,6 +15,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserGroupDto;
+import com.beanframework.core.specification.UserGroupSpecification;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupService;
 
@@ -66,8 +67,8 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	}
 	
 	@Override
-	public Page<UserGroupDto> findPage(DataTableRequest<UserGroupDto> dataTableRequest) throws Exception {
-		Page<UserGroup> page = userGroupService.findEntityPage(dataTableRequest);
+	public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<UserGroup> page = userGroupService.findEntityPage(dataTableRequest, UserGroupSpecification.getSpecification(dataTableRequest));
 		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class);
 		return new PageImpl<UserGroupDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -78,7 +79,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	}
 	
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = userGroupService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -92,7 +93,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return userGroupService.findCountHistory(dataTableRequest);
 	}
 

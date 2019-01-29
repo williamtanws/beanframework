@@ -17,6 +17,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.core.data.ConfigurationDto;
+import com.beanframework.core.specification.ConfigurationSpecification;
 
 @Component
 public class ConfigurationFacadeImpl implements ConfigurationFacade {
@@ -66,8 +67,8 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	}
 
 	@Override
-	public Page<ConfigurationDto> findPage(DataTableRequest<ConfigurationDto> dataTableRequest) throws Exception {
-		Page<Configuration> page = configurationService.findEntityPage(dataTableRequest);
+	public Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		Page<Configuration> page = configurationService.findEntityPage(dataTableRequest, ConfigurationSpecification.getSpecification(dataTableRequest));
 		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), ConfigurationDto.class);
 		return new PageImpl<ConfigurationDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -85,7 +86,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	}
 
 	@Override
-	public List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = configurationService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
@@ -99,7 +100,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	}
 
 	@Override
-	public int countHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception {
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return configurationService.findCountHistory(dataTableRequest);
 	}
 }

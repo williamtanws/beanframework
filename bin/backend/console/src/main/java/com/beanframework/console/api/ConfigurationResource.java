@@ -64,7 +64,7 @@ public class ConfigurationResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<ConfigurationDto> dataTableRequest = new DataTableRequest<ConfigurationDto>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 
 		Page<ConfigurationDto> pagination = configurationFacade.findPage(dataTableRequest);
 
@@ -89,7 +89,7 @@ public class ConfigurationResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest<Object[]> dataTableRequest = new DataTableRequest<Object[]>(request);
+		DataTableRequest dataTableRequest = new DataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = configurationFacade.findHistory(dataTableRequest);

@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
@@ -31,11 +32,11 @@ public interface EmailService {
 
 	void deleteAttachment(UUID uuid, String filename) throws IOException;
 
-	<T> Page<Email> findEntityPage(DataTableRequest<T> dataTableRequest) throws Exception;
+	<T> Page<Email> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
 
 	int count() throws Exception;
 
-	List<Object[]> findHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int findCountHistory(DataTableRequest<Object[]> dataTableRequest) throws Exception;
+	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 }

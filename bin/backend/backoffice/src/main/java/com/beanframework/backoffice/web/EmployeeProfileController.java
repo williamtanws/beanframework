@@ -70,7 +70,7 @@ public class EmployeeProfileController {
 	@GetMapping(value = EmployeeWebConstants.Path.PROFILE)
 	public String profile(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) EmployeeDto employeeProfile, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		employeeProfile = employeeFacade.getProfile();
+		employeeProfile = employeeFacade.getCurrentUser();
 
 		model.addAttribute(EmployeeWebConstants.ModelAttribute.PROFILE, employeeProfile);
 
@@ -85,7 +85,7 @@ public class EmployeeProfileController {
 		if (requestParams.get("uuid") != null) {
 			uuid = UUID.fromString((String) requestParams.get("uuid"));
 		} else {
-			EmployeeDto employee = employeeFacade.getProfile();
+			EmployeeDto employee = employeeFacade.getCurrentUser();
 			uuid = employee.getUuid();
 		}
 
@@ -121,7 +121,7 @@ public class EmployeeProfileController {
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("picture") MultipartFile picture) throws Exception {
 
 		try {
-			EmployeeDto employee = employeeFacade.getProfile();
+			EmployeeDto employee = employeeFacade.getCurrentUser();
 			if (employee.getUuid().equals(employeeProfile.getUuid()) == false)
 				throw new Exception("Invalid attempted employee profile update.");
 
