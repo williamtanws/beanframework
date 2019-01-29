@@ -38,7 +38,7 @@ public class UserRight extends GenericEntity {
 
 	@AuditMappedBy(mappedBy = UserRightField.USER_RIGHT) 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(UserRightField.DYNAMIC_FIELD)
 	private List<UserRightField> fields = new ArrayList<UserRightField>();
 

@@ -3,6 +3,7 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,8 @@ public class DtoUserRightFieldConverter implements DtoConverter<UserRightField, 
 
 		prototype.setValue(source.getValue());
 		try {
-			prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
+			if (Hibernate.isInitialized(source.getDynamicField()))
+				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

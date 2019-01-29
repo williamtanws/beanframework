@@ -11,7 +11,7 @@ public class UserRightInitializeInterceptor implements InitializeInterceptor<Use
 
 	@Override
 	public void onInitialize(UserRight model) throws InterceptorException {
-		
+		Hibernate.initialize(model.getFields());
 		for (UserRightField field : model.getFields()) {
 			Hibernate.initialize(field.getDynamicField().getEnums());
 		}

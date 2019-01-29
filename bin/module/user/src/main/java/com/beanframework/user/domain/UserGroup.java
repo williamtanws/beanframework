@@ -54,7 +54,7 @@ public class UserGroup extends GenericEntity {
 
 	@AuditMappedBy(mappedBy = UserGroupField.USER_GROUP)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(UserGroupField.DYNAMIC_FIELD)
 	private List<UserGroupField> fields = new ArrayList<UserGroupField>();
 

@@ -3,6 +3,7 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,14 @@ import com.beanframework.core.data.UserPermissionFieldDto;
 import com.beanframework.user.domain.UserPermission;
 
 public class DtoUserPermissionConverter implements DtoConverter<UserPermission, UserPermissionDto> {
-	
+
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserPermissionConverter.class);
-	
+
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public UserPermissionDto convert(UserPermission source) throws ConverterException {		
+	public UserPermissionDto convert(UserPermission source) throws ConverterException {
 		return convert(source, new UserPermissionDto());
 	}
 
@@ -46,7 +47,8 @@ public class DtoUserPermissionConverter implements DtoConverter<UserPermission, 
 		prototype.setName(source.getName());
 		prototype.setSort(source.getSort());
 		try {
-			prototype.setFields(modelService.getDto(source.getFields(), UserPermissionFieldDto.class));
+			if (Hibernate.isInitialized(source.getFields()))
+				prototype.setFields(modelService.getDto(source.getFields(), UserPermissionFieldDto.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

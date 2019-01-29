@@ -3,6 +3,7 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +52,11 @@ public class DtoUserConverter implements DtoConverter<User, UserDto> {
 		prototype.setEnabled(source.getEnabled());
 		prototype.setName(source.getName());
 		try {
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
-			prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
+			if (Hibernate.isInitialized(source.getUserGroups()))
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+
+			if (Hibernate.isInitialized(source.getFields()))
+				prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

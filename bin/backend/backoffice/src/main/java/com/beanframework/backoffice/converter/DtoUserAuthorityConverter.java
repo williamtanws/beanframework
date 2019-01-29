@@ -3,6 +3,7 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,11 @@ public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, Us
 
 		prototype.setEnabled(source.getEnabled());
 		try {
-			prototype.setUserPermission(modelService.getDto(source.getUserPermission(), UserPermissionDto.class));
-			prototype.setUserRight(modelService.getDto(source.getUserRight(), UserRightDto.class));
+			if (Hibernate.isInitialized(source.getUserPermission()))
+				prototype.setUserPermission(modelService.getDto(source.getUserPermission(), UserPermissionDto.class));
+
+			if (Hibernate.isInitialized(source.getUserRight()))
+				prototype.setUserRight(modelService.getDto(source.getUserRight(), UserRightDto.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

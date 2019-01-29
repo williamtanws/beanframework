@@ -72,7 +72,7 @@ public abstract class User extends GenericEntity {
 
 	@AuditMappedBy(mappedBy = UserField.USER) 
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(UserField.DYNAMIC_FIELD)
 	private List<UserField> fields = new ArrayList<UserField>();
 

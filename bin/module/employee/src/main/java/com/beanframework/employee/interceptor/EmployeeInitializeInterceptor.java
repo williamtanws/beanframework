@@ -34,12 +34,13 @@ public class EmployeeInitializeInterceptor implements InitializeInterceptor<Empl
 			}
 			initializeUserGroups(userGroup);
 		}
-		
+
+		Hibernate.initialize(model.getFields());
 		for (UserField field : model.getFields()) {
 			Hibernate.initialize(field.getDynamicField().getEnums());
 		}
 	}
-	
+
 	private void initializeUserGroups(UserGroup model) {
 		Hibernate.initialize(model.getUserGroups());
 		for (UserGroup userGroup : model.getUserGroups()) {
