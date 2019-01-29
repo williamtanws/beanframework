@@ -325,7 +325,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			query.where(predicate);
 		}
 		
-        query.select(root);
+        query.select(root).distinct(true);
         
         if (sort.isSorted()) {
 			query.orderBy(toOrders(sort, root, builder));
