@@ -3,12 +3,12 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MenuDto;
@@ -24,19 +24,19 @@ public class DtoMenuConverter implements DtoConverter<Menu, MenuDto> {
 	private ModelService modelService;
 
 	@Override
-	public MenuDto convert(Menu source) throws ConverterException {
-		return convert(source, new MenuDto());
+	public MenuDto convert(Menu source, ModelAction action) throws ConverterException {
+		return convert(source, new MenuDto(), action);
 	}
 
-	public List<MenuDto> convert(List<Menu> sources) throws ConverterException {
+	public List<MenuDto> convert(List<Menu> sources, ModelAction action) throws ConverterException {
 		List<MenuDto> convertedList = new ArrayList<MenuDto>();
 		for (Menu source : sources) {
-			convertedList.add(convert(source));
+			convertedList.add(convert(source, action));
 		}
 		return convertedList;
 	}
 
-	private MenuDto convert(Menu source, MenuDto prototype) throws ConverterException {
+	private MenuDto convert(Menu source, MenuDto prototype, ModelAction action) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -52,18 +52,16 @@ public class DtoMenuConverter implements DtoConverter<Menu, MenuDto> {
 		prototype.setSort(source.getSort());
 		prototype.setTarget(source.getTarget());
 		prototype.setEnabled(source.getEnabled());
-		try {
-			if (Hibernate.isInitialized(source.getChilds()))
-				prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class));
 
-			if (Hibernate.isInitialized(source.getUserGroups()))
-				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
-
-			if (Hibernate.isInitialized(source.getFields()))
-				prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
+		if (action.isInitializeCollection()) {
+			try {
+				prototype.setChilds(modelService.getDto(source.getChilds(), action, MenuDto.class));
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), action, UserGroupDto.class));
+				prototype.setFields(modelService.getDto(source.getFields(), action, MenuFieldDto.class));
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new ConverterException(e.getMessage(), e);
+			}
 		}
 
 		return prototype;

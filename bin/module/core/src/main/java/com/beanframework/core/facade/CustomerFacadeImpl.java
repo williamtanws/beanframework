@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -31,13 +32,19 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
 		Customer entity = customerService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, CustomerDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, CustomerDto.class);
 	}
 
 	@Override
 	public CustomerDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Customer entity = customerService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, CustomerDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, CustomerDto.class);
 	}
 
 	@Override
@@ -55,7 +62,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
 			Customer entity = modelService.getEntity(dto, Customer.class);
 			entity = (Customer) customerService.saveEntity(entity);
 
-			return modelService.getDto(entity, CustomerDto.class);
+			ModelAction action = new ModelAction();
+			action.setInitializeCollection(true);
+			return modelService.getDto(entity, action, CustomerDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -69,7 +78,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Customer> page = customerService.findEntityPage(dataTableRequest, CustomerSpecification.getSpecification(dataTableRequest));
-		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		List<CustomerDto> dtos = modelService.getDto(page.getContent(), action, CustomerDto.class);
 		return new PageImpl<CustomerDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -82,7 +94,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public List<CustomerDto> findAllDtoCustomers() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Customer.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(customerService.findEntityBySorts(sorts, false), CustomerDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		return modelService.getDto(customerService.findEntityBySorts(sorts, false), action, CustomerDto.class);
 	}
 
 	@Override
@@ -91,8 +106,12 @@ public class CustomerFacadeImpl implements CustomerFacade {
 		List<Object[]> revisions = customerService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof Customer)
-				entityObject[0] = modelService.getDto(entityObject[0], CustomerDto.class);
+			if (entityObject[0] instanceof Customer) {
+				
+				ModelAction action = new ModelAction();
+				action.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], action, CustomerDto.class);
+			}
 			revisions.set(i, entityObject);
 		}
 

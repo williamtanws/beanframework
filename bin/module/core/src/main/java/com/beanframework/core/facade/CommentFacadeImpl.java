@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.comment.service.CommentService;
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -31,13 +32,19 @@ public class CommentFacadeImpl implements CommentFacade {
 	@Override
 	public CommentDto findOneByUuid(UUID uuid) throws Exception {
 		Comment entity = commentService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, CommentDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, CommentDto.class);
 	}
 
 	@Override
 	public CommentDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Comment entity = commentService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, CommentDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, CommentDto.class);
 	}
 
 	@Override
@@ -55,7 +62,9 @@ public class CommentFacadeImpl implements CommentFacade {
 			Comment entity = modelService.getEntity(dto, Comment.class);
 			entity = (Comment) commentService.saveEntity(entity);
 
-			return modelService.getDto(entity, CommentDto.class);
+			ModelAction action = new ModelAction();
+			action.setInitializeCollection(true);
+			return modelService.getDto(entity, action, CommentDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -69,7 +78,10 @@ public class CommentFacadeImpl implements CommentFacade {
 	@Override
 	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Comment> page = commentService.findEntityPage(dataTableRequest, CommentSpecification.getSpecification(dataTableRequest));
-		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		List<CommentDto> dtos = modelService.getDto(page.getContent(), action, CommentDto.class);
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -84,8 +96,12 @@ public class CommentFacadeImpl implements CommentFacade {
 		List<Object[]> revisions = commentService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof Comment)
-				entityObject[0] = modelService.getDto(entityObject[0], CommentDto.class);
+			if (entityObject[0] instanceof Comment) {
+				
+				ModelAction action = new ModelAction();
+				action.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], action, CommentDto.class);
+			}
 			revisions.set(i, entityObject);
 		}
 
@@ -101,7 +117,10 @@ public class CommentFacadeImpl implements CommentFacade {
 	public List<CommentDto> findAllDtoComments() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Comment.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(commentService.findEntityBySorts(sorts, false), CommentDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		return modelService.getDto(commentService.findEntityBySorts(sorts, false), action, CommentDto.class);
 	}
 
 }

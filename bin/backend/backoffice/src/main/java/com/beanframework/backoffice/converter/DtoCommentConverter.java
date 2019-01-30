@@ -3,15 +3,15 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.data.UserDto;
-import com.beanframework.comment.domain.Comment;
 
 public class DtoCommentConverter implements DtoConverter<Comment, CommentDto> {
 
@@ -19,19 +19,19 @@ public class DtoCommentConverter implements DtoConverter<Comment, CommentDto> {
 	private ModelService modelService;
 
 	@Override
-	public CommentDto convert(Comment source) throws ConverterException {
-		return convert(source, new CommentDto());
+	public CommentDto convert(Comment source, ModelAction action) throws ConverterException {
+		return convert(source, new CommentDto(), action);
 	}
 
-	public List<CommentDto> convert(List<Comment> sources) throws ConverterException {
+	public List<CommentDto> convert(List<Comment> sources, ModelAction action) throws ConverterException {
 		List<CommentDto> convertedList = new ArrayList<CommentDto>();
 		for (Comment source : sources) {
-			convertedList.add(convert(source));
+			convertedList.add(convert(source, action));
 		}
 		return convertedList;
 	}
 
-	private CommentDto convert(Comment source, CommentDto prototype) throws ConverterException {
+	private CommentDto convert(Comment source, CommentDto prototype, ModelAction action) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -47,12 +47,14 @@ public class DtoCommentConverter implements DtoConverter<Comment, CommentDto> {
 		} else {
 			prototype.setLastUpdatedDate(source.getLastModifiedDate());
 		}
-		try {
-			if (Hibernate.isInitialized(source.getUser()))
-				prototype.setUser(modelService.getDto(source.getUser(), UserDto.class));
 
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), e);
+		if (action.isInitializeCollection()) {
+			try {
+				prototype.setUser(modelService.getDto(source.getUser(), action, UserDto.class));
+
+			} catch (Exception e) {
+				throw new ConverterException(e.getMessage(), e);
+			}
 		}
 
 		return prototype;

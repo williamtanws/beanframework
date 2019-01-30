@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -31,20 +32,26 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private EmployeeService employeeService;
-	
+
 	@Autowired
 	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
 
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
 		Employee entity = employeeService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, EmployeeDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, EmployeeDto.class);
 	}
 
 	@Override
 	public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Employee entity = employeeService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, EmployeeDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, EmployeeDto.class);
 	}
 
 	@Override
@@ -62,7 +69,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			Employee entity = modelService.getEntity(dto, Employee.class);
 			entity = (Employee) employeeService.saveEntity(entity);
 
-			return modelService.getDto(entity, EmployeeDto.class);
+			ModelAction action = new ModelAction();
+			action.setInitializeCollection(true);
+			return modelService.getDto(entity, action, EmployeeDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -77,7 +86,10 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Employee> page = employeeService.findEntityPage(dataTableRequest, EmployeeSpecification.getSpecification(dataTableRequest));
-		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), action, EmployeeDto.class);
 		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -90,7 +102,10 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public List<EmployeeDto> findAllDtoEmployees() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Employee.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(employeeService.findEntityBySorts(sorts, false), EmployeeDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		return modelService.getDto(employeeService.findEntityBySorts(sorts, false), action, EmployeeDto.class);
 	}
 
 	@Override
@@ -126,7 +141,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			employeeService.updatePrincipal(entity);
 			employeeService.saveProfilePicture(entity, picture);
 
-			return modelService.getDto(entity, EmployeeDto.class);
+			ModelAction action = new ModelAction();
+			action.setInitializeCollection(true);
+			return modelService.getDto(entity, action, EmployeeDto.class);
 
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -136,7 +153,10 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public EmployeeDto getCurrentUser() throws Exception {
 		Employee employee = employeeService.getCurrentUser();
-		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), EmployeeDto.class);
+
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), action, EmployeeDto.class);
 	}
 
 	@Override
@@ -145,8 +165,12 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		List<Object[]> revisions = employeeService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof Employee)
-				entityObject[0] = modelService.getDto(entityObject[0], EmployeeDto.class);
+			if (entityObject[0] instanceof Employee) {
+
+				ModelAction action = new ModelAction();
+				action.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], action, EmployeeDto.class);
+			}
 			revisions.set(i, entityObject);
 		}
 

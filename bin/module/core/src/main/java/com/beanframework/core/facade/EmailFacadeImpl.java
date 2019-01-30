@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -35,13 +36,19 @@ public class EmailFacadeImpl implements EmailFacade {
 	@Override
 	public EmailDto findOneByUuid(UUID uuid) throws Exception {
 		Email entity = emailService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, EmailDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, EmailDto.class);
 	}
 
 	@Override
 	public EmailDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Email entity = emailService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, EmailDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, EmailDto.class);
 	}
 
 	@Override
@@ -59,7 +66,9 @@ public class EmailFacadeImpl implements EmailFacade {
 			Email entity = modelService.getEntity(dto, Email.class);
 			entity = (Email) emailService.saveEntity(entity);
 
-			return modelService.getDto(entity, EmailDto.class);
+			ModelAction action = new ModelAction();
+			action.setInitializeCollection(true);
+			return modelService.getDto(entity, action, EmailDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -73,7 +82,10 @@ public class EmailFacadeImpl implements EmailFacade {
 	@Override
 	public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Email> page = emailService.findEntityPage(dataTableRequest, EmailSpecification.getSpecification(dataTableRequest));
-		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		List<EmailDto> dtos = modelService.getDto(page.getContent(), action, EmailDto.class);
 		return new PageImpl<EmailDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -106,8 +118,12 @@ public class EmailFacadeImpl implements EmailFacade {
 		List<Object[]> revisions = emailService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof Email)
-				entityObject[0] = modelService.getDto(entityObject[0], EmailDto.class);
+			if (entityObject[0] instanceof Email) {
+				
+				ModelAction action = new ModelAction();
+				action.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], action, EmailDto.class);
+			}
 			revisions.set(i, entityObject);
 		}
 

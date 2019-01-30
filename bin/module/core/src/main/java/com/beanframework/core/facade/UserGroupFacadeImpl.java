@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -24,20 +25,26 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private UserGroupService userGroupService;
 
 	@Override
 	public UserGroupDto findOneByUuid(UUID uuid) throws Exception {
 		UserGroup entity = userGroupService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, UserGroupDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, UserGroupDto.class);
 	}
 
 	@Override
 	public UserGroupDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserGroup entity = userGroupService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, UserGroupDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, UserGroupDto.class);
 	}
 
 	@Override
@@ -55,7 +62,9 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 			UserGroup entity = modelService.getEntity(dto, UserGroup.class);
 			entity = (UserGroup) userGroupService.saveEntity(entity);
 
-			return modelService.getDto(entity, UserGroupDto.class);
+			ModelAction action = new ModelAction();
+			action.setInitializeCollection(true);
+			return modelService.getDto(entity, action, UserGroupDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -65,11 +74,14 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		userGroupService.deleteByUuid(uuid);
 	}
-	
+
 	@Override
 	public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserGroup> page = userGroupService.findEntityPage(dataTableRequest, UserGroupSpecification.getSpecification(dataTableRequest));
-		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), action, UserGroupDto.class);
 		return new PageImpl<UserGroupDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -77,15 +89,19 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public int count() throws Exception {
 		return userGroupService.count();
 	}
-	
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = userGroupService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof UserGroup)
-				entityObject[0] = modelService.getDto(entityObject[0], UserGroupDto.class);
+			if (entityObject[0] instanceof UserGroup) {
+
+				ModelAction action = new ModelAction();
+				action.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], action, UserGroupDto.class);
+			}
 			revisions.set(i, entityObject);
 		}
 
@@ -101,6 +117,9 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public List<UserGroupDto> findAllDtoUserGroups() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(userGroupService.findEntityBySorts(sorts, false), UserGroupDto.class);
+
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		return modelService.getDto(userGroupService.findEntityBySorts(sorts, false), action, UserGroupDto.class);
 	}
 }

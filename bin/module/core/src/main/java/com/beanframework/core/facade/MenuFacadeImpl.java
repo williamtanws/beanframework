@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -34,13 +35,19 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
 		Menu entity = menuService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, MenuDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, MenuDto.class);
 	}
 
 	@Override
 	public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Menu entity = menuService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, MenuDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, MenuDto.class);
 	}
 
 	@Override
@@ -58,7 +65,9 @@ public class MenuFacadeImpl implements MenuFacade {
 			Menu entity = modelService.getEntity(dto, Menu.class);
 			entity = (Menu) menuService.saveEntity(entity);
 
-			return modelService.getDto(entity, MenuDto.class);
+			ModelAction action = new ModelAction();
+			action.setInitializeCollection(true);
+			return modelService.getDto(entity, action, MenuDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -86,7 +95,10 @@ public class MenuFacadeImpl implements MenuFacade {
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
 			List<Menu> entities = menuService.findEntityMenuTree();
-			return modelService.getDto(entities, MenuDto.class);
+			
+			ModelAction action = new ModelAction();
+			action.setInitializeCollection(true);
+			return modelService.getDto(entities, action, MenuDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -103,7 +115,10 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Menu> page = menuService.findEntityPage(dataTableRequest, MenuSpecification.getSpecification(dataTableRequest));
-		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		List<MenuDto> dtos = modelService.getDto(page.getContent(), action, MenuDto.class);
 		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -118,8 +133,11 @@ public class MenuFacadeImpl implements MenuFacade {
 		List<Object[]> revisions = menuService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof Menu)
-				entityObject[0] = modelService.getDto(entityObject[0], MenuDto.class);
+			if (entityObject[0] instanceof Menu) {
+				ModelAction action = new ModelAction();
+				action.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], action, MenuDto.class);
+			}
 			revisions.set(i, entityObject);
 		}
 

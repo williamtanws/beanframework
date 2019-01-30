@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.service.ModelService;
@@ -30,19 +31,28 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	@Override
 	public AuditorDto findOneByUuid(UUID uuid) throws Exception {
 		Auditor entity = auditorService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, AuditorDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, AuditorDto.class);
 	}
 
 	@Override
 	public AuditorDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Auditor entity = auditorService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, AuditorDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, AuditorDto.class);
 	}
 	
 	@Override
 	public Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Auditor> page = auditorService.findEntityPage(dataTableRequest, AuditorSpecification.getSpecification(dataTableRequest));
-		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		List<AuditorDto> dtos = modelService.getDto(page.getContent(), action, AuditorDto.class);
 		return new PageImpl<AuditorDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -55,7 +65,10 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	public List<AuditorDto> findAllDtoAuditors() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Auditor.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(auditorService.findEntityBySorts(sorts, false), AuditorDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		return modelService.getDto(auditorService.findEntityBySorts(sorts, false), action, AuditorDto.class);
 	}
 	
 	@Override
@@ -64,8 +77,12 @@ public class AuditorFacadeImpl implements AuditorFacade {
 		List<Object[]> revisions = auditorService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof Auditor)
-				entityObject[0] = modelService.getDto(entityObject[0], AuditorDto.class);
+			if (entityObject[0] instanceof Auditor) {
+				
+				ModelAction action = new ModelAction();
+				action.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], action, AuditorDto.class);
+			}
 			revisions.set(i, entityObject);
 		}
 

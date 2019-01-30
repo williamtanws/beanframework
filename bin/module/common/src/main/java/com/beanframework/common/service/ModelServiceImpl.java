@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.exception.InterceptorException;
@@ -416,11 +417,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T> T getDto(Object model, Class modelClass) throws Exception {
+	public <T> T getDto(Object model, ModelAction action, Class modelClass) throws Exception {
 		try {
 			if (model == null)
 				return null;
-			model = dtoConverter(model, modelClass);
+			model = dtoConverter(model, action, modelClass);
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -429,7 +430,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T extends Collection> T getDto(Collection models, Class modelClass) throws Exception {
+	public <T extends Collection> T getDto(Collection models, ModelAction action, Class modelClass) throws Exception {
 		try {
 			if (models == null)
 				return null;
@@ -437,7 +438,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				return (T) new ArrayList<T>();
 			}
 
-			return (T) dtoConverter(models, modelClass);
+			return (T) dtoConverter(models, action, modelClass);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);

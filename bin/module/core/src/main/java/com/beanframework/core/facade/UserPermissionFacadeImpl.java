@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -31,13 +32,19 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Override
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
 		UserPermission entity = userPermissionService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, UserPermissionDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, UserPermissionDto.class);
 	}
 
 	@Override
 	public UserPermissionDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserPermission entity = userPermissionService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, UserPermissionDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, UserPermissionDto.class);
 	}
 
 	@Override
@@ -55,7 +62,9 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 			UserPermission entity = modelService.getEntity(dto, UserPermission.class);
 			entity = (UserPermission) userPermissionService.saveEntity(entity);
 
-			return modelService.getDto(entity, UserPermissionDto.class);
+			ModelAction action = new ModelAction();
+			action.setInitializeCollection(true);
+			return modelService.getDto(entity, action, UserPermissionDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -69,7 +78,10 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Override
 	public Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserPermission> page = userPermissionService.findEntityPage(dataTableRequest, UserPermissionSpecification.getSpecification(dataTableRequest));
-		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), action, UserPermissionDto.class);
 		return new PageImpl<UserPermissionDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -84,8 +96,12 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 		List<Object[]> revisions = userPermissionService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof UserPermission)
-				entityObject[0] = modelService.getDto(entityObject[0], UserPermissionDto.class);
+			if (entityObject[0] instanceof UserPermission) {
+				
+				ModelAction action = new ModelAction();
+				action.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], action, UserPermissionDto.class);
+			}
 			revisions.set(i, entityObject);
 		}
 
@@ -101,7 +117,10 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public List<UserPermissionDto> findAllDtoUserPermissions() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserPermission.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(userPermissionService.findEntityBySorts(sorts, false), UserPermissionDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		return modelService.getDto(userPermissionService.findEntityBySorts(sorts, false), action, UserPermissionDto.class);
 	}
 
 

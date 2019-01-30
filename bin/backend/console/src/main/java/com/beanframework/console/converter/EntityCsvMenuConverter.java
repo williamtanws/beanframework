@@ -38,7 +38,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Menu.ID, source.getId());
 
-				Menu prototype = modelService.findOneEntityByProperties(properties, true, Menu.class);
+				Menu prototype = modelService.findOneEntityByProperties(properties, true,Menu.class);
 
 				if (prototype != null) {
 
@@ -46,7 +46,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 				}
 			}
 			return convert(source, modelService.create(Menu.class));
-
+			
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
@@ -60,43 +60,40 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 			prototype.setSort(source.getSort());
 			prototype.setIcon(StringUtils.stripToNull(source.getIcon()));
 			prototype.setPath(StringUtils.stripToNull(source.getPath()));
-
+			
 			if (StringUtils.isBlank(source.getTarget())) {
 				prototype.setTarget(MenuTargetTypeEnum.SELF);
 			} else {
 				prototype.setTarget(MenuTargetTypeEnum.valueOf(source.getTarget()));
 			}
 			prototype.setEnabled(source.isEnabled());
-
+			
 			// Parent
 			if (StringUtils.isNotBlank(source.getParent())) {
-				if (prototype.getParent() != null && StringUtils.equals(prototype.getParent().getId(), source.getParent()) == false) {
+				Map<String, Object> parentProperties = new HashMap<String, Object>();
+				parentProperties.put(Menu.ID, source.getParent());
+				Menu parent = modelService.findOneEntityByProperties(parentProperties, true, Menu.class);
 
-					Map<String, Object> parentProperties = new HashMap<String, Object>();
-					parentProperties.put(Menu.ID, source.getParent());
-					Menu parent = modelService.findOneEntityByProperties(parentProperties, true, Menu.class);
+				if (parent == null) {
+					LOGGER.error("Parent not exists: " + source.getParent());
+				} else {
+					Hibernate.initialize(parent.getChilds());
 
-					if (parent == null) {
-						LOGGER.error("Parent not exists: " + source.getParent());
-					} else {
-						Hibernate.initialize(parent.getChilds());
-
-						boolean addChild = true;
-						for (Menu child : parent.getChilds()) {
-							if (child.getUuid().equals(prototype.getUuid())) {
-								addChild = false;
-							}
+					boolean addChild = true;
+					for (Menu child : parent.getChilds()) {
+						if (child.getUuid().equals(prototype.getUuid())) {
+							addChild = false;
 						}
-						if (addChild) {
-							parent.getChilds().add(prototype);
-							prototype.setParent(parent);
-						}
+					}
+					if (addChild) {
+						parent.getChilds().add(prototype);						
+						prototype.setParent(parent);
 					}
 				}
 			}
-
+			
 			// Dynamic Field
-			if (StringUtils.isNotBlank(source.getDynamicField())) {
+			if (source.getDynamicField() != null) {
 				String[] dynamicFields = source.getDynamicField().split(ImportListener.SPLITTER);
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split(ImportListener.EQUALS)[0];
@@ -109,15 +106,13 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 							add = false;
 						}
 					}
-
-					if (add) {
+					
+					if(add) {
 						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, true, DynamicField.class);
-
-						if (entityDynamicField == null) {
-							LOGGER.error("DynamicField ID not exists: " + dynamicFieldId);
-						} else {
+						
+						if(entityDynamicField != null) {
 							MenuField field = new MenuField();
 							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));
@@ -128,20 +123,18 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 					}
 				}
 			}
-
+			
 			// User Group
-			if (StringUtils.isNotBlank(source.getUserGroupIds())) {
-				String[] userGroupIds = source.getUserGroupIds().split(ImportListener.SPLITTER);
-				for (int i = 0; i < userGroupIds.length; i++) {
-					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
-					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, true, UserGroup.class);
+			String[] userGroupIds = source.getUserGroupIds().split(ImportListener.SPLITTER);
+			for (int i = 0; i < userGroupIds.length; i++) {
+				Map<String, Object> userGroupProperties = new HashMap<String, Object>();
+				userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
+				UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, true, UserGroup.class);
 
-					if (userGroup == null) {
-						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
-					} else {
-						prototype.getUserGroups().add(userGroup);
-					}
+				if (userGroup == null) {
+					LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+				} else {
+					prototype.getUserGroups().add(userGroup);
 				}
 			}
 		} catch (Exception e) {

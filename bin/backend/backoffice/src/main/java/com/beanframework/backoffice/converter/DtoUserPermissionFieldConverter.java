@@ -3,12 +3,12 @@ package com.beanframework.backoffice.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldDto;
@@ -23,19 +23,19 @@ public class DtoUserPermissionFieldConverter implements DtoConverter<UserPermiss
 	private ModelService modelService;
 
 	@Override
-	public UserPermissionFieldDto convert(UserPermissionField source) throws ConverterException {
-		return convert(source, new UserPermissionFieldDto());
+	public UserPermissionFieldDto convert(UserPermissionField source, ModelAction action) throws ConverterException {
+		return convert(source, new UserPermissionFieldDto(), action);
 	}
 
-	public List<UserPermissionFieldDto> convert(List<UserPermissionField> sources) throws ConverterException {
+	public List<UserPermissionFieldDto> convert(List<UserPermissionField> sources, ModelAction action) throws ConverterException {
 		List<UserPermissionFieldDto> convertedList = new ArrayList<UserPermissionFieldDto>();
 		for (UserPermissionField source : sources) {
-			convertedList.add(convert(source));
+			convertedList.add(convert(source, action));
 		}
 		return convertedList;
 	}
 
-	public UserPermissionFieldDto convert(UserPermissionField source, UserPermissionFieldDto prototype) throws ConverterException {
+	public UserPermissionFieldDto convert(UserPermissionField source, UserPermissionFieldDto prototype, ModelAction action) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -45,12 +45,14 @@ public class DtoUserPermissionFieldConverter implements DtoConverter<UserPermiss
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setValue(source.getValue());
-		try {
-			if (Hibernate.isInitialized(source.getDynamicField()))
-				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
+
+		if (action.isInitializeCollection()) {
+			try {
+				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), action, DynamicFieldDto.class));
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				throw new ConverterException(e.getMessage(), e);
+			}
 		}
 
 		return prototype;
