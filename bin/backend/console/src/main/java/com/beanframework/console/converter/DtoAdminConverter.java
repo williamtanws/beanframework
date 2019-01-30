@@ -5,21 +5,22 @@ import java.util.List;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.AdminDto;
 
 public class DtoAdminConverter implements DtoConverter<Admin, AdminDto> {
 
 	@Override
-	public AdminDto convert(Admin source) throws ConverterException {
-		return convert(source, new AdminDto());
+	public AdminDto convert(Admin source, ModelAction action) throws ConverterException {
+		return convert(source, new AdminDto(), action);
 	}
 
-	public List<AdminDto> convert(List<Admin> sources) throws ConverterException {
+	public List<AdminDto> convert(List<Admin> sources, ModelAction action) throws ConverterException {
 		List<AdminDto> convertedList = new ArrayList<AdminDto>();
 		try {
 			for (Admin source : sources) {
-				convertedList.add(convert(source));
+				convertedList.add(convert(source, action));
 			}
 		} catch (ConverterException e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -27,7 +28,7 @@ public class DtoAdminConverter implements DtoConverter<Admin, AdminDto> {
 		return convertedList;
 	}
 
-	private AdminDto convert(Admin source, AdminDto prototype) {
+	private AdminDto convert(Admin source, AdminDto prototype, ModelAction action) {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());

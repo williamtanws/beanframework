@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -31,13 +32,19 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	@Override
 	public ConfigurationDto findOneByUuid(UUID uuid) throws Exception {
 		Configuration entity = configurationService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, ConfigurationDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, ConfigurationDto.class);
 	}
 
 	@Override
 	public ConfigurationDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Configuration entity = configurationService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, ConfigurationDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(true);
+		return modelService.getDto(entity, action, ConfigurationDto.class);
 	}
 
 	@Override
@@ -55,7 +62,9 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 			Configuration entity = modelService.getEntity(dto, Configuration.class);
 			entity = (Configuration) configurationService.saveEntity(entity);
 
-			return modelService.getDto(entity, ConfigurationDto.class);
+			ModelAction action = new ModelAction();
+			action.setInitializeCollection(true);
+			return modelService.getDto(entity, action, ConfigurationDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -69,7 +78,10 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	@Override
 	public Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Configuration> page = configurationService.findEntityPage(dataTableRequest, ConfigurationSpecification.getSpecification(dataTableRequest));
-		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), ConfigurationDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), action, ConfigurationDto.class);
 		return new PageImpl<ConfigurationDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -82,7 +94,10 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	public List<ConfigurationDto> findAllDtoConfigurations() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Configuration.CREATED_DATE, Sort.Direction.DESC);
-		return modelService.getDto(configurationService.findEntityBySorts(sorts, false), ConfigurationDto.class);
+		
+		ModelAction action = new ModelAction();
+		action.setInitializeCollection(false);
+		return modelService.getDto(configurationService.findEntityBySorts(sorts, false), action, ConfigurationDto.class);
 	}
 
 	@Override
@@ -91,8 +106,12 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 		List<Object[]> revisions = configurationService.findHistory(dataTableRequest);
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof Configuration)
-				entityObject[0] = modelService.getDto(entityObject[0], ConfigurationDto.class);
+			if (entityObject[0] instanceof Configuration) {
+				
+				ModelAction action = new ModelAction();
+				action.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], action, ConfigurationDto.class);
+			}
 			revisions.set(i, entityObject);
 		}
 

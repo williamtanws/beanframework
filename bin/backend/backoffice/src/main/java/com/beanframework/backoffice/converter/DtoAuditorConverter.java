@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beanframework.common.converter.DtoConverter;
+import com.beanframework.common.converter.ModelAction;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.AuditorDto;
@@ -16,19 +17,19 @@ public class DtoAuditorConverter implements DtoConverter<Auditor, AuditorDto> {
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoAuditorConverter.class);
 
 	@Override
-	public AuditorDto convert(Auditor source) throws ConverterException {
-		return convert(source, new AuditorDto());
+	public AuditorDto convert(Auditor source, ModelAction action) throws ConverterException {
+		return convert(source, new AuditorDto(), action);
 	}
 
-	public List<AuditorDto> convert(List<Auditor> sources) throws ConverterException {
+	public List<AuditorDto> convert(List<Auditor> sources, ModelAction action) throws ConverterException {
 		List<AuditorDto> convertedList = new ArrayList<AuditorDto>();
 		for (Auditor source : sources) {
-			convertedList.add(convert(source));
+			convertedList.add(convert(source, action));
 		}
 		return convertedList;
 	}
 
-	private AuditorDto convert(Auditor source, AuditorDto prototype) throws ConverterException {
+	private AuditorDto convert(Auditor source, AuditorDto prototype, ModelAction action) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
