@@ -6,6 +6,10 @@ import java.util.List;
 import com.beanframework.common.data.GenericDto;
 
 public class UserGroupDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6153206915173481326L;
 	public static final String NAME = "name";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_AUTHORITIES = "userAuthorities";

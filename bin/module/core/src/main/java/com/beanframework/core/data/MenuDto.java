@@ -9,6 +9,11 @@ import com.beanframework.menu.domain.MenuTargetTypeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class MenuDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4321844731565401047L;
+
 	private String name;
 
 	private Integer sort;

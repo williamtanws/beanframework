@@ -80,7 +80,7 @@ public class CommentFacadeImpl implements CommentFacade {
 		Page<Comment> page = commentService.findEntityPage(dataTableRequest, CommentSpecification.getSpecification(dataTableRequest));
 		
 		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
+		action.setInitializeCollection(true);
 		List<CommentDto> dtos = modelService.getDto(page.getContent(), action, CommentDto.class);
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
@@ -99,7 +99,7 @@ public class CommentFacadeImpl implements CommentFacade {
 			if (entityObject[0] instanceof Comment) {
 				
 				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
+				action.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], action, CommentDto.class);
 			}
 			revisions.set(i, entityObject);
@@ -119,7 +119,7 @@ public class CommentFacadeImpl implements CommentFacade {
 		sorts.put(Comment.CREATED_DATE, Sort.Direction.DESC);
 		
 		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
+		action.setInitializeCollection(true);
 		return modelService.getDto(commentService.findEntityBySorts(sorts, false), action, CommentDto.class);
 	}
 

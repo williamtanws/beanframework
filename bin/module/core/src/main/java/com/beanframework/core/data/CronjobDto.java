@@ -10,6 +10,10 @@ import com.beanframework.cronjob.domain.CronjobEnum.Result;
 import com.beanframework.cronjob.domain.CronjobEnum.Status;
 
 public class CronjobDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6298142854359675081L;
 	public static final String JOB_CLASS = "jobClass";
 	public static final String JOB_NAME = "jobName";
 	public static final String JOB_GROUP = "jobGroup";

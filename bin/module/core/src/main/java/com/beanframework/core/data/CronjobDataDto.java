@@ -3,6 +3,11 @@ package com.beanframework.core.data;
 import com.beanframework.common.data.GenericDto;
 
 public class CronjobDataDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5609916669962863180L;
+
 	private CronjobDto cronjob;
 
 	private String name;

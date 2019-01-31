@@ -7,6 +7,10 @@ import com.beanframework.email.domain.EmailEnum.Result;
 import com.beanframework.email.domain.EmailEnum.Status;
 
 public class EmailDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5428432457219895180L;
 	public static final String NAME = "name";
 	public static final String TO_RECIPIENTS = "toRecipients";
 	public static final String CC_RECIPIENTS = "ccRecipients";

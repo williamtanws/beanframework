@@ -3,6 +3,10 @@ package com.beanframework.core.data;
 import com.beanframework.common.data.GenericDto;
 
 public class DynamicFieldEnumDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5096285286176721489L;
 	public static final String DYNAMIC_FIELD = "dynamicField";
 	public static final String ENUM_GROUP = "enumGroup";
 	public static final String NAME = "name";

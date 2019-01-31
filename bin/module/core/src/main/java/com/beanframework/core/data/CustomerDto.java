@@ -2,6 +2,11 @@ package com.beanframework.core.data;
 
 public class CustomerDto extends UserDto {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7514300671142954145L;
+
 	private String[] tableUserGroups;
 
 	private String[] tableSelectedUserGroups;
