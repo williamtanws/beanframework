@@ -109,7 +109,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 			if (entityObject[0] instanceof Configuration) {
 				
 				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(false);
+				context.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], context, ConfigurationDto.class);
 			}
 			revisions.set(i, entityObject);

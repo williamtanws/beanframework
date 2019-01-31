@@ -26,6 +26,7 @@ import com.beanframework.backoffice.DynamicFieldEnumWebConstants;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DynamicFieldEnumDataResponse;
 import com.beanframework.core.data.DynamicFieldEnumDto;
 import com.beanframework.core.facade.DynamicFieldEnumFacade;
@@ -36,6 +37,9 @@ public class DynamicFieldEnumResource {
 
 	@Autowired
 	private DynamicFieldEnumFacade dynamicFieldEnumFacade;
+	
+	@Autowired
+	private LocaleMessageService localeMessageService;
 
 	@RequestMapping(DynamicFieldEnumWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
@@ -111,8 +115,10 @@ public class DynamicFieldEnumResource {
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
 			data.setRevisionType(eevisionType.name());
-			data.setPropertiesChanged(propertiesChanged);
-
+			for (String property : propertiesChanged) {
+				String localized = localeMessageService.getMessage("module.dynamicfieldenum." + property);
+				data.getPropertiesChanged().add(property + "=" + localized);
+			}
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;

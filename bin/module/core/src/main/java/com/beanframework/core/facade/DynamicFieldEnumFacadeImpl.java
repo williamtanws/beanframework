@@ -99,7 +99,7 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 			if (entityObject[0] instanceof DynamicFieldEnum) {
 				
 				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(false);
+				context.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], context, DynamicFieldEnumDto.class);
 			}
 			revisions.set(i, entityObject);

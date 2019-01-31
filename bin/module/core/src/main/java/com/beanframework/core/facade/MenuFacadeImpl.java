@@ -135,7 +135,7 @@ public class MenuFacadeImpl implements MenuFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Menu) {
 				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(false);
+				context.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], context, MenuDto.class);
 			}
 			revisions.set(i, entityObject);

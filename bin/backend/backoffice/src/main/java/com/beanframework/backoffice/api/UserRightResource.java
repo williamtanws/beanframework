@@ -27,6 +27,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.facade.UserRightFacade;
 import com.beanframework.user.domain.UserRight;
@@ -36,6 +37,9 @@ public class UserRightResource {
 
 	@Autowired
 	private UserRightFacade userRightFacade;
+	
+	@Autowired
+	private LocaleMessageService localeMessageService;
 
 	@RequestMapping(UserRightWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
@@ -110,7 +114,10 @@ public class UserRightResource {
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
 			data.setRevisionType(eevisionType.name());
-			data.setPropertiesChanged(propertiesChanged);
+			for (String property : propertiesChanged) {
+				String localized = localeMessageService.getMessage("module.userright." + property);
+				data.getPropertiesChanged().add(property + "=" + localized);
+			}
 
 			dataTableResponse.getData().add(data);
 		}

@@ -26,6 +26,7 @@ import com.beanframework.backoffice.DynamicFieldWebConstants;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DynamicFieldDataResponse;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.facade.DynamicFieldFacade;
@@ -35,6 +36,9 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 public class DynamicFieldResource {
 	@Autowired
 	private DynamicFieldFacade dynamicFieldFacade;
+	
+	@Autowired
+	private LocaleMessageService localeMessageService;
 
 	@RequestMapping(DynamicFieldWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
@@ -110,7 +114,10 @@ public class DynamicFieldResource {
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
 			data.setRevisionType(eevisionType.name());
-			data.setPropertiesChanged(propertiesChanged);
+			for (String property : propertiesChanged) {
+				String localized = localeMessageService.getMessage("module.dynamicfield." + property);
+				data.getPropertiesChanged().add(property + "=" + localized);
+			}
 
 			dataTableResponse.getData().add(data);
 		}

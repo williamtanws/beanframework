@@ -31,6 +31,7 @@ import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.core.data.TreeJson;
@@ -43,6 +44,9 @@ public class MenuResource {
 
 	@Autowired
 	private MenuFacade menuFacade;
+	
+	@Autowired
+	private LocaleMessageService localeMessageService;
 
 	@RequestMapping(MenuWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
@@ -188,7 +192,10 @@ public class MenuResource {
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
 			data.setRevisionType(eevisionType.name());
-			data.setPropertiesChanged(propertiesChanged);
+			for (String property : propertiesChanged) {
+				String localized = localeMessageService.getMessage("module.menu." + property);
+				data.getPropertiesChanged().add(property + "=" + localized);
+			}
 
 			dataTableResponse.getData().add(data);
 		}

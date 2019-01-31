@@ -194,7 +194,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 			if (entityObject[0] instanceof Cronjob) {
 				
 				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(false);
+				context.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], context, CronjobDto.class);
 			}
 			revisions.set(i, entityObject);

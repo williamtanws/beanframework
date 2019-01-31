@@ -109,7 +109,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 			if (entityObject[0] instanceof Customer) {
 				
 				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(false);
+				context.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], context, CustomerDto.class);
 			}
 			revisions.set(i, entityObject);

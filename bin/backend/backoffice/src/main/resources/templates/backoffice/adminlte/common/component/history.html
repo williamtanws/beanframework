@@ -67,28 +67,31 @@
 	                      "targets": 3,
 	                      "render": function ( data, type, row ) {
 	                    	  var message = "";
-	                    	  for (var key in row.propertiesChanged) {
-	                    		  var property = row.propertiesChanged[key];
+	                    	  $.each( row.propertiesChanged, function( index, value ) {
+	                    		  var propertyAndLocalized = value.split("=");
+	                    		  var property = propertyAndLocalized[0];
+	                    		  var localized = propertyAndLocalized[1];
+	                    		  
 	                    		  var value = row.entity[property];
-	                    		  var changedValue = value;
-
 	                    		  if(value instanceof Array){
-	                    			  changedValue = "";
+	                    			  var newValue = "";
 	                    			  for (i = 0; i < value.length; i++) { 
 	                    				  if(i > 0){
-	                    					  changedValue += ', ';
+	                    					  newValue += ', ';
 	                    				  }
-	                    				  changedValue += value[i].id;
+	                    				  newValue += value[i].id;
 	                    			  }
+	                    			  value = newValue;
+	                    		  }
+	                    		  if(Object.prototype.toString.call(value) === '[object Object]'){
+	                    			  value = value.id;
 	                    		  }
 	                    		  
-	                    		  if(property != 'password' && value != null){
-		                    		  message = message + property + " <span class='fa fa-long-arrow-right'></span> " + changedValue + "\n";	
-		                    	  }
-	                    		  else{
-		                    		  message = message + property + "\n";
+	                    		  if(index != 0){
+	                    			  message = message + "<br>";
 	                    		  }
-	                    	  }
+	                    		  message = message + localized + " <span class='fa fa-long-arrow-right'></span> " + value + "\n";	
+	                    	  });
 	                          return message;
 	                      }
 	                  },

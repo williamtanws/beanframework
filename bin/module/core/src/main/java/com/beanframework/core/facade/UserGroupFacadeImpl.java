@@ -99,7 +99,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 			if (entityObject[0] instanceof UserGroup) {
 
 				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(false);
+				context.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], context, UserGroupDto.class);
 			}
 			revisions.set(i, entityObject);
