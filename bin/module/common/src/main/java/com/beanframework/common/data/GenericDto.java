@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-import com.beanframework.common.domain.Auditor;
-
 public class GenericDto implements Serializable{
 	/**
 	 * 
@@ -21,9 +19,9 @@ public class GenericDto implements Serializable{
 	private UUID uuid;
 	private String id;
 	private Date createdDate;
-	private Auditor createdBy;
+	private AuditorDto createdBy;
 	private Date lastModifiedDate;
-	private Auditor lastModifiedBy;
+	private AuditorDto lastModifiedBy;
 
 	public UUID getUuid() {
 		return uuid;
@@ -49,11 +47,11 @@ public class GenericDto implements Serializable{
 		this.createdDate = createdDate;
 	}
 
-	public Auditor getCreatedBy() {
+	public AuditorDto getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(Auditor createdBy) {
+	public void setCreatedBy(AuditorDto createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -65,11 +63,11 @@ public class GenericDto implements Serializable{
 		this.lastModifiedDate = lastModifiedDate;
 	}
 
-	public Auditor getLastModifiedBy() {
+	public AuditorDto getLastModifiedBy() {
 		return lastModifiedBy;
 	}
 
-	public void setLastModifiedBy(Auditor lastModifiedBy) {
+	public void setLastModifiedBy(AuditorDto lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
 	

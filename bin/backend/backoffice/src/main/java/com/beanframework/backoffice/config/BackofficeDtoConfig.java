@@ -26,7 +26,7 @@ import com.beanframework.backoffice.converter.DtoUserPermissionFieldConverter;
 import com.beanframework.backoffice.converter.DtoUserRightConverter;
 import com.beanframework.backoffice.converter.DtoUserRightFieldConverter;
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.data.AuditorDto;
+import com.beanframework.common.data.AuditorDto;
 import com.beanframework.core.data.BackofficeConfigurationDto;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.data.CronjobDataDto;

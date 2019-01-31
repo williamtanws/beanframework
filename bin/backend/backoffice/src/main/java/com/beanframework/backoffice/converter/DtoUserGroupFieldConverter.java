@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldDto;
@@ -39,22 +40,25 @@ public class DtoUserGroupFieldConverter implements DtoConverter<UserGroupField, 
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
-		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setValue(source.getValue());
 
-		if (action.isInitializeCollection()) {
-			try {
-				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), action, DynamicFieldDto.class));
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-				throw new ConverterException(e.getMessage(), e);
-			}
-		}
+		try {
+			ModelAction disableInitialCollectionAction = new ModelAction();
+			disableInitialCollectionAction.setInitializeCollection(false);
 
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionAction, AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionAction, AuditorDto.class));
+
+			if (action.isInitializeCollection()) {
+				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), action, DynamicFieldDto.class));
+			}
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 		return prototype;
 	}
 
