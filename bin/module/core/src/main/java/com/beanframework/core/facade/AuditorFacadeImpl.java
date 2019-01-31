@@ -12,10 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.data.AuditorDto;
 import com.beanframework.core.specification.AuditorSpecification;
 import com.beanframework.user.service.AuditorService;
 

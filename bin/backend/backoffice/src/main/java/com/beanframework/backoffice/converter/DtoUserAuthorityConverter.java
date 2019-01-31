@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserAuthorityDto;
@@ -40,21 +41,25 @@ public class DtoUserAuthorityConverter implements DtoConverter<UserAuthority, Us
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
-		prototype.setCreatedBy(source.getCreatedBy());
 		prototype.setCreatedDate(source.getCreatedDate());
-		prototype.setLastModifiedBy(source.getLastModifiedBy());
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setEnabled(source.getEnabled());
 
-		if (action.isInitializeCollection()) {
-			try {
+		try {
+			ModelAction disableInitialCollectionAction = new ModelAction();
+			disableInitialCollectionAction.setInitializeCollection(false);
+
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionAction, AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionAction, AuditorDto.class));
+
+			if (action.isInitializeCollection()) {
 				prototype.setUserPermission(modelService.getDto(source.getUserPermission(), action, UserPermissionDto.class));
 				prototype.setUserRight(modelService.getDto(source.getUserRight(), action, UserRightDto.class));
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-				throw new ConverterException(e.getMessage(), e);
 			}
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
 		}
 
 		return prototype;

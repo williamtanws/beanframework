@@ -25,6 +25,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 @Configuration
 @EnableWebMvc
 //@ComponentScan(basePackages = { "com.beanframework.platform" })
@@ -145,5 +148,10 @@ public class PlatformMvcConfig implements WebMvcConfigurer {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler(RESOURCE_HANDLER).addResourceLocations(RESOURCE_LOCATIONS);
 	}
+	
+	@Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+    }
 
 }

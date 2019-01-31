@@ -1,4 +1,4 @@
-package com.beanframework.core.data;
+package com.beanframework.common.data;
 
 import com.beanframework.common.data.GenericDto;
 
