@@ -18,6 +18,6 @@ usergroup,User Group,20,fa fa-users,/backoffice/usergroup,,true,user,employeegro
 employee,Employee,30,fa fa-user,/backoffice/employee,,true,user,employeegroup,name_en=Employee;name_cn=雇员
 customer,Customer,40,fa fa-user,/backoffice/customer,,true,user,customergroup,name_en=Customer;name_cn=顾客
 media,Media,40,fa fa-file-image-o,/backoffice/media,,true,,employeegroup,name_en=Media;name_cn=媒体
-cms,CMS,50,fa fa-gears,,,true,,employeegroup,name_en=Content Management System;name_cn=内容管理系统
+cms,CMS,50,fa fa-gears,,,true,,employeegroup,name_en=CMS;name_cn=内容管理系统
 site,Site,10,fa fa-fa-globe,/backoffice/site,,true,cms,employeegroup,name_en=Site;name_cn=网站
 comment,Comment,60,fa fa-commenting-o,/backoffice/comment,,true,,employeegroup,name_en=Comment;name_cn=留言

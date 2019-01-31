@@ -13,4 +13,6 @@ customergroup,customer,+,+,+,+
 employeegroup,auditor,+,+,+,+
 employeegroup,filemanager,+,+,+,+
 employeegroup,email,+,+,+,+
+employeegroup,media,+,+,+,+
+employeegroup,site,+,+,+,+
 employeegroup,comment,+,+,+,+

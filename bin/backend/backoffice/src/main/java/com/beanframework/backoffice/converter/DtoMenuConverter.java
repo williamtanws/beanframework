@@ -60,9 +60,9 @@ public class DtoMenuConverter implements DtoConverter<Menu, MenuDto> {
 			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
 
 			if (context.isInitializeCollection()) {
+				prototype.setFields(modelService.getDto(source.getFields(), context, MenuFieldDto.class));
 				prototype.setChilds(modelService.getDto(source.getChilds(), context, MenuDto.class));
 				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), context, UserGroupDto.class));
-				prototype.setFields(modelService.getDto(source.getFields(), context, MenuFieldDto.class));
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
