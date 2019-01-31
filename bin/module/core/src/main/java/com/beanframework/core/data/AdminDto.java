@@ -3,6 +3,10 @@ package com.beanframework.core.data;
 import com.beanframework.common.data.GenericDto;
 
 public class AdminDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5027066586348517568L;
 	public static final String PASSWORD = "password";
 	public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";
 	public static final String ACCOUNT_NON_LOCKED = "accountNonLocked";

@@ -4,6 +4,11 @@ import com.beanframework.common.data.GenericDto;
 
 public class UserGroupFieldDto extends GenericDto {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6527945805106422096L;
+
 	private UserGroupDto userGroup;
 
 	private DynamicFieldDto dynamicField;

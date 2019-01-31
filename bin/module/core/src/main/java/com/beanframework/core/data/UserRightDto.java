@@ -6,6 +6,10 @@ import java.util.List;
 import com.beanframework.common.data.GenericDto;
 
 public class UserRightDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3879059423333980271L;
 	public static final String NAME = "name";
 	public static final String FIELDS = "fields";
 	public static final String SORT = "sort";

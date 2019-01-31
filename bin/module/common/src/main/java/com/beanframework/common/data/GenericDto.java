@@ -1,11 +1,16 @@
 package com.beanframework.common.data;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 import com.beanframework.common.domain.Auditor;
 
-public class GenericDto {
+public class GenericDto implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7199498187148793394L;
 	public static final String UUID = "uuid";
 	public static final String ID = "id";
 	public static final String CREATED_DATE = "createdDate";

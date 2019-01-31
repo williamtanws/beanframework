@@ -4,6 +4,11 @@ import com.beanframework.common.data.GenericDto;
 
 public class UserAuthorityDto extends GenericDto {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -865505469742305954L;
+
 	private UserPermissionDto userPermission;
 
 	private UserRightDto userRight;

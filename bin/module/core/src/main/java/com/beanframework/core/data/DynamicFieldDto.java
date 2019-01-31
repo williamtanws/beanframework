@@ -7,6 +7,10 @@ import com.beanframework.common.data.GenericDto;
 import com.beanframework.dynamicfield.domain.DynamicFieldType;
 
 public class DynamicFieldDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4182237880040624160L;
 	public static final String NAME = "name";
 	public static final String FIELD_TYPE = "fieldType";
 	public static final String SORT = "sort";

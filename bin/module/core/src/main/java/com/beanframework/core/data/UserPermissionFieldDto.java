@@ -4,6 +4,11 @@ import com.beanframework.common.data.GenericDto;
 
 public class UserPermissionFieldDto extends GenericDto {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2920029811939870923L;
+
 	private UserPermissionDto userPermission;
 
 	private DynamicFieldDto dynamicField;

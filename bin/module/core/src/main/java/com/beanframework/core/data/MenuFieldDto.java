@@ -4,6 +4,11 @@ import com.beanframework.common.data.GenericDto;
 
 public class MenuFieldDto extends GenericDto {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3192301047685937164L;
+
 	private DynamicFieldDto dynamicField;
 
 	private String value;

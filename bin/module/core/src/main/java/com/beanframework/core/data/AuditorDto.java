@@ -3,6 +3,11 @@ package com.beanframework.core.data;
 import com.beanframework.common.data.GenericDto;
 
 public class AuditorDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9218549753097868735L;
+
 	public static final String NAME = "name";
 	
 	private String name;

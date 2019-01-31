@@ -5,6 +5,10 @@ import java.util.Date;
 import com.beanframework.common.data.GenericDto;
 
 public class CommentDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7160397218234172945L;
 	public static final String HTML = "html";
 	public static final String VISIBLED = "visibled";
 

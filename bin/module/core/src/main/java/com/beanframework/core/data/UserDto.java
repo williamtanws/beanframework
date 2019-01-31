@@ -6,6 +6,10 @@ import java.util.List;
 import com.beanframework.common.data.GenericDto;
 
 public class UserDto extends GenericDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7847327425785013603L;
 	public static final String PASSWORD = "password";
 	public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";
 	public static final String ACCOUNT_NON_LOCKED = "accountNonLocked";
