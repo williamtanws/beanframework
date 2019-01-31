@@ -13,4 +13,6 @@ cronjob,Cronjob,100,name_en=Cronjob;name_cn=定时任务
 filemanager,File Manager,110,name_en=File Manager;name_cn=文件管理器
 email,Email,120,name_en=Email;name_cn=电子邮件
 auditor,Auditor,130,name_en=Auditor;name_cn=稽核员
+media,Media,160,name_en=Media;name_cn=媒体
+site,Site,150,name_en=Site;name_cn=网站
 comment,Comment,140,name_en=Comment;name_cn=留言
