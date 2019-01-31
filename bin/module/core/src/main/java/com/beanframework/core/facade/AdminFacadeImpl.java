@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.service.AdminService;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -33,18 +33,18 @@ public class AdminFacadeImpl implements AdminFacade {
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
 		Admin entity = adminService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, AdminDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, AdminDto.class);
 	}
 
 	@Override
 	public AdminDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Admin entity = adminService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, AdminDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, AdminDto.class);
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class AdminFacadeImpl implements AdminFacade {
 			Admin entity = modelService.getEntity(dto, Admin.class);
 			entity = (Admin) adminService.saveEntity(entity);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, AdminDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, AdminDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -79,9 +79,9 @@ public class AdminFacadeImpl implements AdminFacade {
 	public Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Admin> page = adminService.findEntityPage(dataTableRequest, AdminSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		List<AdminDto> dtos = modelService.getDto(page.getContent(), action, AdminDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		List<AdminDto> dtos = modelService.getDto(page.getContent(), context, AdminDto.class);
 		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -95,9 +95,9 @@ public class AdminFacadeImpl implements AdminFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Admin.CREATED_DATE, Sort.Direction.DESC);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		return modelService.getDto(adminService.findEntityBySorts(sorts, false), action, AdminDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		return modelService.getDto(adminService.findEntityBySorts(sorts, false), context, AdminDto.class);
 	}
 	
 	@Override
@@ -108,9 +108,9 @@ public class AdminFacadeImpl implements AdminFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Admin) {
 				
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
-				entityObject[0] = modelService.getDto(entityObject[0], action, AdminDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], context, AdminDto.class);
 			}
 			revisions.set(i, entityObject);
 		}

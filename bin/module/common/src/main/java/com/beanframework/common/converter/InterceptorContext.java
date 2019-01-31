@@ -3,7 +3,7 @@ package com.beanframework.common.converter;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ModelAction {
+public class InterceptorContext {
 
 	private boolean initializeCollection = false;
 

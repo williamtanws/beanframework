@@ -13,7 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -40,18 +40,18 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
 		Employee entity = employeeService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, EmployeeDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, EmployeeDto.class);
 	}
 
 	@Override
 	public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Employee entity = employeeService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, EmployeeDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, EmployeeDto.class);
 	}
 
 	@Override
@@ -69,9 +69,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			Employee entity = modelService.getEntity(dto, Employee.class);
 			entity = (Employee) employeeService.saveEntity(entity);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, EmployeeDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, EmployeeDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -87,9 +87,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Employee> page = employeeService.findEntityPage(dataTableRequest, EmployeeSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), action, EmployeeDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), context, EmployeeDto.class);
 		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -103,9 +103,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Employee.CREATED_DATE, Sort.Direction.DESC);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		return modelService.getDto(employeeService.findEntityBySorts(sorts, false), action, EmployeeDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		return modelService.getDto(employeeService.findEntityBySorts(sorts, false), context, EmployeeDto.class);
 	}
 
 	@Override
@@ -141,9 +141,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			employeeService.updatePrincipal(entity);
 			employeeService.saveProfilePicture(entity, picture);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, EmployeeDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, EmployeeDto.class);
 
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -154,9 +154,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public EmployeeDto getCurrentUser() throws Exception {
 		Employee employee = employeeService.getCurrentUser();
 
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), action, EmployeeDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), context, EmployeeDto.class);
 	}
 
 	@Override
@@ -167,9 +167,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Employee) {
 
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
-				entityObject[0] = modelService.getDto(entityObject[0], action, EmployeeDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], context, EmployeeDto.class);
 			}
 			revisions.set(i, entityObject);
 		}

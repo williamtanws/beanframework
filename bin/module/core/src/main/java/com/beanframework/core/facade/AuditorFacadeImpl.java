@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
@@ -32,27 +32,27 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	public AuditorDto findOneByUuid(UUID uuid) throws Exception {
 		Auditor entity = auditorService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, AuditorDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, AuditorDto.class);
 	}
 
 	@Override
 	public AuditorDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Auditor entity = auditorService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, AuditorDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, AuditorDto.class);
 	}
 	
 	@Override
 	public Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Auditor> page = auditorService.findEntityPage(dataTableRequest, AuditorSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		List<AuditorDto> dtos = modelService.getDto(page.getContent(), action, AuditorDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		List<AuditorDto> dtos = modelService.getDto(page.getContent(), context, AuditorDto.class);
 		return new PageImpl<AuditorDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -66,9 +66,9 @@ public class AuditorFacadeImpl implements AuditorFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Auditor.CREATED_DATE, Sort.Direction.DESC);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		return modelService.getDto(auditorService.findEntityBySorts(sorts, false), action, AuditorDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		return modelService.getDto(auditorService.findEntityBySorts(sorts, false), context, AuditorDto.class);
 	}
 	
 	@Override
@@ -79,9 +79,9 @@ public class AuditorFacadeImpl implements AuditorFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Auditor) {
 				
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
-				entityObject[0] = modelService.getDto(entityObject[0], action, AuditorDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], context, AuditorDto.class);
 			}
 			revisions.set(i, entityObject);
 		}

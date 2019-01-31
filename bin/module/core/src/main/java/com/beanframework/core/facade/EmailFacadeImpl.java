@@ -13,7 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -37,18 +37,18 @@ public class EmailFacadeImpl implements EmailFacade {
 	public EmailDto findOneByUuid(UUID uuid) throws Exception {
 		Email entity = emailService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, EmailDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, EmailDto.class);
 	}
 
 	@Override
 	public EmailDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Email entity = emailService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, EmailDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, EmailDto.class);
 	}
 
 	@Override
@@ -66,9 +66,9 @@ public class EmailFacadeImpl implements EmailFacade {
 			Email entity = modelService.getEntity(dto, Email.class);
 			entity = (Email) emailService.saveEntity(entity);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, EmailDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, EmailDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -83,9 +83,9 @@ public class EmailFacadeImpl implements EmailFacade {
 	public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Email> page = emailService.findEntityPage(dataTableRequest, EmailSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		List<EmailDto> dtos = modelService.getDto(page.getContent(), action, EmailDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		List<EmailDto> dtos = modelService.getDto(page.getContent(), context, EmailDto.class);
 		return new PageImpl<EmailDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -120,9 +120,9 @@ public class EmailFacadeImpl implements EmailFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Email) {
 				
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
-				entityObject[0] = modelService.getDto(entityObject[0], action, EmailDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], context, EmailDto.class);
 			}
 			revisions.set(i, entityObject);
 		}

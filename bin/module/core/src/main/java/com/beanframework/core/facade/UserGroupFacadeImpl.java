@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -33,18 +33,18 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public UserGroupDto findOneByUuid(UUID uuid) throws Exception {
 		UserGroup entity = userGroupService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, UserGroupDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, UserGroupDto.class);
 	}
 
 	@Override
 	public UserGroupDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserGroup entity = userGroupService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, UserGroupDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, UserGroupDto.class);
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 			UserGroup entity = modelService.getEntity(dto, UserGroup.class);
 			entity = (UserGroup) userGroupService.saveEntity(entity);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, UserGroupDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, UserGroupDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -79,9 +79,9 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserGroup> page = userGroupService.findEntityPage(dataTableRequest, UserGroupSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), action, UserGroupDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), context, UserGroupDto.class);
 		return new PageImpl<UserGroupDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -98,9 +98,9 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof UserGroup) {
 
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
-				entityObject[0] = modelService.getDto(entityObject[0], action, UserGroupDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], context, UserGroupDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -118,8 +118,8 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		return modelService.getDto(userGroupService.findEntityBySorts(sorts, false), action, UserGroupDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		return modelService.getDto(userGroupService.findEntityBySorts(sorts, false), context, UserGroupDto.class);
 	}
 }

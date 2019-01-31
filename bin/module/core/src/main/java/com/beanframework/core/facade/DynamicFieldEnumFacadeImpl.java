@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -33,18 +33,18 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 	public DynamicFieldEnumDto findOneByUuid(UUID uuid) throws Exception {
 		DynamicFieldEnum entity = dynamicFieldEnumService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, DynamicFieldEnumDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, DynamicFieldEnumDto.class);
 	}
 
 	@Override
 	public DynamicFieldEnumDto findOneProperties(Map<String, Object> properties) throws Exception {
 		DynamicFieldEnum entity = dynamicFieldEnumService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, DynamicFieldEnumDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, DynamicFieldEnumDto.class);
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 			DynamicFieldEnum entity = modelService.getEntity(dto, DynamicFieldEnum.class);
 			entity = (DynamicFieldEnum) dynamicFieldEnumService.saveEntity(entity);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, DynamicFieldEnumDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, DynamicFieldEnumDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -79,9 +79,9 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 	public Page<DynamicFieldEnumDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<DynamicFieldEnum> page = dynamicFieldEnumService.findEntityPage(dataTableRequest, DynamicFieldEnumSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		List<DynamicFieldEnumDto> dtos = modelService.getDto(page.getContent(), action, DynamicFieldEnumDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		List<DynamicFieldEnumDto> dtos = modelService.getDto(page.getContent(), context, DynamicFieldEnumDto.class);
 		return new PageImpl<DynamicFieldEnumDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -98,9 +98,9 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof DynamicFieldEnum) {
 				
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
-				entityObject[0] = modelService.getDto(entityObject[0], action, DynamicFieldEnumDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], context, DynamicFieldEnumDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -118,9 +118,9 @@ public class DynamicFieldEnumFacadeImpl implements DynamicFieldEnumFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(DynamicFieldEnum.CREATED_DATE, Sort.Direction.DESC);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		return modelService.getDto(dynamicFieldEnumService.findEntityBySorts(sorts, false), action, DynamicFieldEnumDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		return modelService.getDto(dynamicFieldEnumService.findEntityBySorts(sorts, false), context, DynamicFieldEnumDto.class);
 	}
 
 }

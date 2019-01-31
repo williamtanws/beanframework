@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -24,19 +24,19 @@ public class DtoUserPermissionFieldConverter implements DtoConverter<UserPermiss
 	private ModelService modelService;
 
 	@Override
-	public UserPermissionFieldDto convert(UserPermissionField source, ModelAction action) throws ConverterException {
-		return convert(source, new UserPermissionFieldDto(), action);
+	public UserPermissionFieldDto convert(UserPermissionField source, InterceptorContext context) throws ConverterException {
+		return convert(source, new UserPermissionFieldDto(), context);
 	}
 
-	public List<UserPermissionFieldDto> convert(List<UserPermissionField> sources, ModelAction action) throws ConverterException {
+	public List<UserPermissionFieldDto> convert(List<UserPermissionField> sources, InterceptorContext context) throws ConverterException {
 		List<UserPermissionFieldDto> convertedList = new ArrayList<UserPermissionFieldDto>();
 		for (UserPermissionField source : sources) {
-			convertedList.add(convert(source, action));
+			convertedList.add(convert(source, context));
 		}
 		return convertedList;
 	}
 
-	public UserPermissionFieldDto convert(UserPermissionField source, UserPermissionFieldDto prototype, ModelAction action) throws ConverterException {
+	public UserPermissionFieldDto convert(UserPermissionField source, UserPermissionFieldDto prototype, InterceptorContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -46,15 +46,15 @@ public class DtoUserPermissionFieldConverter implements DtoConverter<UserPermiss
 		prototype.setValue(source.getValue());
 
 		try {
-			ModelAction disableInitialCollectionAction = new ModelAction();
-			disableInitialCollectionAction.setInitializeCollection(false);
+			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
+			disableInitialCollectionContext.setInitializeCollection(false);
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionAction, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionAction, AuditorDto.class));
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
 
-			if (action.isInitializeCollection()) {
+			if (context.isInitializeCollection()) {
 
-				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), action, DynamicFieldDto.class));
+				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), context, DynamicFieldDto.class));
 
 			}
 		} catch (Exception e) {

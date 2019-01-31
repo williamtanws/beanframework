@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -23,16 +23,16 @@ public class DtoConfigurationConverter implements DtoConverter<Configuration, Co
 	private ModelService modelService;
 
 	@Override
-	public ConfigurationDto convert(Configuration source, ModelAction action) throws ConverterException {
-		return convert(source, new ConfigurationDto(), action);
+	public ConfigurationDto convert(Configuration source, InterceptorContext context) throws ConverterException {
+		return convert(source, new ConfigurationDto(), context);
 	}
 
-	public List<ConfigurationDto> convert(List<Configuration> sources, ModelAction action) throws ConverterException {
+	public List<ConfigurationDto> convert(List<Configuration> sources, InterceptorContext context) throws ConverterException {
 
 		List<ConfigurationDto> convertedList = new ArrayList<ConfigurationDto>();
 		try {
 			for (Configuration source : sources) {
-				convertedList.add(convert(source, action));
+				convertedList.add(convert(source, context));
 			}
 		} catch (ConverterException e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -40,7 +40,7 @@ public class DtoConfigurationConverter implements DtoConverter<Configuration, Co
 		return convertedList;
 	}
 
-	private ConfigurationDto convert(Configuration source, ConfigurationDto prototype, ModelAction action) throws ConverterException {
+	private ConfigurationDto convert(Configuration source, ConfigurationDto prototype, InterceptorContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -50,11 +50,11 @@ public class DtoConfigurationConverter implements DtoConverter<Configuration, Co
 		prototype.setValue(source.getValue());
 		
 		try {
-			ModelAction disableInitialCollectionAction = new ModelAction();
-			disableInitialCollectionAction.setInitializeCollection(false);
+			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
+			disableInitialCollectionContext.setInitializeCollection(false);
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionAction, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionAction, AuditorDto.class));
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
 		
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
