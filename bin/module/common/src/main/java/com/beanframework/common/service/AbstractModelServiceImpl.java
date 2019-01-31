@@ -35,7 +35,7 @@ import org.springframework.util.Assert;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.converter.EntityConverter;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
@@ -242,25 +242,25 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		throw new ConverterException("Cannot find any entity convert to convert target model: " + modelClass.getSimpleName());
 	}
 
-	protected <T extends Collection> T dtoConverter(Collection models, ModelAction action, Class modelClass) throws ConverterException, InterceptorException {
+	protected <T extends Collection> T dtoConverter(Collection models, InterceptorContext context, Class modelClass) throws ConverterException, InterceptorException {
 		if (models instanceof List<?>) {
 			List<Object> listModels = new ArrayList<Object>();
 			Iterator iterator = models.iterator();
 			while (iterator.hasNext()) {
 				Object model = iterator.next();
-				listModels.add(dtoConverter(model, action, modelClass));
+				listModels.add(dtoConverter(model, context, modelClass));
 			}
 			return (T) listModels;
 		}
 		throw new ConverterException("Cannot find available models type to convert target model: " + modelClass.getSimpleName());
 	}
 
-	protected Object dtoConverter(Object model, ModelAction action, Class modelClass) throws ConverterException {
+	protected Object dtoConverter(Object model, InterceptorContext context, Class modelClass) throws ConverterException {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof DtoConverter) {
 				DtoConverter interceptor = (DtoConverter) interceptorMapping.getConverter();
 				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
-					return interceptor.convert(model, action);
+					return interceptor.convert(model, context);
 				}
 			}
 		}

@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.exception.BusinessException;
 
 @SuppressWarnings("rawtypes")
@@ -62,9 +62,9 @@ public interface ModelService {
 
 	<T extends Collection> T getEntity(Collection model, Class modelClass) throws Exception;
 	
-	<T> T getDto(Object model, ModelAction action, Class modelClass) throws Exception;
+	<T> T getDto(Object model, InterceptorContext context, Class modelClass) throws Exception;
 	
-	<T extends Collection> T getDto(Collection models, ModelAction action, Class modelClass) throws Exception;
+	<T extends Collection> T getDto(Collection models, InterceptorContext context, Class modelClass) throws Exception;
 
 	void initDefaults(Object model, Class modelClass) throws Exception;
 

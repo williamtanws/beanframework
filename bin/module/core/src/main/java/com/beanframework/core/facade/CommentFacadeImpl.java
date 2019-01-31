@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.comment.service.CommentService;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -33,18 +33,18 @@ public class CommentFacadeImpl implements CommentFacade {
 	public CommentDto findOneByUuid(UUID uuid) throws Exception {
 		Comment entity = commentService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, CommentDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, CommentDto.class);
 	}
 
 	@Override
 	public CommentDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Comment entity = commentService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, CommentDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, CommentDto.class);
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class CommentFacadeImpl implements CommentFacade {
 			Comment entity = modelService.getEntity(dto, Comment.class);
 			entity = (Comment) commentService.saveEntity(entity);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, CommentDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, CommentDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -79,9 +79,9 @@ public class CommentFacadeImpl implements CommentFacade {
 	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Comment> page = commentService.findEntityPage(dataTableRequest, CommentSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		List<CommentDto> dtos = modelService.getDto(page.getContent(), action, CommentDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		List<CommentDto> dtos = modelService.getDto(page.getContent(), context, CommentDto.class);
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -98,9 +98,9 @@ public class CommentFacadeImpl implements CommentFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Comment) {
 				
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], action, CommentDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(true);
+				entityObject[0] = modelService.getDto(entityObject[0], context, CommentDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -118,9 +118,9 @@ public class CommentFacadeImpl implements CommentFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Comment.CREATED_DATE, Sort.Direction.DESC);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(commentService.findEntityBySorts(sorts, false), action, CommentDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(commentService.findEntityBySorts(sorts, false), context, CommentDto.class);
 	}
 
 }

@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
@@ -44,18 +44,18 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public CronjobDto findOneByUuid(UUID uuid) throws Exception {
 		Cronjob entity = cronjobService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, CronjobDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, CronjobDto.class);
 	}
 
 	@Override
 	public CronjobDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Cronjob entity = cronjobService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, CronjobDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, CronjobDto.class);
 	}
 
 	@Override
@@ -73,9 +73,9 @@ public class CronjobFacadeImpl implements CronjobFacade {
 			Cronjob entity = modelService.getEntity(dto, Cronjob.class);
 			entity = (Cronjob) cronjobService.saveEntity(entity);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, CronjobDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, CronjobDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -90,9 +90,9 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Cronjob> page = cronjobService.findEntityPage(dataTableRequest, CronjobSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		List<CronjobDto> dtos = modelService.getDto(page.getContent(), action, CronjobDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		List<CronjobDto> dtos = modelService.getDto(page.getContent(), context, CronjobDto.class);
 		return new PageImpl<CronjobDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -139,9 +139,9 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 			updateCronjob = (Cronjob) cronjobService.saveEntity(updateCronjob);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(updateCronjob, action, Cronjob.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(updateCronjob, context, Cronjob.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -193,9 +193,9 @@ public class CronjobFacadeImpl implements CronjobFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Cronjob) {
 				
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
-				entityObject[0] = modelService.getDto(entityObject[0], action, CronjobDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], context, CronjobDto.class);
 			}
 			revisions.set(i, entityObject);
 		}

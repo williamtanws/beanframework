@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -25,19 +25,19 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroupD
 	private ModelService modelService;
 
 	@Override
-	public UserGroupDto convert(UserGroup source, ModelAction action) throws ConverterException {
-		return convert(source, new UserGroupDto(), action);
+	public UserGroupDto convert(UserGroup source, InterceptorContext context) throws ConverterException {
+		return convert(source, new UserGroupDto(), context);
 	}
 
-	public List<UserGroupDto> convert(List<UserGroup> sources, ModelAction action) throws ConverterException {
+	public List<UserGroupDto> convert(List<UserGroup> sources, InterceptorContext context) throws ConverterException {
 		List<UserGroupDto> convertedList = new ArrayList<UserGroupDto>();
 		for (UserGroup source : sources) {
-			convertedList.add(convert(source, action));
+			convertedList.add(convert(source, context));
 		}
 		return convertedList;
 	}
 
-	private UserGroupDto convert(UserGroup source, UserGroupDto prototype, ModelAction action) throws ConverterException {
+	private UserGroupDto convert(UserGroup source, UserGroupDto prototype, InterceptorContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -47,16 +47,16 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroupD
 		prototype.setName(source.getName());
 
 		try {
-			ModelAction disableInitialCollectionAction = new ModelAction();
-			disableInitialCollectionAction.setInitializeCollection(false);
+			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
+			disableInitialCollectionContext.setInitializeCollection(false);
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionAction, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionAction, AuditorDto.class));
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
 
-			if (action.isInitializeCollection()) {
-				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), action, UserGroupDto.class));
-				prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), action, UserAuthorityDto.class));
-				prototype.setFields(modelService.getDto(source.getFields(), action, UserGroupFieldDto.class));
+			if (context.isInitializeCollection()) {
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), context, UserGroupDto.class));
+				prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), context, UserAuthorityDto.class));
+				prototype.setFields(modelService.getDto(source.getFields(), context, UserGroupFieldDto.class));
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

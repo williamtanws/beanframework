@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -33,18 +33,18 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
 		UserRight entity = userRightService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, UserRightDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, UserRightDto.class);
 	}
 
 	@Override
 	public UserRightDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserRight entity = userRightService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, UserRightDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, UserRightDto.class);
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class UserRightFacadeImpl implements UserRightFacade {
 			UserRight entity = modelService.getEntity(dto, UserRight.class);
 			entity = (UserRight) userRightService.saveEntity(entity);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, UserRightDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, UserRightDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -79,9 +79,9 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest, UserRightSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		List<UserRightDto> dtos = modelService.getDto(page.getContent(), action, UserRightDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		List<UserRightDto> dtos = modelService.getDto(page.getContent(), context, UserRightDto.class);
 		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -98,9 +98,9 @@ public class UserRightFacadeImpl implements UserRightFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof UserRight) {
 				
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
-				entityObject[0] = modelService.getDto(entityObject[0], action, UserRightDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], context, UserRightDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -118,8 +118,8 @@ public class UserRightFacadeImpl implements UserRightFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserRight.CREATED_DATE, Sort.Direction.DESC);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		return modelService.getDto(userRightService.findEntityBySorts(sorts, false), action, UserRightDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		return modelService.getDto(userRightService.findEntityBySorts(sorts, false), context, UserRightDto.class);
 	}
 }

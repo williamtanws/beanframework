@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.exception.ConverterException;
@@ -22,19 +22,19 @@ public class DtoAuditorConverter implements DtoConverter<Auditor, AuditorDto> {
 	private ModelService modelService;
 
 	@Override
-	public AuditorDto convert(Auditor source, ModelAction action) throws ConverterException {
-		return convert(source, new AuditorDto(), action);
+	public AuditorDto convert(Auditor source, InterceptorContext context) throws ConverterException {
+		return convert(source, new AuditorDto(), context);
 	}
 
-	public List<AuditorDto> convert(List<Auditor> sources, ModelAction action) throws ConverterException {
+	public List<AuditorDto> convert(List<Auditor> sources, InterceptorContext context) throws ConverterException {
 		List<AuditorDto> convertedList = new ArrayList<AuditorDto>();
 		for (Auditor source : sources) {
-			convertedList.add(convert(source, action));
+			convertedList.add(convert(source, context));
 		}
 		return convertedList;
 	}
 
-	private AuditorDto convert(Auditor source, AuditorDto prototype, ModelAction action) throws ConverterException {
+	private AuditorDto convert(Auditor source, AuditorDto prototype, InterceptorContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -44,9 +44,9 @@ public class DtoAuditorConverter implements DtoConverter<Auditor, AuditorDto> {
 		prototype.setName(source.getName());
 
 		try {
-			if (action.isInitializeCollection()) {
-				prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), action, AuditorDto.class));
-				prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), action, AuditorDto.class));
+			if (context.isInitializeCollection()) {
+				prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), context, AuditorDto.class));
+				prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), context, AuditorDto.class));
 			}
 
 		} catch (Exception e) {

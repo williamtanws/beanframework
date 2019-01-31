@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -33,18 +33,18 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public LanguageDto findOneByUuid(UUID uuid) throws Exception {
 		Language entity = languageService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, LanguageDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, LanguageDto.class);
 	}
 
 	@Override
 	public LanguageDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Language entity = languageService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, LanguageDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, LanguageDto.class);
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class LanguageFacadeImpl implements LanguageFacade {
 			Language entity = modelService.getEntity(dto, Language.class);
 			entity = (Language) languageService.saveEntity(entity);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, LanguageDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, LanguageDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -79,9 +79,9 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Language> page = languageService.findEntityPage(dataTableRequest, LanguageSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		List<LanguageDto> dtos = modelService.getDto(page.getContent(), action, LanguageDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		List<LanguageDto> dtos = modelService.getDto(page.getContent(), context, LanguageDto.class);
 		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -98,9 +98,9 @@ public class LanguageFacadeImpl implements LanguageFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Language) {
 				
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
-				entityObject[0] = modelService.getDto(entityObject[0], action, LanguageDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], context, LanguageDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -118,9 +118,9 @@ public class LanguageFacadeImpl implements LanguageFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Language.CREATED_DATE, Sort.Direction.DESC);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		return modelService.getDto(languageService.findEntityBySorts(sorts, false), action, LanguageDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		return modelService.getDto(languageService.findEntityBySorts(sorts, false), context, LanguageDto.class);
 	}
 
 }

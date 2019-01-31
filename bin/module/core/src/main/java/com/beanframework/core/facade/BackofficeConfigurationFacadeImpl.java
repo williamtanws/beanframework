@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
@@ -26,9 +26,9 @@ public class BackofficeConfigurationFacadeImpl implements BackofficeConfiguratio
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
 
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(configurationService.findOneEntityByProperties(properties), action, BackofficeConfigurationDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(configurationService.findOneEntityByProperties(properties), context, BackofficeConfigurationDto.class);
 	}
 
 }

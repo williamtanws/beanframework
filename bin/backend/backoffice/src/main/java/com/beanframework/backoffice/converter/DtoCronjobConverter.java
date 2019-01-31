@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -24,15 +24,15 @@ public class DtoCronjobConverter implements DtoConverter<Cronjob, CronjobDto> {
 	private ModelService modelService;
 
 	@Override
-	public CronjobDto convert(Cronjob source, ModelAction action) throws ConverterException {
-		return convert(source, new CronjobDto(), action);
+	public CronjobDto convert(Cronjob source, InterceptorContext context) throws ConverterException {
+		return convert(source, new CronjobDto(), context);
 	}
 
-	public List<CronjobDto> convert(List<Cronjob> sources, ModelAction action) throws ConverterException {
+	public List<CronjobDto> convert(List<Cronjob> sources, InterceptorContext context) throws ConverterException {
 		List<CronjobDto> convertedList = new ArrayList<CronjobDto>();
 		try {
 			for (Cronjob source : sources) {
-				convertedList.add(convert(source, action));
+				convertedList.add(convert(source, context));
 			}
 		} catch (ConverterException e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -40,7 +40,7 @@ public class DtoCronjobConverter implements DtoConverter<Cronjob, CronjobDto> {
 		return convertedList;
 	}
 
-	private CronjobDto convert(Cronjob source, CronjobDto prototype, ModelAction action) throws ConverterException {
+	private CronjobDto convert(Cronjob source, CronjobDto prototype, InterceptorContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -63,14 +63,14 @@ public class DtoCronjobConverter implements DtoConverter<Cronjob, CronjobDto> {
 		prototype.setLastFinishExecutedDate(source.getLastFinishExecutedDate());
 
 		try {
-			ModelAction disableInitialCollectionAction = new ModelAction();
-			disableInitialCollectionAction.setInitializeCollection(false);
+			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
+			disableInitialCollectionContext.setInitializeCollection(false);
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionAction, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionAction, AuditorDto.class));
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
 
-			if (action.isInitializeCollection()) {
-				prototype.setCronjobDatas(modelService.getDto(source.getCronjobDatas(), action, CronjobDataDto.class));
+			if (context.isInitializeCollection()) {
+				prototype.setCronjobDatas(modelService.getDto(source.getCronjobDatas(), context, CronjobDataDto.class));
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

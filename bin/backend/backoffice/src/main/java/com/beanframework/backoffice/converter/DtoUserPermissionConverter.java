@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -24,19 +24,19 @@ public class DtoUserPermissionConverter implements DtoConverter<UserPermission, 
 	private ModelService modelService;
 
 	@Override
-	public UserPermissionDto convert(UserPermission source, ModelAction action) throws ConverterException {
-		return convert(source, new UserPermissionDto(), action);
+	public UserPermissionDto convert(UserPermission source, InterceptorContext context) throws ConverterException {
+		return convert(source, new UserPermissionDto(), context);
 	}
 
-	public List<UserPermissionDto> convert(List<UserPermission> sources, ModelAction action) throws ConverterException {
+	public List<UserPermissionDto> convert(List<UserPermission> sources, InterceptorContext context) throws ConverterException {
 		List<UserPermissionDto> convertedList = new ArrayList<UserPermissionDto>();
 		for (UserPermission source : sources) {
-			convertedList.add(convert(source, action));
+			convertedList.add(convert(source, context));
 		}
 		return convertedList;
 	}
 
-	private UserPermissionDto convert(UserPermission source, UserPermissionDto prototype, ModelAction action) throws ConverterException {
+	private UserPermissionDto convert(UserPermission source, UserPermissionDto prototype, InterceptorContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -47,14 +47,14 @@ public class DtoUserPermissionConverter implements DtoConverter<UserPermission, 
 		prototype.setSort(source.getSort());
 
 		try {
-			ModelAction disableInitialCollectionAction = new ModelAction();
-			disableInitialCollectionAction.setInitializeCollection(false);
+			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
+			disableInitialCollectionContext.setInitializeCollection(false);
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionAction, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionAction, AuditorDto.class));
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
 
-			if (action.isInitializeCollection()) {
-				prototype.setFields(modelService.getDto(source.getFields(), action, UserPermissionFieldDto.class));
+			if (context.isInitializeCollection()) {
+				prototype.setFields(modelService.getDto(source.getFields(), context, UserPermissionFieldDto.class));
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

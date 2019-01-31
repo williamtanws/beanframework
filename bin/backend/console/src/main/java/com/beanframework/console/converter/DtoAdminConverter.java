@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -23,15 +23,15 @@ public class DtoAdminConverter implements DtoConverter<Admin, AdminDto> {
 	private ModelService modelService;
 
 	@Override
-	public AdminDto convert(Admin source, ModelAction action) throws ConverterException {
-		return convert(source, new AdminDto(), action);
+	public AdminDto convert(Admin source, InterceptorContext context) throws ConverterException {
+		return convert(source, new AdminDto(), context);
 	}
 
-	public List<AdminDto> convert(List<Admin> sources, ModelAction action) throws ConverterException {
+	public List<AdminDto> convert(List<Admin> sources, InterceptorContext context) throws ConverterException {
 		List<AdminDto> convertedList = new ArrayList<AdminDto>();
 		try {
 			for (Admin source : sources) {
-				convertedList.add(convert(source, action));
+				convertedList.add(convert(source, context));
 			}
 		} catch (ConverterException e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -39,7 +39,7 @@ public class DtoAdminConverter implements DtoConverter<Admin, AdminDto> {
 		return convertedList;
 	}
 
-	private AdminDto convert(Admin source, AdminDto prototype, ModelAction action) throws ConverterException {
+	private AdminDto convert(Admin source, AdminDto prototype, InterceptorContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -53,11 +53,11 @@ public class DtoAdminConverter implements DtoConverter<Admin, AdminDto> {
 		prototype.setName(source.getName());
 		
 		try {
-			ModelAction disableInitialCollectionAction = new ModelAction();
-			disableInitialCollectionAction.setInitializeCollection(false);
+			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
+			disableInitialCollectionContext.setInitializeCollection(false);
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionAction, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionAction, AuditorDto.class));
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

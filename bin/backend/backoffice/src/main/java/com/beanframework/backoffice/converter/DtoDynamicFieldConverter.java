@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -25,19 +25,19 @@ public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, Dyna
 	private ModelService modelService;
 
 	@Override
-	public DynamicFieldDto convert(DynamicField source, ModelAction action) throws ConverterException {
-		return convert(source, new DynamicFieldDto(), action);
+	public DynamicFieldDto convert(DynamicField source, InterceptorContext context) throws ConverterException {
+		return convert(source, new DynamicFieldDto(), context);
 	}
 
-	public List<DynamicFieldDto> convert(List<DynamicField> sources, ModelAction action) throws ConverterException {
+	public List<DynamicFieldDto> convert(List<DynamicField> sources, InterceptorContext context) throws ConverterException {
 		List<DynamicFieldDto> convertedList = new ArrayList<DynamicFieldDto>();
 		for (DynamicField source : sources) {
-			convertedList.add(convert(source, action));
+			convertedList.add(convert(source, context));
 		}
 		return convertedList;
 	}
 
-	private DynamicFieldDto convert(DynamicField source, DynamicFieldDto prototype, ModelAction action) throws ConverterException {
+	private DynamicFieldDto convert(DynamicField source, DynamicFieldDto prototype, InterceptorContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -52,15 +52,15 @@ public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, Dyna
 		prototype.setLabel(source.getLabel());
 
 		try {
-			ModelAction disableInitialCollectionAction = new ModelAction();
-			disableInitialCollectionAction.setInitializeCollection(false);
+			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
+			disableInitialCollectionContext.setInitializeCollection(false);
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionAction, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionAction, AuditorDto.class));
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
 
-			if (action.isInitializeCollection()) {
-				prototype.setLanguage(modelService.getDto(source.getLanguage(), action, LanguageDto.class));
-				prototype.setEnums(modelService.getDto(source.getEnums(), action, DynamicFieldEnumDto.class));
+			if (context.isInitializeCollection()) {
+				prototype.setLanguage(modelService.getDto(source.getLanguage(), context, LanguageDto.class));
+				prototype.setEnums(modelService.getDto(source.getEnums(), context, DynamicFieldEnumDto.class));
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

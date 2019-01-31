@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.ModelAction;
+import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -33,18 +33,18 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
 		Customer entity = customerService.findOneEntityByUuid(uuid);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, CustomerDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, CustomerDto.class);
 	}
 
 	@Override
 	public CustomerDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Customer entity = customerService.findOneEntityByProperties(properties);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(true);
-		return modelService.getDto(entity, action, CustomerDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(entity, context, CustomerDto.class);
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
 			Customer entity = modelService.getEntity(dto, Customer.class);
 			entity = (Customer) customerService.saveEntity(entity);
 
-			ModelAction action = new ModelAction();
-			action.setInitializeCollection(true);
-			return modelService.getDto(entity, action, CustomerDto.class);
+			InterceptorContext context = new InterceptorContext();
+			context.setInitializeCollection(true);
+			return modelService.getDto(entity, context, CustomerDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -79,9 +79,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Customer> page = customerService.findEntityPage(dataTableRequest, CustomerSpecification.getSpecification(dataTableRequest));
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		List<CustomerDto> dtos = modelService.getDto(page.getContent(), action, CustomerDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		List<CustomerDto> dtos = modelService.getDto(page.getContent(), context, CustomerDto.class);
 		return new PageImpl<CustomerDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -95,9 +95,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Customer.CREATED_DATE, Sort.Direction.DESC);
 		
-		ModelAction action = new ModelAction();
-		action.setInitializeCollection(false);
-		return modelService.getDto(customerService.findEntityBySorts(sorts, false), action, CustomerDto.class);
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(false);
+		return modelService.getDto(customerService.findEntityBySorts(sorts, false), context, CustomerDto.class);
 	}
 
 	@Override
@@ -108,9 +108,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Customer) {
 				
-				ModelAction action = new ModelAction();
-				action.setInitializeCollection(false);
-				entityObject[0] = modelService.getDto(entityObject[0], action, CustomerDto.class);
+				InterceptorContext context = new InterceptorContext();
+				context.setInitializeCollection(false);
+				entityObject[0] = modelService.getDto(entityObject[0], context, CustomerDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
