@@ -27,6 +27,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.AdminWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.core.data.AdminDto;
@@ -37,6 +38,9 @@ public class AdminResource {
 
 	@Autowired
 	private AdminFacade adminFacade;
+	
+	@Autowired
+	private LocaleMessageService localeMessageService;
 
 	@GetMapping(AdminWebConstants.Path.Api.CHECKID)
 	public boolean checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
@@ -109,7 +113,10 @@ public class AdminResource {
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
 			data.setRevisionType(eevisionType.name());
-			data.setPropertiesChanged(propertiesChanged);
+			for (String property : propertiesChanged) {
+				String localized = localeMessageService.getMessage("module.admin." + property);
+				data.getPropertiesChanged().add(property + "=" + localized);
+			}
 
 			dataTableResponse.getData().add(data);
 		}

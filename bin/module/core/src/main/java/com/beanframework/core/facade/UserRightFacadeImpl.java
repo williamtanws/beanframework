@@ -99,7 +99,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 			if (entityObject[0] instanceof UserRight) {
 				
 				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(false);
+				context.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], context, UserRightDto.class);
 			}
 			revisions.set(i, entityObject);

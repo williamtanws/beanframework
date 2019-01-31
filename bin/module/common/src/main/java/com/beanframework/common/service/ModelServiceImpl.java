@@ -140,7 +140,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
 	public int count(Map<String, Object> properties, Class modelClass) throws Exception {

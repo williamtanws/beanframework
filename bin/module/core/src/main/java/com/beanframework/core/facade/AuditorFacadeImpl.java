@@ -80,7 +80,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 			if (entityObject[0] instanceof Auditor) {
 				
 				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(false);
+				context.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], context, AuditorDto.class);
 			}
 			revisions.set(i, entityObject);

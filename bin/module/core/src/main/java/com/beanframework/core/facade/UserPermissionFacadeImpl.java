@@ -99,7 +99,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 			if (entityObject[0] instanceof UserPermission) {
 				
 				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(false);
+				context.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], context, UserPermissionDto.class);
 			}
 			revisions.set(i, entityObject);

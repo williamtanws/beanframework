@@ -27,6 +27,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.facade.UserGroupFacade;
 import com.beanframework.user.domain.UserGroup;
@@ -36,6 +37,9 @@ public class UserGroupResource {
 
 	@Autowired
 	private UserGroupFacade userGroupFacade;
+	
+	@Autowired
+	private LocaleMessageService localeMessageService;
 
 	@RequestMapping(UserGroupWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
@@ -109,7 +113,10 @@ public class UserGroupResource {
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
 			data.setRevisionType(eevisionType.name());
-			data.setPropertiesChanged(propertiesChanged);
+			for (String property : propertiesChanged) {
+				String localized = localeMessageService.getMessage("module.usergroup." + property);
+				data.getPropertiesChanged().add(property + "=" + localized);
+			}
 
 			dataTableResponse.getData().add(data);
 		}

@@ -1,5 +1,6 @@
 package com.beanframework.common.data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class HistoryDataResponse {
@@ -8,7 +9,7 @@ public class HistoryDataResponse {
 	String revisionId;
 	String revisionDate;
 	String revisionType;
-	Set<String> propertiesChanged;
+	Set<String> propertiesChanged = new HashSet<String>();
 
 	public Object getEntity() {
 		return entity;

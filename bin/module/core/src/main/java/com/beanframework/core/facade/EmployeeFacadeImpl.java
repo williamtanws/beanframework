@@ -168,7 +168,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			if (entityObject[0] instanceof Employee) {
 
 				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(false);
+				context.setInitializeCollection(true);
 				entityObject[0] = modelService.getDto(entityObject[0], context, EmployeeDto.class);
 			}
 			revisions.set(i, entityObject);
