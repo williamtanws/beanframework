@@ -4,7 +4,7 @@ import com.beanframework.common.data.DataTableResponseData;
 
 public class CommentDataResponse extends DataTableResponseData {
 
-	private String user;
+	private UserDto user;
 	private String html;
 	private Boolean visibled;
 	private String lastUpdatedDate;
@@ -25,11 +25,11 @@ public class CommentDataResponse extends DataTableResponseData {
 		this.visibled = visibled;
 	}
 
-	public String getUser() {
+	public UserDto getUser() {
 		return user;
 	}
 
-	public void setUser(String user) {
+	public void setUser(UserDto user) {
 		this.user = user;
 	}
 

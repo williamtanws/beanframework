@@ -10,9 +10,9 @@ import com.beanframework.backoffice.converter.DtoCronjobConverter;
 import com.beanframework.backoffice.converter.DtoCronjobDataConverter;
 import com.beanframework.backoffice.converter.DtoCustomerConverter;
 import com.beanframework.backoffice.converter.DtoDynamicFieldConverter;
-import com.beanframework.backoffice.converter.DtoDynamicFieldEnumConverter;
 import com.beanframework.backoffice.converter.DtoEmailConverter;
 import com.beanframework.backoffice.converter.DtoEmployeeConverter;
+import com.beanframework.backoffice.converter.DtoEnumerationConverter;
 import com.beanframework.backoffice.converter.DtoLanguageConverter;
 import com.beanframework.backoffice.converter.DtoMenuConverter;
 import com.beanframework.backoffice.converter.DtoMenuFieldConverter;
@@ -33,9 +33,9 @@ import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.DynamicFieldDto;
-import com.beanframework.core.data.DynamicFieldEnumDto;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.core.data.EmployeeDto;
+import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
@@ -291,15 +291,15 @@ public class BackofficeDtoConfig {
 	}
 	
 	@Bean
-	public DtoDynamicFieldEnumConverter dtoDynamicFieldEnumConverter() {
-		return new DtoDynamicFieldEnumConverter();
+	public DtoEnumerationConverter dtoEnumerationConverter() {
+		return new DtoEnumerationConverter();
 	}
 
 	@Bean
-	public ConverterMapping dtoDynamicFieldEnumConverterMapping() {
+	public ConverterMapping dtoEnumConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoDynamicFieldEnumConverter());
-		mapping.setTypeCode(DynamicFieldEnumDto.class.getSimpleName());
+		mapping.setConverter(dtoEnumerationConverter());
+		mapping.setTypeCode(EnumerationDto.class.getSimpleName());
 
 		return mapping;
 	}
@@ -319,15 +319,15 @@ public class BackofficeDtoConfig {
 	}
 
 	@Bean
-	public DtoDynamicFieldEnumConverter dtoDynamicFieldEnumValueConverter() {
-		return new DtoDynamicFieldEnumConverter();
+	public DtoEnumerationConverter dtoEnumerationValueConverter() {
+		return new DtoEnumerationConverter();
 	}
 
 	@Bean
-	public ConverterMapping dtoDynamicFieldEnumValueConverterMapping() {
+	public ConverterMapping dtoEnumValueConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoDynamicFieldEnumValueConverter());
-		mapping.setTypeCode(DynamicFieldEnumDto.class.getSimpleName());
+		mapping.setConverter(dtoEnumerationValueConverter());
+		mapping.setTypeCode(EnumerationDto.class.getSimpleName());
 
 		return mapping;
 	}

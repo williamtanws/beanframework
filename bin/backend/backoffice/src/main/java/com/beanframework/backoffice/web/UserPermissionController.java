@@ -2,8 +2,6 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,13 +35,9 @@ public class UserPermissionController extends AbstractController {
 	@Value(UserPermissionWebConstants.View.LIST)
 	private String VIEW_USERPERMISSION_LIST;
 
-	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.CREATE)
-	public UserPermissionDto populateUserPermissionCreate(HttpServletRequest request) throws Exception {
-		return new UserPermissionDto();
-	}
-
 	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE)
-	public UserPermissionDto populateUserPermissionForm(HttpServletRequest request) throws Exception {
+	public UserPermissionDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new UserPermissionDto();
 	}
 
@@ -64,6 +58,12 @@ public class UserPermissionController extends AbstractController {
 			}
 		}
 
+		return VIEW_USERPERMISSION_LIST;
+	}
+	
+	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_USERPERMISSION_LIST;
 	}
 

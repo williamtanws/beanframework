@@ -15,8 +15,8 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
 import com.beanframework.dynamicfield.domain.DynamicFieldType;
+import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.language.domain.Language;
 
 @Component
@@ -68,7 +68,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 				Language entityLanguage = modelService.findOneEntityByProperties(languageProperties, true, Language.class);
 
 				if(entityLanguage == null) {
-					LOGGER.error("DynamicFieldEnum ID not exists: " + source.getLanguage());
+					LOGGER.error("Enum ID not exists: " + source.getLanguage());
 				}
 				else {
 					prototype.setLanguage(entityLanguage);
@@ -81,7 +81,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 				for (int i = 0; i < values.length; i++) {
 
 					boolean add = true;
-					for (DynamicFieldEnum prototypeValue : prototype.getEnums()) {
+					for (Enumeration prototypeValue : prototype.getEnumerations()) {
 						if (prototypeValue.getId().equals(values[i])) {
 							add = false;
 						}
@@ -89,14 +89,13 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 
 					if (add) {
 						Map<String, Object> enumProperties = new HashMap<String, Object>();
-						enumProperties.put(DynamicFieldEnum.ID, values[i]);
-						DynamicFieldEnum entityEnum = modelService.findOneEntityByProperties(enumProperties, true, DynamicFieldEnum.class);
+						enumProperties.put(Enumeration.ID, values[i]);
+						Enumeration entityEnum = modelService.findOneEntityByProperties(enumProperties, true, Enumeration.class);
 
 						if (entityEnum == null) {
-							LOGGER.error("DynamicFieldEnum ID not exists: " + values[i]);
+							LOGGER.error("Enum ID not exists: " + values[i]);
 						} else {
-							entityEnum.setDynamicField(prototype);
-							prototype.getEnums().add(entityEnum);
+							prototype.getEnumerations().add(entityEnum);
 						}
 					}
 				}

@@ -36,7 +36,7 @@ import com.beanframework.comment.domain.Comment;
 public class CommentResource {
 	@Autowired
 	private CommentFacade commentFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
@@ -44,12 +44,12 @@ public class CommentResource {
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
-		
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Comment.ID, id);
-		
+
 		CommentDto data = commentFacade.findOneProperties(properties);
-		
+
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
@@ -60,7 +60,7 @@ public class CommentResource {
 
 		return data != null ? false : true;
 	}
-	
+
 	@RequestMapping(value = CommentWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<CommentDataResponse> page(HttpServletRequest request) throws Exception {
@@ -79,15 +79,15 @@ public class CommentResource {
 			CommentDataResponse data = new CommentDataResponse();
 			data.setUuid(dto.getUuid());
 			data.setId(dto.getId());
-			data.setUser(dto.getUser().getName());
-			data.setHtml(StringUtils.substring(dto.getHtml(), 0, 100)+"...");
+			data.setUser(dto.getUser());
+			data.setHtml(StringUtils.substring(dto.getHtml(), 0, 100) + "...");
 			data.setVisibled(dto.getVisibled());
 			data.setLastUpdatedDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(dto.getLastUpdatedDate()));
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = CommentWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -121,6 +121,7 @@ public class CommentResource {
 			}
 
 			dataTableResponse.getData().add(data);
+
 		}
 		return dataTableResponse;
 	}

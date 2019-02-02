@@ -1,5 +1,5 @@
 id,name,sort,dynamicField
-dynamicfieldenum,Dynamic Field Enum,9,name_en=Dynamic Field Enum;name_cn=动态列举
+enumeration,Enumeration,9,name_en=Enumeration;name_cn=列举
 dynamicfield,Dynamic Field,10,name_en=Dynamic Field;name_cn=动态场
 language,Language,20,name_en=Language;name_cn=语言
 userpermission,User Permission,30,name_en=User Permission;name_cn=用户权利

@@ -1,0 +1,43 @@
+id,name,sort
+task_en,Task,10
+subtask_en,Sub Task,20
+incident_en,Incident,30
+service_request_en,Service Request,40
+problem_en,Problem,50
+open_en,Open,10
+in_progress_en,In Progress,20
+closed_en,Closed,30
+blocker_en,Blocker,10
+critical_en,Critical,20
+major_en,Major,30
+minor_en,Minor,40
+trivial_en,Trivial,50
+unresolved_en,Fixed,10
+fixed_en,Fixed,20
+done_en,Done,30
+wont_fix_en,Won't Fix,40
+wont_do_en,Won't Do,50
+duplicate_en,Duplicate,60
+incomplete_en,Incomplete,70
+cannot_reproduce_en,Cannot Reproduce,80
+task_cn,任务,10
+subtask_cn,子任务,20
+incident_cn,事件,30
+service_request_cn,服务请求,40
+problem_cn,问题,50
+open_cn,打开,10
+in_progress_cn,正在进行中,20
+closed_cn,封闭,30
+blocker_cn,拦截,10
+critical_cn,关键,20
+major_cn,主要,30
+minor_cn,小,40
+trivial_cn,普通,50
+unresolved_cn,未解决,10
+fixed_cn,固定,20
+done_cn,完成,30
+wont_fix_cn,不会修复,40
+wont_do_cn,不会做,50
+duplicate_cn,复制,60
+incomplete_cn,不完整,70
+cannot_reproduce_cn,无法重现,80

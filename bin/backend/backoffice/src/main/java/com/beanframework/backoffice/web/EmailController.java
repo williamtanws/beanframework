@@ -2,8 +2,6 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,13 +36,9 @@ public class EmailController extends AbstractController {
 	@Value(EmailWebConstants.View.LIST)
 	private String VIEW_EMAIL_LIST;
 
-	@ModelAttribute(EmailWebConstants.ModelAttribute.CREATE)
-	public EmailDto populateEmailCreate(HttpServletRequest request) throws Exception {
-		return new EmailDto();
-	}
-
 	@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE)
-	public EmailDto populateEmailForm(HttpServletRequest request) throws Exception {
+	public EmailDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new EmailDto();
 	}
 
@@ -67,7 +61,14 @@ public class EmailController extends AbstractController {
 
 		return VIEW_EMAIL_LIST;
 	}
+	
 
+	@GetMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
+		return VIEW_EMAIL_LIST;
+	}
+	
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
 	public RedirectView create(@ModelAttribute(EmailWebConstants.ModelAttribute.CREATE) EmailDto emailCreate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {

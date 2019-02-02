@@ -7,7 +7,8 @@
 <body>
 	<th:block layout:fragment="update">
 		<form id="menu-update-form" role="form" th:action="${@environment.getProperty('path.menu')}" method="post" th:object="${menuUpdate}">
-			<input type="hidden" name="update">
+			<input type="hidden" name="create" th:if="*{uuid == null}"/>
+			<input type="hidden" name="update" th:if="*{uuid != null}"/>
 			<input type="hidden" name="uuid" th:value="${menuUpdate.uuid}" />
 			<input type="hidden" class="form-control" name="sort" th:value="*{sort}">
 			<input type="hidden" class="form-control" name="parent.uuid" th:if="*{parent != null}" th:value="*{parent.uuid}">
@@ -48,10 +49,10 @@
 							<li>
 								<a href="#tab_usergroup" data-toggle="tab" th:text="#{module.usergroup}" onclick="changeTab('usergroup')"></a>
 							</li>
-							<li>
+							<li th:if="*{uuid != null}">
 								<a href="#tab_history" data-toggle="tab" th:text="#{module.history}" onclick="changeTab('history')"></a>
 							</li>
-							<li>
+							<li th:if="*{uuid != null}">
 								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
@@ -59,7 +60,7 @@
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="~{/backoffice/adminlte/common/component/general :: general}"></th:block>
+										<th:block layout:insert="~{/common/adminlte/common/component/general :: general}"></th:block>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
@@ -118,7 +119,7 @@
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="~{/backoffice/adminlte/common/component/attribute :: attribute}"></th:block>
+										<th:block layout:insert="~{/common/adminlte/common/component/attribute :: attribute}"></th:block>
 									</div>
 								</div>
 								<!-- /.box-body -->
@@ -126,20 +127,20 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_usergroup">
 								<div class="box-body">
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/usergroup :: usergroup (userGroups='userGroups')}"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/usergroup :: usergroup (userGroups='userGroups')}"></th:block>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_history">
+							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.menu.history')}(uuid=*{uuid})} )}"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.menu.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_administration">
+							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/administration :: administration}"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/administration :: administration}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->

@@ -13,7 +13,7 @@ public class UserPermissionInitializeInterceptor implements InitializeIntercepto
 	public void onInitialize(UserPermission model) throws InterceptorException {
 		Hibernate.initialize(model.getFields());
 		for (UserPermissionField field : model.getFields()) {
-			Hibernate.initialize(field.getDynamicField().getEnums());
+			Hibernate.initialize(field.getDynamicField().getEnumerations());
 		}
 	}
 }

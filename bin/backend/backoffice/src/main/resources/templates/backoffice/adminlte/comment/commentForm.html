@@ -7,7 +7,8 @@
 <body>
 	<th:block layout:fragment="update">
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.comment')}" method="post" th:object="${commentUpdate}">
-			<input type="hidden" name="update" />
+			<input type="hidden" name="create" th:if="*{uuid == null}"/>
+			<input type="hidden" name="update" th:if="*{uuid != null}"/>
 			<input type="hidden" name="uuid" th:value="${commentUpdate.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
@@ -15,11 +16,11 @@
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/delete :: button (deleteAuthority='comment_delete')}"></th:block>
+									<th:block th:if="*{uuid != null}" layout:insert="~{/common/adminlte/common/component/delete :: button (deleteAuthority='comment_delete')}"></th:block>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/refresh :: button (deleteAuthority='comment_delete')}"></th:block>
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/update :: button (updateAuthority='comment_update')}"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/refresh :: button (deleteAuthority='comment_delete')}"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/update :: button (updateAuthority='comment_update')}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -35,10 +36,10 @@
 							<li class="active">
 								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
 							</li>
-							<li>
+							<li th:if="*{uuid != null}">
 								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
 							</li>
-							<li>
+							<li th:if="*{uuid != null}">
 								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
@@ -77,15 +78,15 @@
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_history">
+							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.comment.history')}(uuid=*{uuid})} )}"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.comment.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_administration">
+							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{/backoffice/adminlte/common/component/administration :: administration}"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/administration :: administration}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -174,7 +175,7 @@
 		</script>
 
 		<th:block
-			layout:insert="~{/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.comment')}}, objectSearch=${commentSearch}, deleteUuid=${commentUpdate.uuid})}"></th:block>
+			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.comment')}}, objectSearch=${commentSearch}, deleteUuid=${commentUpdate.uuid})}"></th:block>
 	</th:block>
 </body>
 </html>

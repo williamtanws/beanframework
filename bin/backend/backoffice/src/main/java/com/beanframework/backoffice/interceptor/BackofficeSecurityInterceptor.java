@@ -18,21 +18,16 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.employee.domain.Employee;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.service.LanguageService;
-import com.beanframework.common.exception.BusinessException;
-import com.beanframework.core.facade.MenuFacade;
-import com.beanframework.employee.domain.Employee;
-import com.beanframework.menu.domain.Menu;
 
 public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 
 	Logger logger = LoggerFactory.getLogger(BackofficeSecurityInterceptor.class);
 
 	UrlPathHelper urlPathHelper = new UrlPathHelper();
-	
-	@Autowired
-	private MenuFacade menuFacade;
 	
 	@Autowired
 	private LanguageService languageService;
@@ -49,18 +44,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 
 		if (auth != null && auth.getPrincipal() instanceof Employee && modelAndView != null) {
 
-			getMenuNavigation(request, modelAndView);
-
 			getLanguage(modelAndView);
-		}
-	}
-
-	protected void getMenuNavigation(HttpServletRequest request, ModelAndView modelAndView) throws BusinessException {
-		try {
-			List<Menu> menuNavigation = menuFacade.findMenuTreeByCurrentUser();
-			modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MENU_NAVIGATION, menuNavigation);
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
 		}
 	}
 

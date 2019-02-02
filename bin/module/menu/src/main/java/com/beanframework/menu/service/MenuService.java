@@ -25,9 +25,7 @@ public interface MenuService {
 	
 	void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception;
 
-	List<Menu> findEntityMenuTree() throws Exception;
-
-	List<Menu> filterEntityMenuTreeByCurrentUser(List<Menu> cachedMenuTree) throws Exception;
+	List<Menu> findEntityMenuTree(boolean enabled) throws Exception;
 
 	<T> Page<Menu> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
 

@@ -15,7 +15,7 @@ public class CustomerInitializeInterceptor implements InitializeInterceptor<Cust
 
 		Hibernate.initialize(model.getFields());
 		for (UserField field : model.getFields()) {
-			Hibernate.initialize(field.getDynamicField().getEnums());
+			Hibernate.initialize(field.getDynamicField().getEnumerations());
 		}
 	}
 }

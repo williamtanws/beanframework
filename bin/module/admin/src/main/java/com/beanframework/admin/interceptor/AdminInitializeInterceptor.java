@@ -15,7 +15,7 @@ public class AdminInitializeInterceptor implements InitializeInterceptor<Admin> 
 
 		Hibernate.initialize(model.getFields());
 		for (UserField field : model.getFields()) {
-			Hibernate.initialize(field.getDynamicField().getEnums());
+			Hibernate.initialize(field.getDynamicField().getEnumerations());
 		}
 	}
 }

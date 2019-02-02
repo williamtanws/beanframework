@@ -61,6 +61,8 @@ public class DataTableRequest {
 		
 	/** The cache queries. */
 	private List<DataTableColumnSpecs> cacheQueries = new ArrayList<DataTableColumnSpecs>(0);
+	
+	private Pageable pageable;
 
 	/**
 	 * Instantiates a new data table request.
@@ -233,6 +235,22 @@ public class DataTableRequest {
 		this.isGlobalSearch = isGlobalSearch;
 	}
 
+	public List<DataTableColumnSpecs> getCacheQueries() {
+		return cacheQueries;
+	}
+
+	public void setCacheQueries(List<DataTableColumnSpecs> cacheQueries) {
+		this.cacheQueries = cacheQueries;
+	}
+
+	public void setPageable(Pageable pageable) {
+		this.pageable = pageable;
+	}
+	
+	public Pageable getPageable() {
+		return this.pageable;
+	}
+
 	/**
 	 * Prepare data table request.
 	 *
@@ -286,6 +304,15 @@ public class DataTableRequest {
 				this.setOrders(orders);
 			}
 		}
+		
+		List<Order> sortOrders = new ArrayList<Order>();
+		for (DataTableColumnSpecs spec : orders) {
+			if (StringUtils.isNotBlank(spec.getSortDir())) {
+				Order order = new Order(Direction.fromString(spec.getSortDir()), spec.getData());
+				sortOrders.add(order);
+			}
+		}
+		this.setPageable(PageRequest.of(this.getPaginationRequest().getPageNumber(), this.getPaginationRequest().getPageSize(), Sort.by(sortOrders)));
 	}
 
 	private int getNumberOfColumns(HttpServletRequest request) {
@@ -339,17 +366,6 @@ public class DataTableRequest {
 	/** The max params to check. */
 	private int maxParamsToCheck = 0;
 
-	public Pageable getPageable() {
-		List<Order> sortOrders = new ArrayList<Order>();
-		for (DataTableColumnSpecs spec : orders) {
-			if (StringUtils.isNotBlank(spec.getSortDir())) {
-				Order order = new Order(Direction.fromString(spec.getSortDir()), spec.getData());
-				sortOrders.add(order);
-			}
-		}
-		return PageRequest.of(this.getPaginationRequest().getPageNumber(), this.getPaginationRequest().getPageSize(), Sort.by(sortOrders));
-	}
-
 	public AuditCriterion getAuditCriterion() {
 
 		AuditCriterion orCriterion = null;
@@ -384,14 +400,7 @@ public class DataTableRequest {
 	@Override
 	public String toString() {
 		return "DataTableRequest [uniqueId=" + uniqueId + ", start=" + start + ", length=" + length + ", search=" + search + ", regex=" + regex + ", columns=" + columns + ", orders=" + orders
-				+ ", cacheQueries=" + cacheQueries + ", isGlobalSearch=" + isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + "]";
+				+ ", cacheQueries=" + cacheQueries + ", isGlobalSearch=" + isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + ", pageable=" + pageable + "]";
 	}
 
-	public List<DataTableColumnSpecs> getCacheQueries() {
-		return cacheQueries;
-	}
-
-	public void setCacheQueries(List<DataTableColumnSpecs> cacheQueries) {
-		this.cacheQueries = cacheQueries;
-	}
 }

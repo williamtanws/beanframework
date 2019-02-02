@@ -33,13 +33,13 @@ public class DynamicFieldDto extends GenericDto {
 
 	private LanguageDto language;
 
-	private List<DynamicFieldEnumDto> enums = new ArrayList<DynamicFieldEnumDto>();
+	private List<EnumerationDto> enumerations = new ArrayList<EnumerationDto>();
 
-	private String languageUuid;
+	private String tableSelectedLanguage;
 
-	private String[] tableEnums;
+	private String[] tableEnumerations;
 
-	private String[] tableSelectedEnums;
+	private String[] tableSelectedEnumerations;
 
 	public String getName() {
 		return name;
@@ -97,36 +97,36 @@ public class DynamicFieldDto extends GenericDto {
 		this.language = language;
 	}
 
-	public List<DynamicFieldEnumDto> getEnums() {
-		return enums;
+	public List<EnumerationDto> getEnumerations() {
+		return enumerations;
 	}
 
-	public void setEnums(List<DynamicFieldEnumDto> values) {
-		this.enums = values;
+	public void setEnumerations(List<EnumerationDto> enumerations) {
+		this.enumerations = enumerations;
 	}
 
-	public String getLanguageUuid() {
-		return languageUuid;
+	public String getTableSelectedLanguage() {
+		return tableSelectedLanguage;
 	}
 
-	public void setLanguageUuid(String languageUuid) {
-		this.languageUuid = languageUuid;
+	public void setTableSelectedLanguage(String tableSelectedLanguage) {
+		this.tableSelectedLanguage = tableSelectedLanguage;
 	}
 
-	public String[] getTableEnums() {
-		return tableEnums;
+	public String[] getTableEnumerations() {
+		return tableEnumerations;
 	}
 
-	public void setTableEnums(String[] tableEnums) {
-		this.tableEnums = tableEnums;
+	public void setTableEnumerations(String[] tableEnumerations) {
+		this.tableEnumerations = tableEnumerations;
 	}
 
-	public String[] getTableSelectedEnums() {
-		return tableSelectedEnums;
+	public String[] getTableSelectedEnumerations() {
+		return tableSelectedEnumerations;
 	}
 
-	public void setTableSelectedEnums(String[] tableSelectedEnums) {
-		this.tableSelectedEnums = tableSelectedEnums;
+	public void setTableSelectedEnumerations(String[] tableSelectedEnumerations) {
+		this.tableSelectedEnumerations = tableSelectedEnumerations;
 	}
 
 }

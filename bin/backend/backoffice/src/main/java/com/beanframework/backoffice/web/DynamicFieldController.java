@@ -1,9 +1,5 @@
 package com.beanframework.backoffice.web;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,12 +16,8 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.DynamicFieldDto;
-import com.beanframework.core.data.DynamicFieldEnumDto;
-import com.beanframework.core.data.LanguageDto;
 import com.beanframework.core.facade.DynamicFieldFacade;
-import com.beanframework.core.facade.LanguageFacade;
 import com.beanframework.core.facade.DynamicFieldFacade.DynamicFieldPreAuthorizeEnum;
 
 @Controller
@@ -34,31 +26,21 @@ public class DynamicFieldController extends AbstractController {
 	@Autowired
 	private DynamicFieldFacade dynamicFieldFacade;
 
-	@Autowired
-	private LanguageFacade languageFacade;
-
 	@Value(DynamicFieldWebConstants.Path.DYNAMICFIELD)
 	private String PATH_DYNAMICFIELD;
 
 	@Value(DynamicFieldWebConstants.View.LIST)
 	private String VIEW_DYNAMICFIELD_LIST;
 
-	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.CREATE)
-	public DynamicFieldDto create() throws Exception {
-		return new DynamicFieldDto();
-	}
-
 	@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE)
-	public DynamicFieldDto update() throws Exception {
+	public DynamicFieldDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new DynamicFieldDto();
 	}
 
 	@PreAuthorize(DynamicFieldPreAuthorizeEnum.READ)
 	@GetMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD)
 	public String list(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto updateDto, Model model) throws Exception {
-
-		List<LanguageDto> languages = languageFacade.findAllDtoLanguages();
-		model.addAttribute("languages", languages);
 
 		if (updateDto.getUuid() != null) {
 
@@ -73,6 +55,12 @@ public class DynamicFieldController extends AbstractController {
 			}
 		}
 
+		return VIEW_DYNAMICFIELD_LIST;
+	}
+	
+	@GetMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_DYNAMICFIELD_LIST;
 	}
 
@@ -108,42 +96,6 @@ public class DynamicFieldController extends AbstractController {
 		if (updateDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
-
-			// DynamicFieldEnum
-			if (updateDto.getTableEnums() != null) {
-				List<DynamicFieldEnumDto> enums = dynamicFieldFacade.findOneByUuid(updateDto.getUuid()).getEnums();
-
-				for (int i = 0; i < updateDto.getTableEnums().length; i++) {
-
-					boolean remove = true;
-					if (updateDto.getTableSelectedEnums() != null && updateDto.getTableSelectedEnums().length > i && BooleanUtils.parseBoolean(updateDto.getTableSelectedEnums()[i])) {
-						remove = false;
-					}
-
-					if (remove) {
-						for (Iterator<DynamicFieldEnumDto> childsIterator = enums.listIterator(); childsIterator.hasNext();) {
-							if (childsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableEnums()[i]))) {
-								childsIterator.remove();
-							}
-						}
-					} else {
-						boolean add = true;
-						for (Iterator<DynamicFieldEnumDto> childsIterator = enums.listIterator(); childsIterator.hasNext();) {
-							if (childsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableEnums()[i]))) {
-								add = false;
-							}
-						}
-
-						if (add) {
-							DynamicFieldEnumDto child = new DynamicFieldEnumDto();
-							child.setUuid(UUID.fromString(updateDto.getTableEnums()[i]));
-							enums.add(child);
-						}
-					}
-				}
-				updateDto.setEnums(enums);
-			}
-
 			try {
 				updateDto = dynamicFieldFacade.update(updateDto);
 

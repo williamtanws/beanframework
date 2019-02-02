@@ -9,10 +9,7 @@
 		<section class="content" th:with="configurationValue=#{module.configuration.value}">
 			<!-- List Table-->
 			<th:block
-				layout:insert="~{/console/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.configuration.icon')}}, title=#{module.configuration}, objectUpdate=${configurationUpdate}, createAuthority='configuration_create', updateAuthority='configuration_update', tableName='configuration', listUrl=@{${@environment.getProperty('path.api.configuration.page')}}, listFields=${ {{'id', 'ID'},{'value', configurationValue}} }, editFormAction=@{${@environment.getProperty('path.configuration')}}, editForm=@{${@environment.getProperty('view.configuration.form')}}, createButton='1' )}"></th:block>
-			<!-- Create Modal-->
-			<th:block sec:authorize="hasAuthority('configuration_create')"
-				layout:insert="~{/console/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.configuration')}}, createObject=${configurationCreate}, createForm='/console/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.configuration.checkid')})}"></th:block>
+				layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.configuration.icon')}}, title=#{module.configuration}, objectUpdate=${configurationUpdate}, createAuthority='configuration_create', updateAuthority='configuration_update', tableName='configuration', listUrl=@{${@environment.getProperty('path.api.configuration.page')}}, listFields=${ {{'id', 'ID'},{'value', configurationValue}} }, editFormAction=@{${@environment.getProperty('path.configuration')}}, editForm=@{${@environment.getProperty('view.configuration.form')}}, createButton='1' )}"></th:block>
 		</section>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/

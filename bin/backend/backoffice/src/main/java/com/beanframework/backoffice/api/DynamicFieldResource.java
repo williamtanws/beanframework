@@ -36,7 +36,7 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 public class DynamicFieldResource {
 	@Autowired
 	private DynamicFieldFacade dynamicFieldFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
@@ -44,12 +44,12 @@ public class DynamicFieldResource {
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
-		
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(DynamicField.ID, id);
-		
+
 		DynamicFieldDto data = dynamicFieldFacade.findOneProperties(properties);
-		
+
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
@@ -60,7 +60,7 @@ public class DynamicFieldResource {
 
 		return data != null ? false : true;
 	}
-	
+
 	@RequestMapping(value = DynamicFieldWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DynamicFieldDataResponse> page(HttpServletRequest request) throws Exception {
@@ -86,7 +86,7 @@ public class DynamicFieldResource {
 		}
 		return dataTableResponse;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = DynamicFieldWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody

@@ -1,6 +1,5 @@
 package com.beanframework.core.facade;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -94,7 +93,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
-			List<Menu> entities = menuService.findEntityMenuTree();
+			List<Menu> entities = menuService.findEntityMenuTree(false);
 			
 			InterceptorContext context = new InterceptorContext();
 			context.setInitializeCollection(true);
@@ -102,14 +101,6 @@ public class MenuFacadeImpl implements MenuFacade {
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
-	}
-
-	@Override
-	public List<Menu> findMenuTreeByCurrentUser() throws Exception {
-		List<Menu> menuTree = new ArrayList<Menu>();
-		menuTree.addAll(menuService.findEntityMenuTree());
-		
-		return menuService.filterEntityMenuTreeByCurrentUser(menuTree);
 	}
 	
 	@Override

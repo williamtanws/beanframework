@@ -36,7 +36,7 @@ import com.beanframework.customer.domain.Customer;
 public class CustomerResource {
 	@Autowired
 	private CustomerFacade customerFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
@@ -118,6 +118,7 @@ public class CustomerResource {
 			}
 
 			dataTableResponse.getData().add(data);
+
 		}
 		return dataTableResponse;
 	}

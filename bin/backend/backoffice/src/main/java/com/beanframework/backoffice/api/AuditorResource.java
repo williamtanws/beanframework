@@ -29,10 +29,10 @@ public class AuditorResource {
 
 	@Autowired
 	private AuditorFacade auditorFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
-	
+
 	@RequestMapping(value = AuditorWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
@@ -90,6 +90,7 @@ public class AuditorResource {
 			}
 
 			dataTableResponse.getData().add(data);
+
 		}
 		return dataTableResponse;
 	}

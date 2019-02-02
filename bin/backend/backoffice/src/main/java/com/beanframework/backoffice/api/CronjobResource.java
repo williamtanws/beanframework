@@ -38,7 +38,7 @@ public class CronjobResource {
 
 	@Autowired
 	private CronjobFacade cronjobFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
@@ -62,7 +62,7 @@ public class CronjobResource {
 
 		return data != null ? false : true;
 	}
-	
+
 	@RequestMapping(value = CronjobWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
@@ -120,6 +120,7 @@ public class CronjobResource {
 			}
 
 			dataTableResponse.getData().add(data);
+
 		}
 		return dataTableResponse;
 	}

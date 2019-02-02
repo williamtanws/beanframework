@@ -143,6 +143,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 						for (Iterator<UserGroup> userGroupsIterator = prototype.getUserGroups().listIterator(); userGroupsIterator.hasNext();) {
 							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(source.getTableUserGroups()[i]))) {
 								userGroupsIterator.remove();
+								prototype.setLastModifiedDate(lastModifiedDate);
 							}
 						}
 					} else {
@@ -156,6 +157,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 						if (add) {
 							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), false, UserGroup.class);
 							prototype.getUserGroups().add(entityUserGroups);
+							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}

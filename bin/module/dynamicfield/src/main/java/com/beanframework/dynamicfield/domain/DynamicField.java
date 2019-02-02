@@ -9,21 +9,22 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.DynamicFieldConstants;
+import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.language.domain.Language;
 
 @Entity
@@ -43,6 +44,7 @@ public class DynamicField extends GenericEntity {
 	public static final String RULE = "rule";
 	public static final String LABEL = "label";
 	public static final String LANGUAGE = "language";
+	public static final String ENUMERATIONS = "enumerations";
 
 	@Audited(withModifiedFlag = true)
 	private String name;
@@ -69,11 +71,11 @@ public class DynamicField extends GenericEntity {
 	@JoinColumn(name = "language_uuid")
 	private Language language;
 
-	@AuditMappedBy(mappedBy = DynamicFieldEnum.DYNAMIC_FIELD) 
 	@Cascade({ CascadeType.REFRESH })
-	@OneToMany(mappedBy = DynamicFieldEnum.DYNAMIC_FIELD, orphanRemoval = true, fetch = FetchType.LAZY)
-	@OrderBy(DynamicFieldEnum.SORT + " ASC")
-	private List<DynamicFieldEnum> enums = new ArrayList<DynamicFieldEnum>();
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "enum_uuid", referencedColumnName = "uuid"))
+	@OrderBy(Enumeration.SORT + " ASC")
+	private List<Enumeration> enumerations = new ArrayList<Enumeration>();
 
 	public String getName() {
 		return name;
@@ -131,11 +133,11 @@ public class DynamicField extends GenericEntity {
 		this.language = language;
 	}
 
-	public List<DynamicFieldEnum> getEnums() {
-		return enums;
+	public List<Enumeration> getEnumerations() {
+		return enumerations;
 	}
 
-	public void setEnums(List<DynamicFieldEnum> enums) {
-		this.enums = enums;
+	public void setEnumerations(List<Enumeration> enumerations) {
+		this.enumerations = enumerations;
 	}
 }

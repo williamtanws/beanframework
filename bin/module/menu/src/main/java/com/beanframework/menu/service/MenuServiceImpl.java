@@ -3,14 +3,10 @@ package com.beanframework.menu.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -21,8 +17,6 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +25,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.repository.MenuRepository;
-import com.beanframework.user.domain.User;
-import com.beanframework.user.domain.UserAuthority;
-import com.beanframework.user.domain.UserGroup;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -58,7 +49,7 @@ public class MenuServiceImpl implements MenuService {
 	@Cacheable(value = "MenuOneProperties", key = "#properties")
 	@Override
 	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true,Menu.class);
+		return modelService.findOneEntityByProperties(properties, true, Menu.class);
 	}
 
 	@Caching(evict = { //
@@ -162,13 +153,17 @@ public class MenuServiceImpl implements MenuService {
 		return menuList;
 	}
 
-	@Cacheable(value = "MenuTree")
+	@Cacheable(value = "MenuTree", key = "'enabled:'+#enabled")
 	@Transactional(readOnly = true)
 	@Override
-	public List<Menu> findEntityMenuTree() throws Exception {
+	public List<Menu> findEntityMenuTree(boolean enabled) throws Exception {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.PARENT, null);
+
+		if (enabled) {
+			properties.put(Menu.ENABLED, enabled);
+		}
 
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
@@ -178,79 +173,6 @@ public class MenuServiceImpl implements MenuService {
 		return menuTree;
 	}
 
-	@Override
-	public List<Menu> filterEntityMenuTreeByCurrentUser(List<Menu> cachedMenuTree) throws Exception {
-
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		User user = (User) auth.getPrincipal();
-
-		filterAuthorizedMenu(cachedMenuTree, collectUserGroupUuid(user.getUserGroups()));
-		filterEmptyChildMenu(cachedMenuTree);
-		return cachedMenuTree;
-	}
-
-	private Set<UUID> collectUserGroupUuid(List<UserGroup> userGroups) {
-		Set<UUID> userGroupUuids = new LinkedHashSet<UUID>();
-		for (UserGroup userGroup : userGroups) {
-			userGroupUuids.add(userGroup.getUuid());
-			if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
-				userGroupUuids.addAll(collectUserGroupUuid(userGroup.getUserGroups()));
-			}
-		}
-		return userGroupUuids;
-	}
-
-	private void filterAuthorizedMenu(List<Menu> menu, Set<UUID> userGroupUuids) {
-		Iterator<Menu> parent = menu.iterator();
-		while (parent.hasNext()) {
-			Menu menuNext = parent.next();
-			if (menuNext.getEnabled() == false) {
-				parent.remove();
-			}
-
-			boolean remove = true;
-			if (menuNext.getChilds().isEmpty()) {
-				for (UserGroup userGroup : menuNext.getUserGroups()) {
-					if (userGroupUuids.contains(userGroup.getUuid())) {
-						for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-							if (userAuthority.getUserPermission().getId().equals(menuNext.getId())) {
-								if (userAuthority.getEnabled().equals(Boolean.TRUE)) {
-									remove = false;
-								}
-							}
-						}
-					}
-				}
-			}
-			else {
-				remove = false;
-			}
-			
-			if (remove) {
-				parent.remove();
-			}
-
-			if (menuNext.getChilds() != null && menuNext.getChilds().isEmpty() == false) {
-				filterAuthorizedMenu(menuNext.getChilds(), userGroupUuids);
-			}
-		}
-	}
-	
-	private void filterEmptyChildMenu(List<Menu> parent) {
-		Iterator<Menu> menu = parent.iterator();
-		while (menu.hasNext()) {
-			Menu menuNext = menu.next();
-			if(StringUtils.isBlank(menuNext.getPath()) && menuNext.getChilds().isEmpty()) {
-				menu.remove();
-			}
-			
-			if(menuNext.getChilds().isEmpty() == false) {
-				filterEmptyChildMenu(menuNext.getChilds());
-			}
-		}
-	}
-	
 	@Cacheable(value = "MenusPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Menu> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
@@ -262,7 +184,7 @@ public class MenuServiceImpl implements MenuService {
 	public int count() throws Exception {
 		return modelService.count(Menu.class);
 	}
-	
+
 	@Cacheable(value = "MenusHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -274,7 +196,7 @@ public class MenuServiceImpl implements MenuService {
 		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
-		
+
 		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
 
 	}

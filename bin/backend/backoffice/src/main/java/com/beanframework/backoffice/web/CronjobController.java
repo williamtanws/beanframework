@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,13 +46,9 @@ public class CronjobController extends AbstractController {
 	@Value(CronjobWebConstants.View.LIST)
 	private String VIEW_CRONJOB_LIST;
 
-	@ModelAttribute(CronjobWebConstants.ModelAttribute.CREATE)
-	public CronjobDto populateCronjobCreate(HttpServletRequest request) throws Exception {
-		return new CronjobDto();
-	}
-
 	@ModelAttribute(CronjobWebConstants.ModelAttribute.UPDATE)
-	public CronjobDto populateCronjobForm(HttpServletRequest request) throws Exception {
+	public CronjobDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new CronjobDto();
 	}
 
@@ -75,6 +69,12 @@ public class CronjobController extends AbstractController {
 			}
 		}
 
+		return VIEW_CRONJOB_LIST;
+	}
+	
+	@GetMapping(value = CronjobWebConstants.Path.CRONJOB, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_CRONJOB_LIST;
 	}
 
