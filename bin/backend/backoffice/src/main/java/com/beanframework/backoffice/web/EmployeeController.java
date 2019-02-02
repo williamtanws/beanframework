@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,13 +40,9 @@ public class EmployeeController extends AbstractController {
 	@Value(EmployeeWebConstants.View.LIST)
 	private String VIEW_EMPLOYEE_LIST;
 
-	@ModelAttribute(EmployeeWebConstants.ModelAttribute.CREATE)
-	public EmployeeDto create(HttpServletRequest request) throws Exception {
-		return new EmployeeDto();
-	}
-
 	@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE)
-	public EmployeeDto update(HttpServletRequest request) throws Exception {
+	public EmployeeDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new EmployeeDto();
 	}
 
@@ -69,6 +63,12 @@ public class EmployeeController extends AbstractController {
 			}
 		}
 
+		return VIEW_EMPLOYEE_LIST;
+	}
+	
+	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_EMPLOYEE_LIST;
 	}
 

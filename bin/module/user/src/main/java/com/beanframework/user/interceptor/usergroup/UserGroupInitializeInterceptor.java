@@ -19,11 +19,11 @@ public class UserGroupInitializeInterceptor implements InitializeInterceptor<Use
 		for (UserAuthority userAuthority : model.getUserAuthorities()) {
 			Hibernate.initialize(userAuthority.getUserRight());
 			for (UserRightField field : userAuthority.getUserRight().getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnums());
+				Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 			Hibernate.initialize(userAuthority.getUserPermission());
 			for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnums());
+				Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 		}
 
@@ -31,23 +31,23 @@ public class UserGroupInitializeInterceptor implements InitializeInterceptor<Use
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
 			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnums());
+				Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
 				for (UserRightField field : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnums());
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 				Hibernate.initialize(userAuthority.getUserPermission());
 				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnums());
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 			}
 		}
 
 		Hibernate.initialize(model.getFields());
 		for (UserGroupField field : model.getFields()) {
-			Hibernate.initialize(field.getDynamicField().getEnums());
+			Hibernate.initialize(field.getDynamicField().getEnumerations());
 		}
 	}
 }

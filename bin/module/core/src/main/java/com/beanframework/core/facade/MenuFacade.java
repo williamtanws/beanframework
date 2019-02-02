@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.MenuDto;
-import com.beanframework.menu.domain.Menu;
 
 public interface MenuFacade {
 
@@ -41,8 +40,6 @@ public interface MenuFacade {
 
 	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	List<MenuDto> findMenuTree() throws BusinessException;
-
-	List<Menu> findMenuTreeByCurrentUser() throws Exception;
 
 	Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 

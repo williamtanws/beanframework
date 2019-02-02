@@ -1,9 +1,6 @@
 package com.beanframework.backoffice.web;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,9 +19,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CustomerWebConstants;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.CustomerDto;
-import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.facade.CustomerFacade;
 import com.beanframework.core.facade.CustomerFacade.CustomerPreAuthorizeEnum;
 
@@ -40,13 +35,9 @@ public class CustomerController extends AbstractController {
 	@Value(CustomerWebConstants.View.LIST)
 	private String VIEW_CUSTOMER_LIST;
 
-	@ModelAttribute(CustomerWebConstants.ModelAttribute.CREATE)
-	public CustomerDto create() throws Exception {
-		return new CustomerDto();
-	}
-
 	@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE)
-	public CustomerDto update() throws Exception {
+	public CustomerDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new CustomerDto();
 	}
 
@@ -67,6 +58,12 @@ public class CustomerController extends AbstractController {
 			}
 		}
 
+		return VIEW_CUSTOMER_LIST;
+	}
+	
+	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_CUSTOMER_LIST;
 	}
 
@@ -102,41 +99,6 @@ public class CustomerController extends AbstractController {
 		if (updateDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
-
-			// UserGroup
-			if (updateDto.getTableUserGroups() != null) {
-				List<UserGroupDto> userGroups = customerFacade.findOneByUuid(updateDto.getUuid()).getUserGroups();
-
-				for (int i = 0; i < updateDto.getTableUserGroups().length; i++) {
-
-					boolean remove = true;
-					if (updateDto.getTableSelectedUserGroups() != null && updateDto.getTableSelectedUserGroups().length > i && BooleanUtils.parseBoolean(updateDto.getTableSelectedUserGroups()[i])) {
-						remove = false;
-					}
-
-					if (remove) {
-						for (Iterator<UserGroupDto> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext();) {
-							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableUserGroups()[i]))) {
-								userGroupsIterator.remove();
-							}
-						}
-					} else {
-						boolean add = true;
-						for (Iterator<UserGroupDto> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext();) {
-							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableUserGroups()[i]))) {
-								add = false;
-							}
-						}
-
-						if (add) {
-							UserGroupDto userGroup = new UserGroupDto();
-							userGroup.setUuid(UUID.fromString(updateDto.getTableUserGroups()[i]));
-							userGroups.add(userGroup);
-						}
-					}
-				}
-				updateDto.setUserGroups(userGroups);
-			}
 
 			try {
 				updateDto = customerFacade.update(updateDto);

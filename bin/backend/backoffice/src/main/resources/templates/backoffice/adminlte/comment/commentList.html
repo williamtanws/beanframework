@@ -9,16 +9,14 @@
 		<section class="content" th:with="user=#{module.comment.user}, commentHtml=#{module.comment.html}, commentVisibled=#{module.comment.visibled}, lastUpdatedDate=#{module.comment.lastUpdatedDate}">
 			<!-- List Table-->
 			<th:block
-				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.comment.icon')}}, title=#{module.comment}, objectUpdate=${commentUpdate}, createAuthority='comment_create', updateAuthority='comment_update', tableName='comment', listUrl=@{${@environment.getProperty('path.api.comment.page')}}, listFields=${ {{'user', user},{'html', commentHtml}, {'visibled', commentVisibled}, {'lastUpdatedDate', lastUpdatedDate}} }, editFormAction=@{${@environment.getProperty('path.comment')}}, editForm=@{${@environment.getProperty('view.comment.form')}}, createButton='0' )}"></th:block>
+				layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.comment.icon')}}, title=#{module.comment}, objectUpdate=${commentUpdate}, createAuthority='comment_create', updateAuthority='comment_update', tableName='comment', listUrl=@{${@environment.getProperty('path.api.comment.page')}}, listFields=${ {{'user.name', user},{'html', commentHtml}, {'visibled', commentVisibled}, {'lastUpdatedDate', lastUpdatedDate}} }, editFormAction=@{${@environment.getProperty('path.comment')}}, editForm=@{${@environment.getProperty('view.comment.form')}}, createButton='0' )}"></th:block>
 		</section>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 			$('#mainTable thead tr:eq(1) th').each(function(index) {
-				if(index == 1){
-					var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
-				    var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
-		            $(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
-				}
+				var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
+				var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+		        $(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
 			});
 			/*]]>*/
 		</script>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="general">
+		<th:block layout:insert="~{/common/adminlte/common/component/general :: input}"></th:block>
+	</th:block>
+	<th:block layout:fragment="text">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="id" th:text="#{module.backoffice.id}+': '"></label>
+				<span class="text-block" th:text="*{id}"></span>
+				<input type="hidden" class="form-control" name="id" th:value="*{id}">
+			</div>
+		</div>
+	</th:block>
+	<th:block layout:fragment="input">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="id" th:text="#{module.backoffice.id}"></label>
+				<input type="text" class="form-control" name="id" th:value="*{id}">
+				<span class="help-block"></span>
+			</div>
+		</div>
+	</th:block>
+</body>
+</html>

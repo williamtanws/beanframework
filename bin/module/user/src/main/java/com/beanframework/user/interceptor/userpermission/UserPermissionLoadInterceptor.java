@@ -13,7 +13,7 @@ public class UserPermissionLoadInterceptor implements LoadInterceptor<UserPermis
 	public void onLoad(UserPermission model) throws InterceptorException {
 		
 		for (UserPermissionField field : model.getFields()) {
-			Hibernate.initialize(field.getDynamicField().getEnums());
+			Hibernate.initialize(field.getDynamicField().getEnumerations());
 		}
 	}
 }

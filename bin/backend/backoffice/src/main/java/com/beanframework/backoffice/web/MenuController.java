@@ -39,13 +39,9 @@ public class MenuController extends AbstractController {
 	@Value(MenuWebConstants.View.LIST)
 	private String VIEW_MENU_LIST;
 
-	@ModelAttribute(MenuWebConstants.ModelAttribute.CREATE)
-	public MenuDto create() throws Exception {
-		return new MenuDto();
-	}
-
 	@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE)
-	public MenuDto update() throws Exception {
+	public MenuDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new MenuDto();
 	}
 
@@ -67,6 +63,12 @@ public class MenuController extends AbstractController {
 
 		model.addAttribute("menuSelectedUuid", requestParams.get("menuSelectedUuid"));
 
+		return VIEW_MENU_LIST;
+	}
+	
+	@GetMapping(value = MenuWebConstants.Path.MENU, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_MENU_LIST;
 	}
 

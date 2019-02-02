@@ -1,15 +1,14 @@
 id,name,sort,icon,path,target,enabled,parent,userGroupIds,dynamicField
 system,System,10,fa fa-gears,,,true,,employeegroup,name_en=System;name_cn=系统
-field,Field,10,fa fa-columns,,,true,system,employeegroup,name_en=Field;name_cn=输入
-dynamicfield,Dynamic Field,10,fa fa-list-alt,/backoffice/dynamicfield,,true,field,employeegroup,name_en=Dynamic Field;name_cn=动态输入
-dynamicfieldenum,Dynamic Field Enum,20,fa fa-list-ol,/backoffice/dynamicfield/enum,,true,field,employeegroup,name_en=Dynamic Field Enum;name_cn=输入列举
-language,Language,20,fa fa-language,/backoffice/language,,true,system,employeegroup,name_en=Language;name_cn=语言
-userright,User Right,30,fa fa-user-plus,/backoffice/userright,,true,system,employeegroup,name_en=User Right;name_cn=用户权利
-userpermission,User Permission,40,fa fa-key,/backoffice/userpermission,,true,system,employeegroup,name_en=User Permission;name_cn=用户权限
-menu,Menu,50,fa fa-align-justify,/backoffice/menu,,true,system,employeegroup,name_en=Menu;name_cn=菜单
-cronjob,Cronjob,60,fa fa-calendar,/backoffice/cronjob,,true,system,employeegroup,name_en=Cron Job;name_cn=定时任务
-email,Email,70,fa fa-envelope,/backoffice/email,,true,system,employeegroup,name_en=Email;name_cn=电子邮件
-auditor,Auditor,80,fa fa-users,/backoffice/auditor,,true,system,employeegroup,name_en=Auditor;name_cn=稽核员
+enumeration,Enumeration,10,fa fa-list-ol,/backoffice/enumeration,,true,system,employeegroup,name_en=Enumeration;name_cn=列举
+dynamicfield,Dynamic Field,20,fa fa-list-alt,/backoffice/dynamicfield,,true,system,employeegroup,name_en=Dynamic Field;name_cn=动态输入
+language,Language,30,fa fa-language,/backoffice/language,,true,system,employeegroup,name_en=Language;name_cn=语言
+userright,User Right,40,fa fa-user-plus,/backoffice/userright,,true,system,employeegroup,name_en=User Right;name_cn=用户权利
+userpermission,User Permission,50,fa fa-key,/backoffice/userpermission,,true,system,employeegroup,name_en=User Permission;name_cn=用户权限
+menu,Menu,60,fa fa-align-justify,/backoffice/menu,,true,system,employeegroup,name_en=Menu;name_cn=菜单
+cronjob,Cronjob,70,fa fa-calendar,/backoffice/cronjob,,true,system,employeegroup,name_en=Cron Job;name_cn=定时任务
+email,Email,80,fa fa-envelope,/backoffice/email,,true,system,employeegroup,name_en=Email;name_cn=电子邮件
+auditor,Auditor,90,fa fa-users,/backoffice/auditor,,true,system,employeegroup,name_en=Auditor;name_cn=稽核员
 multimedia,Multimedia,20,fa fa-file-image-o,,,true,,customergroup,name_en=Multimedia;name_cn=多媒体
 filemanager,File Manager,10,fa fa-folder,/backoffice/filemanager,,true,multimedia,employeegroup,name_en=File Manager;name_cn=文件管理器
 user,User,30,fa fa-user,,,true,,employeegroup;customergroup,name_en=User;name_cn=用户
@@ -19,5 +18,5 @@ employee,Employee,30,fa fa-user,/backoffice/employee,,true,user,employeegroup,na
 customer,Customer,40,fa fa-user,/backoffice/customer,,true,user,customergroup,name_en=Customer;name_cn=顾客
 media,Media,40,fa fa-file-image-o,/backoffice/media,,true,,employeegroup,name_en=Media;name_cn=媒体
 cms,CMS,50,fa fa-gears,,,true,,employeegroup,name_en=CMS;name_cn=内容管理系统
-site,Site,10,fa fa-fa-globe,/backoffice/site,,true,cms,employeegroup,name_en=Site;name_cn=网站
+site,Site,10,fa fa-globe,/backoffice/site,,true,cms,employeegroup,name_en=Site;name_cn=网站
 comment,Comment,60,fa fa-commenting-o,/backoffice/comment,,true,,employeegroup,name_en=Comment;name_cn=留言

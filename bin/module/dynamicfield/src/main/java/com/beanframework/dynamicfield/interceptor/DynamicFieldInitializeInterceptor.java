@@ -10,7 +10,7 @@ public class DynamicFieldInitializeInterceptor implements InitializeInterceptor<
 
 	@Override
 	public void onInitialize(DynamicField model) throws InterceptorException {
-		Hibernate.initialize(model.getEnums());
+		Hibernate.initialize(model.getEnumerations());
 	}
 
 }

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="employee (employees)">
+		<table id="employeeTable" class="table table-bordered table-hover" style="width: 100%">
+			<thead>
+				<tr>
+					<th th:text="#{module.backoffice.id}" class="text-center"></th>
+					<th th:text="#{module.backoffice.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.select}" class="text-center"></th>
+				</tr>
+			</thead>
+			<thead>
+				<tr>
+					<th th:text="#{module.backoffice.id}" class="text-center"></th>
+					<th th:text="#{module.backoffice.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.select}" class="text-center"></th>
+				</tr>
+			</thead>
+		</table>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    var locale = /*[[${#locale}]]*/;
+		    
+		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.employee.page')}}]]*/;
+		    
+		    var employees = [];
+		    /*[# th:each="object : *{__${employees}__}"]*/  	    
+		    employees.push(/*[[${object.uuid}]]*/); 	    
+		    /*[/]*/
+		    
+		    var employeeTable = $('#employeeTable').DataTable({
+	    		  'language' : {
+			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+			      },
+	    	      'pageLength'  : 10,
+	    	      'paging'      : true,
+	    	      'lengthChange': true,
+	    	      'searching'   : true,
+	    	      'ordering'    : true,
+	    	      'info'        : true,
+	    	      'autoWidth'   : true,
+	    	      'processing': true,
+	    	      'serverSide': true,
+	    	      'searchDelay': 1000,
+	    	      'sDom': 'ltipr', 
+	    	      'ajax': {
+	                    'url': ajaxUrl
+	              },
+	              'columns': [
+	                    { "data": "id" },
+	                    { "data": "name" },
+	                    { "data": "" }
+	              ],
+	    	      'columnDefs': [
+	    	            { 
+	    	                targets: 2,
+	    	                'searchable': false,
+	    	                'orderable': false,
+	    	                'className': 'text-center',
+	    	                render: function(data, type, row, meta)
+	    	                {
+	    	                   var selected = employees.includes(row.uuid);
+	    	                   if(selected){
+	    	                	   return "<input type='hidden' name='tableEmployees["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEmployees["+meta.row+"]' checked>"; 
+	    	                   }
+	    	                   else{
+	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
+	    	                	   if(preventSelfUuid == row.uuid){
+		    	                	   return "<input type='hidden' name='tableEmployees["+meta.row+"]' value='"+row.uuid+"'/>"; 
+	    	                	   }
+	    	                	   else{
+		    	                	   return "<input type='hidden' name='tableEmployees["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEmployees["+meta.row+"]'>"; 
+	    	                	   }
+	    	                   }
+	    	                    
+	    	                }
+	    	            },
+		            	{                                 
+		                	"targets": '_all',
+		                	"render": $.fn.dataTable.render.text()
+		                }            
+	    	       ],
+	    	       'fnDrawCallback': function() {
+	    	           icheck();
+	    	       }
+	    	});
+		    
+		    function icheck() {
+		    	$('input').iCheck({
+					checkboxClass : 'icheckbox_square-blue',
+					radioClass : 'iradio_square-blue',
+					increaseArea : '20%' // optional
+				});
+		    }
+		    
+		    $(document).ready(function ()
+		    {
+		    	$('#employeeTable thead tr:eq(1) th').each(function(index){
+		    		if(index < 2){
+		    			var title = $('#employeeTable thead tr:eq(0) th').eq( $(this).index() ).text();
+		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+		    		} else{
+			            $(this).html('');
+		    		}
+		        });
+		    	
+		    	employeeTable.columns().every(function (index) {
+		    	    $('#employeeTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+		    	    	employeeTable.column($(this).parent().index() + ':visible')
+		    	            .search(this.value)
+		    	            .draw();
+		    	    });
+		    	});
+		    });
+		    /*]]>*/
+		</script>
+		<th:block sec:authorize="hasAuthority('employee_read')">
+			<script th:inline="javascript">
+		    	/*<![CDATA[*/
+		    		$('#employeeTable').on('click', 'tbody tr', function() {
+						//console.log('API row values : ', mainTable.row(this).data());
+						var uuid = employeeTable.row(this).data().uuid;
+						if(uuid){
+							var url = /*[[@{${@environment.getProperty('path.employee')}}]]*/;
+							url += '?uuid='+uuid+'#tab_general';
+							window.open(url, '_blank');
+						}
+					});
+		    	/*]]>*/
+			</script>
+		</th:block>
+	</th:block>
+</body>
+</html>

@@ -32,13 +32,9 @@ public class LanguageController extends AbstractController {
 	@Value(LanguageWebConstants.View.LIST)
 	private String VIEW_LANGUAGE_LIST;
 
-	@ModelAttribute(LanguageWebConstants.ModelAttribute.CREATE)
-	public LanguageDto create() throws Exception {
-		return new LanguageDto();
-	}
-
 	@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE)
-	public LanguageDto update() throws Exception {
+	public LanguageDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new LanguageDto();
 	}
 
@@ -53,11 +49,16 @@ public class LanguageController extends AbstractController {
 			if (existsDto != null) {
 				model.addAttribute(LanguageWebConstants.ModelAttribute.UPDATE, existsDto);
 			} else {
-				updateDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
 
+		return VIEW_LANGUAGE_LIST;
+	}
+
+	@GetMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_LANGUAGE_LIST;
 	}
 
@@ -112,8 +113,7 @@ public class LanguageController extends AbstractController {
 	}
 
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "delete")
-	public RedirectView delete(@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto updateDto, Model model, BindingResult bindingResult,
-			RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@ModelAttribute(LanguageWebConstants.ModelAttribute.UPDATE) LanguageDto updateDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			languageFacade.delete(updateDto.getUuid());

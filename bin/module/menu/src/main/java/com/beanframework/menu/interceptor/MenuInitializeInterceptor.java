@@ -18,9 +18,9 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 	public void onInitialize(Menu model) throws InterceptorException {
 
 		Hibernate.initialize(model.getParent());
-		if (model.getParent() != null) {
-			initializeParent(model.getParent().getParent());
-		}
+//		if (model.getParent() != null) {
+//			initializeParent(model.getParent().getParent());
+//		}
 
 		Hibernate.initialize(model.getChilds());
 		for (Menu menu : model.getChilds()) {
@@ -31,19 +31,19 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
 			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnums());
+				Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnums());
+				Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
 				for (UserRightField field : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnums());
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 				Hibernate.initialize(userAuthority.getUserPermission());
 				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnums());
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 			}
 			initializeUserGroups(userGroup);
@@ -51,22 +51,22 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 		
 		Hibernate.initialize(model.getFields());
 		for (MenuField field : model.getFields()) {
-			Hibernate.initialize(field.getDynamicField().getEnums());
+			Hibernate.initialize(field.getDynamicField().getEnumerations());
 		}
 	}
 
-	private void initializeParent(Menu parent) {
-		Hibernate.initialize(parent);
-		if (parent != null) {
-			initializeParent(parent.getParent());
-		}
-	}
+//	private void initializeParent(Menu parent) {
+//		Hibernate.initialize(parent);
+//		if (parent != null) {
+//			initializeParent(parent.getParent());
+//		}
+//	}
 
 	private void initializeChilds(Menu model) {
 		Hibernate.initialize(model.getParent());
-		if (model.getParent() != null) {
-			initializeParent(model.getParent());
-		}
+//		if (model.getParent() != null) {
+//			initializeParent(model.getParent());
+//		}
 		
 		Hibernate.initialize(model.getChilds());
 		for (Menu menu : model.getChilds()) {
@@ -77,19 +77,19 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
 			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnums());
+				Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnums());
+				Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
 				for (UserRightField field : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnums());
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 				Hibernate.initialize(userAuthority.getUserPermission());
 				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnums());
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 			}
 			initializeUserGroups(userGroup);
@@ -97,7 +97,7 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 		
 		Hibernate.initialize(model.getFields());
 		for (MenuField field : model.getFields()) {
-			Hibernate.initialize(field.getDynamicField().getEnums());
+			Hibernate.initialize(field.getDynamicField().getEnumerations());
 		}
 	}
 
@@ -106,19 +106,19 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
 			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnums());
+				Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnums());
+				Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
 				for (UserRightField field : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnums());
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 				Hibernate.initialize(userAuthority.getUserPermission());
 				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnums());
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 			}
 			initializeUserGroups(userGroup);

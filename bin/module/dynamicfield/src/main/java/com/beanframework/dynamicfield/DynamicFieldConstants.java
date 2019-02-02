@@ -4,7 +4,7 @@ public class DynamicFieldConstants {
 
 	public static interface Table {
 		public static final String DYNAMIC_FIELD = "dynamicfield";
-		public static final String DYNAMIC_FIELD_ENUM = "dynamicfieldenum";
+		public static final String DYNAMIC_FIELD_ENUMERATION_REL = "dynamicfieldenumerationrel";
 	}
 	
 	public static interface Locale {

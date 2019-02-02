@@ -19,7 +19,6 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserRightWebConstants;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.facade.UserRightFacade;
 import com.beanframework.core.facade.UserRightFacade.UserRightPreAuthorizeEnum;
@@ -30,22 +29,15 @@ public class UserRightController extends AbstractController {
 	@Autowired
 	private UserRightFacade userRightFacade;
 
-	@Autowired
-	private LocaleMessageService localeMessageService;
-
 	@Value(UserRightWebConstants.Path.USERRIGHT)
 	private String PATH_USERRIGHT;
 
 	@Value(UserRightWebConstants.View.LIST)
 	private String VIEW_USERRIGHT_LIST;
-
-	@ModelAttribute(UserRightWebConstants.ModelAttribute.CREATE)
-	public UserRightDto populateUserRightCreate() throws Exception {
-		return new UserRightDto();
-	}
-
+	
 	@ModelAttribute(UserRightWebConstants.ModelAttribute.UPDATE)
-	public UserRightDto populateUserRightForm() throws Exception {
+	public UserRightDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new UserRightDto();
 	}
 
@@ -65,6 +57,12 @@ public class UserRightController extends AbstractController {
 			}
 		}
 
+		return VIEW_USERRIGHT_LIST;
+	}
+	
+	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_USERRIGHT_LIST;
 	}
 

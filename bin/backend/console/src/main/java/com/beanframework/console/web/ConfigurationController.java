@@ -2,8 +2,6 @@ package com.beanframework.console.web;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,14 +34,10 @@ public class ConfigurationController extends AbstractController {
 
 	@Value(ConfigurationWebConstants.View.LIST)
 	private String VIEW_CONFIGURATION_LIST;
-
-	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CREATE)
-	public ConfigurationDto populateConfigurationCreate(HttpServletRequest request) throws Exception {
-		return new ConfigurationDto();
-	}
-
+	
 	@ModelAttribute(ConfigurationWebConstants.ModelAttribute.UPDATE)
-	public ConfigurationDto populateConfigurationForm(HttpServletRequest request) throws Exception {
+	public ConfigurationDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new ConfigurationDto();
 	}
 
@@ -65,6 +59,12 @@ public class ConfigurationController extends AbstractController {
 			}
 		}
 
+		return VIEW_CONFIGURATION_LIST;
+	}
+	
+	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_CONFIGURATION_LIST;
 	}
 

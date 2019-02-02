@@ -36,7 +36,7 @@ import com.beanframework.email.domain.Email;
 public class EmailResource {
 	@Autowired
 	private EmailFacade emailFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 

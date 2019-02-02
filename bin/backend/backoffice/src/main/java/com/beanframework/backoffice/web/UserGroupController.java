@@ -24,9 +24,9 @@ import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.facade.UserGroupFacade;
+import com.beanframework.core.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
 import com.beanframework.core.facade.UserPermissionFacade;
 import com.beanframework.core.facade.UserRightFacade;
-import com.beanframework.core.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
 
 @Controller
 public class UserGroupController extends AbstractController {
@@ -46,13 +46,9 @@ public class UserGroupController extends AbstractController {
 	@Value(UserGroupWebConstants.View.LIST)
 	private String VIEW_USERGROUP_LIST;
 
-	@ModelAttribute(UserGroupWebConstants.ModelAttribute.CREATE)
-	public UserGroupDto create() throws Exception {
-		return new UserGroupDto();
-	}
-
 	@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE)
-	public UserGroupDto update() throws Exception {
+	public UserGroupDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new UserGroupDto();
 	}
 
@@ -60,25 +56,38 @@ public class UserGroupController extends AbstractController {
 	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP)
 	public String list(@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE) UserGroupDto usergroupUpdate, Model model) throws Exception {
 
+		// User Authority
+		List<UserRightDto> userRights = userRightFacade.findAllDtoUserRights();
+		model.addAttribute("userRights", userRights);
+
+		List<UserPermissionDto> userPermissions = userPermissionFacade.findAllDtoUserPermissions();
+		model.addAttribute("userPermissions", userPermissions);
+		
 		if (usergroupUpdate.getUuid() != null) {
 
 			UserGroupDto existingUserGroup = userGroupFacade.findOneByUuid(usergroupUpdate.getUuid());
 
 			if (existingUserGroup != null) {
-
-				// User Authority
-				List<UserRightDto> userRights = userRightFacade.findAllDtoUserRights();
-				model.addAttribute("userRights", userRights);
-
-				List<UserPermissionDto> userPermissions = userPermissionFacade.findAllDtoUserPermissions();
-				model.addAttribute("userPermissions", userPermissions);
-
 				model.addAttribute(UserGroupWebConstants.ModelAttribute.UPDATE, existingUserGroup);
 			} else {
 				usergroupUpdate.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
+		return VIEW_USERGROUP_LIST;
+	}
+	
+	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "create")
+	public String createView(Model model, @ModelAttribute(UserGroupWebConstants.ModelAttribute.CREATE) UserGroupDto createDto) throws Exception {
+		
+		// User Authority
+		List<UserRightDto> userRights = userRightFacade.findAllDtoUserRights();
+		model.addAttribute("userRights", userRights);
+
+		List<UserPermissionDto> userPermissions = userPermissionFacade.findAllDtoUserPermissions();
+		model.addAttribute("userPermissions", userPermissions);
+		
+		model.addAttribute("create", true);
 		return VIEW_USERGROUP_LIST;
 	}
 

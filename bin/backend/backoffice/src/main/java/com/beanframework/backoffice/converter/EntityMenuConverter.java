@@ -115,11 +115,14 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (MenuFieldDto sourceField : source.getFields()) {
-						if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
-							prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
-							prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
-							prototype.setLastModifiedDate(lastModifiedDate);
+						if (prototype.getFields().get(i).getDynamicField().getUuid().equals(sourceField.getDynamicField().getUuid())) {
+							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
+
+								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+								prototype.setLastModifiedDate(lastModifiedDate);
+							}
 						}
 					}
 				}
@@ -139,6 +142,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 						for (Iterator<UserGroup> userGroupsIterator = prototype.getUserGroups().listIterator(); userGroupsIterator.hasNext();) {
 							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(source.getTableUserGroups()[i]))) {
 								userGroupsIterator.remove();
+								prototype.setLastModifiedDate(lastModifiedDate);
 							}
 						}
 					} else {
@@ -152,6 +156,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 						if (add) {
 							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), false, UserGroup.class);
 							prototype.getUserGroups().add(entityUserGroups);
+							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}

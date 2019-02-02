@@ -29,7 +29,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserPermission.UUID, source.getUuid());
 
-				UserPermission prototype = modelService.findOneEntityByProperties(properties, true,UserPermission.class);
+				UserPermission prototype = modelService.findOneEntityByProperties(properties, true, UserPermission.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);
@@ -75,11 +75,14 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserPermissionFieldDto sourceField : source.getFields()) {
-						if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
-							prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
-							prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
-							prototype.setLastModifiedDate(lastModifiedDate);
+						if (prototype.getFields().get(i).getDynamicField().getUuid().equals(sourceField.getDynamicField().getUuid())) {
+							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
+
+								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+								prototype.setLastModifiedDate(lastModifiedDate);
+							}
 						}
 					}
 				}

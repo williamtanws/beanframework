@@ -9,10 +9,7 @@
 		<section class="content" th:with="dynamicfieldName=#{module.dynamicfield.name}, dynamicfieldType=#{module.dynamicfield.type}, dynamicfieldSort=#{module.dynamicfield.sort}">
 			<!-- List Table-->
 			<th:block
-				layout:insert="~{/backoffice/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.dynamicfield.icon')}}, title=#{module.dynamicfield}, objectUpdate=${dynamicfieldUpdate}, createAuthority='dynamicfield_create', updateAuthority='dynamicfield_update', tableName='dynamicfield', listUrl=@{${@environment.getProperty('path.api.dynamicfield.page')}}, listFields=${ {{'id', 'ID'}, {'name', dynamicfieldName}, {'type', dynamicfieldType}, {'sort', dynamicfieldSort}} }, editFormAction=@{${@environment.getProperty('path.dynamicfield')}}, editForm=@{${@environment.getProperty('view.dynamicfield.form')}}, createButton='1' )}"></th:block>
-			<!-- Create Modal-->
-			<th:block sec:authorize="hasAuthority('dynamicfield_create')"
-				layout:insert="~{/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.dynamicfield')}}, createObject=${dynamicfieldCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.dynamicfield.checkid')})}"></th:block>
+				layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.dynamicfield.icon')}}, title=#{module.dynamicfield}, objectUpdate=${dynamicfieldUpdate}, createAuthority='dynamicfield_create', updateAuthority='dynamicfield_update', tableName='dynamicfield', listUrl=@{${@environment.getProperty('path.api.dynamicfield.page')}}, listFields=${ {{'id', 'ID'}, {'name', dynamicfieldName}, {'type', dynamicfieldType}, {'sort', dynamicfieldSort}} }, editFormAction=@{${@environment.getProperty('path.dynamicfield')}}, editForm=@{${@environment.getProperty('view.dynamicfield.form')}}, createButton='1' )}"></th:block>
 		</section>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/

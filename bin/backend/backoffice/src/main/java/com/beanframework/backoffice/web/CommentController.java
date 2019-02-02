@@ -32,13 +32,9 @@ public class CommentController extends AbstractController {
 	@Value(CommentWebConstants.View.LIST)
 	private String VIEW_COMMENT_LIST;
 
-	@ModelAttribute(CommentWebConstants.ModelAttribute.CREATE)
-	public CommentDto create() throws Exception {
-		return new CommentDto();
-	}
-
 	@ModelAttribute(CommentWebConstants.ModelAttribute.UPDATE)
-	public CommentDto update() throws Exception {
+	public CommentDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new CommentDto();
 	}
 
@@ -58,6 +54,12 @@ public class CommentController extends AbstractController {
 			}
 		}
 
+		return VIEW_COMMENT_LIST;
+	}
+	
+	@GetMapping(value = CommentWebConstants.Path.COMMENT, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_COMMENT_LIST;
 	}
 

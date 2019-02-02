@@ -1,6 +1,5 @@
 package com.beanframework.backoffice.converter;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,14 +9,14 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.language.domain.Language;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.DynamicFieldDto;
-import com.beanframework.core.data.DynamicFieldEnumDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
+import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.language.domain.Language;
 
 public class EntityDynamicFieldConverter implements EntityConverter<DynamicFieldDto, DynamicField> {
 
@@ -102,60 +101,51 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 			}
 
 			// Language
-			if (StringUtils.isBlank(source.getLanguageUuid())) {
-				if (prototype.getLanguage() != null) {
-					prototype.setLanguage(null);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			} else if (prototype.getLanguage() == null || prototype.getLanguage().getUuid().equals(UUID.fromString(source.getLanguageUuid())) == false) {
-
-				Language entityLanguage = modelService.findOneEntityByUuid(UUID.fromString(source.getLanguageUuid()), true, Language.class);
+			if (StringUtils.isBlank(source.getTableSelectedLanguage())) {
+				prototype.setLanguage(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
+			} else {
+				Language entityLanguage = modelService.findOneEntityByUuid(UUID.fromString(source.getTableSelectedLanguage()), false, Language.class);
 
 				if (entityLanguage != null) {
-					prototype.setLanguage(entityLanguage);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			}
 
-			// DynamicFieldEnum
-			if (source.getEnums() == null || source.getEnums().isEmpty()) {
-				if (prototype.getEnums().isEmpty()) {
-					prototype.setEnums(new ArrayList<DynamicFieldEnum>());
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			}
-
-			Iterator<DynamicFieldEnum> itr = prototype.getEnums().iterator();
-			while (itr.hasNext()) {
-				DynamicFieldEnum userGroup = itr.next();
-
-				boolean remove = true;
-				for (DynamicFieldEnumDto sourceDynamicFieldEnum : source.getEnums()) {
-					if (userGroup.getUuid().equals(sourceDynamicFieldEnum.getUuid())) {
-						remove = false;
+					if (prototype.getLanguage() == null || prototype.getLanguage().getUuid().equals(entityLanguage.getUuid()) == false) {
+						prototype.setLanguage(entityLanguage);
+						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				}
-
-				if (remove) {
-					itr.remove();
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
 			}
 
-			for (DynamicFieldEnumDto sourceDynamicFieldEnum : source.getEnums()) {
+			// Enumeration
+			if (source.getTableEnumerations() != null) {
 
-				boolean add = true;
-				for (DynamicFieldEnum userGroup : prototype.getEnums()) {
-					if (sourceDynamicFieldEnum.getUuid().equals(userGroup.getUuid()))
-						add = false;
-				}
+				for (int i = 0; i < source.getTableEnumerations().length; i++) {
 
-				if (add) {
-					DynamicFieldEnum entityDynamicFieldEnum = modelService.findOneEntityByUuid(sourceDynamicFieldEnum.getUuid(), true, DynamicFieldEnum.class);
-					if (entityDynamicFieldEnum != null) {
-						entityDynamicFieldEnum.setDynamicField(prototype);
-						prototype.getEnums().add(entityDynamicFieldEnum);
-						prototype.setLastModifiedDate(lastModifiedDate);
+					boolean remove = true;
+					if (source.getTableSelectedEnumerations() != null && source.getTableSelectedEnumerations().length > i && BooleanUtils.parseBoolean(source.getTableSelectedEnumerations()[i])) {
+						remove = false;
+					}
+
+					if (remove) {
+						for (Iterator<Enumeration> enumerationsIterator = prototype.getEnumerations().listIterator(); enumerationsIterator.hasNext();) {
+							if (enumerationsIterator.next().getUuid().equals(UUID.fromString(source.getTableEnumerations()[i]))) {
+								enumerationsIterator.remove();
+								prototype.setLastModifiedDate(lastModifiedDate);
+							}
+						}
+					} else {
+						boolean add = true;
+						for (Iterator<Enumeration> enumerationsIterator = prototype.getEnumerations().listIterator(); enumerationsIterator.hasNext();) {
+							if (enumerationsIterator.next().getUuid().equals(UUID.fromString(source.getTableEnumerations()[i]))) {
+								add = false;
+							}
+						}
+
+						if (add) {
+							Enumeration entityEnumerations = modelService.findOneEntityByUuid(UUID.fromString(source.getTableEnumerations()[i]), false, Enumeration.class);
+							prototype.getEnumerations().add(entityEnumerations);
+							prototype.setLastModifiedDate(lastModifiedDate);
+						}
 					}
 				}
 			}

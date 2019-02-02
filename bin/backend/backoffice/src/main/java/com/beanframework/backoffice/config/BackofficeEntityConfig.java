@@ -8,24 +8,24 @@ import com.beanframework.backoffice.converter.EntityCronjobConverter;
 import com.beanframework.backoffice.converter.EntityCronjobDataConverter;
 import com.beanframework.backoffice.converter.EntityCustomerConverter;
 import com.beanframework.backoffice.converter.EntityDynamicFieldConverter;
-import com.beanframework.backoffice.converter.EntityDynamicFieldEnumConverter;
 import com.beanframework.backoffice.converter.EntityEmailConverter;
 import com.beanframework.backoffice.converter.EntityEmployeeConverter;
+import com.beanframework.backoffice.converter.EntityEnumerationConverter;
 import com.beanframework.backoffice.converter.EntityLanguageConverter;
 import com.beanframework.backoffice.converter.EntityMenuConverter;
 import com.beanframework.backoffice.converter.EntityUserGroupConverter;
 import com.beanframework.backoffice.converter.EntityUserPermissionConverter;
 import com.beanframework.backoffice.converter.EntityUserRightConverter;
+import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldEnum;
 import com.beanframework.email.domain.Email;
 import com.beanframework.employee.domain.Employee;
+import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.language.domain.Language;
-import com.beanframework.comment.domain.Comment;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
@@ -161,15 +161,15 @@ public class BackofficeEntityConfig {
 	}
 	
 	@Bean
-	public EntityDynamicFieldEnumConverter entityDynamicFieldEnumConverter() {
-		return new EntityDynamicFieldEnumConverter();
+	public EntityEnumerationConverter entityEnumerationConverter() {
+		return new EntityEnumerationConverter();
 	}
 
 	@Bean
-	public ConverterMapping entityDynamicFieldEnumConverterMapping() {
+	public ConverterMapping entityEnumConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityDynamicFieldEnumConverter());
-		mapping.setTypeCode(DynamicFieldEnum.class.getSimpleName());
+		mapping.setConverter(entityEnumerationConverter());
+		mapping.setTypeCode(Enumeration.class.getSimpleName());
 
 		return mapping;
 	}

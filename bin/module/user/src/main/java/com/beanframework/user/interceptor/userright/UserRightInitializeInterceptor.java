@@ -13,7 +13,7 @@ public class UserRightInitializeInterceptor implements InitializeInterceptor<Use
 	public void onInitialize(UserRight model) throws InterceptorException {
 		Hibernate.initialize(model.getFields());
 		for (UserRightField field : model.getFields()) {
-			Hibernate.initialize(field.getDynamicField().getEnums());
+			Hibernate.initialize(field.getDynamicField().getEnumerations());
 		}
 	}
 }

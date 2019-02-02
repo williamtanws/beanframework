@@ -13,7 +13,7 @@ import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldDto;
-import com.beanframework.core.data.DynamicFieldEnumDto;
+import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
 
@@ -60,7 +60,7 @@ public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, Dyna
 
 			if (context.isInitializeCollection()) {
 				prototype.setLanguage(modelService.getDto(source.getLanguage(), context, LanguageDto.class));
-				prototype.setEnums(modelService.getDto(source.getEnums(), context, DynamicFieldEnumDto.class));
+				prototype.setEnumerations(modelService.getDto(source.getEnumerations(), context, EnumerationDto.class));
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

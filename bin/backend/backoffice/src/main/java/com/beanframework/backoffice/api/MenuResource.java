@@ -44,7 +44,7 @@ public class MenuResource {
 
 	@Autowired
 	private MenuFacade menuFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
@@ -117,29 +117,31 @@ public class MenuResource {
 		Locale locale = LocaleContextHolder.getLocale();
 
 		for (MenuFieldDto menuField : menu.getFields()) {
-			if (menuField.getDynamicField().getLanguage().getId().equals(locale.toString())) {
+			if (menuField.getDynamicField().getLanguage() != null) {
+				if (menuField.getDynamicField().getLanguage().getId().equals(locale.toString())) {
 
-				String name = menuField.getValue();
+					String name = menuField.getValue();
 
-				if (StringUtils.isBlank(name)) {
-					name = "[" + menu.getId() + "]";
+					if (StringUtils.isBlank(name)) {
+						name = "[" + menu.getId() + "]";
+					}
+
+					if (menu.getEnabled() == false) {
+						name = "<span class=\"text-muted\">" + name + "</span>";
+					}
+
+					return name;
 				}
-				
-				if (menu.getEnabled() == false) {
-					name = "<span class=\"text-muted\">" + name + "</span>";
-				}
-
-				return name;
 			}
 		}
-		
-		if(StringUtils.isNotBlank(menu.getName())) {
+
+		if (StringUtils.isNotBlank(menu.getName())) {
 			return menu.getName();
 		}
 
 		return "[" + menu.getId() + "]";
 	}
-	
+
 	@RequestMapping(value = MenuWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
@@ -198,6 +200,7 @@ public class MenuResource {
 			}
 
 			dataTableResponse.getData().add(data);
+
 		}
 		return dataTableResponse;
 	}

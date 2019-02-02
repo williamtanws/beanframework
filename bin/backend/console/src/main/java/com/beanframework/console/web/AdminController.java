@@ -2,8 +2,6 @@ package com.beanframework.console.web;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,13 +35,9 @@ public class AdminController extends AbstractController {
 	@Value(AdminWebConstants.View.LIST)
 	private String VIEW_ADMIN_LIST;
 
-	@ModelAttribute(AdminWebConstants.ModelAttribute.CREATE)
-	public AdminDto populateAdminCreate(HttpServletRequest request) throws Exception {
-		return new AdminDto();
-	}
-
 	@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE)
-	public AdminDto populateAdminForm(HttpServletRequest request) throws Exception {
+	public AdminDto update(Model model) throws Exception {
+		model.addAttribute("create", false);
 		return new AdminDto();
 	}
 
@@ -63,6 +57,12 @@ public class AdminController extends AbstractController {
 			}
 		}
 
+		return VIEW_ADMIN_LIST;
+	}
+	
+	@GetMapping(value = AdminWebConstants.Path.ADMIN, params = "create")
+	public String createView(Model model) throws Exception {
+		model.addAttribute("create", true);
 		return VIEW_ADMIN_LIST;
 	}
 
