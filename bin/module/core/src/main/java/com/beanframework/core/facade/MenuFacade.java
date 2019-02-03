@@ -41,12 +41,16 @@ public interface MenuFacade {
 	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	List<MenuDto> findMenuTree() throws BusinessException;
 
+	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	int count() throws Exception;
 
+	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 }

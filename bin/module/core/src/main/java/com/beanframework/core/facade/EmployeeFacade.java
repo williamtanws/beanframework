@@ -42,12 +42,18 @@ public interface EmployeeFacade {
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
-
+	
+	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
 	Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception;
-
+	
+	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
 	int count() throws Exception;
-
-	List<EmployeeDto> findAllDtoEmployees() throws Exception;
+	
+	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+	
+	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.READ)
 	Set<EmployeeSession> findAllSessions();
@@ -61,9 +67,4 @@ public interface EmployeeFacade {
 	EmployeeDto saveProfile(EmployeeDto employee, MultipartFile picture) throws BusinessException;
 
 	EmployeeDto getCurrentUser() throws Exception;
-
-	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
-
-	int countHistory(DataTableRequest dataTableRequest) throws Exception;
-
 }

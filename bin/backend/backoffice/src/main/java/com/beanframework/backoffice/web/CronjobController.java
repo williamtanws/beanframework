@@ -9,7 +9,6 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,7 +27,6 @@ import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.facade.CronjobFacade;
-import com.beanframework.core.facade.CronjobFacade.CronjobPreAuthorizeEnum;
 import com.beanframework.cronjob.service.CronjobManagerService;
 
 @Controller
@@ -52,10 +50,10 @@ public class CronjobController extends AbstractController {
 		return new CronjobDto();
 	}
 
-	@PreAuthorize(CronjobPreAuthorizeEnum.READ)
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB)
 	public String list(@ModelAttribute(CronjobWebConstants.ModelAttribute.UPDATE) CronjobDto cronjobUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-
+		model.addAttribute("create", false);
+		
 		if (cronjobUpdate.getUuid() != null) {
 
 			CronjobDto existingCronjob = cronjobFacade.findOneByUuid(cronjobUpdate.getUuid());

@@ -23,11 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EnumerationWebConstants;
+import com.beanframework.backoffice.data.EnumDataResponse;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.core.data.EnumDataResponse;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.facade.EnumerationFacade;
 import com.beanframework.enumuration.domain.Enumeration;

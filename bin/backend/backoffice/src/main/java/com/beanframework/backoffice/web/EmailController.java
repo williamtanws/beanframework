@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +21,6 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.core.facade.EmailFacade;
-import com.beanframework.core.facade.EmailFacade.EmailPreAuthorizeEnum;
 
 @Controller
 public class EmailController extends AbstractController {
@@ -42,10 +40,10 @@ public class EmailController extends AbstractController {
 		return new EmailDto();
 	}
 
-	@PreAuthorize(EmailPreAuthorizeEnum.READ)
 	@GetMapping(value = EmailWebConstants.Path.EMAIL)
 	public String list(@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-
+		model.addAttribute("create", false);
+		
 		if (emailUpdate.getUuid() != null) {
 
 			EmailDto existingEmail = emailFacade.findOneByUuid(emailUpdate.getUuid());

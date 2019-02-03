@@ -2,7 +2,6 @@ package com.beanframework.backoffice.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +17,6 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.facade.CommentFacade;
-import com.beanframework.core.facade.CommentFacade.CommentPreAuthorizeEnum;
 
 @Controller
 public class CommentController extends AbstractController {
@@ -38,10 +36,10 @@ public class CommentController extends AbstractController {
 		return new CommentDto();
 	}
 
-	@PreAuthorize(CommentPreAuthorizeEnum.READ)
 	@GetMapping(value = CommentWebConstants.Path.COMMENT)
 	public String list(@ModelAttribute(CommentWebConstants.ModelAttribute.UPDATE) CommentDto updateDto, Model model) throws Exception {
-
+		model.addAttribute("create", false);
+		
 		if (updateDto.getUuid() != null) {
 
 			CommentDto existsDto = commentFacade.findOneByUuid(updateDto.getUuid());

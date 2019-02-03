@@ -35,14 +35,16 @@ public interface CustomerFacade {
 	@PreAuthorize(CustomerPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
+	@PreAuthorize(CustomerPreAuthorizeEnum.READ)
 	Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(CustomerPreAuthorizeEnum.READ)
 	int count() throws Exception;
 
-	List<CustomerDto> findAllDtoCustomers() throws Exception;
-
+	@PreAuthorize(CustomerPreAuthorizeEnum.READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(CustomerPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 }

@@ -54,10 +54,10 @@ public class EmployeeImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.EmployeeImportListener.KEY);
-		setName(ConsoleImportListenerConstants.EmployeeImportListener.NAME);
-		setSort(ConsoleImportListenerConstants.EmployeeImportListener.SORT);
-		setDescription(ConsoleImportListenerConstants.EmployeeImportListener.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.EmployeeImport.KEY);
+		setName(ConsoleImportListenerConstants.EmployeeImport.NAME);
+		setSort(ConsoleImportListenerConstants.EmployeeImport.SORT);
+		setDescription(ConsoleImportListenerConstants.EmployeeImport.DESCRIPTION);
 	}
 
 	@Override
@@ -103,12 +103,12 @@ public class EmployeeImportListener extends ImportListener {
 			final String[] header = beanReader.getHeader(true);
 
 			EmployeeCsv csv;
-			LOGGER.info("Start import " + ConsoleImportListenerConstants.EmployeeImportListener.NAME);
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.EmployeeImport.NAME);
 			while ((csv = beanReader.read(EmployeeCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + ConsoleImportListenerConstants.EmployeeImportListener.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.EmployeeImport.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +20,6 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.facade.CustomerFacade;
-import com.beanframework.core.facade.CustomerFacade.CustomerPreAuthorizeEnum;
 
 @Controller
 public class CustomerController extends AbstractController {
@@ -41,10 +39,10 @@ public class CustomerController extends AbstractController {
 		return new CustomerDto();
 	}
 
-	@PreAuthorize(CustomerPreAuthorizeEnum.READ)
 	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER)
 	public String list(@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE) CustomerDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-
+		model.addAttribute("create", false);
+		
 		if (updateDto.getUuid() != null) {
 
 			CustomerDto existingCustomer = customerFacade.findOneByUuid(updateDto.getUuid());

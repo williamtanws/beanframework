@@ -48,10 +48,10 @@ public class MenuImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.MenuImportListener.KEY);
-		setName(ConsoleImportListenerConstants.MenuImportListener.NAME);
-		setSort(ConsoleImportListenerConstants.MenuImportListener.SORT);
-		setDescription(ConsoleImportListenerConstants.MenuImportListener.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.MenuImport.KEY);
+		setName(ConsoleImportListenerConstants.MenuImport.NAME);
+		setSort(ConsoleImportListenerConstants.MenuImport.SORT);
+		setDescription(ConsoleImportListenerConstants.MenuImport.DESCRIPTION);
 	}
 
 	@Override
@@ -97,12 +97,12 @@ public class MenuImportListener extends ImportListener {
 			final String[] header = beanReader.getHeader(true);
 
 			MenuCsv csv;
-			LOGGER.info("Start import "+ConsoleImportListenerConstants.MenuImportListener.NAME);
+			LOGGER.info("Start import "+ConsoleImportListenerConstants.MenuImport.NAME);
 			while ((csv = beanReader.read(MenuCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+ConsoleImportListenerConstants.MenuImportListener.NAME);
+			LOGGER.info("Finished import "+ConsoleImportListenerConstants.MenuImport.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

@@ -20,6 +20,16 @@ public class Media extends GenericEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -8147085933412547043L;
+	public static final String FILENAME = "fileName";
+	public static final String FILETYPE = "fileType";
+	public static final String FILESIZE = "fileSize";
+	public static final String HEIGHT = "height";
+	public static final String WIDTH = "width";
+	public static final String URL = "url";
+	public static final String TITLE = "title";
+	public static final String CAPTION = "caption";
+	public static final String ALTTEXT = "altText";
+	public static final String DESCRIPTION = "description";
 
 	@Audited(withModifiedFlag = true)
 	private String fileName;
@@ -28,13 +38,13 @@ public class Media extends GenericEntity {
 	private String fileType;
 
 	@Audited(withModifiedFlag = true)
-	private int fileSize;
+	private Integer fileSize;
 
 	@Audited(withModifiedFlag = true)
-	private int height;
+	private Integer height;
 
 	@Audited(withModifiedFlag = true)
-	private int width;
+	private Integer width;
 
 	@Audited(withModifiedFlag = true)
 	private String url;
@@ -67,27 +77,27 @@ public class Media extends GenericEntity {
 		this.fileType = fileType;
 	}
 
-	public int getFileSize() {
+	public Integer getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(int fileSize) {
+	public void setFileSize(Integer fileSize) {
 		this.fileSize = fileSize;
 	}
 
-	public int getHeight() {
+	public Integer getHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public void setHeight(Integer height) {
 		this.height = height;
 	}
 
-	public int getWidth() {
+	public Integer getWidth() {
 		return width;
 	}
 
-	public void setWidth(int width) {
+	public void setWidth(Integer width) {
 		this.width = width;
 	}
 

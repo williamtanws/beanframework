@@ -35,14 +35,17 @@ public interface ConfigurationFacade {
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
 	Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
 	int count() throws Exception;
 
-	List<ConfigurationDto> findAllDtoConfigurations() throws Exception;
-
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	ConfigurationDto findOneDtoById(String id) throws Exception;
 }

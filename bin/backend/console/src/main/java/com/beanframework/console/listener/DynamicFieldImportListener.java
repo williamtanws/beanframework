@@ -48,10 +48,10 @@ public class DynamicFieldImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.DynamicFieldImportListener.KEY);
-		setName(ConsoleImportListenerConstants.DynamicFieldImportListener.NAME);
-		setSort(ConsoleImportListenerConstants.DynamicFieldImportListener.SORT);
-		setDescription(ConsoleImportListenerConstants.DynamicFieldImportListener.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.DynamicFieldImport.KEY);
+		setName(ConsoleImportListenerConstants.DynamicFieldImport.NAME);
+		setSort(ConsoleImportListenerConstants.DynamicFieldImport.SORT);
+		setDescription(ConsoleImportListenerConstants.DynamicFieldImport.DESCRIPTION);
 	}
 
 	@Override
@@ -97,12 +97,12 @@ public class DynamicFieldImportListener extends ImportListener {
 			final String[] header = beanReader.getHeader(true);
 
 			DynamicFieldCsv csv;
-			LOGGER.info("Start import " + ConsoleImportListenerConstants.DynamicFieldImportListener.NAME);
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.DynamicFieldImport.NAME);
 			while ((csv = beanReader.read(DynamicFieldCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + ConsoleImportListenerConstants.DynamicFieldImportListener.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.DynamicFieldImport.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

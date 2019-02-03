@@ -35,13 +35,15 @@ public interface AdminFacade {
 	@PreAuthorize(AdminPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	List<AdminDto> findAllDtoAdmins() throws Exception;
-
+	@PreAuthorize(AdminPreAuthorizeEnum.READ)
 	Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(AdminPreAuthorizeEnum.READ)
 	int count() throws Exception;
 
+	@PreAuthorize(AdminPreAuthorizeEnum.READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(AdminPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 }

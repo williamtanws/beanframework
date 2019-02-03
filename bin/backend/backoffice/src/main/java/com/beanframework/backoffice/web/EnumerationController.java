@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +20,6 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.facade.EnumerationFacade;
-import com.beanframework.core.facade.EnumerationFacade.EnumPreAuthorizeEnum;
 
 @Controller
 public class EnumerationController extends AbstractController {
@@ -41,10 +39,10 @@ public class EnumerationController extends AbstractController {
 		return new EnumerationDto();
 	}
 
-	@PreAuthorize(EnumPreAuthorizeEnum.READ)
 	@GetMapping(value = EnumerationWebConstants.Path.ENUMERATION)
 	public String list(@ModelAttribute(EnumerationWebConstants.ModelAttribute.UPDATE) EnumerationDto updateDto, Model model) throws Exception {
-
+		model.addAttribute("create", false);
+		
 		if (updateDto.getUuid() != null) {
 
 			EnumerationDto existsDto = enumerationFacade.findOneByUuid(updateDto.getUuid());

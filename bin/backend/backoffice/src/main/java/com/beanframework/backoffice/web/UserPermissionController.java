@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +20,6 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.facade.UserPermissionFacade;
-import com.beanframework.core.facade.UserPermissionFacade.UserPermissionPreAuthorizeEnum;
 
 @Controller
 public class UserPermissionController extends AbstractController {
@@ -41,11 +39,11 @@ public class UserPermissionController extends AbstractController {
 		return new UserPermissionDto();
 	}
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.READ)
 	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION)
 	public String list(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermissionDto userpermissionUpdate, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
-
+		model.addAttribute("create", false);
+		
 		if (userpermissionUpdate.getUuid() != null) {
 
 			UserPermissionDto existingUserPermission = userPermissionFacade.findOneByUuid(userpermissionUpdate.getUuid());
