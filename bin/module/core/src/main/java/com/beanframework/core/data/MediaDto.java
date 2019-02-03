@@ -21,9 +21,9 @@ public class MediaDto extends GenericDto {
 
 	private String fileName;
 	private String fileType;
-	private Integer fileSize;
-	private Integer height;
-	private Integer width;
+	private String fileSize;
+	private String height;
+	private String width;
 	private String url;
 	private String title;
 	private String caption;
@@ -46,27 +46,27 @@ public class MediaDto extends GenericDto {
 		this.fileType = fileType;
 	}
 
-	public Integer getFileSize() {
+	public String getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(Integer fileSize) {
+	public void setFileSize(String fileSize) {
 		this.fileSize = fileSize;
 	}
 
-	public Integer getHeight() {
+	public String getHeight() {
 		return height;
 	}
 
-	public void setHeight(Integer height) {
+	public void setHeight(String height) {
 		this.height = height;
 	}
 
-	public Integer getWidth() {
+	public String getWidth() {
 		return width;
 	}
 
-	public void setWidth(Integer width) {
+	public void setWidth(String width) {
 		this.width = width;
 	}
 

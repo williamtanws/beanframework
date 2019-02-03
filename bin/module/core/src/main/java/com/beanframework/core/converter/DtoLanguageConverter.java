@@ -43,7 +43,7 @@ public class DtoLanguageConverter implements DtoConverter<Language, LanguageDto>
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setName(source.getName());
-		prototype.setSort(source.getSort());
+		prototype.setSort(String.valueOf(source.getSort()));
 		prototype.setActive(source.getActive());
 
 		try {

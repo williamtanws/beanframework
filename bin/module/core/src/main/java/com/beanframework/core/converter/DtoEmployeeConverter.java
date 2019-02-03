@@ -72,7 +72,7 @@ public class DtoEmployeeConverter implements DtoConverter<Employee, EmployeeDto>
 						if (o2.getDynamicField() == null || o2.getDynamicField().getSort() == null)
 							return -1;
 
-						return o1.getDynamicField().getSort() - o2.getDynamicField().getSort();
+						return Integer.valueOf(o1.getDynamicField().getSort()) - Integer.valueOf(o2.getDynamicField().getSort());
 					}
 				});
 			}

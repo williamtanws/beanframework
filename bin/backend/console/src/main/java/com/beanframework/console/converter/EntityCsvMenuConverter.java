@@ -57,7 +57,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setName(StringUtils.stripToNull(source.getName()));
-			prototype.setSort(source.getSort());
+			prototype.setSort(Integer.valueOf(source.getSort()));
 			prototype.setIcon(StringUtils.stripToNull(source.getIcon()));
 			prototype.setPath(StringUtils.stripToNull(source.getPath()));
 			

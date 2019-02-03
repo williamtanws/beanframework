@@ -54,14 +54,14 @@ public class EntityEnumerationConverter implements EntityConverter<EnumerationDt
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (source.getSort() == null) {
+		if (StringUtils.isBlank(source.getSort())) {
 			if (prototype.getSort() != null) {
 				prototype.setSort(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getSort() == null || prototype.getSort().equals(source.getSort()) == false) {
-				prototype.setSort(source.getSort());
+			if (prototype.getSort() == null || prototype.getSort().equals(Integer.valueOf(source.getSort())) == false) {
+				prototype.setSort(Integer.valueOf(source.getSort()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}

@@ -50,7 +50,7 @@ public class DtoMenuConverter implements DtoConverter<Menu, MenuDto> {
 		prototype.setParent(source.getParent());
 		prototype.setIcon(source.getIcon());
 		prototype.setPath(source.getPath());
-		prototype.setSort(source.getSort());
+		prototype.setSort(String.valueOf(source.getSort()));
 		prototype.setTarget(source.getTarget());
 		prototype.setEnabled(source.getEnabled());
 
@@ -74,7 +74,7 @@ public class DtoMenuConverter implements DtoConverter<Menu, MenuDto> {
 						if (o2.getDynamicField() == null || o2.getDynamicField().getSort() == null)
 							return -1;
 
-						return o1.getDynamicField().getSort() - o2.getDynamicField().getSort();
+						return Integer.valueOf(o1.getDynamicField().getSort()) - Integer.valueOf(o2.getDynamicField().getSort());
 					}
 				});
 			}

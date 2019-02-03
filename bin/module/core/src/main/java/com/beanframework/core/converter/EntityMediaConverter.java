@@ -65,8 +65,8 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getFileSize() == null || prototype.getFileSize().equals(source.getFileSize()) == false) {
-				prototype.setFileSize(source.getFileSize());
+			if (prototype.getFileSize() == null || prototype.getFileSize().equals(Integer.valueOf(source.getFileSize())) == false) {
+				prototype.setFileSize(Integer.valueOf(source.getFileSize()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
@@ -77,8 +77,8 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getHeight() == null || prototype.getHeight().equals(source.getHeight()) == false) {
-				prototype.setHeight(source.getHeight());
+			if (prototype.getHeight() == null || prototype.getHeight().equals(Integer.valueOf(source.getHeight())) == false) {
+				prototype.setHeight(Integer.valueOf(source.getHeight()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
@@ -89,8 +89,8 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getWidth() == null || prototype.getWidth().equals(source.getWidth()) == false) {
-				prototype.setWidth(source.getWidth());
+			if (prototype.getWidth() == null || prototype.getWidth().equals(Integer.valueOf(source.getWidth())) == false) {
+				prototype.setWidth(Integer.valueOf(source.getWidth()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}

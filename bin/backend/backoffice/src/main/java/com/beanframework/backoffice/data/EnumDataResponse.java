@@ -4,14 +4,14 @@ import com.beanframework.common.data.DataTableResponseData;
 
 public class EnumDataResponse extends DataTableResponseData {
 
-	private Integer sort;
+	private String sort;
 	private String enumGroup;
 
-	public Integer getSort() {
+	public String getSort() {
 		return sort;
 	}
 
-	public void setSort(Integer sort) {
+	public void setSort(String sort) {
 		this.sort = sort;
 	}
 

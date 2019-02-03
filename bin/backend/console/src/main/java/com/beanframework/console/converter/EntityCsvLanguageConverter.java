@@ -52,7 +52,7 @@ public class EntityCsvLanguageConverter implements EntityConverter<LanguageCsv, 
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setActive(source.isActive());
-			prototype.setSort(source.getSort());
+			prototype.setSort(Integer.valueOf(source.getSort()));
 
 		} catch (Exception e) {
 			e.printStackTrace();

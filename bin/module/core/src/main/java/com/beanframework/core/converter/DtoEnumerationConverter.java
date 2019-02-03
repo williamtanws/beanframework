@@ -43,7 +43,7 @@ public class DtoEnumerationConverter implements DtoConverter<Enumeration, Enumer
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setName(source.getName());
-		prototype.setSort(source.getSort());
+		prototype.setSort(String.valueOf(source.getSort()));
 
 		try {
 			InterceptorContext disableInitialCollectionContext = new InterceptorContext();

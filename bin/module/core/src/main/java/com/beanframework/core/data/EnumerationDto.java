@@ -12,7 +12,7 @@ public class EnumerationDto extends GenericDto {
 
 	private String name;
 
-	private Integer sort;
+	private String sort;
 
 	public String getName() {
 		return name;
@@ -22,11 +22,11 @@ public class EnumerationDto extends GenericDto {
 		this.name = name;
 	}
 
-	public Integer getSort() {
+	public String getSort() {
 		return sort;
 	}
 
-	public void setSort(Integer sort) {
+	public void setSort(String sort) {
 		this.sort = sort;
 	}
 }

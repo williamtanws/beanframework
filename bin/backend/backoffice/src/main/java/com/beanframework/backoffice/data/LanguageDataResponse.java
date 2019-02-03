@@ -5,7 +5,7 @@ import com.beanframework.common.data.DataTableResponseData;
 public class LanguageDataResponse extends DataTableResponseData {
 
 	private Boolean active;
-	private Integer sort;
+	private String sort;
 
 	public Boolean getActive() {
 		return active;
@@ -15,11 +15,11 @@ public class LanguageDataResponse extends DataTableResponseData {
 		this.active = active;
 	}
 
-	public Integer getSort() {
+	public String getSort() {
 		return sort;
 	}
 
-	public void setSort(Integer sort) {
+	public void setSort(String sort) {
 		this.sort = sort;
 	}
 
