@@ -21,7 +21,7 @@ import com.beanframework.cronjob.listener.CronjobGlobalListener;
 
 @Configuration
 @ConditionalOnProperty(name = "quartz.enabled")
-public class CronjobConfig {
+public class BackofficeCronjobConfig {
 
 	@Autowired
 	private ApplicationContext applicationContext;
