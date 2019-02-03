@@ -48,10 +48,10 @@ public class AdminImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.AdminImportListener.KEY);
-		setName(ConsoleImportListenerConstants.AdminImportListener.NAME);
-		setSort(ConsoleImportListenerConstants.AdminImportListener.SORT);
-		setDescription(ConsoleImportListenerConstants.AdminImportListener.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.AdminImport.KEY);
+		setName(ConsoleImportListenerConstants.AdminImport.NAME);
+		setSort(ConsoleImportListenerConstants.AdminImport.SORT);
+		setDescription(ConsoleImportListenerConstants.AdminImport.DESCRIPTION);
 	}
 
 	@Override
@@ -97,12 +97,12 @@ public class AdminImportListener extends ImportListener {
 			final String[] header = beanReader.getHeader(true);
 
 			AdminCsv csv;
-			LOGGER.info("Start import " + ConsoleImportListenerConstants.AdminImportListener.NAME);
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.AdminImport.NAME);
 			while ((csv = beanReader.read(AdminCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + ConsoleImportListenerConstants.AdminImportListener.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.AdminImport.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

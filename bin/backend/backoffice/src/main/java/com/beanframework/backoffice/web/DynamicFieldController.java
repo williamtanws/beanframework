@@ -2,7 +2,6 @@ package com.beanframework.backoffice.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +17,6 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.facade.DynamicFieldFacade;
-import com.beanframework.core.facade.DynamicFieldFacade.DynamicFieldPreAuthorizeEnum;
 
 @Controller
 public class DynamicFieldController extends AbstractController {
@@ -38,10 +36,10 @@ public class DynamicFieldController extends AbstractController {
 		return new DynamicFieldDto();
 	}
 
-	@PreAuthorize(DynamicFieldPreAuthorizeEnum.READ)
 	@GetMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD)
 	public String list(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.UPDATE) DynamicFieldDto updateDto, Model model) throws Exception {
-
+		model.addAttribute("create", false);
+		
 		if (updateDto.getUuid() != null) {
 
 			DynamicFieldDto existsDto = dynamicFieldFacade.findOneByUuid(updateDto.getUuid());

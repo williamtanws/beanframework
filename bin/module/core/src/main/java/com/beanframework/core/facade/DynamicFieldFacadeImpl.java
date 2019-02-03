@@ -1,6 +1,5 @@
 package com.beanframework.core.facade;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -8,7 +7,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.InterceptorContext;
@@ -111,16 +109,6 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	@Override
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return dynamicFieldService.findCountHistory(dataTableRequest);
-	}
-
-	@Override
-	public List<DynamicFieldDto> findAllDtoDynamicFields() throws Exception {
-		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(DynamicField.CREATED_DATE, Sort.Direction.DESC);
-
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		return modelService.getDto(dynamicFieldService.findEntityBySorts(sorts, false), context, DynamicFieldDto.class);
 	}
 
 }

@@ -58,10 +58,10 @@ public class DataTableRequest {
 
 	/** The is global search. */
 	private boolean isGlobalSearch;
-		
+
 	/** The cache queries. */
 	private List<DataTableColumnSpecs> cacheQueries = new ArrayList<DataTableColumnSpecs>(0);
-	
+
 	private Pageable pageable;
 
 	/**
@@ -246,7 +246,7 @@ public class DataTableRequest {
 	public void setPageable(Pageable pageable) {
 		this.pageable = pageable;
 	}
-	
+
 	public Pageable getPageable() {
 		return this.pageable;
 	}
@@ -283,12 +283,6 @@ public class DataTableRequest {
 						&& !AppUtil.isObjectEmpty(request.getParameter("columns[" + i + "][data]"))) {
 					DataTableColumnSpecs colSpec = new DataTableColumnSpecs(request, i);
 
-					if (request.getParameter("order[" + i + "][column]") != null) {
-						String sortDir = request.getParameter("order[" + i + "][dir]");
-						colSpec.setSortDir(sortDir);
-						orders.add(colSpec);
-					}
-					
 					columns.add(colSpec);
 
 					if (!AppUtil.isObjectEmpty(colSpec.getSearch())) {
@@ -300,16 +294,40 @@ public class DataTableRequest {
 			if (!AppUtil.isObjectEmpty(columns)) {
 				this.setColumns(columns);
 			}
+
+			for (int i = 0; i < maxParamsToCheck; i++) {
+				if (request.getParameter("order[" + i + "][column]") != null) {
+					String columnIndex = request.getParameter("order[" + i + "][column]");
+
+					if (request.getParameter("columns[" + columnIndex + "][data]") != null) {
+						String sortDir = request.getParameter("order[" + i + "][dir]");
+
+						DataTableColumnSpecs colSpec = new DataTableColumnSpecs();
+						colSpec.setData(request.getParameter("columns[" + columnIndex + "][data]"));
+						colSpec.setName(request.getParameter("columns[" + columnIndex + "][name]"));
+						colSpec.setOrderable(Boolean.valueOf(request.getParameter("columns[" + columnIndex + "][orderable]")));
+						colSpec.setRegex(Boolean.valueOf(request.getParameter("columns[" + columnIndex + "][search][regex]")));
+						colSpec.setSearch(request.getParameter("columns[" + columnIndex + "][search][value]"));
+						colSpec.setSearchable(Boolean.valueOf(request.getParameter("columns[" + columnIndex + "][searchable]")));
+						colSpec.setSortDir(sortDir);
+						orders.add(colSpec);
+					}
+				}
+
+			}
+
 			if (!AppUtil.isObjectEmpty(orders)) {
 				this.setOrders(orders);
 			}
 		}
-		
+
 		List<Order> sortOrders = new ArrayList<Order>();
-		for (DataTableColumnSpecs spec : orders) {
-			if (StringUtils.isNotBlank(spec.getSortDir())) {
-				Order order = new Order(Direction.fromString(spec.getSortDir()), spec.getData());
-				sortOrders.add(order);
+		if (orders != null) {
+			for (DataTableColumnSpecs spec : orders) {
+				if (StringUtils.isNotBlank(spec.getSortDir())) {
+					Order order = new Order(Direction.fromString(spec.getSortDir()), spec.getData());
+					sortOrders.add(order);
+				}
 			}
 		}
 		this.setPageable(PageRequest.of(this.getPaginationRequest().getPageNumber(), this.getPaginationRequest().getPageSize(), Sort.by(sortOrders)));

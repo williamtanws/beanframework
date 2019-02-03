@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +20,6 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.facade.UserRightFacade;
-import com.beanframework.core.facade.UserRightFacade.UserRightPreAuthorizeEnum;
 
 @Controller
 public class UserRightController extends AbstractController {
@@ -41,10 +39,10 @@ public class UserRightController extends AbstractController {
 		return new UserRightDto();
 	}
 
-	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
 	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT)
 	public String list(@ModelAttribute(UserRightWebConstants.ModelAttribute.UPDATE) UserRightDto updateDto, Model model) throws Exception {
-
+		model.addAttribute("create", false);
+		
 		if (updateDto.getUuid() != null) {
 
 			UserRightDto existsDto = userRightFacade.findOneByUuid(updateDto.getUuid());

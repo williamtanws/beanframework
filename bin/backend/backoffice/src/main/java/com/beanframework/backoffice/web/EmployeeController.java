@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +25,6 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.facade.EmployeeFacade;
-import com.beanframework.core.facade.EmployeeFacade.EmployeePreAuthorizeEnum;
 
 @Controller
 public class EmployeeController extends AbstractController {
@@ -46,10 +44,10 @@ public class EmployeeController extends AbstractController {
 		return new EmployeeDto();
 	}
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
 	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) EmployeeDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-
+		model.addAttribute("create", false);
+		
 		if (updateDto.getUuid() != null) {
 
 			EmployeeDto existingEmployee = employeeFacade.findOneByUuid(updateDto.getUuid());

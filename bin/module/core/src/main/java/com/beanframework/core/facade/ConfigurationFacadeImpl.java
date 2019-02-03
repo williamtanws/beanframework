@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.InterceptorContext;
@@ -91,16 +90,6 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	}
 
 	@Override
-	public List<ConfigurationDto> findAllDtoConfigurations() throws Exception {
-		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(Configuration.CREATED_DATE, Sort.Direction.DESC);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		return modelService.getDto(configurationService.findEntityBySorts(sorts, false), context, ConfigurationDto.class);
-	}
-
-	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<Object[]> revisions = configurationService.findHistory(dataTableRequest);
@@ -121,5 +110,15 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	@Override
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return configurationService.findCountHistory(dataTableRequest);
+	}
+
+	@Override
+	public ConfigurationDto findOneDtoById(String id) throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, id);
+
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(configurationService.findOneEntityByProperties(properties), context, ConfigurationDto.class);
 	}
 }

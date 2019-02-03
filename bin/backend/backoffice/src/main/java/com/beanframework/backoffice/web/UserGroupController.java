@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +23,6 @@ import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.facade.UserGroupFacade;
-import com.beanframework.core.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
 import com.beanframework.core.facade.UserPermissionFacade;
 import com.beanframework.core.facade.UserRightFacade;
 
@@ -52,10 +50,10 @@ public class UserGroupController extends AbstractController {
 		return new UserGroupDto();
 	}
 
-	@PreAuthorize(UserGroupPreAuthorizeEnum.READ)
 	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP)
 	public String list(@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE) UserGroupDto usergroupUpdate, Model model) throws Exception {
-
+		model.addAttribute("create", false);
+		
 		// User Authority
 		List<UserRightDto> userRights = userRightFacade.findAllDtoUserRights();
 		model.addAttribute("userRights", userRights);

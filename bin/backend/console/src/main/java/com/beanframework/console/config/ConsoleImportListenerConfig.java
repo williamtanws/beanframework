@@ -16,10 +16,13 @@ import com.beanframework.console.listener.ConfigurationImportListener;
 import com.beanframework.console.listener.CronjobImportListener;
 import com.beanframework.console.listener.CustomerImportListener;
 import com.beanframework.console.listener.DynamicFieldImportListener;
+import com.beanframework.console.listener.DynamicFieldTemplateImportListener;
 import com.beanframework.console.listener.EmployeeImportListener;
 import com.beanframework.console.listener.EnumerationImportListener;
 import com.beanframework.console.listener.LanguageImportListener;
+import com.beanframework.console.listener.MediaImportListener;
 import com.beanframework.console.listener.MenuImportListener;
+import com.beanframework.console.listener.SiteImportListener;
 import com.beanframework.console.listener.UserAuthorityImportListener;
 import com.beanframework.console.listener.UserGroupImportListener;
 import com.beanframework.console.listener.UserPermissionImportListener;
@@ -53,6 +56,11 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	@Bean
 	public DynamicFieldImportListener dynamicFieldImportListener() {
 		return new DynamicFieldImportListener();
+	}
+	
+	@Bean
+	public DynamicFieldTemplateImportListener dynamicFieldTemplateImportListener() {
+		return new DynamicFieldTemplateImportListener();
 	}
 
 	@Bean
@@ -99,47 +107,66 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	public CronjobImportListener cronjobImportListener() {
 		return new CronjobImportListener();
 	}
+	
+	@Bean
+	public SiteImportListener siteImportListener() {
+		return new SiteImportListener();
+	}
+	
+	@Bean
+	public MediaImportListener mediaImportListener() {
+		return new MediaImportListener();
+	}
 
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent event) {
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.AdminImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.AdminImport.KEY))
 			importListenerRegistry.addListener(adminImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.ConfigurationImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.ConfigurationImport.KEY))
 			importListenerRegistry.addListener(configurationImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.CronjobImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.CronjobImport.KEY))
 			importListenerRegistry.addListener(cronjobImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.CustomerImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.CustomerImport.KEY))
 			importListenerRegistry.addListener(customerImportListener());
 		
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.EnumerationImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.EnumerationImport.KEY))
 			importListenerRegistry.addListener(enumerationImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldImport.KEY))
 			importListenerRegistry.addListener(dynamicFieldImportListener());
+		
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldTemplateImport.KEY))
+			importListenerRegistry.addListener(dynamicFieldTemplateImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.EmployeeImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.EmployeeImport.KEY))
 			importListenerRegistry.addListener(employeeImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.LanguageImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.LanguageImport.KEY))
 			importListenerRegistry.addListener(languageImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.MenuImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.MenuImport.KEY))
 			importListenerRegistry.addListener(menuImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserAuthorityImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserAuthorityImport.KEY))
 			importListenerRegistry.addListener(userAuthorityImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserGroupImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserGroupImport.KEY))
 			importListenerRegistry.addListener(userGroupImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserPermissionImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserPermissionImport.KEY))
 			importListenerRegistry.addListener(userPermissionImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserRightImportListener.KEY))
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserRightImport.KEY))
 			importListenerRegistry.addListener(userRightImportListener());
+		
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.SiteImport.KEY))
+			importListenerRegistry.addListener(siteImportListener());
+		
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.MediaImport.KEY))
+			importListenerRegistry.addListener(mediaImportListener());
 	}
 }

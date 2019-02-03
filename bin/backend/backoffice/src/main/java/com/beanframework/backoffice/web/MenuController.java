@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +24,6 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.facade.MenuFacade;
-import com.beanframework.core.facade.MenuFacade.MenuPreAuthorizeEnum;
 
 @Controller
 public class MenuController extends AbstractController {
@@ -45,10 +43,10 @@ public class MenuController extends AbstractController {
 		return new MenuDto();
 	}
 
-	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	@GetMapping(value = MenuWebConstants.Path.MENU)
 	public String list(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-
+		model.addAttribute("create", false);
+		
 		if (updateDto.getUuid() != null) {
 
 			MenuDto existingMenu = menuFacade.findOneByUuid(updateDto.getUuid());

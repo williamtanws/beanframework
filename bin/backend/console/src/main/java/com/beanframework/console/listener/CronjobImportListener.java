@@ -52,10 +52,10 @@ public class CronjobImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.CronjobImportListener.KEY);
-		setName(ConsoleImportListenerConstants.CronjobImportListener.NAME);
-		setSort(ConsoleImportListenerConstants.CronjobImportListener.SORT);
-		setDescription(ConsoleImportListenerConstants.CronjobImportListener.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.CronjobImport.KEY);
+		setName(ConsoleImportListenerConstants.CronjobImport.NAME);
+		setSort(ConsoleImportListenerConstants.CronjobImport.SORT);
+		setDescription(ConsoleImportListenerConstants.CronjobImport.DESCRIPTION);
 	}
 
 	@Override
@@ -101,12 +101,12 @@ public class CronjobImportListener extends ImportListener {
 			final String[] header = beanReader.getHeader(true);
 
 			CronjobCsv csv;
-			LOGGER.info("Start import " + ConsoleImportListenerConstants.CronjobImportListener.NAME);
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.CronjobImport.NAME);
 			while ((csv = beanReader.read(CronjobCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + ConsoleImportListenerConstants.CronjobImportListener.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.CronjobImport.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

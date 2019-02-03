@@ -1,6 +1,5 @@
 package com.beanframework.core.facade;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -8,7 +7,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.InterceptorContext;
@@ -88,16 +86,6 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public int count() throws Exception {
 		return customerService.count();
-	}
-
-	@Override
-	public List<CustomerDto> findAllDtoCustomers() throws Exception {
-		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(Customer.CREATED_DATE, Sort.Direction.DESC);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		return modelService.getDto(customerService.findEntityBySorts(sorts, false), context, CustomerDto.class);
 	}
 
 	@Override

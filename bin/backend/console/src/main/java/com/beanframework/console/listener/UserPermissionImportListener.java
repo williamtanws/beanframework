@@ -48,10 +48,10 @@ public class UserPermissionImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.UserPermissionImportListener.KEY);
-		setName(ConsoleImportListenerConstants.UserPermissionImportListener.NAME);
-		setSort(ConsoleImportListenerConstants.UserPermissionImportListener.SORT);
-		setDescription(ConsoleImportListenerConstants.UserPermissionImportListener.DESCRIPTION);
+		setKey(ConsoleImportListenerConstants.UserPermissionImport.KEY);
+		setName(ConsoleImportListenerConstants.UserPermissionImport.NAME);
+		setSort(ConsoleImportListenerConstants.UserPermissionImport.SORT);
+		setDescription(ConsoleImportListenerConstants.UserPermissionImport.DESCRIPTION);
 	}
 
 	@Override
@@ -97,12 +97,12 @@ public class UserPermissionImportListener extends ImportListener {
 			final String[] header = beanReader.getHeader(true);
 
 			UserPermissionCsv csv;
-			LOGGER.info("Start import " + ConsoleImportListenerConstants.UserPermissionImportListener.NAME);
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.UserPermissionImport.NAME);
 			while ((csv = beanReader.read(UserPermissionCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import " + ConsoleImportListenerConstants.UserPermissionImportListener.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.UserPermissionImport.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

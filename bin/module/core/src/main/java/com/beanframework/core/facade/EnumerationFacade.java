@@ -35,14 +35,15 @@ public interface EnumerationFacade {
 	@PreAuthorize(EnumPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
+	@PreAuthorize(EnumPreAuthorizeEnum.READ)
 	Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception;
-
+	
+	@PreAuthorize(EnumPreAuthorizeEnum.READ)
 	int count() throws Exception;
 
+	@PreAuthorize(EnumPreAuthorizeEnum.READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(EnumPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
-
-	List<EnumerationDto> findAllDtoEnums() throws Exception;
-
 }

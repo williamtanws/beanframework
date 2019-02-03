@@ -35,14 +35,17 @@ public interface UserRightFacade {
 	@PreAuthorize(UserRightPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
 	Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
 	int count() throws Exception;
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	List<UserRightDto> findAllDtoUserRights() throws Exception;
-
 }

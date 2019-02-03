@@ -1,6 +1,7 @@
 userGroupId,userPermissionId,create,read,update,delete
 employeegroup,enumeration,+,+,+,+
 employeegroup,dynamicfield,+,+,+,+
+employeegroup,dynamicfieldtemplate,+,+,+,+
 employeegroup,language,+,+,+,+
 employeegroup,userpermission,+,+,+,+
 employeegroup,userright,+,+,+,+

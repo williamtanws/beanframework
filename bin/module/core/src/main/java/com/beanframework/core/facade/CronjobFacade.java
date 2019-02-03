@@ -36,8 +36,10 @@ public interface CronjobFacade {
 	@PreAuthorize(CronjobPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.READ)
 	Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.READ)
 	int count() throws Exception;
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.UPDATE)
@@ -52,8 +54,10 @@ public interface CronjobFacade {
 	@PreAuthorize(CronjobPreAuthorizeEnum.UPDATE)
 	void removeCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException;
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 }

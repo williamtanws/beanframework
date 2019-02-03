@@ -35,14 +35,16 @@ public interface DynamicFieldFacade {
 	@PreAuthorize(DynamicFieldPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
+	@PreAuthorize(DynamicFieldPreAuthorizeEnum.READ)
 	Page<DynamicFieldDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(DynamicFieldPreAuthorizeEnum.READ)
 	int count() throws Exception;
 
+	@PreAuthorize(DynamicFieldPreAuthorizeEnum.READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(DynamicFieldPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
-
-	List<DynamicFieldDto> findAllDtoDynamicFields() throws Exception;
 
 }

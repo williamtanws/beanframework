@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.console.converter.EntityAdminConverter;
-import com.beanframework.console.converter.EntityConfigurationConverter;
+import com.beanframework.core.converter.EntityAdminConverter;
+import com.beanframework.core.converter.EntityConfigurationConverter;
 
 @Configuration
 public class ConsoleEntityConfig {

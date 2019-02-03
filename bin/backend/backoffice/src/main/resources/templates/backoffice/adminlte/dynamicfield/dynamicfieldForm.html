@@ -36,10 +36,10 @@
 							<li class="active">
 								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
 							</li>
-							<li>
+							<li sec:authorize="hasAuthority('language_read')">
 								<a href="#tab_language" data-toggle="tab" th:text="#{module.language}" onclick="changeTab('language')"></a>
 							</li>
-							<li>
+							<li sec:authorize="hasAuthority('enumeration_read')">
 								<a href="#tab_enumeration" data-toggle="tab" th:text="#{module.enumeration}" onclick="changeTab('enumeration')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
@@ -117,13 +117,13 @@
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_language">
+							<div class="tab-pane" id="tab_language" sec:authorize="hasAuthority('language_read')">
 								<div class="box-body">
 									<th:block layout:insert="~{/common/adminlte/common/component/language :: language (language='language')}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_enumeration">
+							<div class="tab-pane" id="tab_enumeration" sec:authorize="hasAuthority('enumeration_read')">
 								<div class="box-body">
 									<th:block layout:insert="~{/common/adminlte/common/component/enumeration :: enumeration (enumerations='enumerations')}"></th:block>
 								</div>

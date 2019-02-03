@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,6 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.facade.EmployeeFacade;
-import com.beanframework.core.facade.EmployeeFacade.EmployeeSessionPreAuthorizeEnum;
 
 @Controller
 public class EmployeeSessionController {
@@ -35,7 +33,6 @@ public class EmployeeSessionController {
 	@Value(EmployeeWebConstants.Session.View.SESSION_LIST)
 	private String VIEW_EMPLOYEE_SESSIONLIST;
 
-	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.READ)
 	@GetMapping(value = EmployeeWebConstants.Session.Path.SESSION)
 	public String list(Model model, @RequestParam Map<String, Object> requestParams) {
 

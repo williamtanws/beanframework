@@ -1,6 +1,5 @@
 package com.beanframework.core.facade;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -9,7 +8,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -96,16 +94,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public int count() throws Exception {
 		return employeeService.count();
-	}
-
-	@Override
-	public List<EmployeeDto> findAllDtoEmployees() throws Exception {
-		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(Employee.CREATED_DATE, Sort.Direction.DESC);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		return modelService.getDto(employeeService.findEntityBySorts(sorts, false), context, EmployeeDto.class);
 	}
 
 	@Override

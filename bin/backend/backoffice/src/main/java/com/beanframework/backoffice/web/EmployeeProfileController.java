@@ -32,9 +32,9 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.core.data.BackofficeConfigurationDto;
+import com.beanframework.core.data.ConfigurationDto;
 import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.core.facade.BackofficeConfigurationFacade;
+import com.beanframework.core.facade.ConfigurationFacade;
 import com.beanframework.core.facade.EmployeeFacade;
 import com.beanframework.employee.EmployeeConstants;
 
@@ -45,7 +45,7 @@ public class EmployeeProfileController {
 	private EmployeeFacade employeeFacade;
 
 	@Autowired
-	private BackofficeConfigurationFacade configurationFacade;
+	private ConfigurationFacade configurationFacade;
 
 	@Autowired
 	private LocaleMessageService localeMessageService;
@@ -102,7 +102,7 @@ public class EmployeeProfileController {
 			return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(Files.readAllBytes(profilePicture.toPath()));
 		} else {
 
-			BackofficeConfigurationDto configuration = configurationFacade.findOneDtoById(CONFIGURATION_DEFAULT_AVATAR);
+			ConfigurationDto configuration = configurationFacade.findOneDtoById(CONFIGURATION_DEFAULT_AVATAR);
 
 			if (configuration == null) {
 				return null;

@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.console.converter.DtoAdminConverter;
-import com.beanframework.console.converter.DtoConfigurationConverter;
+import com.beanframework.core.converter.DtoAdminConverter;
+import com.beanframework.core.converter.DtoConfigurationConverter;
 import com.beanframework.core.data.AdminDto;
 import com.beanframework.core.data.ConfigurationDto;
 
