@@ -122,4 +122,12 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 		context.setInitializeCollection(false);
 		return modelService.getDto(userGroupService.findEntityBySorts(sorts, false), context, UserGroupDto.class);
 	}
+	
+	@Override
+	public UserGroupDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(userGroupService.create(), context, UserGroupDto.class);
+	}
 }

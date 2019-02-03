@@ -21,8 +21,7 @@ public interface AdminWebConstants {
 
 	public interface ModelAttribute {
 
-		public static final String CREATE = "adminCreate";
-		public static final String UPDATE = "adminUpdate";
+		public static final String ADMIN_DTO = "adminDto";
 		public static final String PROFILE = "adminProfile";
 	}
 	

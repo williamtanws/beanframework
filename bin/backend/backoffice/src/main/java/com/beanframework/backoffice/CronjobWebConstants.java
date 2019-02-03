@@ -21,8 +21,6 @@ public interface CronjobWebConstants {
 	}
 
 	public interface ModelAttribute {
-
-		public static final String CREATE = "cronjobCreate";
-		public static final String UPDATE = "cronjobUpdate";
+		public static final String CRONJOB_DTO = "cronjobDto";
 	}
 }

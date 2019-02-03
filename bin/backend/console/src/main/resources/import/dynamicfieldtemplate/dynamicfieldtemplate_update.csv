@@ -1,7 +1,7 @@
 id,name,dynamicFieldIds
 menutemplate,Menu Template,name_en;name_cn
 userrighttemplate,User Right Template,name_en;name_cn
-userpermissiontemplate,User Right Template,name_en;name_cn
-usergrouptemplate,User Right Template,name_en;name_cn
+userpermissiontemplate,User Permission Template,name_en;name_cn
+usergrouptemplate,User Group Template,name_en;name_cn
 employeetemplate,Employee Template,name_en;name_cn
 customertemplate,Customer Template,name_en;name_cn

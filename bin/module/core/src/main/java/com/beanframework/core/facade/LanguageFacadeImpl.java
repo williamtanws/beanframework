@@ -110,4 +110,12 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return languageService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public LanguageDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(languageService.create(), context, LanguageDto.class);
+	}
 }

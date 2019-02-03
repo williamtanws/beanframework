@@ -1,10 +1,8 @@
 package com.beanframework.employee;
 
 public interface EmployeeConstants {
-	
-	public static final String PROFILE_PICTURE_LOCATION = "${module.employee.profile.picture.location}";
-	
-	public interface Discriminator{
+
+	public interface Discriminator {
 		public static final String EMPLOYEE = "employee";
 	}
 
@@ -15,7 +13,7 @@ public interface EmployeeConstants {
 		public static final String EMPLOYEE_DELETE = "EMPLOYEE_DELETE";
 	}
 
-	public static interface Locale{
+	public static interface Locale {
 		public static final String ID_REQUIRED = "module.employee.id.required";
 		public static final String ID_EXISTS = "module.employee.id.exists";
 		public static final String ID_NOT_EXISTS = "module.employee.id.notexists";
@@ -25,5 +23,8 @@ public interface EmployeeConstants {
 		public static final String NAME_REQUIRED = "module.employee.name.required";
 		public static final String PICTURE_WRONGFORMAT = "module.employee.picture.wrongformat";
 	}
+
+	public static final String PROFILE_PICTURE_LOCATION = "${module.employee.profile.picture.location}";
+	public static final String DYNAMIC_FIELD_TEMPLATE = "module.employee.dynamicfield.template";
 
 }

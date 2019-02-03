@@ -18,8 +18,6 @@ public interface MediaWebConstants {
 	}
 
 	public interface ModelAttribute {
-
-		public static final String CREATE = "mediaCreate";
-		public static final String UPDATE = "mediaUpdate";
+		public static final String MEDIA_DTO = "mediaDto";
 	}
 }

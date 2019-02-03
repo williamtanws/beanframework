@@ -6,11 +6,11 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.email')}" method="post" th:object="${emailUpdate}">
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.email')}" method="post" th:object="${emailDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}"/>
 			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="status" th:value="${emailUpdate.status.name()}">
-			<input type="hidden" name="uuid" th:value="${emailUpdate.uuid}" />
+			<input type="hidden" name="status" th:value="${emailDto.status.name()}">
+			<input type="hidden" name="uuid" th:value="${emailDto.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -190,9 +190,9 @@
 						</button>
 						<h4 class="modal-title" th:text="#{module.email.attachment}"></h4>
 					</div>
-					<form id="email-createattachment-form" role="form" th:action="@{${@environment.getProperty('path.email')}}" method="post" th:object="${emailUpdate}" enctype="multipart/form-data">
+					<form id="email-createattachment-form" role="form" th:action="@{${@environment.getProperty('path.email')}}" method="post" th:object="${emailDto}" enctype="multipart/form-data">
 						<input type="hidden" name="createattachment">
-						<input type="hidden" name="uuid" th:value="${emailUpdate.uuid}">
+						<input type="hidden" name="uuid" th:value="${emailDto.uuid}">
 						<div class="modal-body">
 							<div class="modal-body">
 								<div class="container-fluid">
@@ -232,7 +232,7 @@
 						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.no}+'  '"></button>
 						<form id="delete-email-form" th:action="@{${@environment.getProperty('path.email')}}" method="post" th:object="${emailSearch}">
 							<input type="hidden" name="deleteattachment">
-							<input type="hidden" name="uuid" th:value="${emailUpdate.uuid}">
+							<input type="hidden" name="uuid" th:value="${emailDto.uuid}">
 							<input type="hidden" name="filename">
 							<button type="submit" class="btn btn-danger" th:text="#{module.backoffice.delete}"></button>
 						</form>
@@ -318,7 +318,7 @@
 		</script>
 
 		<th:block
-			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.email')}}, objectSearch=${emailSearch}, deleteUuid=${emailUpdate.uuid})}"></th:block>
+			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.email')}}, objectSearch=${emailSearch}, deleteUuid=${emailDto.uuid})}"></th:block>
 	</th:block>
 </body>
 </html>

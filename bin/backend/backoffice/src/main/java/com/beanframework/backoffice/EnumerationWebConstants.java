@@ -18,8 +18,6 @@ public interface EnumerationWebConstants {
 	}
 
 	public interface ModelAttribute {
-
-		public static final String CREATE = "enumerationCreate";
-		public static final String UPDATE = "enumerationUpdate";
+		public static final String ENUMERATION_DTO = "enumerationDto";
 	}
 }

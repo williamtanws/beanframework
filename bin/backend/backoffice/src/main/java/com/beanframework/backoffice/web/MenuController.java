@@ -37,24 +37,18 @@ public class MenuController extends AbstractController {
 	@Value(MenuWebConstants.View.LIST)
 	private String VIEW_MENU_LIST;
 
-	@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE)
-	public MenuDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new MenuDto();
-	}
-
 	@GetMapping(value = MenuWebConstants.Path.MENU)
-	public String list(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
-		
-		if (updateDto.getUuid() != null) {
 
-			MenuDto existingMenu = menuFacade.findOneByUuid(updateDto.getUuid());
+		if (menuDto.getUuid() != null) {
+
+			MenuDto existingMenu = menuFacade.findOneByUuid(menuDto.getUuid());
 			if (existingMenu != null) {
 
-				model.addAttribute(MenuWebConstants.ModelAttribute.UPDATE, existingMenu);
+				model.addAttribute(MenuWebConstants.ModelAttribute.MENU_DTO, existingMenu);
 			} else {
-				updateDto.setUuid(null);
+				menuDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
@@ -63,23 +57,27 @@ public class MenuController extends AbstractController {
 
 		return VIEW_MENU_LIST;
 	}
-	
+
 	@GetMapping(value = MenuWebConstants.Path.MENU, params = "create")
-	public String createView(Model model) throws Exception {
+	public String createView(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model) throws Exception {
+		
+		menuDto = menuFacade.createDto();
+		model.addAttribute(MenuWebConstants.ModelAttribute.MENU_DTO, menuDto);
 		model.addAttribute("create", true);
+		
 		return VIEW_MENU_LIST;
 	}
 
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "create")
-	public RedirectView create(@ModelAttribute(MenuWebConstants.ModelAttribute.CREATE) MenuDto createDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView create(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		if (createDto.getUuid() != null) {
+		if (menuDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
-				createDto = menuFacade.update(createDto);
+				menuDto = menuFacade.update(menuDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -87,7 +85,7 @@ public class MenuController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(MenuDto.UUID, createDto.getUuid());
+		redirectAttributes.addAttribute(MenuDto.UUID, menuDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -96,15 +94,15 @@ public class MenuController extends AbstractController {
 	}
 
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "update")
-	public RedirectView update(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto updateDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView update(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
-		if (updateDto.getUuid() == null) {
+		if (menuDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			try {
-				updateDto = menuFacade.update(updateDto);
+				menuDto = menuFacade.update(menuDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -112,7 +110,7 @@ public class MenuController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(MenuDto.UUID, updateDto.getUuid());
+		redirectAttributes.addAttribute(MenuDto.UUID, menuDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -121,16 +119,16 @@ public class MenuController extends AbstractController {
 	}
 
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "delete")
-	public RedirectView delete(@ModelAttribute(MenuWebConstants.ModelAttribute.UPDATE) MenuDto updateDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView delete(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			menuFacade.delete(updateDto.getUuid());
+			menuFacade.delete(menuDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(MenuDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(MenuWebConstants.ModelAttribute.UPDATE, updateDto);
+			redirectAttributes.addFlashAttribute(MenuWebConstants.ModelAttribute.MENU_DTO, menuDto);
 		}
 
 		RedirectView redirectView = new RedirectView();

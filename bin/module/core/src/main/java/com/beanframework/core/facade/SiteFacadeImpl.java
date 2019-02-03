@@ -110,4 +110,12 @@ public class SiteFacadeImpl implements SiteFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return siteService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public SiteDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(siteService.create(), context, SiteDto.class);
+	}
 }

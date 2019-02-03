@@ -6,10 +6,10 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.configuration')}" method="post" th:object="${configurationUpdate}">
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.configuration')}" method="post" th:object="${configurationDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}"/>
 			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${configurationUpdate.uuid}" />
+			<input type="hidden" name="uuid" th:value="${configurationDto.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -104,7 +104,7 @@
 		                        url: /*[[${@environment.getProperty('path.api.configuration.checkid')}]]*/ ,
 		                        type: "get",
 		                        data: {
-		                            uuid: /*[[${configurationUpdate.uuid}]]*/ ,
+		                            uuid: /*[[${configurationDto.uuid}]]*/ ,
 		                            id: function() {
 		                                return $("#update-form input[name='id']").val();
 		                            }
@@ -149,7 +149,7 @@
 		</script>
 
 		<th:block
-			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.configuration')}}, objectSearch=${configurationSearch}, deleteUuid=${configurationUpdate.uuid})}"></th:block>
+			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.configuration')}}, objectSearch=${configurationSearch}, deleteUuid=${configurationDto.uuid})}"></th:block>
 	</th:block>
 </body>
 </html>

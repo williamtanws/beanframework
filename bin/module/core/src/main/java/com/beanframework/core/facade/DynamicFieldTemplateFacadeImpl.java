@@ -110,4 +110,12 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return dynamicFieldTemplateService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public DynamicFieldTemplateDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(dynamicFieldTemplateService.create(), context, DynamicFieldTemplateDto.class);
+	}
 }

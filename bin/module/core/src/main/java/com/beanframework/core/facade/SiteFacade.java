@@ -45,5 +45,8 @@ public interface SiteFacade {
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	@PreAuthorize(SitePreAuthorizeEnum.READ)
-	int countHistory(DataTableRequest dataTableRequest) throws Exception;	
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	@PreAuthorize(SitePreAuthorizeEnum.CREATE)
+	SiteDto createDto() throws Exception;	
 }

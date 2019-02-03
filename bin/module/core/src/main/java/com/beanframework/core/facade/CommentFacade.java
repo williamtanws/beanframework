@@ -50,4 +50,7 @@ public interface CommentFacade {
 	@PreAuthorize(CommentPreAuthorizeEnum.READ)
 	List<CommentDto> findAllDtoComments() throws Exception;
 
+	@PreAuthorize(CommentPreAuthorizeEnum.CREATE)
+	CommentDto createDto() throws Exception;
+
 }

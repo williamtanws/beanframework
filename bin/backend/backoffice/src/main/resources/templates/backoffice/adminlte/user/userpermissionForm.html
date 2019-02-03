@@ -6,10 +6,10 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.userpermission')}" method="post" th:object="${userpermissionUpdate}">
-			<input type="hidden" name="create" th:if="*{uuid == null}"/>
-			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${userpermissionUpdate.uuid}" />
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.userpermission')}" method="post" th:object="${userpermissionDto}">
+			<input type="hidden" name="create" th:if="*{uuid == null}" />
+			<input type="hidden" name="update" th:if="*{uuid != null}" />
+			<input type="hidden" name="uuid" th:value="${userpermissionDto.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -75,25 +75,7 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
-									<div class="row" th:if="*{uuid == null}">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="name">Name(en)</label>
-												<input type="hidden" name="fields[0].dynamicField.id" value="name_en">
-												<input type="text" class="form-control" name="fields[0].value" value="">
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="name">Name(cn)</label>
-												<input type="hidden" name="fields[1].dynamicField.id" value="name_cn">
-												<input type="text" class="form-control" name="fields[1].value" value="">
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row" th:if="*{uuid != null}">
+									<div class="row">
 										<th:block layout:insert="~{/common/adminlte/common/component/attribute :: attribute}"></th:block>
 									</div>
 								</div>
@@ -141,7 +123,7 @@
 		                        url: /*[[${@environment.getProperty('path.api.userpermission.checkid')}]]*/ ,
 		                        type: "get",
 		                        data: {
-		                            uuid: /*[[${userpermissionUpdate.uuid}]]*/ ,
+		                            uuid: /*[[${userpermissionDto.uuid}]]*/ ,
 		                            id: function() {
 		                                return $("#update-form input[name='id']").val();
 		                            }
@@ -192,7 +174,7 @@
 		</script>
 
 		<th:block
-			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.userpermission')}}, objectSearch=${userpermissionSearch}, deleteUuid=${userpermissionUpdate.uuid})}"></th:block>
+			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.userpermission')}}, objectSearch=${userpermissionSearch}, deleteUuid=${userpermissionDto.uuid})}"></th:block>
 	</th:block>
 </body>
 </html>

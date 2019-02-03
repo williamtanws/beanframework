@@ -18,8 +18,6 @@ public interface UserGroupWebConstants {
 	}
 
 	public interface ModelAttribute {
-
-		public static final String CREATE = "usergroupCreate";
-		public static final String UPDATE = "usergroupUpdate";
+		public static final String USERGROUP_DTO = "usergroupDto";
 	}
 }

@@ -43,26 +43,20 @@ public class CronjobController extends AbstractController {
 
 	@Value(CronjobWebConstants.View.LIST)
 	private String VIEW_CRONJOB_LIST;
-
-	@ModelAttribute(CronjobWebConstants.ModelAttribute.UPDATE)
-	public CronjobDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new CronjobDto();
-	}
-
+	
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB)
-	public String list(@ModelAttribute(CronjobWebConstants.ModelAttribute.UPDATE) CronjobDto cronjobUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 		
-		if (cronjobUpdate.getUuid() != null) {
+		if (cronjobDto.getUuid() != null) {
 
-			CronjobDto existingCronjob = cronjobFacade.findOneByUuid(cronjobUpdate.getUuid());
+			CronjobDto existingCronjob = cronjobFacade.findOneByUuid(cronjobDto.getUuid());
 
 			if (existingCronjob != null) {
 
-				model.addAttribute(CronjobWebConstants.ModelAttribute.UPDATE, existingCronjob);
+				model.addAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO, existingCronjob);
 			} else {
-				cronjobUpdate.setUuid(null);
+				cronjobDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
@@ -71,20 +65,24 @@ public class CronjobController extends AbstractController {
 	}
 	
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB, params = "create")
-	public String createView(Model model) throws Exception {
+	public String createView(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model) throws Exception {
+		
+		cronjobDto = cronjobFacade.createDto();
+		model.addAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO, cronjobDto);
 		model.addAttribute("create", true);
+		
 		return VIEW_CRONJOB_LIST;
 	}
 
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "create")
-	public RedirectView create(@ModelAttribute(CronjobWebConstants.ModelAttribute.CREATE) CronjobDto cronjobCreate, Model model, BindingResult bindingResult,
+	public RedirectView create(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (cronjobCreate.getUuid() != null) {
+		if (cronjobDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 			try {
-				cronjobCreate = cronjobFacade.create(cronjobCreate);
+				cronjobDto = cronjobFacade.create(cronjobDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -92,7 +90,7 @@ public class CronjobController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(CronjobDto.UUID, cronjobCreate.getUuid());
+		redirectAttributes.addAttribute(CronjobDto.UUID, cronjobDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -101,15 +99,15 @@ public class CronjobController extends AbstractController {
 	}
 
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "update")
-	public RedirectView update(@ModelAttribute(CronjobWebConstants.ModelAttribute.UPDATE) CronjobDto cronjobUpdate, Model model, BindingResult bindingResult,
+	public RedirectView update(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
-		if (cronjobUpdate.getUuid() == null) {
+		if (cronjobDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			try {
-				cronjobUpdate = cronjobFacade.update(cronjobUpdate);
+				cronjobDto = cronjobFacade.update(cronjobDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -117,7 +115,7 @@ public class CronjobController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(CronjobDto.UUID, cronjobUpdate.getUuid());
+		redirectAttributes.addAttribute(CronjobDto.UUID, cronjobDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -126,16 +124,16 @@ public class CronjobController extends AbstractController {
 	}
 
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "delete")
-	public RedirectView delete(@ModelAttribute(CronjobWebConstants.ModelAttribute.UPDATE) CronjobDto cronjobUpdate, Model model, BindingResult bindingResult,
+	public RedirectView delete(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {
-			cronjobManagerService.deleteJobByUuid(cronjobUpdate.getUuid());
-			cronjobFacade.delete(cronjobUpdate.getUuid());
+			cronjobManagerService.deleteJobByUuid(cronjobDto.getUuid());
+			cronjobFacade.delete(cronjobDto.getUuid());
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(CronjobDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(CronjobWebConstants.ModelAttribute.UPDATE, cronjobUpdate);
+			redirectAttributes.addFlashAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO, cronjobDto);
 		}
 
 		RedirectView redirectView = new RedirectView();
@@ -146,21 +144,21 @@ public class CronjobController extends AbstractController {
 	}
 
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "trigger")
-	public RedirectView trigger(@ModelAttribute(CronjobWebConstants.ModelAttribute.UPDATE) CronjobDto cronjobUpdate, Model model, BindingResult bindingResult,
+	public RedirectView trigger(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws ParseException {
 
-		if (cronjobUpdate.getUuid() == null) {
+		if (cronjobDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			String triggerStartDate = (String) requestParams.get("jobTriggerStartDate");
 			if (StringUtils.isNotBlank(triggerStartDate)) {
 				Date date = new SimpleDateFormat("MM/dd/yyyy h:mm a").parse(triggerStartDate);
-				cronjobUpdate.setTriggerStartDate(date);
+				cronjobDto.setTriggerStartDate(date);
 			}
 
 			try {
-				cronjobFacade.trigger(cronjobUpdate);
+				cronjobFacade.trigger(cronjobDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -168,7 +166,7 @@ public class CronjobController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(CronjobDto.UUID, cronjobUpdate.getUuid());
+		redirectAttributes.addAttribute(CronjobDto.UUID, cronjobDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -177,10 +175,10 @@ public class CronjobController extends AbstractController {
 	}
 
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "createjobdata")
-	public RedirectView createjobdata(@ModelAttribute(CronjobWebConstants.ModelAttribute.UPDATE) CronjobDto cronjobUpdate, Model model, BindingResult bindingResult,
+	public RedirectView createjobdata(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
-		if (cronjobUpdate.getUuid() == null) {
+		if (cronjobDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
@@ -192,7 +190,7 @@ public class CronjobController extends AbstractController {
 			cronjobData.setValue(cronjobDataValue);
 
 			try {
-				cronjobFacade.updateCronjobData(cronjobUpdate.getUuid(), cronjobData);
+				cronjobFacade.updateCronjobData(cronjobDto.getUuid(), cronjobData);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -200,7 +198,7 @@ public class CronjobController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(CronjobDto.UUID, cronjobUpdate.getUuid());
+		redirectAttributes.addAttribute(CronjobDto.UUID, cronjobDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -209,17 +207,17 @@ public class CronjobController extends AbstractController {
 	}
 
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "deletejobdata")
-	public RedirectView deletejobdata(@ModelAttribute(CronjobWebConstants.ModelAttribute.CREATE) CustomerDto cronjobUpdate, Model model, BindingResult bindingResult,
+	public RedirectView deletejobdata(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CustomerDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
-		if (cronjobUpdate.getUuid() == null) {
+		if (cronjobDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			UUID jobDataUuidToDelete = UUID.fromString((String) requestParams.get("jobDataUuid"));
 
 			try {
-				cronjobFacade.removeCronjobData(cronjobUpdate.getUuid(), jobDataUuidToDelete);
+				cronjobFacade.removeCronjobData(cronjobDto.getUuid(), jobDataUuidToDelete);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -227,7 +225,7 @@ public class CronjobController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(CronjobDto.UUID, cronjobUpdate.getUuid());
+		redirectAttributes.addAttribute(CronjobDto.UUID, cronjobDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);

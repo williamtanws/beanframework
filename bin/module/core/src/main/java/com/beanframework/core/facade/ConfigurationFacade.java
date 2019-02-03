@@ -46,6 +46,11 @@ public interface ConfigurationFacade {
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
+	
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.CREATE)
+	ConfigurationDto createDto() throws Exception;
 
 	ConfigurationDto findOneDtoById(String id) throws Exception;
+
+
 }

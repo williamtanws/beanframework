@@ -122,5 +122,13 @@ public class CommentFacadeImpl implements CommentFacade {
 		context.setInitializeCollection(true);
 		return modelService.getDto(commentService.findEntityBySorts(sorts, false), context, CommentDto.class);
 	}
+	
+	@Override
+	public CommentDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(commentService.create(), context, CommentDto.class);
+	}
 
 }

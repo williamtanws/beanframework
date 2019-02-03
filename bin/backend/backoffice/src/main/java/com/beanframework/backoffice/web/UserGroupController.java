@@ -44,14 +44,8 @@ public class UserGroupController extends AbstractController {
 	@Value(UserGroupWebConstants.View.LIST)
 	private String VIEW_USERGROUP_LIST;
 
-	@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE)
-	public UserGroupDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new UserGroupDto();
-	}
-
 	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP)
-	public String list(@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE) UserGroupDto usergroupUpdate, Model model) throws Exception {
+	public String list(@ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 		
 		// User Authority
@@ -61,14 +55,14 @@ public class UserGroupController extends AbstractController {
 		List<UserPermissionDto> userPermissions = userPermissionFacade.findAllDtoUserPermissions();
 		model.addAttribute("userPermissions", userPermissions);
 		
-		if (usergroupUpdate.getUuid() != null) {
+		if (usergroupDto.getUuid() != null) {
 
-			UserGroupDto existingUserGroup = userGroupFacade.findOneByUuid(usergroupUpdate.getUuid());
+			UserGroupDto existingUserGroup = userGroupFacade.findOneByUuid(usergroupDto.getUuid());
 
 			if (existingUserGroup != null) {
-				model.addAttribute(UserGroupWebConstants.ModelAttribute.UPDATE, existingUserGroup);
+				model.addAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO, existingUserGroup);
 			} else {
-				usergroupUpdate.setUuid(null);
+				usergroupDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
@@ -76,7 +70,7 @@ public class UserGroupController extends AbstractController {
 	}
 	
 	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "create")
-	public String createView(Model model, @ModelAttribute(UserGroupWebConstants.ModelAttribute.CREATE) UserGroupDto createDto) throws Exception {
+	public String createView(Model model, @ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto) throws Exception {
 		
 		// User Authority
 		List<UserRightDto> userRights = userRightFacade.findAllDtoUserRights();
@@ -85,19 +79,22 @@ public class UserGroupController extends AbstractController {
 		List<UserPermissionDto> userPermissions = userPermissionFacade.findAllDtoUserPermissions();
 		model.addAttribute("userPermissions", userPermissions);
 		
+		usergroupDto = userGroupFacade.createDto();
+		model.addAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO, usergroupDto);
 		model.addAttribute("create", true);
+		
 		return VIEW_USERGROUP_LIST;
 	}
 
 	@PostMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "create")
-	public RedirectView create(@ModelAttribute(UserGroupWebConstants.ModelAttribute.CREATE) UserGroupDto createDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (createDto.getUuid() != null) {
+		if (usergroupDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 			try {
-				createDto = userGroupFacade.create(createDto);
+				usergroupDto = userGroupFacade.create(usergroupDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -105,7 +102,7 @@ public class UserGroupController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(UserGroupDto.UUID, createDto.getUuid());
+		redirectAttributes.addAttribute(UserGroupDto.UUID, usergroupDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -114,15 +111,15 @@ public class UserGroupController extends AbstractController {
 	}
 
 	@PostMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "update")
-	public RedirectView update(@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE) UserGroupDto updateDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
-		if (updateDto.getUuid() == null) {
+		if (usergroupDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			try {
-				updateDto = userGroupFacade.update(updateDto);
+				usergroupDto = userGroupFacade.update(usergroupDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -130,7 +127,7 @@ public class UserGroupController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(UserGroupDto.UUID, updateDto.getUuid());
+		redirectAttributes.addAttribute(UserGroupDto.UUID, usergroupDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -139,16 +136,16 @@ public class UserGroupController extends AbstractController {
 	}
 
 	@PostMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "delete")
-	public RedirectView delete(@ModelAttribute(UserGroupWebConstants.ModelAttribute.UPDATE) UserGroupDto updateDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {
-			userGroupFacade.delete(updateDto.getUuid());
+			userGroupFacade.delete(usergroupDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(UserGroupDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(UserGroupWebConstants.ModelAttribute.UPDATE, updateDto);
+			redirectAttributes.addFlashAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO, usergroupDto);
 		}
 
 		RedirectView redirectView = new RedirectView();

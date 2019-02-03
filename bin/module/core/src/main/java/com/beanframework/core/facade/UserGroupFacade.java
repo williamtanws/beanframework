@@ -35,13 +35,20 @@ public interface UserGroupFacade {
 	@PreAuthorize(UserGroupPreAuthorizeEnum.DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
+	@PreAuthorize(UserGroupPreAuthorizeEnum.READ)
 	Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(UserGroupPreAuthorizeEnum.READ)
 	int count() throws Exception;
 
+	@PreAuthorize(UserGroupPreAuthorizeEnum.READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(UserGroupPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	@PreAuthorize(UserGroupPreAuthorizeEnum.CREATE)
+	UserGroupDto createDto() throws Exception;
 
 	List<UserGroupDto> findAllDtoUserGroups() throws Exception;
 

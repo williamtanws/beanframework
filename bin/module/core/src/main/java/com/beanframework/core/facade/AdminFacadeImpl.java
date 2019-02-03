@@ -110,5 +110,13 @@ public class AdminFacadeImpl implements AdminFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return adminService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public AdminDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(adminService.create(), context, AdminDto.class);
+	}
 
 }

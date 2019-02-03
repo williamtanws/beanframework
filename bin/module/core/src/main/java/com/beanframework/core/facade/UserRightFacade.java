@@ -47,5 +47,8 @@ public interface UserRightFacade {
 	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.CREATE)
+	UserRightDto createDto() throws Exception;
+
 	List<UserRightDto> findAllDtoUserRights() throws Exception;
 }

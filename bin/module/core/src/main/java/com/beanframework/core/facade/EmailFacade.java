@@ -54,4 +54,7 @@ public interface EmailFacade {
 	@PreAuthorize(EmailPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(EmailPreAuthorizeEnum.CREATE)
+	EmailDto createDto() throws Exception;
+
 }

@@ -33,25 +33,19 @@ public class UserPermissionController extends AbstractController {
 	@Value(UserPermissionWebConstants.View.LIST)
 	private String VIEW_USERPERMISSION_LIST;
 
-	@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE)
-	public UserPermissionDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new UserPermissionDto();
-	}
-
 	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION)
-	public String list(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermissionDto userpermissionUpdate, Model model, @RequestParam Map<String, Object> requestParams)
+	public String list(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		model.addAttribute("create", false);
 		
-		if (userpermissionUpdate.getUuid() != null) {
+		if (userpermissionDto.getUuid() != null) {
 
-			UserPermissionDto existingUserPermission = userPermissionFacade.findOneByUuid(userpermissionUpdate.getUuid());
+			UserPermissionDto existsDto = userPermissionFacade.findOneByUuid(userpermissionDto.getUuid());
 
-			if (existingUserPermission != null) {
-				model.addAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE, existingUserPermission);
+			if (existsDto != null) {
+				model.addAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO, existsDto);
 			} else {
-				userpermissionUpdate.setUuid(null);
+				userpermissionDto.setUuid(null);
 				model.addAttribute(BackofficeWebConstants.Model.ERROR, localeMessageService.getMessage(BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND));
 			}
 		}
@@ -60,21 +54,25 @@ public class UserPermissionController extends AbstractController {
 	}
 	
 	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "create")
-	public String createView(Model model) throws Exception {
+	public String createView(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model) throws Exception {
+		
+		userpermissionDto = userPermissionFacade.createDto();
+		model.addAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO, userpermissionDto);
 		model.addAttribute("create", true);
+		
 		return VIEW_USERPERMISSION_LIST;
 	}
 
 	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "create")
-	public RedirectView create(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.CREATE) UserPermissionDto userpermissionCreate, Model model, BindingResult bindingResult,
+	public RedirectView create(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (userpermissionCreate.getUuid() != null) {
+		if (userpermissionDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
-				userpermissionCreate = userPermissionFacade.create(userpermissionCreate);
+				userpermissionDto = userPermissionFacade.create(userpermissionDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -82,7 +80,7 @@ public class UserPermissionController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(UserPermissionDto.UUID, userpermissionCreate.getUuid());
+		redirectAttributes.addAttribute(UserPermissionDto.UUID, userpermissionDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -91,14 +89,14 @@ public class UserPermissionController extends AbstractController {
 	}
 
 	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "update")
-	public RedirectView update(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermissionDto userpermissionUpdate, Model model, BindingResult bindingResult,
+	public RedirectView update(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (userpermissionUpdate.getUuid() == null) {
+		if (userpermissionDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 			try {
-				userpermissionUpdate = userPermissionFacade.update(userpermissionUpdate);
+				userpermissionDto = userPermissionFacade.update(userpermissionDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -106,7 +104,7 @@ public class UserPermissionController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(UserPermissionDto.UUID, userpermissionUpdate.getUuid());
+		redirectAttributes.addAttribute(UserPermissionDto.UUID, userpermissionDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -115,17 +113,17 @@ public class UserPermissionController extends AbstractController {
 	}
 
 	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "delete")
-	public RedirectView delete(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE) UserPermissionDto userpermissionUpdate, Model model, BindingResult bindingResult,
+	public RedirectView delete(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {
 
-			userPermissionFacade.delete(userpermissionUpdate.getUuid());
+			userPermissionFacade.delete(userpermissionDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(UserPermissionDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(UserPermissionWebConstants.ModelAttribute.UPDATE, userpermissionUpdate);
+			redirectAttributes.addFlashAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO, userpermissionDto);
 		}
 
 		RedirectView redirectView = new RedirectView();

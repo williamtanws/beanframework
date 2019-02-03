@@ -122,4 +122,12 @@ public class UserRightFacadeImpl implements UserRightFacade {
 		context.setInitializeCollection(false);
 		return modelService.getDto(userRightService.findEntityBySorts(sorts, false), context, UserRightDto.class);
 	}
+
+	@Override
+	public UserRightDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(userRightService.create(), context, UserRightDto.class);
+	}
 }

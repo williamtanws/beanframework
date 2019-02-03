@@ -53,4 +53,7 @@ public interface MenuFacade {
 	@PreAuthorize(MenuPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(MenuPreAuthorizeEnum.CREATE)
+	MenuDto createDto() throws Exception;
+
 }

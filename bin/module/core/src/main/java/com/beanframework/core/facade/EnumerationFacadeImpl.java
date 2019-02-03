@@ -110,5 +110,13 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return enumerationService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public EnumerationDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(enumerationService.create(), context, EnumerationDto.class);
+	}
 
 }

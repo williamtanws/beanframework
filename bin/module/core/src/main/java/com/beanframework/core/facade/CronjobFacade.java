@@ -60,4 +60,7 @@ public interface CronjobFacade {
 	@PreAuthorize(CronjobPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.CREATE)
+	CronjobDto createDto() throws Exception;
+
 }

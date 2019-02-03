@@ -19,8 +19,6 @@ public interface EmailWebConstants {
 	}
 
 	public interface ModelAttribute {
-
-		public static final String CREATE = "emailCreate";
-		public static final String UPDATE = "emailUpdate";
+		public static final String EMAIL_DTO = "emailDto";
 	}
 }

@@ -17,4 +17,6 @@ public final class UserPermissionConstants {
 		public static final String ID_EXISTS = "module.userpermission.id.exists";
 		public static final String UUID_NOT_EXISTS = "module.userpermission.uuid.notexists";;
 	}
+
+	public static final String DYNAMIC_FIELD_TEMPLATE = "module.userpermission.dynamicfield.template";
 }

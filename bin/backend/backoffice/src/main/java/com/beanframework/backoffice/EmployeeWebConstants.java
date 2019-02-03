@@ -32,8 +32,7 @@ public interface EmployeeWebConstants {
 
 	public interface ModelAttribute {
 
-		public static final String CREATE = "employeeCreate";
-		public static final String UPDATE = "employeeUpdate";
+		public static final String EMPLOYEE_DTO = "employeeDto";
 		public static final String PROFILE = "employeeProfile";
 	}
 	

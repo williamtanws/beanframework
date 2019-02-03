@@ -9,7 +9,7 @@
 		<section class="content" th:with="emailName=#{module.email.name}">
 			<!-- List Table-->
 			<th:block
-				layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.email.icon')}}, title=#{module.email}, objectUpdate=${emailUpdate}, createAuthority='email_create', updateAuthority='email_update', tableName='email', listUrl=@{${@environment.getProperty('path.api.email.page')}}, listFields=${ {{'name', emailName}} }, editFormAction=@{${@environment.getProperty('path.email')}}, editForm=@{${@environment.getProperty('view.email.form')}}, createButton='1' )}"></th:block>
+				layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.email.icon')}}, title=#{module.email}, objectDto=${emailDto}, createAuthority='email_create', updateAuthority='email_update', tableName='email', listUrl=@{${@environment.getProperty('path.api.email.page')}}, listFields=${ {{'name', emailName}} }, editFormAction=@{${@environment.getProperty('path.email')}}, editForm=@{${@environment.getProperty('view.email.form')}}, createButton='1' )}"></th:block>
 		</section>
 		<script th:inline="javascript">
 			    /*<![CDATA[*/

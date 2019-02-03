@@ -207,5 +207,13 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return cronjobService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public CronjobDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(cronjobService.create(), context, CronjobDto.class);
+	}
 
 }
