@@ -10,7 +10,7 @@ import com.beanframework.core.bean.ConfigBeanImpl;
 public class ConfigurationBeanConfig {
 	
 	@Bean(name = "Config")
-	public ConfigBean config() throws Exception {
+	public ConfigBean ConfigBean() throws Exception {
 		return new ConfigBeanImpl();
 	}
 }
