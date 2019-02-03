@@ -30,22 +30,16 @@ public class SiteController extends AbstractController {
 	@Value(SiteWebConstants.View.LIST)
 	private String VIEW_SITE_LIST;
 
-	@ModelAttribute(SiteWebConstants.ModelAttribute.UPDATE)
-	public SiteDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new SiteDto();
-	}
-
 	@GetMapping(value = SiteWebConstants.Path.SITE)
-	public String list(@ModelAttribute(SiteWebConstants.ModelAttribute.UPDATE) SiteDto updateDto, Model model) throws Exception {
+	public String list(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 		
-		if (updateDto.getUuid() != null) {
+		if (siteDto.getUuid() != null) {
 
-			SiteDto existsDto = siteFacade.findOneByUuid(updateDto.getUuid());
+			SiteDto existsDto = siteFacade.findOneByUuid(siteDto.getUuid());
 
 			if (existsDto != null) {
-				model.addAttribute(SiteWebConstants.ModelAttribute.UPDATE, existsDto);
+				model.addAttribute(SiteWebConstants.ModelAttribute.SITE_DTO, existsDto);
 			} else {
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
@@ -55,21 +49,25 @@ public class SiteController extends AbstractController {
 	}
 
 	@GetMapping(value = SiteWebConstants.Path.SITE, params = "create")
-	public String createView(Model model) throws Exception {
+	public String createView(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model) throws Exception {
+		
+		siteDto = siteFacade.createDto();
+		model.addAttribute(SiteWebConstants.ModelAttribute.SITE_DTO, siteDto);
 		model.addAttribute("create", true);
+		
 		return VIEW_SITE_LIST;
 	}
 
 	@PostMapping(value = SiteWebConstants.Path.SITE, params = "create")
-	public RedirectView create(@ModelAttribute(SiteWebConstants.ModelAttribute.CREATE) SiteDto createDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView create(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
-		if (createDto.getUuid() != null) {
+		if (siteDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
-				createDto = siteFacade.create(createDto);
+				siteDto = siteFacade.create(siteDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -77,7 +75,7 @@ public class SiteController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(SiteDto.UUID, createDto.getUuid());
+		redirectAttributes.addAttribute(SiteDto.UUID, siteDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -86,15 +84,15 @@ public class SiteController extends AbstractController {
 	}
 
 	@PostMapping(value = SiteWebConstants.Path.SITE, params = "update")
-	public RedirectView update(@ModelAttribute(SiteWebConstants.ModelAttribute.UPDATE) SiteDto updateDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView update(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
-		if (updateDto.getUuid() == null) {
+		if (siteDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			try {
-				updateDto = siteFacade.update(updateDto);
+				siteDto = siteFacade.update(siteDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -102,7 +100,7 @@ public class SiteController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(SiteDto.UUID, updateDto.getUuid());
+		redirectAttributes.addAttribute(SiteDto.UUID, siteDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -111,15 +109,15 @@ public class SiteController extends AbstractController {
 	}
 
 	@PostMapping(value = SiteWebConstants.Path.SITE, params = "delete")
-	public RedirectView delete(@ModelAttribute(SiteWebConstants.ModelAttribute.UPDATE) SiteDto updateDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
-			siteFacade.delete(updateDto.getUuid());
+			siteFacade.delete(siteDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(SiteDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(SiteDto.UUID, updateDto.getUuid());
+			redirectAttributes.addAttribute(SiteDto.UUID, siteDto.getUuid());
 		}
 
 		RedirectView redirectView = new RedirectView();

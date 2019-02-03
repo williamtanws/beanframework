@@ -110,4 +110,12 @@ public class MediaFacadeImpl implements MediaFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return mediaService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public MediaDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(mediaService.create(), context, MediaDto.class);
+	}
 }

@@ -18,8 +18,7 @@ public interface ConfigurationWebConstants {
 	}
 
 	public interface ModelAttribute {
-		public static final String CREATE = "configurationCreate";
-		public static final String UPDATE = "configurationUpdate";
+		public static final String CONFIGURATION_DTO = "configurationDto";
 		public static final String PROFILE = "configurationProfile";
 	}
 }

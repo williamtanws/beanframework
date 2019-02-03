@@ -20,8 +20,7 @@ public interface CustomerWebConstants {
 	}
 
 	public interface ModelAttribute {
-		public static final String CREATE = "customerCreate";
-		public static final String UPDATE = "customerUpdate";
+		public static final String CUSTOMER_DTO = "customerDto";
 		public static final String PROFILE = "customerProfile";
 	}
 }

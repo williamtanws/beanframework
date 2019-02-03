@@ -34,25 +34,19 @@ public class EmailController extends AbstractController {
 	@Value(EmailWebConstants.View.LIST)
 	private String VIEW_EMAIL_LIST;
 
-	@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE)
-	public EmailDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new EmailDto();
-	}
-
 	@GetMapping(value = EmailWebConstants.Path.EMAIL)
-	public String list(@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 		
-		if (emailUpdate.getUuid() != null) {
+		if (emailDto.getUuid() != null) {
 
-			EmailDto existingEmail = emailFacade.findOneByUuid(emailUpdate.getUuid());
+			EmailDto existingEmail = emailFacade.findOneByUuid(emailDto.getUuid());
 
 			if (existingEmail != null) {
 
-				model.addAttribute(EmailWebConstants.ModelAttribute.UPDATE, existingEmail);
+				model.addAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO, existingEmail);
 			} else {
-				emailUpdate.setUuid(null);
+				emailDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
@@ -62,20 +56,24 @@ public class EmailController extends AbstractController {
 	
 
 	@GetMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
-	public String createView(Model model) throws Exception {
+	public String createView(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model) throws Exception {
+		
+		emailDto = emailFacade.createDto();
+		model.addAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO, emailDto);
 		model.addAttribute("create", true);
+		
 		return VIEW_EMAIL_LIST;
 	}
 	
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
-	public RedirectView create(@ModelAttribute(EmailWebConstants.ModelAttribute.CREATE) EmailDto emailCreate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView create(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
-		if (emailCreate.getUuid() != null) {
+		if (emailDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 			try {
-				emailCreate = emailFacade.create(emailCreate);
+				emailDto = emailFacade.create(emailDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -83,7 +81,7 @@ public class EmailController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(EmailDto.UUID, emailCreate.getUuid());
+		redirectAttributes.addAttribute(EmailDto.UUID, emailDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -92,14 +90,14 @@ public class EmailController extends AbstractController {
 	}
 
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "update")
-	public RedirectView update(@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView update(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
-		if (emailUpdate.getUuid() == null) {
+		if (emailDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 			try {
-				emailUpdate = emailFacade.update(emailUpdate);
+				emailDto = emailFacade.update(emailDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -107,7 +105,7 @@ public class EmailController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(EmailDto.UUID, emailUpdate.getUuid());
+		redirectAttributes.addAttribute(EmailDto.UUID, emailDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -116,16 +114,16 @@ public class EmailController extends AbstractController {
 	}
 
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "delete")
-	public RedirectView delete(@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView delete(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			emailFacade.delete(emailUpdate.getUuid());
+			emailFacade.delete(emailDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(EmailDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(EmailDto.UUID, emailUpdate.getUuid());
+			redirectAttributes.addAttribute(EmailDto.UUID, emailDto.getUuid());
 		}
 
 		RedirectView redirectView = new RedirectView();
@@ -136,14 +134,14 @@ public class EmailController extends AbstractController {
 	}
 
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "createattachment")
-	public RedirectView createAttachment(@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model, BindingResult bindingResult,
+	public RedirectView createAttachment(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("uploadAttachments") MultipartFile[] uploadAttachments) {
 
-		if (emailUpdate.getUuid() == null) {
+		if (emailDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 			try {
-				emailFacade.saveAttachment(emailUpdate, uploadAttachments);
+				emailFacade.saveAttachment(emailDto, uploadAttachments);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -151,7 +149,7 @@ public class EmailController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(EmailDto.UUID, emailUpdate.getUuid());
+		redirectAttributes.addAttribute(EmailDto.UUID, emailDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -160,14 +158,14 @@ public class EmailController extends AbstractController {
 	}
 
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "deleteattachment")
-	public RedirectView deleteAttachment(@ModelAttribute(EmailWebConstants.ModelAttribute.UPDATE) EmailDto emailUpdate, Model model, BindingResult bindingResult,
+	public RedirectView deleteAttachment(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("filename") String filename) {
 
-		if (emailUpdate.getUuid() == null) {
+		if (emailDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 			try {
-				emailFacade.deleteAttachment(emailUpdate.getUuid(), filename);
+				emailFacade.deleteAttachment(emailDto.getUuid(), filename);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -175,7 +173,7 @@ public class EmailController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(EmailDto.UUID, emailUpdate.getUuid());
+		redirectAttributes.addAttribute(EmailDto.UUID, emailDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);

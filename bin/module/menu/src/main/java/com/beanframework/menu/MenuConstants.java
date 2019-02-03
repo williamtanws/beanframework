@@ -14,4 +14,6 @@ public interface MenuConstants {
 		public static final String ID_REQUIRED = "module.menu.id.required";
 		public static final String ID_EXISTS = "module.menu.id.exists";
 	}
+
+	public static final String DYNAMIC_FIELD_TEMPLATE = "module.menu.dynamicfield.template";
 }

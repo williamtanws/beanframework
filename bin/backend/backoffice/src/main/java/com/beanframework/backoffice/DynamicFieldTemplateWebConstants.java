@@ -18,8 +18,6 @@ public interface DynamicFieldTemplateWebConstants {
 	}
 
 	public interface ModelAttribute {
-
-		public static final String CREATE = "dynamicfieldtemplateCreate";
-		public static final String UPDATE = "dynamicfieldtemplateUpdate";
+		public static final String DYNAMICFIELDTEMPLATE_DTO = "dynamicfieldtemplateDto";
 	}
 }

@@ -18,7 +18,6 @@ public interface UserRightWebConstants {
 	}
 
 	public interface ModelAttribute {
-		public static final String CREATE = "userrightCreate";
-		public static final String UPDATE = "userrightUpdate";
+		public static final String USERRIGHT_DTO = "userrightDto";
 	}
 }

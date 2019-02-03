@@ -18,6 +18,6 @@ public interface AuditorWebConstants {
 
 	public interface ModelAttribute {
 
-		public static final String UPDATE = "auditorUpdate";
+		public static final String AUDITOR_DTO = "auditorDto";
 	}
 }

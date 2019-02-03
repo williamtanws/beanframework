@@ -6,10 +6,10 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.cronjob')}" method="post" th:object="${cronjobUpdate}">
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.cronjob')}" method="post" th:object="${cronjobDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}"/>
 			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${cronjobUpdate.uuid}" />
+			<input type="hidden" name="uuid" th:value="${cronjobDto.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -18,8 +18,8 @@
 								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 									<th:block th:if="*{uuid != null}" layout:insert="~{/common/adminlte/common/component/delete :: button (deleteAuthority='cronjob_delete')}"></th:block>
 								</div>
-								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center" th:if="*{uuid != null}">
-									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-trigger" th:text="#{module.cronjob.trigger}" sec:authorize="hasAuthority('cronjob_update')"></button>
+								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+									<button th:if="*{uuid != null}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-trigger" th:text="#{module.cronjob.trigger}" sec:authorize="hasAuthority('cronjob_update')"></button>
 								</div>
 								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: right">
 									<th:block layout:insert="~{/common/adminlte/common/component/refresh :: button (deleteAuthority='cronjob_delete')}"></th:block>
@@ -108,7 +108,7 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr th:each="row : ${cronjobUpdate.cronjobDatas}">
+													<tr th:each="row : ${cronjobDto.cronjobDatas}">
 														<td th:text="${row.name}"></td>
 														<td th:text="${row.value}"></td>
 														<td sec:authorize="hasAuthority('cronjob_update')">
@@ -183,7 +183,7 @@
 		                        url: /*[[${@environment.getProperty('path.api.cronjob.checkid')}]]*/ ,
 		                        type: "get",
 		                        data: {
-		                            uuid: /*[[${cronjobUpdate.uuid}]]*/ ,
+		                            uuid: /*[[${cronjobDto.uuid}]]*/ ,
 		                            id: function() {
 		                                return $("#update-form input[name='id']").val();
 		                            }
@@ -252,7 +252,7 @@
 		</script>
 
 		<th:block
-			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.cronjob')}}, objectSearch=${cronjobSearch}, deleteUuid=${cronjobUpdate.uuid})}"></th:block>
+			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.cronjob')}}, objectSearch=${cronjobSearch}, deleteUuid=${cronjobDto.uuid})}"></th:block>
 
 		<div class="modal fade" id="modal-trigger" sec:authorize="hasAuthority('cronjob_update')">
 			<div class="modal-dialog">
@@ -263,7 +263,7 @@
 						</button>
 						<h4 class="modal-title" th:text="#{module.cronjob.trigger}"></h4>
 					</div>
-					<form id="cronjob-trigger-form" role="form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post" th:object="${cronjobUpdate}">
+					<form id="cronjob-trigger-form" role="form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post" th:object="${cronjobDto}">
 						<input type="hidden" name="trigger">
 						<div class="modal-body">
 							<div class="container-fluid">
@@ -332,7 +332,7 @@
 						</button>
 						<h4 class="modal-title" th:text="#{module.cronjob.jobdata}"></h4>
 					</div>
-					<form id="cronjob-createjobdata-form" role="form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post" th:object="${cronjobUpdate}">
+					<form id="cronjob-createjobdata-form" role="form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post" th:object="${cronjobDto}">
 						<input type="hidden" name="createjobdata">
 						<div class="modal-body">
 							<div class="modal-body">

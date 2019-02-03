@@ -30,24 +30,18 @@ public class CommentController extends AbstractController {
 	@Value(CommentWebConstants.View.LIST)
 	private String VIEW_COMMENT_LIST;
 
-	@ModelAttribute(CommentWebConstants.ModelAttribute.UPDATE)
-	public CommentDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new CommentDto();
-	}
-
 	@GetMapping(value = CommentWebConstants.Path.COMMENT)
-	public String list(@ModelAttribute(CommentWebConstants.ModelAttribute.UPDATE) CommentDto updateDto, Model model) throws Exception {
+	public String list(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 		
-		if (updateDto.getUuid() != null) {
+		if (commentDto.getUuid() != null) {
 
-			CommentDto existsDto = commentFacade.findOneByUuid(updateDto.getUuid());
+			CommentDto existsDto = commentFacade.findOneByUuid(commentDto.getUuid());
 
 			if (existsDto != null) {
-				model.addAttribute(CommentWebConstants.ModelAttribute.UPDATE, existsDto);
+				model.addAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO, existsDto);
 			} else {
-				updateDto.setUuid(null);
+				commentDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
@@ -56,21 +50,25 @@ public class CommentController extends AbstractController {
 	}
 	
 	@GetMapping(value = CommentWebConstants.Path.COMMENT, params = "create")
-	public String createView(Model model) throws Exception {
+	public String createView(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model) throws Exception {
+		
+		commentDto = commentFacade.createDto();
+		model.addAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO, commentDto);
 		model.addAttribute("create", true);
+		
 		return VIEW_COMMENT_LIST;
 	}
 
 	@PostMapping(value = CommentWebConstants.Path.COMMENT, params = "create")
-	public RedirectView create(@ModelAttribute(CommentWebConstants.ModelAttribute.CREATE) CommentDto createDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView create(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
-		if (createDto.getUuid() != null) {
+		if (commentDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
-				createDto = commentFacade.create(createDto);
+				commentDto = commentFacade.create(commentDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -78,7 +76,7 @@ public class CommentController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(CommentDto.UUID, createDto.getUuid());
+		redirectAttributes.addAttribute(CommentDto.UUID, commentDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -87,15 +85,15 @@ public class CommentController extends AbstractController {
 	}
 
 	@PostMapping(value = CommentWebConstants.Path.COMMENT, params = "update")
-	public RedirectView update(@ModelAttribute(CommentWebConstants.ModelAttribute.UPDATE) CommentDto updateDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView update(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
-		if (updateDto.getUuid() == null) {
+		if (commentDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			try {
-				updateDto = commentFacade.update(updateDto);
+				commentDto = commentFacade.update(commentDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -103,7 +101,7 @@ public class CommentController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(CommentDto.UUID, updateDto.getUuid());
+		redirectAttributes.addAttribute(CommentDto.UUID, commentDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -112,16 +110,16 @@ public class CommentController extends AbstractController {
 	}
 
 	@PostMapping(value = CommentWebConstants.Path.COMMENT, params = "delete")
-	public RedirectView delete(@ModelAttribute(CommentWebConstants.ModelAttribute.UPDATE) CommentDto updateDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			commentFacade.delete(updateDto.getUuid());
+			commentFacade.delete(commentDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(CommentDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(CommentDto.UUID, updateDto.getUuid());
+			redirectAttributes.addAttribute(CommentDto.UUID, commentDto.getUuid());
 		}
 
 		RedirectView redirectView = new RedirectView();

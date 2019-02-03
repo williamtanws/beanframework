@@ -139,4 +139,12 @@ public class MenuFacadeImpl implements MenuFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return menuService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public MenuDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(menuService.create(), context, MenuDto.class);
+	}
 }

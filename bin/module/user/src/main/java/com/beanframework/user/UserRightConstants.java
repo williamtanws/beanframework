@@ -9,7 +9,6 @@ public final class UserRightConstants {
 	public interface Table {
 		public static final String USER_RIGHT = "userright";
 		public static final String USER_RIGHT_FIELD = "userrightfield";
-
 	}
 
 	public interface Locale {
@@ -17,4 +16,6 @@ public final class UserRightConstants {
 		public static final String ID_EXISTS = "module.userright.id.exists";
 		public static final String UUID_NOT_EXISTS = "module.userright.uuid.notexists";;
 	}
+	
+	public static final String DYNAMIC_FIELD_TEMPLATE = "module.userright.dynamicfield.template";
 }

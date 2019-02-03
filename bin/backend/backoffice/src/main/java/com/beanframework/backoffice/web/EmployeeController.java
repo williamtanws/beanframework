@@ -38,25 +38,25 @@ public class EmployeeController extends AbstractController {
 	@Value(EmployeeWebConstants.View.LIST)
 	private String VIEW_EMPLOYEE_LIST;
 
-	@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE)
+	@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO)
 	public EmployeeDto update(Model model) throws Exception {
 		model.addAttribute("create", false);
 		return new EmployeeDto();
 	}
 
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
-	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) EmployeeDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 		
-		if (updateDto.getUuid() != null) {
+		if (employeeDto.getUuid() != null) {
 
-			EmployeeDto existingEmployee = employeeFacade.findOneByUuid(updateDto.getUuid());
+			EmployeeDto existingEmployee = employeeFacade.findOneByUuid(employeeDto.getUuid());
 
 			if (existingEmployee != null) {
 
-				model.addAttribute(EmployeeWebConstants.ModelAttribute.UPDATE, existingEmployee);
+				model.addAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO, existingEmployee);
 			} else {
-				updateDto.setUuid(null);
+				employeeDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
@@ -65,21 +65,25 @@ public class EmployeeController extends AbstractController {
 	}
 	
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
-	public String createView(Model model) throws Exception {
+	public String createView(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model) throws Exception {
+		
+		employeeDto = employeeFacade.createDto();
+		model.addAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO, employeeDto);
 		model.addAttribute("create", true);
+		
 		return VIEW_EMPLOYEE_LIST;
 	}
 
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
-	public RedirectView create(@ModelAttribute(EmployeeWebConstants.ModelAttribute.CREATE) EmployeeDto employeeCreate, Model model, BindingResult bindingResult,
+	public RedirectView create(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
-		if (employeeCreate.getUuid() != null) {
+		if (employeeDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
-				employeeCreate = employeeFacade.create(employeeCreate);
+				employeeDto = employeeFacade.create(employeeDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -87,7 +91,7 @@ public class EmployeeController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(EmployeeDto.UUID, employeeCreate.getUuid());
+		redirectAttributes.addAttribute(EmployeeDto.UUID, employeeDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -96,50 +100,50 @@ public class EmployeeController extends AbstractController {
 	}
 
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "update")
-	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) EmployeeDto updateDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
-		if (updateDto.getUuid() == null) {
+		if (employeeDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			// UserGroup
-			if (updateDto.getTableUserGroups() != null) {
-				List<UserGroupDto> userGroups = employeeFacade.findOneByUuid(updateDto.getUuid()).getUserGroups();
+			if (employeeDto.getTableUserGroups() != null) {
+				List<UserGroupDto> userGroups = employeeFacade.findOneByUuid(employeeDto.getUuid()).getUserGroups();
 
-				for (int i = 0; i < updateDto.getTableUserGroups().length; i++) {
+				for (int i = 0; i < employeeDto.getTableUserGroups().length; i++) {
 
 					boolean remove = true;
-					if (updateDto.getTableSelectedUserGroups() != null && updateDto.getTableSelectedUserGroups().length > i && BooleanUtils.parseBoolean(updateDto.getTableSelectedUserGroups()[i])) {
+					if (employeeDto.getTableSelectedUserGroups() != null && employeeDto.getTableSelectedUserGroups().length > i && BooleanUtils.parseBoolean(employeeDto.getTableSelectedUserGroups()[i])) {
 						remove = false;
 					}
 
 					if (remove) {
 						for (Iterator<UserGroupDto> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext();) {
-							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableUserGroups()[i]))) {
+							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(employeeDto.getTableUserGroups()[i]))) {
 								userGroupsIterator.remove();
 							}
 						}
 					} else {
 						boolean add = true;
 						for (Iterator<UserGroupDto> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext();) {
-							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(updateDto.getTableUserGroups()[i]))) {
+							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(employeeDto.getTableUserGroups()[i]))) {
 								add = false;
 							}
 						}
 
 						if (add) {
 							UserGroupDto userGroup = new UserGroupDto();
-							userGroup.setUuid(UUID.fromString(updateDto.getTableUserGroups()[i]));
+							userGroup.setUuid(UUID.fromString(employeeDto.getTableUserGroups()[i]));
 							userGroups.add(userGroup);
 						}
 					}
 				}
-				updateDto.setUserGroups(userGroups);
+				employeeDto.setUserGroups(userGroups);
 			}
 
 			try {
-				updateDto = employeeFacade.update(updateDto);
+				employeeDto = employeeFacade.update(employeeDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -148,7 +152,7 @@ public class EmployeeController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(EmployeeDto.UUID, updateDto.getUuid());
+		redirectAttributes.addAttribute(EmployeeDto.UUID, employeeDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -157,16 +161,16 @@ public class EmployeeController extends AbstractController {
 	}
 
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "delete")
-	public RedirectView delete(@ModelAttribute(EmployeeWebConstants.ModelAttribute.UPDATE) EmployeeDto updateDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {
-			employeeFacade.delete(updateDto.getUuid());
+			employeeFacade.delete(employeeDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(EmployeeDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(EmployeeWebConstants.ModelAttribute.UPDATE, updateDto);
+			redirectAttributes.addFlashAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO, employeeDto);
 		}
 
 		RedirectView redirectView = new RedirectView();

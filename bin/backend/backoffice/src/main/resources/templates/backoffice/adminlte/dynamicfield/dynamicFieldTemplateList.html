@@ -8,7 +8,7 @@
 	<th:block layout:fragment="content">
 		<section class="content" th:with="dynamicfieldtemplateName=#{module.dynamicfieldtemplate.name}">
 			<!-- List Table-->
-			<th:block layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.dynamicfieldtemplate.icon')}}, title=#{module.dynamicfieldtemplate}, objectUpdate=${dynamicfieldtemplateUpdate}, createAuthority='dynamicfieldtemplate_create', updateAuthority='dynamicfieldtemplate_update', tableName='dynamicfieldtemplate', listUrl=@{${@environment.getProperty('path.api.dynamicfieldtemplate.page')}}, listFields=${ {{'id', 'ID'},{'name', dynamicfieldtemplateName}} }, editFormAction=@{${@environment.getProperty('path.dynamicfieldtemplate')}}, editForm=@{${@environment.getProperty('view.dynamicfieldtemplate.form')}}, createButton='1' )}"></th:block>
+			<th:block layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.dynamicfieldtemplate.icon')}}, title=#{module.dynamicfieldtemplate}, objectDto=${dynamicfieldtemplateDto}, createAuthority='dynamicfieldtemplate_create', updateAuthority='dynamicfieldtemplate_update', tableName='dynamicfieldtemplate', listUrl=@{${@environment.getProperty('path.api.dynamicfieldtemplate.page')}}, listFields=${ {{'id', 'ID'},{'name', dynamicfieldtemplateName}} }, editFormAction=@{${@environment.getProperty('path.dynamicfieldtemplate')}}, editForm=@{${@environment.getProperty('view.dynamicfieldtemplate.form')}}, createButton='1' )}"></th:block>
 		</section>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/

@@ -46,4 +46,7 @@ public interface AdminFacade {
 
 	@PreAuthorize(AdminPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	@PreAuthorize(AdminPreAuthorizeEnum.CREATE)
+	AdminDto createDto() throws Exception;
 }

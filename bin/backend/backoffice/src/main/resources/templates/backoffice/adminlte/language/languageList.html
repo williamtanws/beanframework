@@ -9,7 +9,7 @@
 		<section class="content" th:with="languageName=#{module.language.name}, languageActive=#{module.language.active}, languageSort=#{module.language.sort}">
 			<!-- List Table-->
 			<th:block
-				layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.language.icon')}}, title=#{module.language}, objectUpdate=${languageUpdate}, createAuthority='language_create', updateAuthority='language_update', tableName='language', listUrl=@{${@environment.getProperty('path.api.language.page')}}, listFields=${ {{'id', 'ID'},{'name', languageName}, {'active', languageActive}, {'sort', languageSort}} }, editFormAction=@{${@environment.getProperty('path.language')}}, editForm=@{${@environment.getProperty('view.language.form')}}, createButton='1' )}"></th:block>
+				layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.language.icon')}}, title=#{module.language}, objectDto=${languageDto}, createAuthority='language_create', updateAuthority='language_update', tableName='language', listUrl=@{${@environment.getProperty('path.api.language.page')}}, listFields=${ {{'id', 'ID'},{'name', languageName}, {'active', languageActive}, {'sort', languageSort}} }, editFormAction=@{${@environment.getProperty('path.language')}}, editForm=@{${@environment.getProperty('view.language.form')}}, createButton='1' )}"></th:block>
 		</section>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/

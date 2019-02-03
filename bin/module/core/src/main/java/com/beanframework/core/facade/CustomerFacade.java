@@ -47,4 +47,7 @@ public interface CustomerFacade {
 	@PreAuthorize(CustomerPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(CustomerPreAuthorizeEnum.CREATE)
+	CustomerDto createDto() throws Exception;
+
 }

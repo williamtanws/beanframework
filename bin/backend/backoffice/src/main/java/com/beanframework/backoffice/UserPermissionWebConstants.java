@@ -18,7 +18,6 @@ public interface UserPermissionWebConstants {
 	}
 
 	public interface ModelAttribute {
-		public static final String CREATE = "userpermissionCreate";
-		public static final String UPDATE = "userpermissionUpdate";
+		public static final String USERPERMISSION_DTO = "userpermissionDto";
 	}
 }

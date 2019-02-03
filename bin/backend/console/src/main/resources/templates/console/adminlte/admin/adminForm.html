@@ -6,10 +6,10 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.admin')}" method="post" th:object="${adminUpdate}">
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.admin')}" method="post" th:object="${adminDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}"/>
 			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${adminUpdate.uuid}"/>
+			<input type="hidden" name="uuid" th:value="${adminDto.uuid}"/>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -77,8 +77,8 @@
 												<label for="enabled" th:text="#{module.admin.enabled}"></label>
 												<small th:text="#{module.admin.enabled.indicate}"></small>
 												<select class="form-control" name="enabled">
-													<option value="1" th:selected="${adminUpdate.enabled == true} " th:text="#{module.console.yes}"></option>
-													<option value="0" th:selected="${adminUpdate.enabled == false}" th:text="#{module.console.no}"></option>
+													<option value="1" th:selected="${adminDto.enabled == true} " th:text="#{module.console.yes}"></option>
+													<option value="0" th:selected="${adminDto.enabled == false}" th:text="#{module.console.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -110,8 +110,8 @@
 												<label for="credentialsNonExpired" th:text="#{module.admin.credentials.expired}"></label>
 												<small th:text="#{module.admin.credentials.expired.indicate}"></small>
 												<select class="form-control" name="credentialsNonExpired">
-													<option value="1" th:selected="${adminUpdate.credentialsNonExpired == true}" th:text="#{module.console.no}"></option>
-													<option value="0" th:selected="${adminUpdate.credentialsNonExpired == false}" th:text="#{module.console.yes}"></option>
+													<option value="1" th:selected="${adminDto.credentialsNonExpired == true}" th:text="#{module.console.no}"></option>
+													<option value="0" th:selected="${adminDto.credentialsNonExpired == false}" th:text="#{module.console.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -164,7 +164,7 @@
 		                        url: /*[[${@environment.getProperty('path.api.admin.checkid')}]]*/ ,
 		                        type: "get",
 		                        data: {
-		                            uuid: /*[[${adminUpdate.uuid}]]*/ ,
+		                            uuid: /*[[${adminDto.uuid}]]*/ ,
 		                            id: function() {
 		                                return $("#update-form input[name='id']").val();
 		                            }
@@ -230,7 +230,7 @@
 		</script>
 
 		<th:block
-			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.admin')}}, objectSearch=${adminSearch}, deleteUuid=${adminUpdate.uuid})}"></th:block>
+			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.admin')}}, objectSearch=${adminSearch}, deleteUuid=${adminDto.uuid})}"></th:block>
 	</th:block>
 </body>
 </html>

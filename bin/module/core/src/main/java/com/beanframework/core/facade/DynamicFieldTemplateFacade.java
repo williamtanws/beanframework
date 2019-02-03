@@ -47,4 +47,7 @@ public interface DynamicFieldTemplateFacade {
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.CREATE)
+	DynamicFieldTemplateDto createDto() throws Exception;
+
 }

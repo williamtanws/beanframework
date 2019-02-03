@@ -169,4 +169,12 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return employeeService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public EmployeeDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(employeeService.create(), context, EmployeeDto.class);
+	}
 }

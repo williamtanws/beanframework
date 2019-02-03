@@ -110,5 +110,13 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return customerService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public CustomerDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(customerService.create(), context, CustomerDto.class);
+	}
 
 }

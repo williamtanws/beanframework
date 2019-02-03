@@ -6,10 +6,10 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.auditor')}" method="post" th:object="${auditorUpdate}">
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.auditor')}" method="post" th:object="${auditorDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}"/>
 			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${auditorUpdate.uuid}" />
+			<input type="hidden" name="uuid" th:value="${auditorDto.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
 					<!-- Custom Tabs -->

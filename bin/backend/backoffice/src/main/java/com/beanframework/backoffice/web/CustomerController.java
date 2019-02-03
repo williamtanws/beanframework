@@ -33,25 +33,19 @@ public class CustomerController extends AbstractController {
 	@Value(CustomerWebConstants.View.LIST)
 	private String VIEW_CUSTOMER_LIST;
 
-	@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE)
-	public CustomerDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new CustomerDto();
-	}
-
 	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER)
-	public String list(@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE) CustomerDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 		
-		if (updateDto.getUuid() != null) {
+		if (customerDto.getUuid() != null) {
 
-			CustomerDto existingCustomer = customerFacade.findOneByUuid(updateDto.getUuid());
+			CustomerDto existingCustomer = customerFacade.findOneByUuid(customerDto.getUuid());
 
 			if (existingCustomer != null) {
 
-				model.addAttribute(CustomerWebConstants.ModelAttribute.UPDATE, existingCustomer);
+				model.addAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO, existingCustomer);
 			} else {
-				updateDto.setUuid(null);
+				customerDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
@@ -60,21 +54,25 @@ public class CustomerController extends AbstractController {
 	}
 	
 	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "create")
-	public String createView(Model model) throws Exception {
+	public String createView(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model) throws Exception {
+		
+		customerDto = customerFacade.createDto();
+		model.addAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO, customerDto);
 		model.addAttribute("create", true);
+		
 		return VIEW_CUSTOMER_LIST;
 	}
 
 	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "create")
-	public RedirectView create(@ModelAttribute(CustomerWebConstants.ModelAttribute.CREATE) CustomerDto customerCreate, Model model, BindingResult bindingResult,
+	public RedirectView create(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (customerCreate.getUuid() != null) {
+		if (customerDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
-				customerCreate = customerFacade.create(customerCreate);
+				customerDto = customerFacade.create(customerDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -82,7 +80,7 @@ public class CustomerController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(CustomerDto.UUID, customerCreate.getUuid());
+		redirectAttributes.addAttribute(CustomerDto.UUID, customerDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -91,15 +89,15 @@ public class CustomerController extends AbstractController {
 	}
 
 	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "update")
-	public RedirectView update(@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE) CustomerDto updateDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
-		if (updateDto.getUuid() == null) {
+		if (customerDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			try {
-				updateDto = customerFacade.update(updateDto);
+				customerDto = customerFacade.update(customerDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -107,7 +105,7 @@ public class CustomerController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(CustomerDto.UUID, updateDto.getUuid());
+		redirectAttributes.addAttribute(CustomerDto.UUID, customerDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -116,16 +114,16 @@ public class CustomerController extends AbstractController {
 	}
 
 	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "delete")
-	public RedirectView delete(@ModelAttribute(CustomerWebConstants.ModelAttribute.UPDATE) CustomerDto updateDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {
-			customerFacade.delete(updateDto.getUuid());
+			customerFacade.delete(customerDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(CustomerDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(CustomerWebConstants.ModelAttribute.UPDATE, updateDto);
+			redirectAttributes.addFlashAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO, customerDto);
 		}
 
 		RedirectView redirectView = new RedirectView();

@@ -19,7 +19,6 @@ public interface MenuWebConstants {
 	}
 
 	public interface ModelAttribute {
-		public static final String CREATE = "menuCreate";
-		public static final String UPDATE = "menuUpdate";
+		public static final String MENU_DTO = "menuDto";
 	}
 }

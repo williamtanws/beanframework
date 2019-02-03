@@ -19,7 +19,6 @@ public interface CommentWebConstants {
 
 	public interface ModelAttribute {
 
-		public static final String CREATE = "commentCreate";
-		public static final String UPDATE = "commentUpdate";
+		public static final String COMMENT_DTO = "commentDto";
 	}
 }

@@ -45,5 +45,8 @@ public interface MediaFacade {
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	@PreAuthorize(MediaPreAuthorizeEnum.READ)
-	int countHistory(DataTableRequest dataTableRequest) throws Exception;	
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	@PreAuthorize(MediaPreAuthorizeEnum.CREATE)
+	MediaDto createDto() throws Exception;	
 }

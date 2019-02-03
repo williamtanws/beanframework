@@ -134,4 +134,12 @@ public class EmailFacadeImpl implements EmailFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return emailService.findCountHistory(dataTableRequest);
 	}
+	
+	@Override
+	public EmailDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(emailService.create(), context, EmailDto.class);
+	}
 }

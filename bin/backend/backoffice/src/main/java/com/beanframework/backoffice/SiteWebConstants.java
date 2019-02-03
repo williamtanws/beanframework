@@ -18,8 +18,6 @@ public interface SiteWebConstants {
 	}
 
 	public interface ModelAttribute {
-
-		public static final String CREATE = "siteCreate";
-		public static final String UPDATE = "siteUpdate";
+		public static final String SITE_DTO = "siteDto";
 	}
 }

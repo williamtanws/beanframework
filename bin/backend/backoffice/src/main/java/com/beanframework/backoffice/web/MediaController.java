@@ -30,22 +30,16 @@ public class MediaController extends AbstractController {
 	@Value(MediaWebConstants.View.LIST)
 	private String VIEW_MEDIA_LIST;
 
-	@ModelAttribute(MediaWebConstants.ModelAttribute.UPDATE)
-	public MediaDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new MediaDto();
-	}
-
 	@GetMapping(value = MediaWebConstants.Path.MEDIA)
-	public String list(@ModelAttribute(MediaWebConstants.ModelAttribute.UPDATE) MediaDto updateDto, Model model) throws Exception {
+	public String list(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model) throws Exception {
 		model.addAttribute("create", false);
-		
-		if (updateDto.getUuid() != null) {
 
-			MediaDto existsDto = mediaFacade.findOneByUuid(updateDto.getUuid());
+		if (mediaDto.getUuid() != null) {
+
+			MediaDto existsDto = mediaFacade.findOneByUuid(mediaDto.getUuid());
 
 			if (existsDto != null) {
-				model.addAttribute(MediaWebConstants.ModelAttribute.UPDATE, existsDto);
+				model.addAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO, existsDto);
 			} else {
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
@@ -55,21 +49,25 @@ public class MediaController extends AbstractController {
 	}
 
 	@GetMapping(value = MediaWebConstants.Path.MEDIA, params = "create")
-	public String createView(Model model) throws Exception {
+	public String createView(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model) throws Exception {
+
+		mediaDto = mediaFacade.createDto();
+		model.addAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO, mediaDto);
 		model.addAttribute("create", true);
+
 		return VIEW_MEDIA_LIST;
 	}
 
 	@PostMapping(value = MediaWebConstants.Path.MEDIA, params = "create")
-	public RedirectView create(@ModelAttribute(MediaWebConstants.ModelAttribute.CREATE) MediaDto createDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView create(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
-		if (createDto.getUuid() != null) {
+		if (mediaDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
-				createDto = mediaFacade.create(createDto);
+				mediaDto = mediaFacade.create(mediaDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -77,7 +75,7 @@ public class MediaController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(MediaDto.UUID, createDto.getUuid());
+		redirectAttributes.addAttribute(MediaDto.UUID, mediaDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -86,15 +84,15 @@ public class MediaController extends AbstractController {
 	}
 
 	@PostMapping(value = MediaWebConstants.Path.MEDIA, params = "update")
-	public RedirectView update(@ModelAttribute(MediaWebConstants.ModelAttribute.UPDATE) MediaDto updateDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView update(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
-		if (updateDto.getUuid() == null) {
+		if (mediaDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 
 			try {
-				updateDto = mediaFacade.update(updateDto);
+				mediaDto = mediaFacade.update(mediaDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -102,7 +100,7 @@ public class MediaController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(MediaDto.UUID, updateDto.getUuid());
+		redirectAttributes.addAttribute(MediaDto.UUID, mediaDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -111,15 +109,15 @@ public class MediaController extends AbstractController {
 	}
 
 	@PostMapping(value = MediaWebConstants.Path.MEDIA, params = "delete")
-	public RedirectView delete(@ModelAttribute(MediaWebConstants.ModelAttribute.UPDATE) MediaDto updateDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
-			mediaFacade.delete(updateDto.getUuid());
+			mediaFacade.delete(mediaDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(MediaDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(MediaDto.UUID, updateDto.getUuid());
+			redirectAttributes.addAttribute(MediaDto.UUID, mediaDto.getUuid());
 		}
 
 		RedirectView redirectView = new RedirectView();

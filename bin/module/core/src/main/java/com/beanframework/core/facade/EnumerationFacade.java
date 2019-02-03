@@ -46,4 +46,7 @@ public interface EnumerationFacade {
 
 	@PreAuthorize(EnumPreAuthorizeEnum.READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	@PreAuthorize(EnumPreAuthorizeEnum.CREATE)
+	EnumerationDto createDto() throws Exception;
 }

@@ -28,22 +28,18 @@ public class AuditorController extends AbstractController {
 	@Value(AuditorWebConstants.View.LIST)
 	private String VIEW_LANGUAGE_LIST;
 
-	@ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE)
-	public AuditorDto update() throws Exception {
-		return new AuditorDto();
-	}
-
 	@GetMapping(value = AuditorWebConstants.Path.AUDITOR)
-	public String list(@ModelAttribute(AuditorWebConstants.ModelAttribute.UPDATE) AuditorDto updateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@ModelAttribute(AuditorWebConstants.ModelAttribute.AUDITOR_DTO) AuditorDto auditorDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+		model.addAttribute("create", false);
+		
+		if (auditorDto.getUuid() != null) {
 
-		if (updateDto.getUuid() != null) {
-
-			AuditorDto existDto = auditorFacade.findOneByUuid(updateDto.getUuid());
+			AuditorDto existDto = auditorFacade.findOneByUuid(auditorDto.getUuid());
 
 			if (existDto != null) {
-				model.addAttribute(AuditorWebConstants.ModelAttribute.UPDATE, existDto);
+				model.addAttribute(AuditorWebConstants.ModelAttribute.AUDITOR_DTO, existDto);
 			} else {
-				updateDto.setUuid(null);
+				auditorDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}

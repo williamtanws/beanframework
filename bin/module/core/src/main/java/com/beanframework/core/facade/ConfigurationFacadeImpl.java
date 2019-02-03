@@ -121,4 +121,12 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 		context.setInitializeCollection(true);
 		return modelService.getDto(configurationService.findOneEntityByProperties(properties), context, ConfigurationDto.class);
 	}
+	
+	@Override
+	public ConfigurationDto createDto() throws Exception {
+		
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(configurationService.create(), context, ConfigurationDto.class);
+	}
 }

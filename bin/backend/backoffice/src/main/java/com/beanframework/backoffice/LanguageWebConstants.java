@@ -18,8 +18,6 @@ public interface LanguageWebConstants {
 	}
 
 	public interface ModelAttribute {
-
-		public static final String CREATE = "languageCreate";
-		public static final String UPDATE = "languageUpdate";
+		public static final String LANGUAGE_DTO = "languageDto";
 	}
 }

@@ -33,24 +33,18 @@ public class AdminController extends AbstractController {
 	@Value(AdminWebConstants.View.LIST)
 	private String VIEW_ADMIN_LIST;
 
-	@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE)
-	public AdminDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new AdminDto();
-	}
-
 	@GetMapping(value = AdminWebConstants.Path.ADMIN)
-	public String list(@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE) AdminDto adminUpdate, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 		
-		if (adminUpdate.getUuid() != null) {
-			AdminDto existingAdmin = adminFacade.findOneByUuid(adminUpdate.getUuid());
+		if (adminDto.getUuid() != null) {
+			AdminDto existingAdmin = adminFacade.findOneByUuid(adminDto.getUuid());
 
 			if (existingAdmin != null) {
 
-				model.addAttribute(AdminWebConstants.ModelAttribute.UPDATE, existingAdmin);
+				model.addAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO, existingAdmin);
 			} else {
-				adminUpdate.setUuid(null);
+				adminDto.setUuid(null);
 				addErrorMessage(model, ConsoleWebConstants.Locale.RECORD_UUID_NOT_FOUND);
 			}
 		}
@@ -59,20 +53,24 @@ public class AdminController extends AbstractController {
 	}
 	
 	@GetMapping(value = AdminWebConstants.Path.ADMIN, params = "create")
-	public String createView(Model model) throws Exception {
+	public String createView(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model) throws Exception {
+		
+		adminDto = adminFacade.createDto();
+		model.addAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO, adminDto);
 		model.addAttribute("create", true);
+		
 		return VIEW_ADMIN_LIST;
 	}
 
 	@PostMapping(value = AdminWebConstants.Path.ADMIN, params = "create")
-	public RedirectView create(@ModelAttribute(AdminWebConstants.ModelAttribute.CREATE) AdminDto adminCreate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView create(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		if (adminCreate.getUuid() != null) {
+		if (adminDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 			try {
-				adminCreate = adminFacade.create(adminCreate);
+				adminDto = adminFacade.create(adminDto);
 
 				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -80,7 +78,7 @@ public class AdminController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(AdminDto.UUID, adminCreate.getUuid());
+		redirectAttributes.addAttribute(AdminDto.UUID, adminDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -89,14 +87,14 @@ public class AdminController extends AbstractController {
 	}
 
 	@PostMapping(value = AdminWebConstants.Path.ADMIN, params = "update")
-	public RedirectView update(@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE) AdminDto adminUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView update(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
-		if (adminUpdate.getUuid() == null) {
+		if (adminDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 			try {
-				adminUpdate = adminFacade.update(adminUpdate);
+				adminDto = adminFacade.update(adminDto);
 
 				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -104,7 +102,7 @@ public class AdminController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(AdminDto.UUID, adminUpdate.getUuid());
+		redirectAttributes.addAttribute(AdminDto.UUID, adminDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -113,16 +111,16 @@ public class AdminController extends AbstractController {
 	}
 
 	@PostMapping(value = AdminWebConstants.Path.ADMIN, params = "delete")
-	public RedirectView delete(@ModelAttribute(AdminWebConstants.ModelAttribute.UPDATE) AdminDto adminUpdate, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView delete(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
-			adminFacade.delete(adminUpdate.getUuid());
+			adminFacade.delete(adminDto.getUuid());
 
 			addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
 			addErrorMessage(AdminDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(AdminWebConstants.ModelAttribute.UPDATE, adminUpdate);
+			redirectAttributes.addFlashAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO, adminDto);
 		}
 
 		RedirectView redirectView = new RedirectView();

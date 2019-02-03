@@ -123,6 +123,13 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 		return modelService.getDto(userPermissionService.findEntityBySorts(sorts, false), context, UserPermissionDto.class);
 	}
 
+	@Override
+	public UserPermissionDto createDto() throws Exception {
+		InterceptorContext context = new InterceptorContext();
+		context.setInitializeCollection(true);
+		return modelService.getDto(userPermissionService.create(), context, UserPermissionDto.class);
+	}
+
 
 
 }
