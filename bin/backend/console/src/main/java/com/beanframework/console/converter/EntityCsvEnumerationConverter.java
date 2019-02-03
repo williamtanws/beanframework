@@ -51,7 +51,7 @@ public class EntityCsvEnumerationConverter implements EntityConverter<Enumeratio
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setName(StringUtils.stripToNull(source.getName()));
-			prototype.setSort(source.getSort());
+			prototype.setSort(Integer.valueOf(source.getSort()));
 
 		} catch (Exception e) {
 			e.printStackTrace();

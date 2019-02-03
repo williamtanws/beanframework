@@ -73,14 +73,22 @@
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
+												<label for="sort" th:text="#{module.menu.sort}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="sort" th:value="*{sort}" min="0" step="1" onkeypress="return isNumberKey(event)">
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
 												<label for="path" th:text="#{module.menu.path}"></label>
 												<small th:text="#{module.menu.path.indicate}"></small>
 												<input type="text" class="form-control" name="path" th:value="*{path}">
 												<span class="help-block"></span>
 											</div>
 										</div>
-									</div>
-									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="target" th:text="#{module.menu.target}"></label>
@@ -92,6 +100,8 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="icon" th:text="#{module.menu.icon}"></label>
@@ -99,8 +109,6 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
-									</div>
-									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="active" th:text="#{module.menu.enabled}"></label>
@@ -219,6 +227,9 @@
 		                    }
 		                },
 		                name: {
+		                    required: true
+		                },
+		                sort: {
 		                    required: true
 		                }
 		            },

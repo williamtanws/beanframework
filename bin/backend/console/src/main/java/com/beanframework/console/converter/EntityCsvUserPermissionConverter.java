@@ -54,7 +54,7 @@ public class EntityCsvUserPermissionConverter implements EntityConverter<UserPer
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setName(StringUtils.stripToNull(source.getName()));
-			prototype.setSort(source.getSort());
+			prototype.setSort(Integer.valueOf(source.getSort()));
 
 			// Dynamic Field
 			if (StringUtils.isNotBlank(source.getDynamicField())) {

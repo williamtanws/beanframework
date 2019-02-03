@@ -7,7 +7,7 @@ public class DataTableResponseData {
 	private UUID uuid;
 	private String id;
 	private String name;
-	private Integer sort;
+	private String sort;
 
 	public UUID getUuid() {
 		return uuid;
@@ -33,11 +33,11 @@ public class DataTableResponseData {
 		this.name = name;
 	}
 
-	public Integer getSort() {
+	public String getSort() {
 		return sort;
 	}
 
-	public void setSort(Integer sort) {
+	public void setSort(String sort) {
 		this.sort = sort;
 	}
 }

@@ -75,7 +75,7 @@ public class GenericDto implements Serializable{
 	public String toString() {
 		return "ID: " + id;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
