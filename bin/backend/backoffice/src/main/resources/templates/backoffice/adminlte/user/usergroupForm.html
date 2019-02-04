@@ -6,6 +6,7 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
+		<th:block layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.usergroup')}}, deleteUuid=${usergroupDto.uuid})}"></th:block>
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.usergroup')}" method="post" th:object="${usergroupDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}" />
 			<input type="hidden" name="update" th:if="*{uuid != null}" />
@@ -179,8 +180,6 @@
 		    /*]]>*/
 		</script>
 
-		<th:block
-			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.usergroup')}}, objectSearch=${usergroupSearch}, deleteUuid=${usergroupDto.uuid})}"></th:block>
 	</th:block>
 </body>
 </html>

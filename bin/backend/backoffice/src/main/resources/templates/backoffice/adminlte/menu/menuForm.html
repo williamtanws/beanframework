@@ -10,7 +10,6 @@
 			<input type="hidden" name="create" th:if="*{uuid == null}" />
 			<input type="hidden" name="update" th:if="*{uuid != null}" />
 			<input type="hidden" name="uuid" th:value="${menuDto.uuid}" />
-			<input type="hidden" class="form-control" name="sort" th:value="*{sort}">
 			<input type="hidden" class="form-control" name="parent.uuid" th:if="*{parent != null}" th:value="*{parent.uuid}">
 			<th:block th:each="child,itrStat : *{childs}">
 				<input type="hidden" th:name="'childs['+${itrStat.index}+'].uuid'" th:value="${child.uuid}">

@@ -6,6 +6,7 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
+		<th:block layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.dynamicfield')}}, deleteUuid=${dynamicfieldDto.uuid})}"></th:block>
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.dynamicfield')}" method="post" th:object="${dynamicfieldDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}"/>
 			<input type="hidden" name="update" th:if="*{uuid != null}"/>
@@ -84,12 +85,19 @@
 												</select>
 											</div>
 										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="sort" th:text="#{module.dynamicfield.sort}"></label>
+												<input type="text" class="form-control" name="sort" th:value="*{sort}" min="0" step="1" onkeypress="return isNumberKey(event)">
+												<span class="help-block"></span>
+											</div>
+										</div>
 									</div>
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="required" th:text="#{module.dynamicfield.required}"></label>
-												<select class="form-control" name="active">
+												<select class="form-control" name="required">
 													<option value="1" th:selected="*{required == true}" th:text="#{module.backoffice.yes}"></option>
 													<option value="0" th:selected="*{required == false}" th:text="#{module.backoffice.no}"></option>
 												</select>
@@ -100,15 +108,6 @@
 											<div class="form-group">
 												<label for="rule" th:text="#{module.dynamicfield.rule}"></label>
 												<input type="text" class="form-control" name="rule" th:value="*{rule}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="sort" th:text="#{module.dynamicfield.sort}"></label>
-												<input type="text" class="form-control" name="sort" th:value="*{sort}" min="0" step="1" onkeypress="return isNumberKey(event)">
 												<span class="help-block"></span>
 											</div>
 										</div>
@@ -179,6 +178,9 @@
 		                },
 		                name: {
 		                    required: true
+		                },
+		                label: {
+		                    required: true
 		                }
 		            },
 		            messages: {
@@ -188,6 +190,9 @@
 		                },
 		                name: {
 		                    required: /*[[#{module.dynamicfield.name.required}]]*/
+		                },
+		                name: {
+		                    required: /*[[#{module.dynamicfield.label.required}]]*/
 		                }
 		            },
 		            highlight: function(element) {
@@ -220,8 +225,6 @@
 		    /*]]>*/
 		</script>
 
-		<th:block
-			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.dynamicfield')}}, objectSearch=${dynamicfieldSearch}, deleteUuid=${dynamicfieldDto.uuid})}"></th:block>
 	</th:block>
 </body>
 </html>

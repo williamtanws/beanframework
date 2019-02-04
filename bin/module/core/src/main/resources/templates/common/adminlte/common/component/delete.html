@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="delete (deleteAction, objectSearch, deleteUuid)">
+	<th:block layout:fragment="delete (deleteAction, deleteUuid)">
 		<div class="modal fade" id="modal-delete">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -14,8 +14,9 @@
 					<div class="modal-body" th:utext="#{module.backoffice.delete.confirm.info}"></div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.no}+'  '"></button>
-						<form id="delete-form" th:action="${deleteAction}" method="post" th:object="${objectSearch}">
+						<form id="delete-form" th:action="${deleteAction}" method="post">
 							<input type="hidden" name="delete">
+							<input type="hidden" name="uuid" th:value="${deleteUuid}" >
 							<button type="submit" class="btn btn-danger" th:text="#{module.backoffice.delete}"></button>
 						</form>
 					</div>
