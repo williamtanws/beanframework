@@ -77,8 +77,8 @@ public class CommentResource {
 		for (CommentDto dto : pagination.getContent()) {
 
 			CommentDataResponse data = new CommentDataResponse();
-			data.setUuid(dto.getUuid());
-			data.setId(dto.getId());
+			data.setUuid(dto.getUuid().toString());
+			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setUser(dto.getUser());
 			data.setHtml(StringUtils.substring(dto.getHtml(), 0, 100) + "...");
 			data.setVisibled(dto.getVisibled());

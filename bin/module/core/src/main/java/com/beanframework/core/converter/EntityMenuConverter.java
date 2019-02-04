@@ -72,7 +72,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.isBlank(source.getSort())) {
+			if (source.getSort() != null) {
 				if (prototype.getSort() != null) {
 					prototype.setSort(null);
 					prototype.setLastModifiedDate(lastModifiedDate);

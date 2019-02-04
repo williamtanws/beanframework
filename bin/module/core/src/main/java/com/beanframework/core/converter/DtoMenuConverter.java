@@ -50,7 +50,7 @@ public class DtoMenuConverter implements DtoConverter<Menu, MenuDto> {
 		prototype.setParent(source.getParent());
 		prototype.setIcon(source.getIcon());
 		prototype.setPath(source.getPath());
-		prototype.setSort(String.valueOf(source.getSort()));
+		prototype.setSort(source.getSort());
 		prototype.setTarget(source.getTarget());
 		prototype.setEnabled(source.getEnabled());
 

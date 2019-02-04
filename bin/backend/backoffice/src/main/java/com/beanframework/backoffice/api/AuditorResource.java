@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,9 @@ public class AuditorResource {
 		for (AuditorDto dto : pagination.getContent()) {
 
 			DataTableResponseData data = new DataTableResponseData();
-			data.setUuid(dto.getUuid());
-			data.setId(dto.getId());
-			data.setName(dto.getName());
+			data.setUuid(dto.getUuid().toString());
+			data.setId(StringUtils.stripToEmpty(dto.getId()));
+			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;

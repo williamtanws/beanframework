@@ -78,9 +78,9 @@ public class EnumerationResource {
 		for (EnumerationDto dto : pagination.getContent()) {
 
 			EnumDataResponse data = new EnumDataResponse();
-			data.setUuid(dto.getUuid());
-			data.setId(dto.getId());
-			data.setName(dto.getName());
+			data.setUuid(dto.getUuid().toString());
+			data.setId(StringUtils.stripToEmpty(dto.getId()));
+			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			data.setSort(dto.getSort());
 			dataTableResponse.getData().add(data);
 		}

@@ -18,7 +18,7 @@ public class UserRightDto extends GenericDto {
 
 	private List<UserRightFieldDto> fields = new ArrayList<UserRightFieldDto>();
 
-	private String sort;
+	private Integer sort;
 
 	public String getName() {
 		return name;
@@ -36,11 +36,11 @@ public class UserRightDto extends GenericDto {
 		this.fields = fields;
 	}
 
-	public String getSort() {
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(String sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 

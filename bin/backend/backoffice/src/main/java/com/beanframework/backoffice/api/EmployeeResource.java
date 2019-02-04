@@ -77,9 +77,9 @@ public class EmployeeResource {
 		for (EmployeeDto dto : pagination.getContent()) {
 
 			DataTableResponseData data = new DataTableResponseData();
-			data.setUuid(dto.getUuid());
-			data.setId(dto.getId());
-			data.setName(dto.getName());
+			data.setUuid(dto.getUuid().toString());
+			data.setId(StringUtils.stripToEmpty(dto.getId()));
+			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;

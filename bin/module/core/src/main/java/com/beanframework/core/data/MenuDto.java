@@ -16,7 +16,7 @@ public class MenuDto extends GenericDto {
 
 	private String name;
 
-	private String sort;
+	private Integer sort;
 
 	private String icon;
 
@@ -50,11 +50,11 @@ public class MenuDto extends GenericDto {
 		this.name = name;
 	}
 
-	public String getSort() {
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(String sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 

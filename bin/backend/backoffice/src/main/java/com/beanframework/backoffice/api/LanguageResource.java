@@ -78,9 +78,9 @@ public class LanguageResource {
 		for (LanguageDto dto : pagination.getContent()) {
 
 			LanguageDataResponse data = new LanguageDataResponse();
-			data.setUuid(dto.getUuid());
-			data.setId(dto.getId());
-			data.setName(dto.getName());
+			data.setUuid(dto.getUuid().toString());
+			data.setId(StringUtils.stripToEmpty(dto.getId()));
+			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			data.setActive(dto.getActive());
 			data.setSort(dto.getSort());
 			dataTableResponse.getData().add(data);

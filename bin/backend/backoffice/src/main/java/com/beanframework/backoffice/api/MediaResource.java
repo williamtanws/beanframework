@@ -78,9 +78,11 @@ public class MediaResource {
 		for (MediaDto dto : pagination.getContent()) {
 
 			MediaDataResponse data = new MediaDataResponse();
-			data.setUuid(dto.getUuid());
-			data.setId(dto.getId());
+			data.setUuid(dto.getUuid().toString());
+			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setFileName(dto.getFileName());
+			data.setFileType(dto.getFileType());
+			data.setFileSize(dto.getFileSize());
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;

@@ -15,7 +15,7 @@ public class LanguageDto extends GenericDto {
 
 	private Boolean active;
 
-	private String sort;
+	private Integer sort;
 
 	public String getName() {
 		return name;
@@ -33,11 +33,11 @@ public class LanguageDto extends GenericDto {
 		this.active = active;
 	}
 
-	public String getSort() {
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(String sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 

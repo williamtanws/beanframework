@@ -77,8 +77,8 @@ public class EmailResource {
 		for (EmailDto dto : pagination.getContent()) {
 
 			DataTableResponseData data = new DataTableResponseData();
-			data.setUuid(dto.getUuid());
-			data.setName(dto.getName());
+			data.setUuid(dto.getUuid().toString());
+			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;

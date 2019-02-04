@@ -59,7 +59,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.isBlank(source.getSort())) {
+			if (source.getSort() != null) {
 				if (prototype.getSort() != null) {
 					prototype.setSort(null);
 					prototype.setLastModifiedDate(lastModifiedDate);

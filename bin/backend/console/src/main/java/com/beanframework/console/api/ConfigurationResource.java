@@ -80,8 +80,8 @@ public class ConfigurationResource {
 		for (ConfigurationDto dto : pagination.getContent()) {
 
 			ConfigurationDataResponse data = new ConfigurationDataResponse();
-			data.setUuid(dto.getUuid());
-			data.setId(dto.getId());
+			data.setUuid(dto.getUuid().toString());
+			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setValue(dto.getValue());
 			dataTableResponse.getData().add(data);
 		}

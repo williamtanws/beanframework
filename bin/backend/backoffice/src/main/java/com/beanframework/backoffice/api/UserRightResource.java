@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserRightWebConstants;
+import com.beanframework.backoffice.data.UserRightDataResponse;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
@@ -77,10 +78,10 @@ public class UserRightResource {
 
 		for (UserRightDto dto : pagination.getContent()) {
 
-			DataTableResponseData data = new DataTableResponseData();
-			data.setUuid(dto.getUuid());
-			data.setId(dto.getId());
-			data.setName(dto.getName());
+			UserRightDataResponse data = new UserRightDataResponse();
+			data.setUuid(dto.getUuid().toString());
+			data.setId(StringUtils.stripToEmpty(dto.getId()));
+			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			data.setSort(dto.getSort());
 			dataTableResponse.getData().add(data);
 		}

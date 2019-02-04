@@ -5,7 +5,7 @@ import com.beanframework.common.data.DataTableResponseData;
 public class DynamicFieldDataResponse extends DataTableResponseData {
 
 	private String type;
-	private String sort;
+	private Integer sort;
 
 	public String getType() {
 		return type;
@@ -15,11 +15,11 @@ public class DynamicFieldDataResponse extends DataTableResponseData {
 		this.type = type;
 	}
 
-	public String getSort() {
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(String sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 
