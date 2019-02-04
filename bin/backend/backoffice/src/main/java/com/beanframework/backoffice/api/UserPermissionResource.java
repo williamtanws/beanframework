@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants;
+import com.beanframework.backoffice.data.UserPermissionDataResponse;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.DataTableResponseData;
@@ -77,10 +78,10 @@ public class UserPermissionResource {
 
 		for (UserPermissionDto dto : pagination.getContent()) {
 
-			DataTableResponseData data = new DataTableResponseData();
-			data.setUuid(dto.getUuid());
-			data.setId(dto.getId());
-			data.setName(dto.getName());
+			UserPermissionDataResponse data = new UserPermissionDataResponse();
+			data.setUuid(dto.getUuid().toString());
+			data.setId(StringUtils.stripToEmpty(dto.getId()));
+			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			data.setSort(dto.getSort());
 			dataTableResponse.getData().add(data);
 		}

@@ -19,7 +19,7 @@ public class UserPermissionDto extends GenericDto {
 
 	private List<UserPermissionFieldDto> fields = new ArrayList<UserPermissionFieldDto>();
 
-	private String sort;
+	private Integer sort;
 
 	public String getName() {
 		return name;
@@ -37,11 +37,11 @@ public class UserPermissionDto extends GenericDto {
 		this.fields = fields;
 	}
 
-	public String getSort() {
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(String sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 

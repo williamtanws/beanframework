@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MenuWebConstants;
+import com.beanframework.backoffice.data.MenuDataResponse;
 import com.beanframework.backoffice.data.TreeJson;
 import com.beanframework.backoffice.data.TreeJsonState;
 import com.beanframework.common.data.DataTableRequest;
@@ -157,10 +158,10 @@ public class MenuResource {
 
 		for (MenuDto dto : pagination.getContent()) {
 
-			DataTableResponseData data = new DataTableResponseData();
-			data.setUuid(dto.getUuid());
-			data.setId(dto.getId());
-			data.setName(dto.getName());
+			MenuDataResponse data = new MenuDataResponse();
+			data.setUuid(dto.getUuid().toString());
+			data.setId(StringUtils.stripToEmpty(dto.getId()));
+			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			data.setSort(dto.getSort());
 			dataTableResponse.getData().add(data);
 		}

@@ -1,19 +1,16 @@
 package com.beanframework.common.data;
 
-import java.util.UUID;
-
 public class DataTableResponseData {
 
-	private UUID uuid;
+	private String uuid;
 	private String id;
 	private String name;
-	private String sort;
 
-	public UUID getUuid() {
+	public String getUuid() {
 		return uuid;
 	}
 
-	public void setUuid(UUID uuid) {
+	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 
@@ -31,13 +28,5 @@ public class DataTableResponseData {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getSort() {
-		return sort;
-	}
-
-	public void setSort(String sort) {
-		this.sort = sort;
 	}
 }
