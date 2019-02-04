@@ -6,6 +6,7 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
+		<th:block layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.dynamicfieldtemplate')}}, deleteUuid=${dynamicfieldtemplateDto.uuid})}"></th:block>
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.dynamicfieldtemplate')}" method="post" th:object="${dynamicfieldtemplateDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}"/>
 			<input type="hidden" name="update" th:if="*{uuid != null}"/>
@@ -165,8 +166,6 @@
 		    /*]]>*/
 		</script>
 
-		<th:block
-			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.dynamicfieldtemplate')}}, objectSearch=${dynamicfieldtemplateSearch}, deleteUuid=${dynamicfieldtemplateDto.uuid})}"></th:block>
 	</th:block>
 </body>
 </html>

@@ -252,7 +252,7 @@
 		</script>
 
 		<th:block
-			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.cronjob')}}, objectSearch=${cronjobSearch}, deleteUuid=${cronjobDto.uuid})}"></th:block>
+			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.cronjob')}}, deleteUuid=${cronjobDto.uuid})}"></th:block>
 
 		<div class="modal fade" id="modal-trigger" sec:authorize="hasAuthority('cronjob_update')">
 			<div class="modal-dialog">
@@ -378,7 +378,7 @@
 					<div class="modal-body" th:utext="#{module.backoffice.delete.confirm.info}"></div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.no}+'  '"></button>
-						<form id="delete-cronjob-form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post" th:object="${cronjobSearch}">
+						<form id="delete-cronjob-form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post">
 							<input type="hidden" name="deletejobdata">
 							<input type="hidden" name="jobDataUuid">
 							<button type="submit" class="btn btn-danger" th:text="#{module.backoffice.delete}"></button>
