@@ -45,7 +45,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Menu.class));
+			return convert(source, new Menu());
 			
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -101,7 +101,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
-						if (prototype.getFields().get(i).getId().equals(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId)) {
+						if (StringUtils.equals(prototype.getFields().get(i).getId(), prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId)) {
 							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}

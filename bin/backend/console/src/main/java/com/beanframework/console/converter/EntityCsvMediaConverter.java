@@ -39,7 +39,7 @@ public class EntityCsvMediaConverter implements EntityConverter<MediaCsv, Media>
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Media.class));
+			return convert(source, new Media());
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

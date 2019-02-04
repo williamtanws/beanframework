@@ -54,14 +54,14 @@ public class EntityLanguageConverter implements EntityConverter<LanguageDto, Lan
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (source.getSort() != null) {
+		if (source.getSort() == null) {
 			if (prototype.getSort() != null) {
 				prototype.setSort(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getSort() == null || prototype.getSort().equals(Integer.valueOf(source.getSort())) == false) {
-				prototype.setSort(Integer.valueOf(source.getSort()));
+			if (prototype.getSort() == null || prototype.getSort() == source.getSort() == false) {
+				prototype.setSort(source.getSort());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}

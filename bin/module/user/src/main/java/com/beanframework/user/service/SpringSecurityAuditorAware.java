@@ -1,4 +1,4 @@
-package com.beanframework.user.domain;
+package com.beanframework.user.service;
 
 import java.util.Optional;
 
@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.domain.Auditor;
+import com.beanframework.user.domain.User;
 
 @Component
 public class SpringSecurityAuditorAware implements AuditorAware<Auditor> {

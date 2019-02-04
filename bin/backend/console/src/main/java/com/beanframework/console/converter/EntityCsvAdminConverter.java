@@ -36,7 +36,7 @@ public class EntityCsvAdminConverter implements EntityConverter<AdminCsv, Admin>
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Admin.class));
+			return convert(source, new Admin());
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

@@ -39,7 +39,7 @@ public class EntityCsvConfigurationConverter implements EntityConverter<Configur
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Configuration.class));
+			return convert(source, new Configuration());
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

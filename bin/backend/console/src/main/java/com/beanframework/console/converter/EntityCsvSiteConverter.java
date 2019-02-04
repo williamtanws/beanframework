@@ -39,7 +39,7 @@ public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Site.class));
+			return convert(source, new Site());
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

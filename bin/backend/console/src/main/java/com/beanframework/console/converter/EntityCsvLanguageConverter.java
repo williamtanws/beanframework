@@ -39,7 +39,7 @@ public class EntityCsvLanguageConverter implements EntityConverter<LanguageCsv, 
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Language.class));
+			return convert(source, new Language());
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

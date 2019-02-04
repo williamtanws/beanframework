@@ -4,6 +4,7 @@ import org.hibernate.envers.RevisionListener;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.beanframework.common.domain.Auditor;
 import com.beanframework.user.domain.RevisionsEntity;
 import com.beanframework.user.domain.User;
 
@@ -18,11 +19,11 @@ public class EntityRevisionListener implements RevisionListener {
 			User user = (User) auth.getPrincipal();
 			if (user.getUuid() != null) {
 				if (o instanceof RevisionsEntity) {
-					((RevisionsEntity) o).setLastModifiedBy(user.getUuid().toString());
+					Auditor auditor = new Auditor();
+					auditor.setUuid(user.getUuid());
+					((RevisionsEntity) o).setLastModifiedBy(auditor);
 				}
 			}
-
-			System.out.println("New revision is created: " + o);
 		}
 	}
 }
