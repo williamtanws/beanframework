@@ -43,7 +43,7 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Employee.class));
+			return convert(source, new Employee());
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -72,7 +72,7 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
-						if (prototype.getFields().get(i).getId().equals(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId)) {
+						if (StringUtils.equals(prototype.getFields().get(i).getId(), prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId)) {
 							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}

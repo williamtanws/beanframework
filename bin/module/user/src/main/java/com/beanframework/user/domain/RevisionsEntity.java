@@ -2,12 +2,18 @@ package com.beanframework.user.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionEntity;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.beanframework.common.domain.Auditor;
 import com.beanframework.user.listener.EntityRevisionListener;
 
 @Entity
@@ -20,13 +26,16 @@ public class RevisionsEntity extends DefaultRevisionEntity {
 	private static final long serialVersionUID = 3217484900214041461L;
 	
 	@LastModifiedBy
-	private String lastModifiedBy;
+	@Cascade({ CascadeType.MERGE })
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "lastmodifiedby_uuid")
+	private Auditor lastModifiedBy;
 
-	public String getLastModifiedBy() {
+	public Auditor getLastModifiedBy() {
 		return lastModifiedBy;
 	}
 
-	public void setLastModifiedBy(String lastModifiedBy) {
+	public void setLastModifiedBy(Auditor lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
 

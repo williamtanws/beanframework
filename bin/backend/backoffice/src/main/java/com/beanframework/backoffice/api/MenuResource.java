@@ -12,7 +12,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -39,6 +38,7 @@ import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.core.facade.MenuFacade;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
 public class MenuResource {
@@ -186,7 +186,7 @@ public class MenuResource {
 		for (Object[] object : history) {
 
 			MenuDto dto = (MenuDto) object[0];
-			DefaultRevisionEntity revisionEntity = (DefaultRevisionEntity) object[1];
+			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
 			RevisionType eevisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 

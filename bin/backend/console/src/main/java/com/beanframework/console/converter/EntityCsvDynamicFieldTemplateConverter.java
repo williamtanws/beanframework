@@ -41,7 +41,7 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<D
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(DynamicFieldTemplate.class));
+			return convert(source, new DynamicFieldTemplate());
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

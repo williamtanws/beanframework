@@ -10,7 +10,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +30,7 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.facade.EnumerationFacade;
 import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
 public class EnumerationResource {
@@ -105,7 +105,7 @@ public class EnumerationResource {
 		for (Object[] object : history) {
 
 			EnumerationDto dto = (EnumerationDto) object[0];
-			DefaultRevisionEntity revisionEntity = (DefaultRevisionEntity) object[1];
+			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
 			RevisionType eevisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 

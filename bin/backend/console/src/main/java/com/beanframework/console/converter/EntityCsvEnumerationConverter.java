@@ -39,7 +39,7 @@ public class EntityCsvEnumerationConverter implements EntityConverter<Enumeratio
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Enumeration.class));
+			return convert(source, new Enumeration());
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

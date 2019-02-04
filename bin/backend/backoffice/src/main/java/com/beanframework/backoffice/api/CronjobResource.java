@@ -10,7 +10,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,7 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.core.facade.CronjobFacade;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
 public class CronjobResource {
@@ -105,7 +105,7 @@ public class CronjobResource {
 		for (Object[] object : history) {
 
 			CronjobDto dto = (CronjobDto) object[0];
-			DefaultRevisionEntity revisionEntity = (DefaultRevisionEntity) object[1];
+			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
 			RevisionType eevisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
