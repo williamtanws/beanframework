@@ -68,6 +68,7 @@
 											<div class="form-group">
 												<label for="visibled" th:text="#{module.comment.visibled}"></label>
 												<select class="form-control" name="visibled">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{visibled == true}" th:text="#{module.backoffice.yes}"></option>
 													<option value="0" th:selected="*{visibled == false}" th:text="#{module.backoffice.no}"></option>
 												</select>

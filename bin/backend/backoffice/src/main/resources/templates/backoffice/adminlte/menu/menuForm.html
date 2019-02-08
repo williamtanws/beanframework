@@ -93,6 +93,7 @@
 												<label for="target" th:text="#{module.menu.target}"></label>
 												<small th:text="#{module.menu.target.indicate}"></small>
 												<select class="form-control" name="target">
+													<option th:text="'&nbsp'"></option>
 													<option th:each="targetEnum : ${T(com.beanframework.menu.domain.MenuTargetTypeEnum).values()}" th:value="${target}" th:selected="*{target} == ${targetEnum} ? true : false"
 														th:text="${targetEnum.toString()}"></option>
 												</select>
@@ -112,6 +113,7 @@
 											<div class="form-group">
 												<label for="active" th:text="#{module.menu.enabled}"></label>
 												<select class="form-control" name="enabled">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{enabled == true}" th:text="#{module.backoffice.yes}"></option>
 													<option value="0" th:selected="*{enabled == false}" th:text="#{module.backoffice.no}"></option>
 												</select>

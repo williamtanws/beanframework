@@ -78,6 +78,7 @@
 												<label for="enabled" th:text="#{module.admin.enabled}"></label>
 												<small th:text="#{module.admin.enabled.indicate}"></small>
 												<select class="form-control" name="enabled">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="${adminDto.enabled == true} " th:text="#{module.console.yes}"></option>
 													<option value="0" th:selected="${adminDto.enabled == false}" th:text="#{module.console.no}"></option>
 												</select>
@@ -89,6 +90,7 @@
 												<label for="accountNonLocked" th:text="#{module.admin.locked}"></label>
 												<small th:text="#{module.admin.locked.indicate}"></small>
 												<select class="form-control" name="accountNonLocked">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="${adminNonLocked == true} " th:text="#{module.console.no}"></option>
 													<option value="0" th:selected="${adminNonLocked == false}" th:text="#{module.console.yes}"></option>
 												</select>
@@ -100,6 +102,7 @@
 												<label for="accountNonExpired" th:text="#{module.admin.expired}"></label>
 												<small th:text="#{module.admin.expired.indicate}"></small>
 												<select class="form-control" name="accountNonExpired">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="${adminNonExpired == true} " th:text="#{module.console.no}"></option>
 													<option value="0" th:selected="${adminNonExpired == false}" th:text="#{module.console.yes}"></option>
 												</select>
@@ -111,6 +114,7 @@
 												<label for="credentialsNonExpired" th:text="#{module.admin.credentials.expired}"></label>
 												<small th:text="#{module.admin.credentials.expired.indicate}"></small>
 												<select class="form-control" name="credentialsNonExpired">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="${adminDto.credentialsNonExpired == true}" th:text="#{module.console.no}"></option>
 													<option value="0" th:selected="${adminDto.credentialsNonExpired == false}" th:text="#{module.console.yes}"></option>
 												</select>

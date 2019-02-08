@@ -12,7 +12,7 @@ critical_en,Critical,20
 major_en,Major,30
 minor_en,Minor,40
 trivial_en,Trivial,50
-unresolved_en,Fixed,10
+unresolved_en,Unresolved,10
 fixed_en,Fixed,20
 done_en,Done,30
 wont_fix_en,Won't Fix,40
