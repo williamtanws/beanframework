@@ -63,6 +63,7 @@
 											<div class="form-group">
 												<label for="active" th:text="#{module.language.active}"></label>
 												<select class="form-control" name="active">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{active == true}" th:text="#{module.backoffice.yes}"></option>
 													<option value="0" th:selected="*{active == false}" th:text="#{module.backoffice.no}"></option>
 												</select>

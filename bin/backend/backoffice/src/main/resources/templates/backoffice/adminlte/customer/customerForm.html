@@ -84,6 +84,7 @@
 												<label for="enabled" th:text="#{module.customer.enabled}"></label>
 												<small th:text="#{module.customer.enabled.indicate}"></small>
 												<select class="form-control" name="enabled">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="${customerDto.enabled == true} " th:text="#{module.backoffice.yes}"></option>
 													<option value="0" th:selected="${customerDto.enabled == false}" th:text="#{module.backoffice.no}"></option>
 												</select>
@@ -95,6 +96,7 @@
 												<label for="accountNonLocked" th:text="#{module.customer.locked}"></label>
 												<small th:text="#{module.customer.locked.indicate}"></small>
 												<select class="form-control" name="accountNonLocked">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="${customerNonLocked == true} " th:text="#{module.backoffice.no}"></option>
 													<option value="0" th:selected="${customerNonLocked == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
@@ -106,6 +108,7 @@
 												<label for="accountNonExpired" th:text="#{module.customer.expired}"></label>
 												<small th:text="#{module.customer.expired.indicate}"></small>
 												<select class="form-control" name="accountNonExpired">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="${customerNonExpired == true} " th:text="#{module.backoffice.no}"></option>
 													<option value="0" th:selected="${customerNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
@@ -117,6 +120,7 @@
 												<label for="credentialsNonExpired" th:text="#{module.customer.credentials.expired}"></label>
 												<small th:text="#{module.customer.credentials.expired.indicate}"></small>
 												<select class="form-control" name="credentialsNonExpired">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="${customerDto.credentialsNonExpired == true}" th:text="#{module.backoffice.no}"></option>
 													<option value="0" th:selected="${customerDto.credentialsNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>

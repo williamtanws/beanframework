@@ -57,7 +57,10 @@ public class DtoCommentConverter implements DtoConverter<Comment, CommentDto> {
 
 			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
 			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
-			prototype.setUser(modelService.getDto(source.getUser(), context, UserDto.class));
+
+			if (context.isInitializeCollection()) {
+				prototype.setUser(modelService.getDto(source.getUser(), context, UserDto.class));
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

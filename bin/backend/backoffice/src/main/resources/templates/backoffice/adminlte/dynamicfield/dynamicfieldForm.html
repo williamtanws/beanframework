@@ -81,7 +81,7 @@
 												<label for="fieldType" th:text="#{module.dynamicfield.type}"></label>
 												<span>*</span>
 												<select name="jobTrigger" class="form-control">
-													<option th:each="state: ${T(com.beanframework.dynamicfield.domain.DynamicFieldType).values()}" th:value="${state.name()}" th:text="${state}"></option>
+													<option th:each="state: ${T(com.beanframework.dynamicfield.domain.DynamicFieldType).values()}" th:value="${state.name()}" th:text="${state}" th:selected="${dynamicfieldDto.type == state}"></option>
 												</select>
 											</div>
 										</div>
@@ -98,6 +98,7 @@
 											<div class="form-group">
 												<label for="required" th:text="#{module.dynamicfield.required}"></label>
 												<select class="form-control" name="required">
+													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{required == true}" th:text="#{module.backoffice.yes}"></option>
 													<option value="0" th:selected="*{required == false}" th:text="#{module.backoffice.no}"></option>
 												</select>

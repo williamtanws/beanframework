@@ -224,6 +224,12 @@
 		    }
 		
 		    setInterval(checkTimeout, timeout + 5000);
+		    
+		    $('.datetimepicker').each(function(){
+			    $(this).datetimepicker({
+			    	format: 'DD/MM/YYYY hh:mm A'
+			    });
+			});
 		});
 		
 		/*]]>*/
