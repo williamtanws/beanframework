@@ -78,18 +78,6 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (source.getSort() == null) {
-				if (prototype.getSort() != null) {
-					prototype.setSort(null);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			} else {
-				if (prototype.getSort() == null || prototype.getSort() == source.getSort() == false) {
-					prototype.setSort(source.getSort());
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			}
-
 			if (source.getType() == source.getType() == false) {
 				prototype.setType(source.getType());
 				prototype.setLastModifiedDate(lastModifiedDate);

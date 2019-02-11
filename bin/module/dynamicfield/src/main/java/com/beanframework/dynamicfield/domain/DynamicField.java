@@ -55,9 +55,6 @@ public class DynamicField extends GenericEntity {
 	private DynamicFieldType type;
 
 	@Audited(withModifiedFlag = true)
-	private Integer sort;
-
-	@Audited(withModifiedFlag = true)
 	private Boolean required;
 
 	@Audited(withModifiedFlag = true)
@@ -91,14 +88,6 @@ public class DynamicField extends GenericEntity {
 
 	public void setType(DynamicFieldType type) {
 		this.type = type;
-	}
-
-	public Integer getSort() {
-		return sort;
-	}
-
-	public void setSort(Integer sort) {
-		this.sort = sort;
 	}
 
 	public Boolean getRequired() {

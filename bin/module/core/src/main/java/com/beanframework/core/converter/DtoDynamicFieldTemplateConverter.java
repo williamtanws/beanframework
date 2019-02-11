@@ -12,7 +12,7 @@ import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.data.DynamicFieldDto;
+import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 
@@ -53,7 +53,7 @@ public class DtoDynamicFieldTemplateConverter implements DtoConverter<DynamicFie
 			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
 
 			if (context.isInitializeCollection()) {
-				prototype.setDynamicFields(modelService.getDto(source.getDynamicFields(), context, DynamicFieldDto.class));
+				prototype.setDynamicFieldSlots(modelService.getDto(source.getDynamicFieldSlots(), context, DynamicFieldSlotDto.class));
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

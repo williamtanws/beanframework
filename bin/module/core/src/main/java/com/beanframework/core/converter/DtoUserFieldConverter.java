@@ -44,6 +44,7 @@ public class DtoUserFieldConverter implements DtoConverter<UserField, UserFieldD
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setValue(source.getValue());
+		prototype.setSort(source.getSort());
 
 		try {
 			InterceptorContext disableInitialCollectionContext = new InterceptorContext();

@@ -5,7 +5,6 @@ import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
@@ -29,20 +28,22 @@ public class UserField extends GenericEntity {
 	public static final String LANGUAGE = "language";
 	public static final String USER = "user";
 	public static final String DYNAMIC_FIELD = "dynamicField";
-	
+
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_uuid")
 	private User user;
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "dynamicfield_uuid")	
-	@OrderBy(DynamicField.SORT+" ASC")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "dynamicfield_uuid")
 	private DynamicField dynamicField;
 
 	@Audited(withModifiedFlag = true)
 	private String value;
+
+	@Audited(withModifiedFlag = true)
+	private Integer sort;
 
 	public User getUser() {
 		return user;
@@ -66,6 +67,14 @@ public class UserField extends GenericEntity {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.beanframework.common.data.GenericDto;
-import com.beanframework.dynamicfield.domain.DynamicField;
 
 public class DynamicFieldTemplateDto extends GenericDto {
 
@@ -17,9 +16,11 @@ public class DynamicFieldTemplateDto extends GenericDto {
 
 	private String name;
 
-	private List<DynamicField> dynamicFields = new ArrayList<DynamicField>();
+	private List<DynamicFieldSlotDto> dynamicFieldSlots = new ArrayList<DynamicFieldSlotDto>();
 
 	private String[] tableDynamicFields;
+
+	private String[] tableDynamicFieldSorts;
 
 	private String[] tableSelectedDynamicFields;
 
@@ -31,14 +32,6 @@ public class DynamicFieldTemplateDto extends GenericDto {
 		this.name = name;
 	}
 
-	public List<DynamicField> getDynamicFields() {
-		return dynamicFields;
-	}
-
-	public void setDynamicFields(List<DynamicField> dynamicFields) {
-		this.dynamicFields = dynamicFields;
-	}
-
 	public String[] getTableDynamicFields() {
 		return tableDynamicFields;
 	}
@@ -47,12 +40,28 @@ public class DynamicFieldTemplateDto extends GenericDto {
 		this.tableDynamicFields = tableDynamicFields;
 	}
 
+	public String[] getTableDynamicFieldSorts() {
+		return tableDynamicFieldSorts;
+	}
+
+	public void setTableDynamicFieldSorts(String[] tableDynamicFieldSorts) {
+		this.tableDynamicFieldSorts = tableDynamicFieldSorts;
+	}
+
 	public String[] getTableSelectedDynamicFields() {
 		return tableSelectedDynamicFields;
 	}
 
 	public void setTableSelectedDynamicFields(String[] tableSelectedDynamicFields) {
 		this.tableSelectedDynamicFields = tableSelectedDynamicFields;
+	}
+
+	public List<DynamicFieldSlotDto> getDynamicFieldSlots() {
+		return dynamicFieldSlots;
+	}
+
+	public void setDynamicFieldSlots(List<DynamicFieldSlotDto> dynamicFieldSlots) {
+		this.dynamicFieldSlots = dynamicFieldSlots;
 	}
 
 }

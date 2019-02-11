@@ -44,6 +44,7 @@ public class DtoUserPermissionFieldConverter implements DtoConverter<UserPermiss
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setValue(source.getValue());
+		prototype.setSort(source.getSort());
 
 		try {
 			InterceptorContext disableInitialCollectionContext = new InterceptorContext();

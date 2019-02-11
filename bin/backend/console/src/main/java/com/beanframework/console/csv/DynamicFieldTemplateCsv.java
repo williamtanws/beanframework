@@ -8,7 +8,7 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 public class DynamicFieldTemplateCsv extends AbstractCsv {
 
 	private String name;
-	private String dynamicFieldIds;
+	private String dynamicFieldSlotIds;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
@@ -27,12 +27,12 @@ public class DynamicFieldTemplateCsv extends AbstractCsv {
 		this.name = name;
 	}
 
-	public String getDynamicFieldIds() {
-		return dynamicFieldIds;
+	public String getDynamicFieldSlotIds() {
+		return dynamicFieldSlotIds;
 	}
 
-	public void setDynamicFieldIds(String dynamicFieldIds) {
-		this.dynamicFieldIds = dynamicFieldIds;
+	public void setDynamicFieldSlotIds(String dynamicFieldSlotIds) {
+		this.dynamicFieldSlotIds = dynamicFieldSlotIds;
 	}
 
 }

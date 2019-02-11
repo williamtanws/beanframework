@@ -13,6 +13,8 @@ public class MenuFieldDto extends GenericDto {
 
 	private String value;
 
+	private Integer sort;
+
 	public DynamicFieldDto getDynamicField() {
 		return dynamicField;
 	}
@@ -27,6 +29,14 @@ public class MenuFieldDto extends GenericDto {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 
 }

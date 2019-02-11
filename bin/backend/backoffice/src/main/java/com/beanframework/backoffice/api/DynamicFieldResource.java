@@ -81,7 +81,6 @@ public class DynamicFieldResource {
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			data.setType(dto.getType().toString());
-			data.setSort(dto.getSort());
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;

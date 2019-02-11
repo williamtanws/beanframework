@@ -44,6 +44,7 @@ public class DtoUserRightFieldConverter implements DtoConverter<UserRightField, 
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setValue(source.getValue());
+		prototype.setSort(source.getSort());
 
 		try {
 

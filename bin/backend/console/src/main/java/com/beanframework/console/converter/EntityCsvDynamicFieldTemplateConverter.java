@@ -15,6 +15,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldTemplateCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 
 @Component
@@ -55,24 +56,33 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<D
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 
 			// Dynamic Field
-			if (StringUtils.isNotBlank(source.getDynamicFieldIds())) {
-				String[] dynamicFieldIds = source.getDynamicFieldIds().split(ImportListener.SPLITTER);
+			if (StringUtils.isNotBlank(source.getDynamicFieldSlotIds())) {
+				String[] dynamicFieldIds = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
 				for (int i = 0; i < dynamicFieldIds.length; i++) {
+					String dynamicFieldSlotId = dynamicFieldIds[i].split(ImportListener.EQUALS)[0];
+					String dynamicFieldSlotSort = dynamicFieldIds[i].split(ImportListener.EQUALS)[1].split(ImportListener.COLON)[0];
+					String dynamicFieldId = dynamicFieldIds[i].split(ImportListener.EQUALS)[1].split(ImportListener.COLON)[1];
+					
 					boolean add = true;
-					for (DynamicField dynamicField : prototype.getDynamicFields()) {
-						if (StringUtils.equals(dynamicField.getId(), dynamicFieldIds[i]))
+					for (DynamicFieldSlot dynamicFieldSlot : prototype.getDynamicFieldSlots()) {
+						if (StringUtils.equals(dynamicFieldSlot.getId(), dynamicFieldSlotId))
 							add = false;
 					}
 
 					if (add) {
 						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
-						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldIds[i]);
+						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField dynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, true, DynamicField.class);
 
 						if (dynamicField == null) {
 							LOGGER.error("DynamicField not exists: " + dynamicFieldIds[i]);
 						} else {
-							prototype.getDynamicFields().add(dynamicField);
+							DynamicFieldSlot dynamicFieldSlot = new DynamicFieldSlot();
+							dynamicFieldSlot.setId(dynamicFieldSlotId);
+							dynamicFieldSlot.setDynamicField(dynamicField);
+							dynamicFieldSlot.setSort(Integer.valueOf(dynamicFieldSlotSort));
+							dynamicFieldSlot.setDynamicFieldTemplate(prototype);
+							prototype.getDynamicFieldSlots().add(dynamicFieldSlot);
 						}
 					}
 				}

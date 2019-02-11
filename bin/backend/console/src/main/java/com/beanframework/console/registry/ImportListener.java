@@ -12,6 +12,7 @@ public abstract class ImportListener {
 	private String description;
 	public static final String SPLITTER = ";";
 	public static final String EQUALS = "=";
+	public static final String COLON = ":";
 	public static final String POSITIVE = "+";
 	public static final String NEGATIVE = "-";
 	public static final String UNDERSCORE = "_";

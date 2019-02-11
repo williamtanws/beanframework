@@ -14,7 +14,7 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
-import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 
 public class EntityDynamicFieldTemplateConverter implements EntityConverter<DynamicFieldTemplateDto, DynamicFieldTemplate> {
@@ -71,24 +71,25 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 					}
 
 					if (remove) {
-						for (Iterator<DynamicField> employeesIterator = prototype.getDynamicFields().listIterator(); employeesIterator.hasNext();) {
-							if (employeesIterator.next().getUuid().equals(UUID.fromString(source.getTableDynamicFields()[i]))) {
-								employeesIterator.remove();
+						for (Iterator<DynamicFieldSlot> dynamicFieldSlot = prototype.getDynamicFieldSlots().listIterator(); dynamicFieldSlot.hasNext();) {
+							if (dynamicFieldSlot.next().getUuid().equals(UUID.fromString(source.getTableDynamicFields()[i]))) {
+								dynamicFieldSlot.remove();
 								prototype.setLastModifiedDate(lastModifiedDate);
 							}
 						}
 					} else {
 						boolean add = true;
-						for (Iterator<DynamicField> employeesIterator = prototype.getDynamicFields().listIterator(); employeesIterator.hasNext();) {
-							if (employeesIterator.next().getUuid().equals(UUID.fromString(source.getTableDynamicFields()[i]))) {
+						for (Iterator<DynamicFieldSlot> dynamicFieldSlot = prototype.getDynamicFieldSlots().listIterator(); dynamicFieldSlot.hasNext();) {
+							if (dynamicFieldSlot.next().getUuid().equals(UUID.fromString(source.getTableDynamicFields()[i]))) {
 								add = false;
 							}
 						}
 
 						if (add) {
-							DynamicField entityDynamicFields = modelService.findOneEntityByUuid(UUID.fromString(source.getTableDynamicFields()[i]), false, DynamicField.class);
-							prototype.getDynamicFields().add(entityDynamicFields);
-							prototype.setLastModifiedDate(lastModifiedDate);
+//							DynamicField entityDynamicFields = modelService.findOneEntityByUuid(UUID.fromString(source.getTableDynamicFields()[i]), false, DynamicField.class);
+//							prototype.getDynamicFields().add(entityDynamicFields);
+//							prototype.setLastModifiedDate(lastModifiedDate);
+							// TODO: add dynamic field slot?
 						}
 					}
 				}
