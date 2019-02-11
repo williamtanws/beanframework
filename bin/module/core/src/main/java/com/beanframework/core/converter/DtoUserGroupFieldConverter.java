@@ -44,6 +44,7 @@ public class DtoUserGroupFieldConverter implements DtoConverter<UserGroupField, 
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setValue(source.getValue());
+		prototype.setSort(source.getSort());
 
 		try {
 			InterceptorContext disableInitialCollectionContext = new InterceptorContext();

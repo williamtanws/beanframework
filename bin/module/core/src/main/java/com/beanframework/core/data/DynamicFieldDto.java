@@ -23,8 +23,6 @@ public class DynamicFieldDto extends GenericDto {
 
 	private DynamicFieldType type;
 
-	private Integer sort;
-
 	private Boolean required;
 
 	private String rule;
@@ -55,14 +53,6 @@ public class DynamicFieldDto extends GenericDto {
 
 	public void setType(DynamicFieldType type) {
 		this.type = type;
-	}
-
-	public Integer getSort() {
-		return sort;
-	}
-
-	public void setSort(Integer sort) {
-		this.sort = sort;
 	}
 
 	public Boolean getRequired() {

@@ -13,7 +13,7 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
-import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 import com.beanframework.user.UserPermissionConstants;
@@ -49,9 +49,10 @@ public class UserPermissionInitialDefaultsInterceptor implements InitialDefaults
 
 				if (dynamicFieldTemplate != null) {
 
-					for (DynamicField dynamicField : dynamicFieldTemplate.getDynamicFields()) {
+					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						UserPermissionField field = new UserPermissionField();
-						field.setDynamicField(dynamicField);
+						field.setDynamicField(dynamicFieldSlot.getDynamicField());
+						field.setSort(dynamicFieldSlot.getSort());
 						field.setUserPermission(model);
 						model.getFields().add(field);
 					}

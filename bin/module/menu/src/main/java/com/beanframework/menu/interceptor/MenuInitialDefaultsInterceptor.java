@@ -13,7 +13,7 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
-import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 import com.beanframework.menu.MenuConstants;
@@ -49,9 +49,10 @@ public class MenuInitialDefaultsInterceptor implements InitialDefaultsIntercepto
 
 				if (dynamicFieldTemplate != null) {
 
-					for (DynamicField dynamicField : dynamicFieldTemplate.getDynamicFields()) {
+					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						MenuField field = new MenuField();
-						field.setDynamicField(dynamicField);
+						field.setDynamicField(dynamicFieldSlot.getDynamicField());
+						field.setSort(dynamicFieldSlot.getSort());
 						field.setMenu(model);
 						model.getFields().add(field);
 					}

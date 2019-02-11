@@ -68,13 +68,7 @@ public class DtoMenuConverter implements DtoConverter<Menu, MenuDto> {
 				Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
 					@Override
 					public int compare(MenuFieldDto o1, MenuFieldDto o2) {
-						if (o1.getDynamicField() == null || o1.getDynamicField().getSort() == null)
-							return (o2.getDynamicField() == null || o2.getDynamicField().getSort() == null) ? 0 : 1;
-
-						if (o2.getDynamicField() == null || o2.getDynamicField().getSort() == null)
-							return -1;
-
-						return Integer.valueOf(o1.getDynamicField().getSort()) - Integer.valueOf(o2.getDynamicField().getSort());
+						return o1.getSort() - o2.getSort();
 					}
 				});
 			}

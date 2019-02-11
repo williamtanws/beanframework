@@ -44,6 +44,7 @@ public class DtoMenuFieldConverter implements DtoConverter<MenuField, MenuFieldD
 		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		prototype.setValue(source.getValue());
+		prototype.setSort(source.getSort());
 
 		try {
 			InterceptorContext disableInitialCollectionContext = new InterceptorContext();

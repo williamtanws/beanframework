@@ -44,6 +44,9 @@ public class UserRightField extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String value;
 
+	@Audited(withModifiedFlag = true)
+	private Integer sort;
+
 	public UserRight getUserRight() {
 		return userRight;
 	}
@@ -66,6 +69,14 @@ public class UserRightField extends GenericEntity {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 
 }

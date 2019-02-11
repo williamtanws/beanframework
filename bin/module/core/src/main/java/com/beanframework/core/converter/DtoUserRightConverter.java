@@ -60,13 +60,7 @@ public class DtoUserRightConverter implements DtoConverter<UserRight, UserRightD
 				Collections.sort(prototype.getFields(), new Comparator<UserRightFieldDto>() {
 					@Override
 					public int compare(UserRightFieldDto o1, UserRightFieldDto o2) {
-						if (o1.getDynamicField() == null || o1.getDynamicField().getSort() == null)
-							return (o2.getDynamicField() == null || o2.getDynamicField().getSort() == null) ? 0 : 1;
-
-						if (o2.getDynamicField() == null || o2.getDynamicField().getSort() == null)
-							return -1;
-
-						return Integer.valueOf(o1.getDynamicField().getSort()) - Integer.valueOf(o2.getDynamicField().getSort());
+						return o1.getSort() - o2.getSort();
 					}
 				});
 			}

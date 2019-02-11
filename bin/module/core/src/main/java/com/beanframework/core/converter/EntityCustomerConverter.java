@@ -127,6 +127,12 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
 								prototype.setLastModifiedDate(lastModifiedDate);
 							}
+							if (sourceField.getSort() == prototype.getFields().get(i).getSort() == false) {
+								prototype.getFields().get(i).setSort(sourceField.getSort());
+
+								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+								prototype.setLastModifiedDate(lastModifiedDate);
+							}
 						}
 					}
 				}

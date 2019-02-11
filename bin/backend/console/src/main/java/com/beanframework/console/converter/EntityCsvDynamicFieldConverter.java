@@ -56,7 +56,6 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setType(DynamicFieldType.valueOf(source.getType()));
-			prototype.setSort(Integer.valueOf(source.getSort()));
 			prototype.setRequired(source.isRequired());
 			prototype.setRule(StringUtils.stripToNull(StringUtils.stripToNull(source.getRule())));
 			prototype.setLabel(StringUtils.stripToNull(source.getLabel()));

@@ -6,15 +6,13 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -36,11 +34,10 @@ public class DynamicFieldTemplate extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = DynamicFieldTemplateConstants.Table.DYNAMIC_FILE_TEMPLATE_REL, joinColumns = @JoinColumn(name = "template_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "dynamicfield_uuid", referencedColumnName = "uuid"))
-	private List<DynamicField> dynamicFields = new ArrayList<DynamicField>();
+	@AuditMappedBy(mappedBy = DynamicFieldSlot.DYNAMIC_FIELD_TEMPLATE)
+	@Cascade({ CascadeType.ALL })
+	@OneToMany(mappedBy = DynamicFieldSlot.DYNAMIC_FIELD_TEMPLATE, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<DynamicFieldSlot> dynamicFieldSlots = new ArrayList<DynamicFieldSlot>();
 
 	public String getName() {
 		return name;
@@ -50,12 +47,12 @@ public class DynamicFieldTemplate extends GenericEntity {
 		this.name = name;
 	}
 
-	public List<DynamicField> getDynamicFields() {
-		return dynamicFields;
+	public List<DynamicFieldSlot> getDynamicFieldSlots() {
+		return dynamicFieldSlots;
 	}
 
-	public void setDynamicFields(List<DynamicField> dynamicFields) {
-		this.dynamicFields = dynamicFields;
+	public void setDynamicFieldSlots(List<DynamicFieldSlot> dynamicFieldSlots) {
+		this.dynamicFieldSlots = dynamicFieldSlots;
 	}
 
 }

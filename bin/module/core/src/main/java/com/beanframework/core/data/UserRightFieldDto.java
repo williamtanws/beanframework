@@ -15,6 +15,8 @@ public class UserRightFieldDto extends GenericDto {
 
 	private String value;
 
+	private Integer sort;
+
 	public UserRightDto getUserRight() {
 		return userRight;
 	}
@@ -37,6 +39,14 @@ public class UserRightFieldDto extends GenericDto {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 
 }

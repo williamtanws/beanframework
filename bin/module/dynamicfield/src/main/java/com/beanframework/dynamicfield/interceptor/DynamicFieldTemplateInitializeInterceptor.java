@@ -10,7 +10,7 @@ public class DynamicFieldTemplateInitializeInterceptor implements InitializeInte
 
 	@Override
 	public void onInitialize(DynamicFieldTemplate model) throws InterceptorException {
-		Hibernate.initialize(model.getDynamicFields());
+		Hibernate.initialize(model.getDynamicFieldSlots());
 	}
 
 }

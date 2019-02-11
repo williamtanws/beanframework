@@ -19,7 +19,6 @@ import com.beanframework.user.UserGroupConstants;
 @Table(name = UserGroupConstants.Table.USER_GROUP_FIELD)
 public class UserGroupField extends GenericEntity {
 
-
 	/**
 	 * 
 	 */
@@ -27,20 +26,23 @@ public class UserGroupField extends GenericEntity {
 	public static final String LANGUAGE = "language";
 	public static final String USER_GROUP = "userGroup";
 	public static final String DYNAMIC_FIELD = "dynamicField";
-	
+
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usergroup_uuid")
 	private UserGroup userGroup;
-	
+
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")
-	@OrderBy(DynamicField.SORT+" ASC")
+	@OrderBy(DynamicField.SORT + " ASC")
 	private DynamicField dynamicField;
 
 	@Audited(withModifiedFlag = true)
 	private String value;
+
+	@Audited(withModifiedFlag = true)
+	private Integer sort;
 
 	public UserGroup getUserGroup() {
 		return userGroup;
@@ -64,6 +66,14 @@ public class UserGroupField extends GenericEntity {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 
 }
