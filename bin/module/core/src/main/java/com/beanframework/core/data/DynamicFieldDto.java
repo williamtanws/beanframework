@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.beanframework.common.data.GenericDto;
-import com.beanframework.dynamicfield.domain.DynamicFieldType;
+import com.beanframework.dynamicfield.DynamicFieldType;
 
 public class DynamicFieldDto extends GenericDto {
 	/**

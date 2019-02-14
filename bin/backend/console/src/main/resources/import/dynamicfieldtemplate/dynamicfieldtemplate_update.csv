@@ -1,7 +1,7 @@
 id,name,dynamicFieldSlotIds
-menutemplate,Menu Template,menutemplateslot1=0:name_en;menutemplateslot2=1:name_cn
-userrighttemplate,User Right Template,userrighttemplateslot1=0:name_en;userrighttemplateslot2=1:name_cn
-userpermissiontemplate,User Permission Template,userpermissiontemplateslot1=0:name_en;userpermissiontemplateslot1=2:name_cn
-usergrouptemplate,User Group Template,usergrouptemplateslot1=0:name_en;usergrouptemplateslot2=1:name_cn
-employeetemplate,Employee Template,employeetemplateslot1=0:name_en;employeetemplateslot2=1:name_cn
-customertemplate,Customer Template,customertemplateslot1=0:name_en;customertemplateslot2=1:name_cn
+menutemplate			,Menu Template				,menu_0_name_en;menu_1_name_cn
+userrighttemplate		,User Right Template		,userright_0_name_en;userright_1_name_cn
+userpermissiontemplate	,User Permission Template	,userpermission_0_name_en;userpermission_1_name_cn
+usergrouptemplate		,User Group Template		,usergroup_0_name_en;usergroup_1_name_cn
+employeetemplate		,Employee Template			,employee_0_name_en;employee_1_name_cn
+customertemplate		,Customer Template			,customer_0_name_en;customer_1_name_cn

@@ -52,9 +52,6 @@ public class EntityCsvMediaConverter implements EntityConverter<MediaCsv, Media>
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setFileName(StringUtils.stripToNull(source.getFileName()));
 			prototype.setFileType(StringUtils.stripToNull(source.getFileType()));
-			prototype.setFileSize(source.getFileSize());
-			prototype.setHeight(source.getHeight());
-			prototype.setWidth(source.getWidth());
 			prototype.setUrl(StringUtils.stripToNull(source.getUrl()));
 			prototype.setTitle(StringUtils.stripToNull(source.getTitle()));
 			prototype.setCaption(StringUtils.stripToNull(source.getCaption()));

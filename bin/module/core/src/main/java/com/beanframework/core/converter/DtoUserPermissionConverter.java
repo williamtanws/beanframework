@@ -60,6 +60,12 @@ public class DtoUserPermissionConverter implements DtoConverter<UserPermission, 
 				Collections.sort(prototype.getFields(), new Comparator<UserPermissionFieldDto>() {
 					@Override
 					public int compare(UserPermissionFieldDto o1, UserPermissionFieldDto o2) {
+						if(o1.getSort() == null)
+							return o2.getSort() == null ? 0 : 1;
+						
+						if(o2.getSort() == null)
+							return -1;
+						
 						return o1.getSort() - o2.getSort();
 					}
 				});

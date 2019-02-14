@@ -66,6 +66,12 @@ public class DtoUserConverter implements DtoConverter<User, UserDto> {
 				Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
 					@Override
 					public int compare(UserFieldDto o1, UserFieldDto o2) {
+						if(o1.getSort() == null)
+							return o2.getSort() == null ? 0 : 1;
+						
+						if(o2.getSort() == null)
+							return -1;
+						
 						return o1.getSort() - o2.getSort();
 					}
 				});

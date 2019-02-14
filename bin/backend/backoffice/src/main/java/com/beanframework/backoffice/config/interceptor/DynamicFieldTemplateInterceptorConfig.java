@@ -5,12 +5,12 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
-import com.beanframework.dynamicfield.interceptor.DynamicFieldTemplateInitialDefaultsInterceptor;
-import com.beanframework.dynamicfield.interceptor.DynamicFieldTemplateInitializeInterceptor;
-import com.beanframework.dynamicfield.interceptor.DynamicFieldTemplateLoadInterceptor;
-import com.beanframework.dynamicfield.interceptor.DynamicFieldTemplatePrepareInterceptor;
-import com.beanframework.dynamicfield.interceptor.DynamicFieldTemplateRemoveInterceptor;
-import com.beanframework.dynamicfield.interceptor.DynamicFieldTemplateValidateInterceptor;
+import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateInitialDefaultsInterceptor;
+import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateInitializeInterceptor;
+import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateLoadInterceptor;
+import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplatePrepareInterceptor;
+import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateRemoveInterceptor;
+import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateValidateInterceptor;
 
 
 @Configuration

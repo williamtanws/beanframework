@@ -30,13 +30,19 @@ public interface ConsoleImportListenerConstants {
 		public static final String DESCRIPTION = "Update/Remove Dynamic Field Data";
 	}
 	
+	public interface DynamicFieldSlotImport {
+		public static final String KEY = "dynamicfieldslot";
+		public static final String NAME = "Dynamic Field Slot";
+		public static final int SORT = 41;
+		public static final String DESCRIPTION = "Update/Remove Dynamic Field Slot Data";
+	}
+	
 	public interface DynamicFieldTemplateImport {
 		public static final String KEY = "dynamicfieldtemplate";
 		public static final String NAME = "Dynamic Field Template";
-		public static final int SORT = 50;
+		public static final int SORT = 42;
 		public static final String DESCRIPTION = "Update/Remove Dynamic Field Template Data";
 	}
-	
 
 	public interface UserRightImport {
 		public static final String KEY = "userright";

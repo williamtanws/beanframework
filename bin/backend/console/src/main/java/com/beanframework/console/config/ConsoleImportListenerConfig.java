@@ -16,6 +16,7 @@ import com.beanframework.console.listener.ConfigurationImportListener;
 import com.beanframework.console.listener.CronjobImportListener;
 import com.beanframework.console.listener.CustomerImportListener;
 import com.beanframework.console.listener.DynamicFieldImportListener;
+import com.beanframework.console.listener.DynamicFieldSlotImportListener;
 import com.beanframework.console.listener.DynamicFieldTemplateImportListener;
 import com.beanframework.console.listener.EmployeeImportListener;
 import com.beanframework.console.listener.EnumerationImportListener;
@@ -56,6 +57,11 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	@Bean
 	public DynamicFieldImportListener dynamicFieldImportListener() {
 		return new DynamicFieldImportListener();
+	}
+	
+	@Bean
+	public DynamicFieldSlotImportListener dynamicFieldSlotImportListener() {
+		return new DynamicFieldSlotImportListener();
 	}
 	
 	@Bean
@@ -138,6 +144,9 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldImport.KEY))
 			importListenerRegistry.addListener(dynamicFieldImportListener());
+		
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldSlotImport.KEY))
+			importListenerRegistry.addListener(dynamicFieldSlotImportListener());
 		
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldTemplateImport.KEY))
 			importListenerRegistry.addListener(dynamicFieldTemplateImportListener());

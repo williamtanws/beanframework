@@ -93,8 +93,8 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 			}
 			
 			// Dynamic Field
-			if (source.getDynamicField() != null) {
-				String[] dynamicFields = source.getDynamicField().split(ImportListener.SPLITTER);
+			if (source.getDynamicFieldSlotIds() != null) {
+				String[] dynamicFields = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split(ImportListener.EQUALS)[0];
 					String value = dynamicField.split(ImportListener.EQUALS)[1];

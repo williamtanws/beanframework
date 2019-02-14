@@ -1,4 +1,4 @@
-package com.beanframework.dynamicfield.domain;
+package com.beanframework.dynamicfield;
 
 public enum DynamicFieldType {
 	INTEGER("Integer"),
