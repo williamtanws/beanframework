@@ -159,7 +159,7 @@ public class EmailJob implements Job {
 			result = new MessageFormat("{0} sent, {1} failed").format(new Object[] { sentEmail, failedEmail });
 			context.setResult(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new JobExecutionException(e.getMessage(), e);
 		}
 	}
