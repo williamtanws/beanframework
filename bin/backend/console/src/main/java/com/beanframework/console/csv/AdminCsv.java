@@ -2,30 +2,28 @@ package com.beanframework.console.csv;
 
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
+import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class AdminCsv extends AbstractCsv {
 
 	private String name;
 	private String password;
-	private boolean accountNonExpired;
-	private boolean accountNonLocked;
-	private boolean credentialsNonExpired;
-	private boolean enabled;
+	private Boolean accountNonExpired;
+	private Boolean accountNonLocked;
+	private Boolean credentialsNonExpired;
+	private Boolean enabled;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
-				new UniqueHashCode(), // id
-				new NotNull(), // name
-				new NotNull(), // password
-				new ParseBool(), // accountNonExpired
-				new ParseBool(), // accountNonLocked
-				new ParseBool(), // credentialsNonExpired
-				new ParseBool(), // enabled
-				new org.supercsv.cellprocessor.Optional(), // userGroupId
-				new Optional() // dynamicField
+				new NotNull(new Trim()), // id
+				new Optional(new Trim()), // name
+				new Optional(new Trim()), // password
+				new Optional(new Trim(new ParseBool())), // accountNonExpired
+				new Optional(new Trim(new ParseBool())), // accountNonLocked
+				new Optional(new Trim(new ParseBool())), // credentialsNonExpired
+				new Optional(new Trim(new ParseBool())) // enabled
 		};
 
 		return processors;
@@ -47,35 +45,35 @@ public class AdminCsv extends AbstractCsv {
 		this.password = password;
 	}
 
-	public boolean isAccountNonExpired() {
+	public Boolean isAccountNonExpired() {
 		return accountNonExpired;
 	}
 
-	public void setAccountNonExpired(boolean accountNonExpired) {
+	public void setAccountNonExpired(Boolean accountNonExpired) {
 		this.accountNonExpired = accountNonExpired;
 	}
 
-	public boolean isAccountNonLocked() {
+	public Boolean isAccountNonLocked() {
 		return accountNonLocked;
 	}
 
-	public void setAccountNonLocked(boolean accountNonLocked) {
+	public void setAccountNonLocked(Boolean accountNonLocked) {
 		this.accountNonLocked = accountNonLocked;
 	}
 
-	public boolean isCredentialsNonExpired() {
+	public Boolean isCredentialsNonExpired() {
 		return credentialsNonExpired;
 	}
 
-	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+	public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 }

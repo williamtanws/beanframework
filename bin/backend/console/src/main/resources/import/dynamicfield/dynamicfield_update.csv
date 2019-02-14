@@ -1,17 +1,17 @@
-id,name,type,sort,required,rule,label,language,enumIds
-name_en,Name,TEXT,0,false,,Name,en,
-name_cn,Name,TEXT,1,false,,名称,cn,
-description_en,Description,TEXT,0,false,,Description,en,
-description_cn,Description,TEXT,1,false,,描述,cn,
-type_en,Type,SELECT,0,false,,Type,en,task_en;subtask_en;incident_en;service_request_en;problem_en
-type_cn,Type,SELECT,1,false,,类型,cn,task_cn;subtask_cn;incident_cn;service_request_cn;problem_cn
-status_en,Status,SELECT,0,false,,Status,en,open_en;in_progress_en;closed_en
-status_cn,Status,SELECT,1,false,,状态,cn,open_cn;in_progress_cn;closed_cn
-priority_en,Priority,SELECT,0,false,,Priority,en,blocker_en;critical_en;major_en;minor_en;trivial_en
-priority_cn,Priority,SELECT,1,false,,优先,cn,blocker_cn;critical_cn;major_cn;minor_cn;trivial_cn
-resolution_en,Resolution,SELECT,0,false,,Resolution,en,unresolved_en;fixed_en;done_en;wont_fix_en;wont_do_en;duplicate_en;incomplete_en;cannot_reproduce_en
-resolution_cn,Resolution,SELECT,1,false,,决议,cn,unresolved_en;fixed_cn;done_cn;wont_fix_en;wont_do_cn;duplicate_cn;incomplete_cn;cannot_reproduce_cn
-startdate_en,Start Date,DATE,0,false,,Start Date,en,
-startdate_cn,Start Date,DATE,1,false,,开始日期,cn,
-enddate_en,End Date,DATE,0,false,,End Date,en,
-enddate_cn,End Date,DATE,1,false,,结束日期,cn,
+id,name,type,required,rule,label,language,enumIds
+name_en			,Name			,TEXT,false		,,Name			,en,
+name_cn			,Name			,TEXT,false		,,名称			,cn,
+description_en	,Description	,TEXT,false		,,Description	,en,
+description_cn	,Description	,TEXT,false		,,描述			,cn,
+type_en			,Type			,SELECT,false	,,Type			,en,task_en;subtask_en;incident_en;service_request_en;problem_en
+type_cn			,Type			,SELECT,false	,,类型			,cn,task_cn;subtask_cn;incident_cn;service_request_cn;problem_cn
+status_en		,Status			,SELECT,false	,,Status		,en,open_en;in_progress_en;closed_en
+status_cn		,Status			,SELECT,false	,,状态			,cn,open_cn;in_progress_cn;closed_cn
+priority_en		,Priority		,SELECT,false	,,Priority		,en,blocker_en;critical_en;major_en;minor_en;trivial_en
+priority_cn		,Priority		,SELECT,false	,,优先			,cn,blocker_cn;critical_cn;major_cn;minor_cn;trivial_cn
+resolution_en	,Resolution		,SELECT,false	,,Resolution	,en,unresolved_en;fixed_en;done_en;wont_fix_en;wont_do_en;duplicate_en;incomplete_en;cannot_reproduce_en
+resolution_cn	,Resolution		,SELECT,false	,,决议			,cn,unresolved_en;fixed_cn;done_cn;wont_fix_en;wont_do_cn;duplicate_cn;incomplete_cn;cannot_reproduce_cn
+startdate_en	,Start Date		,DATE,false		,,Start Date	,en,
+startdate_cn	,Start Date		,DATE,false		,,开始日期			,cn,
+enddate_en		,End Date		,DATE,false		,,End Date		,en,
+enddate_cn		,End Date		,DATE,false		,,结束日期			,cn,

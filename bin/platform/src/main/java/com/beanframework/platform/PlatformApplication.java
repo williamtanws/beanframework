@@ -15,7 +15,7 @@ public class PlatformApplication {
 		springApplication.addListeners(new ApplicationPidFileWriter());
 		springApplication.run(args);
 
-		// TODO: Build web contexts
+		// TODO: Build multiple web contexts in future
 //		SpringApplicationBuilder springApplication = new SpringApplicationBuilder(PlatformApplication.class);
 //		springApplication.parent(PlatformConfig.class);
 //		springApplication.child(ConsoleMvcConfig.class).web(WebApplicationType.SERVLET);

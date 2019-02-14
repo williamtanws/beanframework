@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -24,6 +23,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.DynamicFieldConstants;
+import com.beanframework.dynamicfield.DynamicFieldType;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.language.domain.Language;
 
@@ -71,7 +71,6 @@ public class DynamicField extends GenericEntity {
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "enum_uuid", referencedColumnName = "uuid"))
-	@OrderBy(Enumeration.SORT + " ASC")
 	private List<Enumeration> enumerations = new ArrayList<Enumeration>();
 
 	public String getName() {

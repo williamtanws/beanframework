@@ -81,19 +81,10 @@
 												<label for="fieldType" th:text="#{module.dynamicfield.type}"></label>
 												<span>*</span>
 												<select name="jobTrigger" class="form-control">
-													<option th:each="state: ${T(com.beanframework.dynamicfield.domain.DynamicFieldType).values()}" th:value="${state.name()}" th:text="${state}" th:selected="${dynamicfieldDto.type == state}"></option>
+													<option th:each="state: ${T(com.beanframework.dynamicfield.DynamicFieldType).values()}" th:value="${state.name()}" th:text="${state}" th:selected="${dynamicfieldDto.type == state}"></option>
 												</select>
 											</div>
 										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="sort" th:text="#{module.dynamicfield.sort}"></label>
-												<input type="text" class="form-control" name="sort" th:value="*{sort}" min="0" step="1" onkeypress="return isNumberKey(event)">
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="required" th:text="#{module.dynamicfield.required}"></label>
@@ -105,6 +96,8 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="rule" th:text="#{module.dynamicfield.rule}"></label>
@@ -192,7 +185,7 @@
 		                name: {
 		                    required: /*[[#{module.dynamicfield.name.required}]]*/
 		                },
-		                name: {
+		                label: {
 		                    required: /*[[#{module.dynamicfield.label.required}]]*/
 		                }
 		            },

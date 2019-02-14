@@ -1,8 +1,8 @@
 package com.beanframework.console.csv;
 
 import org.supercsv.cellprocessor.Optional;
+import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class DynamicFieldTemplateCsv extends AbstractCsv {
@@ -12,9 +12,9 @@ public class DynamicFieldTemplateCsv extends AbstractCsv {
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
-				new UniqueHashCode(), // id
-				new NotNull(), //
-				new Optional() //
+				new NotNull(new Trim()), // id
+				new Optional(new Trim()), // name
+				new Optional(new Trim()) // dynamicFieldSlotIds
 		};
 		return processors;
 	}

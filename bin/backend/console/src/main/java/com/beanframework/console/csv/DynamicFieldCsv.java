@@ -2,15 +2,15 @@ package com.beanframework.console.csv;
 
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
+import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class DynamicFieldCsv extends AbstractCsv {
 
 	private String name;
 	private String type;
-	private boolean required;
+	private Boolean required;
 	private String rule;
 	private String label;
 	private String language;
@@ -18,14 +18,14 @@ public class DynamicFieldCsv extends AbstractCsv {
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
-				new UniqueHashCode(), // id
-				new NotNull(), // name
-				new NotNull(), // type
-				new ParseBool(), // required
-				new Optional(), // rule
-				new NotNull(), // label
-				new Optional(), // language
-				new Optional(), // enumIds
+				new NotNull(new Trim()), // id
+				new Optional(new Trim()), // name
+				new NotNull(new Trim()), // type
+				new Optional(new Trim(new ParseBool())), // required
+				new Optional(new Trim()), // rule
+				new NotNull(new Trim()), // label
+				new Optional(new Trim()), // language
+				new Optional(new Trim()), // enumIds
 		};
 
 		return processors;
@@ -47,11 +47,11 @@ public class DynamicFieldCsv extends AbstractCsv {
 		this.type = type;
 	}
 
-	public boolean isRequired() {
+	public Boolean isRequired() {
 		return required;
 	}
 
-	public void setRequired(boolean required) {
+	public void setRequired(Boolean required) {
 		this.required = required;
 	}
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="dynamicfield (dynamicFields)">
+	<th:block layout:fragment="dynamicfield (dynamicField)">
 		<table id="dynamicfieldTable" class="table table-bordered table-hover" style="width:100%">
 			<thead>
 				<tr>
@@ -25,10 +25,7 @@
 		    
 		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.dynamicfield.page')}}]]*/;
 		    
-		    var dynamicFields = [];
-		    /*[# th:each="object : *{__${dynamicFields}__}"]*/  	    
-		    dynamicFields.push(/*[[${object.uuid}]]*/); 	    
-		    /*[/]*/
+		    var dynamicField = /*[[*{__${dynamicField}__}]]*/;
 		    
 		    var dynamicfieldTable = $('#dynamicfieldTable').DataTable({
 	    		  'language' : {
@@ -44,7 +41,6 @@
 	    	      'processing': true,
 	    	      'serverSide': true,
 	    	      'searchDelay': 1000,
-	    	      'sDom': 'ltipr', 
 	    	      'ajax': {
 	                    'url': ajaxUrl
 	              },
@@ -61,26 +57,22 @@
 	    	                'className': 'text-center',
 	    	                render: function(data, type, row, meta)
 	    	                {
-	    	                   var selected = dynamicFields.includes(row.uuid);
-	    	                   if(selected){
-	    	                	   return "<input type='hidden' name='tableDynamicFields["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedDynamicFields["+meta.row+"]' checked>"; 
+	    	                   if(dynamicField){
+		    	                   if(dynamicField.uuid == row.uuid){
+		    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicField' checked>"; 
+		    	                   }
 	    	                   }
-	    	                   else{
-	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
-	    	                	   if(preventSelfUuid == row.uuid){
-		    	                	   return "<input type='hidden' name='tableDynamicFields["+meta.row+"]' value='"+row.uuid+"'/>"; 
-	    	                	   }
-	    	                	   else{
-		    	                	   return "<input type='hidden' name='tableDynamicFields["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedDynamicFields["+meta.row+"]'>"; 
-	    	                	   }
-	    	                   }
-	    	                    
+	    	                   
+	    	                   var preventSelfUuid = /*[[*{uuid}]]*/;
+    	                	   if(preventSelfUuid == row.uuid){
+	    	                	   return ""; 
+    	                	   }
+    	                	   else{
+	    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicField'>"; 
+    	                	   }
+	    	                  
 	    	                }
-	    	            },
-		            	{                                 
-		                	"targets": '_all',
-		                	"render": $.fn.dataTable.render.text()
-		                }            
+	    	            }            
 	    	       ],
 	    	       'fnDrawCallback': function() {
 	    	           icheck();
@@ -117,7 +109,7 @@
 		    });
 		    /*]]>*/
 		</script>
-		<th:block sec:authorize="hasAuthority('dynamicfield_read')">
+		<th:block sec:authorize="hasAuthority('ppminstructionTemplate_read')">
 			<script th:inline="javascript">
 		    	/*<![CDATA[*/
 		    		$('#dynamicfieldTable').on('click', 'tbody tr', function() {

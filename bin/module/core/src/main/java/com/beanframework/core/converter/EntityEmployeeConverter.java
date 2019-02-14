@@ -56,6 +56,11 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+				prototype.setName(StringUtils.stripToNull(source.getName()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
 			if (source.getAccountNonExpired() == null) {
 				if (prototype.getAccountNonExpired() != null) {

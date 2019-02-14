@@ -1,17 +1,14 @@
 package com.beanframework.console.csv;
 
-import org.supercsv.cellprocessor.ParseInt;
+import org.supercsv.cellprocessor.Optional;
+import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class MediaCsv extends AbstractCsv {
 
 	private String fileName;
 	private String fileType;
-	private int fileSize;
-	private int height;
-	private int width;
 	private String url;
 	private String title;
 	private String caption;
@@ -20,17 +17,14 @@ public class MediaCsv extends AbstractCsv {
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
-				new UniqueHashCode(), // id
-				new NotNull(), //
-				new NotNull(), //
-				new ParseInt(), //
-				new ParseInt(), //
-				new ParseInt(), //
-				new NotNull(), //
-				new NotNull(), //
-				new NotNull(), //
-				new NotNull(), //
-				new NotNull() //
+				new NotNull(new Trim()), // id
+				new Optional(new Trim()), // fileName
+				new Optional(new Trim()), // fileType
+				new Optional(new Trim()), // url
+				new Optional(new Trim()), // title
+				new Optional(new Trim()), // caption
+				new Optional(new Trim()), // altText
+				new Optional(new Trim()) // description
 		};
 
 		return processors;
@@ -50,30 +44,6 @@ public class MediaCsv extends AbstractCsv {
 
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
-	}
-
-	public int getFileSize() {
-		return fileSize;
-	}
-
-	public void setFileSize(int fileSize) {
-		this.fileSize = fileSize;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
 	}
 
 	public String getUrl() {

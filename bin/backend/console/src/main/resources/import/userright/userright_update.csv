@@ -1,5 +1,5 @@
-id,name,sort,dynamicField
-create,Create,0,name_en=Create;name_cn=创建
-read,Read,1,name_en=Read;name_cn=读取
-update,Update,2,name_en=Update;name_cn=更新
-delete,Delete,3,name_en=Delete;name_cn=删除
+id,name,sort,dynamicFieldSlotIds
+create	,Create	,0,userright_0_name_en=Create;userright_1_name_cn=创建
+read	,Read	,1,userright_0_name_en=Read;userright_1_name_cn=读取
+update	,Update	,2,userright_0_name_en=Update;userright_1_name_cn=更新
+delete	,Delete	,3,userright_0_name_en=Delete;userright_1_name_cn=删除

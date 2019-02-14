@@ -22,6 +22,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +58,9 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 	@Autowired
 	protected List<ConverterMapping> converterMappings;
+	
+	@Value("${interceptor.strict.use:false}")
+	protected boolean STRICT_USE_INTERCEPTOR;
 
 	protected void initialDefaultsInterceptor(Collection models, Class modelClass) throws InterceptorException {
 
@@ -80,7 +84,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 		
-		if (notIntercepted) {
+		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
 			throw new InterceptorException("Cannot find any load interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
@@ -107,7 +111,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		if (notIntercepted) {
+		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
 			throw new InterceptorException("Cannot find any initialize interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
@@ -134,7 +138,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		if (notIntercepted) {
+		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
 			throw new InterceptorException("Cannot find any load interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
@@ -161,7 +165,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		if (notIntercepted) {
+		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
 			throw new InterceptorException("Cannot find any prepare interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
@@ -188,7 +192,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		if (notIntercepted) {
+		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
 			throw new InterceptorException("Cannot find any remove interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
@@ -215,7 +219,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		if (notIntercepted) {
+		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
 			throw new InterceptorException("Cannot find any validate interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}

@@ -1,7 +1,6 @@
 package com.beanframework.core.data;
 
 import com.beanframework.common.data.GenericDto;
-import com.beanframework.dynamicfield.domain.DynamicField;
 
 public class DynamicFieldSlotDto extends GenericDto {
 
@@ -9,8 +8,22 @@ public class DynamicFieldSlotDto extends GenericDto {
 	 * 
 	 */
 	private static final long serialVersionUID = 6298813621287874479L;
+	
+	private String name;
+	
 	private Integer sort;
-	private DynamicField dynamicField;
+	
+	private DynamicFieldDto dynamicField;
+	
+	private String tableSelectedDynamicField;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Integer getSort() {
 		return sort;
@@ -20,12 +33,20 @@ public class DynamicFieldSlotDto extends GenericDto {
 		this.sort = sort;
 	}
 
-	public DynamicField getDynamicField() {
+	public DynamicFieldDto getDynamicField() {
 		return dynamicField;
 	}
 
-	public void setDynamicField(DynamicField dynamicField) {
+	public void setDynamicField(DynamicFieldDto dynamicField) {
 		this.dynamicField = dynamicField;
+	}
+
+	public String getTableSelectedDynamicField() {
+		return tableSelectedDynamicField;
+	}
+
+	public void setTableSelectedDynamicField(String tableSelectedDynamicField) {
+		this.tableSelectedDynamicField = tableSelectedDynamicField;
 	}
 
 }

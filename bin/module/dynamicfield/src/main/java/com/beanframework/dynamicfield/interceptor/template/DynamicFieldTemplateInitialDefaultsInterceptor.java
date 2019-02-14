@@ -1,4 +1,4 @@
-package com.beanframework.dynamicfield.interceptor;
+package com.beanframework.dynamicfield.interceptor.template;
 
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;

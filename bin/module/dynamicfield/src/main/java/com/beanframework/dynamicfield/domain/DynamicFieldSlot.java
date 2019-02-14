@@ -24,9 +24,11 @@ public class DynamicFieldSlot extends GenericEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -9103174021745051522L;
-	public static final String DYNAMIC_FIELD_TEMPLATE = "dynamicFieldTemplate";
 	public static final String DYNAMIC_FIELD = "dynamicField";
 	public static final String SORT = "sort";
+
+	@Audited(withModifiedFlag = true)
+	private String name;
 
 	@Audited(withModifiedFlag = true)
 	private Integer sort;
@@ -36,10 +38,13 @@ public class DynamicFieldSlot extends GenericEntity {
 	@JoinColumn(name = "dynamicfield_uuid")
 	private DynamicField dynamicField;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "template_uuid")
-	private DynamicFieldTemplate dynamicFieldTemplate;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Integer getSort() {
 		return sort;
@@ -56,13 +61,4 @@ public class DynamicFieldSlot extends GenericEntity {
 	public void setDynamicField(DynamicField dynamicField) {
 		this.dynamicField = dynamicField;
 	}
-
-	public DynamicFieldTemplate getDynamicFieldTemplate() {
-		return dynamicFieldTemplate;
-	}
-
-	public void setDynamicFieldTemplate(DynamicFieldTemplate dynamicFieldTemplate) {
-		this.dynamicFieldTemplate = dynamicFieldTemplate;
-	}
-
 }

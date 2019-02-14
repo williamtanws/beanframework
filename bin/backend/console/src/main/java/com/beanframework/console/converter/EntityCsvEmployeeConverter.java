@@ -64,8 +64,8 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 
 			// Dynamic Field
-			if (StringUtils.isNotBlank(source.getDynamicField())) {
-				String[] dynamicFields = source.getDynamicField().split(ImportListener.SPLITTER);
+			if (StringUtils.isNotBlank(source.getDynamicFieldSlotIds())) {
+				String[] dynamicFields = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
 				for (String dynamicField : dynamicFields) {
 					String dynamicFieldId = dynamicField.split(ImportListener.EQUALS)[0];
 					String value = dynamicField.split(ImportListener.EQUALS)[1];

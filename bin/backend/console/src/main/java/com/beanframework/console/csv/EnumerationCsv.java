@@ -1,20 +1,21 @@
 package com.beanframework.console.csv;
 
+import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseInt;
+import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class EnumerationCsv extends AbstractCsv {
 
 	private String name;
-	private int sort;
+	private Integer sort;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
-				new UniqueHashCode(), // id
-				new NotNull(), // name
-				new ParseInt() // sort
+				new NotNull(new Trim()), // id
+				new Optional(new Trim()), // name
+				new Optional(new Trim(new ParseInt())) // sort
 		};
 
 		return processors;
@@ -28,11 +29,11 @@ public class EnumerationCsv extends AbstractCsv {
 		this.name = name;
 	}
 
-	public int getSort() {
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(int sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 }

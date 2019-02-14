@@ -1,23 +1,24 @@
 package com.beanframework.console.csv;
 
+import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.ParseInt;
+import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class LanguageCsv extends AbstractCsv {
 
 	private String name;
-	private boolean active;
-	private int sort;
+	private Boolean active;
+	private Integer sort;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
-				new UniqueHashCode(), // id
-				new NotNull(), // name
-				new ParseBool(), // active
-				new ParseInt() // sort
+				new NotNull(new Trim()), // id
+				new Optional(new Trim()), // name
+				new Optional(new Trim(new ParseBool())), // active
+				new Optional(new Trim(new ParseInt())) // sort
 		};
 
 		return processors;
@@ -31,19 +32,19 @@ public class LanguageCsv extends AbstractCsv {
 		this.name = name;
 	}
 
-	public boolean isActive() {
+	public Boolean isActive() {
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 
-	public int getSort() {
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(int sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 }
