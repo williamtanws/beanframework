@@ -37,7 +37,7 @@ import com.beanframework.user.domain.UserGroup;
 @Component
 public class BackofficeAuthProvider implements AuthenticationProvider {
 
-	Logger logger = LoggerFactory.getLogger(BackofficeAuthProvider.class);
+	protected static final Logger logger = LoggerFactory.getLogger(BackofficeAuthProvider.class);
 
 	public static final String LOGIN_WRONG_USERNAME_PASSWORD = "form.login.error.wrongusernameorpassword";
 	public static final String LOGIN_ACCOUNT_DISABLED = "form.login.account.disabled";

@@ -23,9 +23,8 @@ import com.beanframework.console.LicenseWebConstants;
 import com.mchange.v1.lang.BooleanUtils;
 
 public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
-
-	UrlPathHelper urlPathHelper = new UrlPathHelper();
-	Logger logger = LoggerFactory.getLogger(ConsoleSecurityInterceptor.class);
+	
+	protected static final Logger logger = LoggerFactory.getLogger(ConsoleSecurityInterceptor.class);
 
 	@Autowired
 	private ConfigurationService configurationService;
@@ -42,7 +41,7 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (auth != null && auth.getPrincipal() instanceof Admin) {
-			String path = urlPathHelper.getLookupPathForRequest(request);
+			String path = new UrlPathHelper().getLookupPathForRequest(request);
 
 			if (path != null && path.equalsIgnoreCase(PATH_LICENSE) == false && path.equalsIgnoreCase(PATH_LOGIN) == false) {
 

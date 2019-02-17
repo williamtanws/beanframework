@@ -24,7 +24,7 @@ import com.beanframework.email.service.EmailService;
 @Component
 public class EmailFacadeImpl implements EmailFacade {
 
-	Logger logger = LoggerFactory.getLogger(EmailFacadeImpl.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(EmailFacadeImpl.class);
 
 	@Autowired
 	private EmailService emailService;

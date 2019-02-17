@@ -25,7 +25,7 @@ import com.beanframework.language.service.LanguageService;
 
 public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 
-	Logger logger = LoggerFactory.getLogger(BackofficeSecurityInterceptor.class);
+	protected static final Logger logger = LoggerFactory.getLogger(BackofficeSecurityInterceptor.class);
 
 	UrlPathHelper urlPathHelper = new UrlPathHelper();
 

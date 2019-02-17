@@ -50,9 +50,9 @@
 					//$("#logLoader").attr("src", /*[[@{/static/common/img/ajax-loader.gif}]]*/);
 					
 					var level = /*[[${param.level}]]*/;
-					var consolePath = /*[[@{${@environment.getProperty('path.console.api')}}]]*/;
+					var consolePath = /*[[@{${@environment.getProperty('path.logging.tail')}}]]*/;
 					
-				    $.getJSON(consolePath+"/logging/tail?totalLine="+totalLine+"&creationTime="+creationTime+"&level="+level+"&line=10", 
+				    $.getJSON(consolePath+"?totalLine="+totalLine+"&creationTime="+creationTime+"&level="+level+"&line=10", 
 				      function(json){
 				    	  //$("#logLoader").attr("src", /*[[@{/static/common/img/ajax-loader.jpg}]]*/);
 				    	  var text = json.content;
