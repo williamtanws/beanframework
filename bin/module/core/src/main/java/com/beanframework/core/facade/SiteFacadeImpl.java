@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Site;
 import com.beanframework.cms.service.SiteService;
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -23,26 +22,20 @@ public class SiteFacadeImpl implements SiteFacade {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private SiteService siteService;
 
 	@Override
 	public SiteDto findOneByUuid(UUID uuid) throws Exception {
 		Site entity = siteService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, SiteDto.class);
+		return modelService.getDto(entity, SiteDto.class);
 	}
 
 	@Override
 	public SiteDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Site entity = siteService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, SiteDto.class);
+		return modelService.getDto(entity, SiteDto.class);
 	}
 
 	@Override
@@ -60,9 +53,7 @@ public class SiteFacadeImpl implements SiteFacade {
 			Site entity = modelService.getEntity(dto, Site.class);
 			entity = (Site) siteService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, SiteDto.class);
+			return modelService.getDto(entity, SiteDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -72,14 +63,12 @@ public class SiteFacadeImpl implements SiteFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		siteService.deleteByUuid(uuid);
 	}
-	
+
 	@Override
 	public Page<SiteDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Site> page = siteService.findEntityPage(dataTableRequest, SiteSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<SiteDto> dtos = modelService.getDto(page.getContent(), context, SiteDto.class);
+
+		List<SiteDto> dtos = modelService.getDto(page.getContent(), SiteDto.class);
 		return new PageImpl<SiteDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -87,7 +76,7 @@ public class SiteFacadeImpl implements SiteFacade {
 	public int count() throws Exception {
 		return siteService.count();
 	}
-	
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -95,10 +84,8 @@ public class SiteFacadeImpl implements SiteFacade {
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Site) {
-				
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, SiteDto.class);
+
+				entityObject[0] = modelService.getDto(entityObject[0], SiteDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,12 +97,10 @@ public class SiteFacadeImpl implements SiteFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return siteService.findCountHistory(dataTableRequest);
 	}
-	
+
 	@Override
 	public SiteDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(siteService.create(), context, SiteDto.class);
+
+		return modelService.getDto(siteService.create(), SiteDto.class);
 	}
 }

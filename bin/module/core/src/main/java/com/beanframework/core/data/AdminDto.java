@@ -16,7 +16,7 @@ public class AdminDto extends GenericDto {
 	public static final String USER_ROLES = "userRoles";
 	public static final String FIELDS = "fields";
 	public static final String NAME = "name";
-	
+
 	private String password;
 
 	private Boolean accountNonExpired;

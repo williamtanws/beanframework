@@ -38,7 +38,7 @@ public interface EmailFacade {
 
 	@PreAuthorize(EmailPreAuthorizeEnum.READ)
 	Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception;
-	
+
 	@PreAuthorize(EmailPreAuthorizeEnum.READ)
 	int count() throws Exception;
 

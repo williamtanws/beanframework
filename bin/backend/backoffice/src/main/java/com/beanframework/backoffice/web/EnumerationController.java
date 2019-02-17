@@ -36,7 +36,7 @@ public class EnumerationController extends AbstractController {
 	@GetMapping(value = EnumerationWebConstants.Path.ENUMERATION)
 	public String list(@ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (enumerationDto.getUuid() != null) {
 
 			EnumerationDto existsDto = enumerationFacade.findOneByUuid(enumerationDto.getUuid());
@@ -51,14 +51,14 @@ public class EnumerationController extends AbstractController {
 
 		return VIEW_ENUMERATION_LIST;
 	}
-	
+
 	@GetMapping(value = EnumerationWebConstants.Path.ENUMERATION, params = "create")
 	public String createView(@ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model) throws Exception {
-		
+
 		enumerationDto = enumerationFacade.createDto();
 		model.addAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO, enumerationDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_ENUMERATION_LIST;
 	}
 

@@ -2,7 +2,6 @@ package com.beanframework.cronjob;
 
 public final class CronjobConstants {
 
-
 	public static final String QUARTZ_TASKS_ENABLED = "${quartz.tasks.enable}";
 	public static final String QUARTZ_PROPERTIES_LOCATION = "${quartz.properties.location}";
 	public static final String QUARTZ_PROPERTIES_CLASSPATH = "${quartz.properties.classpath}";

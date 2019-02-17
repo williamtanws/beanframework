@@ -42,7 +42,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	@Cacheable(value = "ConfigurationOneProperties", key = "#properties")
 	@Override
 	public Configuration findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true,Configuration.class);
+		return modelService.findOneEntityByProperties(properties, true, Configuration.class);
 	}
 
 	@Cacheable(value = "ConfigurationsAll")
@@ -87,7 +87,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Cacheable(value = "ConfigurationsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Configuration> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
@@ -99,7 +99,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	public int count() throws Exception {
 		return modelService.count(Configuration.class);
 	}
-	
+
 	@Cacheable(value = "ConfigurationsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -111,7 +111,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
-		
+
 		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Configuration.class);
 
 	}

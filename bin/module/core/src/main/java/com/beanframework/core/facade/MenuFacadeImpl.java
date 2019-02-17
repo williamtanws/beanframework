@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -34,19 +33,13 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
 		Menu entity = menuService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, MenuDto.class);
+		return modelService.getDto(entity, MenuDto.class);
 	}
 
 	@Override
 	public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Menu entity = menuService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, MenuDto.class);
+		return modelService.getDto(entity, MenuDto.class);
 	}
 
 	@Override
@@ -64,9 +57,7 @@ public class MenuFacadeImpl implements MenuFacade {
 			Menu entity = modelService.getEntity(dto, Menu.class);
 			entity = (Menu) menuService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, MenuDto.class);
+			return modelService.getDto(entity, MenuDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -94,22 +85,18 @@ public class MenuFacadeImpl implements MenuFacade {
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
 			List<Menu> entities = menuService.findEntityMenuTree(false);
-			
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entities, context, MenuDto.class);
+
+			return modelService.getDto(entities, MenuDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Menu> page = menuService.findEntityPage(dataTableRequest, MenuSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<MenuDto> dtos = modelService.getDto(page.getContent(), context, MenuDto.class);
+
+		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class);
 		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -117,7 +104,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	public int count() throws Exception {
 		return menuService.count();
 	}
-	
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -125,9 +112,8 @@ public class MenuFacadeImpl implements MenuFacade {
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Menu) {
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, MenuDto.class);
+
+				entityObject[0] = modelService.getDto(entityObject[0], MenuDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -139,12 +125,10 @@ public class MenuFacadeImpl implements MenuFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return menuService.findCountHistory(dataTableRequest);
 	}
-	
+
 	@Override
 	public MenuDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(menuService.create(), context, MenuDto.class);
+
+		return modelService.getDto(menuService.create(), MenuDto.class);
 	}
 }

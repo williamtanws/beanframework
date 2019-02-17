@@ -87,5 +87,4 @@ public class DynamicFieldCsv extends AbstractCsv {
 		this.enumIds = enumIds;
 	}
 
-	
 }

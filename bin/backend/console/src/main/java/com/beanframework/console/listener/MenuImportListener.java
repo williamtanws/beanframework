@@ -36,13 +36,13 @@ public class MenuImportListener extends ImportListener {
 
 	@Autowired
 	private MenuService menuService;
-	
+
 	@Autowired
 	private EntityCsvMenuConverter converter;
 
 	@Value("${module.console.import.update.menu}")
 	private String IMPORT_UPDATE;
-	
+
 	@Value("${module.console.import.remove.menu}")
 	private String IMPORT_REMOVE;
 
@@ -68,7 +68,7 @@ public class MenuImportListener extends ImportListener {
 			save(menuCsvList);
 		}
 	}
-	
+
 	@Override
 	public void remove() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -83,7 +83,7 @@ public class MenuImportListener extends ImportListener {
 			remove(menuCsvList);
 		}
 	}
-	
+
 	public List<MenuCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
 		ICsvBeanReader beanReader = null;
 
@@ -97,12 +97,12 @@ public class MenuImportListener extends ImportListener {
 			final String[] header = beanReader.getHeader(true);
 
 			MenuCsv csv;
-			LOGGER.info("Start import "+ConsoleImportListenerConstants.MenuImport.NAME);
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.MenuImport.NAME);
 			while ((csv = beanReader.read(MenuCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+ConsoleImportListenerConstants.MenuImport.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.MenuImport.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {
@@ -125,8 +125,8 @@ public class MenuImportListener extends ImportListener {
 			Menu menu = converter.convert(csv);
 			menuService.saveEntity(menu);
 		}
-	}	
-	
+	}
+
 	public void remove(List<MenuCsv> csvList) throws Exception {
 
 	}

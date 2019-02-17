@@ -50,10 +50,10 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 
 	@Autowired
 	private EmployeeService employeeService;
-	
+
 	@Autowired
 	private ConfigurationService configurationService;
-	
+
 	@Value(BackofficeWebConstants.Configuration.USERGROUP)
 	private String BACKOFFICE_CONFIGURATION_USERGROUP;
 
@@ -77,11 +77,11 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 		Employee employee;
 		try {
 			employee = employeeService.findAuthenticate(id, password);
-			
+
 			if (isAuthorized(employee) == false) {
 				throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 			}
-			
+
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		} catch (DisabledException e) {
@@ -96,7 +96,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 			e.printStackTrace();
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
-		
+
 		Set<GrantedAuthority> authorities = employeeService.getAuthorities(employee.getUserGroups(), new HashSet<String>());
 		authorities.add(new SimpleGrantedAuthority(BACKOFFICE_ACCESS));
 
@@ -106,7 +106,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 	public boolean supports(Class<? extends Object> authentication) {
 		return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
 	}
-	
+
 	boolean isAuthorized(Employee employee) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, BACKOFFICE_CONFIGURATION_USERGROUP);
@@ -117,26 +117,24 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 			for (UserGroup userGroup : employee.getUserGroups()) {
 				if (usergroups.contains(userGroup.getId())) {
 					return true;
-				}
-				else if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false){
+				} else if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
 					return isAuthorized(userGroup, usergroups);
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	boolean isAuthorized(UserGroup model, Set<String> usergroups) {
 		for (UserGroup userGroup : model.getUserGroups()) {
 			if (usergroups.contains(userGroup.getId())) {
 				return true;
-			}
-			else if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false){
+			} else if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
 				return isAuthorized(userGroup, usergroups);
 			}
 		}
-		
+
 		return false;
 	}
 

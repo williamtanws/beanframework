@@ -5,11 +5,11 @@ public interface CustomerConstants {
 	public interface Discriminator {
 		public static final String CUSTOMER = "customer";
 	}
-	
+
 	public static interface Table {
 	}
-	
-	public static interface Locale{
+
+	public static interface Locale {
 		public static final String ID_REQUIRED = "module.customer.id.required";
 		public static final String ID_EXISTS = "module.customer.id.exists";
 		public static final String UUID_NOT_EXISTS = "module.customer.uuid.notexists";

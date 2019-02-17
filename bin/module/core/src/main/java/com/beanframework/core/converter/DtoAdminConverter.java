@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -23,11 +23,11 @@ public class DtoAdminConverter implements DtoConverter<Admin, AdminDto> {
 	private ModelService modelService;
 
 	@Override
-	public AdminDto convert(Admin source, InterceptorContext context) throws ConverterException {
+	public AdminDto convert(Admin source, DtoConverterContext context) throws ConverterException {
 		return convert(source, new AdminDto(), context);
 	}
 
-	public List<AdminDto> convert(List<Admin> sources, InterceptorContext context) throws ConverterException {
+	public List<AdminDto> convert(List<Admin> sources, DtoConverterContext context) throws ConverterException {
 		List<AdminDto> convertedList = new ArrayList<AdminDto>();
 		try {
 			for (Admin source : sources) {
@@ -39,7 +39,7 @@ public class DtoAdminConverter implements DtoConverter<Admin, AdminDto> {
 		return convertedList;
 	}
 
-	private AdminDto convert(Admin source, AdminDto prototype, InterceptorContext context) throws ConverterException {
+	private AdminDto convert(Admin source, AdminDto prototype, DtoConverterContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -51,13 +51,10 @@ public class DtoAdminConverter implements DtoConverter<Admin, AdminDto> {
 		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 		prototype.setEnabled(source.getEnabled());
 		prototype.setName(source.getName());
-		
-		try {
-			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
-			disableInitialCollectionContext.setInitializeCollection(false);
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
+		try {
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

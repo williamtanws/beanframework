@@ -33,7 +33,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE)
 	public String list(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (dynamicfieldtemplateDto.getUuid() != null) {
 
 			DynamicFieldTemplateDto existsDto = dynamicFieldTemplateFacade.findOneByUuid(dynamicfieldtemplateDto.getUuid());
@@ -50,17 +50,17 @@ public class DynamicFieldTemplateController extends AbstractController {
 
 	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "create")
 	public String createView(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model) throws Exception {
-		
+
 		dynamicfieldtemplateDto = dynamicFieldTemplateFacade.createDto();
 		model.addAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO, dynamicfieldtemplateDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_DYNAMICFILEDTEMPLATE_LIST;
 	}
 
 	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "create")
-	public RedirectView create(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
-			throws Exception {
+	public RedirectView create(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
+			BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (dynamicfieldtemplateDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
@@ -84,8 +84,8 @@ public class DynamicFieldTemplateController extends AbstractController {
 	}
 
 	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "update")
-	public RedirectView update(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
-			throws Exception {
+	public RedirectView update(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
+			BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (dynamicfieldtemplateDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
@@ -109,7 +109,8 @@ public class DynamicFieldTemplateController extends AbstractController {
 	}
 
 	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "delete")
-	public RedirectView delete(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
+			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			dynamicFieldTemplateFacade.delete(dynamicfieldtemplateDto.getUuid());

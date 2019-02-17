@@ -38,7 +38,7 @@ public class AdminResource {
 
 	@Autowired
 	private AdminFacade adminFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 

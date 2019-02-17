@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -25,11 +25,11 @@ public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, Dyna
 	private ModelService modelService;
 
 	@Override
-	public DynamicFieldDto convert(DynamicField source, InterceptorContext context) throws ConverterException {
+	public DynamicFieldDto convert(DynamicField source, DtoConverterContext context) throws ConverterException {
 		return convert(source, new DynamicFieldDto(), context);
 	}
 
-	public List<DynamicFieldDto> convert(List<DynamicField> sources, InterceptorContext context) throws ConverterException {
+	public List<DynamicFieldDto> convert(List<DynamicField> sources, DtoConverterContext context) throws ConverterException {
 		List<DynamicFieldDto> convertedList = new ArrayList<DynamicFieldDto>();
 		for (DynamicField source : sources) {
 			convertedList.add(convert(source, context));
@@ -37,7 +37,7 @@ public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, Dyna
 		return convertedList;
 	}
 
-	private DynamicFieldDto convert(DynamicField source, DynamicFieldDto prototype, InterceptorContext context) throws ConverterException {
+	private DynamicFieldDto convert(DynamicField source, DynamicFieldDto prototype, DtoConverterContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -51,16 +51,12 @@ public class DtoDynamicFieldConverter implements DtoConverter<DynamicField, Dyna
 		prototype.setLabel(source.getLabel());
 
 		try {
-			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
-			disableInitialCollectionContext.setInitializeCollection(false);
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
+			prototype.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class));
+			prototype.setEnumerations(modelService.getDto(source.getEnumerations(), EnumerationDto.class));
 
-			if (context.isInitializeCollection()) {
-				prototype.setLanguage(modelService.getDto(source.getLanguage(), context, LanguageDto.class));
-				prototype.setEnumerations(modelService.getDto(source.getEnumerations(), context, EnumerationDto.class));
-			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

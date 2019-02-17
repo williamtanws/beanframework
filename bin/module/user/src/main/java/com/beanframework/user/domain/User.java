@@ -70,7 +70,7 @@ public abstract class User extends GenericEntity {
 	@JoinTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
-	@AuditMappedBy(mappedBy = UserField.USER) 
+	@AuditMappedBy(mappedBy = UserField.USER)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(UserField.DYNAMIC_FIELD)

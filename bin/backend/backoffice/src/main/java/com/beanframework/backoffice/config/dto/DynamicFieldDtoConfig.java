@@ -13,7 +13,7 @@ import com.beanframework.core.data.DynamicFieldTemplateDto;
 
 @Configuration
 public class DynamicFieldDtoConfig {
-	
+
 	@Bean
 	public DtoDynamicFieldConverter dtoDynamicFieldConverter() {
 		return new DtoDynamicFieldConverter();
@@ -27,7 +27,7 @@ public class DynamicFieldDtoConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public DtoDynamicFieldSlotConverter dtoDynamicFieldSlotConverter() {
 		return new DtoDynamicFieldSlotConverter();
@@ -41,7 +41,7 @@ public class DynamicFieldDtoConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public DtoDynamicFieldTemplateConverter dtoDynamicFieldTemplateConverter() {
 		return new DtoDynamicFieldTemplateConverter();

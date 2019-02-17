@@ -12,7 +12,6 @@ import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateP
 import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateRemoveInterceptor;
 import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateValidateInterceptor;
 
-
 @Configuration
 public class DynamicFieldTemplateInterceptorConfig {
 
@@ -109,7 +108,7 @@ public class DynamicFieldTemplateInterceptorConfig {
 	////////////////////////
 	// Remove Interceptor //
 	////////////////////////
-	
+
 	@Bean
 	public DynamicFieldTemplateRemoveInterceptor dynamicFieldTemplateRemoveInterceptor() {
 		return new DynamicFieldTemplateRemoveInterceptor();

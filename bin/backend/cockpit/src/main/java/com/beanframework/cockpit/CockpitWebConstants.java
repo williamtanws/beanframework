@@ -1,9 +1,9 @@
 package com.beanframework.cockpit;
 
 public interface CockpitWebConstants {
-	
-public static final String PAGINATION = "pagination";
-	
+
+	public static final String PAGINATION = "pagination";
+
 	public interface Pagination {
 		public static final String PAGE = "page";
 		public static final String SIZE = "size";
@@ -53,8 +53,8 @@ public static final String PAGINATION = "pagination";
 		public static final String REMEMBERME_TOKENVALIDITYSECONDS = "${module.cockpit.http.rememberme.tokenvalidityseconds}";
 
 	}
-	
-	public interface Cookie{
+
+	public interface Cookie {
 		public static final String REMEMBER_ME = "REMEMBER_ME";
 	}
 

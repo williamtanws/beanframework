@@ -42,15 +42,13 @@ public class EmployeeSessionController {
 	}
 
 	@PostMapping(value = EmployeeWebConstants.Session.Path.SESSION, params = "delete")
-	public RedirectView delete(Model model, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+	public RedirectView delete(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		String uuidStr = (String) requestParams.get("uuid");
 
 		employeeFacade.expireAllSessionsByUuid(UUID.fromString(uuidStr));
 
-		redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS,
-				localeMessageService.getMessage(BackofficeWebConstants.Locale.DELETE_SUCCESS));
+		redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS, localeMessageService.getMessage(BackofficeWebConstants.Locale.DELETE_SUCCESS));
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -58,15 +56,13 @@ public class EmployeeSessionController {
 		return redirectView;
 
 	}
-	
+
 	@PostMapping(value = EmployeeWebConstants.Session.Path.SESSION, params = "deleteall")
-	public RedirectView deleteall(Model model, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+	public RedirectView deleteall(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		employeeFacade.expireAllSessions();
 
-		redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS,
-				localeMessageService.getMessage(BackofficeWebConstants.Locale.DELETE_SUCCESS));
+		redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS, localeMessageService.getMessage(BackofficeWebConstants.Locale.DELETE_SUCCESS));
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);

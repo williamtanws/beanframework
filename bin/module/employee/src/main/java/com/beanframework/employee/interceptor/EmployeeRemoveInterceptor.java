@@ -1,5 +1,6 @@
 package com.beanframework.employee.interceptor;
 
+import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.RemoveInterceptor;
 import com.beanframework.employee.domain.Employee;
@@ -7,7 +8,7 @@ import com.beanframework.employee.domain.Employee;
 public class EmployeeRemoveInterceptor implements RemoveInterceptor<Employee> {
 
 	@Override
-	public void onRemove(Employee model) throws InterceptorException {
+	public void onRemove(Employee model, InterceptorContext context) throws InterceptorException {
 	}
 
 }

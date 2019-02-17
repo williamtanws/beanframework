@@ -14,7 +14,7 @@ public class UserPermissionDto extends GenericDto {
 	public static final String USER_PERMISSION_FIELD = "userPermissionField";
 	public static final String SORT = "sort";
 	public static final String FIELDS = "fields";
-	
+
 	private String name;
 
 	private List<UserPermissionFieldDto> fields = new ArrayList<UserPermissionFieldDto>();

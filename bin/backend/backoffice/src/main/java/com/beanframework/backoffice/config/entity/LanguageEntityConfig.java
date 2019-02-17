@@ -9,7 +9,7 @@ import com.beanframework.language.domain.Language;
 
 @Configuration
 public class LanguageEntityConfig {
-	
+
 	@Bean
 	public EntityLanguageConverter entityLanguageConverter() {
 		return new EntityLanguageConverter();

@@ -66,10 +66,10 @@ public class PlatformUpdateController {
 		});
 
 		model.addAttribute("updates", aList);
-		
-		if(requestParams.get("clearsessions") != null) {
+
+		if (requestParams.get("clearsessions") != null) {
 			String clearsessions = (String) requestParams.get("clearsessions");
-			if(clearsessions.equals("1")) {
+			if (clearsessions.equals("1")) {
 				for (Object principal : sessionRegistry.getAllPrincipals()) {
 					List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principal, false);
 					for (SessionInformation sessionInformation : sessionInformations) {
@@ -127,12 +127,11 @@ public class PlatformUpdateController {
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		
-		if(requestParams.get("clearsessions") == null) {
-			redirectView.setUrl(PATH_UPDATE+"?clearsessions=0");
-		}
-		else {
-			redirectView.setUrl(PATH_UPDATE+"?clearsessions=1");
+
+		if (requestParams.get("clearsessions") == null) {
+			redirectView.setUrl(PATH_UPDATE + "?clearsessions=0");
+		} else {
+			redirectView.setUrl(PATH_UPDATE + "?clearsessions=1");
 		}
 		return redirectView;
 	}

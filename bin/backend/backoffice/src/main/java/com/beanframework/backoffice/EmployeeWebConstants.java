@@ -1,12 +1,12 @@
 package com.beanframework.backoffice;
 
 public interface EmployeeWebConstants {
-	
+
 	public interface Session {
 		public interface Path {
 			public static final String SESSION = "${path.employee.session}";
 		}
-		
+
 		public interface View {
 			public static final String SESSION_LIST = "${view.employee.session}";
 		}
@@ -35,7 +35,7 @@ public interface EmployeeWebConstants {
 		public static final String EMPLOYEE_DTO = "employeeDto";
 		public static final String PROFILE = "employeeProfile";
 	}
-	
+
 	public interface Locale {
 		public static final String ACCOUNT_DISABLED = "module.employee.account.disabled";
 		public static final String ACCOUNT_EXPIRED = "module.employee.account.expired";

@@ -21,7 +21,7 @@ public interface MediaService {
 	Media findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
 	List<Media> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
-	
+
 	Media saveEntity(Media model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;

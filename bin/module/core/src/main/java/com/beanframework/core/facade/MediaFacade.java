@@ -48,5 +48,5 @@ public interface MediaFacade {
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	@PreAuthorize(MediaPreAuthorizeEnum.CREATE)
-	MediaDto createDto() throws Exception;	
+	MediaDto createDto() throws Exception;
 }

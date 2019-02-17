@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -22,6 +23,28 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 	private ModelService modelService;
 
 	@Override
+	public Employee convert(EmployeeDto source, EntityConverterContext context) throws ConverterException {
+
+		try {
+
+			if (source.getUuid() != null) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(Employee.UUID, source.getUuid());
+				Employee prototype = modelService.findOneEntityByProperties(properties, true, Employee.class);
+
+				if (prototype != null) {
+					return convertDto(source, prototype);
+				}
+			}
+
+			return convertDto(source, modelService.create(Employee.class));
+
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), e);
+		}
+
+	}
+
 	public Employee convert(EmployeeDto source) throws ConverterException {
 
 		try {
@@ -32,11 +55,11 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 				Employee prototype = modelService.findOneEntityByProperties(properties, true, Employee.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(Employee.class));
+			return convertDto(source, modelService.create(Employee.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -44,7 +67,7 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 
 	}
 
-	private Employee convert(EmployeeDto source, Employee prototype) throws ConverterException {
+	private Employee convertDto(EmployeeDto source, Employee prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();

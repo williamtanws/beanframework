@@ -16,8 +16,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.LicenseWebConstants;
 import com.mchange.v1.lang.BooleanUtils;
@@ -26,9 +26,9 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 
 	UrlPathHelper urlPathHelper = new UrlPathHelper();
 	Logger logger = LoggerFactory.getLogger(ConsoleSecurityInterceptor.class);
-	
+
 	@Autowired
-	private ModelService modelService;
+	private ConfigurationService configurationService;
 
 	@Value(ConsoleWebConstants.Path.LOGIN)
 	private String PATH_LOGIN;
@@ -37,22 +37,19 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 	private String PATH_LICENSE;
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (auth != null && auth.getPrincipal() instanceof Admin) {
 			String path = urlPathHelper.getLookupPathForRequest(request);
 
-			if (path != null && path.equalsIgnoreCase(PATH_LICENSE) == false
-					&& path.equalsIgnoreCase(PATH_LOGIN) == false) {
-				
-				
+			if (path != null && path.equalsIgnoreCase(PATH_LICENSE) == false && path.equalsIgnoreCase(PATH_LOGIN) == false) {
+
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
-				
-				Configuration license = modelService.findOneEntityByProperties(properties, true,Configuration.class);
+
+				Configuration license = configurationService.findOneEntityByProperties(properties);
 
 				if (license == null || BooleanUtils.parseBoolean(license.getValue()) == false) {
 					response.sendRedirect(PATH_LICENSE);

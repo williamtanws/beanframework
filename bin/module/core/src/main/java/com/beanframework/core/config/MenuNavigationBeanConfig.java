@@ -8,7 +8,7 @@ import com.beanframework.core.bean.MenuNavigationBeanImpl;
 
 @Configuration
 public class MenuNavigationBeanConfig {
-	
+
 	@Bean(name = "MenuNavigation")
 	public MenuNavigationBean MenuNavigationBean() throws Exception {
 		return new MenuNavigationBeanImpl();

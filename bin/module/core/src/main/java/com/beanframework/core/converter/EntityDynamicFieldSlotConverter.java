@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -21,7 +22,7 @@ public class EntityDynamicFieldSlotConverter implements EntityConverter<DynamicF
 	private ModelService modelService;
 
 	@Override
-	public DynamicFieldSlot convert(DynamicFieldSlotDto source) throws ConverterException {
+	public DynamicFieldSlot convert(DynamicFieldSlotDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -31,18 +32,18 @@ public class EntityDynamicFieldSlotConverter implements EntityConverter<DynamicF
 				DynamicFieldSlot prototype = modelService.findOneEntityByProperties(properties, true, DynamicFieldSlot.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(DynamicFieldSlot.class));
+			return convertDto(source, modelService.create(DynamicFieldSlot.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private DynamicFieldSlot convert(DynamicFieldSlotDto source, DynamicFieldSlot prototype) throws ConverterException {
+	private DynamicFieldSlot convertDto(DynamicFieldSlotDto source, DynamicFieldSlot prototype) throws ConverterException {
 
 		try {
 
@@ -75,8 +76,7 @@ public class EntityDynamicFieldSlotConverter implements EntityConverter<DynamicF
 				prototype.setDynamicField(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				DynamicField entityDynamicField = modelService.findOneEntityByUuid(UUID.fromString(source.getTableSelectedDynamicField()), false,
-						DynamicField.class);
+				DynamicField entityDynamicField = modelService.findOneEntityByUuid(UUID.fromString(source.getTableSelectedDynamicField()), false, DynamicField.class);
 
 				if (entityDynamicField != null) {
 

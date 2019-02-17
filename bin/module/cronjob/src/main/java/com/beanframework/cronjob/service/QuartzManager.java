@@ -25,12 +25,11 @@ public class QuartzManager {
 
 	@Autowired
 	private SchedulerFactoryBean schedulerFactoryBean;
-	
+
 	public static final String CRONJOB_UUID = "uuid";
 
 	@SuppressWarnings("unchecked")
-	public void startOrUpdateJob(Cronjob job)
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SchedulerException {
+	public void startOrUpdateJob(Cronjob job) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SchedulerException {
 
 		Class<? extends Job> jobClass = null;
 
@@ -55,43 +54,37 @@ public class QuartzManager {
 			// JobDataMap is an implementation
 			// of the Java Map interface, and has some added convenience methods
 			// for storing and retrieving data of primitive types.
-			
+
 			jobDetail.getJobDataMap().put(CRONJOB_UUID, job.getUuid());
-			
-			if(job.getCronjobDatas() != null){
+
+			if (job.getCronjobDatas() != null) {
 				for (CronjobData param : job.getCronjobDatas()) {
 					jobDetail.getJobDataMap().put(param.getName(), param.getValue());
 				}
 			}
-			
-			if(job.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)){
-				
+
+			if (job.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)) {
+
 				Trigger runOnceTrigger;
-				if(job.getTriggerStartDate() != null){
+				if (job.getTriggerStartDate() != null) {
 					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).build();
-				}
-				else{
+				} else {
 					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startNow().build();
 				}
 				scheduler.scheduleJob(jobDetail, runOnceTrigger);
-			}
-			else if(StringUtils.isNotBlank(job.getCronExpression())){
+			} else if (StringUtils.isNotBlank(job.getCronExpression())) {
 				// Expression Builder Scheduler
 				CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
-	
+
 				// According to the new cronExpression expression to build a new trigger
-				if(job.getTriggerStartDate() != null){
-					trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate())
-							.withSchedule(scheduleBuilder).build();
+				if (job.getTriggerStartDate() != null) {
+					trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).withSchedule(scheduleBuilder).build();
+				} else {
+					trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).withSchedule(scheduleBuilder).build();
 				}
-				else{
-					trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup())
-							.withSchedule(scheduleBuilder).build();
-				}
-				
+
 				scheduler.scheduleJob(jobDetail, trigger);
 			}
-			
 
 		} else {// Presence task
 
@@ -129,8 +122,8 @@ public class QuartzManager {
 
 		return scheduler.deleteJob(jobKey);
 	}
-	
-	public void clearAllScheduler() throws SchedulerException{
+
+	public void clearAllScheduler() throws SchedulerException {
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
 		scheduler.clear();
 	}

@@ -34,10 +34,10 @@ import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
 public class LanguageResource {
-	
+
 	@Autowired
 	private LanguageFacade languageFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
@@ -45,12 +45,12 @@ public class LanguageResource {
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
-		
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Language.ID, id);
-		
+
 		LanguageDto data = languageFacade.findOneProperties(properties);
-		
+
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 		if (StringUtils.isNotBlank(uuidStr)) {
 			UUID uuid = UUID.fromString(uuidStr);
@@ -61,7 +61,7 @@ public class LanguageResource {
 
 		return data != null ? false : true;
 	}
-	
+
 	@RequestMapping(value = LanguageWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<LanguageDataResponse> page(HttpServletRequest request) throws Exception {
@@ -87,7 +87,7 @@ public class LanguageResource {
 		}
 		return dataTableResponse;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = LanguageWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody

@@ -36,7 +36,7 @@ public class UserRightController extends AbstractController {
 	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT)
 	public String list(@ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (userRightDto.getUuid() != null) {
 
 			UserRightDto existsDto = userRightFacade.findOneByUuid(userRightDto.getUuid());
@@ -51,19 +51,20 @@ public class UserRightController extends AbstractController {
 
 		return VIEW_USERRIGHT_LIST;
 	}
-	
+
 	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "create")
 	public String createView(@ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model) throws Exception {
-		
+
 		userRightDto = userRightFacade.createDto();
 		model.addAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO, userRightDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_USERRIGHT_LIST;
 	}
 
 	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "create")
-	public RedirectView create(@ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public RedirectView create(@ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model, BindingResult bindingResult,
+			RedirectAttributes redirectAttributes) {
 
 		if (userRightDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");

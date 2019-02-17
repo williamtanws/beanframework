@@ -10,7 +10,7 @@ public class CacheWebConstants {
 	public interface View {
 		public static final String CACHE = "${view.cache}";
 	}
-	
+
 	public interface Locale {
 		public static final String CACHE_CLEARALL_SUCCESS = "module.cache.clearall.success";
 	}

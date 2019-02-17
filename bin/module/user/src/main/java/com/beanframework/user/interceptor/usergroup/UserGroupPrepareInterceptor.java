@@ -2,6 +2,7 @@ package com.beanframework.user.interceptor.usergroup;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.PrepareInterceptor;
 import com.beanframework.user.domain.UserGroup;
@@ -9,7 +10,7 @@ import com.beanframework.user.domain.UserGroup;
 public class UserGroupPrepareInterceptor implements PrepareInterceptor<UserGroup> {
 
 	@Override
-	public void onPrepare(UserGroup model) throws InterceptorException {
+	public void onPrepare(UserGroup model, InterceptorContext context) throws InterceptorException {
 
 		if (model.getUserAuthorities() != null) {
 			for (int i = 0; i < model.getUserAuthorities().size(); i++) {

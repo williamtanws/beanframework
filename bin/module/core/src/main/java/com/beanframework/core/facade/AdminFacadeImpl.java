@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.service.AdminService;
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -23,26 +22,22 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private AdminService adminService;
 
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
 		Admin entity = adminService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, AdminDto.class);
+
+		return modelService.getDto(entity, AdminDto.class);
 	}
 
 	@Override
 	public AdminDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Admin entity = adminService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, AdminDto.class);
+
+		return modelService.getDto(entity, AdminDto.class);
 	}
 
 	@Override
@@ -60,9 +55,7 @@ public class AdminFacadeImpl implements AdminFacade {
 			Admin entity = modelService.getEntity(dto, Admin.class);
 			entity = (Admin) adminService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, AdminDto.class);
+			return modelService.getDto(entity, AdminDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -72,14 +65,12 @@ public class AdminFacadeImpl implements AdminFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		adminService.deleteByUuid(uuid);
 	}
-	
+
 	@Override
 	public Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Admin> page = adminService.findEntityPage(dataTableRequest, AdminSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<AdminDto> dtos = modelService.getDto(page.getContent(), context, AdminDto.class);
+
+		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class);
 		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -87,7 +78,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	public int count() throws Exception {
 		return adminService.count();
 	}
-	
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -95,10 +86,8 @@ public class AdminFacadeImpl implements AdminFacade {
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Admin) {
-				
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, AdminDto.class);
+
+				entityObject[0] = modelService.getDto(entityObject[0], AdminDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,13 +99,11 @@ public class AdminFacadeImpl implements AdminFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return adminService.findCountHistory(dataTableRequest);
 	}
-	
+
 	@Override
 	public AdminDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(adminService.create(), context, AdminDto.class);
+
+		return modelService.getDto(adminService.create(), AdminDto.class);
 	}
 
 }

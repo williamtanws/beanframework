@@ -3,7 +3,7 @@ package com.beanframework.console;
 public interface ConsoleWebConstants {
 
 	public static final String PAGINATION = "pagination";
-	
+
 	public interface Pagination {
 		public static final String PAGE = "page";
 		public static final String SIZE = "size";
@@ -35,7 +35,7 @@ public interface ConsoleWebConstants {
 	public interface View {
 		public static final String LOGIN = "${view.console.login}";
 	}
-	
+
 	public interface Authority {
 		public static final String CONSOLE = "${module.console.permission.access}";
 	}

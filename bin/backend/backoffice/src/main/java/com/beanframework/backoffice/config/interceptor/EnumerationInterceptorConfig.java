@@ -18,7 +18,7 @@ public class EnumerationInterceptorConfig {
 	//////////////////////////////////
 	// Initial Defaults Interceptor //
 	//////////////////////////////////
-	
+
 	@Bean
 	public EnumerationInitialDefaultsInterceptor enumerationInitialDefaultsInterceptor() {
 		return new EnumerationInitialDefaultsInterceptor();
@@ -36,7 +36,7 @@ public class EnumerationInterceptorConfig {
 	////////////////////////////
 	// Initialize Interceptor //
 	////////////////////////////
-	
+
 	@Bean
 	public EnumerationInitializeInterceptor enumerationInitializeInterceptor() {
 		return new EnumerationInitializeInterceptor();
@@ -54,7 +54,7 @@ public class EnumerationInterceptorConfig {
 	//////////////////////
 	// Load Interceptor //
 	//////////////////////
-	
+
 	@Bean
 	public EnumerationLoadInterceptor enumerationLoadInterceptor() {
 		return new EnumerationLoadInterceptor();
@@ -72,7 +72,7 @@ public class EnumerationInterceptorConfig {
 	/////////////////////////
 	// Prepare Interceptor //
 	/////////////////////////
-	
+
 	@Bean
 	public EnumerationPrepareInterceptor enumerationPrepareInterceptor() {
 		return new EnumerationPrepareInterceptor();
@@ -90,7 +90,7 @@ public class EnumerationInterceptorConfig {
 	//////////////////////////
 	// Validate Interceptor //
 	//////////////////////////
-	
+
 	@Bean
 	public EnumerationValidateInterceptor enumerationValidateInterceptor() {
 		return new EnumerationValidateInterceptor();

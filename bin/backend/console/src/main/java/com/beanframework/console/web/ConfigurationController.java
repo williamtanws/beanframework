@@ -37,7 +37,7 @@ public class ConfigurationController extends AbstractController {
 	public String list(@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (configurationDto.getUuid() != null) {
 
 			ConfigurationDto existsDto = configurationFacade.findOneByUuid(configurationDto.getUuid());
@@ -53,14 +53,14 @@ public class ConfigurationController extends AbstractController {
 
 		return VIEW_CONFIGURATION_LIST;
 	}
-	
+
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "create")
 	public String createView(@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model) throws Exception {
-		
+
 		configurationDto = configurationFacade.createDto();
 		model.addAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO, configurationDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_CONFIGURATION_LIST;
 	}
 

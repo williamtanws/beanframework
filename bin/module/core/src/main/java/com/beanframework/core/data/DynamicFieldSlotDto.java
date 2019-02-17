@@ -8,13 +8,13 @@ public class DynamicFieldSlotDto extends GenericDto {
 	 * 
 	 */
 	private static final long serialVersionUID = 6298813621287874479L;
-	
+
 	private String name;
-	
+
 	private Integer sort;
-	
+
 	private DynamicFieldDto dynamicField;
-	
+
 	private String tableSelectedDynamicField;
 
 	public String getName() {

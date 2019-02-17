@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -29,7 +30,7 @@ public class EntityCsvCustomerConverter implements EntityConverter<CustomerCsv, 
 	private ModelService modelService;
 
 	@Override
-	public Customer convert(CustomerCsv source) throws ConverterException {
+	public Customer convert(CustomerCsv source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -49,6 +50,10 @@ public class EntityCsvCustomerConverter implements EntityConverter<CustomerCsv, 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
+	}
+
+	public Customer convert(CustomerCsv source) throws ConverterException {
+		return convert(source, new EntityConverterContext());
 	}
 
 	private Customer convert(CustomerCsv source, Customer prototype) throws ConverterException {

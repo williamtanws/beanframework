@@ -6,7 +6,7 @@ public class DynamicFieldTemplateConstants {
 		public static final String DYNAMIC_FIELD_TEMPLATE = "dynamicfieldtpl";
 		public static final String DYNAMIC_FILE_TEMPLATE_REL = "dynamicfieldtplrel";;
 	}
-	
+
 	public static interface Locale {
 		public static final String ID_REQUIRED = "module.dynamicfieldtemplate.id.required";
 		public static final String ID_EXISTS = "module.dynamicfieldtemplate.id.exists";

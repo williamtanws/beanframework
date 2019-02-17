@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.ValidateInterceptor;
 import com.beanframework.email.domain.Email;
@@ -14,7 +15,7 @@ public class EmailValidateInterceptor implements ValidateInterceptor<Email> {
 	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
 	@Override
-	public void onValidate(Email model) throws InterceptorException {
+	public void onValidate(Email model, InterceptorContext context) throws InterceptorException {
 
 		if (StringUtils.isNotBlank(model.getToRecipients())) {
 			valiateRecipients(model.getToRecipients());

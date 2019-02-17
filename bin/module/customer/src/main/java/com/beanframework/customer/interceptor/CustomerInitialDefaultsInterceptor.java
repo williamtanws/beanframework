@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
@@ -34,7 +35,7 @@ public class CustomerInitialDefaultsInterceptor implements InitialDefaultsInterc
 	private String DYNAMIC_FIELD_TEMPLATE;
 
 	@Override
-	public void onInitialDefaults(Customer model) throws InterceptorException {
+	public void onInitialDefaults(Customer model, InterceptorContext context) throws InterceptorException {
 		model.setEnabled(true);
 		model.setAccountNonExpired(true);
 		model.setAccountNonLocked(true);

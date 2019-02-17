@@ -15,7 +15,7 @@ public class DynamicFieldSlotCsv extends AbstractCsv {
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
 				new NotNull(new Trim()), // id
-				new Optional(new Trim()),// name
+				new Optional(new Trim()), // name
 				new Optional(new Trim(new ParseInt())), // sort
 				new Optional(new Trim()),// dynamicFieldId
 		};

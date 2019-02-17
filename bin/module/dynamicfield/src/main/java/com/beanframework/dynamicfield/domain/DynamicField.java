@@ -59,7 +59,7 @@ public class DynamicField extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	private String rule;
-	
+
 	@Audited(withModifiedFlag = true)
 	private String label;
 

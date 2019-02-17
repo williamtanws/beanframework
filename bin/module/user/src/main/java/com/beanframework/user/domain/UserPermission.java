@@ -37,7 +37,7 @@ public class UserPermission extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@AuditMappedBy(mappedBy = UserPermissionField.USER_PERMISSION) 
+	@AuditMappedBy(mappedBy = UserPermissionField.USER_PERMISSION)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserPermissionField.USER_PERMISSION, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(UserPermissionField.DYNAMIC_FIELD)

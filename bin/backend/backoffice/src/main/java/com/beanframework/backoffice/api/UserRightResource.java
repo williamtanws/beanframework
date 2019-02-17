@@ -38,7 +38,7 @@ public class UserRightResource {
 
 	@Autowired
 	private UserRightFacade userRightFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 

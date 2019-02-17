@@ -26,16 +26,14 @@ public class BackofficeSuccessHandler extends SavedRequestAwareAuthenticationSuc
 	private RequestCache requestCache = new HttpSessionRequestCache();
 
 	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-			Authentication authentication) throws ServletException, IOException {
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
 
 		DefaultSavedRequest savedRequest = (DefaultSavedRequest) requestCache.getRequest(request, response);
 
 		if (savedRequest != null && savedRequest.getMethod().equalsIgnoreCase("GET")) {
-			if(StringUtils.isNotBlank(savedRequest.getQueryString())) {
-				getRedirectStrategy().sendRedirect(request, response, savedRequest.getRequestURL()+"?"+savedRequest.getQueryString());
-			}
-			else {
+			if (StringUtils.isNotBlank(savedRequest.getQueryString())) {
+				getRedirectStrategy().sendRedirect(request, response, savedRequest.getRequestURL() + "?" + savedRequest.getQueryString());
+			} else {
 				getRedirectStrategy().sendRedirect(request, response, savedRequest.getRequestURL());
 			}
 		} else {

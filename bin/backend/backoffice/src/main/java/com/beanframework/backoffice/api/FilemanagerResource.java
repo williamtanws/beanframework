@@ -45,7 +45,7 @@ import com.beanframework.backoffice.FilemanagerWebConstants;
 
 @RestController
 public class FilemanagerResource {
-	
+
 	@Value(FilemanagerWebConstants.FILE_MANAGER_LOCATION)
 	public String STORAGE;
 
@@ -59,7 +59,7 @@ public class FilemanagerResource {
 
 			// Returned result
 			List<JSONObject> fileItems = new ArrayList<>();
-			
+
 			FileUtils.forceMkdir(new File(STORAGE));
 
 			try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(STORAGE, path))) {
@@ -73,11 +73,11 @@ public class FilemanagerResource {
 					// Json result
 					JSONObject fileItem = new JSONObject();
 					fileItem.put("name", pathObj.getFileName().toString());
-					
-					if (System.getProperty("os.name").startsWith("Windows") == false){
+
+					if (System.getProperty("os.name").startsWith("Windows") == false) {
 						fileItem.put("rights", com.beanframework.filemanager.utils.FileUtils.getPermissions(pathObj));
-		            }
-					
+					}
+
 					fileItem.put("date", dt.format(new Date(attrs.lastModifiedTime().toMillis())));
 					fileItem.put("size", attrs.size());
 					fileItem.put("type", attrs.isDirectory() ? "dir" : "file");

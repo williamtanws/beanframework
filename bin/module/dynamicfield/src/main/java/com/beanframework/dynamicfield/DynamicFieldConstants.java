@@ -6,7 +6,7 @@ public class DynamicFieldConstants {
 		public static final String DYNAMIC_FIELD = "dynamicfield";
 		public static final String DYNAMIC_FIELD_ENUMERATION_REL = "dynamicfieldenumerationrel";
 	}
-	
+
 	public static interface Locale {
 		public static final String ID_REQUIRED = "module.dynamicfield.id.required";
 		public static final String ID_EXISTS = "module.dynamicfield.id.exists";

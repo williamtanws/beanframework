@@ -4,7 +4,7 @@ public class EmailEnum {
 
 	public enum Status {
 		DRAFT("Draft"), PENDING("Pending"), PROCESSING("Processing"), SENT("Sent"), FAILED("Failed");
-		
+
 		private String value;
 
 		Status(final String value) {
@@ -18,8 +18,7 @@ public class EmailEnum {
 		public static Status fromName(String name) {
 			if (DRAFT.name().equalsIgnoreCase(name)) {
 				return DRAFT;
-			}
-			else if (PENDING.name().equalsIgnoreCase(name)) {
+			} else if (PENDING.name().equalsIgnoreCase(name)) {
 				return PENDING;
 			} else if (PROCESSING.name().equalsIgnoreCase(name)) {
 				return PROCESSING;
@@ -37,7 +36,7 @@ public class EmailEnum {
 			return this.getValue();
 		}
 	}
-	
+
 	public enum Result {
 		SUCCESS("Success"), ERROR("Error");
 

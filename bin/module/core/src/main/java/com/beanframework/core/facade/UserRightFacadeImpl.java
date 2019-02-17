@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -32,19 +31,13 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	@Override
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
 		UserRight entity = userRightService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, UserRightDto.class);
+		return modelService.getDto(entity, UserRightDto.class);
 	}
 
 	@Override
 	public UserRightDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserRight entity = userRightService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, UserRightDto.class);
+		return modelService.getDto(entity, UserRightDto.class);
 	}
 
 	@Override
@@ -62,9 +55,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 			UserRight entity = modelService.getEntity(dto, UserRight.class);
 			entity = (UserRight) userRightService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, UserRightDto.class);
+			return modelService.getDto(entity, UserRightDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,14 +65,12 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		userRightService.deleteByUuid(uuid);
 	}
-	
+
 	@Override
 	public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest, UserRightSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<UserRightDto> dtos = modelService.getDto(page.getContent(), context, UserRightDto.class);
+
+		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class);
 		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -89,7 +78,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public int count() throws Exception {
 		return userRightService.count();
 	}
-	
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -97,10 +86,8 @@ public class UserRightFacadeImpl implements UserRightFacade {
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof UserRight) {
-				
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, UserRightDto.class);
+
+				entityObject[0] = modelService.getDto(entityObject[0], UserRightDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -117,17 +104,13 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public List<UserRightDto> findAllDtoUserRights() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserRight.CREATED_DATE, Sort.Direction.DESC);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		return modelService.getDto(userRightService.findEntityBySorts(sorts, false), context, UserRightDto.class);
+
+		return modelService.getDto(userRightService.findEntityBySorts(sorts, false), UserRightDto.class);
 	}
 
 	@Override
 	public UserRightDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(userRightService.create(), context, UserRightDto.class);
+
+		return modelService.getDto(userRightService.create(), UserRightDto.class);
 	}
 }

@@ -1,11 +1,7 @@
 package com.beanframework.menu.domain;
 
 public enum MenuTargetTypeEnum {
-	SELF("_self"),
-	BLANK("_blank"),
-	PARENT("_parent"),
-	TOP("_top"),
-	FRAMENAME("framename");
+	SELF("_self"), BLANK("_blank"), PARENT("_parent"), TOP("_top"), FRAMENAME("framename");
 
 	private String type;
 
@@ -16,9 +12,9 @@ public enum MenuTargetTypeEnum {
 	public String getType() {
 		return type;
 	}
-	
+
 	@Override
-    public String toString() {
-        return type;
-    }
+	public String toString() {
+		return type;
+	}
 }

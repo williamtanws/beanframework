@@ -38,7 +38,7 @@ public class UserPermissionResource {
 
 	@Autowired
 	private UserPermissionFacade userPermissionFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
@@ -62,7 +62,7 @@ public class UserPermissionResource {
 
 		return data != null ? false : true;
 	}
-	
+
 	@RequestMapping(value = UserPermissionWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {

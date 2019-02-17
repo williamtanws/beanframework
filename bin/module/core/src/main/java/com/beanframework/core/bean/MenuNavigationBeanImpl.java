@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.UserAuthorityDto;
@@ -19,30 +18,28 @@ import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
 
-public class MenuNavigationBeanImpl implements MenuNavigationBean{
-	
+public class MenuNavigationBeanImpl implements MenuNavigationBean {
+
 	@Autowired
 	private MenuService menuService;
-	
+
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Override
 	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
 		List<Menu> entities = menuService.findEntityMenuTree(true);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		List<MenuDto> menuDtoTree = modelService.getDto(entities, context, MenuDto.class);
-		
+
+		List<MenuDto> menuDtoTree = modelService.getDto(entities, MenuDto.class);
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 
 		filterAuthorizedMenu(menuDtoTree, collectUserGroupUuid(user.getUserGroups()));
-		
+
 		return menuDtoTree;
 	}
-	
+
 	private Set<String> collectUserGroupUuid(List<UserGroup> userGroups) {
 		Set<String> userGroupUuids = new HashSet<String>();
 		for (UserGroup userGroup : userGroups) {
@@ -53,7 +50,7 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean{
 		}
 		return userGroupUuids;
 	}
-	
+
 	private Set<String> collectUserGroupDtoUuid(List<UserGroupDto> userGroups) {
 		Set<String> userGroupUuids = new HashSet<String>();
 		for (UserGroupDto userGroup : userGroups) {
@@ -72,7 +69,7 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean{
 			if (menu.getEnabled() == false) {
 				parent.remove();
 			}
-			
+
 			// If menu groups or authorities is not authorized
 			if (isUserGroupAuthorized(menu, authorizedUserGroupUuidList) == false || isAnyUserAuthorityAuthorized(menu.getUserGroups()) == false) {
 				parent.remove();

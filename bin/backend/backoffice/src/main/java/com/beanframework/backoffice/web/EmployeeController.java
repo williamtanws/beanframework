@@ -47,7 +47,7 @@ public class EmployeeController extends AbstractController {
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
 	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (employeeDto.getUuid() != null) {
 
 			EmployeeDto existingEmployee = employeeFacade.findOneByUuid(employeeDto.getUuid());
@@ -63,14 +63,14 @@ public class EmployeeController extends AbstractController {
 
 		return VIEW_EMPLOYEE_LIST;
 	}
-	
+
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
 	public String createView(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model) throws Exception {
-		
+
 		employeeDto = employeeFacade.createDto();
 		model.addAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO, employeeDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_EMPLOYEE_LIST;
 	}
 
@@ -114,7 +114,8 @@ public class EmployeeController extends AbstractController {
 				for (int i = 0; i < employeeDto.getTableUserGroups().length; i++) {
 
 					boolean remove = true;
-					if (employeeDto.getTableSelectedUserGroups() != null && employeeDto.getTableSelectedUserGroups().length > i && BooleanUtils.parseBoolean(employeeDto.getTableSelectedUserGroups()[i])) {
+					if (employeeDto.getTableSelectedUserGroups() != null && employeeDto.getTableSelectedUserGroups().length > i
+							&& BooleanUtils.parseBoolean(employeeDto.getTableSelectedUserGroups()[i])) {
 						remove = false;
 					}
 

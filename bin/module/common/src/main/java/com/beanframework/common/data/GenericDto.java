@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-public class GenericDto implements Serializable{
+public class GenericDto implements Serializable {
 	/**
 	 * 
 	 */
@@ -70,12 +70,12 @@ public class GenericDto implements Serializable{
 	public void setLastModifiedBy(AuditorDto lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ID: " + id;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

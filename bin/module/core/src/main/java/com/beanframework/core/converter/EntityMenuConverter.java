@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -28,7 +29,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 	private ModelService modelService;
 
 	@Override
-	public Menu convert(MenuDto source) throws ConverterException {
+	public Menu convert(MenuDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -37,11 +38,11 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				Menu prototype = modelService.findOneEntityByUuid(source.getUuid(), true, Menu.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(Menu.class));
+			return convertDto(source, modelService.create(Menu.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -49,15 +50,15 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 
 	}
 
-	public List<Menu> convert(List<MenuDto> sources) throws ConverterException {
+	public List<Menu> convertDto(List<MenuDto> sources, EntityConverterContext context) throws ConverterException {
 		List<Menu> convertedList = new ArrayList<Menu>();
 		for (MenuDto source : sources) {
-			convertedList.add(convert(source));
+			convertedList.add(convert(source, context));
 		}
 		return convertedList;
 	}
 
-	private Menu convert(MenuDto source, Menu prototype) throws ConverterException {
+	private Menu convertDto(MenuDto source, Menu prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -26,7 +27,7 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<D
 	private ModelService modelService;
 
 	@Override
-	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source) throws ConverterException {
+	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -48,6 +49,10 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<D
 		}
 	}
 
+	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source) throws ConverterException {
+		return convert(source, new EntityConverterContext());
+	}
+
 	private DynamicFieldTemplate convert(DynamicFieldTemplateCsv source, DynamicFieldTemplate prototype) throws ConverterException {
 
 		try {
@@ -58,7 +63,7 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<D
 			if (StringUtils.isNotBlank(source.getDynamicFieldSlotIds())) {
 				String[] dynamicFieldSlotIds = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
 				for (String dynamicFieldSlotId : dynamicFieldSlotIds) {
-					
+
 					boolean add = true;
 					for (DynamicFieldSlot dynamicFieldSlot : prototype.getDynamicFieldSlots()) {
 						if (StringUtils.equals(dynamicFieldSlot.getId(), dynamicFieldSlotId))

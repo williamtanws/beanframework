@@ -12,15 +12,15 @@ import java.util.Map;
  * @author pavan.solapure
  */
 public class SortBy {
-	
+
 	/** The map of sorts. */
 	private Map<String, SortOrder> mapOfSorts;
-	
+
 	/**
 	 * Instantiates a new sort by.
 	 */
 	public SortBy() {
-		if(null == mapOfSorts) {
+		if (null == mapOfSorts) {
 			mapOfSorts = new HashMap<String, SortOrder>();
 		}
 	}
@@ -30,10 +30,10 @@ public class SortBy {
 	 *
 	 * @return the sortBys
 	 */
-	public Map<String, SortOrder>  getSortBys() {
+	public Map<String, SortOrder> getSortBys() {
 		return mapOfSorts;
 	}
-	
+
 	/**
 	 * Adds the sort.
 	 *
@@ -42,11 +42,11 @@ public class SortBy {
 	public void addSort(String sortBy) {
 		mapOfSorts.put(sortBy, SortOrder.ASC);
 	}
-	
+
 	/**
 	 * Adds the sort.
 	 *
-	 * @param sortBy the sort by
+	 * @param sortBy    the sort by
 	 * @param sortOrder the sort order
 	 */
 	public void addSort(String sortBy, SortOrder sortOrder) {

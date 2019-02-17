@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -23,26 +22,20 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private LanguageService languageService;
 
 	@Override
 	public LanguageDto findOneByUuid(UUID uuid) throws Exception {
 		Language entity = languageService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, LanguageDto.class);
+		return modelService.getDto(entity, LanguageDto.class);
 	}
 
 	@Override
 	public LanguageDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Language entity = languageService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, LanguageDto.class);
+		return modelService.getDto(entity, LanguageDto.class);
 	}
 
 	@Override
@@ -60,9 +53,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 			Language entity = modelService.getEntity(dto, Language.class);
 			entity = (Language) languageService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, LanguageDto.class);
+			return modelService.getDto(entity, LanguageDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -72,14 +63,12 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		languageService.deleteByUuid(uuid);
 	}
-	
+
 	@Override
 	public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Language> page = languageService.findEntityPage(dataTableRequest, LanguageSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<LanguageDto> dtos = modelService.getDto(page.getContent(), context, LanguageDto.class);
+
+		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class);
 		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -87,7 +76,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public int count() throws Exception {
 		return languageService.count();
 	}
-	
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -95,10 +84,8 @@ public class LanguageFacadeImpl implements LanguageFacade {
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Language) {
-				
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, LanguageDto.class);
+
+				entityObject[0] = modelService.getDto(entityObject[0], LanguageDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,12 +97,10 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return languageService.findCountHistory(dataTableRequest);
 	}
-	
+
 	@Override
 	public LanguageDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(languageService.create(), context, LanguageDto.class);
+
+		return modelService.getDto(languageService.create(), LanguageDto.class);
 	}
 }

@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -27,11 +27,11 @@ public class DtoEmployeeConverter implements DtoConverter<Employee, EmployeeDto>
 	private ModelService modelService;
 
 	@Override
-	public EmployeeDto convert(Employee source, InterceptorContext context) throws ConverterException {
+	public EmployeeDto convert(Employee source, DtoConverterContext context) throws ConverterException {
 		return convert(source, new EmployeeDto(), context);
 	}
 
-	public List<EmployeeDto> convert(List<Employee> sources, InterceptorContext context) throws ConverterException {
+	public List<EmployeeDto> convert(List<Employee> sources, DtoConverterContext context) throws ConverterException {
 		List<EmployeeDto> convertedList = new ArrayList<EmployeeDto>();
 		for (Employee source : sources) {
 			convertedList.add(convert(source, context));
@@ -39,7 +39,7 @@ public class DtoEmployeeConverter implements DtoConverter<Employee, EmployeeDto>
 		return convertedList;
 	}
 
-	private EmployeeDto convert(Employee source, EmployeeDto prototype, InterceptorContext context) throws ConverterException {
+	private EmployeeDto convert(Employee source, EmployeeDto prototype, DtoConverterContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -54,28 +54,24 @@ public class DtoEmployeeConverter implements DtoConverter<Employee, EmployeeDto>
 		prototype.setName(source.getName());
 
 		try {
-			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
-			disableInitialCollectionContext.setInitializeCollection(false);
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
+			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+			prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
+			Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
+				@Override
+				public int compare(UserFieldDto o1, UserFieldDto o2) {
+					if (o1.getSort() == null)
+						return o2.getSort() == null ? 0 : 1;
 
-			if (context.isInitializeCollection()) {
-				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), context, UserGroupDto.class));
-				prototype.setFields(modelService.getDto(source.getFields(), context, UserFieldDto.class));
-				Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
-					@Override
-					public int compare(UserFieldDto o1, UserFieldDto o2) {
-						if(o1.getSort() == null)
-							return o2.getSort() == null ? 0 : 1;
-						
-						if(o2.getSort() == null)
-							return -1;
-						
-						return o1.getSort() - o2.getSort();
-					}
-				});
-			}
+					if (o2.getSort() == null)
+						return -1;
+
+					return o1.getSort() - o2.getSort();
+				}
+			});
+
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

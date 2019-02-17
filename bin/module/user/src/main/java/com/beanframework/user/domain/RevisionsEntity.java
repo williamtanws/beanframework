@@ -24,7 +24,7 @@ public class RevisionsEntity extends DefaultRevisionEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 3217484900214041461L;
-	
+
 	@LastModifiedBy
 	@Cascade({ CascadeType.MERGE })
 	@ManyToOne(fetch = FetchType.EAGER)

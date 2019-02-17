@@ -43,11 +43,11 @@ public class CronjobController extends AbstractController {
 
 	@Value(CronjobWebConstants.View.LIST)
 	private String VIEW_CRONJOB_LIST;
-	
+
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB)
 	public String list(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (cronjobDto.getUuid() != null) {
 
 			CronjobDto existingCronjob = cronjobFacade.findOneByUuid(cronjobDto.getUuid());
@@ -63,14 +63,14 @@ public class CronjobController extends AbstractController {
 
 		return VIEW_CRONJOB_LIST;
 	}
-	
+
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB, params = "create")
 	public String createView(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model) throws Exception {
-		
+
 		cronjobDto = cronjobFacade.createDto();
 		model.addAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO, cronjobDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_CRONJOB_LIST;
 	}
 

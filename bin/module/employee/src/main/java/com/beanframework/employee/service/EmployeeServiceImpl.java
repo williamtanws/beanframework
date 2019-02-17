@@ -95,7 +95,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Cacheable(value = "EmployeeOneProperties", key = "#properties")
 	@Override
 	public Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true,Employee.class);
+		return modelService.findOneEntityByProperties(properties, true, Employee.class);
 	}
 
 	@Cacheable(value = "EmployeesSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
@@ -134,7 +134,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Cacheable(value = "EmployeesPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Employee> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
@@ -189,7 +189,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
-		Employee entity = modelService.findOneEntityByProperties(properties, true,Employee.class);
+		Employee entity = modelService.findOneEntityByProperties(properties, true, Employee.class);
 
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
@@ -319,7 +319,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			}
 		}
 	}
-	
+
 	@Cacheable(value = "EmployeesHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -331,7 +331,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
-		
+
 		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
 
 	}

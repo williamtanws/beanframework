@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -19,7 +20,7 @@ public class EntityCronjobDataConverter implements EntityConverter<CronjobDataDt
 	private ModelService modelService;
 
 	@Override
-	public CronjobData convert(CronjobDataDto source) throws ConverterException {
+	public CronjobData convert(CronjobDataDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -28,14 +29,14 @@ public class EntityCronjobDataConverter implements EntityConverter<CronjobDataDt
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(CronjobData.UUID, source.getUuid());
 
-				CronjobData prototype = modelService.findOneEntityByProperties(properties, true,CronjobData.class);
+				CronjobData prototype = modelService.findOneEntityByProperties(properties, true, CronjobData.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(CronjobData.class));
+			return convertDto(source, modelService.create(CronjobData.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -43,10 +44,10 @@ public class EntityCronjobDataConverter implements EntityConverter<CronjobDataDt
 
 	}
 
-	private CronjobData convert(CronjobDataDto source, CronjobData prototype) {
+	private CronjobData convertDto(CronjobDataDto source, CronjobData prototype) {
 
 		Date lastModifiedDate = new Date();
-		
+
 		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
@@ -56,7 +57,7 @@ public class EntityCronjobDataConverter implements EntityConverter<CronjobDataDt
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
-		
+
 		if (StringUtils.equals(StringUtils.stripToNull(source.getValue()), prototype.getValue()) == false) {
 			prototype.setValue(StringUtils.stripToNull(source.getValue()));
 			prototype.setLastModifiedDate(lastModifiedDate);

@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -31,18 +30,14 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 	public DynamicFieldSlotDto findOneByUuid(UUID uuid) throws Exception {
 		DynamicFieldSlot entity = dynamicFieldService.findOneEntityByUuid(uuid);
 
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, DynamicFieldSlotDto.class);
+		return modelService.getDto(entity, DynamicFieldSlotDto.class);
 	}
 
 	@Override
 	public DynamicFieldSlotDto findOneProperties(Map<String, Object> properties) throws Exception {
 		DynamicFieldSlot entity = dynamicFieldService.findOneEntityByProperties(properties);
 
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, DynamicFieldSlotDto.class);
+		return modelService.getDto(entity, DynamicFieldSlotDto.class);
 	}
 
 	@Override
@@ -60,9 +55,7 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 			DynamicFieldSlot entity = modelService.getEntity(dto, DynamicFieldSlot.class);
 			entity = (DynamicFieldSlot) dynamicFieldService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, DynamicFieldSlotDto.class);
+			return modelService.getDto(entity, DynamicFieldSlotDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -77,9 +70,7 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 	public Page<DynamicFieldSlotDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<DynamicFieldSlot> page = dynamicFieldService.findEntityPage(dataTableRequest, DynamicFieldSlotSpecification.getSpecification(dataTableRequest));
 
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<DynamicFieldSlotDto> dtos = modelService.getDto(page.getContent(), context, DynamicFieldSlotDto.class);
+		List<DynamicFieldSlotDto> dtos = modelService.getDto(page.getContent(), DynamicFieldSlotDto.class);
 		return new PageImpl<DynamicFieldSlotDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -96,9 +87,7 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof DynamicFieldSlot) {
 
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, DynamicFieldSlotDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldSlotDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,13 +99,11 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return dynamicFieldService.findCountHistory(dataTableRequest);
 	}
-	
+
 	@Override
 	public DynamicFieldSlotDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(dynamicFieldService.create(), context, DynamicFieldSlotDto.class);
+
+		return modelService.getDto(dynamicFieldService.create(), DynamicFieldSlotDto.class);
 	}
 
 }

@@ -27,7 +27,7 @@ public class DynamicFieldEntityConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public EntityDynamicFieldSlotConverter entityDynamicFieldSlotConverter() {
 		return new EntityDynamicFieldSlotConverter();

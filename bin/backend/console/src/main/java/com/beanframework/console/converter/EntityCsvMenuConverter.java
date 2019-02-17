@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -30,7 +31,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 	private ModelService modelService;
 
 	@Override
-	public Menu convert(MenuCsv source) throws ConverterException {
+	public Menu convert(MenuCsv source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -38,7 +39,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Menu.ID, source.getId());
 
-				Menu prototype = modelService.findOneEntityByProperties(properties, true,Menu.class);
+				Menu prototype = modelService.findOneEntityByProperties(properties, true, Menu.class);
 
 				if (prototype != null) {
 
@@ -46,10 +47,14 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 				}
 			}
 			return convert(source, new Menu());
-			
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
+	}
+
+	public Menu convert(MenuCsv source) throws ConverterException {
+		return convert(source, new EntityConverterContext());
 	}
 
 	private Menu convert(MenuCsv source, Menu prototype) throws ConverterException {
@@ -60,14 +65,14 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 			prototype.setSort(Integer.valueOf(source.getSort()));
 			prototype.setIcon(StringUtils.stripToNull(source.getIcon()));
 			prototype.setPath(StringUtils.stripToNull(source.getPath()));
-			
+
 			if (StringUtils.isBlank(source.getTarget())) {
 				prototype.setTarget(MenuTargetTypeEnum.SELF);
 			} else {
 				prototype.setTarget(MenuTargetTypeEnum.valueOf(source.getTarget()));
 			}
 			prototype.setEnabled(source.isEnabled());
-			
+
 			// Parent
 			if (StringUtils.isNotBlank(source.getParent())) {
 				Map<String, Object> parentProperties = new HashMap<String, Object>();
@@ -86,12 +91,12 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 						}
 					}
 					if (addChild) {
-						parent.getChilds().add(prototype);						
+						parent.getChilds().add(prototype);
 						prototype.setParent(parent);
 					}
 				}
 			}
-			
+
 			// Dynamic Field
 			if (source.getDynamicFieldSlotIds() != null) {
 				String[] dynamicFields = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
@@ -106,13 +111,13 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 							add = false;
 						}
 					}
-					
-					if(add) {
+
+					if (add) {
 						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
 						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, true, DynamicField.class);
-						
-						if(entityDynamicField != null) {
+
+						if (entityDynamicField != null) {
 							MenuField field = new MenuField();
 							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));
@@ -123,7 +128,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 					}
 				}
 			}
-			
+
 			// User Group
 			String[] userGroupIds = source.getUserGroupIds().split(ImportListener.SPLITTER);
 			for (int i = 0; i < userGroupIds.length; i++) {

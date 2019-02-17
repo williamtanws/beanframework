@@ -3,7 +3,7 @@ package com.beanframework.backoffice;
 public class FilemanagerWebConstants {
 
 	public interface Path {
-		
+
 		public static final String FILE_MANAGER = "${path.filemanager}";
 		public static final String ANGULARFILEMANAGER = "${path.filemanager.angularfilemanager}";
 		public static final String TEMPLATES_PAGE = "${path.filemanager.angularfilemanager.templates.page}";
@@ -34,7 +34,7 @@ public class FilemanagerWebConstants {
 	}
 
 	public static final String FILE_MANAGER_LOCATION = "${module.filemanager.location}";
-	
+
 	public static interface PreAuthorize {
 		public static final String READ = "hasAuthority('filemanager_read')";
 		public static final String CREATE = "hasAuthority('filemanager_create')";

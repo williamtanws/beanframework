@@ -51,7 +51,7 @@ public class EmailServiceImpl implements EmailService {
 	@Cacheable(value = "EmailOneProperties", key = "#properties")
 	@Override
 	public Email findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true,Email.class);
+		return modelService.findOneEntityByProperties(properties, true, Email.class);
 	}
 
 	@Cacheable(value = "EmailsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
@@ -93,7 +93,7 @@ public class EmailServiceImpl implements EmailService {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Cacheable(value = "EmailsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Email> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
@@ -136,7 +136,7 @@ public class EmailServiceImpl implements EmailService {
 			}
 		}
 	}
-	
+
 	@Cacheable(value = "EmailsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -148,7 +148,7 @@ public class EmailServiceImpl implements EmailService {
 		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
-		
+
 		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Email.class);
 
 	}

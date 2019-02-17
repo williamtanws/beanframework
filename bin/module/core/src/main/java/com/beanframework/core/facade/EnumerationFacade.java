@@ -37,7 +37,7 @@ public interface EnumerationFacade {
 
 	@PreAuthorize(EnumPreAuthorizeEnum.READ)
 	Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception;
-	
+
 	@PreAuthorize(EnumPreAuthorizeEnum.READ)
 	int count() throws Exception;
 

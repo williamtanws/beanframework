@@ -14,14 +14,14 @@ import com.beanframework.console.interceptor.ConsoleSecurityInterceptor;
 @EnableCaching
 @EnableWebMvc
 //@ComponentScan(basePackages = { "com.beanframework.console" })
-public class ConsoleMvcConfig implements WebMvcConfigurer{
-	
+public class ConsoleMvcConfig implements WebMvcConfigurer {
+
 	@Value("${console.webroot}")
 	private String CONSOLE_WEBROOT;
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(consoleSecurityInterceptor()).addPathPatterns(CONSOLE_WEBROOT+"/**");
+		registry.addInterceptor(consoleSecurityInterceptor()).addPathPatterns(CONSOLE_WEBROOT + "/**");
 	}
 
 	@Bean

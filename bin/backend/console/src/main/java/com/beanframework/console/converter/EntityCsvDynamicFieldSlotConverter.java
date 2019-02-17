@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -25,7 +26,7 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityConverter<Dynam
 	private ModelService modelService;
 
 	@Override
-	public DynamicFieldSlot convert(DynamicFieldSlotCsv source) throws ConverterException {
+	public DynamicFieldSlot convert(DynamicFieldSlotCsv source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -45,6 +46,10 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityConverter<Dynam
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
+	}
+
+	public DynamicFieldSlot convert(DynamicFieldSlotCsv source) throws ConverterException {
+		return convert(source, new EntityConverterContext());
 	}
 
 	private DynamicFieldSlot convert(DynamicFieldSlotCsv source, DynamicFieldSlot prototype) throws ConverterException {

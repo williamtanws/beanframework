@@ -36,7 +36,7 @@ import com.beanframework.user.domain.RevisionsEntity;
 public class EmployeeResource {
 	@Autowired
 	private EmployeeFacade employeeFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
@@ -60,7 +60,7 @@ public class EmployeeResource {
 
 		return data != null ? false : true;
 	}
-	
+
 	@RequestMapping(value = EmployeeWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {

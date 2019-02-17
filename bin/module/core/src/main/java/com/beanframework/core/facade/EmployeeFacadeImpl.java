@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -37,19 +36,15 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
 		Employee entity = employeeService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, EmployeeDto.class);
+
+		return modelService.getDto(entity, EmployeeDto.class);
 	}
 
 	@Override
 	public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Employee entity = employeeService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, EmployeeDto.class);
+
+		return modelService.getDto(entity, EmployeeDto.class);
 	}
 
 	@Override
@@ -67,9 +62,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			Employee entity = modelService.getEntity(dto, Employee.class);
 			entity = (Employee) employeeService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, EmployeeDto.class);
+			return modelService.getDto(entity, EmployeeDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -84,10 +77,8 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Employee> page = employeeService.findEntityPage(dataTableRequest, EmployeeSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), context, EmployeeDto.class);
+
+		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class);
 		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -129,9 +120,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			employeeService.updatePrincipal(entity);
 			employeeService.saveProfilePicture(entity, picture);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, EmployeeDto.class);
+			return modelService.getDto(entity, EmployeeDto.class);
 
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -142,9 +131,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public EmployeeDto getCurrentUser() throws Exception {
 		Employee employee = employeeService.getCurrentUser();
 
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), context, EmployeeDto.class);
+		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), EmployeeDto.class);
 	}
 
 	@Override
@@ -155,9 +142,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Employee) {
 
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, EmployeeDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], EmployeeDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -169,12 +154,10 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return employeeService.findCountHistory(dataTableRequest);
 	}
-	
+
 	@Override
 	public EmployeeDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(employeeService.create(), context, EmployeeDto.class);
+
+		return modelService.getDto(employeeService.create(), EmployeeDto.class);
 	}
 }

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -20,26 +21,26 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 	private ModelService modelService;
 
 	@Override
-	public Admin convert(AdminDto source) throws ConverterException {
+	public Admin convert(AdminDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Admin.UUID, source.getUuid());
-				Admin prototype = modelService.findOneEntityByProperties(properties, true,Admin.class);
+				Admin prototype = modelService.findOneEntityByProperties(properties, true, Admin.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Admin.class));
+			return convertDto(source, modelService.create(Admin.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private Admin convert(AdminDto source, Admin prototype) {
+	private Admin convertDto(AdminDto source, Admin prototype) {
 
 		Date lastModifiedDate = new Date();
 
@@ -47,7 +48,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
-		
+
 		if (source.getAccountNonExpired() == null) {
 			if (prototype.getAccountNonExpired() != null) {
 				prototype.setAccountNonExpired(null);
@@ -59,7 +60,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
-		
+
 		if (source.getAccountNonLocked() == null) {
 			if (prototype.getAccountNonLocked() != null) {
 				prototype.setAccountNonLocked(null);
@@ -71,7 +72,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
-		
+
 		if (source.getCredentialsNonExpired() == null) {
 			if (prototype.getCredentialsNonExpired() != null) {
 				prototype.setCredentialsNonExpired(null);
@@ -83,7 +84,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
-		
+
 		if (source.getEnabled() == null) {
 			if (prototype.getEnabled() != null) {
 				prototype.setEnabled(null);

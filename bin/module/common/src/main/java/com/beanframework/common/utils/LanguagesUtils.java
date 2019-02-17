@@ -16,30 +16,27 @@ import org.springframework.web.servlet.support.RequestContextUtils;
  *
  */
 public final class LanguagesUtils extends CommonUtils {
-    /**
-     * 
-     * @param request
-     *            HttpServletRequest
-     * @param code
-     *            国际化代码
-     * @param args
-     *            替换参数
-     * @return
-     * @see org.springframework.context.MessageSource#getMessage(String,
-     *      Object[], Locale)
-     */
-    public static String getMessage(HttpServletRequest request, String code, Object... args) {
-        WebApplicationContext messageSource = findWebApplicationContext(request);
-        String result;
-        if (notEmpty(messageSource)) {
-            try {
-                result = messageSource.getMessage(code, args, RequestContextUtils.getLocale(request));
-            } catch (NoSuchMessageException e) {
-                result = code;
-            }
-        } else {
-            result = code;
-        }
-        return result;
-    }
+	/**
+	 * 
+	 * @param request HttpServletRequest
+	 * @param code    国际化代码
+	 * @param args    替换参数
+	 * @return
+	 * @see org.springframework.context.MessageSource#getMessage(String, Object[],
+	 *      Locale)
+	 */
+	public static String getMessage(HttpServletRequest request, String code, Object... args) {
+		WebApplicationContext messageSource = findWebApplicationContext(request);
+		String result;
+		if (notEmpty(messageSource)) {
+			try {
+				result = messageSource.getMessage(code, args, RequestContextUtils.getLocale(request));
+			} catch (NoSuchMessageException e) {
+				result = code;
+			}
+		} else {
+			result = code;
+		}
+		return result;
+	}
 }

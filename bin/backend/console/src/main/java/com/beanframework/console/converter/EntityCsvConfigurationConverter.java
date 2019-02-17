@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -24,7 +25,7 @@ public class EntityCsvConfigurationConverter implements EntityConverter<Configur
 	private ModelService modelService;
 
 	@Override
-	public Configuration convert(ConfigurationCsv source) throws ConverterException {
+	public Configuration convert(ConfigurationCsv source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -32,7 +33,7 @@ public class EntityCsvConfigurationConverter implements EntityConverter<Configur
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.ID, source.getId());
 
-				Configuration prototype = modelService.findOneEntityByProperties(properties, true,Configuration.class);
+				Configuration prototype = modelService.findOneEntityByProperties(properties, true, Configuration.class);
 
 				if (prototype != null) {
 
@@ -46,12 +47,16 @@ public class EntityCsvConfigurationConverter implements EntityConverter<Configur
 		}
 	}
 
+	public Configuration convert(ConfigurationCsv source) throws ConverterException {
+		return convert(source, new EntityConverterContext());
+	}
+
 	private Configuration convert(ConfigurationCsv source, Configuration prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setValue(StringUtils.stripToNull(source.getValue()));
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ConverterException(e.getMessage(), e);

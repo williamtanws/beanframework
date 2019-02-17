@@ -3,7 +3,7 @@ package com.beanframework.common.exception;
 import com.beanframework.common.interceptor.Interceptor;
 
 public class ListenerException extends BusinessException {
-	
+
 	/**
 	 * 
 	 */

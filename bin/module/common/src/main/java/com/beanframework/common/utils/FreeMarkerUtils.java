@@ -1,4 +1,5 @@
 package com.beanframework.common.utils;
+
 //package com.beanframework.common.utils;
 //
 //import static org.apache.commons.logging.LogFactory.getLog;

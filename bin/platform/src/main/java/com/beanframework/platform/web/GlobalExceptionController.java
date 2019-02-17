@@ -10,11 +10,11 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class GlobalExceptionController {
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public String handleError405(HttpServletRequest request, Exception e) {
-        ModelAndView mav = new ModelAndView("/405");
-        mav.addObject("exception", e);  
-        //mav.addObject("errorcode", "405");
-        return "redirect:"+request.getContextPath();
-    }
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public String handleError405(HttpServletRequest request, Exception e) {
+		ModelAndView mav = new ModelAndView("/405");
+		mav.addObject("exception", e);
+		// mav.addObject("errorcode", "405");
+		return "redirect:" + request.getContextPath();
+	}
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Site;
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -24,7 +25,7 @@ public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
 	private ModelService modelService;
 
 	@Override
-	public Site convert(SiteCsv source) throws ConverterException {
+	public Site convert(SiteCsv source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -44,6 +45,10 @@ public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
+	}
+
+	public Site convert(SiteCsv source) throws ConverterException {
+		return convert(source, new EntityConverterContext());
 	}
 
 	private Site convert(SiteCsv source, Site prototype) throws ConverterException {

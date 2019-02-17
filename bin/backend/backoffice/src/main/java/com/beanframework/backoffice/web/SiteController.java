@@ -33,7 +33,7 @@ public class SiteController extends AbstractController {
 	@GetMapping(value = SiteWebConstants.Path.SITE)
 	public String list(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (siteDto.getUuid() != null) {
 
 			SiteDto existsDto = siteFacade.findOneByUuid(siteDto.getUuid());
@@ -50,11 +50,11 @@ public class SiteController extends AbstractController {
 
 	@GetMapping(value = SiteWebConstants.Path.SITE, params = "create")
 	public String createView(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model) throws Exception {
-		
+
 		siteDto = siteFacade.createDto();
 		model.addAttribute(SiteWebConstants.ModelAttribute.SITE_DTO, siteDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_SITE_LIST;
 	}
 

@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.comment.domain.Comment;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -24,11 +24,11 @@ public class DtoCommentConverter implements DtoConverter<Comment, CommentDto> {
 	private ModelService modelService;
 
 	@Override
-	public CommentDto convert(Comment source, InterceptorContext context) throws ConverterException {
+	public CommentDto convert(Comment source, DtoConverterContext context) throws ConverterException {
 		return convert(source, new CommentDto(), context);
 	}
 
-	public List<CommentDto> convert(List<Comment> sources, InterceptorContext context) throws ConverterException {
+	public List<CommentDto> convert(List<Comment> sources, DtoConverterContext context) throws ConverterException {
 		List<CommentDto> convertedList = new ArrayList<CommentDto>();
 		for (Comment source : sources) {
 			convertedList.add(convert(source, context));
@@ -36,7 +36,7 @@ public class DtoCommentConverter implements DtoConverter<Comment, CommentDto> {
 		return convertedList;
 	}
 
-	private CommentDto convert(Comment source, CommentDto prototype, InterceptorContext context) throws ConverterException {
+	private CommentDto convert(Comment source, CommentDto prototype, DtoConverterContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -52,16 +52,10 @@ public class DtoCommentConverter implements DtoConverter<Comment, CommentDto> {
 		}
 
 		try {
-			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
-			disableInitialCollectionContext.setInitializeCollection(false);
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
 
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
-
-			if (context.isInitializeCollection()) {
-				prototype.setUser(modelService.getDto(source.getUser(), context, UserDto.class));
-			}
-
+			prototype.setUser(modelService.getDto(source.getUser(), UserDto.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);
