@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -32,19 +31,13 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Override
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
 		UserPermission entity = userPermissionService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, UserPermissionDto.class);
+		return modelService.getDto(entity, UserPermissionDto.class);
 	}
 
 	@Override
 	public UserPermissionDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserPermission entity = userPermissionService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, UserPermissionDto.class);
+		return modelService.getDto(entity, UserPermissionDto.class);
 	}
 
 	@Override
@@ -62,9 +55,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 			UserPermission entity = modelService.getEntity(dto, UserPermission.class);
 			entity = (UserPermission) userPermissionService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, UserPermissionDto.class);
+			return modelService.getDto(entity, UserPermissionDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,14 +65,12 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		userPermissionService.deleteByUuid(uuid);
 	}
-	
+
 	@Override
 	public Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserPermission> page = userPermissionService.findEntityPage(dataTableRequest, UserPermissionSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), context, UserPermissionDto.class);
+
+		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class);
 		return new PageImpl<UserPermissionDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -89,7 +78,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public int count() throws Exception {
 		return userPermissionService.count();
 	}
-	
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -97,10 +86,8 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof UserPermission) {
-				
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, UserPermissionDto.class);
+
+				entityObject[0] = modelService.getDto(entityObject[0], UserPermissionDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -117,19 +104,14 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public List<UserPermissionDto> findAllDtoUserPermissions() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserPermission.CREATED_DATE, Sort.Direction.DESC);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		return modelService.getDto(userPermissionService.findEntityBySorts(sorts, false), context, UserPermissionDto.class);
+
+		return modelService.getDto(userPermissionService.findEntityBySorts(sorts, false), UserPermissionDto.class);
 	}
 
 	@Override
 	public UserPermissionDto createDto() throws Exception {
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(userPermissionService.create(), context, UserPermissionDto.class);
+
+		return modelService.getDto(userPermissionService.create(), UserPermissionDto.class);
 	}
-
-
 
 }

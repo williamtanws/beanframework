@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -19,28 +20,28 @@ public class EntityEnumerationConverter implements EntityConverter<EnumerationDt
 	private ModelService modelService;
 
 	@Override
-	public Enumeration convert(EnumerationDto source) throws ConverterException {
+	public Enumeration convert(EnumerationDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Enumeration.UUID, source.getUuid());
-				Enumeration prototype = modelService.findOneEntityByProperties(properties, true,Enumeration.class);
+				Enumeration prototype = modelService.findOneEntityByProperties(properties, true, Enumeration.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(Enumeration.class));
+			return convertDto(source, modelService.create(Enumeration.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private Enumeration convert(EnumerationDto source, Enumeration prototype) {
+	private Enumeration convertDto(EnumerationDto source, Enumeration prototype) {
 
 		Date lastModifiedDate = new Date();
 
@@ -48,7 +49,7 @@ public class EntityEnumerationConverter implements EntityConverter<EnumerationDt
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
-		
+
 		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setLastModifiedDate(lastModifiedDate);

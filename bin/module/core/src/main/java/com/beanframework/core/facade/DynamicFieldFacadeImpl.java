@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -31,18 +30,14 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	public DynamicFieldDto findOneByUuid(UUID uuid) throws Exception {
 		DynamicField entity = dynamicFieldService.findOneEntityByUuid(uuid);
 
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, DynamicFieldDto.class);
+		return modelService.getDto(entity, DynamicFieldDto.class);
 	}
 
 	@Override
 	public DynamicFieldDto findOneProperties(Map<String, Object> properties) throws Exception {
 		DynamicField entity = dynamicFieldService.findOneEntityByProperties(properties);
 
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, DynamicFieldDto.class);
+		return modelService.getDto(entity, DynamicFieldDto.class);
 	}
 
 	@Override
@@ -60,9 +55,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 			DynamicField entity = modelService.getEntity(dto, DynamicField.class);
 			entity = (DynamicField) dynamicFieldService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, DynamicFieldDto.class);
+			return modelService.getDto(entity, DynamicFieldDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -77,9 +70,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	public Page<DynamicFieldDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<DynamicField> page = dynamicFieldService.findEntityPage(dataTableRequest, DynamicFieldSpecification.getSpecification(dataTableRequest));
 
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), context, DynamicFieldDto.class);
+		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), DynamicFieldDto.class);
 		return new PageImpl<DynamicFieldDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -96,9 +87,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof DynamicField) {
 
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, DynamicFieldDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,13 +99,11 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return dynamicFieldService.findCountHistory(dataTableRequest);
 	}
-	
+
 	@Override
 	public DynamicFieldDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(dynamicFieldService.create(), context, DynamicFieldDto.class);
+
+		return modelService.getDto(dynamicFieldService.create(), DynamicFieldDto.class);
 	}
 
 }

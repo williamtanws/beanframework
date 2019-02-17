@@ -26,7 +26,7 @@ public class Auditor extends GenericEntity {
 	public static final String LAST_MODIFIED_DATE = "lastModifiedDate";
 	public static final String LAST_MODIFIED_BY = "lastModifiedBy";
 	public static final String NAME = "name";
-	
+
 	@Audited(withModifiedFlag = true)
 	private String name;
 

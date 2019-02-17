@@ -18,20 +18,20 @@ import com.beanframework.employee.service.EmployeeServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EmployeeServiceTest {
-	
+
 	@Mock
 	private ModelService modelService;
 
 	@InjectMocks
 	private EmployeeService employeeService = new EmployeeServiceImpl();
-	
+
 	@Test
 	public void testFindEmployeeById() throws Exception {
 		Employee employee = modelService.create(Employee.class);
 		employee.setId("employee");
-		
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, "employee");
-		when(modelService.findOneEntityByProperties(properties, true,Employee.class)).thenReturn(employee);
+		when(modelService.findOneEntityByProperties(properties, true, Employee.class)).thenReturn(employee);
 	}
 }

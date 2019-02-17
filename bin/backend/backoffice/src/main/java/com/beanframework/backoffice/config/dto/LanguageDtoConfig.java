@@ -9,7 +9,7 @@ import com.beanframework.core.data.LanguageDto;
 
 @Configuration
 public class LanguageDtoConfig {
-	
+
 	@Bean
 	public DtoLanguageConverter dtoLanguageConverter() {
 		return new DtoLanguageConverter();

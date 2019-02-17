@@ -171,7 +171,7 @@ public class AdminServiceImpl implements AdminService {
 			return null;
 		}
 	}
-	
+
 	@Cacheable(value = "AdminsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -183,7 +183,7 @@ public class AdminServiceImpl implements AdminService {
 		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
-		
+
 		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Admin.class);
 
 	}

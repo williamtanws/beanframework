@@ -19,9 +19,8 @@ public class AbstractController {
 	protected LocaleMessageService localeMessageService;
 
 	@SuppressWarnings("rawtypes")
-	public void addErrorMessage(Class objectClass, String message, BindingResult bindingResult,
-			RedirectAttributes redirectAttributes) {
-		
+	public void addErrorMessage(Class objectClass, String message, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
 		bindingResult.reject(objectClass.getSimpleName(), message);
 
 		StringBuilder errorMessage = new StringBuilder();
@@ -39,7 +38,7 @@ public class AbstractController {
 	public void addSuccessMessage(RedirectAttributes redirectAttributes, String messageCode) {
 		redirectAttributes.addFlashAttribute(SUCCESS, localeMessageService.getMessage(messageCode));
 	}
-	
+
 	public void addErrorMessage(Model model, String messageCode) {
 		model.addAttribute(ERROR, localeMessageService.getMessage(messageCode));
 	}

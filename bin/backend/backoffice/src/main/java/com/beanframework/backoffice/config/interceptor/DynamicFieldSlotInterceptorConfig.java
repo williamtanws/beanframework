@@ -12,7 +12,6 @@ import com.beanframework.dynamicfield.interceptor.slot.DynamicFieldSlotPrepareIn
 import com.beanframework.dynamicfield.interceptor.slot.DynamicFieldSlotRemoveInterceptor;
 import com.beanframework.dynamicfield.interceptor.slot.DynamicFieldSlotValidateInterceptor;
 
-
 @Configuration
 public class DynamicFieldSlotInterceptorConfig {
 
@@ -109,7 +108,7 @@ public class DynamicFieldSlotInterceptorConfig {
 	////////////////////////
 	// Remove Interceptor //
 	////////////////////////
-	
+
 	@Bean
 	public DynamicFieldSlotRemoveInterceptor dynamicFieldSlotRemoveInterceptor() {
 		return new DynamicFieldSlotRemoveInterceptor();

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -21,7 +22,7 @@ public class EntityCsvAdminConverter implements EntityConverter<AdminCsv, Admin>
 	private ModelService modelService;
 
 	@Override
-	public Admin convert(AdminCsv source) throws ConverterException {
+	public Admin convert(AdminCsv source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -41,6 +42,10 @@ public class EntityCsvAdminConverter implements EntityConverter<AdminCsv, Admin>
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
+	}
+
+	public Admin convert(AdminCsv source) throws ConverterException {
+		return convert(source, new EntityConverterContext());
 	}
 
 	private Admin convert(AdminCsv source, Admin prototype) throws ConverterException {

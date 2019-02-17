@@ -37,7 +37,7 @@ public class UserPermissionController extends AbstractController {
 	public String list(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (userpermissionDto.getUuid() != null) {
 
 			UserPermissionDto existsDto = userPermissionFacade.findOneByUuid(userpermissionDto.getUuid());
@@ -52,14 +52,14 @@ public class UserPermissionController extends AbstractController {
 
 		return VIEW_USERPERMISSION_LIST;
 	}
-	
+
 	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "create")
 	public String createView(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model) throws Exception {
-		
+
 		userpermissionDto = userPermissionFacade.createDto();
 		model.addAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO, userpermissionDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_USERPERMISSION_LIST;
 	}
 

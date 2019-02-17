@@ -24,7 +24,7 @@ public interface AdminWebConstants {
 		public static final String ADMIN_DTO = "adminDto";
 		public static final String PROFILE = "adminProfile";
 	}
-	
+
 	public interface Locale {
 		public static final String ACCOUNT_DISABLED = "module.admin.account.disabled";
 		public static final String ACCOUNT_EXPIRED = "module.admin.account.expired";

@@ -18,6 +18,6 @@ public final class UserGroupConstants {
 		public static final String ID_EXISTS = "module.usergroup.id.exists";
 		public static final String UUID_NOT_EXISTS = "module.usergroup.uuid.notexists";;
 	}
-	
+
 	public static final String DYNAMIC_FIELD_TEMPLATE = "module.usergroup.dynamicfield.template";
 }

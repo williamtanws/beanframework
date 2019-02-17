@@ -32,7 +32,7 @@ public class CacheController {
 
 	@Value(CacheWebConstants.View.CACHE)
 	private String VIEW_CACHE;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
@@ -40,8 +40,7 @@ public class CacheController {
 	private CacheManager cacheManager;
 
 	@GetMapping(value = { CacheWebConstants.Path.CACHE })
-	public String cache(Model model, @RequestParam Map<String, Object> allRequestParams,
-			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	public String cache(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
 		List<Cache> caches = new ArrayList<Cache>();
 
@@ -56,8 +55,7 @@ public class CacheController {
 	}
 
 	@PostMapping(value = { CacheWebConstants.Path.CACHE_CLEARALL }, params = "clearall")
-	public RedirectView clear(Model model, @RequestParam Map<String, Object> allRequestParams,
-			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	public RedirectView clear(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
 		try {
 			cacheManager.clearAll();

@@ -48,5 +48,5 @@ public interface LanguageFacade {
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.CREATE)
-	LanguageDto createDto() throws Exception;	
+	LanguageDto createDto() throws Exception;
 }

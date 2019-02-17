@@ -33,10 +33,12 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
+import com.beanframework.common.context.DtoConverterContext;
+import com.beanframework.common.context.EntityConverterContext;
+import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.converter.EntityConverter;
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
@@ -58,54 +60,54 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 	@Autowired
 	protected List<ConverterMapping> converterMappings;
-	
+
 	@Value("${interceptor.strict.use:false}")
 	protected boolean STRICT_USE_INTERCEPTOR;
 
-	protected void initialDefaultsInterceptor(Collection models, Class modelClass) throws InterceptorException {
+	protected void initialDefaultsInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			initialDefaultsInterceptor(model, modelClass);
+			initialDefaultsInterceptor(model, context, modelClass);
 		}
 	}
 
-	protected void initialDefaultsInterceptor(Object model, Class modelClass) throws InterceptorException {
-		
+	protected void initialDefaultsInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
+
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof InitialDefaultsInterceptor) {
 				InitialDefaultsInterceptor<Object> interceptor = (InitialDefaultsInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
-					interceptor.onInitialDefaults(model);
+					interceptor.onInitialDefaults(model, context);
 					notIntercepted = false;
 				}
 			}
 		}
-		
+
 		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
 			throw new InterceptorException("Cannot find any load interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
-	
-	protected void initializeInterceptor(Collection models, Class modelClass) throws InterceptorException {
+
+	protected void initializeInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			initializeInterceptor(model, modelClass);
+			initializeInterceptor(model, context, modelClass);
 		}
 	}
 
-	protected void initializeInterceptor(Object model, Class modelClass) throws InterceptorException {
-		
+	protected void initializeInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
+
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof InitializeInterceptor) {
 				InitializeInterceptor<Object> interceptor = (InitializeInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
-					interceptor.onInitialize(model);
+					interceptor.onInitialize(model, context);
 					notIntercepted = false;
 				}
 			}
@@ -115,24 +117,24 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			throw new InterceptorException("Cannot find any initialize interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
-	
-	protected void loadInterceptor(Collection models, Class modelClass) throws InterceptorException {
+
+	protected void loadInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			loadInterceptor(model, modelClass);
+			loadInterceptor(model, context, modelClass);
 		}
 	}
 
-	protected void loadInterceptor(Object model, Class modelClass) throws InterceptorException {
-		
+	protected void loadInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
+
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof LoadInterceptor) {
 				LoadInterceptor<Object> interceptor = (LoadInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
-					interceptor.onLoad(model);
+					interceptor.onLoad(model, context);
 					notIntercepted = false;
 				}
 			}
@@ -143,23 +145,23 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void prepareInterceptor(Collection models, Class modelClass) throws InterceptorException {
+	protected void prepareInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			prepareInterceptor(model, modelClass);
+			prepareInterceptor(model, context, modelClass);
 		}
 	}
 
-	protected void prepareInterceptor(Object model, Class modelClass) throws InterceptorException {
+	protected void prepareInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof PrepareInterceptor) {
 				PrepareInterceptor<Object> interceptor = (PrepareInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
-					interceptor.onPrepare(model);
+					interceptor.onPrepare(model, context);
 					notIntercepted = false;
 				}
 			}
@@ -170,23 +172,23 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void removeInterceptor(Collection models, Class modelClass) throws InterceptorException {
+	protected void removeInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			removeInterceptor(model, modelClass);
+			removeInterceptor(model, context, modelClass);
 		}
 	}
 
-	protected void removeInterceptor(Object model, Class modelClass) throws InterceptorException {
+	protected void removeInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof RemoveInterceptor) {
 				RemoveInterceptor<Object> interceptor = (RemoveInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
-					interceptor.onRemove(model);
+					interceptor.onRemove(model, context);
 					notIntercepted = false;
 				}
 			}
@@ -197,23 +199,23 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void validateInterceptor(Collection models, Class modelClass) throws InterceptorException {
+	protected void validateInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			validateInterceptor(model, modelClass);
+			validateInterceptor(model, context, modelClass);
 		}
 	}
 
-	protected void validateInterceptor(Object model, Class modelClass) throws InterceptorException {
+	protected void validateInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof ValidateInterceptor) {
 				ValidateInterceptor<Object> interceptor = (ValidateInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
-					interceptor.onValidate(model);
+					interceptor.onValidate(model, context);
 					notIntercepted = false;
 				}
 			}
@@ -224,21 +226,21 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void entityConverter(Collection models, Class modelClass) throws ConverterException {
+	protected void entityConverter(Collection models, EntityConverterContext context, Class modelClass) throws ConverterException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			entityConverter(model, modelClass);
+			entityConverter(model, context, modelClass);
 		}
 	}
 
-	protected Object entityConverter(Object model, Class modelClass) throws ConverterException {
+	protected Object entityConverter(Object model, EntityConverterContext context, Class modelClass) throws ConverterException {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof EntityConverter) {
 				EntityConverter interceptor = (EntityConverter) interceptorMapping.getConverter();
 				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
-					return interceptor.convert(model);
+					return interceptor.convert(model, context);
 				}
 			}
 		}
@@ -246,7 +248,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		throw new ConverterException("Cannot find any entity convert to convert target model: " + modelClass.getSimpleName());
 	}
 
-	protected <T extends Collection> T dtoConverter(Collection models, InterceptorContext context, Class modelClass) throws ConverterException, InterceptorException {
+	protected <T extends Collection> T dtoConverter(Collection models, DtoConverterContext context, Class modelClass) throws ConverterException, InterceptorException {
 		if (models instanceof List<?>) {
 			List<Object> listModels = new ArrayList<Object>();
 			Iterator iterator = models.iterator();
@@ -259,7 +261,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		throw new ConverterException("Cannot find available models type to convert target model: " + modelClass.getSimpleName());
 	}
 
-	protected Object dtoConverter(Object model, InterceptorContext context, Class modelClass) throws ConverterException {
+	protected Object dtoConverter(Object model, DtoConverterContext context, Class modelClass) throws ConverterException {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof DtoConverter) {
 				DtoConverter interceptor = (DtoConverter) interceptorMapping.getConverter();
@@ -294,9 +296,9 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
 
 		Root root = query.from(domainClass);
-        Predicate predicate = spec.toPredicate(root, query, builder);
+		Predicate predicate = spec.toPredicate(root, query, builder);
 
-        if (predicate != null) {
+		if (predicate != null) {
 			query.where(predicate);
 		}
 
@@ -320,19 +322,19 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 	protected <T> TypedQuery getQuery(@Nullable Specification spec, Class domainClass, Sort sort) {
 		Assert.notNull(domainClass, "Domain class must not be null!");
-		
+
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery query = builder.createQuery(domainClass);
-        Root root = query.from(domainClass);
-        Predicate predicate = spec.toPredicate(root, query, builder);
-        
-        if (predicate != null) {
+		CriteriaQuery query = builder.createQuery(domainClass);
+		Root root = query.from(domainClass);
+		Predicate predicate = spec.toPredicate(root, query, builder);
+
+		if (predicate != null) {
 			query.where(predicate);
 		}
-		
-        query.select(root).distinct(true);
-        
-        if (sort.isSorted()) {
+
+		query.select(root).distinct(true);
+
+		if (sort.isSorted()) {
 			query.orderBy(toOrders(sort, root, builder));
 		}
 

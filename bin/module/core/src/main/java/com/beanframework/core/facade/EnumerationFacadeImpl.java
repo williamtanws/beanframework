@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -30,19 +29,15 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	@Override
 	public EnumerationDto findOneByUuid(UUID uuid) throws Exception {
 		Enumeration entity = enumerationService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, EnumerationDto.class);
+
+		return modelService.getDto(entity, EnumerationDto.class);
 	}
 
 	@Override
 	public EnumerationDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Enumeration entity = enumerationService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, EnumerationDto.class);
+
+		return modelService.getDto(entity, EnumerationDto.class);
 	}
 
 	@Override
@@ -60,9 +55,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 			Enumeration entity = modelService.getEntity(dto, Enumeration.class);
 			entity = (Enumeration) enumerationService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, EnumerationDto.class);
+			return modelService.getDto(entity, EnumerationDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -76,10 +69,8 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	@Override
 	public Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Enumeration> page = enumerationService.findEntityPage(dataTableRequest, EnumerationSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<EnumerationDto> dtos = modelService.getDto(page.getContent(), context, EnumerationDto.class);
+
+		List<EnumerationDto> dtos = modelService.getDto(page.getContent(), EnumerationDto.class);
 		return new PageImpl<EnumerationDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -87,7 +78,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	public int count() throws Exception {
 		return enumerationService.count();
 	}
-	
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -95,28 +86,24 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Enumeration) {
-				
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, EnumerationDto.class);
+
+				entityObject[0] = modelService.getDto(entityObject[0], EnumerationDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
 
 		return revisions;
 	}
-	
+
 	@Override
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return enumerationService.findCountHistory(dataTableRequest);
 	}
-	
+
 	@Override
 	public EnumerationDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(enumerationService.create(), context, EnumerationDto.class);
+
+		return modelService.getDto(enumerationService.create(), EnumerationDto.class);
 	}
 
 }

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.comment.service.CommentService;
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -25,26 +24,22 @@ public class CommentFacadeImpl implements CommentFacade {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private CommentService commentService;
 
 	@Override
 	public CommentDto findOneByUuid(UUID uuid) throws Exception {
 		Comment entity = commentService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, CommentDto.class);
+
+		return modelService.getDto(entity, CommentDto.class);
 	}
 
 	@Override
 	public CommentDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Comment entity = commentService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, CommentDto.class);
+
+		return modelService.getDto(entity, CommentDto.class);
 	}
 
 	@Override
@@ -62,9 +57,7 @@ public class CommentFacadeImpl implements CommentFacade {
 			Comment entity = modelService.getEntity(dto, Comment.class);
 			entity = (Comment) commentService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, CommentDto.class);
+			return modelService.getDto(entity, CommentDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,14 +67,12 @@ public class CommentFacadeImpl implements CommentFacade {
 	public void delete(UUID uuid) throws BusinessException {
 		commentService.deleteByUuid(uuid);
 	}
-	
+
 	@Override
 	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Comment> page = commentService.findEntityPage(dataTableRequest, CommentSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		List<CommentDto> dtos = modelService.getDto(page.getContent(), context, CommentDto.class);
+
+		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class);
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -89,7 +80,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	public int count() throws Exception {
 		return commentService.count();
 	}
-	
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -97,10 +88,8 @@ public class CommentFacadeImpl implements CommentFacade {
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Comment) {
-				
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, CommentDto.class);
+
+				entityObject[0] = modelService.getDto(entityObject[0], CommentDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -117,18 +106,14 @@ public class CommentFacadeImpl implements CommentFacade {
 	public List<CommentDto> findAllDtoComments() throws Exception {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Comment.CREATED_DATE, Sort.Direction.DESC);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(commentService.findEntityBySorts(sorts, false), context, CommentDto.class);
+
+		return modelService.getDto(commentService.findEntityBySorts(sorts, false), CommentDto.class);
 	}
-	
+
 	@Override
 	public CommentDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(commentService.create(), context, CommentDto.class);
+
+		return modelService.getDto(commentService.create(), CommentDto.class);
 	}
 
 }

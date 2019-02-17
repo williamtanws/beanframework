@@ -26,7 +26,7 @@ public class UserAuthorityCsv {
 
 		return processors;
 	}
-	
+
 	public static CellProcessor[] getRemoveProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
 				new UniqueHashCode(), // id

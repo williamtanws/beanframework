@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ImportListenerRegistry {
-	
+
 	protected static final Logger LOGGER = LoggerFactory.getLogger(ImportListenerRegistry.class);
 
 	private Map<String, ImportListener> listeners = new TreeMap<String, ImportListener>();
@@ -30,11 +30,11 @@ public class ImportListenerRegistry {
 		if (StringUtils.isBlank(listener.getDescription())) {
 			throw new RuntimeException("Listener Description is missing");
 		}
-		
-		if(LOGGER.isDebugEnabled()){
-			LOGGER.debug("Added '"+listener.getKey()+"' "+listener.getName());
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Added '" + listener.getKey() + "' " + listener.getName());
 		}
-	
+
 		listeners.put(listener.getKey(), listener);
 	}
 

@@ -28,7 +28,6 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.csv.UserAuthorityCsv;
@@ -49,7 +48,7 @@ public class UserAuthorityImportListener extends ImportListener {
 
 	@Value("${module.console.import.remove.userauthority}")
 	private String IMPORT_REMOVE;
-	
+
 	@PostConstruct
 	public void importer() {
 		setKey(ConsoleImportListenerConstants.UserAuthorityImport.KEY);
@@ -72,7 +71,7 @@ public class UserAuthorityImportListener extends ImportListener {
 			save(csvList);
 		}
 	}
-	
+
 	@Override
 	public void remove() throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -151,7 +150,7 @@ public class UserAuthorityImportListener extends ImportListener {
 			if (userGroup == null) {
 				LOGGER.error("userGroupId not exists: " + userGroupId);
 			} else {
-				
+
 				generateUserAuthority(userGroup);
 
 				for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
@@ -175,54 +174,50 @@ public class UserAuthorityImportListener extends ImportListener {
 						}
 					}
 				}
-				
+
 				modelService.saveEntity(userGroup, UserGroup.class);
 			}
 		}
 	}
-	
-	private void generateUserAuthority(UserGroup model) throws InterceptorException {
-		try {
-			Hibernate.initialize(model.getUserAuthorities());
 
-			Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
-			userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
-			List<UserPermission> userPermissions = modelService.findEntityByPropertiesAndSorts(null, userPermissionSorts, null, null, true, UserPermission.class);
+	private void generateUserAuthority(UserGroup model) throws Exception {
+		Hibernate.initialize(model.getUserAuthorities());
 
-			Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
-			userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
-			List<UserRight> userRights = modelService.findEntityByPropertiesAndSorts(null, userRightSorts, null, null, true, UserRight.class);
+		Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
+		userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
+		List<UserPermission> userPermissions = modelService.findEntityByPropertiesAndSorts(null, userPermissionSorts, null, null, true, UserPermission.class);
 
-			for (UserPermission userPermission : userPermissions) {
-				for (UserRight userRight : userRights) {
+		Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
+		userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
+		List<UserRight> userRights = modelService.findEntityByPropertiesAndSorts(null, userRightSorts, null, null, true, UserRight.class);
 
-					String authorityId = model.getId() + "_" + userPermission.getId() + "_" + userRight.getId();
+		for (UserPermission userPermission : userPermissions) {
+			for (UserRight userRight : userRights) {
 
-					boolean add = true;
-					if (model.getUserAuthorities() != null && model.getUserAuthorities().isEmpty() == false) {
-						for (UserAuthority userAuthority : model.getUserAuthorities()) {
-							if (userAuthority.getId().equals(authorityId)) {
-								add = false;
-							}
+				String authorityId = model.getId() + "_" + userPermission.getId() + "_" + userRight.getId();
+
+				boolean add = true;
+				if (model.getUserAuthorities() != null && model.getUserAuthorities().isEmpty() == false) {
+					for (UserAuthority userAuthority : model.getUserAuthorities()) {
+						if (userAuthority.getId().equals(authorityId)) {
+							add = false;
 						}
 					}
+				}
 
-					if (add) {
-						UserAuthority userAuthority = modelService.create(UserAuthority.class);
-						userAuthority.setId(authorityId);
-						userAuthority.setUserPermission(userPermission);
-						userAuthority.setUserRight(userRight);
+				if (add) {
+					UserAuthority userAuthority = modelService.create(UserAuthority.class);
+					userAuthority.setId(authorityId);
+					userAuthority.setUserPermission(userPermission);
+					userAuthority.setUserRight(userRight);
 
-						userAuthority.setUserGroup(model);
-						model.getUserAuthorities().add(userAuthority);
-					}
+					userAuthority.setUserGroup(model);
+					model.getUserAuthorities().add(userAuthority);
 				}
 			}
-		} catch (Exception e) {
-			throw new InterceptorException(e.getMessage(), e);
 		}
 	}
-	
+
 	public void remove(List<UserAuthorityCsv> csvList) throws Exception {
 	}
 }

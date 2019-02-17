@@ -42,7 +42,7 @@ public class UserRightServiceImpl implements UserRightService {
 	@Cacheable(value = "UserRightOneProperties", key = "#properties")
 	@Override
 	public UserRight findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true,UserRight.class);
+		return modelService.findOneEntityByProperties(properties, true, UserRight.class);
 	}
 
 	@Cacheable(value = "UserRightsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
@@ -79,7 +79,7 @@ public class UserRightServiceImpl implements UserRightService {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Cacheable(value = "UserRightsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<UserRight> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
@@ -91,7 +91,7 @@ public class UserRightServiceImpl implements UserRightService {
 	public int count() throws Exception {
 		return modelService.count(UserRight.class);
 	}
-	
+
 	@Cacheable(value = "UserRightsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -103,7 +103,7 @@ public class UserRightServiceImpl implements UserRightService {
 		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
-		
+
 		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), UserRight.class);
 
 	}

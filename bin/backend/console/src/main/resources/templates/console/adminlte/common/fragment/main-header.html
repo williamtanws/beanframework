@@ -91,10 +91,6 @@
 							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.admin') ? 'active':''}">
 								<a th:href="@{${@environment.getProperty('path.admin')}}" th:text="#{module.admin}"></a>
 							</li>
-							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.documentation') ? 'active':''}">
-								<a th:href="@{${@environment.getProperty('path.documentation')}}" th:text="#{module.documentation}"></a>
-							</li>
-
 						</ul>
 					</div>
 					<!-- /.navbar-collapse -->

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -19,30 +20,29 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 	private ModelService modelService;
 
 	@Override
-	public Configuration convert(ConfigurationDto source) throws ConverterException {
+	public Configuration convert(ConfigurationDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.UUID, source.getUuid());
-				Configuration prototype = modelService.findOneEntityByProperties(properties, true,Configuration.class);
+				Configuration prototype = modelService.findOneEntityByProperties(properties, true, Configuration.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(Configuration.class));
-			
+			return convertDto(source, modelService.create(Configuration.class));
+
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 
-		
 	}
 
-	private Configuration convert(ConfigurationDto source, Configuration prototype) {
+	private Configuration convertDto(ConfigurationDto source, Configuration prototype) {
 
 		Date lastModifiedDate = new Date();
 

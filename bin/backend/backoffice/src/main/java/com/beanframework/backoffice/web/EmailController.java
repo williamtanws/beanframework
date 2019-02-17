@@ -37,7 +37,7 @@ public class EmailController extends AbstractController {
 	@GetMapping(value = EmailWebConstants.Path.EMAIL)
 	public String list(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (emailDto.getUuid() != null) {
 
 			EmailDto existingEmail = emailFacade.findOneByUuid(emailDto.getUuid());
@@ -53,18 +53,17 @@ public class EmailController extends AbstractController {
 
 		return VIEW_EMAIL_LIST;
 	}
-	
 
 	@GetMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
 	public String createView(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model) throws Exception {
-		
+
 		emailDto = emailFacade.createDto();
 		model.addAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO, emailDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_EMAIL_LIST;
 	}
-	
+
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
 	public RedirectView create(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {

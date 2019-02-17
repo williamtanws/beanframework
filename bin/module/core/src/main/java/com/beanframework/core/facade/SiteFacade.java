@@ -48,5 +48,5 @@ public interface SiteFacade {
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	@PreAuthorize(SitePreAuthorizeEnum.CREATE)
-	SiteDto createDto() throws Exception;	
+	SiteDto createDto() throws Exception;
 }

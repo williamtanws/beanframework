@@ -7,11 +7,12 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.language.domain.Language;
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.LanguageDto;
+import com.beanframework.language.domain.Language;
 
 public class EntityLanguageConverter implements EntityConverter<LanguageDto, Language> {
 
@@ -19,28 +20,28 @@ public class EntityLanguageConverter implements EntityConverter<LanguageDto, Lan
 	private ModelService modelService;
 
 	@Override
-	public Language convert(LanguageDto source) throws ConverterException {
+	public Language convert(LanguageDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Language.UUID, source.getUuid());
-				Language prototype = modelService.findOneEntityByProperties(properties, true,Language.class);
+				Language prototype = modelService.findOneEntityByProperties(properties, true, Language.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(Language.class));
+			return convertDto(source, modelService.create(Language.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private Language convert(LanguageDto source, Language prototype) {
+	private Language convertDto(LanguageDto source, Language prototype) {
 
 		Date lastModifiedDate = new Date();
 

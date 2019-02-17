@@ -2,6 +2,7 @@ package com.beanframework.user.interceptor.usergroup;
 
 import org.hibernate.Hibernate;
 
+import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitializeInterceptor;
 import com.beanframework.user.domain.UserAuthority;
@@ -13,7 +14,7 @@ import com.beanframework.user.domain.UserRightField;
 public class UserGroupInitializeInterceptor implements InitializeInterceptor<UserGroup> {
 
 	@Override
-	public void onInitialize(UserGroup model) throws InterceptorException {
+	public void onInitialize(UserGroup model, InterceptorContext context) throws InterceptorException {
 
 		Hibernate.initialize(model.getUserAuthorities());
 		for (UserAuthority userAuthority : model.getUserAuthorities()) {
@@ -49,5 +50,6 @@ public class UserGroupInitializeInterceptor implements InitializeInterceptor<Use
 		for (UserGroupField field : model.getFields()) {
 			Hibernate.initialize(field.getDynamicField().getEnumerations());
 		}
+
 	}
 }

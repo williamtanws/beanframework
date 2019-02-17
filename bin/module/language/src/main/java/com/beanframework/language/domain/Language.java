@@ -21,13 +21,13 @@ public class Language extends GenericEntity {
 	public static final String ACTIVE = "active";
 	public static final String SORT = "sort";
 
-	@Audited(withModifiedFlag=true)
+	@Audited(withModifiedFlag = true)
 	private String name;
-	
-	@Audited(withModifiedFlag=true)
+
+	@Audited(withModifiedFlag = true)
 	private Boolean active;
-	
-	@Audited(withModifiedFlag=true)
+
+	@Audited(withModifiedFlag = true)
 	private Integer sort;
 
 	public String getName() {

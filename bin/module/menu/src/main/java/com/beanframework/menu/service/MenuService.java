@@ -22,7 +22,7 @@ public interface MenuService {
 	Menu saveEntity(Menu model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws Exception;
-	
+
 	void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception;
 
 	List<Menu> findEntityMenuTree(boolean enabled) throws Exception;

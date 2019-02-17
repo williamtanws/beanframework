@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -19,20 +20,20 @@ public class EntityEmailConverter implements EntityConverter<EmailDto, Email> {
 	private ModelService modelService;
 
 	@Override
-	public Email convert(EmailDto source) throws ConverterException {
+	public Email convert(EmailDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Email.UUID, source.getUuid());
-				Email prototype = modelService.findOneEntityByProperties(properties, true,Email.class);
+				Email prototype = modelService.findOneEntityByProperties(properties, true, Email.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(Email.class));
+			return convertDto(source, modelService.create(Email.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -40,7 +41,7 @@ public class EntityEmailConverter implements EntityConverter<EmailDto, Email> {
 
 	}
 
-	private Email convert(EmailDto source, Email prototype) {
+	private Email convertDto(EmailDto source, Email prototype) {
 
 		Date lastModifiedDate = new Date();
 

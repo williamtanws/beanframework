@@ -60,13 +60,13 @@ public class PaginationWrapper<T> {
 		for (int i = 0; i < size; i++) {
 			items.add(new PageItem(start + i, (start + i) == currentNumber));
 		}
-		
-		if(total < MAX_PAGE_ITEM_DISPLAY){
+
+		if (total < MAX_PAGE_ITEM_DISPLAY) {
 			recordNumberFrom = 1;
 			recordNumberTo = total;
-		}else{
-			recordNumberFrom = ((currentNumber-1)*MAX_PAGE_ITEM_DISPLAY)+1;
-			recordNumberTo = (recordNumberFrom+page.getNumberOfElements())-1;
+		} else {
+			recordNumberFrom = ((currentNumber - 1) * MAX_PAGE_ITEM_DISPLAY) + 1;
+			recordNumberTo = (recordNumberFrom + page.getNumberOfElements()) - 1;
 		}
 	}
 
@@ -130,8 +130,6 @@ public class PaginationWrapper<T> {
 		this.recordNumberTo = recordNumberTo;
 	}
 
-
-
 	public String[] getProperties() {
 		return properties;
 	}
@@ -140,8 +138,6 @@ public class PaginationWrapper<T> {
 		this.properties = properties;
 	}
 
-
-
 	public String getDirection() {
 		return direction;
 	}
@@ -149,8 +145,6 @@ public class PaginationWrapper<T> {
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}
-
-
 
 	public class PageItem {
 		private int number;

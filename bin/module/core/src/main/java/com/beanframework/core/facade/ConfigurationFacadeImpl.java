@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -31,19 +30,15 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	@Override
 	public ConfigurationDto findOneByUuid(UUID uuid) throws Exception {
 		Configuration entity = configurationService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, ConfigurationDto.class);
+
+		return modelService.getDto(entity, ConfigurationDto.class);
 	}
 
 	@Override
 	public ConfigurationDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Configuration entity = configurationService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, ConfigurationDto.class);
+
+		return modelService.getDto(entity, ConfigurationDto.class);
 	}
 
 	@Override
@@ -61,9 +56,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 			Configuration entity = modelService.getEntity(dto, Configuration.class);
 			entity = (Configuration) configurationService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, ConfigurationDto.class);
+			return modelService.getDto(entity, ConfigurationDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -77,10 +70,8 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	@Override
 	public Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Configuration> page = configurationService.findEntityPage(dataTableRequest, ConfigurationSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), context, ConfigurationDto.class);
+
+		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), ConfigurationDto.class);
 		return new PageImpl<ConfigurationDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -96,10 +87,8 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Configuration) {
-				
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, ConfigurationDto.class);
+
+				entityObject[0] = modelService.getDto(entityObject[0], ConfigurationDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -117,16 +106,12 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
 
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(configurationService.findOneEntityByProperties(properties), context, ConfigurationDto.class);
+		return modelService.getDto(configurationService.findOneEntityByProperties(properties), ConfigurationDto.class);
 	}
-	
+
 	@Override
 	public ConfigurationDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(configurationService.create(), context, ConfigurationDto.class);
+
+		return modelService.getDto(configurationService.create(), ConfigurationDto.class);
 	}
 }

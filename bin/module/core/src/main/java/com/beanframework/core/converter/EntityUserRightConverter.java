@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -23,7 +24,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 	private ModelService modelService;
 
 	@Override
-	public UserRight convert(UserRightDto source) throws ConverterException {
+	public UserRight convert(UserRightDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -35,7 +36,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				UserRight prototype = modelService.findOneEntityByProperties(properties, true, UserRight.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
@@ -46,7 +47,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 		}
 	}
 
-	private UserRight convert(UserRightDto source, UserRight prototype) throws ConverterException {
+	private UserRight convertDto(UserRightDto source, UserRight prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -26,7 +27,7 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 	private ModelService modelService;
 
 	@Override
-	public Cronjob convert(CronjobCsv source) throws ConverterException {
+	public Cronjob convert(CronjobCsv source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -46,6 +47,10 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
+	}
+
+	public Cronjob convert(CronjobCsv source) throws ConverterException {
+		return convert(source, new EntityConverterContext());
 	}
 
 	private Cronjob convert(CronjobCsv source, Cronjob prototype) throws ConverterException {

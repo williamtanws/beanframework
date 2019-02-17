@@ -31,7 +31,7 @@ public class AuditorController extends AbstractController {
 	@GetMapping(value = AuditorWebConstants.Path.AUDITOR)
 	public String list(@ModelAttribute(AuditorWebConstants.ModelAttribute.AUDITOR_DTO) AuditorDto auditorDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (auditorDto.getUuid() != null) {
 
 			AuditorDto existDto = auditorFacade.findOneByUuid(auditorDto.getUuid());

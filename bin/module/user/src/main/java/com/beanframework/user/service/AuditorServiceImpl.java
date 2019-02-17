@@ -119,14 +119,14 @@ public class AuditorServiceImpl implements AuditorService {
 	@Override
 	public <T> Page<Auditor> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Auditor.class);
-	}	
+	}
 
 	@Cacheable(value = "AuditorsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Auditor.class);
 	}
-	
+
 	@Cacheable(value = "AuditorsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -138,7 +138,7 @@ public class AuditorServiceImpl implements AuditorService {
 		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
-		
+
 		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Auditor.class);
 
 	}

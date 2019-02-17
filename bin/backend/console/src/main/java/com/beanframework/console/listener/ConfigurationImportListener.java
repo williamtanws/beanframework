@@ -36,7 +36,7 @@ public class ConfigurationImportListener extends ImportListener {
 
 	@Autowired
 	private ConfigurationService configurationService;
-	
+
 	@Autowired
 	private EntityCsvConfigurationConverter converter;
 
@@ -97,12 +97,12 @@ public class ConfigurationImportListener extends ImportListener {
 			final String[] header = beanReader.getHeader(true);
 
 			ConfigurationCsv csv;
-			LOGGER.info("Start import "+ConsoleImportListenerConstants.ConfigurationImport.NAME);
+			LOGGER.info("Start import " + ConsoleImportListenerConstants.ConfigurationImport.NAME);
 			while ((csv = beanReader.read(ConfigurationCsv.class, header, processors)) != null) {
 				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 				csvList.add(csv);
 			}
-			LOGGER.info("Finished import "+ConsoleImportListenerConstants.ConfigurationImport.NAME);
+			LOGGER.info("Finished import " + ConsoleImportListenerConstants.ConfigurationImport.NAME);
 		} catch (FileNotFoundException ex) {
 			LOGGER.error("Could not find the CSV file: " + ex);
 		} catch (IOException ex) {

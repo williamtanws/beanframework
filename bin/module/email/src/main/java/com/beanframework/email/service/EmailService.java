@@ -23,7 +23,7 @@ public interface EmailService {
 	Email findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
 	List<Email> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
-	
+
 	Email saveEntity(Email model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;

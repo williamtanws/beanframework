@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -32,19 +31,13 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	@Override
 	public UserGroupDto findOneByUuid(UUID uuid) throws Exception {
 		UserGroup entity = userGroupService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, UserGroupDto.class);
+		return modelService.getDto(entity, UserGroupDto.class);
 	}
 
 	@Override
 	public UserGroupDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserGroup entity = userGroupService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, UserGroupDto.class);
+		return modelService.getDto(entity, UserGroupDto.class);
 	}
 
 	@Override
@@ -62,9 +55,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 			UserGroup entity = modelService.getEntity(dto, UserGroup.class);
 			entity = (UserGroup) userGroupService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, UserGroupDto.class);
+			return modelService.getDto(entity, UserGroupDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -78,10 +69,8 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	@Override
 	public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserGroup> page = userGroupService.findEntityPage(dataTableRequest, UserGroupSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), context, UserGroupDto.class);
+
+		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class);
 		return new PageImpl<UserGroupDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -98,9 +87,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof UserGroup) {
 
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, UserGroupDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], UserGroupDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -118,16 +105,12 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		return modelService.getDto(userGroupService.findEntityBySorts(sorts, false), context, UserGroupDto.class);
+		return modelService.getDto(userGroupService.findEntityBySorts(sorts, false), UserGroupDto.class);
 	}
-	
+
 	@Override
 	public UserGroupDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(userGroupService.create(), context, UserGroupDto.class);
+
+		return modelService.getDto(userGroupService.create(), UserGroupDto.class);
 	}
 }

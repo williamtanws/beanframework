@@ -25,7 +25,7 @@ public class CronjobEnversIntegrator implements Integrator {
 		listenerRegistry.addDuplicationStrategy(EnversListenerDuplicationStrategy.INSTANCE);
 
 		EnversService enversService = serviceRegistry.getService(EnversService.class);
-		
+
 		if (enversService.getEntitiesConfigurations().hasAuditedEntities()) {
 			listenerRegistry.appendListeners(EventType.POST_DELETE, new EnversPostDeleteEventListenerImpl(enversService));
 			listenerRegistry.appendListeners(EventType.POST_INSERT, new EnversPostInsertEventListenerImpl(enversService));

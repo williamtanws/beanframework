@@ -2,7 +2,7 @@ package com.beanframework.common.service;
 
 import java.util.Locale;
 
-public interface LocaleMessageService{
+public interface LocaleMessageService {
 
 	public String getMessage(String code);
 

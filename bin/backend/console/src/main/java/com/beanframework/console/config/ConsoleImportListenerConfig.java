@@ -48,7 +48,7 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	public ConfigurationImportListener configurationImportListener() {
 		return new ConfigurationImportListener();
 	}
-	
+
 	@Bean
 	public EnumerationImportListener enumerationImportListener() {
 		return new EnumerationImportListener();
@@ -58,12 +58,12 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	public DynamicFieldImportListener dynamicFieldImportListener() {
 		return new DynamicFieldImportListener();
 	}
-	
+
 	@Bean
 	public DynamicFieldSlotImportListener dynamicFieldSlotImportListener() {
 		return new DynamicFieldSlotImportListener();
 	}
-	
+
 	@Bean
 	public DynamicFieldTemplateImportListener dynamicFieldTemplateImportListener() {
 		return new DynamicFieldTemplateImportListener();
@@ -113,12 +113,12 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	public CronjobImportListener cronjobImportListener() {
 		return new CronjobImportListener();
 	}
-	
+
 	@Bean
 	public SiteImportListener siteImportListener() {
 		return new SiteImportListener();
 	}
-	
+
 	@Bean
 	public MediaImportListener mediaImportListener() {
 		return new MediaImportListener();
@@ -138,16 +138,16 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.CustomerImport.KEY))
 			importListenerRegistry.addListener(customerImportListener());
-		
+
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.EnumerationImport.KEY))
 			importListenerRegistry.addListener(enumerationImportListener());
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldImport.KEY))
 			importListenerRegistry.addListener(dynamicFieldImportListener());
-		
+
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldSlotImport.KEY))
 			importListenerRegistry.addListener(dynamicFieldSlotImportListener());
-		
+
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldTemplateImport.KEY))
 			importListenerRegistry.addListener(dynamicFieldTemplateImportListener());
 
@@ -171,10 +171,10 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserRightImport.KEY))
 			importListenerRegistry.addListener(userRightImportListener());
-		
+
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.SiteImport.KEY))
 			importListenerRegistry.addListener(siteImportListener());
-		
+
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.MediaImport.KEY))
 			importListenerRegistry.addListener(mediaImportListener());
 	}

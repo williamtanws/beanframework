@@ -37,7 +37,7 @@ public class UserGroupResource {
 
 	@Autowired
 	private UserGroupFacade userGroupFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
@@ -61,7 +61,7 @@ public class UserGroupResource {
 
 		return data != null ? false : true;
 	}
-	
+
 	@RequestMapping(value = UserGroupWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {

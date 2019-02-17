@@ -29,14 +29,14 @@ public interface ConsoleImportListenerConstants {
 		public static final int SORT = 40;
 		public static final String DESCRIPTION = "Update/Remove Dynamic Field Data";
 	}
-	
+
 	public interface DynamicFieldSlotImport {
 		public static final String KEY = "dynamicfieldslot";
 		public static final String NAME = "Dynamic Field Slot";
 		public static final int SORT = 41;
 		public static final String DESCRIPTION = "Update/Remove Dynamic Field Slot Data";
 	}
-	
+
 	public interface DynamicFieldTemplateImport {
 		public static final String KEY = "dynamicfieldtemplate";
 		public static final String NAME = "Dynamic Field Template";
@@ -106,14 +106,14 @@ public interface ConsoleImportListenerConstants {
 		public static final int SORT = 140;
 		public static final String DESCRIPTION = "Update/Remove Customer Data";
 	}
-	
+
 	public interface SiteImport {
 		public static final String KEY = "site";
 		public static final String NAME = "Site";
 		public static final int SORT = 150;
 		public static final String DESCRIPTION = "Update/Remove Site Data";
 	}
-	
+
 	public interface MediaImport {
 		public static final String KEY = "media";
 		public static final String NAME = "Media";

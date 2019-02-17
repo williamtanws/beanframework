@@ -25,7 +25,7 @@ public interface CronjobService {
 	Cronjob saveEntity(Cronjob model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
-	
+
 	List<Cronjob> findEntityStartupJobIsFalseWithQueueJob();
 
 	<T> Page<Cronjob> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
@@ -35,5 +35,5 @@ public interface CronjobService {
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
-	
+
 }

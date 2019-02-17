@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -24,7 +25,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 	private ModelService modelService;
 
 	@Override
-	public UserGroup convert(UserGroupDto source) throws ConverterException {
+	public UserGroup convert(UserGroupDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -33,7 +34,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 				UserGroup prototype = modelService.findOneEntityByUuid(source.getUuid(), true, UserGroup.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
@@ -45,11 +46,11 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 
 	}
 
-	public List<UserGroup> convert(List<UserGroupDto> sources) throws ConverterException {
+	public List<UserGroup> convert(List<UserGroupDto> sources, EntityConverterContext context) throws ConverterException {
 		List<UserGroup> convertedList = new ArrayList<UserGroup>();
 		try {
 			for (UserGroupDto source : sources) {
-				convertedList.add(convert(source));
+				convertedList.add(convert(source, context));
 			}
 		} catch (ConverterException e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -57,7 +58,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 		return convertedList;
 	}
 
-	private UserGroup convert(UserGroupDto source, UserGroup prototype) throws ConverterException {
+	private UserGroup convertDto(UserGroupDto source, UserGroup prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();

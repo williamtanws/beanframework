@@ -7,11 +7,11 @@ public interface LicenseWebConstants extends ConsoleWebConstants {
 	public interface Param {
 		public static final String ACCEPT = "accept";
 	}
-	
+
 	public interface Model {
 		public static final String LICENSE = "license";
 	}
-	
+
 	public interface ModelAttribute {
 		public static final String LICENSE = "license";
 	}
@@ -23,7 +23,7 @@ public interface LicenseWebConstants extends ConsoleWebConstants {
 	public interface View {
 		public static final String LICENSE = "${view.console.platform.license}";
 	}
-	
+
 	public interface Locale {
 		public static final String ACCEPT_SUCCESS = "module.console.platform.license.accepted";
 	}

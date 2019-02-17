@@ -2,6 +2,7 @@ package com.beanframework.menu.interceptor;
 
 import org.hibernate.Hibernate;
 
+import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitializeInterceptor;
 import com.beanframework.menu.domain.Menu;
@@ -15,7 +16,7 @@ import com.beanframework.user.domain.UserRightField;
 public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 
 	@Override
-	public void onInitialize(Menu model) throws InterceptorException {
+	public void onInitialize(Menu model, InterceptorContext context) throws InterceptorException {
 
 		Hibernate.initialize(model.getParent());
 //		if (model.getParent() != null) {
@@ -48,7 +49,7 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 			}
 			initializeUserGroups(userGroup);
 		}
-		
+
 		Hibernate.initialize(model.getFields());
 		for (MenuField field : model.getFields()) {
 			Hibernate.initialize(field.getDynamicField().getEnumerations());
@@ -67,12 +68,12 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 //		if (model.getParent() != null) {
 //			initializeParent(model.getParent());
 //		}
-		
+
 		Hibernate.initialize(model.getChilds());
 		for (Menu menu : model.getChilds()) {
 			initializeChilds(menu);
 		}
-		
+
 		Hibernate.initialize(model.getUserGroups());
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
@@ -94,7 +95,7 @@ public class MenuInitializeInterceptor implements InitializeInterceptor<Menu> {
 			}
 			initializeUserGroups(userGroup);
 		}
-		
+
 		Hibernate.initialize(model.getFields());
 		for (MenuField field : model.getFields()) {
 			Hibernate.initialize(field.getDynamicField().getEnumerations());

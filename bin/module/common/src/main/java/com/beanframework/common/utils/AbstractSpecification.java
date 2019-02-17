@@ -34,7 +34,7 @@ public class AbstractSpecification {
 
 		};
 	}
-	
+
 	public static <T> Predicate getPredicate(DataTableRequest dataTableRequest, Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 

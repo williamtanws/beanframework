@@ -47,7 +47,7 @@ public class CronjobServiceImpl implements CronjobService {
 	@Cacheable(value = "CronjobOneProperties", key = "#properties")
 	@Override
 	public Cronjob findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true,Cronjob.class);
+		return modelService.findOneEntityByProperties(properties, true, Cronjob.class);
 	}
 
 	@Cacheable(value = "CronjobsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
@@ -84,7 +84,7 @@ public class CronjobServiceImpl implements CronjobService {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Cacheable(value = "CronjobsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Cronjob> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
@@ -114,7 +114,7 @@ public class CronjobServiceImpl implements CronjobService {
 		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
-		
+
 		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Cronjob.class);
 
 	}

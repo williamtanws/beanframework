@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -28,7 +29,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 	private ModelService modelService;
 
 	@Override
-	public DynamicField convert(DynamicFieldCsv source) throws ConverterException {
+	public DynamicField convert(DynamicFieldCsv source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -50,6 +51,10 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 		}
 	}
 
+	public DynamicField convert(DynamicFieldCsv source) throws ConverterException {
+		return convert(source, new EntityConverterContext());
+	}
+
 	private DynamicField convert(DynamicFieldCsv source, DynamicField prototype) throws ConverterException {
 
 		try {
@@ -66,10 +71,9 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 				languageProperties.put(Language.ID, source.getLanguage());
 				Language entityLanguage = modelService.findOneEntityByProperties(languageProperties, true, Language.class);
 
-				if(entityLanguage == null) {
+				if (entityLanguage == null) {
 					LOGGER.error("Enum ID not exists: " + source.getLanguage());
-				}
-				else {
+				} else {
 					prototype.setLanguage(entityLanguage);
 				}
 			}

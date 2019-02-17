@@ -28,7 +28,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 	Logger logger = LoggerFactory.getLogger(BackofficeSecurityInterceptor.class);
 
 	UrlPathHelper urlPathHelper = new UrlPathHelper();
-	
+
 	@Autowired
 	private LanguageService languageService;
 

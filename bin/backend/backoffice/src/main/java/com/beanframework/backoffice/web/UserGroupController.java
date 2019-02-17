@@ -47,14 +47,14 @@ public class UserGroupController extends AbstractController {
 	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP)
 	public String list(@ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto, Model model) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		// User Authority
 		List<UserRightDto> userRights = userRightFacade.findAllDtoUserRights();
 		model.addAttribute("userRights", userRights);
 
 		List<UserPermissionDto> userPermissions = userPermissionFacade.findAllDtoUserPermissions();
 		model.addAttribute("userPermissions", userPermissions);
-		
+
 		if (usergroupDto.getUuid() != null) {
 
 			UserGroupDto existingUserGroup = userGroupFacade.findOneByUuid(usergroupDto.getUuid());
@@ -68,21 +68,21 @@ public class UserGroupController extends AbstractController {
 		}
 		return VIEW_USERGROUP_LIST;
 	}
-	
+
 	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "create")
 	public String createView(Model model, @ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto) throws Exception {
-		
+
 		// User Authority
 		List<UserRightDto> userRights = userRightFacade.findAllDtoUserRights();
 		model.addAttribute("userRights", userRights);
 
 		List<UserPermissionDto> userPermissions = userPermissionFacade.findAllDtoUserPermissions();
 		model.addAttribute("userPermissions", userPermissions);
-		
+
 		usergroupDto = userGroupFacade.createDto();
 		model.addAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO, usergroupDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_USERGROUP_LIST;
 	}
 

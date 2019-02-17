@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -23,7 +24,7 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 	private ModelService modelService;
 
 	@Override
-	public DynamicFieldTemplate convert(DynamicFieldTemplateDto source) throws ConverterException {
+	public DynamicFieldTemplate convert(DynamicFieldTemplateDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -33,18 +34,18 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 				DynamicFieldTemplate prototype = modelService.findOneEntityByProperties(properties, true, DynamicFieldTemplate.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(DynamicFieldTemplate.class));
+			return convertDto(source, modelService.create(DynamicFieldTemplate.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private DynamicFieldTemplate convert(DynamicFieldTemplateDto source, DynamicFieldTemplate prototype) throws ConverterException {
+	private DynamicFieldTemplate convertDto(DynamicFieldTemplateDto source, DynamicFieldTemplate prototype) throws ConverterException {
 
 		try {
 
@@ -66,7 +67,8 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 				for (int i = 0; i < source.getTableDynamicFieldSlots().length; i++) {
 
 					boolean remove = true;
-					if (source.getTableSelectedDynamicFieldSlots() != null && source.getTableSelectedDynamicFieldSlots().length > i && BooleanUtils.parseBoolean(source.getTableSelectedDynamicFieldSlots()[i])) {
+					if (source.getTableSelectedDynamicFieldSlots() != null && source.getTableSelectedDynamicFieldSlots().length > i
+							&& BooleanUtils.parseBoolean(source.getTableSelectedDynamicFieldSlots()[i])) {
 						remove = false;
 					}
 

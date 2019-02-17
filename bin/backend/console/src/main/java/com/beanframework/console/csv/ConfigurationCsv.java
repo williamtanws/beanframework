@@ -5,10 +5,10 @@ import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
-public class ConfigurationCsv extends AbstractCsv{
+public class ConfigurationCsv extends AbstractCsv {
 
 	private String value;
-	
+
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
 				new NotNull(new Trim()), // id
@@ -17,7 +17,6 @@ public class ConfigurationCsv extends AbstractCsv{
 
 		return processors;
 	}
-
 
 	public String getValue() {
 		return value;

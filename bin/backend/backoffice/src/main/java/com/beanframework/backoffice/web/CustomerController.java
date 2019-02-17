@@ -36,7 +36,7 @@ public class CustomerController extends AbstractController {
 	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER)
 	public String list(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (customerDto.getUuid() != null) {
 
 			CustomerDto existingCustomer = customerFacade.findOneByUuid(customerDto.getUuid());
@@ -52,14 +52,14 @@ public class CustomerController extends AbstractController {
 
 		return VIEW_CUSTOMER_LIST;
 	}
-	
+
 	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "create")
 	public String createView(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model) throws Exception {
-		
+
 		customerDto = customerFacade.createDto();
 		model.addAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO, customerDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_CUSTOMER_LIST;
 	}
 

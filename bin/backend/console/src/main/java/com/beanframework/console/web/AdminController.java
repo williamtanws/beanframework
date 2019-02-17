@@ -36,7 +36,7 @@ public class AdminController extends AbstractController {
 	@GetMapping(value = AdminWebConstants.Path.ADMIN)
 	public String list(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (adminDto.getUuid() != null) {
 			AdminDto existingAdmin = adminFacade.findOneByUuid(adminDto.getUuid());
 
@@ -51,14 +51,14 @@ public class AdminController extends AbstractController {
 
 		return VIEW_ADMIN_LIST;
 	}
-	
+
 	@GetMapping(value = AdminWebConstants.Path.ADMIN, params = "create")
 	public String createView(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model) throws Exception {
-		
+
 		adminDto = adminFacade.createDto();
 		model.addAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO, adminDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_ADMIN_LIST;
 	}
 

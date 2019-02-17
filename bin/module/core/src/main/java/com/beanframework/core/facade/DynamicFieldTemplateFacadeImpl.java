@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -30,19 +29,15 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 	@Override
 	public DynamicFieldTemplateDto findOneByUuid(UUID uuid) throws Exception {
 		DynamicFieldTemplate entity = dynamicFieldTemplateService.findOneEntityByUuid(uuid);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, DynamicFieldTemplateDto.class);
+
+		return modelService.getDto(entity, DynamicFieldTemplateDto.class);
 	}
 
 	@Override
 	public DynamicFieldTemplateDto findOneProperties(Map<String, Object> properties) throws Exception {
 		DynamicFieldTemplate entity = dynamicFieldTemplateService.findOneEntityByProperties(properties);
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(entity, context, DynamicFieldTemplateDto.class);
+
+		return modelService.getDto(entity, DynamicFieldTemplateDto.class);
 	}
 
 	@Override
@@ -60,9 +55,7 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 			DynamicFieldTemplate entity = modelService.getEntity(dto, DynamicFieldTemplate.class);
 			entity = (DynamicFieldTemplate) dynamicFieldTemplateService.saveEntity(entity);
 
-			InterceptorContext context = new InterceptorContext();
-			context.setInitializeCollection(true);
-			return modelService.getDto(entity, context, DynamicFieldTemplateDto.class);
+			return modelService.getDto(entity, DynamicFieldTemplateDto.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -76,10 +69,8 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 	@Override
 	public Page<DynamicFieldTemplateDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<DynamicFieldTemplate> page = dynamicFieldTemplateService.findEntityPage(dataTableRequest, DynamicFieldTemplateSpecification.getSpecification(dataTableRequest));
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(false);
-		List<DynamicFieldTemplateDto> dtos = modelService.getDto(page.getContent(), context, DynamicFieldTemplateDto.class);
+
+		List<DynamicFieldTemplateDto> dtos = modelService.getDto(page.getContent(), DynamicFieldTemplateDto.class);
 		return new PageImpl<DynamicFieldTemplateDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -95,10 +86,8 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 		for (int i = 0; i < revisions.size(); i++) {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof DynamicFieldTemplate) {
-				
-				InterceptorContext context = new InterceptorContext();
-				context.setInitializeCollection(true);
-				entityObject[0] = modelService.getDto(entityObject[0], context, DynamicFieldTemplateDto.class);
+
+				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldTemplateDto.class);
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,12 +99,10 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return dynamicFieldTemplateService.findCountHistory(dataTableRequest);
 	}
-	
+
 	@Override
 	public DynamicFieldTemplateDto createDto() throws Exception {
-		
-		InterceptorContext context = new InterceptorContext();
-		context.setInitializeCollection(true);
-		return modelService.getDto(dynamicFieldTemplateService.create(), context, DynamicFieldTemplateDto.class);
+
+		return modelService.getDto(dynamicFieldTemplateService.create(), DynamicFieldTemplateDto.class);
 	}
 }

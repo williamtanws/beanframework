@@ -1,13 +1,7 @@
 package com.beanframework.dynamicfield;
 
 public enum DynamicFieldType {
-	INTEGER("Integer"),
-	FLOATING_POINT("Floating Point"),
-	TEXT("Text"),
-	SELECT("Select"),
-	BOOLEAN("Boolean"),
-	DATE("Date"),
-	FILE("File");
+	INTEGER("Integer"), FLOATING_POINT("Floating Point"), TEXT("Text"), SELECT("Select"), BOOLEAN("Boolean"), DATE("Date"), FILE("File");
 
 	private String type;
 
@@ -18,9 +12,9 @@ public enum DynamicFieldType {
 	public String getType() {
 		return type;
 	}
-	
+
 	@Override
-    public String toString() {
-        return type;
-    }
+	public String toString() {
+		return type;
+	}
 }

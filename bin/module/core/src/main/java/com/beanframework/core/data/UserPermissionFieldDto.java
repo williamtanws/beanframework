@@ -14,7 +14,7 @@ public class UserPermissionFieldDto extends GenericDto {
 	private DynamicFieldDto dynamicField;
 
 	private String value;
-	
+
 	private Integer sort;
 
 	public UserPermissionDto getUserPermission() {

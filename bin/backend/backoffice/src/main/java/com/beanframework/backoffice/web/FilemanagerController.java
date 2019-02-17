@@ -21,10 +21,10 @@ public class FilemanagerController {
 
 	@Value(FilemanagerWebConstants.View.CONTAINER)
 	private String VIEW_CONTAINER;
-	
+
 	@Value(FilemanagerWebConstants.View.TEMPLATES)
 	private String VIEWE_TEMPLATES;
-	
+
 	@Value(FilemanagerWebConstants.View.ANGULARFILEMANAGER)
 	private String VIEW_ANGULARFILEMANAGER;
 
@@ -33,7 +33,7 @@ public class FilemanagerController {
 	public String filemanager(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_CONTAINER;
 	}
-	
+
 	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
 	@RequestMapping(value = FilemanagerWebConstants.Path.ANGULARFILEMANAGER, method = { RequestMethod.GET, RequestMethod.POST })
 	public String angularfilemanager(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
@@ -43,6 +43,6 @@ public class FilemanagerController {
 	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
 	@RequestMapping(value = FilemanagerWebConstants.Path.TEMPLATES_PAGE, method = { RequestMethod.GET, RequestMethod.POST })
 	public String template(@PathVariable("page") String page, Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-		return VIEWE_TEMPLATES+"/"+page;
+		return VIEWE_TEMPLATES + "/" + page;
 	}
 }

@@ -21,7 +21,7 @@ public interface SiteService {
 	Site findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
 	List<Site> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
-	
+
 	Site saveEntity(Site model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;

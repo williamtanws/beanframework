@@ -12,7 +12,6 @@ import com.beanframework.dynamicfield.interceptor.DynamicFieldPrepareInterceptor
 import com.beanframework.dynamicfield.interceptor.DynamicFieldRemoveInterceptor;
 import com.beanframework.dynamicfield.interceptor.DynamicFieldValidateInterceptor;
 
-
 @Configuration
 public class DynamicFieldInterceptorConfig {
 
@@ -109,7 +108,7 @@ public class DynamicFieldInterceptorConfig {
 	////////////////////////
 	// Remove Interceptor //
 	////////////////////////
-	
+
 	@Bean
 	public DynamicFieldRemoveInterceptor dynamicFieldRemoveInterceptor() {
 		return new DynamicFieldRemoveInterceptor();

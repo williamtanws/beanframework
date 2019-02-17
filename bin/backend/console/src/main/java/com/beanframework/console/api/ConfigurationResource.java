@@ -39,7 +39,7 @@ public class ConfigurationResource {
 
 	@Autowired
 	private ConfigurationFacade configurationFacade;
-	
+
 	@Autowired
 	private LocaleMessageService localeMessageService;
 

@@ -20,7 +20,7 @@ public interface HistoryWebConstants {
 		public static final String CREATE = "historyCreate";
 		public static final String UPDATE = "historyUpdate";
 	}
-	
+
 	public static interface PreAuthorize {
 		public static final String READ = "hasAuthority('history_read')";
 	}

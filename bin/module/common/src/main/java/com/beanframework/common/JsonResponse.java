@@ -1,10 +1,10 @@
 package com.beanframework.common;
 
 public class JsonResponse {
-	
+
 	public static final String SUCCESS = "SUCCESS";
 	public static final String FAIL = "FAIL";
-	
+
 	private String status = null;
 	private Object result = null;
 

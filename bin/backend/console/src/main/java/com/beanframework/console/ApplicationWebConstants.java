@@ -3,7 +3,7 @@ package com.beanframework.console;
 public interface ApplicationWebConstants {
 
 	public static final String PAGINATION = "pagination";
-	
+
 	public interface Pagination {
 		public static final String PAGE = "page";
 		public static final String SIZE = "size";

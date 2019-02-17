@@ -60,11 +60,11 @@ public class MenuController extends AbstractController {
 
 	@GetMapping(value = MenuWebConstants.Path.MENU, params = "create")
 	public String createView(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model) throws Exception {
-		
+
 		menuDto = menuFacade.createDto();
 		model.addAttribute(MenuWebConstants.ModelAttribute.MENU_DTO, menuDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_MENU_LIST;
 	}
 

@@ -6,7 +6,7 @@ package com.beanframework.common.data;
 public enum SortOrder {
 
 	/** The asc. */
-	ASC("ASC"), 
+	ASC("ASC"),
 	/** The desc. */
 	DESC("DESC");
 
@@ -16,8 +16,7 @@ public enum SortOrder {
 	/**
 	 * Instantiates a new sort order.
 	 * 
-	 * @param v
-	 *            the v
+	 * @param v the v
 	 */
 	SortOrder(String v) {
 		value = v;
@@ -26,8 +25,7 @@ public enum SortOrder {
 	/**
 	 * From value.
 	 * 
-	 * @param v
-	 *            the v
+	 * @param v the v
 	 * @return the sort order
 	 */
 	public static SortOrder fromValue(String v) {

@@ -12,7 +12,6 @@ import com.beanframework.core.data.MenuFieldDto;
 @Configuration
 public class MenuDtoConfig {
 
-
 	@Bean
 	public DtoMenuConverter dtoMenuConverter() {
 		return new DtoMenuConverter();

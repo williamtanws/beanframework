@@ -27,22 +27,22 @@ import com.beanframework.core.facade.ConfigurationFacade;
 
 @Controller
 public class LicenseController extends AbstractController {
-	
+
 	@Autowired
 	private ConfigurationFacade configurationFacade;
-	
+
 	@Value(LicenseWebConstants.Path.LICENSE)
 	private String PATH_LICENSE;
-	
+
 	@Value(LicenseWebConstants.View.LICENSE)
 	private String VIEW_LICENSE;
 
 	public boolean isLicenseAccepted() throws Exception {
-		
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 		ConfigurationDto configuration = configurationFacade.findOneProperties(properties);
-		
+
 		if (configuration == null) {
 			return false;
 		} else if (Boolean.parseBoolean(configuration.getValue())) {
@@ -56,11 +56,11 @@ public class LicenseController extends AbstractController {
 	public String view(@ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) ConfigurationDto configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 		try {
-			
+
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			configuration = configurationFacade.findOneProperties(properties);
-			if(configuration == null) {
+			if (configuration == null) {
 				configuration = new ConfigurationDto();
 			}
 
@@ -80,30 +80,28 @@ public class LicenseController extends AbstractController {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			ConfigurationDto existingConfiguration = configurationFacade.findOneProperties(properties);
-			
-			if(existingConfiguration == null) {
+
+			if (existingConfiguration == null) {
 				existingConfiguration = new ConfigurationDto();
 				existingConfiguration.setId(LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 			}
-			
-			if(BooleanUtils.parseBoolean(configuration.getValue())) {
+
+			if (BooleanUtils.parseBoolean(configuration.getValue())) {
 				existingConfiguration.setValue("true");
-			}
-			else {
+			} else {
 				existingConfiguration.setValue("false");
 			}
-			
-			if(existingConfiguration.getUuid() == null) {
+
+			if (existingConfiguration.getUuid() == null) {
 				configurationFacade.create(existingConfiguration);
-			}
-			else {
+			} else {
 				configurationFacade.update(existingConfiguration);
 			}
 			addSuccessMessage(redirectAttributes, LicenseWebConstants.Locale.ACCEPT_SUCCESS);
 		} catch (Exception e) {
 			addErrorMessage(ConfigurationDto.class, e.getMessage(), bindingResult, redirectAttributes);
 		}
-		
+
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
 		redirectView.setUrl(PATH_LICENSE);

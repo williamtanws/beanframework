@@ -15,8 +15,7 @@ public class FilterBy {
 
 	/** The map of sorts. */
 	private Map<String, String> mapOfFilters;
-	
-	
+
 	/** The global search. */
 	private boolean globalSearch;
 
@@ -41,7 +40,7 @@ public class FilterBy {
 	/**
 	 * Sets the map of filters.
 	 *
-	 * @param mapOfFilters            the mapOfFilters to set
+	 * @param mapOfFilters the mapOfFilters to set
 	 */
 	public void setMapOfFilters(Map<String, String> mapOfFilters) {
 		this.mapOfFilters = mapOfFilters;
@@ -51,7 +50,7 @@ public class FilterBy {
 	 * Adds the sort.
 	 *
 	 * @param filterColumn the filter column
-	 * @param filterValue the filter value
+	 * @param filterValue  the filter value
 	 */
 	public void addFilter(String filterColumn, String filterValue) {
 		mapOfFilters.put(filterColumn, filterValue);

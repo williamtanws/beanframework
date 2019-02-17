@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
@@ -34,7 +35,7 @@ public class MenuInitialDefaultsInterceptor implements InitialDefaultsIntercepto
 	private String DYNAMIC_FIELD_TEMPLATE;
 
 	@Override
-	public void onInitialDefaults(Menu model) throws InterceptorException {
+	public void onInitialDefaults(Menu model, InterceptorContext context) throws InterceptorException {
 
 		try {
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();

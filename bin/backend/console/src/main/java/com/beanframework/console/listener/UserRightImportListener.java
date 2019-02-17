@@ -33,7 +33,7 @@ import com.beanframework.user.service.UserRightService;
 
 public class UserRightImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserRightImportListener.class);
-	
+
 	@Autowired
 	private UserRightService userRightService;
 

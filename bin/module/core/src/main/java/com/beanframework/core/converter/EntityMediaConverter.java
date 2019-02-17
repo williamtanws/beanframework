@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -19,7 +20,7 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 	private ModelService modelService;
 
 	@Override
-	public Media convert(MediaDto source) throws ConverterException {
+	public Media convert(MediaDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -29,18 +30,18 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				Media prototype = modelService.findOneEntityByProperties(properties, true, Media.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(Media.class));
+			return convertDto(source, modelService.create(Media.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private Media convert(MediaDto source, Media prototype) {
+	private Media convertDto(MediaDto source, Media prototype) {
 
 		Date lastModifiedDate = new Date();
 
@@ -53,7 +54,7 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 			prototype.setFileName(StringUtils.stripToNull(source.getFileName()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
-		
+
 		if (StringUtils.equals(StringUtils.stripToNull(source.getFileType()), prototype.getFileType()) == false) {
 			prototype.setFileType(StringUtils.stripToNull(source.getFileType()));
 			prototype.setLastModifiedDate(lastModifiedDate);
@@ -70,7 +71,7 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
-		
+
 		if (source.getHeight() == null) {
 			if (prototype.getHeight() != null) {
 				prototype.setHeight(null);
@@ -82,7 +83,7 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
-		
+
 		if (source.getWidth() == null) {
 			if (prototype.getWidth() != null) {
 				prototype.setWidth(null);
@@ -94,27 +95,27 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
-		
+
 		if (StringUtils.equals(StringUtils.stripToNull(source.getUrl()), prototype.getUrl()) == false) {
 			prototype.setUrl(StringUtils.stripToNull(source.getUrl()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
-		
+
 		if (StringUtils.equals(StringUtils.stripToNull(source.getTitle()), prototype.getTitle()) == false) {
 			prototype.setTitle(StringUtils.stripToNull(source.getTitle()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
-		
+
 		if (StringUtils.equals(StringUtils.stripToNull(source.getCaption()), prototype.getCaption()) == false) {
 			prototype.setCaption(StringUtils.stripToNull(source.getCaption()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
-		
+
 		if (StringUtils.equals(StringUtils.stripToNull(source.getAltText()), prototype.getAltText()) == false) {
 			prototype.setAltText(StringUtils.stripToNull(source.getAltText()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
-		
+
 		if (StringUtils.equals(StringUtils.stripToNull(source.getDescription()), prototype.getDescription()) == false) {
 			prototype.setDescription(StringUtils.stripToNull(source.getDescription()));
 			prototype.setLastModifiedDate(lastModifiedDate);

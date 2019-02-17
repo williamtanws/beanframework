@@ -9,7 +9,7 @@ import com.beanframework.core.data.CommentDto;
 
 @Configuration
 public class CommentDtoConfig {
-	
+
 	@Bean
 	public DtoCommentConverter dtoCommentConverter() {
 		return new DtoCommentConverter();

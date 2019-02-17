@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.converter.InterceptorContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -23,11 +23,11 @@ public class DtoLanguageConverter implements DtoConverter<Language, LanguageDto>
 	private ModelService modelService;
 
 	@Override
-	public LanguageDto convert(Language source, InterceptorContext context) throws ConverterException {
+	public LanguageDto convert(Language source, DtoConverterContext context) throws ConverterException {
 		return convert(source, new LanguageDto(), context);
 	}
 
-	public List<LanguageDto> convert(List<Language> sources, InterceptorContext context) throws ConverterException {
+	public List<LanguageDto> convert(List<Language> sources, DtoConverterContext context) throws ConverterException {
 		List<LanguageDto> convertedList = new ArrayList<LanguageDto>();
 		for (Language source : sources) {
 			convertedList.add(convert(source, context));
@@ -35,7 +35,7 @@ public class DtoLanguageConverter implements DtoConverter<Language, LanguageDto>
 		return convertedList;
 	}
 
-	private LanguageDto convert(Language source, LanguageDto prototype, InterceptorContext context) throws ConverterException {
+	private LanguageDto convert(Language source, LanguageDto prototype, DtoConverterContext context) throws ConverterException {
 
 		prototype.setUuid(source.getUuid());
 		prototype.setId(source.getId());
@@ -47,11 +47,8 @@ public class DtoLanguageConverter implements DtoConverter<Language, LanguageDto>
 		prototype.setActive(source.getActive());
 
 		try {
-			InterceptorContext disableInitialCollectionContext = new InterceptorContext();
-			disableInitialCollectionContext.setInitializeCollection(false);
-
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), disableInitialCollectionContext, AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), disableInitialCollectionContext, AuditorDto.class));
+			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
+			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

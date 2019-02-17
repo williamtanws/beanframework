@@ -33,7 +33,7 @@ public class CommentController extends AbstractController {
 	@GetMapping(value = CommentWebConstants.Path.COMMENT)
 	public String list(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model) throws Exception {
 		model.addAttribute("create", false);
-		
+
 		if (commentDto.getUuid() != null) {
 
 			CommentDto existsDto = commentFacade.findOneByUuid(commentDto.getUuid());
@@ -48,14 +48,14 @@ public class CommentController extends AbstractController {
 
 		return VIEW_COMMENT_LIST;
 	}
-	
+
 	@GetMapping(value = CommentWebConstants.Path.COMMENT, params = "create")
 	public String createView(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model) throws Exception {
-		
+
 		commentDto = commentFacade.createDto();
 		model.addAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO, commentDto);
 		model.addAttribute("create", true);
-		
+
 		return VIEW_COMMENT_LIST;
 	}
 
@@ -110,8 +110,7 @@ public class CommentController extends AbstractController {
 	}
 
 	@PostMapping(value = CommentWebConstants.Path.COMMENT, params = "delete")
-	public RedirectView delete(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult,
-			RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			commentFacade.delete(commentDto.getUuid());

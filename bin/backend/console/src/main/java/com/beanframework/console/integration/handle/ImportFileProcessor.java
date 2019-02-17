@@ -35,7 +35,7 @@ import com.beanframework.console.listener.UserRightImportListener;
 import com.beanframework.core.data.FileProcessor;
 
 @Component
-public class ImportFileProcessor implements FileProcessor{
+public class ImportFileProcessor implements FileProcessor {
 
 	private static final String MSG = "%s received. Path: %s";
 

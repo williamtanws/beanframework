@@ -9,7 +9,7 @@ import com.beanframework.core.converter.DtoAuditorConverter;
 
 @Configuration
 public class AuditorDtoConfig {
-	
+
 	@Bean
 	public DtoAuditorConverter dtoAuditorConverter() {
 		return new DtoAuditorConverter();

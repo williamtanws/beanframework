@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -20,7 +21,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 	private ModelService modelService;
 
 	@Override
-	public UserPermission convert(UserPermissionDto source) throws ConverterException {
+	public UserPermission convert(UserPermissionDto source, EntityConverterContext context) throws ConverterException {
 
 		try {
 
@@ -32,7 +33,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 				UserPermission prototype = modelService.findOneEntityByProperties(properties, true, UserPermission.class);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertDto(source, prototype);
 				}
 			}
 
@@ -44,7 +45,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 
 	}
 
-	private UserPermission convert(UserPermissionDto source, UserPermission prototype) throws ConverterException {
+	private UserPermission convertDto(UserPermissionDto source, UserPermission prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();

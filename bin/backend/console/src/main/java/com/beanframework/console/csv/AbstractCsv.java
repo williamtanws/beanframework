@@ -6,7 +6,7 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class AbstractCsv {
 	private String id;
-	
+
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
 				new NotNull(new Trim()), // ID

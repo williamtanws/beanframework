@@ -148,10 +148,10 @@ public class PlatformMvcConfig implements WebMvcConfigurer {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler(RESOURCE_HANDLER).addResourceLocations(RESOURCE_LOCATIONS);
 	}
-	
+
 	@Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-    }
+	public ObjectMapper objectMapper() {
+		return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+	}
 
 }
