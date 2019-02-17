@@ -22,7 +22,7 @@ import com.beanframework.menu.service.MenuService;
 @Component
 public class MenuFacadeImpl implements MenuFacade {
 
-	Logger logger = LoggerFactory.getLogger(MenuFacadeImpl.class.getName());
+	protected static final Logger LOGGER = LoggerFactory.getLogger(MenuFacadeImpl.class.getName());
 
 	@Autowired
 	private ModelService modelService;

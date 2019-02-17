@@ -7,6 +7,12 @@ public class LoggingWebConstants {
 	}
 
 	public interface Path {
+		
+		public interface Api {
+			public static final String LOGGING_TAIL = "${path.api.logging.tail}";
+			public static final String LOGGING_LEVEL = "${path.api.logging.level}";
+		}
+		
 		public static final String LOGGING = "${path.logging}";
 		public static final String LOGGING_TAIL = "${path.logging.tail}";
 		public static final String LOGGING_DOWNLOAD = "${path.logging.download}";

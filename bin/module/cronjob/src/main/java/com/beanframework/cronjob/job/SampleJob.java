@@ -15,11 +15,11 @@ import org.springframework.stereotype.Component;
 @DisallowConcurrentExecution
 public class SampleJob implements Job {
 
-	Logger logger = LoggerFactory.getLogger(SampleJob.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(SampleJob.class);
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		logger.info("Executing com.beanframework.job.SampleJob");
+		LOGGER.info("Executing com.beanframework.job.SampleJob");
 
 		StringBuilder result = new StringBuilder();
 		result.append("This is sample job result. ");

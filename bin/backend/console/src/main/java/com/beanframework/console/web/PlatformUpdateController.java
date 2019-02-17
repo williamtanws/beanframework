@@ -34,7 +34,7 @@ import net.sf.ehcache.CacheManager;
 @Controller
 public class PlatformUpdateController {
 
-	Logger logger = LoggerFactory.getLogger(PlatformUpdateController.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(PlatformUpdateController.class);
 
 	@Value(PlatformUpdateWebConstants.Path.UPDATE)
 	private String PATH_UPDATE;
@@ -109,7 +109,7 @@ public class PlatformUpdateController {
 						successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
 					} catch (Exception e) {
 						e.printStackTrace();
-						logger.error(e.getMessage(), e);
+						LOGGER.error(e.getMessage(), e);
 						errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " <br>");
 					}
 				}
