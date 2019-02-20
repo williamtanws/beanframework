@@ -1,12 +1,9 @@
 package com.beanframework.backoffice.config;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -30,25 +27,5 @@ public class BackofficeMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(backofficeSecurityInterceptor()).addPathPatterns(BACKOFFICE_WEBROOT + "/**");
-	}
-
-	@Override
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-//		// Hibernate for Json
-//		Hibernate5Module module = new Hibernate5Module();
-////		module.disable(Feature.USE_TRANSIENT_ANNOTATION);
-////		module.disable(Feature.FORCE_LAZY_LOADING);
-//
-//		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-//		builder.modulesToInstall(module);
-//
-//		converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
-//
-//		// Comment
-//		final ByteArrayHttpMessageConverter arrayHttpMessageConverter = new ByteArrayHttpMessageConverter();
-//	    final List<MediaType> list = new ArrayList<>();
-//	    list.add(MediaType.ALL);
-//	    arrayHttpMessageConverter.setSupportedMediaTypes(list);
-//	    converters.add(arrayHttpMessageConverter);
 	}
 }

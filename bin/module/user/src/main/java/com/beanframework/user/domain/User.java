@@ -3,6 +3,7 @@ package com.beanframework.user.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -47,6 +48,7 @@ public abstract class User extends GenericEntity {
 	private static final long serialVersionUID = -7444894280894062710L;
 
 	@Audited(withModifiedFlag = true)
+	@Column(length = 60)
 	private String password;
 
 	@Audited(withModifiedFlag = true)

@@ -69,3 +69,7 @@
 .span-icon {
 	margin-top: 2px;
 }
+
+.capitalize span {
+	text-transform: capitalize;
+}

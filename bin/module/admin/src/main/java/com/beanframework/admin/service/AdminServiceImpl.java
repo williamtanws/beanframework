@@ -25,6 +25,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.admin.AdminConstants;
@@ -33,7 +34,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.service.AuditorService;
-import com.beanframework.user.utils.PasswordUtils;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -49,6 +49,9 @@ public class AdminServiceImpl implements AdminService {
 
 	@Value(AdminConstants.Admin.DEFAULT_PASSWORD)
 	private String defaultAdminPassword;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Admin create() throws Exception {
@@ -135,7 +138,7 @@ public class AdminServiceImpl implements AdminService {
 				entity.setId(defaultAdminId);
 			}
 		} else {
-			if (PasswordUtils.isMatch(password, entity.getPassword()) == false) {
+			if (passwordEncoder.matches(password, entity.getPassword()) == false) {
 				throw new BadCredentialsException("Bad Credentials");
 			}
 		}

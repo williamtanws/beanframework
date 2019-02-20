@@ -44,6 +44,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,7 +57,6 @@ import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
-import com.beanframework.user.utils.PasswordUtils;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -80,6 +80,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private SessionRegistry sessionRegistry;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Employee create() throws Exception {
@@ -194,7 +197,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
 		} else {
-			if (PasswordUtils.isMatch(password, entity.getPassword()) == false) {
+			if (passwordEncoder.matches(password, entity.getPassword()) == false) {
 				throw new BadCredentialsException("Bad Credentials");
 			}
 		}

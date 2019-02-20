@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
@@ -18,12 +19,14 @@ import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.utils.PasswordUtils;
 
 public class EntityCustomerConverter implements EntityConverter<CustomerDto, Customer> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Customer convert(CustomerDto source, EntityConverterContext context) throws ConverterException {
@@ -112,7 +115,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 			}
 
 			if (StringUtils.isNotBlank(source.getPassword())) {
-				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+				prototype.setPassword(passwordEncoder.encode(source.getPassword()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 

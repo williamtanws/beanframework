@@ -1,6 +1,7 @@
 package com.beanframework.platform.config;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -24,9 +26,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Configuration
 @EnableWebMvc
@@ -149,9 +148,29 @@ public class PlatformMvcConfig implements WebMvcConfigurer {
 		registry.addResourceHandler(RESOURCE_HANDLER).addResourceLocations(RESOURCE_LOCATIONS);
 	}
 
-	@Bean
-	public ObjectMapper objectMapper() {
-		return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//		// Hibernate for Json
+//		Hibernate5Module module = new Hibernate5Module();
+//		module.disable(Feature.USE_TRANSIENT_ANNOTATION);
+//		module.disable(Feature.FORCE_LAZY_LOADING);
+//		
+//		// Simple Module
+///*		SimpleModule simpleModule = new SimpleModule();
+//		simpleModule.addSerializer(new NullAsEmptyStringSerializer());*/
+//
+//		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+//		builder.modulesToInstall(module);
+//		builder.featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+//
+//		converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
+//
+//		// Comment
+//		final ByteArrayHttpMessageConverter arrayHttpMessageConverter = new ByteArrayHttpMessageConverter();
+//	    final List<MediaType> list = new ArrayList<>();
+//	    list.add(MediaType.ALL);
+//	    arrayHttpMessageConverter.setSupportedMediaTypes(list);
+//	    converters.add(arrayHttpMessageConverter);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.context.EntityConverterContext;
@@ -13,12 +14,14 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.AdminDto;
-import com.beanframework.user.utils.PasswordUtils;
 
 public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Admin convert(AdminDto source, EntityConverterContext context) throws ConverterException {
@@ -98,7 +101,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 		}
 
 		if (StringUtils.isNotBlank(source.getPassword())) {
-			prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+			prototype.setPassword(passwordEncoder.encode(source.getPassword()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
