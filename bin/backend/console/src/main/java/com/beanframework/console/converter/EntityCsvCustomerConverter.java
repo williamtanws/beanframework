@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.context.EntityConverterContext;
@@ -19,7 +20,6 @@ import com.beanframework.customer.domain.Customer;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.utils.PasswordUtils;
 
 @Component
 public class EntityCsvCustomerConverter implements EntityConverter<CustomerCsv, Customer> {
@@ -28,6 +28,9 @@ public class EntityCsvCustomerConverter implements EntityConverter<CustomerCsv, 
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Customer convert(CustomerCsv source, EntityConverterContext context) throws ConverterException {
@@ -66,7 +69,7 @@ public class EntityCsvCustomerConverter implements EntityConverter<CustomerCsv, 
 			prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
 			prototype.setEnabled(source.isEnabled());
 			if (StringUtils.isNotBlank(source.getPassword()))
-				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+				prototype.setPassword(passwordEncoder.encode(source.getPassword()));
 
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 

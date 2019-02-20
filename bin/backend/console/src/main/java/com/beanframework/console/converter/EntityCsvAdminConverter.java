@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
@@ -13,13 +14,15 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.AdminCsv;
-import com.beanframework.user.utils.PasswordUtils;
 
 @Component
 public class EntityCsvAdminConverter implements EntityConverter<AdminCsv, Admin> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Admin convert(AdminCsv source, EntityConverterContext context) throws ConverterException {
@@ -57,7 +60,7 @@ public class EntityCsvAdminConverter implements EntityConverter<AdminCsv, Admin>
 			prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
 			prototype.setEnabled(source.isEnabled());
 			if (StringUtils.isNotBlank(source.getPassword()))
-				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+				prototype.setPassword(passwordEncoder.encode(source.getPassword()));
 			prototype.setName(source.getName());
 
 		} catch (Exception e) {

@@ -1,7 +1,7 @@
 id,name,sort,icon,path,target,enabled,parent,userGroupIds,dynamicFieldSlotIds
 system				,System					,10	,fa fa-gears		,									,,true,				,employeegroup				,menu_0_name_en=System;menu_1_name_cn=系统
 enumeration			,Enumeration			,10	,fa fa-list-ol		,/backoffice/enumeration			,,true,system		,employeegroup				,menu_0_name_en=Enumeration;menu_1_name_cn=列举
-field				,Field					,20	,fa-plus-square-o	,									,,true,system		,employeegroup				,menu_0_name_en=Field;menu_1_name_cn=输入
+field				,Field					,20	,fa fa-plus-square-o,									,,true,system		,employeegroup				,menu_0_name_en=Field;menu_1_name_cn=输入
 dynamicfield		,Dynamic Field			,10	,fa fa-list-alt		,/backoffice/dynamicfield			,,true,field		,employeegroup				,menu_0_name_en=Dynamic Field;menu_1_name_cn=动态输入
 dynamicfieldslot	,Dynamic Field Slot		,20	,fa fa-clone		,/backoffice/dynamicfield/slot		,,true,field		,employeegroup				,menu_0_name_en=Dynamic Field Slot;menu_1_name_cn=动态场槽
 dynamicfieldtemplate,Dynamic Field Template	,30	,fa fa-th			,/backoffice/dynamicfield/template	,,true,field		,employeegroup				,menu_0_name_en=Dynamic Field Template;menu_1_name_cn=动态模板
@@ -11,7 +11,8 @@ userpermission		,User Permission		,50	,fa fa-key			,/backoffice/userpermission		
 menu				,Menu					,60	,fa fa-align-justify,/backoffice/menu					,,true,system		,employeegroup				,menu_0_name_en=Menu;menu_1_name_cn=菜单
 cronjob				,Cronjob				,70	,fa fa-calendar		,/backoffice/cronjob				,,true,system		,employeegroup				,menu_0_name_en=Cron Job;menu_1_name_cn=定时任务
 email				,Email					,80	,fa fa-envelope		,/backoffice/email					,,true,system		,employeegroup				,menu_0_name_en=Email;menu_1_name_cn=电子邮件
-auditor				,Auditor				,90	,fa fa-users		,/backoffice/auditor				,,true,system		,employeegroup				,menu_0_name_en=Auditor;menu_1_name_cn=稽核员
+auditor				,Auditor Log			,90	,fa fa-users		,/backoffice/auditor				,,true,system		,employeegroup				,menu_0_name_en=Auditor History;menu_1_name_cn=稽核员历史
+auditing			,Auditing History		,100,fa fa-users		,/backoffice/auditing				,,true,system		,employeegroup				,menu_0_name_en=Auditing History;menu_1_name_cn=审计历史
 user				,User					,20	,fa fa-user			,									,,true,				,employeegroup;customergroup,menu_0_name_en=User;menu_1_name_cn=用户
 employeesession		,Employee Session		,10	,fa fa-clock-o		,/backoffice/employee/session		,,true,user			,employeegroup				,menu_0_name_en=Employee Session;menu_1_name_cn=雇员会话
 usergroup			,User Group				,20	,fa fa-users		,/backoffice/usergroup				,,true,user			,employeegroup				,menu_0_name_en=User Group;menu_1_name_cn=用户组

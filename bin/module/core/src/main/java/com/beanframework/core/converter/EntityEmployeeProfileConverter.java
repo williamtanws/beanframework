@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.context.EntityConverterContext;
@@ -14,13 +15,15 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.user.utils.PasswordUtils;
 
 @Component
 public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeDto, Employee> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Employee convert(EmployeeDto source, EntityConverterContext context) throws ConverterException {
@@ -78,7 +81,7 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 			}
 
 			if (StringUtils.isNotBlank(source.getPassword())) {
-				prototype.setPassword(PasswordUtils.encode(source.getPassword()));
+				prototype.setPassword(passwordEncoder.encode(source.getPassword()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 

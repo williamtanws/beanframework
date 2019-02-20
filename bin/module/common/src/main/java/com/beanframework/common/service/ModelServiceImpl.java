@@ -34,6 +34,7 @@ import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.exception.InterceptorException;
+import com.beanframework.common.registry.AfterRemoveEvent;
 import com.beanframework.common.registry.AfterRemoveListener;
 import com.beanframework.common.registry.AfterRemoveListenerRegistry;
 import com.beanframework.common.registry.AfterSaveEvent;
@@ -375,9 +376,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		removeInterceptor(model, interceptorContext, modelClass);
 		modelRepository.delete(model);
 
+		AfterRemoveEvent event = new AfterRemoveEvent();
+
 		Set<Entry<String, AfterRemoveListener>> afterRemoveListeners = afterRemoveListenerRegistry.getListeners().entrySet();
 		for (Entry<String, AfterRemoveListener> entry : afterRemoveListeners) {
-			entry.getValue().afterRemove(model);
+			entry.getValue().afterRemove(model, event);
 		}
 	}
 
