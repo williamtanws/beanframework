@@ -17,11 +17,6 @@
 		    	
 		    var locale = /*[[${#locale}]]*/;
 		    
-		    var objectsName = [];
-		    /*[# th:each="object : *{__${objectsName}__}"]*/  	    
-		    objectsName.push(/*[[${object.uuid}]]*/); 	    
-		    /*[/]*/
-		    
 		    var historyTable = $('#historyTable').DataTable({
 	    		  'language' : {
 			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'

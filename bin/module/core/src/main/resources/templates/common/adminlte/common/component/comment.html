@@ -46,7 +46,15 @@
 	                    { "data": "user" },
 	                    { "data": "html" },
 	                    { "data": "lastUpdatedDate" }
-	              ]
+	              ],
+	              "columnDefs": [
+	            	  {                                 
+			              	"targets": 0,
+			              	"render": function ( data, type, row ) {
+			              		return row.user.name;
+			              	}
+			          }  
+		          ]
 	    	});
 		    
 		    $(document).ready(function ()

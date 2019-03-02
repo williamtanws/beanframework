@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,11 @@ public class LocaleMessageServiceImpl implements LocaleMessageService {
 
 	public String getMessage(String code) {
 		Locale locale = LocaleContextHolder.getLocale();
-		return messageSource.getMessage(code, null, locale);
+		try {			
+			return messageSource.getMessage(code, null, locale);
+		} catch (NoSuchMessageException e) {
+			return null;
+		}
 	}
 
 	public String getMessage(String code, Object[] args) {

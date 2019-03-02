@@ -5,23 +5,18 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
+import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 
-public class DtoDynamicFieldTemplateConverter implements DtoConverter<DynamicFieldTemplate, DynamicFieldTemplateDto> {
+public class DtoDynamicFieldTemplateConverter extends AbstractDtoConverter<DynamicFieldTemplate, DynamicFieldTemplateDto> implements DtoConverter<DynamicFieldTemplate, DynamicFieldTemplateDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoDynamicFieldTemplateConverter.class);
-
-	@Autowired
-	private ModelService modelService;
 
 	@Override
 	public DynamicFieldTemplateDto convert(DynamicFieldTemplate source, DtoConverterContext context) throws ConverterException {
@@ -38,18 +33,12 @@ public class DtoDynamicFieldTemplateConverter implements DtoConverter<DynamicFie
 
 	private DynamicFieldTemplateDto convert(DynamicFieldTemplate source, DynamicFieldTemplateDto prototype, DtoConverterContext context) throws ConverterException {
 
-		prototype.setUuid(source.getUuid());
-		prototype.setId(source.getId());
-		prototype.setCreatedDate(source.getCreatedDate());
-		prototype.setLastModifiedDate(source.getLastModifiedDate());
-
-		prototype.setName(source.getName());
-
 		try {
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
+			convertGeneric(source, prototype, context);
 
+			prototype.setName(source.getName());
 			prototype.setDynamicFieldSlots(modelService.getDto(source.getDynamicFieldSlots(), DynamicFieldSlotDto.class));
+			
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

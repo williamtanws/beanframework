@@ -5,23 +5,18 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
+import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.user.domain.UserField;
 
-public class DtoUserFieldConverter implements DtoConverter<UserField, UserFieldDto> {
+public class DtoUserFieldConverter extends AbstractDtoConverter<UserField, UserFieldDto> implements DtoConverter<UserField, UserFieldDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserFieldConverter.class);
-
-	@Autowired
-	private ModelService modelService;
 
 	@Override
 	public UserFieldDto convert(UserField source, DtoConverterContext context) throws ConverterException {
@@ -38,18 +33,11 @@ public class DtoUserFieldConverter implements DtoConverter<UserField, UserFieldD
 
 	public UserFieldDto convert(UserField source, UserFieldDto prototype, DtoConverterContext context) throws ConverterException {
 
-		prototype.setUuid(source.getUuid());
-		prototype.setId(source.getId());
-		prototype.setCreatedDate(source.getCreatedDate());
-		prototype.setLastModifiedDate(source.getLastModifiedDate());
-
-		prototype.setValue(source.getValue());
-		prototype.setSort(source.getSort());
-
 		try {
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
+			convertGeneric(source, prototype, context);
 
+			prototype.setValue(source.getValue());
+			prototype.setSort(source.getSort());
 			prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
 
 		} catch (Exception e) {

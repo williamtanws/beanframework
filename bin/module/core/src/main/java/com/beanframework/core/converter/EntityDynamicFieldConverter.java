@@ -88,6 +88,11 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 				prototype.setLabel(StringUtils.stripToNull(source.getLabel()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getGrid()), prototype.getGrid()) == false) {
+				prototype.setGrid(StringUtils.stripToNull(source.getGrid()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
 			// Language
 			if (StringUtils.isBlank(source.getTableSelectedLanguage())) {

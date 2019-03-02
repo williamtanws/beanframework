@@ -121,6 +121,14 @@ public class AngularFileManagerServlet extends HttpServlet {
     private String REPOSITORY_BASE_PATH = "/tmp";
     // private String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss"; // (2001-07-04 12:08:56)
     private String DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss z"; // (Wed, 4 Jul 2001 12:08:56)
+    
+    private void checkDirectoryTraversalSecuirty(String parent, String child) throws Exception {
+		File file = new File(parent, child);
+		if (file.getCanonicalPath().startsWith(new File(parent).getCanonicalPath()) == false) {
+			System.out.println(file.getCanonicalPath());
+			throw new Exception("Directory Traversal Attack Detected!!!");
+		}
+	}
 
     @Override
     public void init() throws ServletException {
@@ -164,6 +172,8 @@ public class AngularFileManagerServlet extends HttpServlet {
         String action = request.getParameter("action");
         if ("download".equals(action)) {
             String path = request.getParameter("path");
+            
+            checkDirectoryTraversalSecuirty(REPOSITORY_BASE_PATH, path);
             File file = new File(REPOSITORY_BASE_PATH, path);
             if (!file.isFile()) {
                 // if not a file, it is a folder, show this error.  
@@ -454,8 +464,12 @@ public class AngularFileManagerServlet extends HttpServlet {
             String newpath = params.getAsString("newItemPath");
             LOG.debug("rename from: {} to: {}", path, newpath);
 
+            checkDirectoryTraversalSecuirty(REPOSITORY_BASE_PATH, path);
             File srcFile = new File(REPOSITORY_BASE_PATH, path);
+
+            checkDirectoryTraversalSecuirty(REPOSITORY_BASE_PATH, newpath);
             File destFile = new File(REPOSITORY_BASE_PATH, newpath);
+            
             if (srcFile.isFile()) {
                 FileUtils.moveFile(srcFile, destFile);
             } else {
@@ -538,6 +552,7 @@ public class AngularFileManagerServlet extends HttpServlet {
             String path = params.getAsString("item");
             LOG.debug("editFile path: {}", path);
 
+            checkDirectoryTraversalSecuirty(REPOSITORY_BASE_PATH, path);
             File srcFile = new File(REPOSITORY_BASE_PATH, path);
             String content = params.getAsString("content");
             FileUtils.writeStringToFile(srcFile, content);

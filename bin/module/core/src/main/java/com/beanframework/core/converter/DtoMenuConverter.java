@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
+import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MenuDto;
@@ -19,7 +19,7 @@ import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.menu.domain.Menu;
 
-public class DtoMenuConverter implements DtoConverter<Menu, MenuDto> {
+public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implements DtoConverter<Menu, MenuDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoMenuConverter.class);
 
@@ -41,23 +41,16 @@ public class DtoMenuConverter implements DtoConverter<Menu, MenuDto> {
 
 	private MenuDto convert(Menu source, MenuDto prototype, DtoConverterContext context) throws ConverterException {
 
-		prototype.setUuid(source.getUuid());
-		prototype.setId(source.getId());
-		prototype.setCreatedDate(source.getCreatedDate());
-		prototype.setLastModifiedDate(source.getLastModifiedDate());
-
-		prototype.setName(source.getName());
-		prototype.setParent(source.getParent());
-		prototype.setIcon(source.getIcon());
-		prototype.setPath(source.getPath());
-		prototype.setSort(source.getSort());
-		prototype.setTarget(source.getTarget());
-		prototype.setEnabled(source.getEnabled());
-
 		try {
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
+			convertGeneric(source, prototype, context);
 
+			prototype.setName(source.getName());
+			prototype.setParent(source.getParent());
+			prototype.setIcon(source.getIcon());
+			prototype.setPath(source.getPath());
+			prototype.setSort(source.getSort());
+			prototype.setTarget(source.getTarget());
+			prototype.setEnabled(source.getEnabled());
 			prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class));
 			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 			prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));

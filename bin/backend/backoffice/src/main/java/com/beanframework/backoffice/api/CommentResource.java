@@ -34,6 +34,7 @@ import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
 public class CommentResource {
+	
 	@Autowired
 	private CommentFacade commentFacade;
 
