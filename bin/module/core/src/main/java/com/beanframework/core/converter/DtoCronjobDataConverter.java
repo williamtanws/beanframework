@@ -5,22 +5,17 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
+import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.cronjob.domain.CronjobData;
 
-public class DtoCronjobDataConverter implements DtoConverter<CronjobData, CronjobDataDto> {
+public class DtoCronjobDataConverter extends AbstractDtoConverter<CronjobData, CronjobDataDto> implements DtoConverter<CronjobData, CronjobDataDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoCronjobDataConverter.class);
-
-	@Autowired
-	private ModelService modelService;
 
 	@Override
 	public CronjobDataDto convert(CronjobData source, DtoConverterContext context) throws ConverterException {
@@ -37,16 +32,11 @@ public class DtoCronjobDataConverter implements DtoConverter<CronjobData, Cronjo
 
 	private CronjobDataDto convert(CronjobData source, CronjobDataDto prototype, DtoConverterContext context) throws ConverterException {
 
-		prototype.setUuid(source.getUuid());
-		prototype.setCreatedDate(source.getCreatedDate());
-		prototype.setLastModifiedDate(source.getLastModifiedDate());
-
-		prototype.setName(source.getName());
-		prototype.setValue(source.getValue());
-
 		try {
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
+			convertGeneric(source, prototype, context);
+
+			prototype.setName(source.getName());
+			prototype.setValue(source.getValue());
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

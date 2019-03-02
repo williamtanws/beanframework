@@ -43,6 +43,7 @@ public class DynamicField extends GenericEntity {
 	public static final String REQUIRED = "required";
 	public static final String RULE = "rule";
 	public static final String LABEL = "label";
+	public static final String GRID = "grid";
 	public static final String LANGUAGE = "language";
 	public static final String ENUMERATIONS = "enumerations";
 
@@ -62,6 +63,9 @@ public class DynamicField extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	private String label;
+
+	@Audited(withModifiedFlag = true)
+	private String grid;
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -111,6 +115,14 @@ public class DynamicField extends GenericEntity {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getGrid() {
+		return grid;
+	}
+
+	public void setGrid(String grid) {
+		this.grid = grid;
 	}
 
 	public Language getLanguage() {

@@ -67,6 +67,9 @@ public abstract class GenericEntity implements Serializable {
 	@JoinColumn(name = "lastmodifiedby_uuid")
 	private Auditor lastModifiedBy;
 
+	@Audited(withModifiedFlag = true)
+	private String reference;
+
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -113,6 +116,14 @@ public abstract class GenericEntity implements Serializable {
 
 	public void setLastModifiedBy(Auditor lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
+	}
+
+	public String getReference() {
+		return reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
 	}
 
 	@Override

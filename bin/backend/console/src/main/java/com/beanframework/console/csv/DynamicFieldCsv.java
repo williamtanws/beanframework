@@ -13,6 +13,7 @@ public class DynamicFieldCsv extends AbstractCsv {
 	private Boolean required;
 	private String rule;
 	private String label;
+	private String grid;
 	private String language;
 	private String enumIds;
 
@@ -24,6 +25,7 @@ public class DynamicFieldCsv extends AbstractCsv {
 				new Optional(new Trim(new ParseBool())), // required
 				new Optional(new Trim()), // rule
 				new NotNull(new Trim()), // label
+				new NotNull(new Trim()), // grid
 				new Optional(new Trim()), // language
 				new Optional(new Trim()), // enumIds
 		};
@@ -65,6 +67,14 @@ public class DynamicFieldCsv extends AbstractCsv {
 
 	public String getLabel() {
 		return label;
+	}
+
+	public String getGrid() {
+		return grid;
+	}
+
+	public void setGrid(String grid) {
+		this.grid = grid;
 	}
 
 	public void setLabel(String label) {

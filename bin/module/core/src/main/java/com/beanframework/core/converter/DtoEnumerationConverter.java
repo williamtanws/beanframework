@@ -5,22 +5,17 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
+import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
-import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.enumuration.domain.Enumeration;
 
-public class DtoEnumerationConverter implements DtoConverter<Enumeration, EnumerationDto> {
+public class DtoEnumerationConverter extends AbstractDtoConverter<Enumeration, EnumerationDto> implements DtoConverter<Enumeration, EnumerationDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoEnumerationConverter.class);
-
-	@Autowired
-	private ModelService modelService;
 
 	@Override
 	public EnumerationDto convert(Enumeration source, DtoConverterContext context) throws ConverterException {
@@ -37,17 +32,11 @@ public class DtoEnumerationConverter implements DtoConverter<Enumeration, Enumer
 
 	private EnumerationDto convert(Enumeration source, EnumerationDto prototype, DtoConverterContext context) throws ConverterException {
 
-		prototype.setUuid(source.getUuid());
-		prototype.setId(source.getId());
-		prototype.setCreatedDate(source.getCreatedDate());
-		prototype.setLastModifiedDate(source.getLastModifiedDate());
-
-		prototype.setName(source.getName());
-		prototype.setSort(source.getSort());
-
 		try {
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
+			convertGeneric(source, prototype, context);
+
+			prototype.setName(source.getName());
+			prototype.setSort(source.getSort());
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

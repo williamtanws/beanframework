@@ -49,6 +49,14 @@ public class FilemanagerResource {
 	@Value(FilemanagerWebConstants.FILE_MANAGER_LOCATION)
 	public String STORAGE;
 
+	private void checkDirectoryTraversalSecuirty(String parent, String child) throws Exception {
+		File file = new File(parent, child);
+		if (file.getCanonicalPath().startsWith(new File(parent).getCanonicalPath()) == false) {
+			System.out.println(file.getCanonicalPath());
+			throw new Exception("Directory Traversal Attack Detected!!!");
+		}
+	}
+
 	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_LIST)
 	public Object list(@RequestBody JSONObject json) throws ServletException {
@@ -56,12 +64,13 @@ public class FilemanagerResource {
 		try {
 			// Directory Listing
 			String path = json.getString("path");
-
+			
 			// Returned result
 			List<JSONObject> fileItems = new ArrayList<>();
 
 			FileUtils.forceMkdir(new File(STORAGE));
 
+			checkDirectoryTraversalSecuirty(STORAGE, path);
 			try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(STORAGE, path))) {
 
 				String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -108,7 +117,8 @@ public class FilemanagerResource {
 			for (Part part : parts) {
 				if (part.getContentType() != null) { // Ignore path fields, file type
 					String path = STORAGE + destination;
-
+					
+					checkDirectoryTraversalSecuirty(STORAGE, path);
 					File f = new File(path, com.beanframework.filemanager.utils.FileUtils.getFileName(part.getHeader("content-disposition")));
 					if (!com.beanframework.filemanager.utils.FileUtils.write(part.getInputStream(), f)) {
 						throw new Exception("File upload failed");
@@ -123,11 +133,13 @@ public class FilemanagerResource {
 
 	/**
 	 * File download/preview
+	 * @throws Exception 
 	 */
 	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_PREVIEW)
-	public void preview(HttpServletResponse response, String path) throws IOException {
-
+	public void preview(HttpServletResponse response, String path) throws Exception {
+		
+		checkDirectoryTraversalSecuirty(STORAGE, path);
 		File file = new File(STORAGE, path);
 		if (!file.exists()) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Resource Not Found");
@@ -159,6 +171,8 @@ public class FilemanagerResource {
 	public Object createFolder(@RequestBody JSONObject json) {
 		try {
 			String newPath = json.getString("newPath");
+			
+			checkDirectoryTraversalSecuirty(STORAGE, newPath);
 			File newDir = new File(STORAGE + newPath);
 			if (!newDir.mkdir()) {
 				throw new Exception("Cannot create a directory: " + newPath);
@@ -183,6 +197,8 @@ public class FilemanagerResource {
 			JSONArray items = json.getJSONArray("items");
 			for (int i = 0; i < items.size(); i++) {
 				String path = items.getString(i);
+				
+				checkDirectoryTraversalSecuirty(STORAGE, path);
 				File f = new File(STORAGE, path);
 				com.beanframework.filemanager.utils.FileUtils.setPermissions(f, perms, recursive); // 设置�?��?
 			}
@@ -204,9 +220,11 @@ public class FilemanagerResource {
 
 			for (int i = 0; i < items.size(); i++) {
 				String path = items.getString(i);
-
+				
+				checkDirectoryTraversalSecuirty(STORAGE, path);
 				File srcFile = new File(STORAGE, path);
 				File destFile = new File(STORAGE + newpath, srcFile.getName());
+				checkDirectoryTraversalSecuirty(STORAGE + newpath, srcFile.getName());
 
 				FileCopyUtils.copy(srcFile, destFile);
 			}
@@ -228,9 +246,11 @@ public class FilemanagerResource {
 
 			for (int i = 0; i < items.size(); i++) {
 				String path = items.getString(i);
-
+				
+				checkDirectoryTraversalSecuirty(STORAGE, path);
 				File srcFile = new File(STORAGE, path);
 				File destFile = new File(STORAGE + newpath, srcFile.getName());
+				checkDirectoryTraversalSecuirty(STORAGE + newpath, srcFile.getName());
 
 				if (srcFile.isFile()) {
 					FileUtils.moveFile(srcFile, destFile);
@@ -254,6 +274,8 @@ public class FilemanagerResource {
 			JSONArray items = json.getJSONArray("items");
 			for (int i = 0; i < items.size(); i++) {
 				String path = items.getString(i);
+				
+				checkDirectoryTraversalSecuirty(STORAGE, path);
 				File srcFile = new File(STORAGE, path);
 				if (!FileUtils.deleteQuietly(srcFile)) {
 					throw new Exception("Failed to delete: " + srcFile.getAbsolutePath());
@@ -274,7 +296,9 @@ public class FilemanagerResource {
 		try {
 			String path = json.getString("item");
 			String newPath = json.getString("newItemPath");
-
+			
+			checkDirectoryTraversalSecuirty(STORAGE, path);
+			checkDirectoryTraversalSecuirty(STORAGE, newPath);
 			File srcFile = new File(STORAGE, path);
 			File destFile = new File(STORAGE, newPath);
 			if (srcFile.isFile()) {
@@ -296,6 +320,8 @@ public class FilemanagerResource {
 	public Object getContent(@RequestBody JSONObject json) {
 		try {
 			String path = json.getString("item");
+			
+			checkDirectoryTraversalSecuirty(STORAGE, path);
 			File srcFile = new File(STORAGE, path);
 
 			String content = FileUtils.readFileToString(srcFile, "UTF-8");
@@ -317,7 +343,8 @@ public class FilemanagerResource {
 		try {
 			String path = json.getString("item");
 			String content = json.getString("content");
-
+			
+			checkDirectoryTraversalSecuirty(STORAGE, path);
 			File srcFile = new File(STORAGE, path);
 			FileUtils.writeStringToFile(srcFile, content, "UTF-8");
 
@@ -339,10 +366,13 @@ public class FilemanagerResource {
 			JSONArray items = json.getJSONArray("items");
 			List<File> files = new ArrayList<>();
 			for (int i = 0; i < items.size(); i++) {
+				
+				checkDirectoryTraversalSecuirty(STORAGE, items.getString(i));
 				File f = new File(STORAGE, items.getString(i));
 				files.add(f);
 			}
-
+			
+			checkDirectoryTraversalSecuirty(STORAGE + destination, compressedFilename);
 			File zip = new File(STORAGE + destination, compressedFilename);
 
 			try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip))) {
@@ -364,6 +394,8 @@ public class FilemanagerResource {
 			String destination = json.getString("destination");
 			String zipName = json.getString("item");
 			String folderName = json.getString("folderName");
+			
+			checkDirectoryTraversalSecuirty(STORAGE, zipName);
 			File file = new File(STORAGE, zipName);
 
 			String extension = com.beanframework.filemanager.utils.FileUtils.getExtension(zipName);

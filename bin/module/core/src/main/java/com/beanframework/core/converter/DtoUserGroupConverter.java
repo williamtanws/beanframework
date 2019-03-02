@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
+import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserAuthorityDto;
@@ -19,7 +19,7 @@ import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.UserGroupFieldDto;
 import com.beanframework.user.domain.UserGroup;
 
-public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroupDto> {
+public class DtoUserGroupConverter extends AbstractDtoConverter<UserGroup, UserGroupDto> implements DtoConverter<UserGroup, UserGroupDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserGroupConverter.class);
 
@@ -41,17 +41,10 @@ public class DtoUserGroupConverter implements DtoConverter<UserGroup, UserGroupD
 
 	private UserGroupDto convert(UserGroup source, UserGroupDto prototype, DtoConverterContext context) throws ConverterException {
 
-		prototype.setUuid(source.getUuid());
-		prototype.setId(source.getId());
-		prototype.setCreatedDate(source.getCreatedDate());
-		prototype.setLastModifiedDate(source.getLastModifiedDate());
-
-		prototype.setName(source.getName());
-
 		try {
-			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
-			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
+			convertGeneric(source, prototype, context);
 
+			prototype.setName(source.getName());
 			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class));
 			prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class));

@@ -17,6 +17,7 @@ public class DynamicFieldDto extends GenericDto {
 	public static final String REQUIRED = "required";
 	public static final String RULE = "rule";
 	public static final String LABEL = "label";
+	public static final String GRID = "grid";
 	public static final String LANGUAGE = "language";
 
 	private String name;
@@ -28,6 +29,8 @@ public class DynamicFieldDto extends GenericDto {
 	private String rule;
 
 	private String label;
+
+	private String grid;
 
 	private LanguageDto language;
 
@@ -77,6 +80,14 @@ public class DynamicFieldDto extends GenericDto {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getGrid() {
+		return grid;
+	}
+
+	public void setGrid(String grid) {
+		this.grid = grid;
 	}
 
 	public LanguageDto getLanguage() {

@@ -3,7 +3,7 @@
 <body>
 	<th:block layout:fragment="attribute">
 		<th:block th:each="field,itrStat : *{fields}">
-			<div class="col-md-6">
+			<div th:class="${field.dynamicField.grid}">
 				<div class="form-group">
 					<label th:if="${field.dynamicField.language == null}" for="name" th:text="${field.dynamicField.name}"></label>
 					<label th:if="${field.dynamicField.language != null}" for="name" th:text="${field.dynamicField.name}+'('+${field.dynamicField.language.id}+')'"></label>
@@ -12,6 +12,25 @@
 					<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicField.uuid'" th:value="${field.dynamicField.uuid}">
 					<th:block th:if="${field.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).TEXT}">
 						<input type="text" class="form-control" th:name="'fields['+${itrStat.index}+'].value'" th:value="${field.value}" th:required="${field.dynamicField.required}">
+					</th:block>
+					<th:block th:if="${field.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).TEXTAREA}">
+						<textarea rows="4" cols="50" class="form-control" th:name="'fields['+${itrStat.index}+'].value'" th:text="${field.value}" th:required="${field.dynamicField.required}"></textarea>
+					</th:block>
+					<th:block th:if="${field.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).EDITOR}">
+						<textarea th:id="'editor'+*{uuid}" rows="10" cols="80" class="form-control" th:name="'fields['+${itrStat.index}+'].value'" th:text="${field.value}" th:required="${field.dynamicField.required}"></textarea>
+						<script th:inline="javascript">
+						/*<![CDATA[*/
+							
+						  var uuid = /*[[*{uuid}]]*/ ;
+						  var editorId = 'editor'+uuid;
+							
+						  $(function () {
+						    // Replace the <textarea id="editor1"> with a CKEditor
+						    // instance, using default configuration.
+						    CKEDITOR.replace(editorId)
+						  })
+						/*]]>*/
+						</script>
 					</th:block>
 					<th:block th:if="${field.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).SELECT}">
 						<select class="form-control select2" th:name="'fields['+${itrStat.index}+'].value'" style="width: 100%;" th:required="${field.dynamicField.required}">

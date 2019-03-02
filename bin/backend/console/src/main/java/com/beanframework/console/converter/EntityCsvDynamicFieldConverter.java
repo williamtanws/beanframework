@@ -64,6 +64,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 			prototype.setRequired(source.isRequired());
 			prototype.setRule(StringUtils.stripToNull(StringUtils.stripToNull(source.getRule())));
 			prototype.setLabel(StringUtils.stripToNull(source.getLabel()));
+			prototype.setGrid(StringUtils.stripToNull(source.getGrid()));
 
 			// Language
 			if (StringUtils.isNotBlank(source.getLanguage())) {
