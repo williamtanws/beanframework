@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -59,8 +58,19 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	public EmployeeDto save(EmployeeDto dto) throws BusinessException {
 		try {
+			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == false) {
+				String mimetype = dto.getProfilePicture().getContentType();
+				String type = mimetype.split("/")[0];
+				if (type.equals("image") == false) {
+					throw new Exception("Wrong picture format");
+				}
+			}
+			
 			Employee entity = modelService.getEntity(dto, Employee.class);
 			entity = (Employee) employeeService.saveEntity(entity);
+			
+			employeeService.updatePrincipal(entity);
+			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, EmployeeDto.class);
 		} catch (Exception e) {
@@ -104,11 +114,11 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	}
 
 	@Override
-	public EmployeeDto saveProfile(EmployeeDto dto, MultipartFile picture) throws BusinessException {
+	public EmployeeDto saveProfile(EmployeeDto dto) throws BusinessException {
 
 		try {
-			if (picture != null && picture.isEmpty() == false) {
-				String mimetype = picture.getContentType();
+			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == false) {
+				String mimetype = dto.getProfilePicture().getContentType();
 				String type = mimetype.split("/")[0];
 				if (type.equals("image") == false) {
 					throw new Exception("Wrong picture format");
@@ -118,7 +128,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 			entity = (Employee) employeeService.saveEntity(entity);
 			employeeService.updatePrincipal(entity);
-			employeeService.saveProfilePicture(entity, picture);
+			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, EmployeeDto.class);
 

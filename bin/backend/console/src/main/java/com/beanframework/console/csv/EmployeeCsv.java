@@ -16,6 +16,7 @@ public class EmployeeCsv extends AbstractCsv {
 	private Boolean enabled;
 	private String userGroupIds;
 	private String dynamicFieldSlotIds;
+	private String profilePicture;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
@@ -27,7 +28,8 @@ public class EmployeeCsv extends AbstractCsv {
 				new Optional(new Trim(new ParseBool())), // credentialsNonExpired
 				new Optional(new Trim(new ParseBool())), // enabled
 				new Optional(new Trim()), // userGroupIds
-				new Optional(new Trim()) // dynamicFieldSlotIds
+				new Optional(new Trim()), // dynamicFieldSlotIds
+				new Optional(new Trim()) // profilePicture
 		};
 
 		return processors;
@@ -95,6 +97,14 @@ public class EmployeeCsv extends AbstractCsv {
 
 	public void setDynamicFieldSlotIds(String dynamicFieldSlotIds) {
 		this.dynamicFieldSlotIds = dynamicFieldSlotIds;
+	}
+
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 
 }

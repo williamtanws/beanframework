@@ -57,7 +57,8 @@ public class CommentServiceImpl implements CommentService {
 			@CacheEvict(value = "CommentOneProperties", allEntries = true), //
 			@CacheEvict(value = "CommentsSorts", allEntries = true), //
 			@CacheEvict(value = "CommentsPage", allEntries = true), //
-			@CacheEvict(value = "CommentsHistory", allEntries = true) }) //
+			@CacheEvict(value = "CommentsHistory", allEntries = true), //
+			@CacheEvict(value = "CommentsCount", allEntries = true) })
 	@Override
 	public Comment saveEntity(Comment model) throws BusinessException {
 		return (Comment) modelService.saveEntity(model, Comment.class);
@@ -68,7 +69,8 @@ public class CommentServiceImpl implements CommentService {
 			@CacheEvict(value = "CommentOneProperties", allEntries = true), //
 			@CacheEvict(value = "CommentsSorts", allEntries = true), //
 			@CacheEvict(value = "CommentsPage", allEntries = true), //
-			@CacheEvict(value = "CommentsHistory", allEntries = true) })
+			@CacheEvict(value = "CommentsHistory", allEntries = true), //
+			@CacheEvict(value = "CommentsCount", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
@@ -123,5 +125,11 @@ public class CommentServiceImpl implements CommentService {
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Comment.class);
+	}
+
+	@Cacheable(value = "CommentsCount", key = "'count, dataTableRequest:'+#dataTableRequest")
+	@Override
+	public int countComment(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.count(dataTableRequest.getProperties(), Comment.class);
 	}
 }
