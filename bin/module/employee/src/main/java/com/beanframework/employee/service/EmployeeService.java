@@ -1,6 +1,8 @@
 package com.beanframework.employee.service;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +39,8 @@ public interface EmployeeService {
 	int count() throws Exception;
 
 	void saveProfilePicture(Employee employee, MultipartFile picture) throws IOException;
+
+	void saveProfilePicture(Employee employee, InputStream inputStream) throws IOException;
 
 	void deleteEmployeeProfilePictureByUuid(UUID uuid);
 

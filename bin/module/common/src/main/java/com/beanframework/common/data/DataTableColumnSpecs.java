@@ -209,7 +209,9 @@ public class DataTableColumnSpecs {
 		this.setSearch(request.getParameter("columns[" + i + "][search][value]"));
 		this.setSearchable(Boolean.valueOf(request.getParameter("columns[" + i + "][searchable]")));
 
-		int sortableCol = Integer.parseInt(request.getParameter("order[0][column]"));
+		int sortableCol = 0;
+		if (request.getParameter("order[0][column]") != null)
+			sortableCol = Integer.parseInt(request.getParameter("order[0][column]"));
 		String sortDir = request.getParameter("order[0][dir]");
 
 		if (i == sortableCol) {

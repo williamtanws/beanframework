@@ -5,7 +5,9 @@ package com.beanframework.common.data;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,10 +53,10 @@ public class DataTableRequest {
 	private boolean regex;
 
 	/** The columns. */
-	private List<DataTableColumnSpecs> columns;
+	private List<DataTableColumnSpecs> columns = new ArrayList<DataTableColumnSpecs>(0);
 
 	/** The order. */
-	private List<DataTableColumnSpecs> orders;
+	private List<DataTableColumnSpecs> orders = new ArrayList<DataTableColumnSpecs>(0);
 
 	/** The is global search. */
 	private boolean isGlobalSearch;
@@ -413,6 +415,29 @@ public class DataTableRequest {
 
 	public AuditOrder getAuditOrder() {
 		return AuditEntity.revisionNumber().desc();
+	}
+	
+	public Map<String, Object> getProperties(){
+		
+		Map<String, Object> properties = new HashMap<String, Object> ();
+		
+		if (isGlobalSearch() && StringUtils.isNotEmpty(getSearch())) {
+			for (DataTableColumnSpecs specs : columns) {
+				properties.put(specs.getData(), getSearch());
+			}
+		} else {
+			for (DataTableColumnSpecs specs : columns) {
+				if (StringUtils.isNotBlank(specs.getSearch())) {
+					properties.put(specs.getData(), specs.getSearch());
+				}
+			}
+		}
+
+		if (StringUtils.isNotBlank(getUniqueId())) {
+			properties.put("uuid", getUniqueId());
+		}
+		
+		return properties;
 	}
 
 	@Override

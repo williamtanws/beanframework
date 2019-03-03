@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -67,7 +66,7 @@ public interface EmployeeFacade {
 	@PreAuthorize(EmployeePreAuthorizeEnum.CREATE)
 	EmployeeDto createDto() throws Exception;
 
-	EmployeeDto saveProfile(EmployeeDto employee, MultipartFile picture) throws BusinessException;
+	EmployeeDto saveProfile(EmployeeDto employee) throws BusinessException;
 
 	EmployeeDto getCurrentUser() throws Exception;
 }

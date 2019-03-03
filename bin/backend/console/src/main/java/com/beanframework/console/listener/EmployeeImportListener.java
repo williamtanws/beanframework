@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -130,7 +131,10 @@ public class EmployeeImportListener extends ImportListener {
 		for (EmployeeCsv csv : csvList) {
 
 			Employee model = converter.convert(csv);
-			employeeService.saveEntity(model);
+			model = employeeService.saveEntity(model);
+			
+			ClassPathResource resource = new ClassPathResource(csv.getProfilePicture());
+			employeeService.saveProfilePicture(model, resource.getInputStream());
 		}
 	}
 

@@ -1,15 +1,16 @@
 package com.beanframework.backoffice.web;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -95,11 +95,15 @@ public class EmployeeProfileController {
 			type = "thumbnail";
 		}
 
-		File profilePicture = new File(PROFILE_PICTURE_LOCATION + File.separator + uuid + File.separator + type + ".png");
-		profilePicture = new File(profilePicture.getAbsolutePath());
-		if (profilePicture.exists()) {
+		InputStream targetStream;
+		File picture = new File(PROFILE_PICTURE_LOCATION + File.separator + uuid + File.separator + type + ".png");
 
-			return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(Files.readAllBytes(profilePicture.toPath()));
+		if (picture.exists()) {
+			targetStream = new FileInputStream(picture);
+
+			String mimeType = URLConnection.guessContentTypeFromName(picture.getName());
+
+			return ResponseEntity.ok().contentType(MediaType.valueOf(mimeType)).body(IOUtils.toByteArray(targetStream));
 		} else {
 
 			ConfigurationDto configuration = configurationFacade.findOneDtoById(CONFIGURATION_DEFAULT_AVATAR);
@@ -109,23 +113,25 @@ public class EmployeeProfileController {
 			} else {
 
 				ClassPathResource resource = new ClassPathResource(configuration.getValue());
-				Path defaultImage = Paths.get(resource.getURI());
+				targetStream = resource.getInputStream();
 
-				return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(Files.readAllBytes(defaultImage));
+				String mimeType = URLConnection.guessContentTypeFromName(picture.getName());
+
+				return ResponseEntity.ok().contentType(MediaType.valueOf(mimeType)).body(IOUtils.toByteArray(targetStream));
 			}
 		}
 	}
 
 	@PostMapping(value = EmployeeWebConstants.Path.PROFILE, params = "update")
 	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) EmployeeDto employeeProfile, Model model, BindingResult bindingResult,
-			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("picture") MultipartFile picture) throws Exception {
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		try {
 			EmployeeDto employee = employeeFacade.getCurrentUser();
 			if (employee.getUuid().equals(employeeProfile.getUuid()) == false)
 				throw new Exception("Invalid attempted employee profile update.");
 
-			employeeProfile = employeeFacade.saveProfile(employeeProfile, picture);
+			employeeProfile = employeeFacade.saveProfile(employeeProfile);
 
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS, localeMessageService.getMessage(BackofficeWebConstants.Locale.SAVE_SUCCESS));
 		} catch (BusinessException e) {

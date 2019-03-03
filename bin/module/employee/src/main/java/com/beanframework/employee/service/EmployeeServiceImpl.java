@@ -3,6 +3,7 @@ package com.beanframework.employee.service;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,8 +15,8 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -80,7 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private SessionRegistry sessionRegistry;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -157,9 +158,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 			File profilePictureFolder = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid());
 			FileUtils.forceMkdir(profilePictureFolder);
 
-//			String mimetype = picture.getContentType();
-//			String extension = mimetype.split("/")[1];
-
 			File original = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
 			original = new File(original.getAbsolutePath());
 			picture.transferTo(original);
@@ -169,6 +167,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 			BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, PROFILE_PICTURE_THUMBNAIL_WEIGHT, PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
 			ImageIO.write(thumbImg, "png", thumbnail);
 		}
+	}
+
+	@Override
+	public void saveProfilePicture(Employee employee, InputStream inputStream) throws IOException {
+
+		File profilePictureFolder = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid());
+		FileUtils.forceMkdir(profilePictureFolder);
+
+		File original = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
+		original = new File(original.getAbsolutePath());
+		FileUtils.copyInputStreamToFile(inputStream, original);
+
+		File thumbnail = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "thumbnail.png");
+		BufferedImage img = ImageIO.read(original);
+		BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, PROFILE_PICTURE_THUMBNAIL_WEIGHT, PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
+		ImageIO.write(thumbImg, "png", thumbnail);
+
 	}
 
 	@Override
