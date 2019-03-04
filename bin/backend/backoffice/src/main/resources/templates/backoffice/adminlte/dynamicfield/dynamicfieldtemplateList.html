@@ -15,7 +15,8 @@
 		 	$('#mainTable thead tr:eq(1) th').each(function(index) {
 				var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
 				var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
-	        	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+    			var search = mainTable.state.loaded().columns[index].search.search;
+	            $(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' ' + title + '" value="'+search+'" />');
 			});
 			/*]]>*/
 		</script>
