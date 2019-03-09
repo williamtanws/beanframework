@@ -37,6 +37,7 @@ public abstract class GenericEntity implements Serializable {
 	public static final String CREATED_BY = "createdBy";
 	public static final String LAST_MODIFIED_DATE = "lastModifiedDate";
 	public static final String LAST_MODIFIED_BY = "lastModifiedBy";
+	public static final String REFERENCE = "reference";
 
 	@Id
 	@GeneratedValue(generator = "inquisitive-uuid2")
