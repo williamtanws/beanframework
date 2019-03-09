@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="list (icon, title, objectDto, createAuthority, updateAuthority, tableName, listUrl, listFields, editFormAction, editForm, createButton)">
+	<th:block layout:fragment="list (icon, title, objectDto, createAuthority, updateAuthority, tableName, listUrl, listFields, editFormAction, editForm, createButton, filterColumnIndex)">
 		<!-- Search Form
 		<div class="row">
 			<div class="col-md-6">
@@ -78,7 +78,7 @@
 													</thead>
 													<thead>
 														<tr>
-															<th th:each="field : ${listFields}" class="text-center"></th>
+															<th th:each="field : ${listFields}"></th>
 														</tr>
 													</thead>
 												</table>
@@ -134,6 +134,7 @@
 			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
 			      },
 	    	      'pageLength'  : 10,
+	    	      'fixedHeader' : true,
 	    	      'paging'      : true,
 	    	      'lengthChange': true,
 	    	      'searching'   : true,
@@ -195,20 +196,37 @@
 				editForm(uuid);
 			});
 			
-			$(document).ready(function ()
-		    {
-			    mainTable.columns().every(function(index) {
-			        $('#mainTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function() {
-			            mainTable.column($(this).parent().index() + ':visible')
-			                .search(this.value)
-			                .draw();
-			        });
-			    });
+			$(document).ready(function() {
+				
+				var filterColumnIndex = /*[[${filterColumnIndex}]]*/ ;
+				
+				if(filterColumnIndex){
+				    $('#mainTable thead tr:eq(1) th').each(function(index) {
+				        if(filterColumnIndex.includes(index)){
+				        	var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
+					        var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/ ;
+					        var search = mainTable.state.loaded().columns[index].search.search;
+					        $(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' ' + title + '" value="' + search + '" />');
+				        }
+				        else{
+				        	$(this).html('');
+				        }
+				    });
+				    
+				    mainTable.columns().every(function(index) {
+				        $('#mainTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function() {
+				            mainTable.column($(this).parent().index() + ':visible')
+				                .search(this.value)
+				                .draw();
+				        });
+				    });
+	
+				    $('#searchAll').keyup(function() {
+				        mainTable.search($(this).val()).draw();
+				    });
 			    
-		    	$('#searchAll').keyup(function(){
-					   mainTable.search( $(this).val() ).draw();
-				});
-		    });
+				}
+			});
 		    /*]]>*/
 		</script>
 	</th:block>

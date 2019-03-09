@@ -127,9 +127,9 @@ public class CommentServiceImpl implements CommentService {
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Comment.class);
 	}
 
-	@Cacheable(value = "CommentsCount", key = "'count, dataTableRequest:'+#dataTableRequest")
+	@Cacheable(value = "CommentsCount", key = "'count, properties:'+#properties")
 	@Override
-	public int countComment(DataTableRequest dataTableRequest) throws Exception {
-		return modelService.count(dataTableRequest.getProperties(), Comment.class);
+	public int countCommentByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.count(properties, Comment.class);
 	}
 }

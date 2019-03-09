@@ -34,5 +34,5 @@ public interface CommentService {
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	int countComment(DataTableRequest dataTableRequest) throws Exception;
+	int countCommentByProperties(Map<String, Object> properties) throws Exception;
 }

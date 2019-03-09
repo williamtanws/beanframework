@@ -42,9 +42,9 @@ public class AbstractSpecification {
 			for (DataTableColumnSpecs specs : dataTableRequest.getColumns()) {
 				if (specs.getData().contains(".")) {
 					String[] objectProperty = specs.getData().split("\\.");
-					predicates.add(cb.or(cb.like(root.get(objectProperty[0]).get(objectProperty[1]), convertToLikePattern(specs.getSearch()))));
+					predicates.add(cb.or(cb.like(root.get(objectProperty[0]).get(objectProperty[1]), convertToLikePattern(dataTableRequest.getSearch()))));
 				} else {
-					predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(specs.getSearch()))));
+					predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(dataTableRequest.getSearch()))));
 				}
 			}
 		} else {

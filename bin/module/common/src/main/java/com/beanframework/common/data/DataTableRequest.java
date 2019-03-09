@@ -24,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.utils.AbstractSpecification;
 import com.beanframework.common.utils.AppUtil;
 
@@ -324,13 +325,17 @@ public class DataTableRequest {
 		}
 
 		List<Order> sortOrders = new ArrayList<Order>();
-		if (orders != null) {
+		if (orders.isEmpty() == false) {
 			for (DataTableColumnSpecs spec : orders) {
 				if (StringUtils.isNotBlank(spec.getSortDir())) {
 					Order order = new Order(Direction.fromString(spec.getSortDir()), spec.getData());
 					sortOrders.add(order);
 				}
 			}
+		}
+		else {
+			Order order = new Order(Direction.DESC, GenericEntity.CREATED_DATE);
+			sortOrders.add(order);
 		}
 		this.setPageable(PageRequest.of(this.getPaginationRequest().getPageNumber(), this.getPaginationRequest().getPageSize(), Sort.by(sortOrders)));
 	}
@@ -431,10 +436,6 @@ public class DataTableRequest {
 					properties.put(specs.getData(), specs.getSearch());
 				}
 			}
-		}
-
-		if (StringUtils.isNotBlank(getUniqueId())) {
-			properties.put("uuid", getUniqueId());
 		}
 		
 		return properties;
