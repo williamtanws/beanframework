@@ -205,20 +205,27 @@
 				        if(filterColumnIndex.includes(index)){
 				        	var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
 					        var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/ ;
-					        var search = mainTable.state.loaded().columns[index].search.search;
+					        var search = '';
+					        
+					        if(mainTable.state.loaded()){
+						        search = mainTable.state.loaded().columns[index].search.search;
+					        }
+					        
 					        $(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' ' + title + '" value="' + search + '" />');
+				        
+					        $('input', this ).on('keyup change', function () {
+					            if ( table.column(i).search() !== this.value ) {
+					                table
+					                    .column(i)
+					                    .search( this.value )
+					                    .draw();
+					            }
+					        });
+				        
 				        }
 				        else{
 				        	$(this).html('');
 				        }
-				    });
-				    
-				    mainTable.columns().every(function(index) {
-				        $('#mainTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function() {
-				            mainTable.column($(this).parent().index() + ':visible')
-				                .search(this.value)
-				                .draw();
-				        });
 				    });
 	
 				    $('#searchAll').keyup(function() {

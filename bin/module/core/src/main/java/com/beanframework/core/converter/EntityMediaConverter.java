@@ -66,39 +66,10 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getFileSize() == null || prototype.getFileSize().equals(Integer.valueOf(source.getFileSize())) == false) {
-				prototype.setFileSize(Integer.valueOf(source.getFileSize()));
+			if (prototype.getFileSize() == null || prototype.getFileSize().equals(source.getFileSize()) == false) {
+				prototype.setFileSize(source.getFileSize());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-		}
-
-		if (source.getHeight() == null) {
-			if (prototype.getHeight() != null) {
-				prototype.setHeight(null);
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
-		} else {
-			if (prototype.getHeight() == null || prototype.getHeight().equals(Integer.valueOf(source.getHeight())) == false) {
-				prototype.setHeight(Integer.valueOf(source.getHeight()));
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
-		}
-
-		if (source.getWidth() == null) {
-			if (prototype.getWidth() != null) {
-				prototype.setWidth(null);
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
-		} else {
-			if (prototype.getWidth() == null || prototype.getWidth().equals(Integer.valueOf(source.getWidth())) == false) {
-				prototype.setWidth(Integer.valueOf(source.getWidth()));
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
-		}
-
-		if (StringUtils.equals(StringUtils.stripToNull(source.getUrl()), prototype.getUrl()) == false) {
-			prototype.setUrl(StringUtils.stripToNull(source.getUrl()));
-			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
 		if (StringUtils.equals(StringUtils.stripToNull(source.getTitle()), prototype.getTitle()) == false) {
@@ -118,6 +89,16 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 
 		if (StringUtils.equals(StringUtils.stripToNull(source.getDescription()), prototype.getDescription()) == false) {
 			prototype.setDescription(StringUtils.stripToNull(source.getDescription()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
+
+		if (StringUtils.equals(StringUtils.stripToNull(source.getUrl()), prototype.getUrl()) == false) {
+			prototype.setUrl(StringUtils.stripToNull(source.getUrl()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
+
+		if (StringUtils.equals(StringUtils.stripToNull(source.getLocation()), prototype.getLocation()) == false) {
+			prototype.setLocation(StringUtils.stripToNull(source.getLocation()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 

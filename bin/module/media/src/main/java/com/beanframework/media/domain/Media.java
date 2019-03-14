@@ -23,13 +23,12 @@ public class Media extends GenericEntity {
 	public static final String FILENAME = "fileName";
 	public static final String FILETYPE = "fileType";
 	public static final String FILESIZE = "fileSize";
-	public static final String HEIGHT = "height";
-	public static final String WIDTH = "width";
-	public static final String URL = "url";
 	public static final String TITLE = "title";
 	public static final String CAPTION = "caption";
 	public static final String ALTTEXT = "altText";
 	public static final String DESCRIPTION = "description";
+	public static final String URL = "url";
+	public static final String LOCATION = "location";
 
 	@Audited(withModifiedFlag = true)
 	private String fileName;
@@ -38,16 +37,7 @@ public class Media extends GenericEntity {
 	private String fileType;
 
 	@Audited(withModifiedFlag = true)
-	private Integer fileSize;
-
-	@Audited(withModifiedFlag = true)
-	private Integer height;
-
-	@Audited(withModifiedFlag = true)
-	private Integer width;
-
-	@Audited(withModifiedFlag = true)
-	private String url;
+	private Long fileSize;
 
 	@Audited(withModifiedFlag = true)
 	private String title;
@@ -60,6 +50,12 @@ public class Media extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	private String description;
+
+	@Audited(withModifiedFlag = true)
+	private String url;
+
+	@Audited(withModifiedFlag = true)
+	private String location;
 
 	public String getFileName() {
 		return fileName;
@@ -77,36 +73,12 @@ public class Media extends GenericEntity {
 		this.fileType = fileType;
 	}
 
-	public Integer getFileSize() {
+	public Long getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(Integer fileSize) {
+	public void setFileSize(Long fileSize) {
 		this.fileSize = fileSize;
-	}
-
-	public Integer getHeight() {
-		return height;
-	}
-
-	public void setHeight(Integer height) {
-		this.height = height;
-	}
-
-	public Integer getWidth() {
-		return width;
-	}
-
-	public void setWidth(Integer width) {
-		this.width = width;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	public String getTitle() {
@@ -139,6 +111,22 @@ public class Media extends GenericEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 }

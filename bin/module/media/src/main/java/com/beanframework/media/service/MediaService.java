@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -33,4 +34,6 @@ public interface MediaService {
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	Media createByMultipartFile(MultipartFile file, String location) throws Exception;
 }
