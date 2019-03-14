@@ -18,17 +18,17 @@ public class MediaDto extends GenericDto {
 	public static final String CAPTION = "caption";
 	public static final String ALTTEXT = "altText";
 	public static final String DESCRIPTION = "description";
+	public static final String LOCATION = "location";
 
 	private String fileName;
 	private String fileType;
-	private String fileSize;
-	private String height;
-	private String width;
+	private Long fileSize;
 	private String url;
 	private String title;
 	private String caption;
 	private String altText;
 	private String description;
+	private String location;
 
 	public String getFileName() {
 		return fileName;
@@ -46,28 +46,12 @@ public class MediaDto extends GenericDto {
 		this.fileType = fileType;
 	}
 
-	public String getFileSize() {
+	public Long getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(String fileSize) {
+	public void setFileSize(Long fileSize) {
 		this.fileSize = fileSize;
-	}
-
-	public String getHeight() {
-		return height;
-	}
-
-	public void setHeight(String height) {
-		this.height = height;
-	}
-
-	public String getWidth() {
-		return width;
-	}
-
-	public void setWidth(String width) {
-		this.width = width;
 	}
 
 	public String getUrl() {
@@ -110,4 +94,11 @@ public class MediaDto extends GenericDto {
 		this.description = description;
 	}
 
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
 }

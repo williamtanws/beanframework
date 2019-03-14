@@ -1,13 +1,26 @@
 package com.beanframework.backoffice.web;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.UUID;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -29,6 +42,9 @@ public class MediaController extends AbstractController {
 
 	@Value(MediaWebConstants.View.LIST)
 	private String VIEW_MEDIA_LIST;
+	
+	@Value("${module.media.location.assets}")
+	private String MEDIA_ASSETS;
 
 	@GetMapping(value = MediaWebConstants.Path.MEDIA)
 	public String list(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model) throws Exception {
@@ -124,6 +140,32 @@ public class MediaController extends AbstractController {
 		redirectView.setContextRelative(true);
 		redirectView.setUrl(PATH_MEDIA);
 		return redirectView;
+	}
 
+	@GetMapping(value = MediaWebConstants.Path.MEDIA_BROWSE)
+	@ResponseBody
+	public String browse(Model model, @RequestParam Map<String, Object> allRequestParams) throws Exception {
+		return "window.opener.CKEDITOR.tools.callFunction( funcNum, fileUrl [, data] );";
+	}
+
+	@PostMapping(value = MediaWebConstants.Path.MEDIA_UPLOAD)
+	@ResponseBody
+	public String upload(Model model, @RequestParam Map<String, Object> allRequestParams, MultipartFile file) throws Exception {
+
+		MediaDto mediaDto = mediaFacade.createByMultipartFile(file, MEDIA_ASSETS);
+		String filePath = mediaDto.getUrl() + "/" + file.getOriginalFilename();
+		return "{\"location\":\"" + filePath + "\"}";
+	}
+
+	@GetMapping(value = MediaWebConstants.Path.MEDIA_PUBLIC + "/{uuid}/{fileName}")
+	public ResponseEntity<byte[]> media(@PathVariable String uuid, @PathVariable String fileName) throws Exception {
+
+		MediaDto mediaDto = mediaFacade.findOneByUuid(UUID.fromString(uuid));
+
+		File mediaFile = new File(mediaDto.getLocation(), fileName);
+
+		InputStream targetStream = new FileInputStream(mediaFile);
+
+		return ResponseEntity.ok().contentType(MediaType.valueOf(mediaDto.getFileType())).body(IOUtils.toByteArray(targetStream));
 	}
 }
