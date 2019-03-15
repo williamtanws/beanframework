@@ -6,8 +6,8 @@ import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.ParseDate;
 import org.supercsv.cellprocessor.Token;
+import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class CronjobCsv extends AbstractCsv {
@@ -17,23 +17,23 @@ public class CronjobCsv extends AbstractCsv {
 	private String jobName;
 	private String description;
 	private String cronExpression;
-	private boolean startup;
+	private Boolean startup;
 	private String jobTrigger;
 	private Date triggerStartDate;
 	private String cronjobData;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
-				new UniqueHashCode(), // id
-				new NotNull(), // jobClass
-				new NotNull(), // jobGroup
-				new NotNull(), // jobName
-				new Optional(), // description
-				new NotNull(), // cronExpression
-				new ParseBool(), // startup
-				new NotNull(), // jobTrigger
-				new Optional(new Token(" ", null, new ParseDate("dd/MM/yyyy h:mm a", true))), // triggerStartDate
-				new Optional() // cronjobData
+				new NotNull(new Trim()), // id
+				new NotNull(new Trim()), // jobClass
+				new NotNull(new Trim()), // jobGroup
+				new NotNull(new Trim()), // jobName
+				new Optional(new Trim()), // description
+				new NotNull(new Trim()), // cronExpression
+				new Optional(new Trim(new ParseBool())), // startup
+				new NotNull(new Trim()), // jobTrigger
+				new Optional(new Trim(new Token(" ", null, new ParseDate("dd/MM/yyyy h:mm a", true)))), // triggerStartDate
+				new Optional(new Trim()) // cronjobData
 		};
 
 		return processors;
@@ -79,11 +79,11 @@ public class CronjobCsv extends AbstractCsv {
 		this.cronExpression = cronExpression;
 	}
 
-	public boolean isStartup() {
+	public Boolean isStartup() {
 		return startup;
 	}
 
-	public void setStartup(boolean startup) {
+	public void setStartup(Boolean startup) {
 		this.startup = startup;
 	}
 

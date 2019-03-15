@@ -9,11 +9,11 @@
 			<a th:href="@{${@environment.getProperty('backoffice.webroot')}}" class="logo">
 				<!-- mini logo for sidebar mini 50x50 pixels -->
 				<span class="logo-mini">
-					<b th:text="#{module.backoffice.short}"></b>
+					<b th:utext="#{module.backoffice.short}"></b>
 				</span>
 				<!-- logo for regular state and mobile devices -->
 				<span class="logo-lg">
-					<b th:text="#{module.backoffice}"></b>
+					<b th:utext="#{module.backoffice}"></b>
 				</span>
 			</a>
 			<!-- Header Navbar: style can be found in header.less -->
@@ -29,16 +29,19 @@
 				<div class="navbar-custom-menu">
 					<ul class="nav navbar-nav">
 						<!-- Notifications: style can be found in dropdown.less -->
-						<li class="dropdown notifications-menu">
+						<li class="dropdown notifications-menu" th:if="${@environment.getProperty('module.backoffice.locale') != ''}">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<i class="fa fa-language"></i> <span th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}" th:text="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? ${#strings.arraySplit(locale,';')[1]} : ''"></span>
+								<i class="fa fa-language"></i>
+								<span th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.backoffice.locale'), ',')}"
+									th:text="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? ${#strings.arraySplit(locale,';')[1]} : ''"></span>
 								<span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
 								<li>
 									<!-- inner menu: contains the actual data -->
 									<ul class="menu">
-										<li th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}" th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #f4f4f4':''">
+										<li th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.backoffice.locale'), ',')}"
+											th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #f4f4f4':''">
 											<a href="#" th:onclick="changeLocale([[${#strings.arraySplit(locale,';')[0]}]])">
 												<i class="text-aqua"></i>
 												<span th:text="${#strings.arraySplit(locale,';')[1]}"></span>
@@ -52,13 +55,17 @@
 						<li class="dropdown user user-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<img th:src="@{${@environment.getProperty('path.employee.profile.picture')}}" class="user-image" alt="User Image">
-								<span class="hidden-xs" th:text="${#authentication.principal.id}"></span>
+								<span class="hidden-xs" th:text="${#authentication.principal.name}"></span>
+								<span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
 								<!-- User image -->
 								<li class="user-header">
 									<img th:src="@{${@environment.getProperty('path.employee.profile.picture')}(type='thumbnail')}" class="img-circle" alt="User Image">
-									<p th:text="${#authentication.principal.id}"></p>
+									<p>
+										<span th:text="${#authentication.principal.name}"></span>
+										<small th:text="'ID: '+ ${#authentication.principal.id}"></small>
+									</p>
 								</li>
 								<!-- Menu Footer-->
 								<li class="user-footer">

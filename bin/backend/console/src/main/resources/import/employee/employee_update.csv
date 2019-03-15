@@ -1,2 +1,2 @@
-id,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,dynamicField
-employee,employee,true,true,true,true,employeegroup;customergroup,employee_name_en=Employee;employee_name_cn=雇员
+id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,dynamicFieldSlotIds,profilePicture
+employee,Employee,employee,true,true,true,true,employeegroup;customergroup,,static/adminlte/dist/img/user2-160x160.jpg

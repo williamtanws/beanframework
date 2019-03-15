@@ -53,8 +53,7 @@ public class ArchiveFileProcessor {
 					try {
 						outGzipFileStream = new FileOutputStream(processedFile.getAbsolutePath() + ".tar.gz");
 
-						outGzipStream = (GzipCompressorOutputStream) new CompressorStreamFactory()
-								.createCompressorOutputStream(CompressorStreamFactory.GZIP, outGzipFileStream);
+						outGzipStream = (GzipCompressorOutputStream) new CompressorStreamFactory().createCompressorOutputStream(CompressorStreamFactory.GZIP, outGzipFileStream);
 
 						inTarFileStream = new FileInputStream(processedFile.getAbsolutePath());
 

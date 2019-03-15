@@ -1,13 +1,13 @@
 package com.beanframework.platform.config;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -15,12 +15,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -28,9 +28,8 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 @Configuration
-@EnableCaching
-@EnableAsync
-@EnableJpaAuditing
+@EnableWebMvc
+//@ComponentScan(basePackages = { "com.beanframework.platform" })
 public class PlatformMvcConfig implements WebMvcConfigurer {
 
 	@Value("${i18n.resources}")
@@ -147,6 +146,31 @@ public class PlatformMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler(RESOURCE_HANDLER).addResourceLocations(RESOURCE_LOCATIONS);
+	}
+
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//		// Hibernate for Json
+//		Hibernate5Module module = new Hibernate5Module();
+//		module.disable(Feature.USE_TRANSIENT_ANNOTATION);
+//		module.disable(Feature.FORCE_LAZY_LOADING);
+//		
+//		// Simple Module
+///*		SimpleModule simpleModule = new SimpleModule();
+//		simpleModule.addSerializer(new NullAsEmptyStringSerializer());*/
+//
+//		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+//		builder.modulesToInstall(module);
+//		builder.featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+//
+//		converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
+//
+//		// Comment
+//		final ByteArrayHttpMessageConverter arrayHttpMessageConverter = new ByteArrayHttpMessageConverter();
+//	    final List<MediaType> list = new ArrayList<>();
+//	    list.add(MediaType.ALL);
+//	    arrayHttpMessageConverter.setSupportedMediaTypes(list);
+//	    converters.add(arrayHttpMessageConverter);
 	}
 
 }

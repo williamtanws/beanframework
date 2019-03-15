@@ -2,31 +2,8 @@
 # = APPLICATION
 # ===============================
 spring.profiles.active=dev
-spring.profiles.include=platform,console,backoffice
-
-# =======================================================
-# = INTERNATIONALIZATION (MessageSourceAutoConfiguration)
-# =======================================================
-i18n.resources.exclude=classpath*:i18n/backoffice_*.properties
-
-# ===============================
-# = LANGUAGE
-# ===============================
-language.pathpatterns=${console.webroot}/**,${backoffice.webroot}/**
-
-# ===============================
-# = CONSOLE
-# ===============================
-console.webroot=/console
-console.api=/api/console
-console.theme=console/adminlte
-
-# ===============================
-# = BACKOFFICE
-# ===============================
-backoffice.webroot=/backoffice
-backoffice.api=/api/backoffice
-backoffice.theme=backoffice/adminlte
+spring.profiles.include=platform,console,backoffice,cockpit
+interceptor.strict.use=true
 
 # ===============================
 # = QUARTZ

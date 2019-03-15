@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="dynamicfield (dynamicField)">
+		<table id="dynamicfieldTable" class="table table-bordered table-hover" style="width:100%">
+			<thead>
+				<tr>
+					<th th:text="#{module.backoffice.id}" class="text-center"></th>
+					<th th:text="#{module.backoffice.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.select}" class="text-center"></th>
+				</tr>
+			</thead>
+		</table>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    var locale = /*[[${#locale}]]*/;
+		    
+		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.dynamicfield.page')}}]]*/;
+		    
+		    var dynamicField = /*[[*{__${dynamicField}__}]]*/;
+		    
+		    var dynamicfieldTable = $('#dynamicfieldTable').DataTable({
+	    		  'language' : {
+			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+			      },
+	    	      'pageLength'  : 10,
+	    	      'paging'      : true,
+	    	      'lengthChange': true,
+	    	      'searching'   : true,
+	    	      'ordering'    : true,
+	    	      'info'        : true,
+	    	      'autoWidth'   : true,
+	    	      'processing': true,
+	    	      'serverSide': true,
+	    	      'searchDelay': 1000,
+	    	      'ajax': {
+	                    'url': ajaxUrl
+	              },
+	              'columns': [
+	                    { "data": "id" },
+	                    { "data": "name" },
+	                    { "data": "" }
+	              ],
+	    	      'columnDefs': [
+	    	            { 
+	    	                targets: 2,
+	    	                'searchable': false,
+	    	                'orderable': false,
+	    	                'className': 'text-center',
+	    	                render: function(data, type, row, meta)
+	    	                {
+	    	                   if(dynamicField){
+		    	                   if(dynamicField.uuid == row.uuid){
+		    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicField' checked>"; 
+		    	                   }
+	    	                   }
+	    	                   
+	    	                   var preventSelfUuid = /*[[*{uuid}]]*/;
+    	                	   if(preventSelfUuid == row.uuid){
+	    	                	   return ""; 
+    	                	   }
+    	                	   else{
+	    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicField'>"; 
+    	                	   }
+	    	                  
+	    	                }
+	    	            }            
+	    	       ],
+	    	       'fnDrawCallback': function() {
+	    	           icheck();
+	    	       }
+	    	});
+		    
+		    function icheck() {
+		    	$('input').iCheck({
+					checkboxClass : 'icheckbox_square-blue',
+					radioClass : 'iradio_square-blue',
+					increaseArea : '20%' // optional
+				});
+		    }
+		    
+		    $(document).ready(function ()
+		    {
+		    	$('#dynamicfieldTable thead tr:eq(1) th').each(function(index){
+		    		if(index < 2){
+		    			var title = $('#dynamicfieldTable thead tr:eq(0) th').eq( $(this).index() ).text();
+		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+		    		} else{
+			            $(this).html('');
+		    		}
+		        });
+		    	
+		    	dynamicfieldTable.columns().every(function (index) {
+		    	    $('#dynamicfieldTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+		    	    	dynamicfieldTable.column($(this).parent().index() + ':visible')
+		    	            .search(this.value)
+		    	            .draw();
+		    	    });
+		    	});
+		    });
+		    /*]]>*/
+		</script>
+		<th:block sec:authorize="hasAuthority('ppminstructionTemplate_read')">
+			<script th:inline="javascript">
+		    	/*<![CDATA[*/
+		    		$('#dynamicfieldTable').on('click', 'tbody tr', function() {
+						//console.log('API row values : ', mainTable.row(this).data());
+						var uuid = dynamicfieldTable.row(this).data().uuid;
+						if(uuid){
+							var url = /*[[@{${@environment.getProperty('path.dynamicfield')}}]]*/;
+							url += '?uuid='+uuid+'#tab_general';
+							window.open(url, '_blank');
+						}
+					});
+		    	/*]]>*/
+			</script>
+		</th:block>
+	</th:block>
+</body>
+</html>

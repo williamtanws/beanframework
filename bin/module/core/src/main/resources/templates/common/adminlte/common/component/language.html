@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="language (language)">
+		<table id="languageTable" class="table table-bordered table-hover" style="width:100%">
+			<thead>
+				<tr>
+					<th th:text="#{module.backoffice.id}" class="text-center"></th>
+					<th th:text="#{module.backoffice.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.select}" class="text-center"></th>
+				</tr>
+			</thead>
+		</table>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    var locale = /*[[${#locale}]]*/;
+		    
+		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.language.page')}}]]*/;
+		    
+		    var language = /*[[*{__${language}__}]]*/;
+		    
+		    var languageTable = $('#languageTable').DataTable({
+	    		  'language' : {
+			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+			      },
+	    	      'pageLength'  : 10,
+	    	      'paging'      : true,
+	    	      'lengthChange': true,
+	    	      'searching'   : true,
+	    	      'ordering'    : true,
+	    	      'info'        : true,
+	    	      'autoWidth'   : true,
+	    	      'processing': true,
+	    	      'serverSide': true,
+	    	      'searchDelay': 1000,
+	    	      'sDom': 'ltipr', 
+	    	      'ajax': {
+	                    'url': ajaxUrl
+	              },
+	              'columns': [
+	                    { "data": "id" },
+	                    { "data": "name" },
+	                    { "data": "" }
+	              ],
+	    	      'columnDefs': [
+	    	            { 
+	    	                targets: 2,
+	    	                'searchable': false,
+	    	                'orderable': false,
+	    	                'className': 'text-center',
+	    	                render: function(data, type, row, meta)
+	    	                {
+	    	                   if(language){
+		    	                   if(language.uuid == row.uuid){
+		    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedlanguage' checked>"; 
+		    	                   }
+	    	                   }
+	    	                   
+	    	                   var preventSelfUuid = /*[[*{uuid}]]*/;
+    	                	   if(preventSelfUuid == row.uuid){
+	    	                	   return ""; 
+    	                	   }
+    	                	   else{
+	    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedlanguage'>"; 
+    	                	   }
+	    	                  
+	    	                }
+	    	            }            
+	    	       ],
+	    	       'fnDrawCallback': function() {
+	    	           icheck();
+	    	       }
+	    	});
+		    
+		    function icheck() {
+		    	$('input').iCheck({
+					checkboxClass : 'icheckbox_square-blue',
+					radioClass : 'iradio_square-blue',
+					increaseArea : '20%' // optional
+				});
+		    }
+		    
+		    $(document).ready(function ()
+		    {
+		    	$('#languageTable thead tr:eq(1) th').each(function(index){
+		    		if(index < 2){
+		    			var title = $('#languageTable thead tr:eq(0) th').eq( $(this).index() ).text();
+		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+		    		} else{
+			            $(this).html('');
+		    		}
+		        });
+		    	
+		    	languageTable.columns().every(function (index) {
+		    	    $('#languageTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+		    	    	languageTable.column($(this).parent().index() + ':visible')
+		    	            .search(this.value)
+		    	            .draw();
+		    	    });
+		    	});
+		    });
+		    /*]]>*/
+		</script>
+		<th:block sec:authorize="hasAuthority('language_read')">
+			<script th:inline="javascript">
+		    	/*<![CDATA[*/
+		    		$('#languageTable').on('click', 'tbody tr', function() {
+						//console.log('API row values : ', mainTable.row(this).data());
+						var uuid = languageTable.row(this).data().uuid;
+						if(uuid){
+							var url = /*[[@{${@environment.getProperty('path.language')}}]]*/;
+							url += '?uuid='+uuid+'#tab_general';
+							window.open(url, '_blank');
+						}
+					});
+		    	/*]]>*/
+			</script>
+		</th:block>
+	</th:block>
+</body>
+</html>

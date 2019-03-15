@@ -1,1 +1,11 @@
-﻿CKEDITOR.plugins.setLang("colordialog","cy",{clear:"Clirio",highlight:"Uwcholeuo",options:"Opsiynau Lliw",selected:"Lliw a Ddewiswyd",title:"Dewis lliw"});
+/*
+Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+*/
+CKEDITOR.plugins.setLang( 'colordialog', 'cy', {
+	clear: 'Clirio',
+	highlight: 'Uwcholeuo',
+	options: 'Opsiynau Lliw',
+	selected: 'Lliw a Ddewiswyd',
+	title: 'Dewis lliw'
+} );

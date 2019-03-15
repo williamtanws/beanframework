@@ -15,9 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.dao.DataAccessException;
@@ -29,57 +30,60 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "${jpa.repository.basepackages}",
-		entityManagerFactoryRef = "entityManagerFactory",
-		transactionManagerRef = "transactionManager")
+@EnableJpaRepositories(basePackages = "${jpa.repository.basepackages}", entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
-@EnableCaching
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableAsync
+@PropertySource("file:../../config/src/main/resources/application.properties")
+@Order(0)
 public class PlatformConfig {
-	
+
 	protected final Logger logger = LoggerFactory.getLogger(PlatformConfig.class);
 
 	@Value("${platform.datasource.maxPoolSize:10}")
 	private int PLATFORM_DATASOURCE_MAX_POOL_SIZE;
-			
+
 	@Value("${platform.hibernate.hbm2ddl.auto}")
 	private String PLATFORM_HIBERNATE_HDM2DDL_AUTO;
-	
+
 	@Value("${platform.hibernate.show_sql:false}")
 	private boolean PLATFORM_HIBERNATE_SHOW_SQL;
-	
+
 	@Value("${platform.hibernate.format_sql:false}")
 	private boolean PLATFORM_HIBERNATE_FORMAT_SQL;
-	
+
 	@Value("${platform.hibernate.dialect}")
 	private String PLATFORM_HIBERNATE_DIALECT;
-	
+
 	@Value("${platform.import.startup}")
 	private String PLATFORM_IMPORT_STARTUP;
-	
+
 	@Value("${platform.import.startup.enabled:false}")
 	private boolean PLATFORM_IMPORT_STARTUP_ENABLED;
-	
+
 	@Value("${data.dir}")
 	private String DIR_DATA;
-	
+
 	@Value("${temp.dir}")
 	private String DIR_TEMP;
-	
+
 	@Value("${log.dir}")
 	private String DIR_LOG;
 
 	/*
-	 * Populate SpringBoot DataSourceProperties object directly from application.yml 
-	 * based on prefix.Thanks to .yml, Hierachical data is mapped out of the box with matching-name
-	 * properties of DataSourceProperties object].
+	 * Populate SpringBoot DataSourceProperties object directly from application.yml
+	 * based on prefix.Thanks to .yml, Hierachical data is mapped out of the box
+	 * with matching-name properties of DataSourceProperties object].
 	 */
 //	@Bean
 //	@Primary
@@ -87,22 +91,22 @@ public class PlatformConfig {
 //	public DataSourceProperties dataSourceProperties(){
 //		return new DataSourceProperties();
 //	}
-	
+
 //	datasource.platform.url=
 //			datasource.platform.username=
 //			datasource.platform.password=
 //			datasource.platform.driverClassName=
 //			datasource.platform.defaultSchema=
-	
+
 	@Value("${datasource.platform.url}")
 	private String DATASOURCE_URL;
-	
+
 	@Value("${datasource.platform.username}")
 	private String DATASOURCE_USERNAME;
-	
+
 	@Value("${datasource.platform.password}")
 	private String DATASOURCE_PASSWORD;
-	
+
 	@Value("${datasource.platform.driverClassName}")
 	private String DATASOURCE_DRIVER_CLASS_NAME;
 
@@ -117,44 +121,38 @@ public class PlatformConfig {
 		dataSourceProperties.setPassword(DATASOURCE_PASSWORD);
 		dataSourceProperties.setDriverClassName(DATASOURCE_DRIVER_CLASS_NAME);
 
-		HikariDataSource dataSource = (HikariDataSource) DataSourceBuilder
-					.create(dataSourceProperties.getClassLoader())
-					.driverClassName(dataSourceProperties.getDriverClassName())
-					.url(dataSourceProperties.getUrl())
-					.username(dataSourceProperties.getUsername())
-					.password(dataSourceProperties.getPassword())
-					.type(HikariDataSource.class)
-					.build();
-			dataSource.setMaximumPoolSize(PLATFORM_DATASOURCE_MAX_POOL_SIZE);
-			
-			if (PLATFORM_IMPORT_STARTUP_ENABLED) {
-				// schema init
-				try {
-					PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+		HikariDataSource dataSource = (HikariDataSource) DataSourceBuilder.create(dataSourceProperties.getClassLoader()).driverClassName(dataSourceProperties.getDriverClassName())
+				.url(dataSourceProperties.getUrl()).username(dataSourceProperties.getUsername()).password(dataSourceProperties.getPassword()).type(HikariDataSource.class).build();
+		dataSource.setMaximumPoolSize(PLATFORM_DATASOURCE_MAX_POOL_SIZE);
 
-					Resource[] initSql = loader.getResources(PLATFORM_IMPORT_STARTUP);
+		if (PLATFORM_IMPORT_STARTUP_ENABLED) {
+			// schema init
+			try {
+				PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 
-					ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
-					for (Resource resource : initSql) {
-						resourceDatabasePopulator.addScript(resource);
-					}
+				Resource[] initSql = loader.getResources(PLATFORM_IMPORT_STARTUP);
 
-					DatabasePopulator databasePopulator = resourceDatabasePopulator;
-					DatabasePopulatorUtils.execute(databasePopulator, dataSource);
-				} catch (DataAccessException e) {
-					logger.warn(e.getMessage());
-				} catch (IOException e) {
-					logger.warn(e.getMessage());
+				ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
+				for (Resource resource : initSql) {
+					resourceDatabasePopulator.addScript(resource);
 				}
-			}
 
-			Files.createDirectories(Paths.get(DIR_DATA));
-			Files.createDirectories(Paths.get(DIR_TEMP));
-			Files.createDirectories(Paths.get(DIR_LOG));
-						
-			return dataSource;
+				DatabasePopulator databasePopulator = resourceDatabasePopulator;
+				DatabasePopulatorUtils.execute(databasePopulator, dataSource);
+			} catch (DataAccessException e) {
+				logger.warn(e.getMessage());
+			} catch (IOException e) {
+				logger.warn(e.getMessage());
+			}
+		}
+
+		Files.createDirectories(Paths.get(DIR_DATA));
+		Files.createDirectories(Paths.get(DIR_TEMP));
+		Files.createDirectories(Paths.get(DIR_LOG));
+
+		return dataSource;
 	}
-	
+
 	@Value("${jpa.domain.packagetoscan}")
 	private String[] jpadomainpackagetoscan;
 
@@ -195,13 +193,8 @@ public class PlatformConfig {
 		properties.put("hibernate.c3p0.preferredTestQuery", "SELECT 1");
 		properties.put("hibernate.c3p0.autoCommitOnClose", "true");
 		properties.put("hibernate.c3p0.testConnectionOnCheckout", "true");
-		//anti-pattern
-//		properties.put("hibernate.enable_lazy_load_no_trans", "true");
 		properties.put("current_session_context_class", "thread");
-		// Fix hibernate multiple merge problem
-//		properties.put("hibernate.event.merge.entity_copy_observer", "allow");
-		// Fix LAZY on session problems in unit tests
-//		properties.put("hibernate.enable_lazy_load_no_trans", "true");
+		properties.put("hibernate.envers.autoRegisterListeners", "false");
 		return properties;
 	}
 
@@ -211,6 +204,11 @@ public class PlatformConfig {
 		JpaTransactionManager txManager = new JpaTransactionManager();
 		txManager.setEntityManagerFactory(emf);
 		return txManager;
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+	    return new BCryptPasswordEncoder();
 	}
 
 }

@@ -1,2 +1,2 @@
-id,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,dynamicField
-customer,customer,true,true,true,true,generalcustomer,customer_name_en=Customer;customer_name_cn=顾客
+id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,dynamicFieldSlotIds
+customer,Customer,customer,true,true,true,true,generalcustomer,

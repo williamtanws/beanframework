@@ -14,35 +14,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.beanframework.backoffice.WebFilemanagerConstants;
+import com.beanframework.backoffice.FilemanagerWebConstants;
 
 @Controller
 public class FilemanagerController {
 
-	@Value(WebFilemanagerConstants.View.CONTAINER)
+	@Value(FilemanagerWebConstants.View.CONTAINER)
 	private String VIEW_CONTAINER;
-	
-	@Value(WebFilemanagerConstants.View.TEMPLATES)
+
+	@Value(FilemanagerWebConstants.View.TEMPLATES)
 	private String VIEWE_TEMPLATES;
-	
-	@Value(WebFilemanagerConstants.View.ANGULARFILEMANAGER)
+
+	@Value(FilemanagerWebConstants.View.ANGULARFILEMANAGER)
 	private String VIEW_ANGULARFILEMANAGER;
 
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.READ)
-	@RequestMapping(value = WebFilemanagerConstants.Path.FILE_MANAGER, method = { RequestMethod.GET, RequestMethod.POST })
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
+	@RequestMapping(value = FilemanagerWebConstants.Path.FILE_MANAGER, method = { RequestMethod.GET, RequestMethod.POST })
 	public String filemanager(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_CONTAINER;
 	}
-	
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.READ)
-	@RequestMapping(value = WebFilemanagerConstants.Path.ANGULARFILEMANAGER, method = { RequestMethod.GET, RequestMethod.POST })
+
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
+	@RequestMapping(value = FilemanagerWebConstants.Path.ANGULARFILEMANAGER, method = { RequestMethod.GET, RequestMethod.POST })
 	public String angularfilemanager(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_ANGULARFILEMANAGER;
 	}
 
-	@PreAuthorize(WebFilemanagerConstants.PreAuthorize.READ)
-	@RequestMapping(value = WebFilemanagerConstants.Path.TEMPLATES_PAGE, method = { RequestMethod.GET, RequestMethod.POST })
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
+	@RequestMapping(value = FilemanagerWebConstants.Path.TEMPLATES_PAGE, method = { RequestMethod.GET, RequestMethod.POST })
 	public String template(@PathVariable("page") String page, Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-		return VIEWE_TEMPLATES+"/"+page;
+		return VIEWE_TEMPLATES + "/" + page;
 	}
 }

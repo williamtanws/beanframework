@@ -1,0 +1,54 @@
+package com.beanframework.core.facade;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
+
+import com.beanframework.common.data.DataTableRequest;
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.data.UserRightDto;
+
+public interface UserRightFacade {
+
+	public static interface UserRightPreAuthorizeEnum {
+		public static final String READ = "hasAuthority('userright_read')";
+		public static final String CREATE = "hasAuthority('userright_create')";
+		public static final String UPDATE = "hasAuthority('userright_update')";
+		public static final String DELETE = "hasAuthority('userright_delete')";
+	}
+
+	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
+	UserRightDto findOneByUuid(UUID uuid) throws Exception;
+
+	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
+	UserRightDto findOneProperties(Map<String, Object> properties) throws Exception;
+
+	@PreAuthorize(UserRightPreAuthorizeEnum.CREATE)
+	UserRightDto create(UserRightDto model) throws BusinessException;
+
+	@PreAuthorize(UserRightPreAuthorizeEnum.UPDATE)
+	UserRightDto update(UserRightDto model) throws BusinessException;
+
+	@PreAuthorize(UserRightPreAuthorizeEnum.DELETE)
+	void delete(UUID uuid) throws BusinessException;
+
+	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
+	Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+
+	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
+	int count() throws Exception;
+
+	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	@PreAuthorize(UserRightPreAuthorizeEnum.READ)
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	@PreAuthorize(UserRightPreAuthorizeEnum.CREATE)
+	UserRightDto createDto() throws Exception;
+
+	List<UserRightDto> findAllDtoUserRights() throws Exception;
+}

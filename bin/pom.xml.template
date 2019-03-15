@@ -15,21 +15,26 @@
 	</properties>
 
     <modules>
-    	<module>core/common</module>
-    	<module>core/language</module>
-    	<module>core/user</module>
-    	<module>core/email</module>
-    	<module>core/cronjob</module>
-    	<module>core/configuration</module>
-    	<module>core/dynamicfield</module>
+    	<module>module/common</module>
+    	<module>module/language</module>
+    	<module>module/user</module>
+    	<module>module/employee</module>
+    	<module>module/admin</module>
+    	<module>module/customer</module>
+    	<module>module/email</module>
+    	<module>module/cronjob</module>
+    	<module>module/configuration</module>
+    	<module>module/dynamicfield</module>
+    	<module>module/menu</module>
+        <module>module/filemanager</module>
+        <module>module/media</module>
+        <module>module/comment</module>
+        <module>module/cms</module>
+        <module>module/core</module>
 		<module>ui/adminlte</module>
-    	<module>backend/admin</module>
         <module>backend/console</module>
-    	<module>backend/menu</module>
-    	<module>backend/employee</module>
-    	<module>backend/customer</module>
-        <module>backend/filemanager</module>
         <module>backend/backoffice</module>
+        <module>backend/cockpit</module>
         <module>platform</module>
         <module>../config</module>
     </modules>

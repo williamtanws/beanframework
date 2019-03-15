@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE" th:text="#{error.page}"></title>
+<title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE" th:utext="#{error.page}"></title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <!-- Bootstrap 3.3.7 -->
@@ -28,7 +28,7 @@
 
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-<link rel="stylesheet" th:href="@{/static/custom/custom.css}">
+<link rel="stylesheet" th:href="@{/static/common/common.css}">
 </head>
 <body class="hold-transition login-page">
 	<section class="content">
@@ -58,10 +58,8 @@
 	<script th:src="@{/static/adminlte/plugins/iCheck/icheck.min.js}"></script>
 	<!-- PACE -->
 	<script th:src="@{/static/adminlte/plugins/pace/pace.min.js}"></script>
-	<!-- Bootstrap Validator -->
-	<script type="text/javascript" th:src="@{/static/common/js/jquery.validate.min.js}"></script>
 
-	<script type="text/javascript" th:src="@{/static/custom/custom.js}">
+	<script type="text/javascript" th:src="@{/static/common/common.js}">
 		
 	</script>
 	<th:block layout:fragment="js"></th:block>
