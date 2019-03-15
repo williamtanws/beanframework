@@ -66,6 +66,10 @@
 	min-width: 74px;
 }
 
-.nav-tabs-custom>.nav-tabs>li>a .error {
-	color: red;
+.span-icon {
+	margin-top: 2px;
+}
+
+.capitalize span {
+	text-transform: capitalize;
 }

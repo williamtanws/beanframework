@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="history (historyListUrl)">
+		<table id="historyTable" class="table table-bordered table-hover" style="width:100%">
+			<thead>
+				<tr>
+					<th th:text="#{module.history.user}" class="text-center" style="min-width: 100px;"></th>
+					<th th:text="#{module.history.revisionDate}" class="text-center" style="min-width: 150px;"></th>
+					<th th:text="#{module.history.revisionType}" class="text-center" style="min-width: 100px;"></th>
+					<th th:text="#{module.history.propertiesChanged}" class="text-center"></th>
+				</tr>
+			</thead>
+		</table>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    var locale = /*[[${#locale}]]*/;
+		    
+		    var historyTable = $('#historyTable').DataTable({
+	    		  'language' : {
+			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+			      },
+	    	      'pageLength'  : 10,
+	    	      'paging'      : true,
+	    	      'lengthChange': true,
+	    	      'searching'   : false,
+	    	      'ordering'    : true,
+	    	      'info'        : true,
+	    	      'autoWidth'   : true,
+	    	      'processing': true,
+	    	      'serverSide': true,
+	    	      'searchDelay': 1000,
+	    	      'sDom': 'ltipr', 
+	    	      'ajax': {
+	                    'url':/*[[${historyListUrl}]]*/
+	              },
+	              "columnDefs": [
+	                  {
+	                      "targets": 0,
+	                      "render": function ( data, type, row ) {
+	                    	  if(row.entity.lastModifiedBy){
+	                    		  return row.entity.lastModifiedBy.name + ' ['+row.entity.lastModifiedBy.id+']';
+	                    	  }
+	                    	  else{
+		                          return 'System';
+	                    	  }
+	                      }
+	                  },
+	                  {
+	                      "targets": 1,
+	                      "render": function ( data, type, row ) {
+	                          return row.revisionDate;
+	                      }
+	                  },
+	                  {
+	                      "targets": 2,
+	                      "render": function ( data, type, row ) {
+	                          return row.revisionType;
+	                      }
+	                  },
+	                  {
+	                      "targets": 3,
+	                      "render": function ( data, type, row ) {
+	                    	  var message = "";
+	                    	  $.each( row.propertiesChanged, function( index, value ) {
+	                    		  var propertyAndLocalized = value.split("=");
+	                    		  var property = propertyAndLocalized[0];
+	                    		  var localized = propertyAndLocalized[1];
+	                    		  
+	                    		  var value = row.entity[property];
+	                    		  if(value instanceof Array){
+	                    			  var newValue = "";
+	                    			  for (i = 0; i < value.length; i++) { 
+	                    				  if(i > 0){
+	                    					  newValue += ', ';
+	                    				  }
+	                    				  newValue += value[i].id;
+	                    			  }
+	                    			  value = newValue;
+	                    		  }
+	                    		  if(Object.prototype.toString.call(value) === '[object Object]'){
+	                    			  value = value.id;
+	                    		  }
+	                    		  
+	                    		  if(index != 0){
+	                    			  message = message + "<br>";
+	                    		  }
+	                    		  message = message + localized + " <span class='fa fa-long-arrow-right'></span> " + value + "\n";	
+	                    	  });
+	                          return message;
+	                      }
+	                  },
+		              {                                 
+		              	"targets": '_all',
+		               	"render": $.fn.dataTable.render.text()
+		              }  
+	              ]
+	    	});
+		    /*]]>*/
+		</script>
+		<th:block sec:authorize="hasAuthority('employee_read')">
+			<script th:inline="javascript">
+		    	/*<![CDATA[*/
+		    		$('#historyTable').on('click', 'tbody tr', function() {
+						//console.log('API row values : ', mainTable.row(this).data());
+						var uuid = historyTable.row(this).data().uuid;
+						if(uuid){
+							var url = /*[[@{${@environment.getProperty('path.employee')}}]]*/;
+							url += '?uuid='+uuid+'#tab_general';
+							window.open(url, '_blank');
+						}
+					});
+		    	/*]]>*/
+			</script>
+		</th:block>
+	</th:block>
+</body>
+</html>

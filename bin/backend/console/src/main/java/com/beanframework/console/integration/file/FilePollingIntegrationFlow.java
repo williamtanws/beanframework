@@ -31,7 +31,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.beanframework.console.config.IntegrationConfig;
 import com.beanframework.console.integration.handle.ArchiveFileProcessor;
-import com.beanframework.console.integration.handle.ImporterFileProcessor;
+import com.beanframework.console.integration.handle.ImportFileProcessor;
 
 /**
  * Inbound File Adapter looks for files that match the given regular expression
@@ -49,51 +49,40 @@ public class FilePollingIntegrationFlow {
 
 	@Autowired
 	private ApplicationContext applicationContext;
-	
+
 	@Autowired
 	private MessageChannel processedChannel;
-	
+
 	@Autowired
 	private MessageChannel failedChannel;
-	
+
 	@Autowired
 	private ArchiveFileProcessor archiveFileProcessor;
-	
+
 	@Autowired
-	private ImporterFileProcessor updateFileProcessor;
-	
+	private ImportFileProcessor updateFileProcessor;
+
 	@Autowired
 	private PlatformTransactionManager transactionManager;
 
 	@Bean
-	public IntegrationFlow inboundFileIntegration(@Value("${inbound.file.poller.fixed.delay}") long period,
-			@Value("${inbound.file.poller.max.messages.per.poll}") int maxMessagesPerPoll, TaskExecutor taskExecutor,
-			MessageSource<File> fileReadingMessageSource) {
+	public IntegrationFlow inboundFileIntegration(@Value("${inbound.file.poller.fixed.delay}") long period, @Value("${inbound.file.poller.max.messages.per.poll}") int maxMessagesPerPoll,
+			TaskExecutor taskExecutor, MessageSource<File> fileReadingMessageSource) {
 		return IntegrationFlows
 				.from(fileReadingMessageSource,
-						c -> c.poller(Pollers.fixedDelay(period).taskExecutor(taskExecutor)
-								.maxMessagesPerPoll(maxMessagesPerPoll)
-								.transactionSynchronizationFactory(transactionSynchronizationFactory())
-								.transactional(transactionManager)))
-				.handle(updateFileProcessor)
-				.channel(IntegrationConfig.READ_CHANNEL)
-				.get();
+						c -> c.poller(Pollers.fixedDelay(period).taskExecutor(taskExecutor).maxMessagesPerPoll(maxMessagesPerPoll)
+								.transactionSynchronizationFactory(transactionSynchronizationFactory()).transactional(transactionManager)))
+				.handle(updateFileProcessor).channel(IntegrationConfig.READ_CHANNEL).get();
 	}
-	
+
 	@Bean
 	public IntegrationFlow processedFileIntegration() {
-		return IntegrationFlows
-				.from(IntegrationConfig.PROCESSED_CHANNEL)
-				.handle(archiveFileProcessor)
-				.get();
+		return IntegrationFlows.from(IntegrationConfig.PROCESSED_CHANNEL).handle(archiveFileProcessor).get();
 	}
-	
+
 	@Bean
 	public IntegrationFlow failedFileIntegration() {
-		return IntegrationFlows
-				.from(IntegrationConfig.FAILED_CHANNEL)
-				.handle(archiveFileProcessor)
-				.get();
+		return IntegrationFlows.from(IntegrationConfig.FAILED_CHANNEL).handle(archiveFileProcessor).get();
 	}
 
 	@Bean
@@ -111,18 +100,16 @@ public class FilePollingIntegrationFlow {
 	@Bean
 	public TransactionSynchronizationFactory transactionSynchronizationFactory() {
 		ExpressionParser parser = new SpelExpressionParser();
-		
+
 		ExpressionEvaluatingTransactionSynchronizationProcessor syncProcessor = new ExpressionEvaluatingTransactionSynchronizationProcessor();
 		syncProcessor.setBeanFactory(applicationContext.getAutowireCapableBeanFactory());
-		
-		syncProcessor.setAfterCommitExpression(parser.parseExpression(
-				"payload.renameTo(new java.io.File(@inboundProcessedDirectory.path + T(java.io.File).separator + payload.name ))"));
+
+		syncProcessor.setAfterCommitExpression(parser.parseExpression("payload.renameTo(new java.io.File(@inboundProcessedDirectory.path + T(java.io.File).separator + payload.name ))"));
 		syncProcessor.setAfterCommitChannel(processedChannel);
-		
-		syncProcessor.setAfterRollbackExpression(parser.parseExpression(
-				"payload.renameTo(new java.io.File(@inboundFailedDirectory.path + T(java.io.File).separator + payload.name ))"));
+
+		syncProcessor.setAfterRollbackExpression(parser.parseExpression("payload.renameTo(new java.io.File(@inboundFailedDirectory.path + T(java.io.File).separator + payload.name ))"));
 		syncProcessor.setAfterRollbackChannel(failedChannel);
-		
+
 		return new DefaultTransactionSynchronizationFactory(syncProcessor);
 	}
 
@@ -132,7 +119,7 @@ public class FilePollingIntegrationFlow {
 		source.setDirectory(this.inboundReadDirectory);
 		source.setScanner(directoryScanner);
 		source.setAutoCreateDirectory(true);
-		
+
 		return source;
 	}
 

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="${@environment.getProperty('layout.backoffice')}">
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
 <head>
-<title th:text="#{module.employee.session}"></title>
+<title th:utext="#{module.employee.session}"></title>
 </head>
 <body>
 	<th:block layout:fragment="content">
 		<section class="content">
 			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/component/alert :: custom"></th:block>
+				<th:block layout:insert="~{/common/adminlte/common/component/alert :: custom}"></th:block>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -55,7 +55,10 @@
 												</thead>
 												<tbody>
 													<tr th:each="row : ${sessions}">
-														<th scope="row" th:text="${row.principalEmployee.id}"></th>
+														<th scope="row">
+															<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=${row.principalEmployee.uuid})}" th:text="${row.principalEmployee.id}"></a>
+															<span sec:authorize="!hasAuthority('employee_read')" th:text="${row.principalEmployee.id}"></span>
+														</th>
 														<td>
 															<th:block th:each="row2 : ${row.sessionInformations}">
 																<span th:text="${row2.sessionId}"></span>

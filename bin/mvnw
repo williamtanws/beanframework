@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/sh
 # ----------------------------------------------------------------------------
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -129,7 +129,7 @@ if [ -z "$JAVA_HOME" ]; then
         javaExecutable="`readlink -f \"$javaExecutable\"`"
       fi
       javaHome="`dirname \"$javaExecutable\"`"
-      javaHome=`expr "$javaHome" : '\(.*\)/bin'`
+      javaHome=`expr "$javaHome" : '\(.*\)'`
       JAVA_HOME="$javaHome"
       export JAVA_HOME
     fi
@@ -142,7 +142,7 @@ if [ -z "$JAVACMD" ] ; then
       # IBM's JDK on AIX uses strange locations for the executables
       JAVACMD="$JAVA_HOME/jre/sh/java"
     else
-      JAVACMD="$JAVA_HOME/bin/java"
+      JAVACMD="$JAVA_HOME/java"
     fi
   else
     JAVACMD="`which java`"
@@ -242,14 +242,14 @@ else
                   echo " - Compiling MavenWrapperDownloader.java ..."
                 fi
                 # Compiling the Java class
-                ("$JAVA_HOME/bin/javac" "$javaClass")
+                ("$JAVA_HOME/javac" "$javaClass")
             fi
             if [ -e "$BASE_DIR/.mvn/wrapper/MavenWrapperDownloader.class" ]; then
                 # Running the downloader
                 if [ "$MVNW_VERBOSE" = true ]; then
                   echo " - Running MavenWrapperDownloader.java ..."
                 fi
-                ("$JAVA_HOME/bin/java" -cp .mvn/wrapper MavenWrapperDownloader "$MAVEN_PROJECTBASEDIR")
+                ("$JAVA_HOME/java" -cp .mvn/wrapper MavenWrapperDownloader "$MAVEN_PROJECTBASEDIR")
             fi
         fi
     fi

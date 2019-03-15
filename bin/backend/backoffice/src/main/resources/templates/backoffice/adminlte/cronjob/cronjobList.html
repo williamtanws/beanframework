@@ -1,60 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="${@environment.getProperty('layout.backoffice')}">
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
 <head>
-<title th:text="#{module.cronjob}"></title>
+<title th:utext="#{module.cronjob}"></title>
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<section class="content">
-			<!-- Search Form-->
-			<div class="row">
-				<th:block
-					layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.cronjob')}}, objectSearch=${cronjobSearch}, searchFields=${ {'id', 'jobName'} }, displayFields=${ {'id', 'jobName', 'startup', 'status', 'result'} } ,searchForm='/backoffice/adminlte/cronjob/cronjobList' )"></th:block>
-			</div>
-			<!-- Alert Notification-->
-			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/component/alert :: custom"></th:block>
-			</div>
+		<section class="content" th:with="cronjobName=#{module.cronjob.jobname}">
 			<!-- List Table-->
-			<div class="row"
-				th:with="startup=#{module.cronjob.startup}, jobName=#{module.cronjob.jobname}, status=#{module.cronjob.status}, result=#{module.cronjob.result}">
-				<th:block
-					layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.cronjob}, objectUpdate=${cronjobUpdate}, objectSearch=${cronjobSearch}, icon=@{${@environment.getProperty('module.cronjob.icon')}}, createAuthority='cronjob_create', updateAuthority='cronjob_update', listFields=${ {{'jobName', jobName}, {'startup', startup}, {'status', status}, {'result', result}} }, paginationAction=@{${@environment.getProperty('path.cronjob')}}, searchFields=${ {'id', 'jobName', 'startup', 'status', 'result'} }, updateForm='/backoffice/adminlte/cronjob/cronjobForm')"></th:block>
-			</div>
-			<!-- Create Modal-->
-			<th:block sec:authorize="hasAuthority('cronjob_create')"
-				layout:insert="/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.cronjob')}}, createObject=${cronjobCreate}, createForm='/backoffice/adminlte/common/component/general', createCheckId=${@environment.getProperty('path.api.cronjob.checkid')})"></th:block>
+			<th:block
+				layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.cronjob.icon')}}, title=#{module.cronjob}, objectDto=${cronjobDto}, createAuthority='cronjob_create', updateAuthority='cronjob_update', tableName='cronjob', listUrl=@{${@environment.getProperty('path.api.cronjob.page')}}, listFields=${ {{'id', 'ID'},{'name', cronjobName}} }, editFormAction=@{${@environment.getProperty('path.cronjob')}}, editForm=@{${@environment.getProperty('view.cronjob.form')}}, createButton='1', filterColumnIndex=${ {0, 1} } )}"></th:block>
 		</section>
-	</th:block>
-	<th:block layout:fragment="searchForm">
-		<div class="form-group">
-			<label for="startup" th:text="#{module.cronjob.startup}"></label>
-			<select class="form-control" name="startup">
-				<option></option>
-				<option value="1" th:selected="*{startup == true}" th:text="#{module.backoffice.yes}"></option>
-				<option value="0" th:selected="*{startup == false}" th:text="#{module.backoffice.no}"></option>
-			</select>
-			<span class="help-block"></span>
-		</div>
-		<div class="form-group">
-			<label for="status" th:text="#{module.cronjob.status}"></label>
-			<select class="form-control" name="status">
-				<option></option>
-				<option th:each="statusEnum : ${T(com.beanframework.cronjob.domain.CronjobEnum.Status).values()}" th:value="${statusEnum.name()}" th:selected="*{status} == ${statusEnum} ? true : false"
-					th:text="${statusEnum.toString()}"></option>
-			</select>
-			<span class="help-block"></span>
-		</div>
-		<div class="form-group">
-			<label for="result" th:text="#{module.cronjob.result}"></label>
-			<select class="form-control" name="result">
-				<option></option>
-				<option th:each="resultEnum : ${T(com.beanframework.cronjob.domain.CronjobEnum.Result).values()}" th:value="${resultEnum.name()}" th:selected="*{result} == ${resultEnum} ? true : false"
-					th:text="${resultEnum.toString()}"></option>
-			</select>
-			<span class="help-block"></span>
-		</div>
 	</th:block>
 
 </body>

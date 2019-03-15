@@ -1,31 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="${@environment.getProperty('layout.backoffice')}">
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
 <head>
-<title th:text="#{module.userpermission}"></title>
+<title th:utext="#{module.userpermission}"></title>
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.userpermission')}" method="post" th:object="${userpermissionUpdate}">
-			<input type="hidden" name="update" />
-			<input type="hidden" name="uuid" th:value="${userpermissionUpdate.uuid}" />
-			<input type="hidden" name="page" th:value="${pagination.getNumber()+1}">
-			<input type="hidden" name="size" th:value="${pagination.getSize()}">
-			<input type="hidden" name="direction" th:value="${direction}">
-			<input type="hidden" name="properties" th:value="${properties}">
-			<input type="hidden" name="userpermissionSearch.searchAll" th:value="${objectSearch.searchAll}" class="form-control">
-			<input type="hidden" th:each="field : ${searchFields}" th:name="'userpermissionSearch.'+${field}" th:value="${objectSearch.__${field}__}" class="form-control">
+		<th:block layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.userpermission')}}, deleteUuid=${userpermissionDto.uuid})}"></th:block>
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.userpermission')}" method="post" th:object="${userpermissionDto}">
+			<input type="hidden" name="create" th:if="*{uuid == null}" />
+			<input type="hidden" name="update" th:if="*{uuid != null}" />
+			<input type="hidden" name="uuid" th:value="${userpermissionDto.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block layout:insert="/backoffice/adminlte/common/component/delete :: button (deleteAuthority='userpermission_delete')"></th:block>
+									<th:block th:if="*{uuid != null}" layout:insert="~{/common/adminlte/common/component/delete :: button (deleteAuthority='userpermission_delete')}"></th:block>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="/backoffice/adminlte/common/component/refresh :: button (deleteAuthority='userpermission_delete')"></th:block>
-									<th:block layout:insert="/backoffice/adminlte/common/component/update :: button (updateAuthority='userpermission_update')"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/refresh :: button (deleteAuthority='userpermission_delete')}"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/update :: button (updateAuthority='userpermission_update')}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -44,10 +40,10 @@
 							<li>
 								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.backoffice.attribute}" onclick="changeTab('attribute')"></a>
 							</li>
-							<li>
+							<li th:if="*{uuid != null}">
 								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
 							</li>
-							<li>
+							<li th:if="*{uuid != null}">
 								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
@@ -55,7 +51,24 @@
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="/backoffice/adminlte/common/component/general :: general"></th:block>
+										<th:block layout:insert="~{/common/adminlte/common/component/general :: general}"></th:block>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="name" th:text="#{module.userpermission.name}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="sort" th:text="#{module.userpermission.sort}"></label>
+												<input type="text" class="form-control" name="sort" th:value="*{sort}" min="0" step="1" onkeypress="return isNumberKey(event)">
+												<span class="help-block"></span>
+											</div>
+										</div>
 									</div>
 								</div>
 								<!-- /.box-body -->
@@ -64,21 +77,21 @@
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="/backoffice/adminlte/common/component/attribute :: attribute"></th:block>
+										<th:block layout:insert="~{/common/adminlte/common/component/attribute :: attribute}"></th:block>
 									</div>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_history">
+							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/common/component/history :: history"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.userpermission.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_administration">
+							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="/backoffice/adminlte/common/component/administration :: administration"></th:block>
+									<th:block layout:insert="~{/common/adminlte/common/component/administration :: administration}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -94,6 +107,9 @@
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
 		        $('#update-form').validate({
+		        	onkeyup: function(element) {
+		                this.element(element);
+		            },
 		        	onfocusout: false,
 		            invalidHandler: function(form, validator) {
 		                var errors = validator.numberOfInvalids();
@@ -108,7 +124,7 @@
 		                        url: /*[[${@environment.getProperty('path.api.userpermission.checkid')}]]*/ ,
 		                        type: "get",
 		                        data: {
-		                            uuid: /*[[${userpermissionUpdate.uuid}]]*/ ,
+		                            uuid: /*[[${userpermissionDto.uuid}]]*/ ,
 		                            id: function() {
 		                                return $("#update-form input[name='id']").val();
 		                            }
@@ -141,11 +157,13 @@
 		                $(element).closest('.form-group').find('.help-block').html('');
 		                
 		                var id = $(element).closest('.tab-pane').attr('id');
-	                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','');
-	                    
+		                var noError = true;
 		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
-		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
+		                    noError = false;
 		                });
+		                if(noError){
+			                $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','black');
+		                }
 		            },
 		            errorPlacement: function(error, element) {
 		                element.closest('.form-group').find('.help-block').html(error.text());
@@ -156,8 +174,6 @@
 		    /*]]>*/
 		</script>
 
-		<th:block
-			layout:insert="/backoffice/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.userpermission')}}, objectSearch=${userpermissionSearch}, deleteUuid=${userpermissionUpdate.uuid})"></th:block>
 	</th:block>
 </body>
 </html>

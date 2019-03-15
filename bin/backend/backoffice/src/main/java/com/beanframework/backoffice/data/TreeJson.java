@@ -50,7 +50,7 @@ public class TreeJson {
 	public void setChildren(List<TreeJson> children) {
 		this.children = children;
 	}
-	
+
 	public String getTreePath() {
 		return treePath;
 	}
@@ -58,12 +58,11 @@ public class TreeJson {
 	public void setTreePath(String treePath) {
 		this.treePath = treePath;
 	}
-	
-	public boolean hasChildren(){
-		if(children == null || children.isEmpty()){
+
+	public boolean hasChildren() {
+		if (children == null || children.isEmpty()) {
 			return false;
-		}
-		else{
+		} else {
 			return true;
 		}
 	}

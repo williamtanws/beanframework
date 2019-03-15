@@ -9,7 +9,7 @@
 				<div class="container">
 					<div class="navbar-header">
 						<a th:href="@{${@environment.getProperty('console.webroot')}}" class="navbar-brand">
-							<b th:text="#{module.console}"></b>
+							<b th:utext="#{module.console}"></b>
 						</a>
 						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
 							<i class="fa fa-bars"></i>
@@ -55,7 +55,8 @@
 								</ul>
 							</li>
 
-							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.configuration') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.initialize') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.update') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.license') ? 'dropdown active':'dropdown'}">
+							<li
+								th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.configuration') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.initialize') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.update') || #httpServletRequest.requestURI == @environment.getProperty('path.console.platform.license') ? 'dropdown active':'dropdown'}">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 									<span th:text="#{module.console.platform}"></span>
 									<span class="caret"></span>
@@ -72,7 +73,8 @@
 									</li>
 								</ul>
 							</li>
-							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.cache') || #httpServletRequest.requestURI == @environment.getProperty('path.logging') ? 'dropdown active':'dropdown'}">
+							<li
+								th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.cache') || #httpServletRequest.requestURI == @environment.getProperty('path.logging') ? 'dropdown active':'dropdown'}">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 									<span th:text="#{module.console.monitor}"></span>
 									<span class="caret"></span>
@@ -89,10 +91,6 @@
 							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.admin') ? 'active':''}">
 								<a th:href="@{${@environment.getProperty('path.admin')}}" th:text="#{module.admin}"></a>
 							</li>
-							<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.documentation') ? 'active':''}">
-								<a th:href="@{${@environment.getProperty('path.documentation')}}" th:text="#{module.documentation}"></a>
-							</li>
-
 						</ul>
 					</div>
 					<!-- /.navbar-collapse -->
@@ -100,16 +98,19 @@
 					<div class="navbar-custom-menu">
 						<ul class="nav navbar-nav">
 							<!-- Notifications: style can be found in dropdown.less -->
-							<li class="dropdown notifications-menu">
+							<li class="dropdown notifications-menu" th:if="${@environment.getProperty('module.console.locale') != ''}">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<i class="fa fa-language"></i> <span th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}" th:text="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? ${#strings.arraySplit(locale,';')[1]} : ''"></span>
+									<i class="fa fa-language"></i>
+									<span th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}"
+										th:text="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? ${#strings.arraySplit(locale,';')[1]} : ''"></span>
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
 									<li>
 										<!-- inner menu: contains the actual data -->
 										<ul class="menu">
-											<li th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}" th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #f4f4f4':''">
+											<li th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}"
+												th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #f4f4f4':''">
 												<a href="#" th:onclick="changeLocale([[${#strings.arraySplit(locale,';')[0]}]])">
 													<i class="text-aqua"></i>
 													<span th:text="${#strings.arraySplit(locale,';')[1]}"></span>

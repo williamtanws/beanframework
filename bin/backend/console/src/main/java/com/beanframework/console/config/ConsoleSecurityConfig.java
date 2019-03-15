@@ -15,44 +15,48 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
-import com.beanframework.console.WebConsoleConstants;
+import com.beanframework.console.ConsoleWebConstants;
+import com.beanframework.console.security.ConsoleAuthProvider;
+import com.beanframework.console.security.ConsoleCsrfHeaderFilter;
+import com.beanframework.console.security.ConsoleSessionExpiredDetectingLoginUrlAuthenticationEntryPoint;
+import com.beanframework.console.security.ConsoleSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
-@Order(0)
+@Order(1)
 public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Value(WebConsoleConstants.Path.CONSOLE)
+	@Value(ConsoleWebConstants.Path.CONSOLE)
 	private String MODULE_CONSOLE_PATH;
 	
-	@Value(WebConsoleConstants.Path.CONSOLE_API)
+	@Value(ConsoleWebConstants.Path.CONSOLE_API)
 	private String MODULE_CONSOLE_PATH_API;
 	
-	@Value(WebConsoleConstants.Http.USERNAME_PARAM)
+	@Value(ConsoleWebConstants.Http.USERNAME_PARAM)
 	private String HTTP_USERNAME_PARAM;
 	
-	@Value(WebConsoleConstants.Http.PASSWORD_PARAM)
+	@Value(ConsoleWebConstants.Http.PASSWORD_PARAM)
 	private String HTTP_PASSWORD_PARAM;
 	
-	@Value(WebConsoleConstants.Http.ANTPATTERNS_PERMITALL)
+	@Value(ConsoleWebConstants.Http.ANTPATTERNS_PERMITALL)
 	private String[] HTTP_ANTPATTERNS_PERMITALL;
 	
-	@Value(WebConsoleConstants.Http.REMEMBERME_PARAM)
+	@Value(ConsoleWebConstants.Http.REMEMBERME_PARAM)
 	private String HTTP_REMEMBERME_PARAM;
 	
-	@Value(WebConsoleConstants.Http.REMEMBERME_COOKIENAME)
+	@Value(ConsoleWebConstants.Http.REMEMBERME_COOKIENAME)
 	private String HTTP_REMEMBERME_COOKIENAME;
 	
-	@Value(WebConsoleConstants.Http.REMEMBERME_TOKENVALIDITYSECONDS)
+	@Value(ConsoleWebConstants.Http.REMEMBERME_TOKENVALIDITYSECONDS)
 	private int HTTP_REMEMBERME_TOKENVALIDITYSECONDS;
 	
-	@Value(WebConsoleConstants.Path.LOGIN)
+	@Value(ConsoleWebConstants.Path.LOGIN)
 	private String PATH_CONSOLE_LOGIN;
 	
-	@Value(WebConsoleConstants.Path.LOGOUT)
+	@Value(ConsoleWebConstants.Path.LOGOUT)
 	private String PATH_CONSOLE_LOGOUT;
 	
-	@Value(WebConsoleConstants.Authority.CONSOLE)
+	@Value(ConsoleWebConstants.Authority.CONSOLE)
 	private String CONSOLE_ACCESS;
 	
 	@Autowired
@@ -89,7 +93,7 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
             	.logoutUrl(PATH_CONSOLE_LOGOUT)
             	.logoutSuccessUrl(PATH_CONSOLE_LOGIN+"?logout") 
             	.invalidateHttpSession(true)
-            	.deleteCookies(WebConsoleConstants.Cookie.REMEMBER_ME)
+            	.deleteCookies(ConsoleWebConstants.Cookie.REMEMBER_ME)
                	.permitAll()
         		.and()
         	.exceptionHandling()
@@ -114,8 +118,8 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
     	auth.authenticationProvider(authProvider);
     }
     
-	public CsrfHeaderFilter csrfHeaderFilter(String path){
-    	CsrfHeaderFilter csrfHeaderFilter = new CsrfHeaderFilter();
+	public ConsoleCsrfHeaderFilter csrfHeaderFilter(String path){
+    	ConsoleCsrfHeaderFilter csrfHeaderFilter = new ConsoleCsrfHeaderFilter();
     	csrfHeaderFilter.setPath(path);
     	return csrfHeaderFilter;
     }
@@ -128,6 +132,6 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
     public AuthenticationEntryPoint consoleAuthenticationEntryPoint() {
-        return new SessionExpiredDetectingLoginUrlAuthenticationEntryPoint(PATH_CONSOLE_LOGIN);
+        return new ConsoleSessionExpiredDetectingLoginUrlAuthenticationEntryPoint(PATH_CONSOLE_LOGIN);
     }
 }

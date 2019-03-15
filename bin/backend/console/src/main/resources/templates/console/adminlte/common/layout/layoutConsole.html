@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE" th:text="#{module.console}"></title>
+<title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE" th:utext="#{module.console}"></title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <!-- Bootstrap 3.3.7 -->
@@ -58,12 +58,6 @@
 <!-- DataTables -->
 <script th:src="@{/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
-<style>
-.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
- }
-</style>
 </head>
 <body class="hold-transition skin-blue layout-top-nav">
 	<!-- Site wrapper -->
@@ -121,12 +115,18 @@
 			sessionStorage.setItem("tabUrl", '#tab_'+tab);
 		}
 		
-		function activaTab(){
+		function activeTab(){
 			if(window.location.hash != ''){
 				var baseUrl = window.location.href.split('#')[0];
 				window.location.replace( baseUrl + window.location.hash );
 				
-			    $('.nav-tabs a[href="' + window.location.hash + '"]').tab('show');
+				if($('.nav-tabs a[href="' + window.location.hash + '"]').length == 0) {
+					sessionStorage.removeItem("tabUrl");
+					window.location.hash = '';
+				}
+				else{
+				    $('.nav-tabs a[href="' + window.location.hash + '"]').tab('show');
+				}
 			}
 			else{
 				var tabUrl = sessionStorage.getItem("tabUrl");
@@ -134,14 +134,19 @@
 					var baseUrl = window.location.href.split('#')[0];
 					window.location.replace( baseUrl + tabUrl );
 					
-				    $('.nav-tabs a[href="' + tabUrl + '"]').tab('show');
 				    
-				    sessionStorage.removeItem("tabUrl");
+				    if($('.nav-tabs a[href="' + tabUrl + '"]').length == 0) {
+						sessionStorage.removeItem("tabUrl");
+						window.location.hash = '';
+					}
+					else{
+						$('.nav-tabs a[href="' + tabUrl + '"]').tab('show');
+					}
 				}
 			}
 		}
 		
-		activaTab();
+		activeTab();
 		
 		$(document).ready(function() {
 			

@@ -1,26 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="${@environment.getProperty('layout.backoffice')}">
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
 <head>
-<title th:text="#{module.employee}"></title>
+<title th:utext="#{module.employee}"></title>
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<section class="content">
-			<!-- Search Form-->
-			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/component/search :: search (searchAction=@{${@environment.getProperty('path.employee')}}, objectSearch=${employeeSearch}, searchFields=${ {'id'} }, displayFields=${ {'id'} } )"></th:block>
-			</div>
-			<!-- Alert Notification-->
-			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/component/alert :: custom"></th:block>
-			</div>
+		<section class="content" th:with="employeeName=#{module.employee.name}">
 			<!-- List Table-->
-			<div class="row">
-				<th:block layout:insert="/backoffice/adminlte/common/component/list :: list (title=#{module.employee}, objectUpdate=${employeeUpdate}, objectSearch=${employeeSearch}, icon=@{${@environment.getProperty('module.employee.icon')}}, createAuthority='employee_create', updateAuthority='employee_update', paginationAction=@{${@environment.getProperty('path.employee')}}, searchFields=${ {'id'} }, updateForm='/backoffice/adminlte/employee/employeeForm')"></th:block>
-			</div>
-			<!-- Create Modal-->
-			<th:block sec:authorize="hasAuthority('employee_create')" layout:insert="/backoffice/adminlte/common/component/create :: create (createAction=@{${@environment.getProperty('path.employee')}}, createObject=${employeeCreate}, createForm='/backoffice/adminlte/employee/employeeForm', createCheckId=${@environment.getProperty('path.api.employee.checkid')})"></th:block>
+			<th:block
+				layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.employee.icon')}}, title=#{module.employee}, objectDto=${employeeDto}, createAuthority='employee_create', updateAuthority='employee_update', tableName='employee', listUrl=@{${@environment.getProperty('path.api.employee.page')}}, listFields=${ {{'id', 'ID'},{'name', employeeName}} }, editFormAction=@{${@environment.getProperty('path.employee')}}, editForm=@{${@environment.getProperty('view.employee.form')}}, createButton='1', filterColumnIndex=${ {0, 1} } )}"></th:block>
 		</section>
 	</th:block>
 </body>

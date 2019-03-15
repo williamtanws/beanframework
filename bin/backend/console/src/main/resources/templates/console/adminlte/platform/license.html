@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="${@environment.getProperty('layout.console')}">
+	layout:decorate="~{${@environment.getProperty('layout.console')}}">
 <head>
-<title th:text="#{module.console.platform.license}"></title>
+<title th:utext="#{module.console.platform.license}"></title>
 <style>
 .license {
     height: auto;
@@ -79,7 +79,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 										</div>
 									</div>
 									<div class="col-xs-4 col-md-offset-8" th:if="${license.value == 'false' || license.uuid == null}">
-										<button type="submit" class="btn btn-block btn-primary" th:text="#{module.console.submit}"></button>
+										<button type="submit" class="btn btn-block btn-success" th:text="#{module.console.submit}"></button>
 									</div>
 									<div class="col-xs-12 text-center" th:if="${license.value == 'true'}" style="font-size: 16px">
 										<span class="fa fa-check-square text-green"></span>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE" th:text="#{module.backoffice}"></title>
+<title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE" th:utext="#{module.backoffice}"></title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <!-- Bootstrap 3.3.7 -->
@@ -18,6 +18,8 @@
 <link rel="stylesheet" th:href="@{/static/adminlte/bower_components/select2/dist/css/select2.min.css}">
 <!-- DataTables -->
 <link rel="stylesheet" th:href="@{/static/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css}">
+<!-- Bootstrap Datetimepicker -->
+<link rel="stylesheet" th:href="@{/static/common/plugin/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css}">
 <!-- Theme style -->
 <link rel="stylesheet" th:href="@{/static/adminlte/dist/css/AdminLTE.min.css}">
 <!-- iCheck -->
@@ -61,11 +63,18 @@
 <script th:src="@{/static/adminlte/plugins/iCheck/icheck.min.js}"></script>
 <!-- PACE -->
 <script th:src="@{/static/adminlte/plugins/pace/pace.min.js}"></script>
-<!-- Bootstrap Validator -->
-<script th:src="@{/static/common/js/jquery.validate.min.js}"></script>
+<!-- Jquery Validator -->
+<script th:src="@{/static/common/js/jquery.validate.js}"></script>
 <!-- DataTables -->
 <script th:src="@{/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<!-- Bootstrap Datetimepicker -->
+<script th:src="@{/static/common/plugin/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js}"></script>
+<!-- CK Editor 
+<script th:src="@{/static/adminlte/bower_components/ckeditor/ckeditor.js}"></script>
+-->
+<!-- TinyMCE -->
+<script th:src="@{/static/adminlte/bower_components/tinymce/js/tinymce/tinymce.min.js}"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini" id="bodyOuter" style="display: none">
 	<!-- Site wrapper -->
@@ -103,6 +112,12 @@
 		/*<![CDATA[*/		
 		/* Global javascript here*/
 		
+	    $(function () {
+	        //Initialize Select2 Elements
+	        $('.select2').select2()
+	    })
+	  
+	  
 		if (sessionStorage.getItem("sidebar-toggle-collapsed")) {
 		    $("body").addClass('sidebar-collapse')
 		}
@@ -143,12 +158,18 @@
 			sessionStorage.setItem("tabUrl", '#tab_'+tab);
 		}
 		
-		function activaTab(){
+		function activeTab(){
 			if(window.location.hash != ''){
 				var baseUrl = window.location.href.split('#')[0];
 				window.location.replace( baseUrl + window.location.hash );
 				
-			    $('.nav-tabs a[href="' + window.location.hash + '"]').tab('show');
+				if($('.nav-tabs a[href="' + window.location.hash + '"]').length == 0) {
+					sessionStorage.removeItem("tabUrl");
+					window.location.hash = '';
+				}
+				else{
+				    $('.nav-tabs a[href="' + window.location.hash + '"]').tab('show');
+				}
 			}
 			else{
 				var tabUrl = sessionStorage.getItem("tabUrl");
@@ -156,14 +177,19 @@
 					var baseUrl = window.location.href.split('#')[0];
 					window.location.replace( baseUrl + tabUrl );
 					
-				    $('.nav-tabs a[href="' + tabUrl + '"]').tab('show');
 				    
-				    sessionStorage.removeItem("tabUrl");
+				    if($('.nav-tabs a[href="' + tabUrl + '"]').length == 0) {
+						sessionStorage.removeItem("tabUrl");
+						window.location.hash = '';
+					}
+					else{
+						$('.nav-tabs a[href="' + tabUrl + '"]').tab('show');
+					}
 				}
 			}
 		}
 		
-		activaTab();
+		activeTab();
 		
 		function isNumberKey(evt)
 		{
@@ -203,6 +229,12 @@
 		    }
 		
 		    setInterval(checkTimeout, timeout + 5000);
+		    
+		    $('.datetimepicker').each(function(){
+			    $(this).datetimepicker({
+			    	format: 'DD/MM/YYYY hh:mm A'
+			    });
+			});
 		});
 		
 		/*]]>*/

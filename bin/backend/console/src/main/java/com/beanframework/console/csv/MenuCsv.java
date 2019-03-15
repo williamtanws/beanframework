@@ -3,40 +3,51 @@ package com.beanframework.console.csv;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.ParseInt;
-import org.supercsv.cellprocessor.constraint.UniqueHashCode;
+import org.supercsv.cellprocessor.Trim;
+import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class MenuCsv extends AbstractCsv {
 
-	private int sort;
+	private String name;
+	private Integer sort;
 	private String icon;
 	private String path;
 	private String target;
-	private boolean enabled;
+	private Boolean enabled;
 	private String parent;
 	private String userGroupIds;
-	private String dynamicField;
-	
+	private String dynamicFieldSlotIds;
+
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
-				new UniqueHashCode(), // ID
-				new ParseInt(), // sort
-				new Optional(), // icon
-				new Optional(), // path
-				new Optional(), // target
-				new ParseBool(), // enabled
-				new Optional(), // parent
-				new Optional(), // userGroupIds
-				new Optional() // dynamicField
+				new NotNull(new Trim()), // ID
+				new Optional(new Trim()), // name
+				new Optional(new Trim(new ParseInt())), // sort
+				new Optional(new Trim()), // icon
+				new Optional(new Trim()), // path
+				new Optional(new Trim()), // target
+				new Optional(new Trim(new ParseBool())), // enabled
+				new Optional(new Trim()), // parent
+				new Optional(new Trim()), // userGroupIds
+				new Optional(new Trim()) // dynamicFieldSlotIds
 		};
 		return processors;
 	}
 
-	public int getSort() {
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(int sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 
@@ -64,11 +75,11 @@ public class MenuCsv extends AbstractCsv {
 		this.target = target;
 	}
 
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -88,11 +99,11 @@ public class MenuCsv extends AbstractCsv {
 		this.userGroupIds = userGroupIds;
 	}
 
-	public String getDynamicField() {
-		return dynamicField;
+	public String getDynamicFieldSlotIds() {
+		return dynamicFieldSlotIds;
 	}
 
-	public void setDynamicField(String dynamicField) {
-		this.dynamicField = dynamicField;
+	public void setDynamicFieldSlotIds(String dynamicFieldSlotIds) {
+		this.dynamicFieldSlotIds = dynamicFieldSlotIds;
 	}
 }

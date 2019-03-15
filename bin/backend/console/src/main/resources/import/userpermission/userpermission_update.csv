@@ -1,12 +1,20 @@
-id,sort,dynamicField
-language,0,userpermission_name_en=Language;userpermission_name_cn=语言
-userpermission,1,userpermission_name_en=User Permission;userpermission_name_cn=用户权利
-userright,2,userpermission_name_en=User Right;userpermission_name_cn=用户权限
-usergroup,3,userpermission_name_en=User Group;userpermission_name_cn=用户组
-menu,4,userpermission_name_en=Menu;userpermission_name_cn=菜单
-employeesession,5,userpermission_name_en=Employee Session;userpermission_name_cn=员工会话
-employee,6,userpermission_name_en=Employee;userpermission_name_cn=雇员
-customer,7,userpermission_name_en=Customer;userpermission_name_cn=顾客
-cronjob,8,userpermission_name_en=Cronjob;userpermission_name_cn=定时任务
-filemanager,9,userpermission_name_en=File Manager;userpermission_name_cn=文件管理器
-email,10,userpermission_name_en=Email;userpermission_name_cn=电子邮件
+id,name,sort,dynamicFieldSlotIds
+enumeration			,Enumeration			,9	,userpermission_0_name_en=Enumeration;userpermission_1_name_cn=列举
+dynamicfield		,Dynamic Field			,10	,userpermission_0_name_en=Dynamic Field;userpermission_1_name_cn=动态场
+dynamicfieldslot	,Dynamic Field Slot		,11	,userpermission_0_name_en=Dynamic Field Slot;userpermission_1_name_cn=动态场槽
+dynamicfieldtemplate,Dynamic Field Template	,12	,userpermission_0_name_en=Dynamic Field Template;userpermission_1_name_cn=动态模板
+language			,Language				,30	,userpermission_0_name_en=Language;userpermission_1_name_cn=语言
+userpermission		,User Permission		,40	,userpermission_0_name_en=User Permission;userpermission_1_name_cn=用户权利
+userright			,User Right				,50	,userpermission_0_name_en=User Right;userpermission_1_name_cn=用户权限
+usergroup			,User Group				,60	,userpermission_0_name_en=User Group;userpermission_1_name_cn=用户组
+menu				,Menu					,70	,userpermission_0_name_en=Menu;userpermission_1_name_cn=菜单
+employeesession		,Employee Session		,80	,userpermission_0_name_en=Employee Session;userpermission_1_name_cn=员工会话
+employee			,Employee				,90	,userpermission_0_name_en=Employee;userpermission_1_name_cn=雇员
+customer			,Customer				,100,userpermission_0_name_en=Customer;userpermission_1_name_cn=顾客
+cronjob				,Cronjob				,110,userpermission_0_name_en=Cronjob;userpermission_1_name_cn=定时任务
+filemanager			,File Manager			,120,userpermission_0_name_en=File Manager;userpermission_1_name_cn=文件管理器
+email				,Email					,130,userpermission_0_name_en=Email;userpermission_1_name_cn=电子邮件
+auditor				,Auditor				,140,userpermission_0_name_en=Auditor;userpermission_1_name_cn=稽核员
+media				,Media					,150,userpermission_0_name_en=Media;userpermission_1_name_cn=媒体
+site				,Site					,160,userpermission_0_name_en=Site;userpermission_1_name_cn=网站
+comment				,Comment				,170,userpermission_0_name_en=Comment;userpermission_1_name_cn=留言

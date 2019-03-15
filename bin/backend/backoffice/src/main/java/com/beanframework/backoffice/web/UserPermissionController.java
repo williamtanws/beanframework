@@ -2,15 +2,8 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,16 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.backoffice.WebBackofficeConstants;
-import com.beanframework.backoffice.WebUserPermissionConstants;
-import com.beanframework.backoffice.data.UserPermissionSearch;
-import com.beanframework.backoffice.data.UserPermissionSpecification;
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.backoffice.UserPermissionWebConstants;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.common.utils.ParamUtils;
-import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.service.UserPermissionFacade;
+import com.beanframework.core.data.UserPermissionDto;
+import com.beanframework.core.facade.UserPermissionFacade;
 
 @Controller
 public class UserPermissionController extends AbstractController {
@@ -38,134 +27,60 @@ public class UserPermissionController extends AbstractController {
 	@Autowired
 	private UserPermissionFacade userPermissionFacade;
 
-	@Autowired
-	private LocaleMessageService localeMessageService;
-
-	@Value(WebUserPermissionConstants.Path.USERPERMISSION)
+	@Value(UserPermissionWebConstants.Path.USERPERMISSION)
 	private String PATH_USERPERMISSION;
 
-	@Value(WebUserPermissionConstants.View.LIST)
+	@Value(UserPermissionWebConstants.View.LIST)
 	private String VIEW_USERPERMISSION_LIST;
 
-	@Value(WebUserPermissionConstants.LIST_SIZE)
-	private int MODULE_USERPERMISSION_LIST_SIZE;
-
-	private Page<UserPermission> getPagination(UserPermissionSearch userPermissionSearch, Model model, @RequestParam Map<String, Object> requestParams)
+	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION)
+	public String list(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
-		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
-		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
-		size = size <= 0 ? MODULE_USERPERMISSION_LIST_SIZE : size;
+		model.addAttribute("create", false);
 
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.PROPERTIES));
-		String[] properties = StringUtils.isBlank(propertiesStr) ? null
-				: propertiesStr.split(WebBackofficeConstants.Pagination.PROPERTIES_SPLIT);
+		if (userpermissionDto.getUuid() != null) {
 
-		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
-		Direction direction = StringUtils.isBlank(directionStr) ? Direction.ASC : Direction.fromString(directionStr);
+			UserPermissionDto existsDto = userPermissionFacade.findOneByUuid(userpermissionDto.getUuid());
 
-		if (properties == null) {
-			properties = new String[1];
-			properties[0] = UserPermission.CREATED_DATE;
-			direction = Sort.Direction.DESC;
-		}
-
-		Page<UserPermission> pagination = userPermissionFacade.findPage(
-				UserPermissionSpecification.findByCriteria(userPermissionSearch),
-				PageRequest.of(page <= 0 ? 0 : page - 1, size <= 0 ? 1 : size, direction, properties));
-
-		model.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
-		model.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-
-		return pagination;
-	}
-
-	private RedirectAttributes setPaginationRedirectAttributes(RedirectAttributes redirectAttributes,
-			@RequestParam Map<String, Object> requestParams, UserPermissionSearch userpermissionSearch) {
-		
-		userpermissionSearch.setSearchAll((String)requestParams.get("userpermissionSearch.searchAll"));
-		userpermissionSearch.setId((String)requestParams.get("userpermissionSearch.id"));
-		
-		int page = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.PAGE));
-		page = page <= 0 ? 1 : page;
-		int size = ParamUtils.parseInt(requestParams.get(WebBackofficeConstants.Pagination.SIZE));
-		size = size <= 0 ? MODULE_USERPERMISSION_LIST_SIZE : size;
-
-		String propertiesStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.PROPERTIES));
-		String directionStr = ParamUtils.parseString(requestParams.get(WebBackofficeConstants.Pagination.DIRECTION));
-
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PAGE, page);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.SIZE, size);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.PROPERTIES, propertiesStr);
-		redirectAttributes.addAttribute(WebBackofficeConstants.Pagination.DIRECTION, directionStr);
-		redirectAttributes.addAttribute("searchAll", userpermissionSearch.getSearchAll());
-		redirectAttributes.addAttribute("id", userpermissionSearch.getId());
-
-		return redirectAttributes;
-	}
-
-	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.CREATE)
-	public UserPermission populateUserPermissionCreate(HttpServletRequest request) throws Exception {
-		return userPermissionFacade.create();
-	}
-
-	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE)
-	public UserPermission populateUserPermissionForm(HttpServletRequest request) throws Exception {
-		return userPermissionFacade.create();
-	}
-
-	@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH)
-	public UserPermissionSearch populateUserPermissionSearch(HttpServletRequest request) {
-		return new UserPermissionSearch();
-	}
-
-	@GetMapping(value = WebUserPermissionConstants.Path.USERPERMISSION)
-	public String list(
-			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
-			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE) UserPermission userpermissionUpdate,
-			Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-
-		model.addAttribute(WebBackofficeConstants.PAGINATION, getPagination(userpermissionSearch, model, requestParams));
-
-		if (userpermissionUpdate.getUuid() != null) {
-
-			UserPermission existingUserPermission = userPermissionFacade.findOneDtoByUuid(userpermissionUpdate.getUuid());
-
-			if (existingUserPermission != null) {
-				model.addAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE, existingUserPermission);
+			if (existsDto != null) {
+				model.addAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO, existsDto);
 			} else {
-				userpermissionUpdate.setUuid(null);
-				model.addAttribute(WebBackofficeConstants.Model.ERROR,
-						localeMessageService.getMessage(WebBackofficeConstants.Locale.RECORD_UUID_NOT_FOUND));
+				userpermissionDto.setUuid(null);
+				model.addAttribute(BackofficeWebConstants.Model.ERROR, localeMessageService.getMessage(BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND));
 			}
 		}
 
 		return VIEW_USERPERMISSION_LIST;
 	}
 
-	@PostMapping(value = WebUserPermissionConstants.Path.USERPERMISSION, params = "create")
-	public RedirectView create(
-			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
-			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.CREATE) UserPermission userpermissionCreate,
-			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "create")
+	public String createView(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model) throws Exception {
 
-		if (userpermissionCreate.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
-					"Create new record doesn't need UUID.");
+		userpermissionDto = userPermissionFacade.createDto();
+		model.addAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO, userpermissionDto);
+		model.addAttribute("create", true);
+
+		return VIEW_USERPERMISSION_LIST;
+	}
+
+	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "create")
+	public RedirectView create(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
+
+		if (userpermissionDto.getUuid() != null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
 		} else {
 
 			try {
-				userpermissionCreate = userPermissionFacade.createDto(userpermissionCreate);
+				userpermissionDto = userPermissionFacade.create(userpermissionDto);
 
-				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(UserPermissionDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(UserPermission.UUID, userpermissionCreate.getUuid());
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, userpermissionSearch);
+		redirectAttributes.addAttribute(UserPermissionDto.UUID, userpermissionDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -173,28 +88,23 @@ public class UserPermissionController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebUserPermissionConstants.Path.USERPERMISSION, params = "update")
-	public RedirectView update(
-			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
-			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE) UserPermission userpermissionUpdate,
-			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "update")
+	public RedirectView update(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (userpermissionUpdate.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(WebBackofficeConstants.Model.ERROR,
-					"Update record needed existing UUID.");
+		if (userpermissionDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
 			try {
-				userpermissionUpdate = userPermissionFacade.updateDto(userpermissionUpdate);
+				userpermissionDto = userPermissionFacade.update(userpermissionDto);
 
-				addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.SAVE_SUCCESS);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
+				addErrorMessage(UserPermissionDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
 		}
 
-		redirectAttributes.addAttribute(UserPermission.UUID, userpermissionUpdate.getUuid());
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, userpermissionSearch);
+		redirectAttributes.addAttribute(UserPermissionDto.UUID, userpermissionDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -202,25 +112,19 @@ public class UserPermissionController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = WebUserPermissionConstants.Path.USERPERMISSION, params = "delete")
-	public RedirectView delete(
-			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.SEARCH) UserPermissionSearch userpermissionSearch,
-			@ModelAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE) UserPermission userpermissionUpdate,
-			Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-			RedirectAttributes redirectAttributes) {
+	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "delete")
+	public RedirectView delete(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {
 
-			userPermissionFacade.delete(userpermissionUpdate.getUuid());
+			userPermissionFacade.delete(userpermissionDto.getUuid());
 
-			addSuccessMessage(redirectAttributes, WebBackofficeConstants.Locale.DELETE_SUCCESS);
+			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 		} catch (BusinessException e) {
-			addErrorMessage(UserPermission.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(WebUserPermissionConstants.ModelAttribute.UPDATE,
-					userpermissionUpdate);
+			addErrorMessage(UserPermissionDto.class, e.getMessage(), bindingResult, redirectAttributes);
+			redirectAttributes.addFlashAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO, userpermissionDto);
 		}
-
-		setPaginationRedirectAttributes(redirectAttributes, requestParams, userpermissionSearch);
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);

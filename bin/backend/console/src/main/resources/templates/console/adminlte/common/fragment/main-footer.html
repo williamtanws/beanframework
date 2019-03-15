@@ -4,7 +4,7 @@
 </head>
 <body>
 	<th:block th:fragment="footer">
-		<footer class="main-footer" th:utext="@{${@environment.getProperty('module.console.copyright')}}"></footer>
+		<footer class="main-footer" th:utext="${@Config.get('footer')}"></footer>
 	</th:block>
 </body>
 </html>
