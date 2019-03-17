@@ -3,6 +3,7 @@ package com.beanframework.core.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,12 @@ public class DtoAuditorConverter extends AbstractDtoConverter<Auditor, AuditorDt
 	private AuditorDto convert(Auditor source, AuditorDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			source = (Auditor) Hibernate.unproxy( source );
+			
+			prototype.setUuid(source.getUuid());
+			prototype.setId(source.getId());
+			prototype.setCreatedDate(source.getCreatedDate());
+			prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 			prototype.setName(source.getName());
 

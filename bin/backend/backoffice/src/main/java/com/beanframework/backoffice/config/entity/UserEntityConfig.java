@@ -9,11 +9,13 @@ import com.beanframework.core.converter.EntityEmployeeConverter;
 import com.beanframework.core.converter.EntityUserGroupConverter;
 import com.beanframework.core.converter.EntityUserPermissionConverter;
 import com.beanframework.core.converter.EntityUserRightConverter;
+import com.beanframework.core.converter.EntityVendorConverter;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
+import com.beanframework.vendor.domain.Vendor;
 
 @Configuration
 public class UserEntityConfig {
@@ -84,6 +86,20 @@ public class UserEntityConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(entityCustomerConverter());
 		mapping.setTypeCode(Customer.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
+	public EntityVendorConverter entityVendorConverter() {
+		return new EntityVendorConverter();
+	}
+
+	@Bean
+	public ConverterMapping entityVendorConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(entityVendorConverter());
+		mapping.setTypeCode(Vendor.class.getSimpleName());
 
 		return mapping;
 	}

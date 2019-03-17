@@ -19,7 +19,17 @@
 					</th:block>
 					<th:block th:if="${field.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).EDITOR}">
 						<textarea th:id="'editor'+*{uuid}" rows="10" cols="80" class="form-control" th:name="'fields['+${itrStat.index}+'].value'" th:text="${field.value}" th:required="${field.dynamicField.required}"></textarea>
-						
+						<script th:inline="javascript">
+						/*<![CDATA[*/
+							
+							var editorId = /*[[*{uuid}]]*/;
+							editorId = 'editor'+ editorId;
+							
+							CKEDITOR.replace(editorId, {
+								customConfig: '/static/backoffice/ckeditor/config.js'
+							});
+						/*]]>*/
+						</script>
 					</th:block>
 					<th:block th:if="${field.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).SELECT}">
 						<select class="form-control select2" th:name="'fields['+${itrStat.index}+'].value'" style="width: 100%;" th:required="${field.dynamicField.required}">

@@ -17,6 +17,7 @@
 
 	<properties>
 		<beanframework.version>2.0.0</beanframework.version>
+		<dms.version>1.0.0</dms.version>
 		<ppm.version>1.0.0</ppm.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
@@ -42,6 +43,18 @@
 			<artifactId>cockpit</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- DMS -->
+		<dependency>
+			<groupId>com.oceanetz.pcrisks</groupId>
+			<artifactId>dmsconsole</artifactId>
+			<version>${dms.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oceanetz.pcrisks</groupId>
+			<artifactId>dmsbackoffice</artifactId>
+			<version>${dms.version}</version>
+		</dependency>
+		<!-- PPM -->
 		<dependency>
 			<groupId>com.oceanetz.pcrisks</groupId>
 			<artifactId>ppmconsole</artifactId>

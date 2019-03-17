@@ -11,6 +11,7 @@ import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.MediaDto;
+import com.beanframework.core.data.UserDto;
 import com.beanframework.media.domain.Media;
 
 public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> implements DtoConverter<Media, MediaDto> {
@@ -47,6 +48,7 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 			prototype.setDescription(source.getDescription());
 			prototype.setUrl(source.getUrl());
 			prototype.setLocation(source.getLocation());
+			prototype.setUser(modelService.getDto(source.getUser(), UserDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

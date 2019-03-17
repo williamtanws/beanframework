@@ -105,7 +105,7 @@ public class SiteServiceImpl implements SiteService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		List<Object[]> histories = modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Site.class);
+		List<Object[]> histories = modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Site.class);
 		for (Object[] objects : histories) {
 			Site site = (Site) objects[0];
 			Hibernate.initialize(site.getLastModifiedBy());

@@ -18,6 +18,7 @@ employeesession		,Employee Session		,10	,fa fa-clock-o		,/backoffice/employee/se
 usergroup			,User Group				,20	,fa fa-users		,/backoffice/usergroup				,,true,user			,employeegroup				,menu_0_name_en=User Group;menu_1_name_cn=用户组
 employee			,Employee				,30	,fa fa-user			,/backoffice/employee				,,true,user			,employeegroup				,menu_0_name_en=Employee;menu_1_name_cn=雇员
 customer			,Customer				,40	,fa fa-user			,/backoffice/customer				,,true,user			,customergroup				,menu_0_name_en=Customer;menu_1_name_cn=顾客
+vendor				,Vendor					,50	,fa fa-user			,/backoffice/vendor					,,true,user			,vendorgroup				,menu_0_name_en=Vendor;menu_1_name_cn=供应商
 multimedia			,Multimedia				,30	,fa fa-file-image-o	,									,,true,				,employeegroup				,menu_0_name_en=Multimedia;menu_1_name_cn=多媒体
 filemanager			,File Manager			,10	,fa fa-folder		,/backoffice/filemanager			,,true,multimedia	,employeegroup				,menu_0_name_en=File Manager;menu_1_name_cn=文件管理器
 media				,Media					,20	,fa fa-file-image-o	,/backoffice/media					,,true,multimedia	,employeegroup				,menu_0_name_en=Media;menu_1_name_cn=媒体

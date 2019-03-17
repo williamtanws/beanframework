@@ -28,6 +28,7 @@ import com.beanframework.console.listener.UserAuthorityImportListener;
 import com.beanframework.console.listener.UserGroupImportListener;
 import com.beanframework.console.listener.UserPermissionImportListener;
 import com.beanframework.console.listener.UserRightImportListener;
+import com.beanframework.console.listener.VendorImportListener;
 import com.beanframework.console.registry.ImportListenerRegistry;
 
 @Configuration
@@ -108,6 +109,11 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	public CustomerImportListener customerImportListener() {
 		return new CustomerImportListener();
 	}
+	
+	@Bean
+	public VendorImportListener vendorImportListener() {
+		return new VendorImportListener();
+	}
 
 	@Bean
 	public CronjobImportListener cronjobImportListener() {
@@ -138,6 +144,9 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.CustomerImport.KEY))
 			importListenerRegistry.addListener(customerImportListener());
+
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.VendorImport.KEY))
+			importListenerRegistry.addListener(vendorImportListener());
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.EnumerationImport.KEY))
 			importListenerRegistry.addListener(enumerationImportListener());

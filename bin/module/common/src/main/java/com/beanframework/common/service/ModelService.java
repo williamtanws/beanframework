@@ -38,7 +38,7 @@ public interface ModelService {
 	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, boolean initialize,
 			Class modelClass) throws Exception;
 
-	List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
+	List<Object[]> findHistories(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
 			throws Exception;
 
 	int findCountHistory(boolean b, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer start, Integer length, Class modelClass) throws Exception;

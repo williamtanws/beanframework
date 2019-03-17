@@ -105,7 +105,7 @@ public class LanguageServiceImpl implements LanguageService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		List<Object[]> histories = modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Language.class);
+		List<Object[]> histories = modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Language.class);
 		for (Object[] objects : histories) {
 			Language language = (Language) objects[0];
 			Hibernate.initialize(language.getLastModifiedBy());
