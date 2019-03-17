@@ -3,8 +3,10 @@ package com.beanframework.platform.config;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -173,4 +175,14 @@ public class PlatformMvcConfig implements WebMvcConfigurer {
 //	    converters.add(arrayHttpMessageConverter);
 	}
 
+	@Bean
+	public VelocityEngine velocityEngine() throws Exception {
+	    Properties properties = new Properties();
+	    properties.setProperty("input.encoding", "UTF-8");
+	    properties.setProperty("output.encoding", "UTF-8");
+	    properties.setProperty("resource.loader", "class");
+	    properties.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+	    VelocityEngine velocityEngine = new VelocityEngine(properties);
+	    return velocityEngine;
+	}
 }

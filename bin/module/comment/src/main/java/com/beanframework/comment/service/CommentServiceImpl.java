@@ -107,7 +107,7 @@ public class CommentServiceImpl implements CommentService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		List<Object[]> histories = modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Comment.class);
+		List<Object[]> histories = modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Comment.class);
 		for (Object[] objects : histories) {
 			Comment comment = (Comment) objects[0];
 			Hibernate.initialize(comment.getLastModifiedBy());

@@ -15,6 +15,7 @@ import com.beanframework.core.converter.DtoUserPermissionConverter;
 import com.beanframework.core.converter.DtoUserPermissionFieldConverter;
 import com.beanframework.core.converter.DtoUserRightConverter;
 import com.beanframework.core.converter.DtoUserRightFieldConverter;
+import com.beanframework.core.converter.DtoVendorConverter;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.data.UserAuthorityDto;
@@ -26,6 +27,7 @@ import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserPermissionFieldDto;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.data.UserRightFieldDto;
+import com.beanframework.core.data.VendorDto;
 
 @Configuration
 public class UserDtoConfig {
@@ -180,6 +182,20 @@ public class UserDtoConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoCustomerConverter());
 		mapping.setTypeCode(CustomerDto.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
+	public DtoVendorConverter dtoVendorConverter() {
+		return new DtoVendorConverter();
+	}
+
+	@Bean
+	public ConverterMapping dtoVendorConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dtoVendorConverter());
+		mapping.setTypeCode(VendorDto.class.getSimpleName());
 
 		return mapping;
 	}

@@ -3,3 +3,4 @@ employeegroup	,Employee Group		,							,usergroup_0_name_en=Employee Group;userg
 customergroup	,Customer Group		,generalcustomer;vipcustomer,usergroup_0_name_en=Customer Group;usergroup_1_name_cn=客户组
 generalcustomer	,General Customer	,							,usergroup_0_name_en=General Customer;usergroup_1_name_cn=一般客户
 vipcustomer		,VIP Customer		,							,usergroup_0_name_en=VIP Customer;usergroup_1_name_cn=VIP客户
+customergroup	,Customer Group		,generalcustomer;vipcustomer,usergroup_0_name_en=Customer Group;usergroup_1_name_cn=客户组

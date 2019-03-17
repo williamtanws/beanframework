@@ -85,6 +85,9 @@ public class MediaServiceImpl implements MediaService {
 
 		try {
 			Media model = modelService.findOneEntityByUuid(uuid, true, Media.class);
+
+			File mediaFile = new File(MEDIA_LOCATION,  model.getLocation());
+			FileUtils.forceDelete(mediaFile);
 			modelService.deleteByEntity(model, Media.class);
 
 		} catch (Exception e) {
@@ -116,7 +119,7 @@ public class MediaServiceImpl implements MediaService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		List<Object[]> histories = modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Media.class);
+		List<Object[]> histories = modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Media.class);
 		for (Object[] objects : histories) {
 			Media media = (Media) objects[0];
 			Hibernate.initialize(media.getLastModifiedBy());
@@ -136,25 +139,30 @@ public class MediaServiceImpl implements MediaService {
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Media.class);
 	}
 
+	@Caching(evict = { //
+			@CacheEvict(value = "MediaOneProperties", allEntries = true), //
+			@CacheEvict(value = "MediasSorts", allEntries = true), //
+			@CacheEvict(value = "MediasPage", allEntries = true), //
+			@CacheEvict(value = "MediasHistory", allEntries = true) }) //
 	@Override
-	public Media createByMultipartFile(MultipartFile file, String location) throws Exception {
-		Media media = modelService.create(Media.class);
-		media.setFileName(file.getOriginalFilename());
-		media.setFileType(file.getContentType());
-		media.setFileSize(file.getSize());
-		media.setTitle(file.getName());
-		media = (Media) modelService.saveEntity(media, Media.class);
-
-		File mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getUuid().toString());
+	public Media storeFile(Media media, MultipartFile file, String location) throws Exception {
+		File mediaFolder = new File(MEDIA_LOCATION + File.separator + location);
 		FileUtils.forceMkdir(mediaFolder);
 
-		File original = new File(mediaFolder.getAbsolutePath(), file.getOriginalFilename());
+		File original = new File(mediaFolder.getAbsolutePath(), media.getFileName());
 		file.transferTo(original);
 
 		media.setUrl(MEDIA_URL + "/" + media.getUuid());
-		media.setLocation(MEDIA_LOCATION + "/" + location);
+		media.setLocation(location);
+
 		media = (Media) modelService.saveEntity(media, Media.class);
 
 		return media;
+	}
+
+	@Cacheable(value = "MediasCount", key = "'count, properties:'+#properties")
+	@Override
+	public int countMediaByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.count(properties, Media.class);
 	}
 }

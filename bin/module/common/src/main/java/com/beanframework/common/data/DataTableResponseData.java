@@ -4,6 +4,11 @@ public class DataTableResponseData {
 
 	private String uuid;
 	private String id;
+	private String createdDate;
+	private AuditorDto createdBy;
+	private String lastModifiedDate;
+	private AuditorDto lastModifiedBy;
+	private String reference;
 	private String name;
 
 	public String getUuid() {
@@ -20,6 +25,46 @@ public class DataTableResponseData {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public AuditorDto getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(AuditorDto createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(String lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public AuditorDto getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+
+	public void setLastModifiedBy(AuditorDto lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
+
+	public String getReference() {
+		return reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
 	}
 
 	public String getName() {
