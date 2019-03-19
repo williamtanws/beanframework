@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -124,7 +125,10 @@ public class VendorImportListener extends ImportListener {
 		for (VendorCsv csv : vendorCsvList) {
 
 			Vendor model = converter.convert(csv);
-			vendorService.saveEntity(model);
+			model = vendorService.saveEntity(model);
+
+			ClassPathResource resource = new ClassPathResource(csv.getProfilePicture());
+			vendorService.saveProfilePicture(model, resource.getInputStream());
 		}
 	}
 

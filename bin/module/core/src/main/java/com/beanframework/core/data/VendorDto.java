@@ -1,5 +1,7 @@
 package com.beanframework.core.data;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class VendorDto extends UserDto {
 
 	/**
@@ -10,6 +12,8 @@ public class VendorDto extends UserDto {
 	private String[] tableUserGroups;
 
 	private String[] tableSelectedUserGroups;
+	
+	private MultipartFile profilePicture;
 
 	public String[] getTableUserGroups() {
 		return tableUserGroups;
@@ -25,6 +29,14 @@ public class VendorDto extends UserDto {
 
 	public void setTableSelectedUserGroups(String[] tableSelectedUserGroups) {
 		this.tableSelectedUserGroups = tableSelectedUserGroups;
+	}
+
+	public MultipartFile getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(MultipartFile profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 
 }

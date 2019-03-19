@@ -37,9 +37,9 @@ public interface EmployeeService {
 
 	int count() throws Exception;
 
-	void saveProfilePicture(Employee employee, MultipartFile picture) throws IOException;
+	void saveProfilePicture(Employee model, MultipartFile picture) throws IOException;
 
-	void saveProfilePicture(Employee employee, InputStream inputStream) throws IOException;
+	void saveProfilePicture(Employee model, InputStream inputStream) throws IOException;
 
 	void deleteEmployeeProfilePictureByUuid(UUID uuid);
 
@@ -47,7 +47,7 @@ public interface EmployeeService {
 
 	Employee getCurrentUser() throws Exception;
 
-	Employee updatePrincipal(Employee employee);
+	Employee updatePrincipal(Employee model);
 
 	Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids);
 

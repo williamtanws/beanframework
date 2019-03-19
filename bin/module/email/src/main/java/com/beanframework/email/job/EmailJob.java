@@ -24,9 +24,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.service.ModelService;
+import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.domain.EmailEnum.Result;
 import com.beanframework.email.domain.EmailEnum.Status;
+import com.beanframework.media.MediaConstants;
 
 @Component
 @DisallowConcurrentExecution
@@ -42,8 +44,11 @@ public class EmailJob implements Job {
 
 	@Value("${spring.mail.from.email}")
 	private String fromEmail;
+	
+	@Value(MediaConstants.MEDIA_LOCATION)
+	private String MEDIA_LOCATION;
 
-	@Value("${module.email.attachment.location}")
+	@Value(EmailConstants.EMAIL_ATTACHMENT_LOCATION)
 	private String EMAIL_ATTACHMENT_LOCATION;
 
 	@Autowired
@@ -129,9 +134,7 @@ public class EmailJob implements Job {
 							bccRecipients = email.getBccRecipients().split(";");
 						}
 
-						String workingDir = System.getProperty("user.dir");
-
-						File attachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + email.getUuid());
+						File attachmentFolder = new File(MEDIA_LOCATION, EMAIL_ATTACHMENT_LOCATION + File.separator + email.getUuid());
 						files = attachmentFolder.listFiles();
 
 						sendEmail(toRecipients, ccRecipients, bccRecipients, email.getSubject(), email.getText(), email.getHtml(), files);

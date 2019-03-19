@@ -69,7 +69,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			Employee entity = modelService.getEntity(dto, Employee.class);
 			entity = (Employee) employeeService.saveEntity(entity);
 			
-			employeeService.updatePrincipal(entity);
 			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, EmployeeDto.class);

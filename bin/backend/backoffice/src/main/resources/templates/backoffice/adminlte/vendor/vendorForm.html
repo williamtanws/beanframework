@@ -128,6 +128,18 @@
 											</div>
 										</div>
 									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="picture" th:text="#{module.vendor.picture}"></label>
+												<input type="file" class="form-control" name="profilePicture" accept="image/*">
+												<span class="help-block"></span>
+											</div>
+											<div class="form-group" style="text-align: center;">
+												<img style="max-width: 100%" th:src="@{${@environment.getProperty('path.vendor.profile.picture')}(type='original',uuid=*{uuid})}" class="img-circle" alt="User Image">
+											</div>
+										</div>
+									</div>
 								</div>
 								<!-- /.box-body -->
 							</div>

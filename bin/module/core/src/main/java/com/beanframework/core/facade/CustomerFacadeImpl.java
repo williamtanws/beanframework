@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.EntityCustomerProfileConverter;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.specification.CustomerSpecification;
 import com.beanframework.customer.domain.Customer;
@@ -25,6 +26,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Autowired
 	private CustomerService customerService;
+	
+	@Autowired
+	private EntityCustomerProfileConverter entityCustomerProfileConverter;
 
 	@Override
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
@@ -52,8 +56,18 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	public CustomerDto save(CustomerDto dto) throws BusinessException {
 		try {
+			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == false) {
+				String mimetype = dto.getProfilePicture().getContentType();
+				String type = mimetype.split("/")[0];
+				if (type.equals("image") == false) {
+					throw new Exception("Wrong picture format");
+				}
+			}
+			
 			Customer entity = modelService.getEntity(dto, Customer.class);
 			entity = (Customer) customerService.saveEntity(entity);
+			
+			customerService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, CustomerDto.class);
 		} catch (Exception e) {
@@ -78,7 +92,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public int count() throws Exception {
 		return customerService.count();
 	}
-
+	
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -104,6 +118,37 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public CustomerDto createDto() throws Exception {
 
 		return modelService.getDto(customerService.create(), CustomerDto.class);
+	}
+	
+	@Override
+	public CustomerDto saveProfile(CustomerDto dto) throws BusinessException {
+
+		try {
+			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == false) {
+				String mimetype = dto.getProfilePicture().getContentType();
+				String type = mimetype.split("/")[0];
+				if (type.equals("image") == false) {
+					throw new Exception("Wrong picture format");
+				}
+			}
+			Customer entity = entityCustomerProfileConverter.convert(dto);
+
+			entity = (Customer) customerService.saveEntity(entity);
+			customerService.updatePrincipal(entity);
+			customerService.saveProfilePicture(entity, dto.getProfilePicture());
+
+			return modelService.getDto(entity, CustomerDto.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public CustomerDto getCurrentUser() throws Exception {
+		Customer customer = customerService.getCurrentUser();
+
+		return modelService.getDto(customerService.findOneEntityByUuid(customer.getUuid()), CustomerDto.class);
 	}
 
 }
