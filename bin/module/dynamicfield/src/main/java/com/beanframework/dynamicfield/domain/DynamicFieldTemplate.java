@@ -21,7 +21,7 @@ import com.beanframework.dynamicfield.DynamicFieldTemplateConstants;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
-@Table(name = DynamicFieldTemplateConstants.Table.DYNAMIC_FIELD_TEMPLATE)
+@Table(name = DynamicFieldTemplateConstants.Table.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
 public class DynamicFieldTemplate extends GenericEntity {
 
 	/**

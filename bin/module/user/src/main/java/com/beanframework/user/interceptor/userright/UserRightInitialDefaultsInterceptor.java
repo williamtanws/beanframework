@@ -31,15 +31,15 @@ public class UserRightInitialDefaultsInterceptor implements InitialDefaultsInter
 	@Autowired
 	private ConfigurationService configurationService;
 
-	@Value(UserRightConstants.DYNAMIC_FIELD_TEMPLATE)
-	private String DYNAMIC_FIELD_TEMPLATE;
+	@Value(UserRightConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
+	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 
 	@Override
 	public void onInitialDefaults(UserRight model, InterceptorContext context) throws InterceptorException {
 
 		try {
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();
-			configurationProperties.put(Configuration.ID, DYNAMIC_FIELD_TEMPLATE);
+			configurationProperties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 			Configuration configuration = configurationService.findOneEntityByProperties(configurationProperties);
 
 			if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {

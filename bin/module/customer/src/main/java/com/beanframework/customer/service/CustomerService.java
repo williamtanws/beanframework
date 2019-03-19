@@ -1,5 +1,7 @@
 package com.beanframework.customer.service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -7,6 +9,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -33,4 +36,12 @@ public interface CustomerService {
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	void saveProfilePicture(Customer model, MultipartFile picture) throws IOException;
+
+	void saveProfilePicture(Customer model, InputStream inputStream) throws IOException;
+
+	Customer updatePrincipal(Customer model);
+
+	Customer getCurrentUser();
 }

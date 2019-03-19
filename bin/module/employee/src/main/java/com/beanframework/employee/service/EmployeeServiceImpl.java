@@ -55,6 +55,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
+import com.beanframework.media.MediaConstants;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
@@ -69,15 +70,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private AuditorService auditorService;
+	
+	@Value(MediaConstants.MEDIA_LOCATION)
+	public String MEDIA_LOCATION;
 
-	@Value(EmployeeConstants.PROFILE_PICTURE_LOCATION)
+	@Value(EmployeeConstants.EMPLOYEE_MEDIA_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
 
-	@Value("${module.employee.profile.picture.thumbnail.height:100}")
-	public int PROFILE_PICTURE_THUMBNAIL_HEIGHT;
+	@Value(EmployeeConstants.EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH)
+	public int EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH;
 
-	@Value("${module.employee.profile.picture.thumbnail.weight:100}")
-	public int PROFILE_PICTURE_THUMBNAIL_WEIGHT;
+	@Value(EmployeeConstants.EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT)
+	public int EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT;
 
 	@Autowired
 	private SessionRegistry sessionRegistry;
@@ -152,19 +156,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public void saveProfilePicture(Employee employee, MultipartFile picture) throws IOException {
+	public void saveProfilePicture(Employee model, MultipartFile picture) throws IOException {
 		if (picture != null && picture.isEmpty() == false) {
 
-			File profilePictureFolder = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid());
+			File profilePictureFolder = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid());
 			FileUtils.forceMkdir(profilePictureFolder);
 
-			File original = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
+			File original = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid() + File.separator + "original.png");
 			original = new File(original.getAbsolutePath());
 			picture.transferTo(original);
 
-			File thumbnail = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "thumbnail.png");
+			File thumbnail = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid() + File.separator + "thumbnail.png");
 			BufferedImage img = ImageIO.read(original);
-			BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, PROFILE_PICTURE_THUMBNAIL_WEIGHT, PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
+			BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
 			ImageIO.write(thumbImg, "png", thumbnail);
 		}
 	}
@@ -172,16 +176,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public void saveProfilePicture(Employee employee, InputStream inputStream) throws IOException {
 
-		File profilePictureFolder = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid());
+		File profilePictureFolder = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid());
 		FileUtils.forceMkdir(profilePictureFolder);
 
-		File original = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
+		File original = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
 		original = new File(original.getAbsolutePath());
 		FileUtils.copyInputStreamToFile(inputStream, original);
 
-		File thumbnail = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "thumbnail.png");
+		File thumbnail = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "thumbnail.png");
 		BufferedImage img = ImageIO.read(original);
-		BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, PROFILE_PICTURE_THUMBNAIL_WEIGHT, PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
+		BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
 		ImageIO.write(thumbImg, "png", thumbnail);
 
 	}
@@ -242,25 +246,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		if (auth != null) {
 
-			Employee employee = (Employee) auth.getPrincipal();
-			return employee;
+			Employee user = (Employee) auth.getPrincipal();
+			return user;
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public Employee updatePrincipal(Employee employee) {
+	public Employee updatePrincipal(Employee model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Employee employeePrincipal = (Employee) auth.getPrincipal();
-		employeePrincipal.setId(employee.getId());
-		employeePrincipal.setName(employee.getName());
-		employeePrincipal.setPassword(employee.getPassword());
+		Employee principal = (Employee) auth.getPrincipal();
+		principal.setId(model.getId());
+		principal.setName(model.getName());
+		principal.setPassword(model.getPassword());
 
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal, employeePrincipal.getPassword(), auth.getAuthorities());
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), auth.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(token);
 
-		return employeePrincipal;
+		return principal;
 	}
 
 	@Override

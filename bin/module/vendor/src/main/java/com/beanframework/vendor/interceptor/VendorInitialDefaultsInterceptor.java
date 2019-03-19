@@ -31,8 +31,8 @@ public class VendorInitialDefaultsInterceptor implements InitialDefaultsIntercep
 	@Autowired
 	private ConfigurationService configurationService;
 
-	@Value(VendorConstants.DYNAMIC_FIELD_TEMPLATE)
-	private String DYNAMIC_FIELD_TEMPLATE;
+	@Value(VendorConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
+	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 
 	@Override
 	public void onInitialDefaults(Vendor model, InterceptorContext context) throws InterceptorException {
@@ -43,7 +43,7 @@ public class VendorInitialDefaultsInterceptor implements InitialDefaultsIntercep
 
 		try {
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();
-			configurationProperties.put(Configuration.ID, DYNAMIC_FIELD_TEMPLATE);
+			configurationProperties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 			Configuration configuration = configurationService.findOneEntityByProperties(configurationProperties);
 
 			if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
