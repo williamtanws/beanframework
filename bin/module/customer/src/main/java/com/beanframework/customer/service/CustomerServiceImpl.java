@@ -38,12 +38,16 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.CustomerConstants;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.media.MediaConstants;
+import com.beanframework.user.service.AuditorService;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private AuditorService auditorService;
 	
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
@@ -88,7 +92,9 @@ public class CustomerServiceImpl implements CustomerService {
 			@CacheEvict(value = "CustomersHistory", allEntries = true) }) //
 	@Override
 	public Customer saveEntity(Customer model) throws BusinessException {
-		return (Customer) modelService.saveEntity(model, Customer.class);
+		model = (Customer) modelService.saveEntity(model, Customer.class);
+		auditorService.saveEntity(model);
+		return model;
 	}
 
 	@Caching(evict = { //

@@ -36,6 +36,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.media.MediaConstants;
+import com.beanframework.user.service.AuditorService;
 import com.beanframework.vendor.VendorConstants;
 import com.beanframework.vendor.domain.Vendor;
 
@@ -44,6 +45,9 @@ public class VendorServiceImpl implements VendorService {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private AuditorService auditorService;
 	
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
@@ -88,7 +92,9 @@ public class VendorServiceImpl implements VendorService {
 			@CacheEvict(value = "VendorsHistory", allEntries = true) }) //
 	@Override
 	public Vendor saveEntity(Vendor model) throws BusinessException {
-		return (Vendor) modelService.saveEntity(model, Vendor.class);
+		model = (Vendor) modelService.saveEntity(model, Vendor.class);
+		auditorService.saveEntity(model);
+		return model;
 	}
 
 	@Caching(evict = { //

@@ -13,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -37,7 +35,6 @@ public abstract class GenericEntity implements Serializable {
 	public static final String CREATED_BY = "createdBy";
 	public static final String LAST_MODIFIED_DATE = "lastModifiedDate";
 	public static final String LAST_MODIFIED_BY = "lastModifiedBy";
-	public static final String REFERENCE = "reference";
 
 	@Id
 	@GeneratedValue(generator = "inquisitive-uuid2")
@@ -63,13 +60,9 @@ public abstract class GenericEntity implements Serializable {
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@LastModifiedBy
-	@Cascade({ CascadeType.MERGE })
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "lastmodifiedby_uuid")
 	private Auditor lastModifiedBy;
-
-	@Audited(withModifiedFlag = true)
-	private String reference;
 
 	public UUID getUuid() {
 		return uuid;
@@ -117,14 +110,6 @@ public abstract class GenericEntity implements Serializable {
 
 	public void setLastModifiedBy(Auditor lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
-	}
-
-	public String getReference() {
-		return reference;
-	}
-
-	public void setReference(String reference) {
-		this.reference = reference;
 	}
 
 	@Override

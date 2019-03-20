@@ -3,12 +3,14 @@
 <body>
 	<th:block layout:fragment="administration">
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-6">
 				<div class="form-group">
 					<label th:text="#{module.backoffice.uuid}"></label>
 					<span>:</span>
 					<span class="text-block" th:text="*{uuid}"></span>
 				</div>
+			</div>
+			<div class="col-md-6">
 				<div class="form-group">
 					<label th:text="#{module.backoffice.reference}"></label>
 					<span>:</span>
