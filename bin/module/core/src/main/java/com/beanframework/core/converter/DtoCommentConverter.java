@@ -43,6 +43,7 @@ public class DtoCommentConverter extends AbstractDtoConverter<Comment, CommentDt
 				prototype.setLastUpdatedDate(source.getLastModifiedDate());
 			}
 			prototype.setUser(modelService.getDto(source.getUser(), UserDto.class));
+			prototype.setRepliedBys(modelService.getDto(source.getRepliedBys(), CommentDto.class));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

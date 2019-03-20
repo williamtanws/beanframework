@@ -78,7 +78,7 @@ public class AuditorServiceImpl implements AuditorService {
 				auditor.setName(model.getName());
 			} else {
 				Date lastModifiedDate = new Date();
-				if (StringUtils.isNotBlank(model.getId()) && StringUtils.equals(model.getId(), auditor.getId()) == false) {
+				if (StringUtils.equals(model.getId(), auditor.getId()) == false) {
 					auditor.setId(model.getId());
 					auditor.setLastModifiedDate(lastModifiedDate);
 				}

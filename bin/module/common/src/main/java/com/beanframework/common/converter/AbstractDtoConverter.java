@@ -17,14 +17,14 @@ public abstract class AbstractDtoConverter<T extends GenericEntity, E extends Ge
 
 	@SuppressWarnings("unchecked")
 	protected void convertGeneric(T source, E prototype, DtoConverterContext context) throws ConverterException {
-		source = (T) Hibernate.unproxy( source );
-		
-		prototype.setUuid(source.getUuid());
-		prototype.setId(source.getId());
-		prototype.setCreatedDate(source.getCreatedDate());
-		prototype.setLastModifiedDate(source.getLastModifiedDate());
 
 		try {
+			source = (T) Hibernate.unproxy(source);
+
+			prototype.setUuid(source.getUuid());
+			prototype.setId(source.getId());
+			prototype.setCreatedDate(source.getCreatedDate());
+			prototype.setLastModifiedDate(source.getLastModifiedDate());
 			prototype.setCreatedBy(modelService.getDto(source.getCreatedBy(), AuditorDto.class));
 			prototype.setLastModifiedBy(modelService.getDto(source.getLastModifiedBy(), AuditorDto.class));
 		} catch (Exception e) {
