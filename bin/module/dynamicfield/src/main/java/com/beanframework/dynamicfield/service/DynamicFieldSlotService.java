@@ -20,7 +20,7 @@ public interface DynamicFieldSlotService {
 
 	DynamicFieldSlot findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<DynamicFieldSlot> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<DynamicFieldSlot> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	DynamicFieldSlot saveEntity(DynamicFieldSlot model) throws BusinessException;
 

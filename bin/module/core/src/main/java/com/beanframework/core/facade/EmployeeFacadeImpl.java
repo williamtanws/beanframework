@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -31,18 +32,27 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
+	
+	@Autowired
+	private DtoConverterContext dtoConverterContext;
 
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
+		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee entity = employeeService.findOneEntityByUuid(uuid);
-
+		dtoConverterContext.clearFetchProperties();
+		
 		return modelService.getDto(entity, EmployeeDto.class);
 	}
 
 	@Override
 	public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
+		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee entity = employeeService.findOneEntityByProperties(properties);
-
+		dtoConverterContext.clearFetchProperties();
+		
 		return modelService.getDto(entity, EmployeeDto.class);
 	}
 
@@ -65,10 +75,10 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 					throw new Exception("Wrong picture format");
 				}
 			}
-			
+
 			Employee entity = modelService.getEntity(dto, Employee.class);
 			entity = (Employee) employeeService.saveEntity(entity);
-			
+
 			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, EmployeeDto.class);

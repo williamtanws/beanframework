@@ -20,7 +20,7 @@ public interface CronjobService {
 
 	Cronjob findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Cronjob> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Cronjob> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Cronjob saveEntity(Cronjob model) throws BusinessException;
 

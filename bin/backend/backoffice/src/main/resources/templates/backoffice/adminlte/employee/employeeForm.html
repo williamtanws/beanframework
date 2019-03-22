@@ -153,7 +153,7 @@
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_usergroup" sec:authorize="hasAuthority('usergroup_read')">>
+							<div class="tab-pane" id="tab_usergroup" sec:authorize="hasAuthority('usergroup_read')">
 								<div class="box-body">
 									<th:block layout:insert="~{/common/adminlte/common/component/usergroup :: usergroup (userGroups='userGroups')}"></th:block>
 								</div>

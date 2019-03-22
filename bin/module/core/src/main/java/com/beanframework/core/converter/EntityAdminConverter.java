@@ -30,7 +30,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Admin.UUID, source.getUuid());
-				Admin prototype = modelService.findOneEntityByProperties(properties, true, Admin.class);
+				Admin prototype = modelService.findOneEntityByProperties(properties, Admin.class);
 
 				if (prototype != null) {
 					return convertDto(source, prototype);

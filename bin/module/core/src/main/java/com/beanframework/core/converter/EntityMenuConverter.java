@@ -35,7 +35,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 
 			if (source.getUuid() != null) {
 
-				Menu prototype = modelService.findOneEntityByUuid(source.getUuid(), true, Menu.class);
+				Menu prototype = modelService.findOneEntityByUuid(source.getUuid(), Menu.class);
 
 				if (prototype != null) {
 					return convertDto(source, prototype);
@@ -161,7 +161,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 						}
 
 						if (add) {
-							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), false, UserGroup.class);
+							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), UserGroup.class);
 							prototype.getUserGroups().add(entityUserGroups);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}

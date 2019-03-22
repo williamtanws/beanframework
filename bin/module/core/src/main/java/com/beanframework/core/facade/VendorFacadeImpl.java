@@ -9,12 +9,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.EntityVendorProfileConverter;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.core.specification.VendorSpecification;
+import com.beanframework.employee.domain.Employee;
 import com.beanframework.vendor.domain.Vendor;
 import com.beanframework.vendor.service.VendorService;
 
@@ -30,17 +32,26 @@ public class VendorFacadeImpl implements VendorFacade {
 	@Autowired
 	private EntityVendorProfileConverter entityVendorProfileConverter;
 	
+	@Autowired
+	private DtoConverterContext dtoConverterContext;
+	
 	@Override
 	public VendorDto findOneByUuid(UUID uuid) throws Exception {
+		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Vendor entity = vendorService.findOneEntityByUuid(uuid);
-
+		dtoConverterContext.clearFetchProperties();
+		
 		return modelService.getDto(entity, VendorDto.class);
 	}
 
 	@Override
 	public VendorDto findOneProperties(Map<String, Object> properties) throws Exception {
+		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Vendor entity = vendorService.findOneEntityByProperties(properties);
-
+		dtoConverterContext.clearFetchProperties();
+		
 		return modelService.getDto(entity, VendorDto.class);
 	}
 

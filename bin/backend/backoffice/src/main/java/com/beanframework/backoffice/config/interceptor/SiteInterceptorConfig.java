@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.cms.domain.Site;
 import com.beanframework.cms.interceptor.SiteInitialDefaultsInterceptor;
-import com.beanframework.cms.interceptor.SiteInitializeInterceptor;
 import com.beanframework.cms.interceptor.SiteLoadInterceptor;
 import com.beanframework.cms.interceptor.SitePrepareInterceptor;
 import com.beanframework.cms.interceptor.SiteRemoveInterceptor;
@@ -28,24 +27,6 @@ public class SiteInterceptorConfig {
 	public InterceptorMapping siteInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(siteInitialDefaultsInterceptor());
-		mapping.setTypeCode(Site.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public SiteInitializeInterceptor siteInitializeInterceptor() {
-		return new SiteInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping siteInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(siteInitializeInterceptor());
 		mapping.setTypeCode(Site.class.getSimpleName());
 
 		return mapping;

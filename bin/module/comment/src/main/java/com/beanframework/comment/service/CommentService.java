@@ -20,7 +20,7 @@ public interface CommentService {
 
 	Comment findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Comment> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Comment> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Comment saveEntity(Comment model) throws BusinessException;
 

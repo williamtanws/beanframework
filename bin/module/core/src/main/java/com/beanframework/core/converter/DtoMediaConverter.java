@@ -37,7 +37,7 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 
 	private MediaDto convert(Media source, MediaDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setFileName(source.getFileName());
 			prototype.setFileType(source.getFileType());
@@ -48,6 +48,7 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 			prototype.setDescription(source.getDescription());
 			prototype.setUrl(source.getUrl());
 			prototype.setLocation(source.getLocation());
+
 			prototype.setUser(modelService.getDto(source.getUser(), UserDto.class));
 
 		} catch (Exception e) {

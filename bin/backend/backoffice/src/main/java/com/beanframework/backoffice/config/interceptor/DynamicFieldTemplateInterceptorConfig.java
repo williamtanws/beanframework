@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateInitialDefaultsInterceptor;
-import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateInitializeInterceptor;
 import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateLoadInterceptor;
 import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplatePrepareInterceptor;
 import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateRemoveInterceptor;
@@ -28,24 +27,6 @@ public class DynamicFieldTemplateInterceptorConfig {
 	public InterceptorMapping dynamicFieldTemplateInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(dynamicFieldTemplateInitialDefaultsInterceptor());
-		mapping.setTypeCode(DynamicFieldTemplate.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public DynamicFieldTemplateInitializeInterceptor dynamicFieldTemplateInitializeInterceptor() {
-		return new DynamicFieldTemplateInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping dynamicFieldTemplateInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(dynamicFieldTemplateInitializeInterceptor());
 		mapping.setTypeCode(DynamicFieldTemplate.class.getSimpleName());
 
 		return mapping;

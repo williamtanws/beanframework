@@ -20,7 +20,7 @@ public interface UserPermissionService {
 
 	UserPermission findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<UserPermission> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<UserPermission> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	UserPermission saveEntity(UserPermission model) throws BusinessException;
 

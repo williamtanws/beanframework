@@ -61,19 +61,19 @@ public class AdminServiceImpl implements AdminService {
 	@Cacheable(value = "AdminOne", key = "#uuid")
 	@Override
 	public Admin findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Admin.class);
+		return modelService.findOneEntityByUuid(uuid,  Admin.class);
 	}
 
 	@Cacheable(value = "AdminOneProperties", key = "#properties")
 	@Override
 	public Admin findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Admin.class);
+		return modelService.findOneEntityByProperties(properties, Admin.class);
 	}
 
-	@Cacheable(value = "AdminsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "AdminsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Admin> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Admin.class);
+	public List<Admin> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Admin.class);
 	}
 
 	@Caching(evict = { //
@@ -99,7 +99,7 @@ public class AdminServiceImpl implements AdminService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Admin model = modelService.findOneEntityByUuid(uuid, true, Admin.class);
+			Admin model = modelService.findOneEntityByUuid(uuid,  Admin.class);
 			modelService.deleteByEntity(model, Admin.class);
 
 		} catch (Exception e) {
@@ -110,7 +110,7 @@ public class AdminServiceImpl implements AdminService {
 	@Cacheable(value = "AdminsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Admin> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Admin.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Admin.class);
 	}
 
 	@Cacheable(value = "AdminsPage", key = "'count'")
@@ -128,7 +128,7 @@ public class AdminServiceImpl implements AdminService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Admin.ID, id);
-		Admin entity = modelService.findOneEntityByProperties(properties, true, Admin.class);
+		Admin entity = modelService.findOneEntityByProperties(properties, Admin.class);
 
 		if (entity == null) {
 			if (StringUtils.compare(password, defaultAdminPassword) != 0) {

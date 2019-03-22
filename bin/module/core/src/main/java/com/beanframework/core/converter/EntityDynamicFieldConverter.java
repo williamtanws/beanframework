@@ -32,7 +32,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicField.UUID, source.getUuid());
-				DynamicField prototype = modelService.findOneEntityByProperties(properties, true, DynamicField.class);
+				DynamicField prototype = modelService.findOneEntityByProperties(properties, DynamicField.class);
 
 				if (prototype != null) {
 					return convertDto(source, prototype);
@@ -99,7 +99,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 				prototype.setLanguage(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				Language entityLanguage = modelService.findOneEntityByUuid(UUID.fromString(source.getTableSelectedLanguage()), false, Language.class);
+				Language entityLanguage = modelService.findOneEntityByUuid(UUID.fromString(source.getTableSelectedLanguage()), Language.class);
 
 				if (entityLanguage != null) {
 
@@ -136,7 +136,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 						}
 
 						if (add) {
-							Enumeration entityEnumerations = modelService.findOneEntityByUuid(UUID.fromString(source.getTableEnumerations()[i]), false, Enumeration.class);
+							Enumeration entityEnumerations = modelService.findOneEntityByUuid(UUID.fromString(source.getTableEnumerations()[i]), Enumeration.class);
 							prototype.getEnumerations().add(entityEnumerations);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}

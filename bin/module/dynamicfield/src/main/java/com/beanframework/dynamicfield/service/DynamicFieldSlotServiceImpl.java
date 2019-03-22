@@ -36,19 +36,19 @@ public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 	@Cacheable(value = "DynamicFieldSlotOne", key = "#uuid")
 	@Override
 	public DynamicFieldSlot findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, DynamicFieldSlot.class);
+		return modelService.findOneEntityByUuid(uuid, DynamicFieldSlot.class);
 	}
 
 	@Cacheable(value = "DynamicFieldSlotOneProperties", key = "#properties")
 	@Override
 	public DynamicFieldSlot findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, DynamicFieldSlot.class);
+		return modelService.findOneEntityByProperties(properties, DynamicFieldSlot.class);
 	}
 
-	@Cacheable(value = "DynamicFieldSlotsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "DynamicFieldSlotsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<DynamicFieldSlot> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, DynamicFieldSlot.class);
+	public List<DynamicFieldSlot> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, DynamicFieldSlot.class);
 	}
 
 	@Caching(evict = { //
@@ -72,7 +72,7 @@ public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			DynamicFieldSlot model = modelService.findOneEntityByUuid(uuid, true, DynamicFieldSlot.class);
+			DynamicFieldSlot model = modelService.findOneEntityByUuid(uuid, DynamicFieldSlot.class);
 			modelService.deleteByEntity(model, DynamicFieldSlot.class);
 
 		} catch (Exception e) {
@@ -83,7 +83,7 @@ public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 	@Cacheable(value = "DynamicFieldSlotsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<DynamicFieldSlot> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, DynamicFieldSlot.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), DynamicFieldSlot.class);
 	}
 
 	@Cacheable(value = "DynamicFieldSlotsPage", key = "'count'")

@@ -40,19 +40,19 @@ public class AuditorServiceImpl implements AuditorService {
 	@Cacheable(value = "AuditorOne", key = "#uuid")
 	@Override
 	public Auditor findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Auditor.class);
+		return modelService.findOneEntityByUuid(uuid,  Auditor.class);
 	}
 
 	@Cacheable(value = "AuditorOneProperties", key = "#properties")
 	@Override
 	public Auditor findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Auditor.class);
+		return modelService.findOneEntityByProperties(properties, Auditor.class);
 	}
 
-	@Cacheable(value = "AuditorsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "AuditorsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Auditor> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Auditor.class);
+	public List<Auditor> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Auditor.class);
 	}
 
 	@Caching(evict = { //
@@ -64,11 +64,11 @@ public class AuditorServiceImpl implements AuditorService {
 	@Override
 	public Auditor saveEntity(User model) throws BusinessException {
 		try {
-			Auditor auditor = modelService.findOneEntityByUuid(model.getUuid(), true, Auditor.class);
+			Auditor auditor = modelService.findOneEntityByUuid(model.getUuid(), Auditor.class);
 			if (auditor == null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Auditor.ID, model.getId());
-				auditor = modelService.findOneEntityByProperties(properties, true, Auditor.class);
+				auditor = modelService.findOneEntityByProperties(properties, Auditor.class);
 			}
 
 			if (auditor == null) {
@@ -107,7 +107,7 @@ public class AuditorServiceImpl implements AuditorService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Auditor model = modelService.findOneEntityByUuid(uuid, true, Auditor.class);
+			Auditor model = modelService.findOneEntityByUuid(uuid,  Auditor.class);
 			modelService.deleteByEntity(model, Auditor.class);
 
 		} catch (Exception e) {
@@ -118,7 +118,7 @@ public class AuditorServiceImpl implements AuditorService {
 	@Cacheable(value = "AuditorsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Auditor> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Auditor.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Auditor.class);
 	}
 
 	@Cacheable(value = "AuditorsPage", key = "'count'")

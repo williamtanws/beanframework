@@ -87,7 +87,7 @@
 											<div class="form-group">
 												<label for="fieldType" th:text="#{module.dynamicfield.type}"></label>
 												<span>*</span>
-												<select name="jobTrigger" class="form-control">
+												<select name="type" class="form-control">
 													<option th:each="state: ${T(com.beanframework.dynamicfield.DynamicFieldType).values()}" th:value="${state.name()}" th:text="${state}" th:selected="${dynamicfieldDto.type == state}"></option>
 												</select>
 											</div>

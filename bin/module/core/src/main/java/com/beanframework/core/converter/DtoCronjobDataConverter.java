@@ -33,7 +33,7 @@ public class DtoCronjobDataConverter extends AbstractDtoConverter<CronjobData, C
 	private CronjobDataDto convert(CronjobData source, CronjobDataDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setValue(source.getValue());

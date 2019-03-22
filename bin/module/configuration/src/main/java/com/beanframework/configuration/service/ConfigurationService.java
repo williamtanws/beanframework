@@ -22,7 +22,7 @@ public interface ConfigurationService {
 
 	List<Configuration> findAllEntity() throws Exception;
 
-	List<Configuration> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Configuration> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Configuration saveEntity(Configuration model) throws BusinessException;
 

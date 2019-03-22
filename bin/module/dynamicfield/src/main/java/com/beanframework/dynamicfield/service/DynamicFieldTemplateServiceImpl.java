@@ -36,19 +36,19 @@ public class DynamicFieldTemplateServiceImpl implements DynamicFieldTemplateServ
 	@Cacheable(value = "DynamicFieldTemplateOne", key = "#uuid")
 	@Override
 	public DynamicFieldTemplate findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, DynamicFieldTemplate.class);
+		return modelService.findOneEntityByUuid(uuid,  DynamicFieldTemplate.class);
 	}
 
 	@Cacheable(value = "DynamicFieldTemplateOneProperties", key = "#properties")
 	@Override
 	public DynamicFieldTemplate findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, DynamicFieldTemplate.class);
+		return modelService.findOneEntityByProperties(properties, DynamicFieldTemplate.class);
 	}
 
-	@Cacheable(value = "DynamicFieldTemplatesSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "DynamicFieldTemplatesSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<DynamicFieldTemplate> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, DynamicFieldTemplate.class);
+	public List<DynamicFieldTemplate> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,DynamicFieldTemplate.class);
 	}
 
 	@Caching(evict = { //
@@ -72,7 +72,7 @@ public class DynamicFieldTemplateServiceImpl implements DynamicFieldTemplateServ
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			DynamicFieldTemplate model = modelService.findOneEntityByUuid(uuid, true, DynamicFieldTemplate.class);
+			DynamicFieldTemplate model = modelService.findOneEntityByUuid(uuid,  DynamicFieldTemplate.class);
 			modelService.deleteByEntity(model, DynamicFieldTemplate.class);
 
 		} catch (Exception e) {
@@ -83,7 +83,7 @@ public class DynamicFieldTemplateServiceImpl implements DynamicFieldTemplateServ
 	@Cacheable(value = "DynamicFieldTemplatesPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<DynamicFieldTemplate> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, DynamicFieldTemplate.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), DynamicFieldTemplate.class);
 	}
 
 	@Cacheable(value = "DynamicFieldTemplatesPage", key = "'count'")

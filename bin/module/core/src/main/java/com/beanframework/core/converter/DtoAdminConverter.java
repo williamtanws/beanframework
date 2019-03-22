@@ -36,7 +36,7 @@ public class DtoAdminConverter extends AbstractDtoConverter<Admin, AdminDto> imp
 
 	private AdminDto convert(Admin source, AdminDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setAccountNonExpired(source.getAccountNonExpired());
 			prototype.setAccountNonLocked(source.getAccountNonLocked());

@@ -10,8 +10,8 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
-import com.beanframework.core.data.VendorDto;
 import com.beanframework.core.data.UserGroupDto;
+import com.beanframework.core.data.VendorDto;
 import com.beanframework.vendor.domain.Vendor;
 
 public class DtoVendorConverter extends AbstractDtoConverter<Vendor, VendorDto> implements DtoConverter<Vendor, VendorDto> {
@@ -34,7 +34,7 @@ public class DtoVendorConverter extends AbstractDtoConverter<Vendor, VendorDto> 
 	private VendorDto convert(Vendor source, VendorDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setPassword(source.getPassword());
 			prototype.setAccountNonExpired(source.getAccountNonExpired());
@@ -42,7 +42,9 @@ public class DtoVendorConverter extends AbstractDtoConverter<Vendor, VendorDto> 
 			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+
+			if (context.getFetchProperties().contains(Vendor.USER_GROUPS))
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

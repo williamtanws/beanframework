@@ -33,7 +33,7 @@ public class DtoLanguageConverter extends AbstractDtoConverter<Language, Languag
 	private LanguageDto convert(Language source, LanguageDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setSort(source.getSort());

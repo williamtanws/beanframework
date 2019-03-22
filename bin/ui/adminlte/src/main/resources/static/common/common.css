@@ -73,3 +73,20 @@
 .capitalize span {
 	text-transform: capitalize;
 }
+
+pre {
+	background-color: #f5f5f575;
+}
+
+blockquote {
+    padding: 10px 20px;
+    margin: 0 0 20px;
+    font-size: 13px;
+    border-left: 5px solid #eee;
+    color: grey;
+    font-weight: 600;
+}
+
+.chat {
+    padding: 5px 10px 5px 10px;
+}

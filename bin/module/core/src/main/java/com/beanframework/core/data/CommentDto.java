@@ -1,9 +1,5 @@
 package com.beanframework.core.data;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.beanframework.common.data.GenericDto;
 
 public class CommentDto extends GenericDto {
@@ -18,13 +14,7 @@ public class CommentDto extends GenericDto {
 
 	private Boolean visibled;
 
-	private Date lastUpdatedDate;
-
 	private UserDto user;
-
-	private CommentDto repliedTo;
-
-	private List<CommentDto> repliedBys = new ArrayList<CommentDto>();
 
 	public String getHtml() {
 		return html;
@@ -42,36 +32,12 @@ public class CommentDto extends GenericDto {
 		this.visibled = visibled;
 	}
 
-	public Date getLastUpdatedDate() {
-		return lastUpdatedDate;
-	}
-
-	public void setLastUpdatedDate(Date lastUpdatedDate) {
-		this.lastUpdatedDate = lastUpdatedDate;
-	}
-
 	public UserDto getUser() {
 		return user;
 	}
 
 	public void setUser(UserDto user) {
 		this.user = user;
-	}
-
-	public CommentDto getRepliedTo() {
-		return repliedTo;
-	}
-
-	public void setRepliedTo(CommentDto repliedTo) {
-		this.repliedTo = repliedTo;
-	}
-
-	public List<CommentDto> getRepliedBys() {
-		return repliedBys;
-	}
-
-	public void setRepliedBys(List<CommentDto> repliedBys) {
-		this.repliedBys = repliedBys;
 	}
 
 }

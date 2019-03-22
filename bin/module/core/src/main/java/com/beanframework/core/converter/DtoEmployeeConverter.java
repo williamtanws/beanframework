@@ -37,7 +37,7 @@ public class DtoEmployeeConverter extends AbstractDtoConverter<Employee, Employe
 	private EmployeeDto convert(Employee source, EmployeeDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setPassword(source.getPassword());
 			prototype.setAccountNonExpired(source.getAccountNonExpired());
@@ -45,20 +45,25 @@ public class DtoEmployeeConverter extends AbstractDtoConverter<Employee, Employe
 			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
-			prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
-				@Override
-				public int compare(UserFieldDto o1, UserFieldDto o2) {
-					if (o1.getSort() == null)
-						return o2.getSort() == null ? 0 : 1;
 
-					if (o2.getSort() == null)
-						return -1;
+			if (context.getFetchProperties().contains(Employee.USER_GROUPS))
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
-					return o1.getSort() - o2.getSort();
-				}
-			});
+			if (context.getFetchProperties().contains(Employee.FIELDS)) {
+				prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
+				Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
+					@Override
+					public int compare(UserFieldDto o1, UserFieldDto o2) {
+						if (o1.getSort() == null)
+							return o2.getSort() == null ? 0 : 1;
+
+						if (o2.getSort() == null)
+							return -1;
+
+						return o1.getSort() - o2.getSort();
+					}
+				});
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

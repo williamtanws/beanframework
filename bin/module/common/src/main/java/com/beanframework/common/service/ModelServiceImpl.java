@@ -98,7 +98,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> T findOneEntityByUuid(UUID uuid, boolean initialize, Class modelClass) throws Exception {
+	public <T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception {
 		Assert.notNull(uuid, "uuid was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -106,8 +106,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			Object model = entityManager.find(modelClass, uuid);
 
-			if (initialize)
-				initializeInterceptor(model, interceptorContext, modelClass);
 			if (model != null)
 				loadInterceptor(model, interceptorContext, modelClass);
 
@@ -120,14 +118,12 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> T findOneEntityByProperties(Map<String, Object> properties, boolean initialize, Class modelClass) throws Exception {
+	public <T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
 			Object model = createQuery(properties, null, null, null, null, modelClass).getSingleResult();
 
-			if (initialize)
-				initializeInterceptor(model, interceptorContext, modelClass);
 			if (model != null)
 				loadInterceptor(model, interceptorContext, modelClass);
 
@@ -184,15 +180,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, boolean initialize,
-			Class modelClass) throws Exception {
+	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
+			throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
 			List<Object> models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
 
-			if (initialize)
-				initializeInterceptor(models, interceptorContext, modelClass);
 			if (models != null)
 				loadInterceptor(models, interceptorContext, modelClass);
 
@@ -273,16 +267,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(readOnly = true)
 	@Override
-	public <T> Page<T> findEntityPage(Specification spec, Pageable pageable, boolean initialize, Class modelClass) throws Exception {
+	public <T> Page<T> findEntityPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
-
-			if (initialize) {
-				Iterator<T> i = page.getContent().iterator();
-				while (i.hasNext()) {
-					initializeInterceptor(i.next(), interceptorContext, modelClass);
-				}
-			}
 
 			Iterator<T> i = page.getContent().iterator();
 			while (i.hasNext()) {
@@ -358,7 +345,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException {
 		try {
 
-			Object model = findOneEntityByUuid(uuid, false, modelClass);
+			Object model = findOneEntityByUuid(uuid, modelClass);
 
 			deleteEntity(model, modelClass);
 

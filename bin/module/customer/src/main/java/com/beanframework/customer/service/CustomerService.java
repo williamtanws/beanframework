@@ -23,7 +23,7 @@ public interface CustomerService {
 
 	Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Customer> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Customer> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Customer saveEntity(Customer model) throws BusinessException;
 

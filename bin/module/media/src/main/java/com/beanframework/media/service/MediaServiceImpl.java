@@ -48,19 +48,19 @@ public class MediaServiceImpl implements MediaService {
 	@Cacheable(value = "MediaOne", key = "#uuid")
 	@Override
 	public Media findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Media.class);
+		return modelService.findOneEntityByUuid(uuid,  Media.class);
 	}
 
 	@Cacheable(value = "MediaOneProperties", key = "#properties")
 	@Override
 	public Media findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Media.class);
+		return modelService.findOneEntityByProperties(properties, Media.class);
 	}
 
-	@Cacheable(value = "MediasSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "MediasSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Media> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Media.class);
+	public List<Media> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Media.class);
 	}
 
 	@Caching(evict = { //
@@ -84,7 +84,7 @@ public class MediaServiceImpl implements MediaService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Media model = modelService.findOneEntityByUuid(uuid, true, Media.class);
+			Media model = modelService.findOneEntityByUuid(uuid,  Media.class);
 
 			File mediaFile = new File(MEDIA_LOCATION,  model.getLocation());
 			FileUtils.forceDelete(mediaFile);
@@ -98,7 +98,7 @@ public class MediaServiceImpl implements MediaService {
 	@Cacheable(value = "MediasPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Media> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Media.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Media.class);
 	}
 
 	@Cacheable(value = "MediasPage", key = "'count'")

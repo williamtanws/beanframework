@@ -42,24 +42,31 @@ public class DtoUserGroupConverter extends AbstractDtoConverter<UserGroup, UserG
 	private UserGroupDto convert(UserGroup source, UserGroupDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
-			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class));
-			prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
-				@Override
-				public int compare(UserGroupFieldDto o1, UserGroupFieldDto o2) {
-					if (o1.getSort() == null)
-						return o2.getSort() == null ? 0 : 1;
 
-					if (o2.getSort() == null)
-						return -1;
+			if (context.getFetchProperties().contains(UserGroup.USER_GROUPS))
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
-					return o1.getSort() - o2.getSort();
-				}
-			});
+			if (context.getFetchProperties().contains(UserGroup.USER_AUTHORITIES))
+				prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class));
+
+			if (context.getFetchProperties().contains(UserGroup.FIELDS)) {
+				prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class));
+				Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
+					@Override
+					public int compare(UserGroupFieldDto o1, UserGroupFieldDto o2) {
+						if (o1.getSort() == null)
+							return o2.getSort() == null ? 0 : 1;
+
+						if (o2.getSort() == null)
+							return -1;
+
+						return o1.getSort() - o2.getSort();
+					}
+				});
+			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

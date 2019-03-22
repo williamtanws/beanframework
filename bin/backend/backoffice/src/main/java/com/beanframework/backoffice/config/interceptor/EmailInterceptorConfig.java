@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.interceptor.EmailInitialDefaultsInterceptor;
-import com.beanframework.email.interceptor.EmailInitializeInterceptor;
 import com.beanframework.email.interceptor.EmailLoadInterceptor;
 import com.beanframework.email.interceptor.EmailPrepareInterceptor;
 import com.beanframework.email.interceptor.EmailRemoveInterceptor;
@@ -28,24 +27,6 @@ public class EmailInterceptorConfig {
 	public InterceptorMapping emailInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(emailInitialDefaultsInterceptor());
-		mapping.setTypeCode(Email.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public EmailInitializeInterceptor emailInitializeInterceptor() {
-		return new EmailInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping emailInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(emailInitializeInterceptor());
 		mapping.setTypeCode(Email.class.getSimpleName());
 
 		return mapping;

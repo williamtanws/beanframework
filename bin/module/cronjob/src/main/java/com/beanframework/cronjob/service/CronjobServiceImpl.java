@@ -41,19 +41,19 @@ public class CronjobServiceImpl implements CronjobService {
 	@Cacheable(value = "CronjobOne", key = "#uuid")
 	@Override
 	public Cronjob findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Cronjob.class);
+		return modelService.findOneEntityByUuid(uuid, Cronjob.class);
 	}
 
 	@Cacheable(value = "CronjobOneProperties", key = "#properties")
 	@Override
 	public Cronjob findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Cronjob.class);
+		return modelService.findOneEntityByProperties(properties, Cronjob.class);
 	}
 
-	@Cacheable(value = "CronjobsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "CronjobsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Cronjob> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Cronjob.class);
+	public List<Cronjob> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Cronjob.class);
 	}
 
 	@Caching(evict = { //
@@ -77,7 +77,7 @@ public class CronjobServiceImpl implements CronjobService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Cronjob model = modelService.findOneEntityByUuid(uuid, true, Cronjob.class);
+			Cronjob model = modelService.findOneEntityByUuid(uuid, Cronjob.class);
 			modelService.deleteByEntity(model, Cronjob.class);
 
 		} catch (Exception e) {
@@ -88,7 +88,7 @@ public class CronjobServiceImpl implements CronjobService {
 	@Cacheable(value = "CronjobsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Cronjob> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Cronjob.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Cronjob.class);
 	}
 
 	@Cacheable(value = "CronjobsPage", key = "'count'")

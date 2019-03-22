@@ -20,7 +20,7 @@ public interface LanguageService {
 
 	Language findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Language> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Language> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Language saveEntity(Language model) throws BusinessException;
 

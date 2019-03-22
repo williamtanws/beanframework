@@ -42,7 +42,7 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 	private MenuDto convert(Menu source, MenuDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setParent(source.getParent());
@@ -51,21 +51,28 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 			prototype.setSort(source.getSort());
 			prototype.setTarget(source.getTarget());
 			prototype.setEnabled(source.getEnabled());
-			prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class));
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
-			prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
-				@Override
-				public int compare(MenuFieldDto o1, MenuFieldDto o2) {
-					if (o1.getSort() == null)
-						return o2.getSort() == null ? 0 : 1;
 
-					if (o2.getSort() == null)
-						return -1;
+			if (context.getFetchProperties().contains(Menu.CHILDS))
+				prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class));
 
-					return o1.getSort() - o2.getSort();
-				}
-			});
+			if (context.getFetchProperties().contains(Menu.USER_GROUPS))
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+
+			if (context.getFetchProperties().contains(Menu.FIELDS)) {
+				prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));
+				Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
+					@Override
+					public int compare(MenuFieldDto o1, MenuFieldDto o2) {
+						if (o1.getSort() == null)
+							return o2.getSort() == null ? 0 : 1;
+
+						if (o2.getSort() == null)
+							return -1;
+
+						return o1.getSort() - o2.getSort();
+					}
+				});
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

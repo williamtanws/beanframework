@@ -27,7 +27,7 @@ public class EntityEnumerationConverter implements EntityConverter<EnumerationDt
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Enumeration.UUID, source.getUuid());
-				Enumeration prototype = modelService.findOneEntityByProperties(properties, true, Enumeration.class);
+				Enumeration prototype = modelService.findOneEntityByProperties(properties, Enumeration.class);
 
 				if (prototype != null) {
 					return convertDto(source, prototype);

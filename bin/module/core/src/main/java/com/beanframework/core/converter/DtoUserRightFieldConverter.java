@@ -35,12 +35,14 @@ public class DtoUserRightFieldConverter extends AbstractDtoConverter<UserRightFi
 
 		try {
 
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setValue(source.getValue());
 			prototype.setSort(source.getSort());
-			prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
-			
+
+			if (context.getFetchProperties().contains(UserRightField.DYNAMIC_FIELD))
+				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
+
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

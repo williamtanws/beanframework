@@ -39,7 +39,7 @@ public class DtoEmailConverter extends AbstractDtoConverter<Email, EmailDto> imp
 	private EmailDto convert(Email source, EmailDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setToRecipients(source.getToRecipients());

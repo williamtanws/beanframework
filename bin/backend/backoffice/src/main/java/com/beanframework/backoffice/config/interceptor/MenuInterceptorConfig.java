@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.interceptor.MenuInitialDefaultsInterceptor;
-import com.beanframework.menu.interceptor.MenuInitializeInterceptor;
 import com.beanframework.menu.interceptor.MenuLoadInterceptor;
 import com.beanframework.menu.interceptor.MenuPrepareInterceptor;
 import com.beanframework.menu.interceptor.MenuRemoveInterceptor;
@@ -28,24 +27,6 @@ public class MenuInterceptorConfig {
 	public InterceptorMapping menuInitialDefaultsInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(menuInitialDefaultsInterceptor());
-		interceptorMapping.setTypeCode(Menu.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public MenuInitializeInterceptor menuInitializeInterceptor() {
-		return new MenuInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping menuInitializeInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(menuInitializeInterceptor());
 		interceptorMapping.setTypeCode(Menu.class.getSimpleName());
 
 		return interceptorMapping;

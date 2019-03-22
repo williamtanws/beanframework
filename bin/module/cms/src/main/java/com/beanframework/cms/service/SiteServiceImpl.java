@@ -37,19 +37,19 @@ public class SiteServiceImpl implements SiteService {
 	@Cacheable(value = "SiteOne", key = "#uuid")
 	@Override
 	public Site findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Site.class);
+		return modelService.findOneEntityByUuid(uuid,  Site.class);
 	}
 
 	@Cacheable(value = "SiteOneProperties", key = "#properties")
 	@Override
 	public Site findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Site.class);
+		return modelService.findOneEntityByProperties(properties, Site.class);
 	}
 
-	@Cacheable(value = "SitesSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "SitesSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Site> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Site.class);
+	public List<Site> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Site.class);
 	}
 
 	@Caching(evict = { //
@@ -73,7 +73,7 @@ public class SiteServiceImpl implements SiteService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Site model = modelService.findOneEntityByUuid(uuid, true, Site.class);
+			Site model = modelService.findOneEntityByUuid(uuid,  Site.class);
 			modelService.deleteByEntity(model, Site.class);
 
 		} catch (Exception e) {
@@ -84,7 +84,7 @@ public class SiteServiceImpl implements SiteService {
 	@Cacheable(value = "SitesPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Site> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Site.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Site.class);
 	}
 
 	@Cacheable(value = "SitesPage", key = "'count'")

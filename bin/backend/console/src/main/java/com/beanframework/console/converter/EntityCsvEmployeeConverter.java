@@ -41,7 +41,7 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.ID, source.getId());
 
-				Employee prototype = modelService.findOneEntityByProperties(properties, true, Employee.class);
+				Employee prototype = modelService.findOneEntityByProperties(properties, Employee.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);
@@ -62,10 +62,10 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setAccountNonExpired(source.isAccountNonExpired());
-			prototype.setAccountNonLocked(source.isAccountNonLocked());
-			prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
-			prototype.setEnabled(source.isEnabled());
+			prototype.setAccountNonExpired(source.getAccountNonExpired());
+			prototype.setAccountNonLocked(source.getAccountNonLocked());
+			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+			prototype.setEnabled(source.getEnabled());
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(passwordEncoder.encode(source.getPassword()));
 
@@ -89,7 +89,7 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 					if (add) {
 						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
 						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
-						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, true, DynamicField.class);
+						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, DynamicField.class);
 
 						if (entityDynamicField == null) {
 							LOGGER.error("DynamicField Id not exists: " + dynamicFieldId);
@@ -118,7 +118,7 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 					if (add) {
 						Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 						userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-						UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, true, UserGroup.class);
+						UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 
 						if (userGroup == null) {
 							LOGGER.error("UserGroup ID not exists: " + userGroupIds[i]);

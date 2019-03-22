@@ -36,19 +36,19 @@ public class UserGroupServiceImpl implements UserGroupService {
 	@Cacheable(value = "UserGroupOne", key = "#uuid")
 	@Override
 	public UserGroup findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, UserGroup.class);
+		return modelService.findOneEntityByUuid(uuid, UserGroup.class);
 	}
 
 	@Cacheable(value = "UserGroupOneProperties", key = "#properties")
 	@Override
 	public UserGroup findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, UserGroup.class);
+		return modelService.findOneEntityByProperties(properties, UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "UserGroupsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<UserGroup> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, UserGroup.class);
+	public List<UserGroup> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserGroup.class);
 	}
 
 	@Caching(evict = { //
@@ -72,7 +72,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			UserGroup model = modelService.findOneEntityByUuid(uuid, true, UserGroup.class);
+			UserGroup model = modelService.findOneEntityByUuid(uuid, UserGroup.class);
 			modelService.deleteByEntity(model, UserGroup.class);
 
 		} catch (Exception e) {
@@ -83,7 +83,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 	@Cacheable(value = "UserGroupsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<UserGroup> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, UserGroup.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), UserGroup.class);
 	}
 
 	@Cacheable(value = "UserGroupsPage", key = "'count'")

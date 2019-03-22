@@ -28,6 +28,7 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
+
 		Admin entity = adminService.findOneEntityByUuid(uuid);
 
 		return modelService.getDto(entity, AdminDto.class);

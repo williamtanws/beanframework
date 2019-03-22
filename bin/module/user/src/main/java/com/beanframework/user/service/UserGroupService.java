@@ -20,7 +20,7 @@ public interface UserGroupService {
 
 	UserGroup findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<UserGroup> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<UserGroup> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	UserGroup saveEntity(UserGroup model) throws BusinessException;
 

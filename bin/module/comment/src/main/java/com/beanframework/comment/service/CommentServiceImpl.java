@@ -37,19 +37,19 @@ public class CommentServiceImpl implements CommentService {
 	@Cacheable(value = "CommentOne", key = "#uuid")
 	@Override
 	public Comment findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Comment.class);
+		return modelService.findOneEntityByUuid(uuid,  Comment.class);
 	}
 
 	@Cacheable(value = "CommentOneProperties", key = "#properties")
 	@Override
 	public Comment findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Comment.class);
+		return modelService.findOneEntityByProperties(properties, Comment.class);
 	}
 
-	@Cacheable(value = "CommentsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "CommentsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Comment> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Comment.class);
+	public List<Comment> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Comment.class);
 	}
 
 	@Caching(evict = { //
@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Comment model = modelService.findOneEntityByUuid(uuid, true, Comment.class);
+			Comment model = modelService.findOneEntityByUuid(uuid,  Comment.class);
 			modelService.deleteByEntity(model, Comment.class);
 
 		} catch (Exception e) {
@@ -86,7 +86,7 @@ public class CommentServiceImpl implements CommentService {
 	@Cacheable(value = "CommentsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Comment> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Comment.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Comment.class);
 	}
 
 	@Cacheable(value = "CommentsPage", key = "'count'")

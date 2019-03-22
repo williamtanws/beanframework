@@ -22,7 +22,6 @@ public class GenericDto implements Serializable {
 	private AuditorDto createdBy;
 	private Date lastModifiedDate;
 	private AuditorDto lastModifiedBy;
-	private String reference;
 
 	public UUID getUuid() {
 		return uuid;
@@ -70,14 +69,6 @@ public class GenericDto implements Serializable {
 
 	public void setLastModifiedBy(AuditorDto lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
-	}
-
-	public String getReference() {
-		return reference;
-	}
-
-	public void setReference(String reference) {
-		this.reference = reference;
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Site.ID, source.getId());
 
-				Site prototype = modelService.findOneEntityByProperties(properties, true, Site.class);
+				Site prototype = modelService.findOneEntityByProperties(properties, Site.class);
 
 				if (prototype != null) {
 

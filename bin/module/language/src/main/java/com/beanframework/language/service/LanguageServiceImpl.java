@@ -37,19 +37,19 @@ public class LanguageServiceImpl implements LanguageService {
 	@Cacheable(value = "LanguageOne", key = "#uuid")
 	@Override
 	public Language findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Language.class);
+		return modelService.findOneEntityByUuid(uuid, Language.class);
 	}
 
 	@Cacheable(value = "LanguageOneProperties", key = "#properties")
 	@Override
 	public Language findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Language.class);
+		return modelService.findOneEntityByProperties(properties, Language.class);
 	}
 
-	@Cacheable(value = "LanguagesSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "LanguagesSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Language> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Language.class);
+	public List<Language> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Language.class);
 	}
 
 	@Caching(evict = { //
@@ -73,7 +73,7 @@ public class LanguageServiceImpl implements LanguageService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Language model = modelService.findOneEntityByUuid(uuid, true, Language.class);
+			Language model = modelService.findOneEntityByUuid(uuid, Language.class);
 			modelService.deleteByEntity(model, Language.class);
 
 		} catch (Exception e) {
@@ -84,7 +84,7 @@ public class LanguageServiceImpl implements LanguageService {
 	@Cacheable(value = "LanguagesPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Language> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Language.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Language.class);
 	}
 
 	@Cacheable(value = "LanguagesPage", key = "'count'")
