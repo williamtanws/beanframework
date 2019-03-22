@@ -45,19 +45,19 @@ public class EmailServiceImpl implements EmailService {
 	@Cacheable(value = "EmailOne", key = "#uuid")
 	@Override
 	public Email findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Email.class);
+		return modelService.findOneEntityByUuid(uuid,  Email.class);
 	}
 
 	@Cacheable(value = "EmailOneProperties", key = "#properties")
 	@Override
 	public Email findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Email.class);
+		return modelService.findOneEntityByProperties(properties, Email.class);
 	}
 
-	@Cacheable(value = "EmailsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "EmailsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Email> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Email.class);
+	public List<Email> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Email.class);
 	}
 
 	@Caching(evict = { //
@@ -81,7 +81,7 @@ public class EmailServiceImpl implements EmailService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Email model = modelService.findOneEntityByUuid(uuid, true, Email.class);
+			Email model = modelService.findOneEntityByUuid(uuid,  Email.class);
 			modelService.deleteByEntity(model, Email.class);
 
 			String workingDir = System.getProperty("user.dir");
@@ -97,7 +97,7 @@ public class EmailServiceImpl implements EmailService {
 	@Cacheable(value = "EmailsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Email> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Email.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Email.class);
 	}
 
 	@Cacheable(value = "EmailsPage", key = "'count'")

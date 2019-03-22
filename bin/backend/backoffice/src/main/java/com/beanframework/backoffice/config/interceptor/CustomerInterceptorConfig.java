@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.interceptor.CustomerInitialDefaultsInterceptor;
-import com.beanframework.customer.interceptor.CustomerInitializeInterceptor;
 import com.beanframework.customer.interceptor.CustomerLoadInterceptor;
 import com.beanframework.customer.interceptor.CustomerPrepareInterceptor;
 import com.beanframework.customer.interceptor.CustomerRemoveInterceptor;
@@ -28,24 +27,6 @@ public class CustomerInterceptorConfig {
 	public InterceptorMapping customerInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(customerInitialDefaultsInterceptor());
-		mapping.setTypeCode(Customer.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public CustomerInitializeInterceptor customerInitializeInterceptor() {
-		return new CustomerInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping customerInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(customerInitializeInterceptor());
 		mapping.setTypeCode(Customer.class.getSimpleName());
 
 		return mapping;

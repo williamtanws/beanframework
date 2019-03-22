@@ -33,7 +33,7 @@ public class EntityCsvEnumerationConverter implements EntityConverter<Enumeratio
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Enumeration.ID, source.getId());
 
-				Enumeration prototype = modelService.findOneEntityByProperties(properties, true, Enumeration.class);
+				Enumeration prototype = modelService.findOneEntityByProperties(properties, Enumeration.class);
 
 				if (prototype != null) {
 

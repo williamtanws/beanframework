@@ -42,7 +42,6 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
-import com.beanframework.common.interceptor.InitializeInterceptor;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.common.interceptor.LoadInterceptor;
 import com.beanframework.common.interceptor.PrepareInterceptor;
@@ -88,33 +87,6 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
 			throw new InterceptorException("Cannot find any load interceptor to intercept target model: " + modelClass.getSimpleName());
-		}
-	}
-
-	protected void initializeInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
-
-		Iterator iterator = models.iterator();
-		while (iterator.hasNext()) {
-			Object model = iterator.next();
-			initializeInterceptor(model, context, modelClass);
-		}
-	}
-
-	protected void initializeInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
-
-		boolean notIntercepted = true;
-		for (InterceptorMapping interceptorMapping : interceptorMappings) {
-			if (interceptorMapping.getInterceptor() instanceof InitializeInterceptor) {
-				InitializeInterceptor<Object> interceptor = (InitializeInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
-					interceptor.onInitialize(model, context);
-					notIntercepted = false;
-				}
-			}
-		}
-
-		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any initialize interceptor to intercept target model: " + modelClass.getSimpleName());
 		}
 	}
 

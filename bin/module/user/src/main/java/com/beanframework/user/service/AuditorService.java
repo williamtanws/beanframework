@@ -21,7 +21,7 @@ public interface AuditorService {
 
 	Auditor findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Auditor> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Auditor> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Auditor saveEntity(User model) throws BusinessException;
 

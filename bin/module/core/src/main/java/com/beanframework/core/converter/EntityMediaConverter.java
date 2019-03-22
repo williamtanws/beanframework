@@ -28,7 +28,7 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Media.UUID, source.getUuid());
-				Media prototype = modelService.findOneEntityByProperties(properties, true, Media.class);
+				Media prototype = modelService.findOneEntityByProperties(properties, Media.class);
 
 				if (prototype != null) {
 					return convertDto(source, prototype);
@@ -108,7 +108,7 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				prototype.setUser(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			} else if (prototype.getUser().getUuid().equals(source.getUser().getUuid()) == false) {
-				User entityUser = modelService.findOneEntityByUuid(source.getUser().getUuid(), false, User.class);
+				User entityUser = modelService.findOneEntityByUuid(source.getUser().getUuid(), User.class);
 
 				if (entityUser != null) {
 					prototype.setUser(entityUser);

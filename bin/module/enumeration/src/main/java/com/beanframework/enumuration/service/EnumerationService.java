@@ -20,7 +20,7 @@ public interface EnumerationService {
 
 	Enumeration findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Enumeration> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Enumeration> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Enumeration saveEntity(Enumeration model) throws BusinessException;
 

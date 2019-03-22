@@ -33,7 +33,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserRight.UUID, source.getUuid());
 
-				UserRight prototype = modelService.findOneEntityByProperties(properties, true, UserRight.class);
+				UserRight prototype = modelService.findOneEntityByProperties(properties, UserRight.class);
 
 				if (prototype != null) {
 					return convertDto(source, prototype);
@@ -105,7 +105,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 					if (sourceField.getDynamicField().getUuid() == null && StringUtils.isNotBlank(sourceField.getDynamicField().getId())) {
 						Map<String, Object> properties = new HashMap<String, Object>();
 						properties.put(DynamicField.ID, sourceField.getDynamicField().getId());
-						DynamicField entityDynamicField = modelService.findOneEntityByProperties(properties, false, DynamicField.class);
+						DynamicField entityDynamicField = modelService.findOneEntityByProperties(properties, DynamicField.class);
 
 						UserRightField field = new UserRightField();
 						field.setUserRight(prototype);

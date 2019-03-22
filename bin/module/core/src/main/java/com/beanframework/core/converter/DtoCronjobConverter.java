@@ -37,7 +37,7 @@ public class DtoCronjobConverter extends AbstractDtoConverter<Cronjob, CronjobDt
 
 	private CronjobDto convert(Cronjob source, CronjobDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setJobClass(source.getJobClass());
 			prototype.setJobGroup(source.getJobGroup());
@@ -53,8 +53,9 @@ public class DtoCronjobConverter extends AbstractDtoConverter<Cronjob, CronjobDt
 			prototype.setLastTriggeredDate(source.getLastTriggeredDate());
 			prototype.setLastStartExecutedDate(source.getLastStartExecutedDate());
 			prototype.setLastFinishExecutedDate(source.getLastFinishExecutedDate());
+
 			prototype.setCronjobDatas(modelService.getDto(source.getCronjobDatas(), CronjobDataDto.class));
-			
+
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

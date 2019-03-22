@@ -54,6 +54,11 @@
 			<artifactId>dmsbackoffice</artifactId>
 			<version>${dms.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.oceanetz.pcrisks</groupId>
+			<artifactId>dmscockpit</artifactId>
+			<version>${dms.version}</version>
+		</dependency>
 		<!-- PPM -->
 		<dependency>
 			<groupId>com.oceanetz.pcrisks</groupId>

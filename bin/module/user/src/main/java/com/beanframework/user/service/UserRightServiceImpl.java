@@ -36,19 +36,19 @@ public class UserRightServiceImpl implements UserRightService {
 	@Cacheable(value = "UserRightOne", key = "#uuid")
 	@Override
 	public UserRight findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, UserRight.class);
+		return modelService.findOneEntityByUuid(uuid,  UserRight.class);
 	}
 
 	@Cacheable(value = "UserRightOneProperties", key = "#properties")
 	@Override
 	public UserRight findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, UserRight.class);
+		return modelService.findOneEntityByProperties(properties, UserRight.class);
 	}
 
-	@Cacheable(value = "UserRightsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "UserRightsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<UserRight> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, UserRight.class);
+	public List<UserRight> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,UserRight.class);
 	}
 
 	@Caching(evict = { //
@@ -72,7 +72,7 @@ public class UserRightServiceImpl implements UserRightService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			UserRight model = modelService.findOneEntityByUuid(uuid, true, UserRight.class);
+			UserRight model = modelService.findOneEntityByUuid(uuid,  UserRight.class);
 			modelService.deleteByEntity(model, UserRight.class);
 
 		} catch (Exception e) {
@@ -83,7 +83,7 @@ public class UserRightServiceImpl implements UserRightService {
 	@Cacheable(value = "UserRightsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<UserRight> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, UserRight.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), UserRight.class);
 	}
 
 	@Cacheable(value = "UserRightsPage", key = "'count'")

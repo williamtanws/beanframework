@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -27,16 +28,29 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Autowired
 	private UserGroupService userGroupService;
-
+	
+	@Autowired
+	private DtoConverterContext dtoConverterContext;
+	
 	@Override
 	public UserGroupDto findOneByUuid(UUID uuid) throws Exception {
+		dtoConverterContext.addFetchProperty(UserGroup.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
+		dtoConverterContext.addFetchProperty(UserGroup.FIELDS);
 		UserGroup entity = userGroupService.findOneEntityByUuid(uuid);
+		dtoConverterContext.clearFetchProperties();
+		
 		return modelService.getDto(entity, UserGroupDto.class);
 	}
 
 	@Override
 	public UserGroupDto findOneProperties(Map<String, Object> properties) throws Exception {
+		dtoConverterContext.addFetchProperty(UserGroup.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
+		dtoConverterContext.addFetchProperty(UserGroup.FIELDS);
 		UserGroup entity = userGroupService.findOneEntityByProperties(properties);
+		dtoConverterContext.clearFetchProperties();
+		
 		return modelService.getDto(entity, UserGroupDto.class);
 	}
 
@@ -105,7 +119,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(userGroupService.findEntityBySorts(sorts, false), UserGroupDto.class);
+		return modelService.getDto(userGroupService.findEntityBySorts(sorts), UserGroupDto.class);
 	}
 
 	@Override

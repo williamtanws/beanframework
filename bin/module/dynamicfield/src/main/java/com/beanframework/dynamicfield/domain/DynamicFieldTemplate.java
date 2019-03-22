@@ -30,6 +30,7 @@ public class DynamicFieldTemplate extends GenericEntity {
 	private static final long serialVersionUID = 250602072404640389L;
 
 	public static final String NAME = "name";
+	public static final String DYNAMIC_FIELD_SLOTS = "dynamicFieldSlots";
 
 	@Audited(withModifiedFlag = true)
 	private String name;

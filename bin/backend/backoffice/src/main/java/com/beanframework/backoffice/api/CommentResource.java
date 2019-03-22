@@ -1,6 +1,7 @@
 package com.beanframework.backoffice.api;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
 public class CommentResource {
-	
+
 	@Autowired
 	private CommentFacade commentFacade;
 
@@ -83,7 +84,17 @@ public class CommentResource {
 			data.setUser(dto.getUser());
 			data.setHtml(StringUtils.substring(dto.getHtml(), 0, 100) + "...");
 			data.setVisibled(dto.getVisibled());
-			data.setLastUpdatedDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(dto.getLastUpdatedDate()));
+
+			Date lastUpdatedDate;
+			if (dto.getLastModifiedDate() == null) {
+				lastUpdatedDate = dto.getCreatedDate();
+			} else {
+				lastUpdatedDate = dto.getLastModifiedDate();
+			}
+
+			if (lastUpdatedDate != null)
+				data.setLastUpdatedDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(lastUpdatedDate));
+			
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;

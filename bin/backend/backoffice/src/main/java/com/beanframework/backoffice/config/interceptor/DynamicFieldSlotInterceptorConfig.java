@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.interceptor.slot.DynamicFieldSlotInitialDefaultsInterceptor;
-import com.beanframework.dynamicfield.interceptor.slot.DynamicFieldSlotInitializeInterceptor;
 import com.beanframework.dynamicfield.interceptor.slot.DynamicFieldSlotLoadInterceptor;
 import com.beanframework.dynamicfield.interceptor.slot.DynamicFieldSlotPrepareInterceptor;
 import com.beanframework.dynamicfield.interceptor.slot.DynamicFieldSlotRemoveInterceptor;
@@ -28,24 +27,6 @@ public class DynamicFieldSlotInterceptorConfig {
 	public InterceptorMapping dynamicFieldSlotInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(dynamicFieldSlotInitialDefaultsInterceptor());
-		mapping.setTypeCode(DynamicFieldSlot.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public DynamicFieldSlotInitializeInterceptor dynamicFieldSlotInitializeInterceptor() {
-		return new DynamicFieldSlotInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping dynamicFieldSlotInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(dynamicFieldSlotInitializeInterceptor());
 		mapping.setTypeCode(DynamicFieldSlot.class.getSimpleName());
 
 		return mapping;

@@ -33,6 +33,7 @@ public class Media extends GenericEntity {
 	public static final String DESCRIPTION = "description";
 	public static final String URL = "url";
 	public static final String LOCATION = "location";
+	public static final String USER = "user";
 
 	@Audited(withModifiedFlag = true)
 	private String fileName;

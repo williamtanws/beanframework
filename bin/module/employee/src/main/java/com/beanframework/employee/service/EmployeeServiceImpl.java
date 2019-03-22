@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -47,6 +48,7 @@ import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
@@ -97,19 +99,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Cacheable(value = "EmployeeOne", key = "#uuid")
 	@Override
 	public Employee findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Employee.class);
+		return modelService.findOneEntityByUuid(uuid,  Employee.class);
 	}
 
 	@Cacheable(value = "EmployeeOneProperties", key = "#properties")
 	@Override
 	public Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Employee.class);
+		return modelService.findOneEntityByProperties(properties, Employee.class);
 	}
 
-	@Cacheable(value = "EmployeesSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "EmployeesSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Employee> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Employee.class);
+	public List<Employee> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Employee.class);
 	}
 
 	@Caching(evict = { //
@@ -135,7 +137,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Employee model = modelService.findOneEntityByUuid(uuid, true, Employee.class);
+			Employee model = modelService.findOneEntityByUuid(uuid,  Employee.class);
 			modelService.deleteByEntity(model, Employee.class);
 
 		} catch (Exception e) {
@@ -146,7 +148,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Cacheable(value = "EmployeesPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Employee> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Employee.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Employee.class);
 	}
 
 	@Cacheable(value = "EmployeesPage", key = "'count'")
@@ -202,6 +204,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public Employee findAuthenticate(String id, String password) throws Exception {
 
@@ -211,14 +214,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
-		Employee entity = modelService.findOneEntityByProperties(properties, true, Employee.class);
-
+		Employee entity = modelService.findOneEntityByProperties(properties, Employee.class);
+		
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
 		} else {
+			
 			if (passwordEncoder.matches(password, entity.getPassword()) == false) {
 				throw new BadCredentialsException("Bad Credentials");
 			}
+			
+			fetchEmployeeProperties(entity);
 		}
 
 		if (entity.getEnabled() == false) {
@@ -238,6 +244,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return entity;
+	}
+	
+	private void fetchEmployeeProperties(Employee employee) {
+		Hibernate.initialize(employee.getUserGroups());
+		
+		for (UserGroup userGroup : employee.getUserGroups()) {
+			fetchUserGroup(userGroup);
+		}
+	}
+	
+	private void fetchUserGroup(UserGroup userGroup) {
+		Hibernate.initialize(userGroup.getUserAuthorities());
+		for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+			Hibernate.initialize(userAuthority.getUserRight());
+			Hibernate.initialize(userAuthority.getUserPermission());
+		}
+		
+		for (UserGroup child : userGroup.getUserGroups()) {
+			fetchUserGroup(child);
+		}
 	}
 
 	@Override

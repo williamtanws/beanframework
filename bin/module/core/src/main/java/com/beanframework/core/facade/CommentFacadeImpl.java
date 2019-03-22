@@ -107,7 +107,7 @@ public class CommentFacadeImpl implements CommentFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Comment.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(commentService.findEntityBySorts(sorts, false), CommentDto.class);
+		return modelService.getDto(commentService.findEntityBySorts(sorts), CommentDto.class);
 	}
 
 	@Override

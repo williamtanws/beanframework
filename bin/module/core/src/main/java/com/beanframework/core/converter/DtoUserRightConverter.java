@@ -37,23 +37,26 @@ public class DtoUserRightConverter extends AbstractDtoConverter<UserRight, UserR
 
 		try {
 
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setSort(source.getSort());
-			prototype.setFields(modelService.getDto(source.getFields(), UserRightFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<UserRightFieldDto>() {
-				@Override
-				public int compare(UserRightFieldDto o1, UserRightFieldDto o2) {
-					if (o1.getSort() == null)
-						return o2.getSort() == null ? 0 : 1;
 
-					if (o2.getSort() == null)
-						return -1;
+			if (context.getFetchProperties().contains(UserRight.FIELDS)) {
+				prototype.setFields(modelService.getDto(source.getFields(), UserRightFieldDto.class));
+				Collections.sort(prototype.getFields(), new Comparator<UserRightFieldDto>() {
+					@Override
+					public int compare(UserRightFieldDto o1, UserRightFieldDto o2) {
+						if (o1.getSort() == null)
+							return o2.getSort() == null ? 0 : 1;
 
-					return o1.getSort() - o2.getSort();
-				}
-			});
+						if (o2.getSort() == null)
+							return -1;
+
+						return o1.getSort() - o2.getSort();
+					}
+				});
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

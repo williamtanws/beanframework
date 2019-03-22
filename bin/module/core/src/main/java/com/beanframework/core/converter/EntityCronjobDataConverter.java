@@ -29,7 +29,7 @@ public class EntityCronjobDataConverter implements EntityConverter<CronjobDataDt
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(CronjobData.UUID, source.getUuid());
 
-				CronjobData prototype = modelService.findOneEntityByProperties(properties, true, CronjobData.class);
+				CronjobData prototype = modelService.findOneEntityByProperties(properties, CronjobData.class);
 
 				if (prototype != null) {
 					return convertDto(source, prototype);

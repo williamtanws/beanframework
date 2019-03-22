@@ -33,7 +33,7 @@ public class DtoEnumerationConverter extends AbstractDtoConverter<Enumeration, E
 	private EnumerationDto convert(Enumeration source, EnumerationDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setSort(source.getSort());

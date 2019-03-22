@@ -33,7 +33,7 @@ public class EntityCustomerProfileConverter implements EntityConverter<CustomerD
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Customer.UUID, source.getUuid());
-				Customer prototype = modelService.findOneEntityByProperties(properties, true, Customer.class);
+				Customer prototype = modelService.findOneEntityByProperties(properties, Customer.class);
 
 				if (prototype != null) {
 					return convertDto(source, prototype);
@@ -55,7 +55,7 @@ public class EntityCustomerProfileConverter implements EntityConverter<CustomerD
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Customer.UUID, source.getUuid());
-				Customer prototype = modelService.findOneEntityByProperties(properties, true, Customer.class);
+				Customer prototype = modelService.findOneEntityByProperties(properties, Customer.class);
 
 				if (prototype != null) {
 					return convertDto(source, prototype);

@@ -59,7 +59,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Auditor.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(auditorService.findEntityBySorts(sorts, false), AuditorDto.class);
+		return modelService.getDto(auditorService.findEntityBySorts(sorts), AuditorDto.class);
 	}
 
 	@Override

@@ -34,11 +34,13 @@ public class DtoDynamicFieldTemplateConverter extends AbstractDtoConverter<Dynam
 	private DynamicFieldTemplateDto convert(DynamicFieldTemplate source, DynamicFieldTemplateDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
-			prototype.setDynamicFieldSlots(modelService.getDto(source.getDynamicFieldSlots(), DynamicFieldSlotDto.class));
-			
+
+			if (context.getFetchProperties().contains(DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS))
+				prototype.setDynamicFieldSlots(modelService.getDto(source.getDynamicFieldSlots(), DynamicFieldSlotDto.class));
+
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

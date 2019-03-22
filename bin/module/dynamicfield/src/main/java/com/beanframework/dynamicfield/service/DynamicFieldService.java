@@ -20,7 +20,7 @@ public interface DynamicFieldService {
 
 	DynamicField findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<DynamicField> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<DynamicField> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	DynamicField saveEntity(DynamicField model) throws BusinessException;
 

@@ -36,19 +36,19 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	@Cacheable(value = "UserPermissionOne", key = "#uuid")
 	@Override
 	public UserPermission findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, UserPermission.class);
+		return modelService.findOneEntityByUuid(uuid,  UserPermission.class);
 	}
 
 	@Cacheable(value = "UserPermissionOneProperties", key = "#properties")
 	@Override
 	public UserPermission findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, UserPermission.class);
+		return modelService.findOneEntityByProperties(properties, UserPermission.class);
 	}
 
-	@Cacheable(value = "UserPermissionsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "UserPermissionsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<UserPermission> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, UserPermission.class);
+	public List<UserPermission> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,UserPermission.class);
 	}
 
 	@Caching(evict = { //
@@ -72,7 +72,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			UserPermission model = modelService.findOneEntityByUuid(uuid, true, UserPermission.class);
+			UserPermission model = modelService.findOneEntityByUuid(uuid,  UserPermission.class);
 			modelService.deleteByEntity(model, UserPermission.class);
 
 		} catch (Exception e) {
@@ -83,7 +83,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	@Cacheable(value = "UserPermissionsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<UserPermission> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, UserPermission.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), UserPermission.class);
 	}
 
 	@Cacheable(value = "UserPermissionsPage", key = "'count'")

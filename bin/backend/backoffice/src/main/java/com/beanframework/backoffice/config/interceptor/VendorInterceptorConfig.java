@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.vendor.domain.Vendor;
 import com.beanframework.vendor.interceptor.VendorInitialDefaultsInterceptor;
-import com.beanframework.vendor.interceptor.VendorInitializeInterceptor;
 import com.beanframework.vendor.interceptor.VendorLoadInterceptor;
 import com.beanframework.vendor.interceptor.VendorPrepareInterceptor;
 import com.beanframework.vendor.interceptor.VendorRemoveInterceptor;
@@ -28,24 +27,6 @@ public class VendorInterceptorConfig {
 	public InterceptorMapping vendorInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(vendorInitialDefaultsInterceptor());
-		mapping.setTypeCode(Vendor.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public VendorInitializeInterceptor vendorInitializeInterceptor() {
-		return new VendorInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping vendorInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(vendorInitializeInterceptor());
 		mapping.setTypeCode(Vendor.class.getSimpleName());
 
 		return mapping;

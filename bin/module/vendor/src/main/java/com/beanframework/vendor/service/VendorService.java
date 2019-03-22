@@ -23,7 +23,7 @@ public interface VendorService {
 
 	Vendor findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Vendor> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Vendor> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Vendor saveEntity(Vendor model) throws BusinessException;
 

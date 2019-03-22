@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.interceptor.LanguageInitialDefaultsInterceptor;
-import com.beanframework.language.interceptor.LanguageInitializeInterceptor;
 import com.beanframework.language.interceptor.LanguageLoadInterceptor;
 import com.beanframework.language.interceptor.LanguagePrepareInterceptor;
 import com.beanframework.language.interceptor.LanguageRemoveInterceptor;
@@ -28,24 +27,6 @@ public class LanguageInterceptorConfig {
 	public InterceptorMapping languageInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(languageInitialDefaultsInterceptor());
-		mapping.setTypeCode(Language.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public LanguageInitializeInterceptor languageInitializeInterceptor() {
-		return new LanguageInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping languageInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(languageInitializeInterceptor());
 		mapping.setTypeCode(Language.class.getSimpleName());
 
 		return mapping;

@@ -31,7 +31,7 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldTemplate.UUID, source.getUuid());
-				DynamicFieldTemplate prototype = modelService.findOneEntityByProperties(properties, true, DynamicFieldTemplate.class);
+				DynamicFieldTemplate prototype = modelService.findOneEntityByProperties(properties, DynamicFieldTemplate.class);
 
 				if (prototype != null) {
 					return convertDto(source, prototype);
@@ -88,7 +88,7 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 						}
 
 						if (add) {
-							DynamicFieldSlot entityDynamicFieldSlots = modelService.findOneEntityByUuid(UUID.fromString(source.getTableDynamicFieldSlots()[i]), false, DynamicFieldSlot.class);
+							DynamicFieldSlot entityDynamicFieldSlots = modelService.findOneEntityByUuid(UUID.fromString(source.getTableDynamicFieldSlots()[i]), DynamicFieldSlot.class);
 							prototype.getDynamicFieldSlots().add(entityDynamicFieldSlots);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}

@@ -36,7 +36,7 @@ public class DtoSiteConverter extends AbstractDtoConverter<Site, SiteDto> implem
 
 	private SiteDto convert(Site source, SiteDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setUrl(source.getUrl());

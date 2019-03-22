@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -29,16 +30,33 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Autowired
 	private MenuService menuService;
+	
+	@Autowired
+	private DtoConverterContext dtoConverterContext;
 
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
+		dtoConverterContext.addFetchProperty(Menu.CHILDS);
+		dtoConverterContext.addFetchProperty(Menu.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(Menu.FIELDS);
+		
 		Menu entity = menuService.findOneEntityByUuid(uuid);
+		
+		dtoConverterContext.clearFetchProperties();
+		
 		return modelService.getDto(entity, MenuDto.class);
 	}
 
 	@Override
 	public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
+		dtoConverterContext.addFetchProperty(Menu.CHILDS);
+		dtoConverterContext.addFetchProperty(Menu.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(Menu.FIELDS);
+		
 		Menu entity = menuService.findOneEntityByProperties(properties);
+		
+		dtoConverterContext.clearFetchProperties();
+		
 		return modelService.getDto(entity, MenuDto.class);
 	}
 
@@ -86,7 +104,15 @@ public class MenuFacadeImpl implements MenuFacade {
 		try {
 			List<Menu> entities = menuService.findEntityMenuTree(false);
 
-			return modelService.getDto(entities, MenuDto.class);
+			dtoConverterContext.addFetchProperty(Menu.CHILDS);
+			dtoConverterContext.addFetchProperty(Menu.USER_GROUPS);
+			dtoConverterContext.addFetchProperty(Menu.FIELDS);
+			
+			List<MenuDto> dtos = modelService.getDto(entities, MenuDto.class);
+			
+			dtoConverterContext.clearFetchProperties();
+			
+			return dtos;
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -128,7 +154,6 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public MenuDto createDto() throws Exception {
-
 		return modelService.getDto(menuService.create(), MenuDto.class);
 	}
 }

@@ -36,19 +36,19 @@ public class EnumerationServiceImpl implements EnumerationService {
 	@Cacheable(value = "EnumOne", key = "#uuid")
 	@Override
 	public Enumeration findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Enumeration.class);
+		return modelService.findOneEntityByUuid(uuid,  Enumeration.class);
 	}
 
 	@Cacheable(value = "EnumOneProperties", key = "#properties")
 	@Override
 	public Enumeration findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Enumeration.class);
+		return modelService.findOneEntityByProperties(properties, Enumeration.class);
 	}
 
-	@Cacheable(value = "EnumsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "EnumsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Enumeration> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Enumeration.class);
+	public List<Enumeration> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Enumeration.class);
 	}
 
 	@Caching(evict = { //
@@ -72,7 +72,7 @@ public class EnumerationServiceImpl implements EnumerationService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Enumeration model = modelService.findOneEntityByUuid(uuid, true, Enumeration.class);
+			Enumeration model = modelService.findOneEntityByUuid(uuid,  Enumeration.class);
 			modelService.deleteByEntity(model, Enumeration.class);
 
 		} catch (Exception e) {
@@ -83,7 +83,7 @@ public class EnumerationServiceImpl implements EnumerationService {
 	@Cacheable(value = "EnumsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Enumeration> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Enumeration.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Enumeration.class);
 	}
 
 	@Cacheable(value = "EnumsPage", key = "'count'")

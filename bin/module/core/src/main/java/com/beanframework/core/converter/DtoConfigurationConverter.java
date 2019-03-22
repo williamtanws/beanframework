@@ -37,7 +37,7 @@ public class DtoConfigurationConverter extends AbstractDtoConverter<Configuratio
 
 	private ConfigurationDto convert(Configuration source, ConfigurationDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setValue(source.getValue());
 

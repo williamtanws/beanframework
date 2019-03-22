@@ -36,19 +36,19 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 	@Cacheable(value = "DynamicFieldOne", key = "#uuid")
 	@Override
 	public DynamicField findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, DynamicField.class);
+		return modelService.findOneEntityByUuid(uuid, DynamicField.class);
 	}
 
 	@Cacheable(value = "DynamicFieldOneProperties", key = "#properties")
 	@Override
 	public DynamicField findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, DynamicField.class);
+		return modelService.findOneEntityByProperties(properties, DynamicField.class);
 	}
 
-	@Cacheable(value = "DynamicFieldsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "DynamicFieldsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<DynamicField> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, DynamicField.class);
+	public List<DynamicField> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, DynamicField.class);
 	}
 
 	@Caching(evict = { //
@@ -72,7 +72,7 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			DynamicField model = modelService.findOneEntityByUuid(uuid, true, DynamicField.class);
+			DynamicField model = modelService.findOneEntityByUuid(uuid, DynamicField.class);
 			modelService.deleteByEntity(model, DynamicField.class);
 
 		} catch (Exception e) {
@@ -83,7 +83,7 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 	@Cacheable(value = "DynamicFieldsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<DynamicField> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, DynamicField.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), DynamicField.class);
 	}
 
 	@Cacheable(value = "DynamicFieldsPage", key = "'count'")

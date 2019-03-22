@@ -69,19 +69,19 @@ public class VendorServiceImpl implements VendorService {
 	@Cacheable(value = "VendorOne", key = "#uuid")
 	@Override
 	public Vendor findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Vendor.class);
+		return modelService.findOneEntityByUuid(uuid,  Vendor.class);
 	}
 
 	@Cacheable(value = "VendorOneProperties", key = "#properties")
 	@Override
 	public Vendor findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Vendor.class);
+		return modelService.findOneEntityByProperties(properties, Vendor.class);
 	}
 
-	@Cacheable(value = "VendorsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
+	@Cacheable(value = "VendorsSorts", key = "'sorts:'+#sorts")
 	@Override
-	public List<Vendor> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Vendor.class);
+	public List<Vendor> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Vendor.class);
 	}
 
 	@Caching(evict = { //
@@ -107,7 +107,7 @@ public class VendorServiceImpl implements VendorService {
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Vendor model = modelService.findOneEntityByUuid(uuid, true, Vendor.class);
+			Vendor model = modelService.findOneEntityByUuid(uuid,  Vendor.class);
 			modelService.deleteByEntity(model, Vendor.class);
 
 		} catch (Exception e) {
@@ -118,7 +118,7 @@ public class VendorServiceImpl implements VendorService {
 	@Cacheable(value = "VendorsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Vendor> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Vendor.class);
+		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Vendor.class);
 	}
 
 	@Cacheable(value = "VendorsPage", key = "'count'")

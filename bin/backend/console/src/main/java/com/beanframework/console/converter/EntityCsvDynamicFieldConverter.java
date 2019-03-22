@@ -37,7 +37,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicField.ID, source.getId());
 
-				DynamicField prototype = modelService.findOneEntityByProperties(properties, true, DynamicField.class);
+				DynamicField prototype = modelService.findOneEntityByProperties(properties, DynamicField.class);
 
 				if (prototype != null) {
 
@@ -70,7 +70,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 			if (StringUtils.isNotBlank(source.getLanguage())) {
 				Map<String, Object> languageProperties = new HashMap<String, Object>();
 				languageProperties.put(Language.ID, source.getLanguage());
-				Language entityLanguage = modelService.findOneEntityByProperties(languageProperties, true, Language.class);
+				Language entityLanguage = modelService.findOneEntityByProperties(languageProperties, Language.class);
 
 				if (entityLanguage == null) {
 					LOGGER.error("Enum ID not exists: " + source.getLanguage());
@@ -94,7 +94,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 					if (add) {
 						Map<String, Object> enumProperties = new HashMap<String, Object>();
 						enumProperties.put(Enumeration.ID, values[i]);
-						Enumeration entityEnum = modelService.findOneEntityByProperties(enumProperties, true, Enumeration.class);
+						Enumeration entityEnum = modelService.findOneEntityByProperties(enumProperties, Enumeration.class);
 
 						if (entityEnum == null) {
 							LOGGER.error("Enum ID not exists: " + values[i]);

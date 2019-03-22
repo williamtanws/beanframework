@@ -34,7 +34,7 @@ public class DtoCustomerConverter extends AbstractDtoConverter<Customer, Custome
 	private CustomerDto convert(Customer source, CustomerDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setPassword(source.getPassword());
 			prototype.setAccountNonExpired(source.getAccountNonExpired());
@@ -42,7 +42,9 @@ public class DtoCustomerConverter extends AbstractDtoConverter<Customer, Custome
 			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+
+			if (context.getFetchProperties().contains(Customer.USER_GROUPS))
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
