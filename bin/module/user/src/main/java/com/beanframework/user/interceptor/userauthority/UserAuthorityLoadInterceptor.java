@@ -18,14 +18,18 @@ public class UserAuthorityLoadInterceptor extends AbstractLoadInterceptor<UserAu
 		if (context.getFetchProperties().contains(UserAuthority.USER_PERMISSION)) {
 			Hibernate.initialize(model.getUserPermission());
 			for (UserPermissionField field : model.getUserPermission().getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnumerations());
+				Hibernate.initialize(field.getDynamicField());
+				if (field.getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 		}
 
 		if (context.getFetchProperties().contains(UserAuthority.USER_RIGHT)) {
 			Hibernate.initialize(model.getUserRight());
 			for (UserRightField field : model.getUserRight().getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnumerations());
+				Hibernate.initialize(field.getDynamicField());
+				if (field.getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 		}
 	}
