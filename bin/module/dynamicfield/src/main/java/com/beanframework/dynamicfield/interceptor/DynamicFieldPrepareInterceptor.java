@@ -2,13 +2,14 @@ package com.beanframework.dynamicfield.interceptor;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.PrepareInterceptor;
+import com.beanframework.common.interceptor.AbstractPrepareInterceptor;
 import com.beanframework.dynamicfield.domain.DynamicField;
 
-public class DynamicFieldPrepareInterceptor implements PrepareInterceptor<DynamicField> {
+public class DynamicFieldPrepareInterceptor extends AbstractPrepareInterceptor<DynamicField> {
 
 	@Override
 	public void onPrepare(DynamicField model, InterceptorContext context) throws InterceptorException {
+		super.onPrepare(model, context);
 	}
 
 }

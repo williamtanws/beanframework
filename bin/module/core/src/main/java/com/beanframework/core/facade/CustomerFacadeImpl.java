@@ -28,10 +28,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Autowired
 	private CustomerService customerService;
-	
+
 	@Autowired
 	private DtoConverterContext dtoConverterContext;
-	
+
 	@Autowired
 	private EntityCustomerProfileConverter entityCustomerProfileConverter;
 
@@ -40,9 +40,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
 		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
 		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Customer entity = customerService.findOneEntityByUuid(uuid);
+		CustomerDto dto = modelService.getDto(entity, CustomerDto.class);
 		dtoConverterContext.clearFetchProperties();
 
-		return modelService.getDto(entity, CustomerDto.class);
+		return dto;
 	}
 
 	@Override
@@ -50,9 +51,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
 		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
 		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Customer entity = customerService.findOneEntityByProperties(properties);
+		CustomerDto dto = modelService.getDto(entity, CustomerDto.class);
 		dtoConverterContext.clearFetchProperties();
-		
-		return modelService.getDto(entity, CustomerDto.class);
+
+		return dto;
 	}
 
 	@Override
@@ -74,10 +76,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
 					throw new Exception("Wrong picture format");
 				}
 			}
-			
+
 			Customer entity = modelService.getEntity(dto, Customer.class);
 			entity = (Customer) customerService.saveEntity(entity);
-			
+
 			customerService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, CustomerDto.class);
@@ -103,7 +105,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public int count() throws Exception {
 		return customerService.count();
 	}
-	
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -130,7 +132,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 		return modelService.getDto(customerService.create(), CustomerDto.class);
 	}
-	
+
 	@Override
 	public CustomerDto saveProfile(CustomerDto dto) throws BusinessException {
 

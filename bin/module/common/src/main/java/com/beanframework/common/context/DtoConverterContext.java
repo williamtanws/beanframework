@@ -1,29 +1,26 @@
 package com.beanframework.common.context;
 
-import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DtoConverterContext {
-
-	private Set<String> fetchProperties = new HashSet<String>();
-
+	
+	@Autowired
+	private FetchContext fetchContext;
+	
 	public Set<String> getFetchProperties() {
-		return fetchProperties;
-	}
-
-	public void setFetchProperties(Set<String> fetchProperties) {
-		this.fetchProperties = fetchProperties;
+		return fetchContext.getFetchProperties();
 	}
 	
 	public void addFetchProperty(String property) {
-		fetchProperties.add(property);
+		fetchContext.getFetchProperties().add(property);
 	}
 
 	public void clearFetchProperties() {
-		fetchProperties.clear();
+		fetchContext.getFetchProperties().clear();
 	}
 
 }

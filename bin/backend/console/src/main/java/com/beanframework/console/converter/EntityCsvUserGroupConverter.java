@@ -32,7 +32,7 @@ public class EntityCsvUserGroupConverter implements EntityConverter<UserGroupCsv
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserGroup.ID, source.getId());
 

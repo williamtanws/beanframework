@@ -44,8 +44,7 @@ public class DtoDynamicFieldConverter extends AbstractDtoConverter<DynamicField,
 			prototype.setLabel(source.getLabel());
 			prototype.setGrid(source.getGrid());
 
-			if (context.getFetchProperties().contains(DynamicField.LANGUAGE))
-				prototype.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class));
+			prototype.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class));
 
 			if (context.getFetchProperties().contains(DynamicField.ENUMERATIONS))
 				prototype.setEnumerations(modelService.getDto(source.getEnumerations(), EnumerationDto.class));

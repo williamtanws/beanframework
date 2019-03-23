@@ -29,7 +29,7 @@ public class EntityCsvMediaConverter implements EntityConverter<MediaCsv, Media>
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Media.ID, source.getId());
 

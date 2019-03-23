@@ -38,9 +38,10 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
 		dtoConverterContext.addFetchProperty(UserGroup.FIELDS);
 		UserGroup entity = userGroupService.findOneEntityByUuid(uuid);
+		UserGroupDto dto = modelService.getDto(entity, UserGroupDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, UserGroupDto.class);
+		return dto;
 	}
 
 	@Override
@@ -49,9 +50,10 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
 		dtoConverterContext.addFetchProperty(UserGroup.FIELDS);
 		UserGroup entity = userGroupService.findOneEntityByProperties(properties);
+		UserGroupDto dto = modelService.getDto(entity, UserGroupDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, UserGroupDto.class);
+		return dto;
 	}
 
 	@Override

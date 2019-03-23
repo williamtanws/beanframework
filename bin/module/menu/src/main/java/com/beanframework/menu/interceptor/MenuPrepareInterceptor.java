@@ -4,13 +4,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.PrepareInterceptor;
+import com.beanframework.common.interceptor.AbstractPrepareInterceptor;
 import com.beanframework.menu.domain.Menu;
 
-public class MenuPrepareInterceptor implements PrepareInterceptor<Menu> {
+public class MenuPrepareInterceptor extends AbstractPrepareInterceptor<Menu> {
 
 	@Override
 	public void onPrepare(Menu model, InterceptorContext context) throws InterceptorException {
+		super.onPrepare(model, context);
 
 		if (StringUtils.isBlank(model.getPath())) {
 			model.setPath(null);

@@ -108,7 +108,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			if (model != null)
 				loadInterceptor(model, interceptorContext, modelClass);
-
+			
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -396,7 +396,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-
+	
 	@Override
 	public <T> T getDto(Object model, Class modelClass) throws Exception {
 		try {

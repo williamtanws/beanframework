@@ -32,7 +32,7 @@ public class EntityCsvUserRightConverter implements EntityConverter<UserRightCsv
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserRight.ID, source.getId());
 

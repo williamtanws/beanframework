@@ -29,7 +29,7 @@ public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Site.ID, source.getId());
 

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
+import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.customer.CustomerConstants;
@@ -21,7 +21,7 @@ import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 import com.beanframework.user.domain.UserField;
 
-public class CustomerInitialDefaultsInterceptor implements InitialDefaultsInterceptor<Customer> {
+public class CustomerInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Customer> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(CustomerInitialDefaultsInterceptor.class);
 
@@ -36,6 +36,7 @@ public class CustomerInitialDefaultsInterceptor implements InitialDefaultsInterc
 
 	@Override
 	public void onInitialDefaults(Customer model, InterceptorContext context) throws InterceptorException {
+		super.onInitialDefaults(model, context);
 		model.setEnabled(true);
 		model.setAccountNonExpired(true);
 		model.setAccountNonLocked(true);
