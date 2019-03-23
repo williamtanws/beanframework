@@ -40,9 +40,10 @@ public class VendorFacadeImpl implements VendorFacade {
 		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
 		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Vendor entity = vendorService.findOneEntityByUuid(uuid);
+		VendorDto dto = modelService.getDto(entity, VendorDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, VendorDto.class);
+		return dto;
 	}
 
 	@Override
@@ -50,9 +51,10 @@ public class VendorFacadeImpl implements VendorFacade {
 		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
 		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Vendor entity = vendorService.findOneEntityByProperties(properties);
+		VendorDto dto = modelService.getDto(entity, VendorDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, VendorDto.class);
+		return dto;
 	}
 
 	@Override

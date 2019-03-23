@@ -33,7 +33,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicField.ID, source.getId());
 

@@ -41,9 +41,10 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
 		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee entity = employeeService.findOneEntityByUuid(uuid);
+		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, EmployeeDto.class);
+		return dto;
 	}
 
 	@Override
@@ -51,9 +52,10 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
 		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee entity = employeeService.findOneEntityByProperties(properties);
+		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, EmployeeDto.class);
+		return dto;
 	}
 
 	@Override
@@ -148,9 +150,13 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public EmployeeDto getCurrentUser() throws Exception {
+		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee employee = employeeService.getCurrentUser();
-
-		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), EmployeeDto.class);
+		EmployeeDto dto = modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), EmployeeDto.class);
+		dtoConverterContext.clearFetchProperties();
+		
+		return dto;
 	}
 
 	@Override

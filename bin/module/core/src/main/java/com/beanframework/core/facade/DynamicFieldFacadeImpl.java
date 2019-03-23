@@ -26,7 +26,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Autowired
 	private DynamicFieldService dynamicFieldService;
-	
+
 	@Autowired
 	private DtoConverterContext dtoConverterContext;
 
@@ -35,9 +35,10 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 		dtoConverterContext.addFetchProperty(DynamicField.LANGUAGE);
 		dtoConverterContext.addFetchProperty(DynamicField.ENUMERATIONS);
 		DynamicField entity = dynamicFieldService.findOneEntityByUuid(uuid);
+		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class);
 		dtoConverterContext.clearFetchProperties();
 
-		return modelService.getDto(entity, DynamicFieldDto.class);
+		return dto;
 	}
 
 	@Override
@@ -45,9 +46,10 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 		dtoConverterContext.addFetchProperty(DynamicField.LANGUAGE);
 		dtoConverterContext.addFetchProperty(DynamicField.ENUMERATIONS);
 		DynamicField entity = dynamicFieldService.findOneEntityByProperties(properties);
+		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class);
 		dtoConverterContext.clearFetchProperties();
 
-		return modelService.getDto(entity, DynamicFieldDto.class);
+		return dto;
 	}
 
 	@Override

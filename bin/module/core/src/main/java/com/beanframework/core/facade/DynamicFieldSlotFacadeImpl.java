@@ -34,18 +34,20 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 	public DynamicFieldSlotDto findOneByUuid(UUID uuid) throws Exception {
 		dtoConverterContext.addFetchProperty(DynamicFieldSlot.DYNAMIC_FIELD);
 		DynamicFieldSlot entity = dynamicFieldService.findOneEntityByUuid(uuid);
+		DynamicFieldSlotDto dto = modelService.getDto(entity, DynamicFieldSlotDto.class);
 		dtoConverterContext.clearFetchProperties();
-
-		return modelService.getDto(entity, DynamicFieldSlotDto.class);
+		
+		return dto;
 	}
 
 	@Override
 	public DynamicFieldSlotDto findOneProperties(Map<String, Object> properties) throws Exception {
 		dtoConverterContext.addFetchProperty(DynamicFieldSlot.DYNAMIC_FIELD);
 		DynamicFieldSlot entity = dynamicFieldService.findOneEntityByProperties(properties);
+		DynamicFieldSlotDto dto = modelService.getDto(entity, DynamicFieldSlotDto.class);
 		dtoConverterContext.clearFetchProperties();
-
-		return modelService.getDto(entity, DynamicFieldSlotDto.class);
+		
+		return dto;
 	}
 
 	@Override

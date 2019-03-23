@@ -37,7 +37,7 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.ID, source.getId());
 

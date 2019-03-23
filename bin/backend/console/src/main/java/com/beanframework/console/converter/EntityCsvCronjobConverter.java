@@ -31,7 +31,7 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Cronjob.ID, source.getId());
 

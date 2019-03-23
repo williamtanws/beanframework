@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
+import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
@@ -21,7 +21,7 @@ import com.beanframework.menu.MenuConstants;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
 
-public class MenuInitialDefaultsInterceptor implements InitialDefaultsInterceptor<Menu> {
+public class MenuInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Menu> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuInitialDefaultsInterceptor.class);
 
@@ -36,6 +36,7 @@ public class MenuInitialDefaultsInterceptor implements InitialDefaultsIntercepto
 
 	@Override
 	public void onInitialDefaults(Menu model, InterceptorContext context) throws InterceptorException {
+		super.onInitialDefaults(model, context);
 
 		try {
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();

@@ -39,12 +39,11 @@ public class MenuFacadeImpl implements MenuFacade {
 		dtoConverterContext.addFetchProperty(Menu.CHILDS);
 		dtoConverterContext.addFetchProperty(Menu.USER_GROUPS);
 		dtoConverterContext.addFetchProperty(Menu.FIELDS);
-		
 		Menu entity = menuService.findOneEntityByUuid(uuid);
-		
+		MenuDto dto =  modelService.getDto(entity, MenuDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, MenuDto.class);
+		return dto;
 	}
 
 	@Override
@@ -52,12 +51,11 @@ public class MenuFacadeImpl implements MenuFacade {
 		dtoConverterContext.addFetchProperty(Menu.CHILDS);
 		dtoConverterContext.addFetchProperty(Menu.USER_GROUPS);
 		dtoConverterContext.addFetchProperty(Menu.FIELDS);
-		
 		Menu entity = menuService.findOneEntityByProperties(properties);
-		
+		MenuDto dto =  modelService.getDto(entity, MenuDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, MenuDto.class);
+		return dto;
 	}
 
 	@Override
@@ -102,14 +100,12 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
-			List<Menu> entities = menuService.findEntityMenuTree(false);
 
 			dtoConverterContext.addFetchProperty(Menu.CHILDS);
 			dtoConverterContext.addFetchProperty(Menu.USER_GROUPS);
 			dtoConverterContext.addFetchProperty(Menu.FIELDS);
-			
+			List<Menu> entities = menuService.findEntityMenuTree(false);
 			List<MenuDto> dtos = modelService.getDto(entities, MenuDto.class);
-			
 			dtoConverterContext.clearFetchProperties();
 			
 			return dtos;

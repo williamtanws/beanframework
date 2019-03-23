@@ -37,18 +37,20 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
 		dtoConverterContext.addFetchProperty(UserPermission.FIELDS);
 		UserRight entity = userRightService.findOneEntityByUuid(uuid);
+		UserRightDto dto = modelService.getDto(entity, UserRightDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, UserRightDto.class);
+		return dto;
 	}
 
 	@Override
 	public UserRightDto findOneProperties(Map<String, Object> properties) throws Exception {
 		dtoConverterContext.addFetchProperty(UserPermission.FIELDS);
 		UserRight entity = userRightService.findOneEntityByProperties(properties);
+		UserRightDto dto = modelService.getDto(entity, UserRightDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, UserRightDto.class);
+		return dto;
 	}
 
 	@Override

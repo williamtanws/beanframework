@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
+import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
@@ -21,7 +21,7 @@ import com.beanframework.user.UserRightConstants;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightField;
 
-public class UserRightInitialDefaultsInterceptor implements InitialDefaultsInterceptor<UserRight> {
+public class UserRightInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<UserRight> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserRightInitialDefaultsInterceptor.class);
 
@@ -36,6 +36,7 @@ public class UserRightInitialDefaultsInterceptor implements InitialDefaultsInter
 
 	@Override
 	public void onInitialDefaults(UserRight model, InterceptorContext context) throws InterceptorException {
+		super.onInitialDefaults(model, context);
 
 		try {
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();

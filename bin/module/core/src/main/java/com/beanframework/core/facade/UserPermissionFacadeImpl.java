@@ -36,18 +36,20 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
 		dtoConverterContext.addFetchProperty(UserPermission.FIELDS);
 		UserPermission entity = userPermissionService.findOneEntityByUuid(uuid);
+		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, UserPermissionDto.class);
+		return dto;
 	}
 
 	@Override
 	public UserPermissionDto findOneProperties(Map<String, Object> properties) throws Exception {
 		dtoConverterContext.addFetchProperty(UserPermission.FIELDS);
 		UserPermission entity = userPermissionService.findOneEntityByProperties(properties);
+		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class);
 		dtoConverterContext.clearFetchProperties();
 		
-		return modelService.getDto(entity, UserPermissionDto.class);
+		return dto;
 	}
 
 	@Override
