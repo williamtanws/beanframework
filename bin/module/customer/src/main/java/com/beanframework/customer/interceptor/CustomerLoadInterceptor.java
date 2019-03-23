@@ -24,16 +24,22 @@ public class CustomerLoadInterceptor extends AbstractLoadInterceptor<Customer> {
 			for (UserGroup userGroup : model.getUserGroups()) {
 				Hibernate.initialize(userGroup.getUserAuthorities());
 				for (UserGroupField field : userGroup.getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnumerations());
+					Hibernate.initialize(field.getDynamicField());
+					if (field.getDynamicField() != null)
+						Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 					Hibernate.initialize(userAuthority.getUserRight());
 					for (UserRightField field : userAuthority.getUserRight().getFields()) {
-						Hibernate.initialize(field.getDynamicField().getEnumerations());
+						Hibernate.initialize(field.getDynamicField());
+						if (field.getDynamicField() != null)
+							Hibernate.initialize(field.getDynamicField().getEnumerations());
 					}
 					Hibernate.initialize(userAuthority.getUserPermission());
 					for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-						Hibernate.initialize(field.getDynamicField().getEnumerations());
+						Hibernate.initialize(field.getDynamicField());
+						if (field.getDynamicField() != null)
+							Hibernate.initialize(field.getDynamicField().getEnumerations());
 					}
 				}
 				initializeUserGroups(userGroup);
@@ -43,7 +49,9 @@ public class CustomerLoadInterceptor extends AbstractLoadInterceptor<Customer> {
 		if (context.getFetchProperties().contains(Customer.FIELDS)) {
 			Hibernate.initialize(model.getFields());
 			for (UserField field : model.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnumerations());
+				Hibernate.initialize(field.getDynamicField());
+				if (field.getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 		}
 
@@ -54,16 +62,22 @@ public class CustomerLoadInterceptor extends AbstractLoadInterceptor<Customer> {
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
 			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicField().getEnumerations());
+				Hibernate.initialize(field.getDynamicField());
+				if (field.getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
 				for (UserRightField field : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnumerations());
+					Hibernate.initialize(field.getDynamicField());
+					if (field.getDynamicField() != null)
+						Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 				Hibernate.initialize(userAuthority.getUserPermission());
 				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnumerations());
+					Hibernate.initialize(field.getDynamicField());
+					if (field.getDynamicField() != null)
+						Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 			}
 			initializeUserGroups(userGroup);

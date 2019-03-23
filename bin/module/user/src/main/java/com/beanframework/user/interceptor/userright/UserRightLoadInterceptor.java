@@ -18,7 +18,8 @@ public class UserRightLoadInterceptor extends AbstractLoadInterceptor<UserRight>
 			Hibernate.initialize(model.getFields());
 			for (UserRightField field : model.getFields()) {
 				Hibernate.initialize(field.getDynamicField());
-				Hibernate.initialize(field.getDynamicField().getEnumerations());
+				if (field.getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 
 			}
 		}

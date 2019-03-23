@@ -22,11 +22,15 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 			for (UserAuthority userAuthority : model.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
 				for (UserRightField field : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnumerations());
+					Hibernate.initialize(field.getDynamicField());
+					if (field.getDynamicField() != null)
+						Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 				Hibernate.initialize(userAuthority.getUserPermission());
 				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnumerations());
+					Hibernate.initialize(field.getDynamicField());
+					if (field.getDynamicField() != null)
+						Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 			}
 		}
@@ -36,16 +40,22 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 			for (UserGroup userGroup : model.getUserGroups()) {
 				Hibernate.initialize(userGroup.getUserAuthorities());
 				for (UserGroupField field : userGroup.getFields()) {
-					Hibernate.initialize(field.getDynamicField().getEnumerations());
+					Hibernate.initialize(field.getDynamicField());
+					if (field.getDynamicField() != null)
+						Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
 				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
 					Hibernate.initialize(userAuthority.getUserRight());
 					for (UserRightField field : userAuthority.getUserRight().getFields()) {
-						Hibernate.initialize(field.getDynamicField().getEnumerations());
+						Hibernate.initialize(field.getDynamicField());
+						if (field.getDynamicField() != null)
+							Hibernate.initialize(field.getDynamicField().getEnumerations());
 					}
 					Hibernate.initialize(userAuthority.getUserPermission());
 					for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-						Hibernate.initialize(field.getDynamicField().getEnumerations());
+						Hibernate.initialize(field.getDynamicField());
+						if (field.getDynamicField() != null)
+							Hibernate.initialize(field.getDynamicField().getEnumerations());
 					}
 				}
 			}
@@ -55,7 +65,8 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 			Hibernate.initialize(model.getFields());
 			for (UserGroupField field : model.getFields()) {
 				Hibernate.initialize(field.getDynamicField());
-				Hibernate.initialize(field.getDynamicField().getEnumerations());
+				if (field.getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 		}
 	}

@@ -18,7 +18,8 @@ public class UserPermissionLoadInterceptor extends AbstractLoadInterceptor<UserP
 			Hibernate.initialize(model.getFields());
 			for (UserPermissionField field : model.getFields()) {
 				Hibernate.initialize(field.getDynamicField());
-				Hibernate.initialize(field.getDynamicField().getEnumerations());
+				if (field.getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 		}
 	}
