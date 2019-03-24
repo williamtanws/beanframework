@@ -17,16 +17,15 @@ public class MenuLoadInterceptor extends AbstractLoadInterceptor<Menu> {
 
 	@Override
 	public void onLoad(Menu model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
 
-		if (context.getFetchProperties().contains(Menu.CHILDS)) {
+		if (context.isFetchable(Menu.CHILDS)) {
 			Hibernate.initialize(model.getChilds());
 			for (Menu menu : model.getChilds()) {
 				initializeChilds(menu);
 			}
 		}
 
-		if (context.getFetchProperties().contains(Menu.USER_GROUPS)) {
+		if (context.isFetchable(Menu.USER_GROUPS)) {
 			Hibernate.initialize(model.getUserGroups());
 			for (UserGroup userGroup : model.getUserGroups()) {
 				Hibernate.initialize(userGroup.getUserAuthorities());
@@ -58,7 +57,7 @@ public class MenuLoadInterceptor extends AbstractLoadInterceptor<Menu> {
 			}
 		}
 
-		if (context.getFetchProperties().contains(Menu.FIELDS)) {
+		if (context.isFetchable(Menu.FIELDS)) {
 			Hibernate.initialize(model.getFields());
 			for (MenuField field : model.getFields()) {
 				Hibernate.initialize(field.getDynamicField());
@@ -66,6 +65,8 @@ public class MenuLoadInterceptor extends AbstractLoadInterceptor<Menu> {
 					Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 		}
+
+		super.onLoad(model, context);
 	}
 
 	private void initializeChilds(Menu model) {

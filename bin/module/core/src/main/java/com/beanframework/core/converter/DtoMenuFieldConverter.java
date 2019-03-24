@@ -39,7 +39,7 @@ public class DtoMenuFieldConverter extends AbstractDtoConverter<MenuField, MenuF
 			prototype.setValue(source.getValue());
 			prototype.setSort(source.getSort());
 
-			if (context.getFetchProperties().contains(MenuField.DYNAMIC_FIELD))
+			if (context.isFetchable(MenuField.DYNAMIC_FIELD))
 				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
 
 		} catch (Exception e) {

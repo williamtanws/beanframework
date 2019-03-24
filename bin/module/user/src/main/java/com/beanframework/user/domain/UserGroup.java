@@ -37,6 +37,7 @@ public class UserGroup extends GenericEntity {
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_AUTHORITIES = "userAuthorities";
 	public static final String FIELDS = "fields";
+	public static final String USERS = "users";
 
 	@Audited(withModifiedFlag = true)
 	private String name;

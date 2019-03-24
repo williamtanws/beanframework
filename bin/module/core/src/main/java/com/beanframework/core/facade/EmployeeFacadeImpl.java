@@ -20,6 +20,8 @@ import com.beanframework.core.specification.EmployeeSpecification;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
+import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserGroup;
 
 @Component
 public class EmployeeFacadeImpl implements EmployeeFacade {
@@ -39,6 +41,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
 		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
+		dtoConverterContext.addFetchProperty(UserAuthority.USER_PERMISSION);
+		dtoConverterContext.addFetchProperty(UserAuthority.USER_RIGHT);
 		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee entity = employeeService.findOneEntityByUuid(uuid);
 		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
@@ -50,6 +55,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
 		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
+		dtoConverterContext.addFetchProperty(UserAuthority.USER_PERMISSION);
+		dtoConverterContext.addFetchProperty(UserAuthority.USER_RIGHT);
 		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee entity = employeeService.findOneEntityByProperties(properties);
 		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
@@ -151,6 +159,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public EmployeeDto getCurrentUser() throws Exception {
 		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
+		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
+		dtoConverterContext.addFetchProperty(UserAuthority.USER_PERMISSION);
+		dtoConverterContext.addFetchProperty(UserAuthority.USER_RIGHT);
 		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee employee = employeeService.getCurrentUser();
 		EmployeeDto dto = modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), EmployeeDto.class);

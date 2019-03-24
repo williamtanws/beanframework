@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
-import org.hibernate.Hibernate;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -120,11 +119,6 @@ public class MediaServiceImpl implements MediaService {
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
 		List<Object[]> histories = modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Media.class);
-		for (Object[] objects : histories) {
-			Media media = (Media) objects[0];
-			Hibernate.initialize(media.getLastModifiedBy());
-			Hibernate.unproxy(media.getLastModifiedBy());
-		}
 		return histories;
 	}
 

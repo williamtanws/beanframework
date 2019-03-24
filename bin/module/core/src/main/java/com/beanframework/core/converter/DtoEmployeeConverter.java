@@ -46,10 +46,10 @@ public class DtoEmployeeConverter extends AbstractDtoConverter<Employee, Employe
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
 
-			if (context.getFetchProperties().contains(Employee.USER_GROUPS))
+			if (context.isFetchable(Employee.USER_GROUPS))
 				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
-			if (context.getFetchProperties().contains(Employee.FIELDS)) {
+			if (context.isFetchable(Employee.FIELDS)) {
 				prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
 				Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
 					@Override

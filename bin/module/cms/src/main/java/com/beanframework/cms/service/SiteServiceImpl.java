@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.Hibernate;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -106,11 +105,6 @@ public class SiteServiceImpl implements SiteService {
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
 		List<Object[]> histories = modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Site.class);
-		for (Object[] objects : histories) {
-			Site site = (Site) objects[0];
-			Hibernate.initialize(site.getLastModifiedBy());
-			Hibernate.unproxy(site.getLastModifiedBy());
-		}
 		return histories;
 	}
 

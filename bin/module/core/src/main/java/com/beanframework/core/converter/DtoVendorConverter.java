@@ -43,7 +43,7 @@ public class DtoVendorConverter extends AbstractDtoConverter<Vendor, VendorDto> 
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
 
-			if (context.getFetchProperties().contains(Vendor.USER_GROUPS))
+			if (context.isFetchable(Vendor.USER_GROUPS))
 				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
 		} catch (Exception e) {

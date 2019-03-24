@@ -17,7 +17,6 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Hibernate;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -51,6 +50,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -90,6 +90,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private InterceptorContext interceptorContext;
 
 	@Override
 	public Employee create() throws Exception {
@@ -214,7 +217,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
+		
+		interceptorContext.addFetchProperty(Employee.USER_GROUPS);
+		interceptorContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
+		interceptorContext.addFetchProperty(UserAuthority.USER_PERMISSION);
+		interceptorContext.addFetchProperty(UserAuthority.USER_RIGHT);
+		interceptorContext.addFetchProperty(Employee.FIELDS);
 		Employee entity = modelService.findOneEntityByProperties(properties, Employee.class);
+		interceptorContext.clearFetchProperties();
 		
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
@@ -223,8 +233,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 			if (passwordEncoder.matches(password, entity.getPassword()) == false) {
 				throw new BadCredentialsException("Bad Credentials");
 			}
-			
-			fetchEmployeeProperties(entity);
 		}
 
 		if (entity.getEnabled() == false) {
@@ -244,26 +252,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return entity;
-	}
-	
-	private void fetchEmployeeProperties(Employee employee) {
-		Hibernate.initialize(employee.getUserGroups());
-		
-		for (UserGroup userGroup : employee.getUserGroups()) {
-			fetchUserGroup(userGroup);
-		}
-	}
-	
-	private void fetchUserGroup(UserGroup userGroup) {
-		Hibernate.initialize(userGroup.getUserAuthorities());
-		for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-			Hibernate.initialize(userAuthority.getUserRight());
-			Hibernate.initialize(userAuthority.getUserPermission());
-		}
-		
-		for (UserGroup child : userGroup.getUserGroups()) {
-			fetchUserGroup(child);
-		}
 	}
 
 	@Override

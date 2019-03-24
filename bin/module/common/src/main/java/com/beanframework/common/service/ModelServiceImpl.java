@@ -402,6 +402,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 			if (model == null)
 				return null;
+			
 			model = dtoConverter(model, dtoConveterContext, modelClass);
 			return (T) model;
 		} catch (Exception e) {

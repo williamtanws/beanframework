@@ -15,9 +15,8 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 
 	@Override
 	public void onLoad(UserGroup model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
 
-		if (context.getFetchProperties().contains(UserGroup.USER_AUTHORITIES)) {
+		if (context.isFetchable(UserGroup.USER_AUTHORITIES)) {
 			Hibernate.initialize(model.getUserAuthorities());
 			for (UserAuthority userAuthority : model.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
@@ -35,22 +34,26 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 			}
 		}
 
-		if (context.getFetchProperties().contains(UserGroup.USER_GROUPS)) {
+		if (context.isFetchable(UserGroup.USER_GROUPS)) {
 			Hibernate.initialize(model.getUserGroups());
 			for (UserGroup userGroup : model.getUserGroups()) {
+				
 				Hibernate.initialize(userGroup.getUserAuthorities());
 				for (UserGroupField field : userGroup.getFields()) {
 					Hibernate.initialize(field.getDynamicField());
 					if (field.getDynamicField() != null)
 						Hibernate.initialize(field.getDynamicField().getEnumerations());
 				}
+				
 				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+					
 					Hibernate.initialize(userAuthority.getUserRight());
 					for (UserRightField field : userAuthority.getUserRight().getFields()) {
 						Hibernate.initialize(field.getDynamicField());
 						if (field.getDynamicField() != null)
 							Hibernate.initialize(field.getDynamicField().getEnumerations());
 					}
+					
 					Hibernate.initialize(userAuthority.getUserPermission());
 					for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
 						Hibernate.initialize(field.getDynamicField());
@@ -61,7 +64,7 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 			}
 		}
 
-		if (context.getFetchProperties().contains(UserGroup.FIELDS)) {
+		if (context.isFetchable(UserGroup.FIELDS)) {
 			Hibernate.initialize(model.getFields());
 			for (UserGroupField field : model.getFields()) {
 				Hibernate.initialize(field.getDynamicField());
@@ -69,5 +72,6 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 					Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 		}
+		super.onLoad(model, context);
 	}
 }

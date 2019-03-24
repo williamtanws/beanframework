@@ -39,7 +39,7 @@ public class DtoUserFieldConverter extends AbstractDtoConverter<UserField, UserF
 			prototype.setValue(source.getValue());
 			prototype.setSort(source.getSort());
 
-			if (context.getFetchProperties().contains(UserField.DYNAMIC_FIELD))
+			if (context.isFetchable(UserField.DYNAMIC_FIELD))
 				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
 
 		} catch (Exception e) {

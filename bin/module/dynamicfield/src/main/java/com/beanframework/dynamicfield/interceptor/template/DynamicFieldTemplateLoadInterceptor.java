@@ -12,9 +12,8 @@ public class DynamicFieldTemplateLoadInterceptor extends AbstractLoadInterceptor
 
 	@Override
 	public void onLoad(DynamicFieldTemplate model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
 
-		if (context.getFetchProperties().contains(DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS)) {
+		if (context.isFetchable(DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS)) {
 			if (model.getDynamicFieldSlots() != null && model.getDynamicFieldSlots().isEmpty() == false)
 				for (DynamicFieldSlot dynamicFieldSlot : model.getDynamicFieldSlots()) {
 					Hibernate.initialize(dynamicFieldSlot.getDynamicField());
@@ -23,6 +22,7 @@ public class DynamicFieldTemplateLoadInterceptor extends AbstractLoadInterceptor
 
 				}
 		}
+		super.onLoad(model, context);
 	}
 
 }
