@@ -7,20 +7,24 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DtoConverterContext {
-	
+
 	@Autowired
 	private FetchContext fetchContext;
-	
+
 	public Set<String> getFetchProperties() {
 		return fetchContext.getFetchProperties();
 	}
-	
+
 	public void addFetchProperty(String property) {
 		fetchContext.getFetchProperties().add(property);
 	}
 
 	public void clearFetchProperties() {
 		fetchContext.getFetchProperties().clear();
+	}
+
+	public boolean isFetchable(String property) {
+		return fetchContext.getFetchProperties().contains(property);
 	}
 
 }

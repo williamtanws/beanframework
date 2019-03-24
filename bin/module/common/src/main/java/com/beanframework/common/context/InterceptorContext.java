@@ -22,5 +22,9 @@ public class InterceptorContext {
 	public void clearFetchProperties() {
 		fetchContext.getFetchProperties().clear();
 	}
+	
+	public boolean isFetchable(String property) {
+		return fetchContext.getFetchProperties().contains(property);
+	}
 
 }

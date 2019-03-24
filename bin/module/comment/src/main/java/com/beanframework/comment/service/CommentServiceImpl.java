@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.Hibernate;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -108,11 +107,6 @@ public class CommentServiceImpl implements CommentService {
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
 		List<Object[]> histories = modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Comment.class);
-		for (Object[] objects : histories) {
-			Comment comment = (Comment) objects[0];
-			Hibernate.initialize(comment.getLastModifiedBy());
-			Hibernate.unproxy(comment.getLastModifiedBy());
-		}
 		return histories;
 	}
 

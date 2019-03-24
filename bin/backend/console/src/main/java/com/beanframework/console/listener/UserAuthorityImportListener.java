@@ -154,8 +154,6 @@ public class UserAuthorityImportListener extends ImportListener {
 				generateUserAuthority(userGroup);
 
 				for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
-					Hibernate.initialize(userGroup.getUserAuthorities().get(i).getUserRight());
-					Hibernate.initialize(userGroup.getUserAuthorities().get(i).getUserPermission());
 
 					for (UserAuthorityCsv userAuthorityCsv : userGroupAuthorityList) {
 						if (userGroup.getUserAuthorities().get(i).getUserPermission().getId().equals(userAuthorityCsv.getUserPermissionId())) {

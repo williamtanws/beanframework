@@ -7,6 +7,5 @@ public abstract class AbstractLoadInterceptor<T> implements LoadInterceptor<T> {
 	
 	@Override
 	public void onLoad(T model, InterceptorContext context) throws InterceptorException {
-		
 	}
 }

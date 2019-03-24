@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.Hibernate;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -106,11 +105,6 @@ public class LanguageServiceImpl implements LanguageService {
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
 		List<Object[]> histories = modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Language.class);
-		for (Object[] objects : histories) {
-			Language language = (Language) objects[0];
-			Hibernate.initialize(language.getLastModifiedBy());
-			Hibernate.unproxy(language.getLastModifiedBy());
-		}
 		return histories;
 	}
 

@@ -17,9 +17,8 @@ public class VendorLoadInterceptor extends AbstractLoadInterceptor<Vendor> {
 
 	@Override
 	public void onLoad(Vendor model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
 
-		if (context.getFetchProperties().contains(Vendor.USER_GROUPS)) {
+		if (context.isFetchable(Vendor.USER_GROUPS)) {
 			Hibernate.initialize(model.getUserGroups());
 			for (UserGroup userGroup : model.getUserGroups()) {
 				Hibernate.initialize(userGroup.getUserAuthorities());
@@ -46,7 +45,7 @@ public class VendorLoadInterceptor extends AbstractLoadInterceptor<Vendor> {
 			}
 		}
 
-		if (context.getFetchProperties().contains(Vendor.FIELDS)) {
+		if (context.isFetchable(Vendor.FIELDS)) {
 			Hibernate.initialize(model.getFields());
 			for (UserField field : model.getFields()) {
 				Hibernate.initialize(field.getDynamicField());
@@ -54,6 +53,8 @@ public class VendorLoadInterceptor extends AbstractLoadInterceptor<Vendor> {
 					Hibernate.initialize(field.getDynamicField().getEnumerations());
 			}
 		}
+
+		super.onLoad(model, context);
 
 	}
 

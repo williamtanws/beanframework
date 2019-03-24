@@ -15,6 +15,7 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserAuthorityDto;
+import com.beanframework.core.data.UserDto;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.UserGroupFieldDto;
 import com.beanframework.user.domain.UserGroup;
@@ -45,14 +46,17 @@ public class DtoUserGroupConverter extends AbstractDtoConverter<UserGroup, UserG
 			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
+			
+			if (context.isFetchable(UserGroup.USERS))
+				prototype.setUsers(modelService.getDto(source.getUsers(), UserDto.class));
 
-			if (context.getFetchProperties().contains(UserGroup.USER_GROUPS))
+			if (context.isFetchable(UserGroup.USER_GROUPS))
 				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
-			if (context.getFetchProperties().contains(UserGroup.USER_AUTHORITIES))
+			if (context.isFetchable(UserGroup.USER_AUTHORITIES))
 				prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class));
 
-			if (context.getFetchProperties().contains(UserGroup.FIELDS)) {
+			if (context.isFetchable(UserGroup.FIELDS)) {
 				prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class));
 				Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
 					@Override

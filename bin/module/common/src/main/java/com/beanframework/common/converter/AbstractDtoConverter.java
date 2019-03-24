@@ -16,7 +16,7 @@ public abstract class AbstractDtoConverter<T extends GenericEntity, E extends Ge
 
 	protected void convertCommonProperties(T source, E prototype, DtoConverterContext context) throws ConverterException {
 
-		try {
+		try {			
 			prototype.setUuid(source.getUuid());
 			prototype.setId(source.getId());
 			prototype.setCreatedDate(source.getCreatedDate());

@@ -234,6 +234,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	protected Object dtoConverter(Object model, DtoConverterContext context, Class modelClass) throws ConverterException {
+		
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof DtoConverter) {
 				DtoConverter interceptor = (DtoConverter) interceptorMapping.getConverter();
