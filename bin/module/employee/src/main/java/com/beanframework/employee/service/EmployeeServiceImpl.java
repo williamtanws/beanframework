@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +52,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beanframework.common.context.InterceptorContext;
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -92,8 +94,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private InterceptorContext interceptorContext;
+	private FetchContext fetchContext;
 
+	@Autowired
+	private EntityManager entityManager;
+	
 	@Override
 	public Employee create() throws Exception {
 		return modelService.create(Employee.class);
@@ -102,12 +107,32 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Cacheable(value = "EmployeeOne", key = "#uuid")
 	@Override
 	public Employee findOneEntityByUuid(UUID uuid) throws Exception {
+		fetchContext.clearFetchProperties(Employee.class);
+		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.clearFetchProperties(UserAuthority.class);
+		
+		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
+		
 		return modelService.findOneEntityByUuid(uuid,  Employee.class);
 	}
 
 	@Cacheable(value = "EmployeeOneProperties", key = "#properties")
 	@Override
 	public Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		fetchContext.clearFetchProperties(Employee.class);
+		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.clearFetchProperties(UserAuthority.class);
+		
+		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
+		
 		return modelService.findOneEntityByProperties(properties, Employee.class);
 	}
 
@@ -122,7 +147,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 			@CacheEvict(value = "EmployeeOneProperties", allEntries = true), //
 			@CacheEvict(value = "EmployeesSorts", allEntries = true), //
 			@CacheEvict(value = "EmployeesPage", allEntries = true), //
-			@CacheEvict(value = "EmployeesHistory", allEntries = true) }) //
+			@CacheEvict(value = "EmployeesHistory", allEntries = true), //
+			@CacheEvict(value = "EmployeeCountByUserGroups", allEntries = true) })
 	@Override
 	public Employee saveEntity(Employee model) throws BusinessException {
 		model = (Employee) modelService.saveEntity(model, Employee.class);
@@ -135,7 +161,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 			@CacheEvict(value = "EmployeeOneProperties", allEntries = true), //
 			@CacheEvict(value = "EmployeesSorts", allEntries = true), //
 			@CacheEvict(value = "EmployeesPage", allEntries = true), //
-			@CacheEvict(value = "EmployeesHistory", allEntries = true) })
+			@CacheEvict(value = "EmployeesHistory", allEntries = true), //
+			@CacheEvict(value = "EmployeeCountByUserGroups", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
@@ -217,14 +244,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
-		
-		interceptorContext.addFetchProperty(Employee.USER_GROUPS);
-		interceptorContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
-		interceptorContext.addFetchProperty(UserAuthority.USER_PERMISSION);
-		interceptorContext.addFetchProperty(UserAuthority.USER_RIGHT);
-		interceptorContext.addFetchProperty(Employee.FIELDS);
-		Employee entity = modelService.findOneEntityByProperties(properties, Employee.class);
-		interceptorContext.clearFetchProperties();
+
+		Employee entity = findOneEntityByProperties(properties);
 		
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
@@ -381,5 +402,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
+	}
+
+	@Cacheable(value = "EmployeeCountByUserGroups", key = "'count, userGroupsUuid:'+#userGroupsUuid")
+	@Override
+	public int countByUserGroups(List<UUID> userGroupsUuid) {
+		Query query = entityManager
+				.createQuery("SELECT COUNT(DISTINCT o) FROM Employee o LEFT JOIN o.userGroups u WHERE (u.uuid IN (?1))");
+		query.setParameter(1, userGroupsUuid);
+
+		Long count = (Long) query.getSingleResult();
+		return count.intValue();
 	}
 }

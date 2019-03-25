@@ -3,7 +3,6 @@ package com.beanframework.core.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +43,7 @@ public class DtoCustomerConverter extends AbstractDtoConverter<Customer, Custome
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
 
-			if (context.isFetchable(Customer.USER_GROUPS))
+			if (context.isFetchable(Customer.class, Customer.USER_GROUPS))
 				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
 		} catch (Exception e) {

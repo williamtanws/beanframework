@@ -61,4 +61,6 @@ public interface EmployeeService {
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
+	int countByUserGroups(List<UUID> userGroupsUuid);
+
 }

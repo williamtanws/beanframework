@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -27,6 +28,9 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private FetchContext fetchContext;
 
 	@Override
 	public UserPermission create() throws Exception {
@@ -36,12 +40,16 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	@Cacheable(value = "UserPermissionOne", key = "#uuid")
 	@Override
 	public UserPermission findOneEntityByUuid(UUID uuid) throws Exception {
+		fetchContext.clearFetchProperties(UserPermission.class);
+		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
 		return modelService.findOneEntityByUuid(uuid,  UserPermission.class);
 	}
 
 	@Cacheable(value = "UserPermissionOneProperties", key = "#properties")
 	@Override
 	public UserPermission findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		fetchContext.clearFetchProperties(UserPermission.class);
+		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
 		return modelService.findOneEntityByProperties(properties, UserPermission.class);
 	}
 

@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -26,27 +25,20 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 
 	@Autowired
 	private DynamicFieldSlotService dynamicFieldService;
-	
-	@Autowired
-	private DtoConverterContext dtoConverterContext;
 
 	@Override
 	public DynamicFieldSlotDto findOneByUuid(UUID uuid) throws Exception {
-		dtoConverterContext.addFetchProperty(DynamicFieldSlot.DYNAMIC_FIELD);
 		DynamicFieldSlot entity = dynamicFieldService.findOneEntityByUuid(uuid);
 		DynamicFieldSlotDto dto = modelService.getDto(entity, DynamicFieldSlotDto.class);
-		dtoConverterContext.clearFetchProperties();
-		
+
 		return dto;
 	}
 
 	@Override
 	public DynamicFieldSlotDto findOneProperties(Map<String, Object> properties) throws Exception {
-		dtoConverterContext.addFetchProperty(DynamicFieldSlot.DYNAMIC_FIELD);
 		DynamicFieldSlot entity = dynamicFieldService.findOneEntityByProperties(properties);
 		DynamicFieldSlotDto dto = modelService.getDto(entity, DynamicFieldSlotDto.class);
-		dtoConverterContext.clearFetchProperties();
-		
+
 		return dto;
 	}
 

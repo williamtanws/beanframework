@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -28,27 +27,20 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Autowired
 	private UserPermissionService userPermissionService;
-	
-	@Autowired
-	private DtoConverterContext dtoConverterContext;
 
 	@Override
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
-		dtoConverterContext.addFetchProperty(UserPermission.FIELDS);
 		UserPermission entity = userPermissionService.findOneEntityByUuid(uuid);
 		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class);
-		dtoConverterContext.clearFetchProperties();
-		
+
 		return dto;
 	}
 
 	@Override
 	public UserPermissionDto findOneProperties(Map<String, Object> properties) throws Exception {
-		dtoConverterContext.addFetchProperty(UserPermission.FIELDS);
 		UserPermission entity = userPermissionService.findOneEntityByProperties(properties);
 		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class);
-		dtoConverterContext.clearFetchProperties();
-		
+
 		return dto;
 	}
 

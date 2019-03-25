@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -26,26 +25,19 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 
 	@Autowired
 	private DynamicFieldTemplateService dynamicFieldTemplateService;
-	
-	@Autowired
-	private DtoConverterContext dtoConverterContext;
 
 	@Override
 	public DynamicFieldTemplateDto findOneByUuid(UUID uuid) throws Exception {
-		dtoConverterContext.addFetchProperty(DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS);
 		DynamicFieldTemplate entity = dynamicFieldTemplateService.findOneEntityByUuid(uuid);
 		DynamicFieldTemplateDto dto = modelService.getDto(entity, DynamicFieldTemplateDto.class);
-		dtoConverterContext.clearFetchProperties();
 		
 		return dto;
 	}
 
 	@Override
 	public DynamicFieldTemplateDto findOneProperties(Map<String, Object> properties) throws Exception {
-		dtoConverterContext.addFetchProperty(DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS);
 		DynamicFieldTemplate entity = dynamicFieldTemplateService.findOneEntityByProperties(properties);
 		DynamicFieldTemplateDto dto = modelService.getDto(entity, DynamicFieldTemplateDto.class);
-		dtoConverterContext.clearFetchProperties();
 		
 		return dto;
 	}

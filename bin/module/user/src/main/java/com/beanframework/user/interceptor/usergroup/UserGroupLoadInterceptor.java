@@ -16,7 +16,7 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 	@Override
 	public void onLoad(UserGroup model, InterceptorContext context) throws InterceptorException {
 
-		if (context.isFetchable(UserGroup.USER_AUTHORITIES)) {
+		if (context.isFetchable(UserGroup.class, UserGroup.USER_AUTHORITIES)) {
 			Hibernate.initialize(model.getUserAuthorities());
 			for (UserAuthority userAuthority : model.getUserAuthorities()) {
 				Hibernate.initialize(userAuthority.getUserRight());
@@ -34,7 +34,7 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 			}
 		}
 
-		if (context.isFetchable(UserGroup.USER_GROUPS)) {
+		if (context.isFetchable(UserGroup.class, UserGroup.USER_GROUPS)) {
 			Hibernate.initialize(model.getUserGroups());
 			for (UserGroup userGroup : model.getUserGroups()) {
 				
@@ -64,7 +64,7 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 			}
 		}
 
-		if (context.isFetchable(UserGroup.FIELDS)) {
+		if (context.isFetchable(UserGroup.class, UserGroup.FIELDS)) {
 			Hibernate.initialize(model.getFields());
 			for (UserGroupField field : model.getFields()) {
 				Hibernate.initialize(field.getDynamicField());

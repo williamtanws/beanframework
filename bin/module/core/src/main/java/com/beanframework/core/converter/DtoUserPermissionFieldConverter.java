@@ -39,7 +39,7 @@ public class DtoUserPermissionFieldConverter extends AbstractDtoConverter<UserPe
 			prototype.setValue(source.getValue());
 			prototype.setSort(source.getSort());
 
-			if (context.isFetchable(UserPermissionField.DYNAMIC_FIELD))
+			if (context.isFetchable(UserPermissionField.class, UserPermissionField.DYNAMIC_FIELD))
 				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
 
 		} catch (Exception e) {

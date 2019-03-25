@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -20,8 +19,6 @@ import com.beanframework.core.specification.EmployeeSpecification;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
-import com.beanframework.user.domain.UserAuthority;
-import com.beanframework.user.domain.UserGroup;
 
 @Component
 public class EmployeeFacadeImpl implements EmployeeFacade {
@@ -34,34 +31,19 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
-	
-	@Autowired
-	private DtoConverterContext dtoConverterContext;
 
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
-		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
-		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
-		dtoConverterContext.addFetchProperty(UserAuthority.USER_PERMISSION);
-		dtoConverterContext.addFetchProperty(UserAuthority.USER_RIGHT);
-		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee entity = employeeService.findOneEntityByUuid(uuid);
 		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
-		dtoConverterContext.clearFetchProperties();
 		
 		return dto;
 	}
 
 	@Override
 	public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
-		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
-		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
-		dtoConverterContext.addFetchProperty(UserAuthority.USER_PERMISSION);
-		dtoConverterContext.addFetchProperty(UserAuthority.USER_RIGHT);
-		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee entity = employeeService.findOneEntityByProperties(properties);
 		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
-		dtoConverterContext.clearFetchProperties();
 		
 		return dto;
 	}
@@ -158,14 +140,10 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public EmployeeDto getCurrentUser() throws Exception {
-		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
-		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
-		dtoConverterContext.addFetchProperty(UserAuthority.USER_PERMISSION);
-		dtoConverterContext.addFetchProperty(UserAuthority.USER_RIGHT);
-		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Employee employee = employeeService.getCurrentUser();
-		EmployeeDto dto = modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), EmployeeDto.class);
-		dtoConverterContext.clearFetchProperties();
+		
+		Employee entity = employeeService.findOneEntityByUuid(employee.getUuid());
+		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
 		
 		return dto;
 	}

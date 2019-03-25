@@ -41,7 +41,7 @@ public class DtoUserPermissionConverter extends AbstractDtoConverter<UserPermiss
 			prototype.setName(source.getName());
 			prototype.setSort(source.getSort());
 
-			if (context.isFetchable(UserPermission.FIELDS)) {
+			if (context.isFetchable(UserPermission.class, UserPermission.FIELDS)) {
 				prototype.setFields(modelService.getDto(source.getFields(), UserPermissionFieldDto.class));
 				Collections.sort(prototype.getFields(), new Comparator<UserPermissionFieldDto>() {
 					@Override

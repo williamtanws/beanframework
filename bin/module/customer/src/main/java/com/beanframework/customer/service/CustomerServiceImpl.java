@@ -32,6 +32,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -48,6 +49,9 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private AuditorService auditorService;
+	
+	@Autowired
+	private FetchContext fetchContext;
 	
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
@@ -69,12 +73,20 @@ public class CustomerServiceImpl implements CustomerService {
 	@Cacheable(value = "CustomerOne", key = "#uuid")
 	@Override
 	public Customer findOneEntityByUuid(UUID uuid) throws Exception {
+		fetchContext.clearFetchProperties(Customer.class);
+		
+		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
+		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
 		return modelService.findOneEntityByUuid(uuid,  Customer.class);
 	}
 
 	@Cacheable(value = "CustomerOneProperties", key = "#properties")
 	@Override
 	public Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		fetchContext.clearFetchProperties(Customer.class);
+		
+		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
+		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
 		return modelService.findOneEntityByProperties(properties, Customer.class);
 	}
 

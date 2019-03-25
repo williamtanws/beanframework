@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -27,6 +28,9 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private FetchContext fetchContext;
 
 	@Override
 	public UserGroup create() throws Exception {
@@ -36,12 +40,20 @@ public class UserGroupServiceImpl implements UserGroupService {
 	@Cacheable(value = "UserGroupOne", key = "#uuid")
 	@Override
 	public UserGroup findOneEntityByUuid(UUID uuid) throws Exception {
+		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.FIELDS);
 		return modelService.findOneEntityByUuid(uuid, UserGroup.class);
 	}
 
 	@Cacheable(value = "UserGroupOneProperties", key = "#properties")
 	@Override
 	public UserGroup findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.FIELDS);
 		return modelService.findOneEntityByProperties(properties, UserGroup.class);
 	}
 
