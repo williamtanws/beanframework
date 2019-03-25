@@ -11,13 +11,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.specification.UserRightSpecification;
-import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserRightService;
 
@@ -29,27 +27,20 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Autowired
 	private UserRightService userRightService;
-	
-	@Autowired
-	private DtoConverterContext dtoConverterContext;
 
 	@Override
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
-		dtoConverterContext.addFetchProperty(UserPermission.FIELDS);
 		UserRight entity = userRightService.findOneEntityByUuid(uuid);
 		UserRightDto dto = modelService.getDto(entity, UserRightDto.class);
-		dtoConverterContext.clearFetchProperties();
-		
+
 		return dto;
 	}
 
 	@Override
 	public UserRightDto findOneProperties(Map<String, Object> properties) throws Exception {
-		dtoConverterContext.addFetchProperty(UserPermission.FIELDS);
 		UserRight entity = userRightService.findOneEntityByProperties(properties);
 		UserRightDto dto = modelService.getDto(entity, UserRightDto.class);
-		dtoConverterContext.clearFetchProperties();
-		
+
 		return dto;
 	}
 

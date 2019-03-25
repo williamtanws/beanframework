@@ -52,13 +52,13 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 			prototype.setTarget(source.getTarget());
 			prototype.setEnabled(source.getEnabled());
 
-			if (context.isFetchable(Menu.CHILDS))
+			if (context.isFetchable(Menu.class, Menu.CHILDS))
 				prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class));
 
-			if (context.isFetchable(Menu.USER_GROUPS))
+			if (context.isFetchable(Menu.class, Menu.USER_GROUPS))
 				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
-			if (context.isFetchable(Menu.FIELDS)) {
+			if (context.isFetchable(Menu.class, Menu.FIELDS)) {
 				prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));
 				Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
 					@Override

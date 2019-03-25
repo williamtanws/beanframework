@@ -44,10 +44,10 @@ public class DtoUserAuthorityConverter extends AbstractDtoConverter<UserAuthorit
 
 			prototype.setEnabled(source.getEnabled());
 
-			if (context.isFetchable(UserAuthority.USER_PERMISSION))
+			if (context.isFetchable(UserAuthority.class, UserAuthority.USER_PERMISSION))
 				prototype.setUserPermission(modelService.getDto(source.getUserPermission(), UserPermissionDto.class));
 
-			if (context.isFetchable(UserAuthority.USER_RIGHT))
+			if (context.isFetchable(UserAuthority.class, UserAuthority.USER_RIGHT))
 				prototype.setUserRight(modelService.getDto(source.getUserRight(), UserRightDto.class));
 
 		} catch (Exception e) {

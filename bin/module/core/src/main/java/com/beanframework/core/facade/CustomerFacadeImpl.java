@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -18,7 +17,6 @@ import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.specification.CustomerSpecification;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerService;
-import com.beanframework.employee.domain.Employee;
 
 @Component
 public class CustomerFacadeImpl implements CustomerFacade {
@@ -30,29 +28,20 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	private CustomerService customerService;
 
 	@Autowired
-	private DtoConverterContext dtoConverterContext;
-
-	@Autowired
 	private EntityCustomerProfileConverter entityCustomerProfileConverter;
 
 	@Override
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
-		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
-		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Customer entity = customerService.findOneEntityByUuid(uuid);
 		CustomerDto dto = modelService.getDto(entity, CustomerDto.class);
-		dtoConverterContext.clearFetchProperties();
 
 		return dto;
 	}
 
 	@Override
 	public CustomerDto findOneProperties(Map<String, Object> properties) throws Exception {
-		dtoConverterContext.addFetchProperty(Employee.USER_GROUPS);
-		dtoConverterContext.addFetchProperty(Employee.FIELDS);
 		Customer entity = customerService.findOneEntityByProperties(properties);
 		CustomerDto dto = modelService.getDto(entity, CustomerDto.class);
-		dtoConverterContext.clearFetchProperties();
 
 		return dto;
 	}

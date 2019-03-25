@@ -18,7 +18,7 @@ public class EmployeeLoadInterceptor extends AbstractLoadInterceptor<Employee> {
 	@Override
 	public void onLoad(Employee model, InterceptorContext context) throws InterceptorException {
 
-		if (context.isFetchable(Employee.USER_GROUPS)) {
+		if (context.isFetchable(Employee.class, Employee.USER_GROUPS)) {
 			Hibernate.initialize(model.getUserGroups());
 			for (UserGroup userGroup : model.getUserGroups()) {
 				Hibernate.initialize(userGroup.getUserAuthorities());
@@ -45,7 +45,7 @@ public class EmployeeLoadInterceptor extends AbstractLoadInterceptor<Employee> {
 			}
 		}
 
-		if (context.isFetchable(Employee.FIELDS)) {
+		if (context.isFetchable(Employee.class, Employee.FIELDS)) {
 			Hibernate.initialize(model.getFields());
 			for (UserField field : model.getFields()) {
 				Hibernate.initialize(field.getDynamicField());

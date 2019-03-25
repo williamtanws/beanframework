@@ -20,11 +20,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.repository.MenuRepository;
+import com.beanframework.user.domain.UserGroup;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -34,6 +36,9 @@ public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private MenuRepository menuRepository;
+	
+	@Autowired
+	private FetchContext fetchContext;
 
 	@Override
 	public Menu create() throws Exception {
@@ -43,12 +48,24 @@ public class MenuServiceImpl implements MenuService {
 	@Cacheable(value = "MenuOne", key = "#uuid")
 	@Override
 	public Menu findOneEntityByUuid(UUID uuid) throws Exception {
+		fetchContext.clearFetchProperties(Menu.class);
+		
+		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
+		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
+		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
+		
 		return modelService.findOneEntityByUuid(uuid,  Menu.class);
 	}
 
 	@Cacheable(value = "MenuOneProperties", key = "#properties")
 	@Override
 	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		fetchContext.clearFetchProperties(Menu.class);
+		
+		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
+		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
+		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
+		
 		return modelService.findOneEntityByProperties(properties, Menu.class);
 	}
 
@@ -157,6 +174,12 @@ public class MenuServiceImpl implements MenuService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findEntityMenuTree(boolean enabled) throws Exception {
+		fetchContext.clearFetchProperties(Menu.class);
+		
+		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
+		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
+		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
+		fetchContext.addFetchProperty(Menu.class, UserGroup.USER_AUTHORITIES);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.PARENT, null);

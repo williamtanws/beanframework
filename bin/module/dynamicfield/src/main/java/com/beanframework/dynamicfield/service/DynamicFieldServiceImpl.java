@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -27,6 +28,9 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private FetchContext fetchContext;
 
 	@Override
 	public DynamicField create() throws Exception {
@@ -36,12 +40,20 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 	@Cacheable(value = "DynamicFieldOne", key = "#uuid")
 	@Override
 	public DynamicField findOneEntityByUuid(UUID uuid) throws Exception {
+		fetchContext.clearFetchProperties(DynamicField.class);
+		
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 		return modelService.findOneEntityByUuid(uuid, DynamicField.class);
 	}
 
 	@Cacheable(value = "DynamicFieldOneProperties", key = "#properties")
 	@Override
 	public DynamicField findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		fetchContext.clearFetchProperties(DynamicField.class);
+		
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 		return modelService.findOneEntityByProperties(properties, DynamicField.class);
 	}
 

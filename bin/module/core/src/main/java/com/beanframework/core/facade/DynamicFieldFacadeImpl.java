@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -27,27 +26,18 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	@Autowired
 	private DynamicFieldService dynamicFieldService;
 
-	@Autowired
-	private DtoConverterContext dtoConverterContext;
-
 	@Override
 	public DynamicFieldDto findOneByUuid(UUID uuid) throws Exception {
-		dtoConverterContext.addFetchProperty(DynamicField.LANGUAGE);
-		dtoConverterContext.addFetchProperty(DynamicField.ENUMERATIONS);
 		DynamicField entity = dynamicFieldService.findOneEntityByUuid(uuid);
 		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class);
-		dtoConverterContext.clearFetchProperties();
 
 		return dto;
 	}
 
 	@Override
 	public DynamicFieldDto findOneProperties(Map<String, Object> properties) throws Exception {
-		dtoConverterContext.addFetchProperty(DynamicField.LANGUAGE);
-		dtoConverterContext.addFetchProperty(DynamicField.ENUMERATIONS);
 		DynamicField entity = dynamicFieldService.findOneEntityByProperties(properties);
 		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class);
-		dtoConverterContext.clearFetchProperties();
 
 		return dto;
 	}

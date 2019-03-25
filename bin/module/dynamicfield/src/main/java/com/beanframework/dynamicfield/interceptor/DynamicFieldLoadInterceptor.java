@@ -12,7 +12,7 @@ public class DynamicFieldLoadInterceptor extends AbstractLoadInterceptor<Dynamic
 	@Override
 	public void onLoad(DynamicField model, InterceptorContext context) throws InterceptorException {
 
-		if (context.isFetchable(DynamicField.ENUMERATIONS))
+		if (context.isFetchable(DynamicField.class, DynamicField.ENUMERATIONS))
 			Hibernate.initialize(model.getEnumerations());
 
 		super.onLoad(model, context);

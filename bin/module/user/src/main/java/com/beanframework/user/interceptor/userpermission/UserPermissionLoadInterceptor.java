@@ -13,7 +13,7 @@ public class UserPermissionLoadInterceptor extends AbstractLoadInterceptor<UserP
 	@Override
 	public void onLoad(UserPermission model, InterceptorContext context) throws InterceptorException {
 
-		if (context.isFetchable(UserPermission.FIELDS)) {
+		if (context.isFetchable(UserPermission.class, UserPermission.FIELDS)) {
 			Hibernate.initialize(model.getFields());
 			for (UserPermissionField field : model.getFields()) {
 				Hibernate.initialize(field.getDynamicField());

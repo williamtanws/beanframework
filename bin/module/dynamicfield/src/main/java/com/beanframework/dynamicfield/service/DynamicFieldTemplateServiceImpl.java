@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -27,6 +28,9 @@ public class DynamicFieldTemplateServiceImpl implements DynamicFieldTemplateServ
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private FetchContext fetchContext;
 
 	@Override
 	public DynamicFieldTemplate create() throws Exception {
@@ -36,12 +40,20 @@ public class DynamicFieldTemplateServiceImpl implements DynamicFieldTemplateServ
 	@Cacheable(value = "DynamicFieldTemplateOne", key = "#uuid")
 	@Override
 	public DynamicFieldTemplate findOneEntityByUuid(UUID uuid) throws Exception {
+		fetchContext.clearFetchProperties(DynamicFieldTemplate.class);
+		
+		fetchContext.addFetchProperty(DynamicFieldTemplate.class, DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS);
+		
 		return modelService.findOneEntityByUuid(uuid,  DynamicFieldTemplate.class);
 	}
 
 	@Cacheable(value = "DynamicFieldTemplateOneProperties", key = "#properties")
 	@Override
 	public DynamicFieldTemplate findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		fetchContext.clearFetchProperties(DynamicFieldTemplate.class);
+		
+		fetchContext.addFetchProperty(DynamicFieldTemplate.class, DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS);
+		
 		return modelService.findOneEntityByProperties(properties, DynamicFieldTemplate.class);
 	}
 

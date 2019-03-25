@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.UserAuthorityDto;
@@ -27,19 +26,11 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean {
 	@Autowired
 	private ModelService modelService;
 
-	@Autowired
-	private DtoConverterContext dtoConverterContext;
-
 	@Override
 	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
 
-		dtoConverterContext.addFetchProperty(Menu.CHILDS);
-		dtoConverterContext.addFetchProperty(Menu.USER_GROUPS);
-		dtoConverterContext.addFetchProperty(Menu.FIELDS);
-		dtoConverterContext.addFetchProperty(UserGroup.USER_AUTHORITIES);
 		List<Menu> entities = menuService.findEntityMenuTree(true);
 		List<MenuDto> menuDtoTree = modelService.getDto(entities, MenuDto.class);
-		dtoConverterContext.clearFetchProperties();
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();

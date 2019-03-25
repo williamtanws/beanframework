@@ -46,10 +46,10 @@ public class DtoUserConverter extends AbstractDtoConverter<User, UserDto> implem
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
 
-			if (context.isFetchable(User.USER_GROUPS))
+			if (context.isFetchable(User.class, User.USER_GROUPS))
 				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
-			if (context.isFetchable(User.FIELDS)) {
+			if (context.isFetchable(User.class, User.FIELDS)) {
 				prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
 				Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
 					@Override

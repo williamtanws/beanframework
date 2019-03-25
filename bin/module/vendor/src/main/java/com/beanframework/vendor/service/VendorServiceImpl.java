@@ -32,6 +32,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -48,6 +49,9 @@ public class VendorServiceImpl implements VendorService {
 
 	@Autowired
 	private AuditorService auditorService;
+	
+	@Autowired
+	private FetchContext fetchContext;
 	
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
@@ -69,12 +73,22 @@ public class VendorServiceImpl implements VendorService {
 	@Cacheable(value = "VendorOne", key = "#uuid")
 	@Override
 	public Vendor findOneEntityByUuid(UUID uuid) throws Exception {
+		fetchContext.clearFetchProperties(Vendor.class);
+		
+		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
+		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
+		
 		return modelService.findOneEntityByUuid(uuid,  Vendor.class);
 	}
 
 	@Cacheable(value = "VendorOneProperties", key = "#properties")
 	@Override
 	public Vendor findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		fetchContext.clearFetchProperties(Vendor.class);
+		
+		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
+		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
+		
 		return modelService.findOneEntityByProperties(properties, Vendor.class);
 	}
 

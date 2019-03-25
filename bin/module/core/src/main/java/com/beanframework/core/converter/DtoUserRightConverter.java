@@ -42,7 +42,7 @@ public class DtoUserRightConverter extends AbstractDtoConverter<UserRight, UserR
 			prototype.setName(source.getName());
 			prototype.setSort(source.getSort());
 
-			if (context.isFetchable(UserRight.FIELDS)) {
+			if (context.isFetchable(UserRight.class, UserRight.FIELDS)) {
 				prototype.setFields(modelService.getDto(source.getFields(), UserRightFieldDto.class));
 				Collections.sort(prototype.getFields(), new Comparator<UserRightFieldDto>() {
 					@Override

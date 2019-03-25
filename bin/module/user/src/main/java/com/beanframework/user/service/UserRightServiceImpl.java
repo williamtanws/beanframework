@@ -17,9 +17,11 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 
 @Service
@@ -27,6 +29,9 @@ public class UserRightServiceImpl implements UserRightService {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private FetchContext fetchContext;
 
 	@Override
 	public UserRight create() throws Exception {
@@ -36,12 +41,20 @@ public class UserRightServiceImpl implements UserRightService {
 	@Cacheable(value = "UserRightOne", key = "#uuid")
 	@Override
 	public UserRight findOneEntityByUuid(UUID uuid) throws Exception {
+		fetchContext.clearFetchProperties(UserPermission.class);
+		
+		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
+		
 		return modelService.findOneEntityByUuid(uuid,  UserRight.class);
 	}
 
 	@Cacheable(value = "UserRightOneProperties", key = "#properties")
 	@Override
 	public UserRight findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		fetchContext.clearFetchProperties(UserPermission.class);
+		
+		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
+		
 		return modelService.findOneEntityByProperties(properties, UserRight.class);
 	}
 

@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -30,31 +29,20 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Autowired
 	private MenuService menuService;
-	
-	@Autowired
-	private DtoConverterContext dtoConverterContext;
 
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
-		dtoConverterContext.addFetchProperty(Menu.CHILDS);
-		dtoConverterContext.addFetchProperty(Menu.USER_GROUPS);
-		dtoConverterContext.addFetchProperty(Menu.FIELDS);
 		Menu entity = menuService.findOneEntityByUuid(uuid);
-		MenuDto dto =  modelService.getDto(entity, MenuDto.class);
-		dtoConverterContext.clearFetchProperties();
-		
+		MenuDto dto = modelService.getDto(entity, MenuDto.class);
+
 		return dto;
 	}
 
 	@Override
 	public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
-		dtoConverterContext.addFetchProperty(Menu.CHILDS);
-		dtoConverterContext.addFetchProperty(Menu.USER_GROUPS);
-		dtoConverterContext.addFetchProperty(Menu.FIELDS);
 		Menu entity = menuService.findOneEntityByProperties(properties);
-		MenuDto dto =  modelService.getDto(entity, MenuDto.class);
-		dtoConverterContext.clearFetchProperties();
-		
+		MenuDto dto = modelService.getDto(entity, MenuDto.class);
+
 		return dto;
 	}
 
@@ -101,13 +89,9 @@ public class MenuFacadeImpl implements MenuFacade {
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
 
-			dtoConverterContext.addFetchProperty(Menu.CHILDS);
-			dtoConverterContext.addFetchProperty(Menu.USER_GROUPS);
-			dtoConverterContext.addFetchProperty(Menu.FIELDS);
 			List<Menu> entities = menuService.findEntityMenuTree(false);
 			List<MenuDto> dtos = modelService.getDto(entities, MenuDto.class);
-			dtoConverterContext.clearFetchProperties();
-			
+
 			return dtos;
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);

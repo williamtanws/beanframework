@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.context.EntityConverterContext;
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -31,7 +31,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 	private ModelService modelService;
 
 	@Autowired
-	private DtoConverterContext dtoConverterContext;
+	private FetchContext fetchContext;
 
 	@Override
 	public Menu convert(MenuCsv source, EntityConverterContext context) throws ConverterException {
@@ -81,9 +81,10 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 				Map<String, Object> parentProperties = new HashMap<String, Object>();
 				parentProperties.put(Menu.ID, source.getParent());
 
-				dtoConverterContext.addFetchProperty(Menu.CHILDS);
+				fetchContext.clearFetchProperties(Menu.class);
+				fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
+				
 				Menu parent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
-				dtoConverterContext.clearFetchProperties();
 
 				if (parent == null) {
 					LOGGER.error("Parent not exists: " + source.getParent());

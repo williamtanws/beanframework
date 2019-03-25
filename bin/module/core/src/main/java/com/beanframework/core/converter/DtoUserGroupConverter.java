@@ -47,16 +47,16 @@ public class DtoUserGroupConverter extends AbstractDtoConverter<UserGroup, UserG
 
 			prototype.setName(source.getName());
 			
-			if (context.isFetchable(UserGroup.USERS))
+			if (context.isFetchable(UserGroup.class, UserGroup.USERS))
 				prototype.setUsers(modelService.getDto(source.getUsers(), UserDto.class));
 
-			if (context.isFetchable(UserGroup.USER_GROUPS))
+			if (context.isFetchable(UserGroup.class, UserGroup.USER_GROUPS))
 				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
-			if (context.isFetchable(UserGroup.USER_AUTHORITIES))
+			if (context.isFetchable(UserGroup.class, UserGroup.USER_AUTHORITIES))
 				prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class));
 
-			if (context.isFetchable(UserGroup.FIELDS)) {
+			if (context.isFetchable(UserGroup.class, UserGroup.FIELDS)) {
 				prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class));
 				Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
 					@Override

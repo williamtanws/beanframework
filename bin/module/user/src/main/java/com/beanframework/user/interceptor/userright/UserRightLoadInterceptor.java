@@ -13,7 +13,7 @@ public class UserRightLoadInterceptor extends AbstractLoadInterceptor<UserRight>
 	@Override
 	public void onLoad(UserRight model, InterceptorContext context) throws InterceptorException {
 
-		if (context.isFetchable(UserRight.FIELDS)) {
+		if (context.isFetchable(UserRight.class, UserRight.FIELDS)) {
 			Hibernate.initialize(model.getFields());
 			for (UserRightField field : model.getFields()) {
 				Hibernate.initialize(field.getDynamicField());
