@@ -9,19 +9,19 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.cronjob.repository.CronjobRepository;
 
 @Service
@@ -33,46 +33,40 @@ public class CronjobServiceImpl implements CronjobService {
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private FetchContext fetchContext;
+
 	@Override
 	public Cronjob create() throws Exception {
 		return modelService.create(Cronjob.class);
 	}
 
-	@Cacheable(value = "CronjobOne", key = "#uuid")
 	@Override
 	public Cronjob findOneEntityByUuid(UUID uuid) throws Exception {
+		fetchContext.clearFetchProperties(Cronjob.class);
+		fetchContext.addFetchProperty(Cronjob.class, Cronjob.CRONJOB_DATAS);
+
 		return modelService.findOneEntityByUuid(uuid, Cronjob.class);
 	}
 
-	@Cacheable(value = "CronjobOneProperties", key = "#properties")
 	@Override
 	public Cronjob findOneEntityByProperties(Map<String, Object> properties) throws Exception {
+		fetchContext.clearFetchProperties(Cronjob.class);
+		fetchContext.addFetchProperty(Cronjob.class, Cronjob.CRONJOB_DATAS);
+
 		return modelService.findOneEntityByProperties(properties, Cronjob.class);
 	}
 
-	@Cacheable(value = "CronjobsSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<Cronjob> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Cronjob.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "CronjobOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "CronjobOneProperties", allEntries = true), //
-			@CacheEvict(value = "CronjobsSorts", allEntries = true), //
-			@CacheEvict(value = "CronjobsPage", allEntries = true), //
-			@CacheEvict(value = "CronjobsHistory", allEntries = true) }) //
 	@Override
 	public Cronjob saveEntity(Cronjob model) throws BusinessException {
 		return (Cronjob) modelService.saveEntity(model, Cronjob.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "CronjobOne", key = "#uuid"), //
-			@CacheEvict(value = "CronjobOneProperties", allEntries = true), //
-			@CacheEvict(value = "CronjobsSorts", allEntries = true), //
-			@CacheEvict(value = "CronjobsPage", allEntries = true), //
-			@CacheEvict(value = "CronjobsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
@@ -85,13 +79,11 @@ public class CronjobServiceImpl implements CronjobService {
 		}
 	}
 
-	@Cacheable(value = "CronjobsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Cronjob> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Cronjob.class);
 	}
 
-	@Cacheable(value = "CronjobsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Cronjob.class);
@@ -103,7 +95,6 @@ public class CronjobServiceImpl implements CronjobService {
 		return cronjobRepository.findStartupJobIsFalseWithQueueJob();
 	}
 
-	@Cacheable(value = "CronjobsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -119,7 +110,6 @@ public class CronjobServiceImpl implements CronjobService {
 
 	}
 
-	@Cacheable(value = "CronjobsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -128,5 +118,10 @@ public class CronjobServiceImpl implements CronjobService {
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Cronjob.class);
+	}
+
+	@Override
+	public CronjobData findOneEntityCronjobDataByProperties(Map<String, Object> properties) throws Exception {
+		return modelService.findOneEntityByProperties(properties, CronjobData.class);
 	}
 }

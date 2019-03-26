@@ -17,6 +17,7 @@ import com.beanframework.console.csv.CronjobCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
+import com.beanframework.cronjob.service.CronjobService;
 
 @Component
 public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cronjob> {
@@ -25,6 +26,9 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private CronjobService cronjobService;
 
 	@Override
 	public Cronjob convert(CronjobCsv source, EntityConverterContext context) throws ConverterException {
@@ -35,14 +39,14 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Cronjob.ID, source.getId());
 
-				Cronjob prototype = modelService.findOneEntityByProperties(properties, Cronjob.class);
+				Cronjob prototype = cronjobService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new Cronjob());
+			return convertToEntity(source, modelService.create(Cronjob.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -53,7 +57,7 @@ public class EntityCsvCronjobConverter implements EntityConverter<CronjobCsv, Cr
 		return convert(source, new EntityConverterContext());
 	}
 
-	private Cronjob convert(CronjobCsv source, Cronjob prototype) throws ConverterException {
+	private Cronjob convertToEntity(CronjobCsv source, Cronjob prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));

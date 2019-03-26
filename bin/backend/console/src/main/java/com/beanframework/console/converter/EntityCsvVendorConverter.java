@@ -20,6 +20,7 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.vendor.service.VendorService;
 
 @Component
 public class EntityCsvVendorConverter implements EntityConverter<VendorCsv, Vendor> {
@@ -28,7 +29,10 @@ public class EntityCsvVendorConverter implements EntityConverter<VendorCsv, Vend
 
 	@Autowired
 	private ModelService modelService;
-	
+
+	@Autowired
+	private VendorService vendorService;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -41,7 +45,7 @@ public class EntityCsvVendorConverter implements EntityConverter<VendorCsv, Vend
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Vendor.ID, source.getId());
 
-				Vendor prototype = modelService.findOneEntityByProperties(properties, Vendor.class);
+				Vendor prototype = vendorService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 

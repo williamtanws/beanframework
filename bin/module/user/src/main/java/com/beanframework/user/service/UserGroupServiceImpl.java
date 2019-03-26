@@ -9,9 +9,7 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,7 +26,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private FetchContext fetchContext;
 
@@ -37,7 +35,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 		return modelService.create(UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupOne", key = "#uuid")
 	@Override
 	public UserGroup findOneEntityByUuid(UUID uuid) throws Exception {
 		fetchContext.clearFetchProperties(UserGroup.class);
@@ -47,7 +44,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 		return modelService.findOneEntityByUuid(uuid, UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupOneProperties", key = "#properties")
 	@Override
 	public UserGroup findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		fetchContext.clearFetchProperties(UserGroup.class);
@@ -57,29 +53,16 @@ public class UserGroupServiceImpl implements UserGroupService {
 		return modelService.findOneEntityByProperties(properties, UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupsSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<UserGroup> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserGroup.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "UserGroupOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "UserGroupOneProperties", allEntries = true), //
-			@CacheEvict(value = "UserGroupsSorts", allEntries = true), //
-			@CacheEvict(value = "UserGroupsPage", allEntries = true), //
-			@CacheEvict(value = "UserGroupsHistory", allEntries = true) }) //
 	@Override
 	public UserGroup saveEntity(UserGroup model) throws BusinessException {
 		return (UserGroup) modelService.saveEntity(model, UserGroup.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "UserGroupOne", key = "#uuid"), //
-			@CacheEvict(value = "UserGroupOneProperties", allEntries = true), //
-			@CacheEvict(value = "UserGroupsSorts", allEntries = true), //
-			@CacheEvict(value = "UserGroupsPage", allEntries = true), //
-			@CacheEvict(value = "UserGroupsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
@@ -92,19 +75,16 @@ public class UserGroupServiceImpl implements UserGroupService {
 		}
 	}
 
-	@Cacheable(value = "UserGroupsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<UserGroup> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -120,7 +100,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	}
 
-	@Cacheable(value = "UserGroupsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

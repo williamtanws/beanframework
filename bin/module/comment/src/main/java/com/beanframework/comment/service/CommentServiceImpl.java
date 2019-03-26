@@ -9,9 +9,7 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,48 +31,31 @@ public class CommentServiceImpl implements CommentService {
 		return modelService.create(Comment.class);
 	}
 
-	@Cacheable(value = "CommentOne", key = "#uuid")
 	@Override
 	public Comment findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid,  Comment.class);
+		return modelService.findOneEntityByUuid(uuid, Comment.class);
 	}
 
-	@Cacheable(value = "CommentOneProperties", key = "#properties")
 	@Override
 	public Comment findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.findOneEntityByProperties(properties, Comment.class);
 	}
 
-	@Cacheable(value = "CommentsSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<Comment> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Comment.class);
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Comment.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "CommentOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "CommentOneProperties", allEntries = true), //
-			@CacheEvict(value = "CommentsSorts", allEntries = true), //
-			@CacheEvict(value = "CommentsPage", allEntries = true), //
-			@CacheEvict(value = "CommentsHistory", allEntries = true), //
-			@CacheEvict(value = "CommentsCount", allEntries = true) })
 	@Override
 	public Comment saveEntity(Comment model) throws BusinessException {
 		return (Comment) modelService.saveEntity(model, Comment.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "CommentOne", key = "#uuid"), //
-			@CacheEvict(value = "CommentOneProperties", allEntries = true), //
-			@CacheEvict(value = "CommentsSorts", allEntries = true), //
-			@CacheEvict(value = "CommentsPage", allEntries = true), //
-			@CacheEvict(value = "CommentsHistory", allEntries = true), //
-			@CacheEvict(value = "CommentsCount", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Comment model = modelService.findOneEntityByUuid(uuid,  Comment.class);
+			Comment model = modelService.findOneEntityByUuid(uuid, Comment.class);
 			modelService.deleteByEntity(model, Comment.class);
 
 		} catch (Exception e) {
@@ -82,19 +63,16 @@ public class CommentServiceImpl implements CommentService {
 		}
 	}
 
-	@Cacheable(value = "CommentsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Comment> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Comment.class);
 	}
 
-	@Cacheable(value = "CommentsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Comment.class);
 	}
 
-	@Cacheable(value = "CommentsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -110,7 +88,6 @@ public class CommentServiceImpl implements CommentService {
 		return histories;
 	}
 
-	@Cacheable(value = "CommentsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -121,7 +98,6 @@ public class CommentServiceImpl implements CommentService {
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Comment.class);
 	}
 
-	@Cacheable(value = "CommentsCount", key = "'count, properties:'+#properties")
 	@Override
 	public int countCommentByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.count(properties, Comment.class);

@@ -11,9 +11,7 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,7 +34,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private MenuRepository menuRepository;
-	
+
 	@Autowired
 	private FetchContext fetchContext;
 
@@ -45,50 +43,38 @@ public class MenuServiceImpl implements MenuService {
 		return modelService.create(Menu.class);
 	}
 
-	@Cacheable(value = "MenuOne", key = "#uuid")
 	@Override
 	public Menu findOneEntityByUuid(UUID uuid) throws Exception {
 		fetchContext.clearFetchProperties(Menu.class);
-		
+
 		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
-		
-		return modelService.findOneEntityByUuid(uuid,  Menu.class);
+
+		return modelService.findOneEntityByUuid(uuid, Menu.class);
 	}
 
-	@Cacheable(value = "MenuOneProperties", key = "#properties")
 	@Override
 	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		fetchContext.clearFetchProperties(Menu.class);
-		
+
 		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
-		
+
 		return modelService.findOneEntityByProperties(properties, Menu.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "MenuOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
-			@CacheEvict(value = "MenusHistory", allEntries = true), //
-			@CacheEvict(value = "MenuTree", allEntries = true) }) //
 	@Override
 	public Menu saveEntity(Menu model) throws BusinessException {
 		return (Menu) modelService.saveEntity(model, Menu.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "MenuOne", key = "#uuid"), //
-			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
-			@CacheEvict(value = "MenusHistory", allEntries = true), //
-			@CacheEvict(value = "MenuTree", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Menu model = modelService.findOneEntityByUuid(uuid,  Menu.class);
+			Menu model = modelService.findOneEntityByUuid(uuid, Menu.class);
 			modelService.deleteByEntity(model, Menu.class);
 
 		} catch (Exception e) {
@@ -96,12 +82,6 @@ public class MenuServiceImpl implements MenuService {
 		}
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "MenuOne", key = "#fromUuid"), //
-			@CacheEvict(value = "MenuOne", key = "#toUuid", condition = "#toUuid != null"), //
-			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
-			@CacheEvict(value = "MenusHistory", allEntries = true), //
-			@CacheEvict(value = "MenuTree", allEntries = true) })
 	@Transactional
 	@Override
 	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) {
@@ -170,12 +150,11 @@ public class MenuServiceImpl implements MenuService {
 		return menuList;
 	}
 
-	@Cacheable(value = "MenuTree", key = "'enabled:'+#enabled")
 	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findEntityMenuTree(boolean enabled) throws Exception {
 		fetchContext.clearFetchProperties(Menu.class);
-		
+
 		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
@@ -196,19 +175,16 @@ public class MenuServiceImpl implements MenuService {
 		return menuTree;
 	}
 
-	@Cacheable(value = "MenusPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Menu> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Menu.class);
 	}
 
-	@Cacheable(value = "MenusPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Menu.class);
 	}
 
-	@Cacheable(value = "MenusHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -224,7 +200,6 @@ public class MenuServiceImpl implements MenuService {
 
 	}
 
-	@Cacheable(value = "MenusHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

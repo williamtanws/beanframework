@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -20,6 +19,7 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.domain.MenuTargetTypeEnum;
+import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.domain.UserGroup;
 
 @Component
@@ -31,7 +31,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 	private ModelService modelService;
 
 	@Autowired
-	private FetchContext fetchContext;
+	private MenuService menuService;
 
 	@Override
 	public Menu convert(MenuCsv source, EntityConverterContext context) throws ConverterException {
@@ -42,7 +42,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Menu.ID, source.getId());
 
-				Menu prototype = modelService.findOneEntityByProperties(properties, Menu.class);
+				Menu prototype = menuService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
@@ -81,10 +81,7 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 				Map<String, Object> parentProperties = new HashMap<String, Object>();
 				parentProperties.put(Menu.ID, source.getParent());
 
-				fetchContext.clearFetchProperties(Menu.class);
-				fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
-				
-				Menu parent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
+				Menu parent = menuService.findOneEntityByProperties(parentProperties);
 
 				if (parent == null) {
 					LOGGER.error("Parent not exists: " + source.getParent());

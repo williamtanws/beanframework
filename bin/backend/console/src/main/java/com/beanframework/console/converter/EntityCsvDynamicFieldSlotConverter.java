@@ -16,6 +16,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldSlotCsv;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
+import com.beanframework.dynamicfield.service.DynamicFieldSlotService;
 
 @Component
 public class EntityCsvDynamicFieldSlotConverter implements EntityConverter<DynamicFieldSlotCsv, DynamicFieldSlot> {
@@ -24,6 +25,9 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityConverter<Dynam
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private DynamicFieldSlotService dynamicFieldSlotService;
 
 	@Override
 	public DynamicFieldSlot convert(DynamicFieldSlotCsv source, EntityConverterContext context) throws ConverterException {
@@ -34,14 +38,14 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityConverter<Dynam
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldSlot.ID, source.getId());
 
-				DynamicFieldSlot prototype = modelService.findOneEntityByProperties(properties, DynamicFieldSlot.class);
+				DynamicFieldSlot prototype = dynamicFieldSlotService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new DynamicFieldSlot());
+			return convertToEntity(source, modelService.create(DynamicFieldSlot.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -52,7 +56,7 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityConverter<Dynam
 		return convert(source, new EntityConverterContext());
 	}
 
-	private DynamicFieldSlot convert(DynamicFieldSlotCsv source, DynamicFieldSlot prototype) throws ConverterException {
+	private DynamicFieldSlot convertToEntity(DynamicFieldSlotCsv source, DynamicFieldSlot prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));

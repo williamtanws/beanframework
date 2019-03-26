@@ -14,6 +14,7 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.console.csv.ConfigurationCsv;
 
 @Component
@@ -23,6 +24,9 @@ public class EntityCsvConfigurationConverter implements EntityConverter<Configur
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private ConfigurationService configurationService;
 
 	@Override
 	public Configuration convert(ConfigurationCsv source, EntityConverterContext context) throws ConverterException {
@@ -33,14 +37,14 @@ public class EntityCsvConfigurationConverter implements EntityConverter<Configur
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.ID, source.getId());
 
-				Configuration prototype = modelService.findOneEntityByProperties(properties, Configuration.class);
+				Configuration prototype = configurationService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new Configuration());
+			return convertToEntity(source, modelService.create(Configuration.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -51,7 +55,7 @@ public class EntityCsvConfigurationConverter implements EntityConverter<Configur
 		return convert(source, new EntityConverterContext());
 	}
 
-	private Configuration convert(ConfigurationCsv source, Configuration prototype) throws ConverterException {
+	private Configuration convertToEntity(ConfigurationCsv source, Configuration prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));

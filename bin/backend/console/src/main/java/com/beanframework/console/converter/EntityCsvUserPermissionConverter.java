@@ -18,6 +18,7 @@ import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserPermissionField;
+import com.beanframework.user.service.UserPermissionService;
 
 @Component
 public class EntityCsvUserPermissionConverter implements EntityConverter<UserPermissionCsv, UserPermission> {
@@ -26,6 +27,9 @@ public class EntityCsvUserPermissionConverter implements EntityConverter<UserPer
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private UserPermissionService userPermissionService;
 
 	@Override
 	public UserPermission convert(UserPermissionCsv source, EntityConverterContext context) throws ConverterException {
@@ -36,7 +40,7 @@ public class EntityCsvUserPermissionConverter implements EntityConverter<UserPer
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserPermission.ID, source.getId());
 
-				UserPermission prototype = modelService.findOneEntityByProperties(properties, UserPermission.class);
+				UserPermission prototype = userPermissionService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 

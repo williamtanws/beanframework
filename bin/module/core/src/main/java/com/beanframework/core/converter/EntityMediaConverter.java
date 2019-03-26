@@ -13,12 +13,16 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.media.domain.Media;
+import com.beanframework.media.service.MediaService;
 import com.beanframework.user.domain.User;
 
 public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private MediaService mediaService;
 
 	@Override
 	public Media convert(MediaDto source, EntityConverterContext context) throws ConverterException {
@@ -28,21 +32,21 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Media.UUID, source.getUuid());
-				Media prototype = modelService.findOneEntityByProperties(properties, Media.class);
+				Media prototype = mediaService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Media.class));
+			return convertToEntity(source, modelService.create(Media.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private Media convertDto(MediaDto source, Media prototype) throws ConverterException {
+	private Media convertToEntity(MediaDto source, Media prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();

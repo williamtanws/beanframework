@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Site;
+import com.beanframework.cms.service.SiteService;
 import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -24,6 +25,9 @@ public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private SiteService siteService;
+
 	@Override
 	public Site convert(SiteCsv source, EntityConverterContext context) throws ConverterException {
 
@@ -33,14 +37,14 @@ public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Site.ID, source.getId());
 
-				Site prototype = modelService.findOneEntityByProperties(properties, Site.class);
+				Site prototype = siteService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new Site());
+			return convertToEntity(source, modelService.create(Site.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -51,7 +55,7 @@ public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
 		return convert(source, new EntityConverterContext());
 	}
 
-	private Site convert(SiteCsv source, Site prototype) throws ConverterException {
+	private Site convertToEntity(SiteCsv source, Site prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));

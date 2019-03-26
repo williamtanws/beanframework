@@ -17,6 +17,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.CustomerCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.customer.domain.Customer;
+import com.beanframework.customer.service.CustomerService;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
@@ -30,6 +31,9 @@ public class EntityCsvCustomerConverter implements EntityConverter<CustomerCsv, 
 	private ModelService modelService;
 	
 	@Autowired
+	private CustomerService customerService;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
@@ -41,14 +45,14 @@ public class EntityCsvCustomerConverter implements EntityConverter<CustomerCsv, 
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Customer.ID, source.getId());
 
-				Customer prototype = modelService.findOneEntityByProperties(properties, Customer.class);
+				Customer prototype = customerService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new Customer());
+			return convertToEntity(source, modelService.create(Customer.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -59,7 +63,7 @@ public class EntityCsvCustomerConverter implements EntityConverter<CustomerCsv, 
 		return convert(source, new EntityConverterContext());
 	}
 
-	private Customer convert(CustomerCsv source, Customer prototype) throws ConverterException {
+	private Customer convertToEntity(CustomerCsv source, Customer prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));

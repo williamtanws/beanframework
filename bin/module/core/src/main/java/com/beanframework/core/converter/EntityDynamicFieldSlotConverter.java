@@ -15,11 +15,15 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
+import com.beanframework.dynamicfield.service.DynamicFieldSlotService;
 
 public class EntityDynamicFieldSlotConverter implements EntityConverter<DynamicFieldSlotDto, DynamicFieldSlot> {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private DynamicFieldSlotService dynamicFieldSlotService;
 
 	@Override
 	public DynamicFieldSlot convert(DynamicFieldSlotDto source, EntityConverterContext context) throws ConverterException {
@@ -29,21 +33,21 @@ public class EntityDynamicFieldSlotConverter implements EntityConverter<DynamicF
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldSlot.UUID, source.getUuid());
-				DynamicFieldSlot prototype = modelService.findOneEntityByProperties(properties, DynamicFieldSlot.class);
+				DynamicFieldSlot prototype = dynamicFieldSlotService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(DynamicFieldSlot.class));
+			return convertToEntity(source, modelService.create(DynamicFieldSlot.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private DynamicFieldSlot convertDto(DynamicFieldSlotDto source, DynamicFieldSlot prototype) throws ConverterException {
+	private DynamicFieldSlot convertToEntity(DynamicFieldSlotDto source, DynamicFieldSlot prototype) throws ConverterException {
 
 		try {
 

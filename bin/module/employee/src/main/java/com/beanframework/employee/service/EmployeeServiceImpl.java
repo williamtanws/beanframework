@@ -29,9 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -74,7 +72,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private AuditorService auditorService;
-	
+
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
 
@@ -92,63 +90,53 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private FetchContext fetchContext;
 
 	@Autowired
 	private EntityManager entityManager;
-	
+
 	@Override
 	public Employee create() throws Exception {
 		return modelService.create(Employee.class);
 	}
 
-	@Cacheable(value = "EmployeeOne", key = "#uuid")
 	@Override
 	public Employee findOneEntityByUuid(UUID uuid) throws Exception {
 		fetchContext.clearFetchProperties(Employee.class);
 		fetchContext.clearFetchProperties(UserGroup.class);
 		fetchContext.clearFetchProperties(UserAuthority.class);
-		
+
 		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
 		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
-		
-		return modelService.findOneEntityByUuid(uuid,  Employee.class);
+
+		return modelService.findOneEntityByUuid(uuid, Employee.class);
 	}
 
-	@Cacheable(value = "EmployeeOneProperties", key = "#properties")
 	@Override
 	public Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		fetchContext.clearFetchProperties(Employee.class);
 		fetchContext.clearFetchProperties(UserGroup.class);
 		fetchContext.clearFetchProperties(UserAuthority.class);
-		
+
 		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
 		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
-		
+
 		return modelService.findOneEntityByProperties(properties, Employee.class);
 	}
 
-	@Cacheable(value = "EmployeesSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<Employee> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Employee.class);
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Employee.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "EmployeeOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "EmployeeOneProperties", allEntries = true), //
-			@CacheEvict(value = "EmployeesSorts", allEntries = true), //
-			@CacheEvict(value = "EmployeesPage", allEntries = true), //
-			@CacheEvict(value = "EmployeesHistory", allEntries = true), //
-			@CacheEvict(value = "EmployeeCountByUserGroups", allEntries = true) })
 	@Override
 	public Employee saveEntity(Employee model) throws BusinessException {
 		model = (Employee) modelService.saveEntity(model, Employee.class);
@@ -156,18 +144,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return model;
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "EmployeeOne", key = "#uuid"), //
-			@CacheEvict(value = "EmployeeOneProperties", allEntries = true), //
-			@CacheEvict(value = "EmployeesSorts", allEntries = true), //
-			@CacheEvict(value = "EmployeesPage", allEntries = true), //
-			@CacheEvict(value = "EmployeesHistory", allEntries = true), //
-			@CacheEvict(value = "EmployeeCountByUserGroups", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Employee model = modelService.findOneEntityByUuid(uuid,  Employee.class);
+			Employee model = modelService.findOneEntityByUuid(uuid, Employee.class);
 			modelService.deleteByEntity(model, Employee.class);
 
 		} catch (Exception e) {
@@ -175,13 +156,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
-	@Cacheable(value = "EmployeesPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Employee> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Employee.class);
 	}
 
-	@Cacheable(value = "EmployeesPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Employee.class);
@@ -246,11 +225,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		properties.put(Employee.ID, id);
 
 		Employee entity = findOneEntityByProperties(properties);
-		
+
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
 		} else {
-			
+
 			if (passwordEncoder.matches(password, entity.getPassword()) == false) {
 				throw new BadCredentialsException("Bad Credentials");
 			}
@@ -377,7 +356,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
-	@Cacheable(value = "EmployeesHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -393,7 +371,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	}
 
-	@Cacheable(value = "EmployeesHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -404,11 +381,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
 	}
 
-	@Cacheable(value = "EmployeeCountByUserGroups", key = "'count, userGroupsUuid:'+#userGroupsUuid")
 	@Override
 	public int countByUserGroups(List<UUID> userGroupsUuid) {
-		Query query = entityManager
-				.createQuery("SELECT COUNT(DISTINCT o) FROM Employee o LEFT JOIN o.userGroups u WHERE (u.uuid IN (?1))");
+		Query query = entityManager.createQuery("SELECT COUNT(DISTINCT o) FROM Employee o LEFT JOIN o.userGroups u WHERE (u.uuid IN (?1))");
 		query.setParameter(1, userGroupsUuid);
 
 		Long count = (Long) query.getSingleResult();

@@ -12,9 +12,6 @@ import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -49,7 +46,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Value(AdminConstants.Admin.DEFAULT_PASSWORD)
 	private String defaultAdminPassword;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -58,30 +55,21 @@ public class AdminServiceImpl implements AdminService {
 		return modelService.create(Admin.class);
 	}
 
-	@Cacheable(value = "AdminOne", key = "#uuid")
 	@Override
 	public Admin findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid,  Admin.class);
+		return modelService.findOneEntityByUuid(uuid, Admin.class);
 	}
 
-	@Cacheable(value = "AdminOneProperties", key = "#properties")
 	@Override
 	public Admin findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.findOneEntityByProperties(properties, Admin.class);
 	}
 
-	@Cacheable(value = "AdminsSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<Admin> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Admin.class);
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Admin.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "AdminOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "AdminOneProperties", allEntries = true), //
-			@CacheEvict(value = "AdminsSorts", allEntries = true), //
-			@CacheEvict(value = "AdminsPage", allEntries = true), //
-			@CacheEvict(value = "AdminsHistory", allEntries = true) }) //
 	@Override
 	public Admin saveEntity(Admin model) throws BusinessException {
 		model = (Admin) modelService.saveEntity(model, Admin.class);
@@ -89,17 +77,11 @@ public class AdminServiceImpl implements AdminService {
 		return model;
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "AdminOne", key = "#uuid"), //
-			@CacheEvict(value = "AdminOneProperties", allEntries = true), //
-			@CacheEvict(value = "AdminsSorts", allEntries = true), //
-			@CacheEvict(value = "AdminsPage", allEntries = true), //
-			@CacheEvict(value = "AdminsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Admin model = modelService.findOneEntityByUuid(uuid,  Admin.class);
+			Admin model = modelService.findOneEntityByUuid(uuid, Admin.class);
 			modelService.deleteByEntity(model, Admin.class);
 
 		} catch (Exception e) {
@@ -107,13 +89,11 @@ public class AdminServiceImpl implements AdminService {
 		}
 	}
 
-	@Cacheable(value = "AdminsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Admin> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Admin.class);
 	}
 
-	@Cacheable(value = "AdminsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Admin.class);
@@ -175,7 +155,6 @@ public class AdminServiceImpl implements AdminService {
 		}
 	}
 
-	@Cacheable(value = "AdminsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -191,7 +170,6 @@ public class AdminServiceImpl implements AdminService {
 
 	}
 
-	@Cacheable(value = "AdminsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

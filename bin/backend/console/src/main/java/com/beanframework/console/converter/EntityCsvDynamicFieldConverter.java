@@ -17,6 +17,7 @@ import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.DynamicFieldType;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.service.DynamicFieldService;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.language.domain.Language;
 
@@ -27,6 +28,9 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private DynamicFieldService dynamicFieldService;
 
 	@Override
 	public DynamicField convert(DynamicFieldCsv source, EntityConverterContext context) throws ConverterException {
@@ -37,14 +41,14 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicField.ID, source.getId());
 
-				DynamicField prototype = modelService.findOneEntityByProperties(properties, DynamicField.class);
+				DynamicField prototype = dynamicFieldService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new DynamicField());
+			return convertToEntity(source, modelService.create(DynamicField.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -55,7 +59,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 		return convert(source, new EntityConverterContext());
 	}
 
-	private DynamicField convert(DynamicFieldCsv source, DynamicField prototype) throws ConverterException {
+	private DynamicField convertToEntity(DynamicFieldCsv source, DynamicField prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));

@@ -20,9 +20,7 @@ import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -49,13 +47,13 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private AuditorService auditorService;
-	
+
 	@Autowired
 	private FetchContext fetchContext;
-	
+
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
-	
+
 	@Value(CustomerConstants.CUSTOMER_MEDIA_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
 
@@ -70,38 +68,29 @@ public class CustomerServiceImpl implements CustomerService {
 		return modelService.create(Customer.class);
 	}
 
-	@Cacheable(value = "CustomerOne", key = "#uuid")
 	@Override
 	public Customer findOneEntityByUuid(UUID uuid) throws Exception {
 		fetchContext.clearFetchProperties(Customer.class);
-		
+
 		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
 		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
-		return modelService.findOneEntityByUuid(uuid,  Customer.class);
+		return modelService.findOneEntityByUuid(uuid, Customer.class);
 	}
 
-	@Cacheable(value = "CustomerOneProperties", key = "#properties")
 	@Override
 	public Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		fetchContext.clearFetchProperties(Customer.class);
-		
+
 		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
 		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
 		return modelService.findOneEntityByProperties(properties, Customer.class);
 	}
 
-	@Cacheable(value = "CustomersSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<Customer> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Customer.class);
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Customer.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "CustomerOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "CustomerOneProperties", allEntries = true), //
-			@CacheEvict(value = "CustomersSorts", allEntries = true), //
-			@CacheEvict(value = "CustomersPage", allEntries = true), //
-			@CacheEvict(value = "CustomersHistory", allEntries = true) }) //
 	@Override
 	public Customer saveEntity(Customer model) throws BusinessException {
 		model = (Customer) modelService.saveEntity(model, Customer.class);
@@ -109,17 +98,11 @@ public class CustomerServiceImpl implements CustomerService {
 		return model;
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "CustomerOne", key = "#uuid"), //
-			@CacheEvict(value = "CustomerOneProperties", allEntries = true), //
-			@CacheEvict(value = "CustomersSorts", allEntries = true), //
-			@CacheEvict(value = "CustomersPage", allEntries = true), //
-			@CacheEvict(value = "CustomersHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Customer model = modelService.findOneEntityByUuid(uuid,  Customer.class);
+			Customer model = modelService.findOneEntityByUuid(uuid, Customer.class);
 			modelService.deleteByEntity(model, Customer.class);
 
 		} catch (Exception e) {
@@ -127,18 +110,16 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 	}
 
-	@Cacheable(value = "CustomersPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Customer> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Customer.class);
 	}
 
-	@Cacheable(value = "CustomersPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Customer.class);
 	}
-	
+
 	@Override
 	public void saveProfilePicture(Customer model, MultipartFile picture) throws IOException {
 		if (picture != null && picture.isEmpty() == false) {
@@ -174,7 +155,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	}
 
-	@Cacheable(value = "CustomersHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -190,7 +170,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	}
 
-	@Cacheable(value = "CustomersHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -200,7 +179,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Customer.class);
 	}
-	
+
 	@Override
 	public Customer getCurrentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

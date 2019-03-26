@@ -15,6 +15,7 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.EnumerationCsv;
 import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.enumuration.service.EnumerationService;
 
 @Component
 public class EntityCsvEnumerationConverter implements EntityConverter<EnumerationCsv, Enumeration> {
@@ -23,6 +24,9 @@ public class EntityCsvEnumerationConverter implements EntityConverter<Enumeratio
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EnumerationService enumerationService;
 
 	@Override
 	public Enumeration convert(EnumerationCsv source, EntityConverterContext context) throws ConverterException {
@@ -33,14 +37,14 @@ public class EntityCsvEnumerationConverter implements EntityConverter<Enumeratio
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Enumeration.ID, source.getId());
 
-				Enumeration prototype = modelService.findOneEntityByProperties(properties, Enumeration.class);
+				Enumeration prototype = enumerationService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new Enumeration());
+			return convertToEntity(source, modelService.create(Enumeration.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -51,7 +55,7 @@ public class EntityCsvEnumerationConverter implements EntityConverter<Enumeratio
 		return convert(source, new EntityConverterContext());
 	}
 
-	private Enumeration convert(EnumerationCsv source, Enumeration prototype) throws ConverterException {
+	private Enumeration convertToEntity(EnumerationCsv source, Enumeration prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
