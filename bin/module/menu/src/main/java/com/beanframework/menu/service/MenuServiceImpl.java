@@ -46,9 +46,12 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public Menu findOneEntityByUuid(UUID uuid) throws Exception {
 		fetchContext.clearFetchProperties(Menu.class);
+		fetchContext.clearFetchProperties(UserGroup.class);
 
 		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
 
 		return modelService.findOneEntityByUuid(uuid, Menu.class);
@@ -57,9 +60,12 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		fetchContext.clearFetchProperties(Menu.class);
+		fetchContext.clearFetchProperties(UserGroup.class);
 
 		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
 
 		return modelService.findOneEntityByProperties(properties, Menu.class);
@@ -154,11 +160,13 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public List<Menu> findEntityMenuTree(boolean enabled) throws Exception {
 		fetchContext.clearFetchProperties(Menu.class);
+		fetchContext.clearFetchProperties(UserGroup.class);
 
 		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
-		fetchContext.addFetchProperty(Menu.class, UserGroup.USER_AUTHORITIES);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.PARENT, null);

@@ -110,6 +110,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
 		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
@@ -125,6 +126,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
 		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
