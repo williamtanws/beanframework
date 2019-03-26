@@ -15,13 +15,17 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.employee.domain.Employee;
+import com.beanframework.employee.service.EmployeeService;
 
 @Component
 public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeDto, Employee> {
 
 	@Autowired
 	private ModelService modelService;
-	
+
+	@Autowired
+	private EmployeeService employeeService;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -33,14 +37,14 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.UUID, source.getUuid());
-				Employee prototype = modelService.findOneEntityByProperties(properties, Employee.class);
+				Employee prototype = employeeService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Employee.class));
+			return convertToEntity(source, modelService.create(Employee.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -58,11 +62,11 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 				Employee prototype = modelService.findOneEntityByProperties(properties, Employee.class);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Employee.class));
+			return convertToEntity(source, modelService.create(Employee.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -70,7 +74,7 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 
 	}
 
-	private Employee convertDto(EmployeeDto source, Employee prototype) throws ConverterException {
+	private Employee convertToEntity(EmployeeDto source, Employee prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();

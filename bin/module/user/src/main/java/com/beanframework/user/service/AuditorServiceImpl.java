@@ -12,9 +12,7 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,30 +35,21 @@ public class AuditorServiceImpl implements AuditorService {
 		return modelService.create(Auditor.class);
 	}
 
-	@Cacheable(value = "AuditorOne", key = "#uuid")
 	@Override
 	public Auditor findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid,  Auditor.class);
+		return modelService.findOneEntityByUuid(uuid, Auditor.class);
 	}
 
-	@Cacheable(value = "AuditorOneProperties", key = "#properties")
 	@Override
 	public Auditor findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.findOneEntityByProperties(properties, Auditor.class);
 	}
 
-	@Cacheable(value = "AuditorsSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<Auditor> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Auditor.class);
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Auditor.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "AuditorOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "AuditorOneProperties", allEntries = true), //
-			@CacheEvict(value = "AuditorsSorts", allEntries = true), //
-			@CacheEvict(value = "AuditorsPage", allEntries = true), //
-			@CacheEvict(value = "AuditorsHistory", allEntries = true) }) //
 	@Override
 	public Auditor saveEntity(User model) throws BusinessException {
 		try {
@@ -97,17 +86,11 @@ public class AuditorServiceImpl implements AuditorService {
 		}
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "AuditorOne", key = "#uuid"), //
-			@CacheEvict(value = "AuditorOneProperties", allEntries = true), //
-			@CacheEvict(value = "AuditorsSorts", allEntries = true), //
-			@CacheEvict(value = "AuditorsPage", allEntries = true), //
-			@CacheEvict(value = "AuditorsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Auditor model = modelService.findOneEntityByUuid(uuid,  Auditor.class);
+			Auditor model = modelService.findOneEntityByUuid(uuid, Auditor.class);
 			modelService.deleteByEntity(model, Auditor.class);
 
 		} catch (Exception e) {
@@ -115,19 +98,16 @@ public class AuditorServiceImpl implements AuditorService {
 		}
 	}
 
-	@Cacheable(value = "AuditorsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Auditor> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Auditor.class);
 	}
 
-	@Cacheable(value = "AuditorsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Auditor.class);
 	}
 
-	@Cacheable(value = "AuditorsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -143,7 +123,6 @@ public class AuditorServiceImpl implements AuditorService {
 
 	}
 
-	@Cacheable(value = "AuditorsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

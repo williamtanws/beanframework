@@ -15,12 +15,16 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.vendor.service.VendorService;
 
 @Component
 public class EntityVendorProfileConverter implements EntityConverter<VendorDto, Vendor> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private VendorService vendorService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -33,14 +37,14 @@ public class EntityVendorProfileConverter implements EntityConverter<VendorDto, 
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Vendor.UUID, source.getUuid());
-				Vendor prototype = modelService.findOneEntityByProperties(properties, Vendor.class);
+				Vendor prototype = vendorService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Vendor.class));
+			return convertToEntity(source, modelService.create(Vendor.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -55,14 +59,14 @@ public class EntityVendorProfileConverter implements EntityConverter<VendorDto, 
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Vendor.UUID, source.getUuid());
-				Vendor prototype = modelService.findOneEntityByProperties(properties, Vendor.class);
+				Vendor prototype = vendorService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Vendor.class));
+			return convertToEntity(source, modelService.create(Vendor.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -70,7 +74,7 @@ public class EntityVendorProfileConverter implements EntityConverter<VendorDto, 
 
 	}
 
-	private Vendor convertDto(VendorDto source, Vendor prototype) throws ConverterException {
+	private Vendor convertToEntity(VendorDto source, Vendor prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();

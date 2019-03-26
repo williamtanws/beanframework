@@ -9,9 +9,7 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,49 +35,34 @@ public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 		return modelService.create(DynamicFieldSlot.class);
 	}
 
-	@Cacheable(value = "DynamicFieldSlotOne", key = "#uuid")
 	@Override
 	public DynamicFieldSlot findOneEntityByUuid(UUID uuid) throws Exception {
 		fetchContext.clearFetchProperties(DynamicFieldSlot.class);
-		
+
 		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
 
 		return modelService.findOneEntityByUuid(uuid, DynamicFieldSlot.class);
 	}
 
-	@Cacheable(value = "DynamicFieldSlotOneProperties", key = "#properties")
 	@Override
 	public DynamicFieldSlot findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		fetchContext.clearFetchProperties(DynamicFieldSlot.class);
-		
+
 		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		
+
 		return modelService.findOneEntityByProperties(properties, DynamicFieldSlot.class);
 	}
 
-	@Cacheable(value = "DynamicFieldSlotsSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<DynamicFieldSlot> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, DynamicFieldSlot.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "DynamicFieldSlotOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "DynamicFieldSlotOneProperties", allEntries = true), //
-			@CacheEvict(value = "DynamicFieldSlotsSorts", allEntries = true), //
-			@CacheEvict(value = "DynamicFieldSlotsPage", allEntries = true), //
-			@CacheEvict(value = "DynamicFieldSlotsHistory", allEntries = true) }) //
 	@Override
 	public DynamicFieldSlot saveEntity(DynamicFieldSlot model) throws BusinessException {
 		return (DynamicFieldSlot) modelService.saveEntity(model, DynamicFieldSlot.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "DynamicFieldSlotOne", key = "#uuid"), //
-			@CacheEvict(value = "DynamicFieldSlotOneProperties", allEntries = true), //
-			@CacheEvict(value = "DynamicFieldSlotsSorts", allEntries = true), //
-			@CacheEvict(value = "DynamicFieldSlotsPage", allEntries = true), //
-			@CacheEvict(value = "DynamicFieldSlotsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
@@ -92,19 +75,16 @@ public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 		}
 	}
 
-	@Cacheable(value = "DynamicFieldSlotsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<DynamicFieldSlot> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), DynamicFieldSlot.class);
 	}
 
-	@Cacheable(value = "DynamicFieldSlotsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(DynamicFieldSlot.class);
 	}
 
-	@Cacheable(value = "DynamicFieldSlotsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -120,7 +100,6 @@ public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 
 	}
 
-	@Cacheable(value = "DynamicFieldSlotsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

@@ -17,6 +17,7 @@ import com.beanframework.console.csv.DynamicFieldTemplateCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
+import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 
 @Component
 public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<DynamicFieldTemplateCsv, DynamicFieldTemplate> {
@@ -25,6 +26,9 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<D
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private DynamicFieldTemplateService dynamicFieldTemplateService;
 
 	@Override
 	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source, EntityConverterContext context) throws ConverterException {
@@ -35,14 +39,14 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<D
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldTemplate.ID, source.getId());
 
-				DynamicFieldTemplate prototype = modelService.findOneEntityByProperties(properties, DynamicFieldTemplate.class);
+				DynamicFieldTemplate prototype = dynamicFieldTemplateService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new DynamicFieldTemplate());
+			return convertToEntity(source, modelService.create(DynamicFieldTemplate.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -53,7 +57,7 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<D
 		return convert(source, new EntityConverterContext());
 	}
 
-	private DynamicFieldTemplate convert(DynamicFieldTemplateCsv source, DynamicFieldTemplate prototype) throws ConverterException {
+	private DynamicFieldTemplate convertToEntity(DynamicFieldTemplateCsv source, DynamicFieldTemplate prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));

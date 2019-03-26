@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.domain.CronjobData;
 
 public interface CronjobService {
 
@@ -35,5 +36,7 @@ public interface CronjobService {
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	CronjobData findOneEntityCronjobDataByProperties(Map<String, Object> properties) throws Exception;
 
 }

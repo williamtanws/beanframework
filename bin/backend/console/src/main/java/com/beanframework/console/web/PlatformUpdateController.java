@@ -45,7 +45,7 @@ public class PlatformUpdateController {
 	@Autowired
 	private ImportListenerRegistry importerRegistry;
 
-	@Autowired
+	@Autowired(required = false)
 	private CacheManager cacheManager;
 
 	@Autowired
@@ -123,7 +123,8 @@ public class PlatformUpdateController {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, errorMessages.toString());
 		}
 
-		cacheManager.clearAll();
+		if (cacheManager != null)
+			cacheManager.clearAll();
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);

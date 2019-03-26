@@ -9,9 +9,7 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,54 +31,36 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		return modelService.create(Configuration.class);
 	}
 
-	@Cacheable(value = "ConfigurationOne", key = "#uuid")
 	@Override
 	public Configuration findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid,  Configuration.class);
+		return modelService.findOneEntityByUuid(uuid, Configuration.class);
 	}
 
-	@Cacheable(value = "ConfigurationOneProperties", key = "#properties")
 	@Override
 	public Configuration findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.findOneEntityByProperties(properties, Configuration.class);
 	}
 
-	@Cacheable(value = "ConfigurationsAll")
 	@Override
 	public List<Configuration> findAllEntity() throws Exception {
 		return modelService.findEntityByPropertiesAndSorts(null, null, null, null, Configuration.class);
 	}
 
-	@Cacheable(value = "ConfigurationsSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<Configuration> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Configuration.class);
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Configuration.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "ConfigurationOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "ConfigurationOneProperties", allEntries = true), //
-			@CacheEvict(value = "ConfigurationsAll", allEntries = true), //
-			@CacheEvict(value = "ConfigurationsSorts", allEntries = true), //
-			@CacheEvict(value = "ConfigurationsPage", allEntries = true), //
-			@CacheEvict(value = "ConfigurationsHistory", allEntries = true) }) //
 	@Override
 	public Configuration saveEntity(Configuration model) throws BusinessException {
 		return (Configuration) modelService.saveEntity(model, Configuration.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "ConfigurationOne", key = "#uuid"), //
-			@CacheEvict(value = "ConfigurationOneProperties", allEntries = true), //
-			@CacheEvict(value = "ConfigurationsAll", allEntries = true), //
-			@CacheEvict(value = "ConfigurationsSorts", allEntries = true), //
-			@CacheEvict(value = "ConfigurationsPage", allEntries = true), //
-			@CacheEvict(value = "ConfigurationsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Configuration model = modelService.findOneEntityByUuid(uuid,  Configuration.class);
+			Configuration model = modelService.findOneEntityByUuid(uuid, Configuration.class);
 			modelService.deleteByEntity(model, Configuration.class);
 
 		} catch (Exception e) {
@@ -88,19 +68,16 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		}
 	}
 
-	@Cacheable(value = "ConfigurationsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Configuration> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Configuration.class);
 	}
 
-	@Cacheable(value = "ConfigurationsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Configuration.class);
 	}
 
-	@Cacheable(value = "ConfigurationsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -116,7 +93,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	}
 
-	@Cacheable(value = "ConfigurationsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

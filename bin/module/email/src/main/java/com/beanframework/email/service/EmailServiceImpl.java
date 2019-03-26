@@ -13,9 +13,7 @@ import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -42,46 +40,31 @@ public class EmailServiceImpl implements EmailService {
 		return modelService.create(Email.class);
 	}
 
-	@Cacheable(value = "EmailOne", key = "#uuid")
 	@Override
 	public Email findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid,  Email.class);
+		return modelService.findOneEntityByUuid(uuid, Email.class);
 	}
 
-	@Cacheable(value = "EmailOneProperties", key = "#properties")
 	@Override
 	public Email findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.findOneEntityByProperties(properties, Email.class);
 	}
 
-	@Cacheable(value = "EmailsSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<Email> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null,Email.class);
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Email.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "EmailOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "EmailOneProperties", allEntries = true), //
-			@CacheEvict(value = "EmailsSorts", allEntries = true), //
-			@CacheEvict(value = "EmailsPage", allEntries = true), //
-			@CacheEvict(value = "EmailsHistory", allEntries = true) }) //
 	@Override
 	public Email saveEntity(Email model) throws BusinessException {
 		return (Email) modelService.saveEntity(model, Email.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "EmailOne", key = "#uuid"), //
-			@CacheEvict(value = "EmailOneProperties", allEntries = true), //
-			@CacheEvict(value = "EmailsSorts", allEntries = true), //
-			@CacheEvict(value = "EmailsPage", allEntries = true), //
-			@CacheEvict(value = "EmailsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Email model = modelService.findOneEntityByUuid(uuid,  Email.class);
+			Email model = modelService.findOneEntityByUuid(uuid, Email.class);
 			modelService.deleteByEntity(model, Email.class);
 
 			String workingDir = System.getProperty("user.dir");
@@ -94,13 +77,11 @@ public class EmailServiceImpl implements EmailService {
 		}
 	}
 
-	@Cacheable(value = "EmailsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Email> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Email.class);
 	}
 
-	@Cacheable(value = "EmailsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Email.class);
@@ -137,7 +118,6 @@ public class EmailServiceImpl implements EmailService {
 		}
 	}
 
-	@Cacheable(value = "EmailsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -153,7 +133,6 @@ public class EmailServiceImpl implements EmailService {
 
 	}
 
-	@Cacheable(value = "EmailsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

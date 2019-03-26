@@ -13,11 +13,15 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.enumuration.service.EnumerationService;
 
 public class EntityEnumerationConverter implements EntityConverter<EnumerationDto, Enumeration> {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private EnumerationService enumerationService;
 
 	@Override
 	public Enumeration convert(EnumerationDto source, EntityConverterContext context) throws ConverterException {
@@ -27,21 +31,21 @@ public class EntityEnumerationConverter implements EntityConverter<EnumerationDt
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Enumeration.UUID, source.getUuid());
-				Enumeration prototype = modelService.findOneEntityByProperties(properties, Enumeration.class);
+				Enumeration prototype = enumerationService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Enumeration.class));
+			return convertToEntity(source, modelService.create(Enumeration.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private Enumeration convertDto(EnumerationDto source, Enumeration prototype) {
+	private Enumeration convertToEntity(EnumerationDto source, Enumeration prototype) {
 
 		Date lastModifiedDate = new Date();
 

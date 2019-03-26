@@ -9,9 +9,7 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,41 +31,26 @@ public class LanguageServiceImpl implements LanguageService {
 		return modelService.create(Language.class);
 	}
 
-	@Cacheable(value = "LanguageOne", key = "#uuid")
 	@Override
 	public Language findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Language.class);
 	}
 
-	@Cacheable(value = "LanguageOneProperties", key = "#properties")
 	@Override
 	public Language findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.findOneEntityByProperties(properties, Language.class);
 	}
 
-	@Cacheable(value = "LanguagesSorts", key = "'sorts:'+#sorts")
 	@Override
 	public List<Language> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Language.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "LanguageOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "LanguageOneProperties", allEntries = true), //
-			@CacheEvict(value = "LanguagesSorts", allEntries = true), //
-			@CacheEvict(value = "LanguagesPage", allEntries = true), //
-			@CacheEvict(value = "LanguagesHistory", allEntries = true) }) //
 	@Override
 	public Language saveEntity(Language model) throws BusinessException {
 		return (Language) modelService.saveEntity(model, Language.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "LanguageOne", key = "#uuid"), //
-			@CacheEvict(value = "LanguageOneProperties", allEntries = true), //
-			@CacheEvict(value = "LanguagesSorts", allEntries = true), //
-			@CacheEvict(value = "LanguagesPage", allEntries = true), //
-			@CacheEvict(value = "LanguagesHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
@@ -80,19 +63,16 @@ public class LanguageServiceImpl implements LanguageService {
 		}
 	}
 
-	@Cacheable(value = "LanguagesPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public <T> Page<Language> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
 		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Language.class);
 	}
 
-	@Cacheable(value = "LanguagesPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Language.class);
 	}
 
-	@Cacheable(value = "LanguagesHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -108,7 +88,6 @@ public class LanguageServiceImpl implements LanguageService {
 		return histories;
 	}
 
-	@Cacheable(value = "LanguagesHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

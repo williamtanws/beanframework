@@ -36,7 +36,7 @@ public class CacheController {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-	@Autowired
+	@Autowired(required = false)
 	private CacheManager cacheManager;
 
 	@GetMapping(value = { CacheWebConstants.Path.CACHE })
@@ -44,21 +44,25 @@ public class CacheController {
 
 		List<Cache> caches = new ArrayList<Cache>();
 
-		for (String name : cacheManager.getCacheNames()) {
-			Cache cache = cacheManager.getCache(name);
-			caches.add(cache);
+		if (cacheManager != null) {
+			for (String name : cacheManager.getCacheNames()) {
+				Cache cache = cacheManager.getCache(name);
+				caches.add(cache);
+			}
 		}
 
 		model.addAttribute("caches", caches);
 
 		return VIEW_CACHE;
+
 	}
 
 	@PostMapping(value = { CacheWebConstants.Path.CACHE_CLEARALL }, params = "clearall")
 	public RedirectView clear(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
 		try {
-			cacheManager.clearAll();
+			if (cacheManager != null)
+				cacheManager.clearAll();
 
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, localeMessageService.getMessage(CacheWebConstants.Locale.CACHE_CLEARALL_SUCCESS));
 		} catch (CacheException e) {

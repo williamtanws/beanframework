@@ -18,6 +18,7 @@ import com.beanframework.console.csv.EmployeeCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.employee.domain.Employee;
+import com.beanframework.employee.service.EmployeeService;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 
@@ -28,6 +29,9 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -41,13 +45,13 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.ID, source.getId());
 
-				Employee prototype = modelService.findOneEntityByProperties(properties, Employee.class);
+				Employee prototype = employeeService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new Employee());
+			return convertToEntity(source, modelService.create(Employee.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -58,7 +62,7 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 		return convert(source, new EntityConverterContext());
 	}
 
-	private Employee convert(EmployeeCsv source, Employee prototype) throws ConverterException {
+	private Employee convertToEntity(EmployeeCsv source, Employee prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));

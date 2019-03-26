@@ -15,6 +15,7 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.LanguageCsv;
 import com.beanframework.language.domain.Language;
+import com.beanframework.language.service.LanguageService;
 
 @Component
 public class EntityCsvLanguageConverter implements EntityConverter<LanguageCsv, Language> {
@@ -23,6 +24,9 @@ public class EntityCsvLanguageConverter implements EntityConverter<LanguageCsv, 
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private LanguageService languageService;
 
 	@Override
 	public Language convert(LanguageCsv source, EntityConverterContext context) throws ConverterException {
@@ -33,14 +37,14 @@ public class EntityCsvLanguageConverter implements EntityConverter<LanguageCsv, 
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Language.ID, source.getId());
 
-				Language prototype = modelService.findOneEntityByProperties(properties, Language.class);
+				Language prototype = languageService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new Language());
+			return convertToEntity(source, modelService.create(Language.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -51,7 +55,7 @@ public class EntityCsvLanguageConverter implements EntityConverter<LanguageCsv, 
 		return convert(source, new EntityConverterContext());
 	}
 
-	private Language convert(LanguageCsv source, Language prototype) throws ConverterException {
+	private Language convertToEntity(LanguageCsv source, Language prototype) throws ConverterException {
 
 		try {
 			prototype.setId(StringUtils.stripToNull(source.getId()));

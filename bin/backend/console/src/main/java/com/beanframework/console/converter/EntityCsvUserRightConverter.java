@@ -18,6 +18,7 @@ import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.service.UserRightService;
 
 @Component
 public class EntityCsvUserRightConverter implements EntityConverter<UserRightCsv, UserRight> {
@@ -26,6 +27,9 @@ public class EntityCsvUserRightConverter implements EntityConverter<UserRightCsv
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private UserRightService userRightService;
 
 	@Override
 	public UserRight convert(UserRightCsv source, EntityConverterContext context) throws ConverterException {
@@ -36,7 +40,7 @@ public class EntityCsvUserRightConverter implements EntityConverter<UserRightCsv
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserRight.ID, source.getId());
 
-				UserRight prototype = modelService.findOneEntityByProperties(properties, UserRight.class);
+				UserRight prototype = userRightService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 

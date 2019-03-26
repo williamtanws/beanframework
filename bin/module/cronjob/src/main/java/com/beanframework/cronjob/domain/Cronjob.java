@@ -103,7 +103,7 @@ public class Cronjob extends GenericEntity {
 
 	@AuditMappedBy(mappedBy = CronjobData.CRONJOB)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = CronjobData.CRONJOB, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = CronjobData.CRONJOB, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy("createdDate DESC")
 	private List<CronjobData> cronjobDatas = new ArrayList<CronjobData>(0);
 

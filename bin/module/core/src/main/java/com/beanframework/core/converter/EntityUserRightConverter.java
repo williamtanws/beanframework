@@ -17,11 +17,15 @@ import com.beanframework.core.data.UserRightFieldDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.service.UserRightService;
 
 public class EntityUserRightConverter implements EntityConverter<UserRightDto, UserRight> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private UserRightService userRightService;
 
 	@Override
 	public UserRight convert(UserRightDto source, EntityConverterContext context) throws ConverterException {
@@ -33,10 +37,10 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserRight.UUID, source.getUuid());
 
-				UserRight prototype = modelService.findOneEntityByProperties(properties, UserRight.class);
+				UserRight prototype = userRightService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
@@ -47,7 +51,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 		}
 	}
 
-	private UserRight convertDto(UserRightDto source, UserRight prototype) throws ConverterException {
+	private UserRight convertToEntity(UserRightDto source, UserRight prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();
