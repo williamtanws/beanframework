@@ -83,6 +83,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Override
 	public Page<UserGroup> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties(UserGroup.class);
 		return modelService.findEntityPage(UserGroupSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserGroup.class);
 	}
 

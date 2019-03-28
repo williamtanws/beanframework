@@ -137,6 +137,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Page<Customer> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties(Customer.class);
 		return modelService.findEntityPage(CustomerSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Customer.class);
 	}
 

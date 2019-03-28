@@ -143,6 +143,7 @@ public class VendorServiceImpl implements VendorService {
 
 	@Override
 	public Page<Vendor> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties(Vendor.class);
 		return modelService.findEntityPage(VendorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Vendor.class);
 	}
 

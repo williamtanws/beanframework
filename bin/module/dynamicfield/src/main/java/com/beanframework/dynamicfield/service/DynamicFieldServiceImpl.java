@@ -76,6 +76,7 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 
 	@Override
 	public Page<DynamicField> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties(DynamicField.class);
 		return modelService.findEntityPage(DynamicFieldSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicField.class);
 	}
 

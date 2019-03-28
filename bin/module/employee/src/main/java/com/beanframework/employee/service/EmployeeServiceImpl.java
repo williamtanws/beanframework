@@ -171,6 +171,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Page<Employee> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties(Employee.class);
 		return modelService.findEntityPage(EmployeeSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Employee.class);
 	}
 
