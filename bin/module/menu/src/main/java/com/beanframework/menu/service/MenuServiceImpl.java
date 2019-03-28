@@ -21,7 +21,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.repository.MenuRepository;
 import com.beanframework.menu.specification.MenuSpecification;
 import com.beanframework.user.domain.UserGroup;
 
@@ -30,9 +29,6 @@ public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private MenuRepository menuRepository;
 
 	@Autowired
 	private FetchContext fetchContext;
@@ -89,27 +85,70 @@ public class MenuServiceImpl implements MenuService {
 
 	@Transactional
 	@Override
-	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) {
+	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
 
 		if (toUuid == null) {
-			menuRepository.setParentNullByUuid(fromUuid);
+			setParentNullAndSortByUuid(fromUuid, toIndex);
 
-			menuRepository.updateSortByUuid(fromUuid, toIndex);
-
-			List<Menu> toMenuChilds = menuRepository.findByParentNullOrderBySort();
+			List<Menu> toMenuChilds = findByParentNullOrderBySort();
 
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
-			menuRepository.saveAll(menus);
+			for (Menu menu : menus) {
+				modelService.saveEntity(menu, Menu.class);
+			}
 		} else {
-			menuRepository.updateParentByUuid(fromUuid, toUuid);
+			updateParentByUuid(fromUuid, toUuid, toIndex);
 
-			menuRepository.updateSortByUuid(fromUuid, toIndex);
-
-			List<Menu> toMenuChilds = menuRepository.findByParentUuidOrderBySort(toUuid);
+			List<Menu> toMenuChilds = findByParentUuidOrderBySort(toUuid);
 
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
-			menuRepository.saveAll(menus);
+			for (Menu menu : menus) {
+				modelService.saveEntity(menu, Menu.class);
+			}
 		}
+	}
+
+	private void setParentNullAndSortByUuid(UUID fromUuid, int toIndex) throws Exception {
+		fetchContext.clearFetchProperties(Menu.class);
+		fetchContext.addFetchProperty(Menu.class, Menu.PARENT);
+		Menu menu = modelService.findOneEntityByUuid(fromUuid, Menu.class);
+		menu.setParent(null);
+		menu.setSort(toIndex);
+		modelService.saveEntity(menu, Menu.class);
+	}
+
+	private List<Menu> findByParentNullOrderBySort() throws Exception {
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Menu.PARENT, null);
+
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Menu.SORT, Sort.Direction.ASC);
+
+		return modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
+	}
+
+	private void updateParentByUuid(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
+		fetchContext.clearFetchProperties(Menu.class);
+		fetchContext.addFetchProperty(Menu.class, Menu.PARENT);
+		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
+		Menu menu = modelService.findOneEntityByUuid(fromUuid, Menu.class);
+		Menu parent = modelService.findOneEntityByUuid(toUuid, Menu.class);
+		parent.getChilds().add(menu);
+		menu.setParent(parent);
+		menu.setSort(toIndex);
+		modelService.saveEntity(menu, Menu.class);
+	}
+
+	private List<Menu> findByParentUuidOrderBySort(UUID toUuid) throws Exception {
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Menu.PARENT+"."+Menu.UUID, toUuid);
+
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Menu.SORT, Sort.Direction.ASC);
+
+		return modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
 	}
 
 	private List<Menu> changePosition(List<Menu> menuList, UUID fromId, int toIndex) {
@@ -184,6 +223,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Page<Menu> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties(Menu.class);
 		return modelService.findEntityPage(MenuSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Menu.class);
 	}
 

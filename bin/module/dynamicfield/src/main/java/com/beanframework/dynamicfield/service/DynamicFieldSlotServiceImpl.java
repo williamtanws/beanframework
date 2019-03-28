@@ -76,6 +76,7 @@ public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 
 	@Override
 	public Page<DynamicFieldSlot> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties(DynamicFieldSlot.class);
 		return modelService.findEntityPage(DynamicFieldSlotSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicFieldSlot.class);
 	}
 

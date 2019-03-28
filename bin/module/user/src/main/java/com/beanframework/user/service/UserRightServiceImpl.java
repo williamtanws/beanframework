@@ -77,6 +77,7 @@ public class UserRightServiceImpl implements UserRightService {
 
 	@Override
 	public Page<UserRight> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties(UserPermission.class);
 		return modelService.findEntityPage(UserRightSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserRight.class);
 	}
 

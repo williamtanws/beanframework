@@ -80,6 +80,7 @@ public class CronjobServiceImpl implements CronjobService {
 
 	@Override
 	public Page<Cronjob> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties(Cronjob.class);
 		return modelService.findEntityPage(CronjobSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Cronjob.class);
 	}
 
