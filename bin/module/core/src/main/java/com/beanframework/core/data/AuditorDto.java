@@ -1,6 +1,4 @@
-package com.beanframework.common.data;
-
-import com.beanframework.common.data.GenericDto;
+package com.beanframework.core.data;
 
 public class AuditorDto extends GenericDto {
 	/**

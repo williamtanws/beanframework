@@ -13,7 +13,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldSlotDto;
-import com.beanframework.core.specification.DynamicFieldSlotSpecification;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.service.DynamicFieldSlotService;
 
@@ -70,7 +69,7 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 
 	@Override
 	public Page<DynamicFieldSlotDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<DynamicFieldSlot> page = dynamicFieldService.findEntityPage(dataTableRequest, DynamicFieldSlotSpecification.getSpecification(dataTableRequest));
+		Page<DynamicFieldSlot> page = dynamicFieldService.findEntityPage(dataTableRequest);
 
 		List<DynamicFieldSlotDto> dtos = modelService.getDto(page.getContent(), DynamicFieldSlotDto.class);
 		return new PageImpl<DynamicFieldSlotDto>(dtos, page.getPageable(), page.getTotalElements());

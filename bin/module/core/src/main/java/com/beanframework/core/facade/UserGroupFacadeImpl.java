@@ -15,7 +15,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserGroupDto;
-import com.beanframework.core.specification.UserGroupSpecification;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupService;
 
@@ -72,7 +71,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<UserGroup> page = userGroupService.findEntityPage(dataTableRequest, UserGroupSpecification.getSpecification(dataTableRequest));
+		Page<UserGroup> page = userGroupService.findEntityPage(dataTableRequest);
 
 		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class);
 		return new PageImpl<UserGroupDto>(dtos, page.getPageable(), page.getTotalElements());

@@ -9,16 +9,15 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
+import com.beanframework.language.specification.LanguageSpecification;
 
 @Service
 public class LanguageServiceImpl implements LanguageService {
@@ -64,8 +63,8 @@ public class LanguageServiceImpl implements LanguageService {
 	}
 
 	@Override
-	public <T> Page<Language> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Language.class);
+	public Page<Language> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(LanguageSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Language.class);
 	}
 
 	@Override

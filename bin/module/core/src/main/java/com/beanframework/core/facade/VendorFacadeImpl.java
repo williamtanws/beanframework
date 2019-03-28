@@ -14,7 +14,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.EntityVendorProfileConverter;
 import com.beanframework.core.data.VendorDto;
-import com.beanframework.core.specification.VendorSpecification;
 import com.beanframework.vendor.domain.Vendor;
 import com.beanframework.vendor.service.VendorService;
 
@@ -84,7 +83,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Vendor> page = vendorService.findEntityPage(dataTableRequest, VendorSpecification.getSpecification(dataTableRequest));
+		Page<Vendor> page = vendorService.findEntityPage(dataTableRequest);
 
 		List<VendorDto> dtos = modelService.getDto(page.getContent(), VendorDto.class);
 		return new PageImpl<VendorDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -148,9 +147,9 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public VendorDto getCurrentUser() throws Exception {
-		Vendor vendor = vendorService.getCurrentUser();
+		Vendor entity = vendorService.getCurrentUser();
 
-		return modelService.getDto(vendorService.findOneEntityByUuid(vendor.getUuid()), VendorDto.class);
+		return modelService.getDto(entity, VendorDto.class);
 	}
 
 }

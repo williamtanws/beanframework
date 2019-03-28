@@ -9,10 +9,8 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.context.FetchContext;
@@ -20,6 +18,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.specification.DynamicFieldSpecification;
 
 @Service
 public class DynamicFieldServiceImpl implements DynamicFieldService {
@@ -76,8 +75,8 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 	}
 
 	@Override
-	public <T> Page<DynamicField> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), DynamicField.class);
+	public Page<DynamicField> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(DynamicFieldSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicField.class);
 	}
 
 	@Override

@@ -12,10 +12,8 @@ import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +22,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.media.domain.Media;
+import com.beanframework.media.specification.MediaSpecification;
 
 @Service
 public class MediaServiceImpl implements MediaService {
@@ -78,8 +77,8 @@ public class MediaServiceImpl implements MediaService {
 	}
 
 	@Override
-	public <T> Page<Media> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Media.class);
+	public Page<Media> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(MediaSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Media.class);
 	}
 
 	@Override

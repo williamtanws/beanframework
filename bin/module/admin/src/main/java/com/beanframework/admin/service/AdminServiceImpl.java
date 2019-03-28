@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -27,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import com.beanframework.admin.AdminConstants;
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.admin.specification.AdminSpecification;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -90,8 +90,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public <T> Page<Admin> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Admin.class);
+	public Page<Admin> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(AdminSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Admin.class);
 	}
 
 	@Override

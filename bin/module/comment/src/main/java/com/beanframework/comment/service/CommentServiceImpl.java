@@ -9,13 +9,12 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.comment.domain.Comment;
+import com.beanframework.comment.specification.CommentSpecification;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -64,8 +63,8 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public <T> Page<Comment> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Comment.class);
+	public Page<Comment> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(CommentSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Comment.class);
 	}
 
 	@Override

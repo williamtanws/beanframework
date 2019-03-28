@@ -20,10 +20,8 @@ import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +34,12 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.CustomerConstants;
 import com.beanframework.customer.domain.Customer;
+import com.beanframework.customer.specification.CustomerSpecification;
+import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.media.MediaConstants;
+import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserField;
+import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 
 @Service
@@ -71,18 +74,40 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Customer findOneEntityByUuid(UUID uuid) throws Exception {
 		fetchContext.clearFetchProperties(Customer.class);
+		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.clearFetchProperties(UserAuthority.class);
+		fetchContext.clearFetchProperties(DynamicField.class);
+		fetchContext.clearFetchProperties(UserField.class);
 
 		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
 		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 		return modelService.findOneEntityByUuid(uuid, Customer.class);
 	}
 
 	@Override
 	public Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		fetchContext.clearFetchProperties(Customer.class);
+		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.clearFetchProperties(UserAuthority.class);
+		fetchContext.clearFetchProperties(DynamicField.class);
+		fetchContext.clearFetchProperties(UserField.class);
 
 		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
 		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 		return modelService.findOneEntityByProperties(properties, Customer.class);
 	}
 
@@ -111,8 +136,8 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public <T> Page<Customer> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Customer.class);
+	public Page<Customer> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(CustomerSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Customer.class);
 	}
 
 	@Override
@@ -181,13 +206,13 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public Customer getCurrentUser() {
+	public Customer getCurrentUser() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (auth != null) {
 
-			Customer user = (Customer) auth.getPrincipal();
-			return user;
+			Customer principal = (Customer) auth.getPrincipal();
+			return findOneEntityByUuid(principal.getUuid());
 		} else {
 			return null;
 		}

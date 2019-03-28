@@ -9,16 +9,15 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.configuration.specification.ConfigurationSpecification;
 
 @Service
 public class ConfigurationServiceImpl implements ConfigurationService {
@@ -69,8 +68,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	}
 
 	@Override
-	public <T> Page<Configuration> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Configuration.class);
+	public Page<Configuration> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(ConfigurationSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Configuration.class);
 	}
 
 	@Override

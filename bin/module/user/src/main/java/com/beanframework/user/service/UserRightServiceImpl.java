@@ -9,10 +9,8 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.context.FetchContext;
@@ -21,6 +19,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
+import com.beanframework.user.specification.UserRightSpecification;
 
 @Service
 public class UserRightServiceImpl implements UserRightService {
@@ -77,8 +76,8 @@ public class UserRightServiceImpl implements UserRightService {
 	}
 
 	@Override
-	public <T> Page<UserRight> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), UserRight.class);
+	public Page<UserRight> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(UserRightSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserRight.class);
 	}
 
 	@Override

@@ -11,10 +11,8 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +22,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.repository.MenuRepository;
+import com.beanframework.menu.specification.MenuSpecification;
 import com.beanframework.user.domain.UserGroup;
 
 @Service
@@ -184,8 +183,8 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public <T> Page<Menu> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Menu.class);
+	public Page<Menu> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(MenuSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Menu.class);
 	}
 
 	@Override

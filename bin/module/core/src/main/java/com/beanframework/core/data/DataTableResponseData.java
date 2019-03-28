@@ -1,4 +1,4 @@
-package com.beanframework.common.data;
+package com.beanframework.core.data;
 
 public class DataTableResponseData {
 

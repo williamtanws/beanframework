@@ -121,7 +121,6 @@ public class EntityCsvMenuConverter implements EntityConverter<MenuCsv, Menu> {
 
 						if (entityDynamicField != null) {
 							MenuField field = new MenuField();
-							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setMenu(prototype);

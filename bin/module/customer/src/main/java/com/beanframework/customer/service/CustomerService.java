@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
@@ -29,7 +28,7 @@ public interface CustomerService {
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
 
-	<T> Page<Customer> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
+	Page<Customer> findEntityPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
@@ -43,5 +42,5 @@ public interface CustomerService {
 
 	Customer updatePrincipal(Customer model);
 
-	Customer getCurrentUser();
+	Customer getCurrentUser() throws Exception;
 }

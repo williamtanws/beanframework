@@ -9,10 +9,8 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +21,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.cronjob.repository.CronjobRepository;
+import com.beanframework.cronjob.specification.CronjobSpecification;
 
 @Service
 public class CronjobServiceImpl implements CronjobService {
@@ -80,8 +79,8 @@ public class CronjobServiceImpl implements CronjobService {
 	}
 
 	@Override
-	public <T> Page<Cronjob> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Cronjob.class);
+	public Page<Cronjob> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(CronjobSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Cronjob.class);
 	}
 
 	@Override

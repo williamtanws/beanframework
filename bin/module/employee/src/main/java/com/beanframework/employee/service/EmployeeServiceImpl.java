@@ -29,10 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -54,11 +52,14 @@ import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
+import com.beanframework.employee.specification.EmployeeSpecification;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 
@@ -107,13 +108,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 		fetchContext.clearFetchProperties(Employee.class);
 		fetchContext.clearFetchProperties(UserGroup.class);
 		fetchContext.clearFetchProperties(UserAuthority.class);
+		fetchContext.clearFetchProperties(DynamicField.class);
+		fetchContext.clearFetchProperties(UserField.class);
 
 		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
+		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 
 		return modelService.findOneEntityByUuid(uuid, Employee.class);
 	}
@@ -123,13 +129,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 		fetchContext.clearFetchProperties(Employee.class);
 		fetchContext.clearFetchProperties(UserGroup.class);
 		fetchContext.clearFetchProperties(UserAuthority.class);
+		fetchContext.clearFetchProperties(DynamicField.class);
+		fetchContext.clearFetchProperties(UserField.class);
 
 		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
+		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 
 		return modelService.findOneEntityByProperties(properties, Employee.class);
 	}
@@ -159,8 +170,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public <T> Page<Employee> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Employee.class);
+	public Page<Employee> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(EmployeeSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Employee.class);
 	}
 
 	@Override
@@ -257,13 +268,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Employee getCurrentUser() {
+	public Employee getCurrentUser() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (auth != null) {
 
-			Employee user = (Employee) auth.getPrincipal();
-			return user;
+			Employee principal = (Employee) auth.getPrincipal();
+			return findOneEntityByUuid(principal.getUuid());
 		} else {
 			return null;
 		}

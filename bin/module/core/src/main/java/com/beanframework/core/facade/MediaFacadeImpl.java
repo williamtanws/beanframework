@@ -13,7 +13,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MediaDto;
-import com.beanframework.core.specification.MediaSpecification;
 import com.beanframework.media.domain.Media;
 import com.beanframework.media.service.MediaService;
 
@@ -66,7 +65,7 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Override
 	public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Media> page = mediaService.findEntityPage(dataTableRequest, MediaSpecification.getSpecification(dataTableRequest));
+		Page<Media> page = mediaService.findEntityPage(dataTableRequest);
 
 		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class);
 		return new PageImpl<MediaDto>(dtos, page.getPageable(), page.getTotalElements());

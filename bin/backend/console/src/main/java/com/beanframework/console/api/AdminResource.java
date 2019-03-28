@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.AdminWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.core.data.AdminDto;
+import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.AdminFacade;
 
 @RestController
