@@ -15,7 +15,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MenuDto;
-import com.beanframework.core.specification.MenuSpecification;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
 
@@ -100,7 +99,7 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Menu> page = menuService.findEntityPage(dataTableRequest, MenuSpecification.getSpecification(dataTableRequest));
+		Page<Menu> page = menuService.findEntityPage(dataTableRequest);
 
 		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class);
 		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());

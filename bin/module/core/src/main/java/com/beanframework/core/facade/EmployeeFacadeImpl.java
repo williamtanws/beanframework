@@ -15,7 +15,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.EntityEmployeeProfileConverter;
 import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.core.specification.EmployeeSpecification;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
@@ -87,7 +86,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Employee> page = employeeService.findEntityPage(dataTableRequest, EmployeeSpecification.getSpecification(dataTableRequest));
+		Page<Employee> page = employeeService.findEntityPage(dataTableRequest);
 
 		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class);
 		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -140,9 +139,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public EmployeeDto getCurrentUser() throws Exception {
-		Employee employee = employeeService.getCurrentUser();
-		
-		Employee entity = employeeService.findOneEntityByUuid(employee.getUuid());
+		Employee entity = employeeService.getCurrentUser();
 		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
 		
 		return dto;

@@ -17,7 +17,6 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.core.data.CronjobDto;
-import com.beanframework.core.specification.CronjobSpecification;
 import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
@@ -81,7 +80,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Override
 	public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Cronjob> page = cronjobService.findEntityPage(dataTableRequest, CronjobSpecification.getSpecification(dataTableRequest));
+		Page<Cronjob> page = cronjobService.findEntityPage(dataTableRequest);
 
 		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class);
 		return new PageImpl<CronjobDto>(dtos, page.getPageable(), page.getTotalElements());

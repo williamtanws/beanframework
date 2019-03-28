@@ -9,16 +9,15 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.enumuration.specification.EnumerationSpecification;
 
 @Service
 public class EnumerationServiceImpl implements EnumerationService {
@@ -64,8 +63,8 @@ public class EnumerationServiceImpl implements EnumerationService {
 	}
 
 	@Override
-	public <T> Page<Enumeration> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Enumeration.class);
+	public Page<Enumeration> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(EnumerationSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Enumeration.class);
 	}
 
 	@Override

@@ -13,7 +13,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.LanguageDto;
-import com.beanframework.core.specification.LanguageSpecification;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.service.LanguageService;
 
@@ -66,7 +65,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
 	@Override
 	public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Language> page = languageService.findEntityPage(dataTableRequest, LanguageSpecification.getSpecification(dataTableRequest));
+		Page<Language> page = languageService.findEntityPage(dataTableRequest);
 
 		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class);
 		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());

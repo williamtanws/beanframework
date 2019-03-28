@@ -15,7 +15,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserRightDto;
-import com.beanframework.core.specification.UserRightSpecification;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserRightService;
 
@@ -72,7 +71,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest, UserRightSpecification.getSpecification(dataTableRequest));
+		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest);
 
 		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class);
 		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());

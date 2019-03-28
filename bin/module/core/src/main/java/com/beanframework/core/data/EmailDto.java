@@ -2,7 +2,6 @@ package com.beanframework.core.data;
 
 import java.io.File;
 
-import com.beanframework.common.data.GenericDto;
 import com.beanframework.email.domain.EmailEnum.Result;
 import com.beanframework.email.domain.EmailEnum.Status;
 

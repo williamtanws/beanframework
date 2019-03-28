@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
-import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.core.data.AuditorDto;
 
 public class DtoAuditorConverter implements DtoConverter<Auditor, AuditorDto> {
 

@@ -85,7 +85,6 @@ public class EntityCsvUserGroupConverter implements EntityConverter<UserGroupCsv
 
 						if (entityDynamicField != null) {
 							UserGroupField field = new UserGroupField();
-							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setUserGroup(prototype);

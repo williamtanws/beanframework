@@ -1,4 +1,4 @@
-package com.beanframework.core.specification;
+package com.beanframework.dynamicfield.specification;
 
 import com.beanframework.common.utils.AbstractSpecification;
 

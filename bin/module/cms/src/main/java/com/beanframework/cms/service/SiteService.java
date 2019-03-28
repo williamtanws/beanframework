@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.cms.domain.Site;
 import com.beanframework.common.data.DataTableRequest;
@@ -26,7 +25,7 @@ public interface SiteService {
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
 
-	<T> Page<Site> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
+	Page<Site> findEntityPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 

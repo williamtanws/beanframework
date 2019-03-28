@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
@@ -29,7 +28,7 @@ public interface VendorService {
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
 
-	<T> Page<Vendor> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
+	Page<Vendor> findEntityPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
@@ -41,7 +40,7 @@ public interface VendorService {
 
 	void saveProfilePicture(Vendor model, InputStream inputStream) throws IOException;
 
-	Vendor getCurrentUser();
+	Vendor getCurrentUser() throws Exception;
 
 	Vendor updatePrincipal(Vendor model);
 }

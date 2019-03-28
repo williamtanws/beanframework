@@ -17,7 +17,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CommentDto;
-import com.beanframework.core.specification.CommentSpecification;
 
 @Component
 public class CommentFacadeImpl implements CommentFacade {
@@ -70,7 +69,7 @@ public class CommentFacadeImpl implements CommentFacade {
 
 	@Override
 	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Comment> page = commentService.findEntityPage(dataTableRequest, CommentSpecification.getSpecification(dataTableRequest));
+		Page<Comment> page = commentService.findEntityPage(dataTableRequest);
 
 		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class);
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());

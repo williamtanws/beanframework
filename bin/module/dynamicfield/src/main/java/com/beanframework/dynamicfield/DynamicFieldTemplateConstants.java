@@ -4,7 +4,8 @@ public class DynamicFieldTemplateConstants {
 
 	public static interface Table {
 		public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "dynamicfieldtpl";
-		public static final String DYNAMIC_FILE_TEMPLATE_REL = "dynamicfieldtplrel";;
+		public static final String DYNAMIC_FIELD_TEMPLATE_REL = "dynamicfieldtplrel";
+		public static final String DYNAMIC_FIELD_TEMPLATE_FIELDSLOT_REL = "dynamicfieldtplslotrel";;
 	}
 
 	public static interface Locale {

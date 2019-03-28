@@ -20,10 +20,8 @@ import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,10 +32,15 @@ import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.media.MediaConstants;
+import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserField;
+import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.vendor.VendorConstants;
 import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.vendor.specification.VendorSpecification;
 
 @Service
 public class VendorServiceImpl implements VendorService {
@@ -81,15 +84,41 @@ public class VendorServiceImpl implements VendorService {
 	@Override
 	public Vendor findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		fetchContext.clearFetchProperties(Vendor.class);
+		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.clearFetchProperties(UserAuthority.class);
+		fetchContext.clearFetchProperties(DynamicField.class);
+		fetchContext.clearFetchProperties(UserField.class);
 
 		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
 		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 
 		return modelService.findOneEntityByProperties(properties, Vendor.class);
 	}
 
 	@Override
 	public List<Vendor> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		fetchContext.clearFetchProperties(Vendor.class);
+		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.clearFetchProperties(UserAuthority.class);
+		fetchContext.clearFetchProperties(DynamicField.class);
+		fetchContext.clearFetchProperties(UserField.class);
+
+		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
+		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Vendor.class);
 	}
 
@@ -113,8 +142,8 @@ public class VendorServiceImpl implements VendorService {
 	}
 
 	@Override
-	public <T> Page<Vendor> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), Vendor.class);
+	public Page<Vendor> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(VendorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Vendor.class);
 	}
 
 	@Override
@@ -183,13 +212,13 @@ public class VendorServiceImpl implements VendorService {
 	}
 
 	@Override
-	public Vendor getCurrentUser() {
+	public Vendor getCurrentUser() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (auth != null) {
 
-			Vendor user = (Vendor) auth.getPrincipal();
-			return user;
+			Vendor principal = (Vendor) auth.getPrincipal();
+			return findOneEntityByUuid(principal.getUuid());
 		} else {
 			return null;
 		}

@@ -89,7 +89,6 @@ public class EntityCsvUserPermissionConverter implements EntityConverter<UserPer
 							LOGGER.error("DynamicField ID not exists: " + dynamicFieldId);
 						} else {
 							UserPermissionField field = new UserPermissionField();
-							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setUserPermission(prototype);

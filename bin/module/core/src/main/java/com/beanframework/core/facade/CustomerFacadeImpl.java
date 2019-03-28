@@ -14,7 +14,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.EntityCustomerProfileConverter;
 import com.beanframework.core.data.CustomerDto;
-import com.beanframework.core.specification.CustomerSpecification;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerService;
 
@@ -84,7 +83,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Customer> page = customerService.findEntityPage(dataTableRequest, CustomerSpecification.getSpecification(dataTableRequest));
+		Page<Customer> page = customerService.findEntityPage(dataTableRequest);
 
 		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class);
 		return new PageImpl<CustomerDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -148,9 +147,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public CustomerDto getCurrentUser() throws Exception {
-		Customer customer = customerService.getCurrentUser();
+		Customer entity = customerService.getCurrentUser();
 
-		return modelService.getDto(customerService.findOneEntityByUuid(customer.getUuid()), CustomerDto.class);
+		return modelService.getDto(entity, CustomerDto.class);
 	}
 
 }

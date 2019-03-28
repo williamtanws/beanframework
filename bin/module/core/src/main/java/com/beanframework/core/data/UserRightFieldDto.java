@@ -1,7 +1,5 @@
 package com.beanframework.core.data;
 
-import com.beanframework.common.data.GenericDto;
-
 public class UserRightFieldDto extends GenericDto {
 
 	/**
