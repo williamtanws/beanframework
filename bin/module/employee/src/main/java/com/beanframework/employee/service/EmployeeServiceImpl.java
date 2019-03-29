@@ -105,11 +105,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties(Employee.class);
-		fetchContext.clearFetchProperties(UserGroup.class);
-		fetchContext.clearFetchProperties(UserAuthority.class);
-		fetchContext.clearFetchProperties(DynamicField.class);
-		fetchContext.clearFetchProperties(UserField.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
 		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
@@ -126,11 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties(Employee.class);
-		fetchContext.clearFetchProperties(UserGroup.class);
-		fetchContext.clearFetchProperties(UserAuthority.class);
-		fetchContext.clearFetchProperties(DynamicField.class);
-		fetchContext.clearFetchProperties(UserField.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
 		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
@@ -171,7 +163,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Page<Employee> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties(Employee.class);
+		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(EmployeeSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Employee.class);
 	}
 

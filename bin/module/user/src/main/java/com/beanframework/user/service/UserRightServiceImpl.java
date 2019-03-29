@@ -37,7 +37,7 @@ public class UserRightServiceImpl implements UserRightService {
 
 	@Override
 	public UserRight findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties(UserPermission.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
 
@@ -46,7 +46,7 @@ public class UserRightServiceImpl implements UserRightService {
 
 	@Override
 	public UserRight findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties(UserPermission.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
 
@@ -77,7 +77,7 @@ public class UserRightServiceImpl implements UserRightService {
 
 	@Override
 	public Page<UserRight> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties(UserPermission.class);
+		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(UserRightSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserRight.class);
 	}
 

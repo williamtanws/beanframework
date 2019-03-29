@@ -37,8 +37,8 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Override
 	public UserGroup findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties(UserGroup.class);
-		fetchContext.clearFetchProperties(UserAuthority.class);
+		fetchContext.clearFetchProperties();
+
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.FIELDS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
@@ -49,8 +49,8 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Override
 	public UserGroup findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties(UserGroup.class);
-		fetchContext.clearFetchProperties(UserAuthority.class);
+		fetchContext.clearFetchProperties();
+
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.FIELDS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
@@ -83,7 +83,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Override
 	public Page<UserGroup> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(UserGroupSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserGroup.class);
 	}
 

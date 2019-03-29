@@ -36,7 +36,7 @@ public class DynamicFieldTemplateServiceImpl implements DynamicFieldTemplateServ
 
 	@Override
 	public DynamicFieldTemplate findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties(DynamicFieldTemplate.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(DynamicFieldTemplate.class, DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS);
 
@@ -45,7 +45,7 @@ public class DynamicFieldTemplateServiceImpl implements DynamicFieldTemplateServ
 
 	@Override
 	public DynamicFieldTemplate findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties(DynamicFieldTemplate.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(DynamicFieldTemplate.class, DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS);
 
@@ -76,7 +76,7 @@ public class DynamicFieldTemplateServiceImpl implements DynamicFieldTemplateServ
 
 	@Override
 	public Page<DynamicFieldTemplate> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties(DynamicFieldTemplate.class);
+		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(DynamicFieldTemplateSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicFieldTemplate.class);
 	}
 
