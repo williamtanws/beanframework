@@ -40,8 +40,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Menu findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties(Menu.class);
-		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
@@ -54,8 +53,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties(Menu.class);
-		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
@@ -109,7 +107,7 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	private void setParentNullAndSortByUuid(UUID fromUuid, int toIndex) throws Exception {
-		fetchContext.clearFetchProperties(Menu.class);
+		fetchContext.clearFetchProperties();
 		fetchContext.addFetchProperty(Menu.class, Menu.PARENT);
 		Menu menu = modelService.findOneEntityByUuid(fromUuid, Menu.class);
 		menu.setParent(null);
@@ -129,7 +127,7 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	private void updateParentByUuid(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
-		fetchContext.clearFetchProperties(Menu.class);
+		fetchContext.clearFetchProperties();
 		fetchContext.addFetchProperty(Menu.class, Menu.PARENT);
 		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		Menu menu = modelService.findOneEntityByUuid(fromUuid, Menu.class);
@@ -197,8 +195,7 @@ public class MenuServiceImpl implements MenuService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findEntityMenuTree(boolean enabled) throws Exception {
-		fetchContext.clearFetchProperties(Menu.class);
-		fetchContext.clearFetchProperties(UserGroup.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
@@ -223,7 +220,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Page<Menu> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties(Menu.class);
+		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(MenuSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Menu.class);
 	}
 

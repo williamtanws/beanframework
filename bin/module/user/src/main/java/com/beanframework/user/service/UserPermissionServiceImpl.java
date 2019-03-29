@@ -36,14 +36,14 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 
 	@Override
 	public UserPermission findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties(UserPermission.class);
+		fetchContext.clearFetchProperties();
 		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
 		return modelService.findOneEntityByUuid(uuid, UserPermission.class);
 	}
 
 	@Override
 	public UserPermission findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties(UserPermission.class);
+		fetchContext.clearFetchProperties();
 		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
 		return modelService.findOneEntityByProperties(properties, UserPermission.class);
 	}
@@ -72,7 +72,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 
 	@Override
 	public Page<UserPermission> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties(UserPermission.class);
+		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(UserPermissionSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserPermission.class);
 	}
 

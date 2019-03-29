@@ -38,12 +38,6 @@ public class EmployeeController extends AbstractController {
 	@Value(EmployeeWebConstants.View.LIST)
 	private String VIEW_EMPLOYEE_LIST;
 
-	@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO)
-	public EmployeeDto update(Model model) throws Exception {
-		model.addAttribute("create", false);
-		return new EmployeeDto();
-	}
-
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
 	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);

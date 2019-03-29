@@ -89,6 +89,7 @@ public class EntityCsvUserRightConverter implements EntityConverter<UserRightCsv
 							LOGGER.error("DynamicField ID not exists: " + dynamicFieldId);
 						} else {
 							UserRightField field = new UserRightField();
+							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setUserRight(prototype);

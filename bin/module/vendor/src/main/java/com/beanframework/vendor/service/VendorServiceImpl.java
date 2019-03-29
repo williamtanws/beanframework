@@ -73,7 +73,7 @@ public class VendorServiceImpl implements VendorService {
 
 	@Override
 	public Vendor findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties(Vendor.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
 		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
@@ -83,11 +83,7 @@ public class VendorServiceImpl implements VendorService {
 
 	@Override
 	public Vendor findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties(Vendor.class);
-		fetchContext.clearFetchProperties(UserGroup.class);
-		fetchContext.clearFetchProperties(UserAuthority.class);
-		fetchContext.clearFetchProperties(DynamicField.class);
-		fetchContext.clearFetchProperties(UserField.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
 		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
@@ -104,11 +100,7 @@ public class VendorServiceImpl implements VendorService {
 
 	@Override
 	public List<Vendor> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		fetchContext.clearFetchProperties(Vendor.class);
-		fetchContext.clearFetchProperties(UserGroup.class);
-		fetchContext.clearFetchProperties(UserAuthority.class);
-		fetchContext.clearFetchProperties(DynamicField.class);
-		fetchContext.clearFetchProperties(UserField.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
 		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
@@ -143,7 +135,7 @@ public class VendorServiceImpl implements VendorService {
 
 	@Override
 	public Page<Vendor> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties(Vendor.class);
+		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(VendorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Vendor.class);
 	}
 

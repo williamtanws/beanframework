@@ -99,6 +99,7 @@ public class EntityCsvEmployeeConverter implements EntityConverter<EmployeeCsv, 
 							LOGGER.error("DynamicField Id not exists: " + dynamicFieldId);
 						} else {
 							UserField field = new UserField();
+							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
 							field.setValue(StringUtils.stripToNull(value));
 							field.setDynamicField(entityDynamicField);
 							field.setUser(prototype);

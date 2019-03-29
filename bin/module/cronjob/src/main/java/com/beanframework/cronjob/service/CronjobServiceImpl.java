@@ -42,7 +42,7 @@ public class CronjobServiceImpl implements CronjobService {
 
 	@Override
 	public Cronjob findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties(Cronjob.class);
+		fetchContext.clearFetchProperties();
 		fetchContext.addFetchProperty(Cronjob.class, Cronjob.CRONJOB_DATAS);
 
 		return modelService.findOneEntityByUuid(uuid, Cronjob.class);
@@ -50,7 +50,7 @@ public class CronjobServiceImpl implements CronjobService {
 
 	@Override
 	public Cronjob findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties(Cronjob.class);
+		fetchContext.clearFetchProperties();
 		fetchContext.addFetchProperty(Cronjob.class, Cronjob.CRONJOB_DATAS);
 
 		return modelService.findOneEntityByProperties(properties, Cronjob.class);
@@ -80,7 +80,7 @@ public class CronjobServiceImpl implements CronjobService {
 
 	@Override
 	public Page<Cronjob> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties(Cronjob.class);
+		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(CronjobSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Cronjob.class);
 	}
 

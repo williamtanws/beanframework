@@ -73,11 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties(Customer.class);
-		fetchContext.clearFetchProperties(UserGroup.class);
-		fetchContext.clearFetchProperties(UserAuthority.class);
-		fetchContext.clearFetchProperties(DynamicField.class);
-		fetchContext.clearFetchProperties(UserField.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
 		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
@@ -93,11 +89,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties(Customer.class);
-		fetchContext.clearFetchProperties(UserGroup.class);
-		fetchContext.clearFetchProperties(UserAuthority.class);
-		fetchContext.clearFetchProperties(DynamicField.class);
-		fetchContext.clearFetchProperties(UserField.class);
+		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
 		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
@@ -137,7 +129,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Page<Customer> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties(Customer.class);
+		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(CustomerSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Customer.class);
 	}
 
