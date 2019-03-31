@@ -214,9 +214,9 @@
 					        $(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' ' + title + '" value="' + search + '" />');
 				        
 					        $('input', this ).on('keyup change', function () {
-					            if ( table.column(i).search() !== this.value ) {
-					                table
-					                    .column(i)
+					            if ( mainTable.column(index).search() !== this.value ) {
+					            	mainTable
+					                    .column(index)
 					                    .search( this.value )
 					                    .draw();
 					            }
