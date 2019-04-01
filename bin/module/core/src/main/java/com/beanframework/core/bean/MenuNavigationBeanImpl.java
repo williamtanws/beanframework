@@ -20,7 +20,7 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean {
 
 	@Autowired
 	private MenuService menuService;
-	
+
 	@Autowired
 	private EmployeeFacade employeeFacade;
 
@@ -55,16 +55,22 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean {
 		Iterator<MenuDto> parent = menuRootList.iterator();
 		while (parent.hasNext()) {
 			MenuDto menu = parent.next();
-			if (menu.getEnabled() == false) {
+
+			boolean removed = false;
+			
+			if (removed == false && menu.getEnabled() == false) {
 				parent.remove();
+				removed = true;
 			}
 
 			// If menu groups or authorities is not authorized
-			if (isUserGroupAuthorized(menu, authorizedUserGroupUuidList) == false) {
+			if (removed == false && isUserGroupAuthorized(menu, authorizedUserGroupUuidList) == false) {
 				parent.remove();
+				removed = true;
 			}
-			if (isAnyUserAuthorityAuthorized(menu.getUserGroups()) == false) {
+			if (removed == false && isAnyUserAuthorityAuthorized(menu.getUserGroups()) == false) {
 				parent.remove();
+				removed = true;
 			}
 
 			// If menu has childs
