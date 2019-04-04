@@ -17,8 +17,10 @@ import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.user.domain.UserPermission;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserRight;
+import com.beanframework.user.domain.UserRightField;
 import com.beanframework.user.specification.UserRightSpecification;
 
 @Service
@@ -39,7 +41,11 @@ public class UserRightServiceImpl implements UserRightService {
 	public UserRight findOneEntityByUuid(UUID uuid) throws Exception {
 		fetchContext.clearFetchProperties();
 
-		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
+		fetchContext.addFetchProperty(UserRight.class, UserRight.FIELDS);
+		fetchContext.addFetchProperty(UserRightField.class, UserRightField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 
 		return modelService.findOneEntityByUuid(uuid, UserRight.class);
 	}
@@ -48,7 +54,11 @@ public class UserRightServiceImpl implements UserRightService {
 	public UserRight findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		fetchContext.clearFetchProperties();
 
-		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
+		fetchContext.addFetchProperty(UserRight.class, UserRight.FIELDS);
+		fetchContext.addFetchProperty(UserRightField.class, UserRightField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 
 		return modelService.findOneEntityByProperties(properties, UserRight.class);
 	}
