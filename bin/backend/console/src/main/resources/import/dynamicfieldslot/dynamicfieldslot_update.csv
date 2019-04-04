@@ -11,3 +11,5 @@ employee_0_name_en		,Employee Name(en) Slot			,0,name_en
 employee_1_name_cn		,Employee Name(cn) Slot			,1,name_cn
 customer_0_name_en		,Customer Name(en) Slot			,0,name_en
 customer_1_name_cn		,Customer Name(cn) Slot			,1,name_cn
+vendor_0_name_en		,Vendor Name(en) Slot			,0,name_en
+vendor_1_name_cn		,Vendor Name(cn) Slot			,1,name_cn

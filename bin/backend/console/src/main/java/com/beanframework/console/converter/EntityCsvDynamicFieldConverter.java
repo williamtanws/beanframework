@@ -9,31 +9,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.ImportListener;
-import com.beanframework.dynamicfield.DynamicFieldType;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.service.DynamicFieldService;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.language.domain.Language;
 
 @Component
-public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFieldCsv, DynamicField> {
+public class EntityCsvDynamicFieldConverter implements EntityCsvConverter<DynamicFieldCsv, DynamicField> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvDynamicFieldConverter.class);
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private DynamicFieldService dynamicFieldService;
 
 	@Override
-	public DynamicField convert(DynamicFieldCsv source, EntityConverterContext context) throws ConverterException {
+	public DynamicField convert(DynamicFieldCsv source) throws ConverterException {
 
 		try {
 
@@ -55,20 +53,29 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 		}
 	}
 
-	public DynamicField convert(DynamicFieldCsv source) throws ConverterException {
-		return convert(source, new EntityConverterContext());
-	}
-
 	private DynamicField convertToEntity(DynamicFieldCsv source, DynamicField prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setName(StringUtils.stripToNull(source.getName()));
-			prototype.setType(DynamicFieldType.valueOf(source.getType()));
-			prototype.setRequired(source.isRequired());
-			prototype.setRule(StringUtils.stripToNull(StringUtils.stripToNull(source.getRule())));
-			prototype.setLabel(StringUtils.stripToNull(source.getLabel()));
-			prototype.setGrid(StringUtils.stripToNull(source.getGrid()));
+			if (StringUtils.isNotBlank(source.getId()))
+				prototype.setId(source.getId());
+
+			if (StringUtils.isNotBlank(source.getName()))
+				prototype.setName(source.getName());
+
+			if (source.getType() != null)
+				prototype.setType(source.getType());
+
+			if (source.getRequired() != null)
+				prototype.setRequired(source.getRequired());
+
+			if (StringUtils.isNotBlank(source.getRule()))
+				prototype.setRule(source.getRule());
+
+			if (StringUtils.isNotBlank(source.getLabel()))
+				prototype.setLabel(source.getLabel());
+
+			if (StringUtils.isNotBlank(source.getGrid()))
+				prototype.setGrid(source.getGrid());
 
 			// Language
 			if (StringUtils.isNotBlank(source.getLanguage())) {

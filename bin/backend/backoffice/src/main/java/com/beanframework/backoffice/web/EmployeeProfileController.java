@@ -81,7 +81,7 @@ public class EmployeeProfileController {
 		return VIEW_EMPLOYEE_PROFILE;
 	}
 
-	@GetMapping(value = EmployeeWebConstants.Path.PROFILE_PICTURE, produces = MediaType.ALL_VALUE)
+	@GetMapping(value = EmployeeConstants.PATH_EMPLOYEE_PROFILE_PICTURE, produces = MediaType.ALL_VALUE)
 	public ResponseEntity<byte[]> getImage(@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		UUID uuid = null;

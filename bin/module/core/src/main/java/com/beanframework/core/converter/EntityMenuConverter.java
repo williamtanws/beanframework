@@ -121,15 +121,9 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (MenuFieldDto sourceField : source.getFields()) {
 
-						if (prototype.getFields().get(i).getDynamicField().getUuid().equals(sourceField.getDynamicField().getUuid())) {
+						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
 							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
-
-								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
-								prototype.setLastModifiedDate(lastModifiedDate);
-							}
-							if (sourceField.getSort() == prototype.getFields().get(i).getSort() == false) {
-								prototype.getFields().get(i).setSort(sourceField.getSort());
 
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
 								prototype.setLastModifiedDate(lastModifiedDate);

@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldTemplateCsv;
@@ -20,18 +19,18 @@ import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 
 @Component
-public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<DynamicFieldTemplateCsv, DynamicFieldTemplate> {
+public class EntityCsvDynamicFieldTemplateConverter implements EntityCsvConverter<DynamicFieldTemplateCsv, DynamicFieldTemplate> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvDynamicFieldTemplateConverter.class);
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private DynamicFieldTemplateService dynamicFieldTemplateService;
 
 	@Override
-	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source, EntityConverterContext context) throws ConverterException {
+	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source) throws ConverterException {
 
 		try {
 
@@ -53,15 +52,14 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<D
 		}
 	}
 
-	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source) throws ConverterException {
-		return convert(source, new EntityConverterContext());
-	}
-
 	private DynamicFieldTemplate convertToEntity(DynamicFieldTemplateCsv source, DynamicFieldTemplate prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setName(StringUtils.stripToNull(source.getName()));
+			if (StringUtils.isNotBlank(source.getId()))
+				prototype.setId(source.getId());
+
+			if (StringUtils.isNotBlank(source.getName()))
+				prototype.setName(source.getName());
 
 			// Dynamic Field Slot
 			if (StringUtils.isNotBlank(source.getDynamicFieldSlotIds())) {

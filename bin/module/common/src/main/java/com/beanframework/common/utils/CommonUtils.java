@@ -5,6 +5,7 @@ import static org.apache.commons.logging.LogFactory.getLog;
 import java.io.File;
 import java.util.Date;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -15,6 +16,7 @@ public abstract class CommonUtils {
 	public static final String SEPARATOR = "/";
 	public static final String BLANK = "";
 	protected final Log log = getLog(getClass());
+	public static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
 	public static Date getDate() {
 		return new Date();
@@ -54,5 +56,12 @@ public abstract class CommonUtils {
 
 	public static boolean notEmpty(Object[] var) {
 		return null != var && 0 < var.length;
+	}
+
+	public static boolean isValidEmail(String email) {
+		Pattern pat = Pattern.compile(EMAIL_REGEX);
+		if (email == null)
+			return false;
+		return pat.matcher(email).matches();
 	}
 }

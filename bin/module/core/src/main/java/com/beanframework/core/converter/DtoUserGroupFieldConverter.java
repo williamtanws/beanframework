@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
-import com.beanframework.core.data.DynamicFieldDto;
+import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.data.UserGroupFieldDto;
 import com.beanframework.user.domain.UserGroupField;
 
@@ -36,10 +36,9 @@ public class DtoUserGroupFieldConverter extends AbstractDtoConverter<UserGroupFi
 			convertCommonProperties(source, prototype, context);
 
 			prototype.setValue(source.getValue());
-			prototype.setSort(source.getSort());
 
-			if (context.isFetchable(UserGroupField.class, UserGroupField.DYNAMIC_FIELD))
-				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
+			if (context.isFetchable(UserGroupField.class, UserGroupField.DYNAMIC_FIELD_SLOT))
+				prototype.setDynamicFieldSlot(modelService.getDto(source.getDynamicFieldSlot(), DynamicFieldSlotDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

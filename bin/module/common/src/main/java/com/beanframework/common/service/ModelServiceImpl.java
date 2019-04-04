@@ -108,7 +108,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			if (model != null)
 				loadInterceptor(model, interceptorContext, modelClass);
-			
+
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -374,6 +374,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public <T> T getEntity(Object model, Class modelClass) throws Exception {
 		try {
+
+			if (model == null) {
+				return null;
+			}
+
 			model = entityConverter(model, entityConveterContext, modelClass);
 			return (T) model;
 		} catch (Exception e) {
@@ -385,6 +390,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public <T extends Collection> T getEntity(Collection models, Class modelClass) throws Exception {
 		try {
+
+			if (models == null)
+				return null;
+
+			if (models.isEmpty())
+				return (T) new ArrayList<T>();
+
 			List<Object> entityObjects = new ArrayList<Object>();
 			for (Object model : models) {
 				model = entityConverter(model, entityConveterContext, modelClass);
@@ -396,13 +408,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public <T> T getDto(Object model, Class modelClass) throws Exception {
 		try {
 			if (model == null)
 				return null;
-			
+
 			model = dtoConverter(model, dtoConveterContext, modelClass);
 			return (T) model;
 		} catch (Exception e) {
@@ -416,9 +428,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 			if (models == null)
 				return null;
-			if (models.isEmpty()) {
+
+			if (models.isEmpty())
 				return (T) new ArrayList<T>();
-			}
 
 			return (T) dtoConverter(models, dtoConveterContext, modelClass);
 		} catch (Exception e) {

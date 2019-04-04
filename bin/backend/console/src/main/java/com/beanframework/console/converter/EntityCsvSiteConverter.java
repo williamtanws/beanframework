@@ -11,14 +11,13 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Site;
 import com.beanframework.cms.service.SiteService;
-import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.SiteCsv;
 
 @Component
-public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
+public class EntityCsvSiteConverter implements EntityCsvConverter<SiteCsv, Site> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvSiteConverter.class);
 
@@ -29,7 +28,7 @@ public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
 	private SiteService siteService;
 
 	@Override
-	public Site convert(SiteCsv source, EntityConverterContext context) throws ConverterException {
+	public Site convert(SiteCsv source) throws ConverterException {
 
 		try {
 
@@ -51,16 +50,17 @@ public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
 		}
 	}
 
-	public Site convert(SiteCsv source) throws ConverterException {
-		return convert(source, new EntityConverterContext());
-	}
-
 	private Site convertToEntity(SiteCsv source, Site prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setName(StringUtils.stripToNull(source.getName()));
-			prototype.setUrl(StringUtils.stripToNull(source.getUrl()));
+			if (StringUtils.isNotBlank(source.getId()))
+				prototype.setId(source.getId());
+
+			if (StringUtils.isNotBlank(source.getName()))
+				prototype.setName(source.getName());
+
+			if (StringUtils.isNotBlank(source.getUrl()))
+				prototype.setUrl(source.getUrl());
 
 		} catch (Exception e) {
 			e.printStackTrace();

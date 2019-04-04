@@ -9,11 +9,9 @@ public class UserPermissionFieldDto extends GenericDto {
 
 	private UserPermissionDto userPermission;
 
-	private DynamicFieldDto dynamicField;
+	private DynamicFieldSlotDto dynamicFieldSlot;
 
 	private String value;
-
-	private Integer sort;
 
 	public UserPermissionDto getUserPermission() {
 		return userPermission;
@@ -23,12 +21,12 @@ public class UserPermissionFieldDto extends GenericDto {
 		this.userPermission = userPermission;
 	}
 
-	public DynamicFieldDto getDynamicField() {
-		return dynamicField;
+	public DynamicFieldSlotDto getDynamicFieldSlot() {
+		return dynamicFieldSlot;
 	}
 
-	public void setDynamicField(DynamicFieldDto dynamicField) {
-		this.dynamicField = dynamicField;
+	public void setDynamicFieldSlot(DynamicFieldSlotDto dynamicFieldSlot) {
+		this.dynamicFieldSlot = dynamicFieldSlot;
 	}
 
 	public String getValue() {
@@ -37,14 +35,6 @@ public class UserPermissionFieldDto extends GenericDto {
 
 	public void setValue(String value) {
 		this.value = value;
-	}
-
-	public Integer getSort() {
-		return sort;
-	}
-
-	public void setSort(Integer sort) {
-		this.sort = sort;
 	}
 
 }

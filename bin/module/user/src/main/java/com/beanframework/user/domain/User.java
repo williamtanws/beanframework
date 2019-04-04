@@ -75,7 +75,7 @@ public abstract class User extends GenericEntity {
 	@AuditMappedBy(mappedBy = UserField.USER)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.LAZY)
-	@OrderBy(UserField.DYNAMIC_FIELD)
+	@OrderBy(UserField.DYNAMIC_FIELD_SLOT)
 	private List<UserField> fields = new ArrayList<UserField>();
 
 	public String getPassword() {

@@ -57,8 +57,7 @@ public class EmployeeInitialDefaultsInterceptor extends AbstractInitialDefaultsI
 
 					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						UserField field = new UserField();
-						field.setDynamicField(dynamicFieldSlot.getDynamicField());
-						field.setSort(dynamicFieldSlot.getSort());
+						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUser(model);
 						model.getFields().add(field);
 					}

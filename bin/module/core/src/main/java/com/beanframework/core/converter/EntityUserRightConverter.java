@@ -15,6 +15,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.data.UserRightFieldDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightField;
 import com.beanframework.user.service.UserRightService;
@@ -87,15 +88,9 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				// Update
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserRightFieldDto sourceField : source.getFields()) {
-						if (prototype.getFields().get(i).getDynamicField().getUuid().equals(sourceField.getDynamicField().getUuid())) {
+						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
 							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
-
-								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
-								prototype.setLastModifiedDate(lastModifiedDate);
-							}
-							if (sourceField.getSort() == prototype.getFields().get(i).getSort() == false) {
-								prototype.getFields().get(i).setSort(sourceField.getSort());
 
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
 								prototype.setLastModifiedDate(lastModifiedDate);
@@ -106,14 +101,14 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 
 				// Add
 				for (UserRightFieldDto sourceField : source.getFields()) {
-					if (sourceField.getDynamicField().getUuid() == null && StringUtils.isNotBlank(sourceField.getDynamicField().getId())) {
+					if (sourceField.getDynamicFieldSlot().getUuid() == null && StringUtils.isNotBlank(sourceField.getDynamicFieldSlot().getId())) {
 						Map<String, Object> properties = new HashMap<String, Object>();
-						properties.put(DynamicField.ID, sourceField.getDynamicField().getId());
-						DynamicField entityDynamicField = modelService.findOneEntityByProperties(properties, DynamicField.class);
+						properties.put(DynamicField.ID, sourceField.getDynamicFieldSlot().getId());
+						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneEntityByProperties(properties, DynamicFieldSlot.class);
 
 						UserRightField field = new UserRightField();
 						field.setUserRight(prototype);
-						field.setDynamicField(entityDynamicField);
+						field.setDynamicFieldSlot(entityDynamicFieldSlot);
 						field.setValue(StringUtils.stripToNull(sourceField.getValue()));
 
 						prototype.getFields().add(field);

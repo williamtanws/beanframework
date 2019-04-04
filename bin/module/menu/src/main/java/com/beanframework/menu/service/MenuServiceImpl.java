@@ -20,7 +20,10 @@ import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.specification.MenuSpecification;
 import com.beanframework.user.domain.UserGroup;
 
@@ -47,6 +50,9 @@ public class MenuServiceImpl implements MenuService {
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
+		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 
 		return modelService.findOneEntityByUuid(uuid, Menu.class);
 	}
@@ -60,6 +66,9 @@ public class MenuServiceImpl implements MenuService {
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
+		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 
 		return modelService.findOneEntityByProperties(properties, Menu.class);
 	}
@@ -202,6 +211,9 @@ public class MenuServiceImpl implements MenuService {
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
+		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.PARENT, null);
