@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
-import com.beanframework.core.data.DynamicFieldDto;
+import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.menu.domain.MenuField;
 
@@ -36,10 +36,9 @@ public class DtoMenuFieldConverter extends AbstractDtoConverter<MenuField, MenuF
 			convertCommonProperties(source, prototype, context);
 
 			prototype.setValue(source.getValue());
-			prototype.setSort(source.getSort());
 
-			if (context.isFetchable(MenuField.class, MenuField.DYNAMIC_FIELD))
-				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
+			if (context.isFetchable(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT))
+				prototype.setDynamicFieldSlot(modelService.getDto(source.getDynamicFieldSlot(), DynamicFieldSlotDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

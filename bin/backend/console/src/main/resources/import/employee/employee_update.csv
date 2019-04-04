@@ -1,2 +1,2 @@
-id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,dynamicField,profilePicture
+id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,dynamicFieldSlotIds,profilePicture
 employee	,Employee			,employee	,true,true,true,true,employeegroup					,,static/adminlte/dist/img/user2-160x160.jpg

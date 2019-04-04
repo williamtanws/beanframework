@@ -1,2 +1,2 @@
-id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,dynamicField,profilePicture
+id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,dynamicFieldSlotIds,profilePicture
 customer	,Customer 			,customer		,true,true,true,true,generalcustomer		,,static/adminlte/dist/img/user8-128x128.jpg

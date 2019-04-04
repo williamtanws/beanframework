@@ -53,8 +53,7 @@ public class UserPermissionInitialDefaultsInterceptor extends AbstractInitialDef
 
 					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						UserPermissionField field = new UserPermissionField();
-						field.setDynamicField(dynamicFieldSlot.getDynamicField());
-						field.setSort(dynamicFieldSlot.getSort());
+						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUserPermission(model);
 						model.getFields().add(field);
 					}

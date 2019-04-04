@@ -91,7 +91,7 @@ public class VendorServiceImpl implements VendorService {
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 
@@ -108,7 +108,7 @@ public class VendorServiceImpl implements VendorService {
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Vendor.class);

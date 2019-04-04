@@ -53,8 +53,7 @@ public class UserRightInitialDefaultsInterceptor extends AbstractInitialDefaults
 
 					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						UserRightField field = new UserRightField();
-						field.setDynamicField(dynamicFieldSlot.getDynamicField());
-						field.setSort(dynamicFieldSlot.getSort());
+						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUserRight(model);
 						model.getFields().add(field);
 					}

@@ -20,6 +20,7 @@ import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 import com.beanframework.menu.MenuConstants;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
+import com.beanframework.menu.domain.MenuTargetTypeEnum;
 
 public class MenuInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Menu> {
 
@@ -39,6 +40,8 @@ public class MenuInitialDefaultsInterceptor extends AbstractInitialDefaultsInter
 		super.onInitialDefaults(model, context);
 
 		try {
+			model.setTarget(MenuTargetTypeEnum.SELF);
+			
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();
 			configurationProperties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 			Configuration configuration = configurationService.findOneEntityByProperties(configurationProperties);
@@ -53,8 +56,7 @@ public class MenuInitialDefaultsInterceptor extends AbstractInitialDefaultsInter
 
 					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						MenuField field = new MenuField();
-						field.setDynamicField(dynamicFieldSlot.getDynamicField());
-						field.setSort(dynamicFieldSlot.getSort());
+						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setMenu(model);
 						model.getFields().add(field);
 					}

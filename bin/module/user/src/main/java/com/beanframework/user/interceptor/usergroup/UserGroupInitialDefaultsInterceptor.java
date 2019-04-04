@@ -53,8 +53,7 @@ public class UserGroupInitialDefaultsInterceptor extends AbstractInitialDefaults
 
 					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						UserGroupField field = new UserGroupField();
-						field.setDynamicField(dynamicFieldSlot.getDynamicField());
-						field.setSort(dynamicFieldSlot.getSort());
+						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUserGroup(model);
 						model.getFields().add(field);
 					}

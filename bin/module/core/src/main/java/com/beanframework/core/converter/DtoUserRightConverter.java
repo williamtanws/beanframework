@@ -46,13 +46,13 @@ public class DtoUserRightConverter extends AbstractDtoConverter<UserRight, UserR
 				Collections.sort(prototype.getFields(), new Comparator<UserRightFieldDto>() {
 					@Override
 					public int compare(UserRightFieldDto o1, UserRightFieldDto o2) {
-						if (o1.getSort() == null)
-							return o2.getSort() == null ? 0 : 1;
+						if (o1.getDynamicFieldSlot().getSort() == null)
+							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
-						if (o2.getSort() == null)
+						if (o2.getDynamicFieldSlot().getSort() == null)
 							return -1;
 
-						return o1.getSort() - o2.getSort();
+						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
 					}
 				});
 			}

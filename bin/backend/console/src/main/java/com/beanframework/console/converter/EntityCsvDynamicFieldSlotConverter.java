@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldSlotCsv;
@@ -19,18 +18,18 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.service.DynamicFieldSlotService;
 
 @Component
-public class EntityCsvDynamicFieldSlotConverter implements EntityConverter<DynamicFieldSlotCsv, DynamicFieldSlot> {
+public class EntityCsvDynamicFieldSlotConverter implements EntityCsvConverter<DynamicFieldSlotCsv, DynamicFieldSlot> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvDynamicFieldSlotConverter.class);
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private DynamicFieldSlotService dynamicFieldSlotService;
 
 	@Override
-	public DynamicFieldSlot convert(DynamicFieldSlotCsv source, EntityConverterContext context) throws ConverterException {
+	public DynamicFieldSlot convert(DynamicFieldSlotCsv source) throws ConverterException {
 
 		try {
 
@@ -52,16 +51,17 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityConverter<Dynam
 		}
 	}
 
-	public DynamicFieldSlot convert(DynamicFieldSlotCsv source) throws ConverterException {
-		return convert(source, new EntityConverterContext());
-	}
-
 	private DynamicFieldSlot convertToEntity(DynamicFieldSlotCsv source, DynamicFieldSlot prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setName(StringUtils.stripToNull(source.getName()));
-			prototype.setSort(source.getSort());
+			if (StringUtils.isNotBlank(source.getId()))
+				prototype.setId(source.getId());
+
+			if (StringUtils.isNotBlank(source.getName()))
+				prototype.setName(source.getName());
+
+			if (source.getSort() != null)
+				prototype.setSort(source.getSort());
 
 			// DynamicField
 			if (StringUtils.isNotBlank(source.getDynamicFieldId())) {
