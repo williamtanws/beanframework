@@ -33,6 +33,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserField;
@@ -76,7 +77,12 @@ public class VendorServiceImpl implements VendorService {
 		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
+
 		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 
 		return modelService.findOneEntityByUuid(uuid, Vendor.class);
 	}
@@ -86,12 +92,14 @@ public class VendorServiceImpl implements VendorService {
 		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
-		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+
+		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
 		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 

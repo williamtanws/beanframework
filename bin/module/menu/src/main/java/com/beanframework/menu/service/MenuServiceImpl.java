@@ -49,10 +49,12 @@ public class MenuServiceImpl implements MenuService {
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
 		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
 		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 
 		return modelService.findOneEntityByUuid(uuid, Menu.class);
 	}
@@ -65,6 +67,7 @@ public class MenuServiceImpl implements MenuService {
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
 		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
 		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
@@ -210,6 +213,7 @@ public class MenuServiceImpl implements MenuService {
 		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		
 		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
 		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
 		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);

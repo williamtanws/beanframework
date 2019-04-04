@@ -53,6 +53,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
@@ -108,12 +109,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
-		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+
+		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
 		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 
@@ -125,12 +128,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
-		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+
+		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
 		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 

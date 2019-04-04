@@ -17,7 +17,10 @@ import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserPermission;
+import com.beanframework.user.domain.UserPermissionField;
 import com.beanframework.user.specification.UserPermissionSpecification;
 
 @Service
@@ -37,14 +40,26 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	@Override
 	public UserPermission findOneEntityByUuid(UUID uuid) throws Exception {
 		fetchContext.clearFetchProperties();
+		
 		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
+		fetchContext.addFetchProperty(UserPermissionField.class, UserPermissionField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+		
 		return modelService.findOneEntityByUuid(uuid, UserPermission.class);
 	}
 
 	@Override
 	public UserPermission findOneEntityByProperties(Map<String, Object> properties) throws Exception {
 		fetchContext.clearFetchProperties();
+
 		fetchContext.addFetchProperty(UserPermission.class, UserPermission.FIELDS);
+		fetchContext.addFetchProperty(UserPermissionField.class, UserPermissionField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+		
 		return modelService.findOneEntityByProperties(properties, UserPermission.class);
 	}
 

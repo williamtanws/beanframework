@@ -36,6 +36,7 @@ import com.beanframework.customer.CustomerConstants;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.specification.CustomerSpecification;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserField;
@@ -76,14 +77,17 @@ public class CustomerServiceImpl implements CustomerService {
 		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
-		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+
+		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
 		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+		
 		return modelService.findOneEntityByUuid(uuid, Customer.class);
 	}
 
@@ -92,14 +96,17 @@ public class CustomerServiceImpl implements CustomerService {
 		fetchContext.clearFetchProperties();
 
 		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
-		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
 		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
 		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+
+		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
 		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+		
 		return modelService.findOneEntityByProperties(properties, Customer.class);
 	}
 
