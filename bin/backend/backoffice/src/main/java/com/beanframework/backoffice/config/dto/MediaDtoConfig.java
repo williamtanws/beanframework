@@ -16,7 +16,7 @@ public class MediaDtoConfig {
 	}
 
 	@Bean
-	public ConverterMapping DtoMediaConverterMapping() {
+	public ConverterMapping dtoMediaConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoMediaConverter());
 		mapping.setTypeCode(MediaDto.class.getSimpleName());

@@ -122,7 +122,7 @@ public class UserDtoConfig {
 	}
 
 	@Bean
-	public ConverterMapping DtoUserRightConverterMapping() {
+	public ConverterMapping dtoUserRightConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoUserRightConverter());
 		mapping.setTypeCode(UserRightDto.class.getSimpleName());
@@ -136,7 +136,7 @@ public class UserDtoConfig {
 	}
 
 	@Bean
-	public ConverterMapping DtoUserRightFieldConverterMapping() {
+	public ConverterMapping dtoUserRightFieldConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoUserRightFieldConverter());
 		mapping.setTypeCode(UserRightFieldDto.class.getSimpleName());
