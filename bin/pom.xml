@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.beanframework</groupId>
+    <artifactId>beanframework</artifactId>
+    <version>${beanframework.version}</version>
+    <packaging>pom</packaging>
+	
+	<properties>
+		<beanframework.version>2.0.0</beanframework.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+    <modules>
+    	<module>module/common</module>
+    	<module>module/enumeration</module>
+    	<module>module/language</module>
+    	<module>module/user</module>
+    	<module>module/employee</module>
+    	<module>module/admin</module>
+    	<module>module/customer</module>
+    	<module>module/vendor</module>
+    	<module>module/email</module>
+    	<module>module/cronjob</module>
+    	<module>module/configuration</module>
+    	<module>module/dynamicfield</module>
+    	<module>module/menu</module>
+        <module>module/filemanager</module>
+        <module>module/media</module>
+        <module>module/comment</module>
+        <module>module/cms</module>
+        <module>module/workflow</module>
+        <module>module/core</module>
+		<module>ui/adminlte</module>
+        <module>backend/console</module>
+        <module>backend/backoffice</module>
+        <module>backend/cockpit</module>
+        <module>platform</module>
+        <module>../config</module>
+        <module>../../pcrisks/dms</module>
+        <module>../../pcrisks/dmsconsole</module>
+        <module>../../pcrisks/dmsbackoffice</module>
+        <module>../../pcrisks/dmscockpit</module>
+        <module>../../pcrisks/ppm</module>
+        <module>../../pcrisks/ppmconsole</module>
+        <module>../../pcrisks/ppmbackoffice</module>
+        <module>../../pcrisks/ppmcockpit</module>
+    </modules>
+
+</project>
