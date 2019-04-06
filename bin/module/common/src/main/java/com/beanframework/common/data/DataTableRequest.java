@@ -6,8 +6,10 @@ package com.beanframework.common.data;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,16 +67,9 @@ public class DataTableRequest {
 	/** The cache queries. */
 	private List<DataTableColumnSpecs> cacheQueries = new ArrayList<DataTableColumnSpecs>(0);
 
-	private Pageable pageable;
+	private Set<Integer> skipColumnIndexes = new HashSet<Integer>();
 
-	/**
-	 * Instantiates a new data table request.
-	 *
-	 * @param request the request
-	 */
-	public DataTableRequest(HttpServletRequest request) {
-		prepareDataTableRequest(request);
-	}
+	private Pageable pageable;
 
 	/**
 	 * Gets the unique id.
@@ -259,7 +254,7 @@ public class DataTableRequest {
 	 *
 	 * @param request the request
 	 */
-	private void prepareDataTableRequest(HttpServletRequest request) {
+	public void prepareDataTableRequest(HttpServletRequest request) {
 
 		Enumeration<String> parameterNames = request.getParameterNames();
 
@@ -282,14 +277,16 @@ public class DataTableRequest {
 			maxParamsToCheck = getNumberOfColumns(request);
 
 			for (int i = 0; i < maxParamsToCheck; i++) {
-				if (null != request.getParameter("columns[" + i + "][data]") && !"null".equalsIgnoreCase(request.getParameter("columns[" + i + "][data]"))
-						&& !AppUtil.isObjectEmpty(request.getParameter("columns[" + i + "][data]"))) {
-					DataTableColumnSpecs colSpec = new DataTableColumnSpecs(request, i);
+				if (skipColumnIndexes.contains(i) == false) {
+					if (null != request.getParameter("columns[" + i + "][data]") && !"null".equalsIgnoreCase(request.getParameter("columns[" + i + "][data]"))
+							&& !AppUtil.isObjectEmpty(request.getParameter("columns[" + i + "][data]"))) {
+						DataTableColumnSpecs colSpec = new DataTableColumnSpecs(request, i);
 
-					columns.add(colSpec);
+						columns.add(colSpec);
 
-					if (!AppUtil.isObjectEmpty(colSpec.getSearch())) {
-						this.setGlobalSearch(false);
+						if (!AppUtil.isObjectEmpty(colSpec.getSearch())) {
+							this.setGlobalSearch(false);
+						}
 					}
 				}
 			}
@@ -299,21 +296,23 @@ public class DataTableRequest {
 			}
 
 			for (int i = 0; i < maxParamsToCheck; i++) {
-				if (request.getParameter("order[" + i + "][column]") != null) {
-					String columnIndex = request.getParameter("order[" + i + "][column]");
+				if (skipColumnIndexes.contains(i) == false) {
+					if (request.getParameter("order[" + i + "][column]") != null) {
+						String columnIndex = request.getParameter("order[" + i + "][column]");
 
-					if (request.getParameter("columns[" + columnIndex + "][data]") != null) {
-						String sortDir = request.getParameter("order[" + i + "][dir]");
+						if (request.getParameter("columns[" + columnIndex + "][data]") != null) {
+							String sortDir = request.getParameter("order[" + i + "][dir]");
 
-						DataTableColumnSpecs colSpec = new DataTableColumnSpecs();
-						colSpec.setData(request.getParameter("columns[" + columnIndex + "][data]"));
-						colSpec.setName(request.getParameter("columns[" + columnIndex + "][name]"));
-						colSpec.setOrderable(Boolean.valueOf(request.getParameter("columns[" + columnIndex + "][orderable]")));
-						colSpec.setRegex(Boolean.valueOf(request.getParameter("columns[" + columnIndex + "][search][regex]")));
-						colSpec.setSearch(request.getParameter("columns[" + columnIndex + "][search][value]"));
-						colSpec.setSearchable(Boolean.valueOf(request.getParameter("columns[" + columnIndex + "][searchable]")));
-						colSpec.setSortDir(sortDir);
-						orders.add(colSpec);
+							DataTableColumnSpecs colSpec = new DataTableColumnSpecs();
+							colSpec.setData(request.getParameter("columns[" + columnIndex + "][data]"));
+							colSpec.setName(request.getParameter("columns[" + columnIndex + "][name]"));
+							colSpec.setOrderable(Boolean.valueOf(request.getParameter("columns[" + columnIndex + "][orderable]")));
+							colSpec.setRegex(Boolean.valueOf(request.getParameter("columns[" + columnIndex + "][search][regex]")));
+							colSpec.setSearch(request.getParameter("columns[" + columnIndex + "][search][value]"));
+							colSpec.setSearchable(Boolean.valueOf(request.getParameter("columns[" + columnIndex + "][searchable]")));
+							colSpec.setSortDir(sortDir);
+							orders.add(colSpec);
+						}
 					}
 				}
 
@@ -332,8 +331,7 @@ public class DataTableRequest {
 					sortOrders.add(order);
 				}
 			}
-		}
-		else {
+		} else {
 			Order order = new Order(Direction.DESC, GenericEntity.CREATED_DATE);
 			sortOrders.add(order);
 		}
@@ -421,11 +419,11 @@ public class DataTableRequest {
 	public AuditOrder getAuditOrder() {
 		return AuditEntity.revisionNumber().desc();
 	}
-	
-	public Map<String, Object> getProperties(){
-		
-		Map<String, Object> properties = new HashMap<String, Object> ();
-		
+
+	public Map<String, Object> getProperties() {
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+
 		if (isGlobalSearch() && StringUtils.isNotEmpty(getSearch())) {
 			for (DataTableColumnSpecs specs : columns) {
 				properties.put(specs.getData(), getSearch());
@@ -437,7 +435,7 @@ public class DataTableRequest {
 				}
 			}
 		}
-		
+
 		return properties;
 	}
 
@@ -445,6 +443,14 @@ public class DataTableRequest {
 	public String toString() {
 		return "DataTableRequest [uniqueId=" + uniqueId + ", start=" + start + ", length=" + length + ", search=" + search + ", regex=" + regex + ", columns=" + columns + ", orders=" + orders
 				+ ", cacheQueries=" + cacheQueries + ", isGlobalSearch=" + isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + ", pageable=" + pageable + "]";
+	}
+
+	public Set<Integer> getSkipColumnIndexes() {
+		return skipColumnIndexes;
+	}
+
+	public void setSkipColumnIndexes(Set<Integer> skipColumnIndexes) {
+		this.skipColumnIndexes = skipColumnIndexes;
 	}
 
 }

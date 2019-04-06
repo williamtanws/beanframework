@@ -67,8 +67,11 @@ public class CommentResource {
 	@ResponseBody
 	public DataTableResponse<CommentDataResponse> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
-
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.getSkipColumnIndexes().add(2);
+		dataTableRequest.getSkipColumnIndexes().add(3);
+		dataTableRequest.prepareDataTableRequest(request);
+		
 		Page<CommentDto> pagination = commentFacade.findPage(dataTableRequest);
 
 		DataTableResponse<CommentDataResponse> dataTableResponse = new DataTableResponse<CommentDataResponse>();
@@ -105,7 +108,8 @@ public class CommentResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = commentFacade.findHistory(dataTableRequest);
