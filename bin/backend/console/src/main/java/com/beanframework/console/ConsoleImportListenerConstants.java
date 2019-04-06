@@ -31,7 +31,7 @@ public interface ConsoleImportListenerConstants {
 	}
 
 	public interface DynamicFieldSlotImport {
-		public static final String KEY = "dynamicfieldslot";
+		public static final String KEY = "dynamicfieldlot";
 		public static final String NAME = "Dynamic Field Slot";
 		public static final int SORT = 41;
 		public static final String DESCRIPTION = "Update/Remove Dynamic Field Slot Data";
@@ -106,7 +106,7 @@ public interface ConsoleImportListenerConstants {
 		public static final int SORT = 131;
 		public static final String DESCRIPTION = "Update/Remove Customer Data";
 	}
-	
+
 	public interface VendorImport {
 		public static final String KEY = "vendor";
 		public static final String NAME = "Vendor";

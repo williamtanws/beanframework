@@ -128,7 +128,7 @@ public class DynamicFieldSlotImportListener extends ImportListener {
 		}
 	}
 
-	private void remove(List<DynamicFieldSlotCsv> csvList) throws Exception {
+	public void remove(List<DynamicFieldSlotCsv> csvList) throws Exception {
 
 	}
 

@@ -14,24 +14,38 @@ import com.beanframework.console.csv.AdminCsv;
 import com.beanframework.console.csv.ConfigurationCsv;
 import com.beanframework.console.csv.CronjobCsv;
 import com.beanframework.console.csv.CustomerCsv;
+import com.beanframework.console.csv.DynamicFieldCsv;
+import com.beanframework.console.csv.DynamicFieldSlotCsv;
+import com.beanframework.console.csv.DynamicFieldTemplateCsv;
 import com.beanframework.console.csv.EmployeeCsv;
+import com.beanframework.console.csv.EnumerationCsv;
 import com.beanframework.console.csv.LanguageCsv;
+import com.beanframework.console.csv.MediaCsv;
 import com.beanframework.console.csv.MenuCsv;
+import com.beanframework.console.csv.SiteCsv;
 import com.beanframework.console.csv.UserAuthorityCsv;
 import com.beanframework.console.csv.UserGroupCsv;
 import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.csv.UserRightCsv;
+import com.beanframework.console.csv.VendorCsv;
 import com.beanframework.console.listener.AdminImportListener;
 import com.beanframework.console.listener.ConfigurationImportListener;
 import com.beanframework.console.listener.CronjobImportListener;
 import com.beanframework.console.listener.CustomerImportListener;
+import com.beanframework.console.listener.DynamicFieldImportListener;
+import com.beanframework.console.listener.DynamicFieldSlotImportListener;
+import com.beanframework.console.listener.DynamicFieldTemplateImportListener;
 import com.beanframework.console.listener.EmployeeImportListener;
+import com.beanframework.console.listener.EnumerationImportListener;
 import com.beanframework.console.listener.LanguageImportListener;
+import com.beanframework.console.listener.MediaImportListener;
 import com.beanframework.console.listener.MenuImportListener;
+import com.beanframework.console.listener.SiteImportListener;
 import com.beanframework.console.listener.UserAuthorityImportListener;
 import com.beanframework.console.listener.UserGroupImportListener;
 import com.beanframework.console.listener.UserPermissionImportListener;
 import com.beanframework.console.listener.UserRightImportListener;
+import com.beanframework.console.listener.VendorImportListener;
 import com.beanframework.core.data.FileProcessor;
 
 @Component
@@ -40,37 +54,58 @@ public class ImportFileProcessor implements FileProcessor {
 	private static final String MSG = "%s received. Path: %s";
 
 	@Autowired
-	private AdminImportListener adminImportListener;
+	private LanguageImportListener languageImportListener;
 
 	@Autowired
 	private ConfigurationImportListener configurationImportListener;
 
 	@Autowired
-	private CronjobImportListener cronjobImportListener;
+	private EnumerationImportListener enumerationImportListener;
 
 	@Autowired
-	private CustomerImportListener customerImportListener;
+	private DynamicFieldImportListener dynamicFieldImportListener;
 
 	@Autowired
-	private EmployeeImportListener employeeImportListener;
+	private DynamicFieldSlotImportListener dynamicFieldSlotImportListener;
 
 	@Autowired
-	private LanguageImportListener languageImportListener;
+	private DynamicFieldTemplateImportListener dynamicFieldTemplateImportListener;
 
 	@Autowired
-	private MenuImportListener menuImportListener;
-
-	@Autowired
-	private UserAuthorityImportListener userAuthorityImportListener;
-
-	@Autowired
-	private UserGroupImportListener userGroupImportListener;
+	private UserRightImportListener userRightImportListener;
 
 	@Autowired
 	private UserPermissionImportListener userPermissionImportListener;
 
 	@Autowired
-	private UserRightImportListener userRightImportListener;
+	private UserGroupImportListener userGroupImportListener;
+
+	@Autowired
+	private UserAuthorityImportListener userAuthorityImportListener;
+
+	@Autowired
+	private MenuImportListener menuImportListener;
+
+	@Autowired
+	private CronjobImportListener cronjobImportListener;
+
+	@Autowired
+	private AdminImportListener adminImportListener;
+
+	@Autowired
+	private EmployeeImportListener employeeImportListener;
+
+	@Autowired
+	private CustomerImportListener customerImportListener;
+
+	@Autowired
+	private VendorImportListener vendorImportListener;
+
+	@Autowired
+	private SiteImportListener siteImportListener;
+
+	@Autowired
+	private MediaImportListener mediaImportListener;
 
 	@Override
 	public void process(Message<String> msg) throws Exception {
@@ -84,72 +119,114 @@ public class ImportFileProcessor implements FileProcessor {
 
 		// Update
 
-		if (fileName.startsWith("configuration_update"))
-			configurationImportListener.save(configurationImportListener.readCSVFile(targetReader, ConfigurationCsv.getUpdateProcessors()));
-
-		if (fileName.startsWith("admin_update"))
-			adminImportListener.save(adminImportListener.readCSVFile(targetReader, AdminCsv.getUpdateProcessors()));
-
-		if (fileName.startsWith("cronjob_update"))
-			cronjobImportListener.save(cronjobImportListener.readCSVFile(targetReader, CronjobCsv.getUpdateProcessors()));
-
-		if (fileName.startsWith("customer_update"))
-			customerImportListener.save(customerImportListener.readCSVFile(targetReader, CustomerCsv.getUpdateProcessors()));
-
-		if (fileName.startsWith("employee_update"))
-			employeeImportListener.save(employeeImportListener.readCSVFile(targetReader, EmployeeCsv.getUpdateProcessors()));
+		fileName = fileName.toLowerCase();
 
 		if (fileName.startsWith("language_update"))
 			languageImportListener.save(languageImportListener.readCSVFile(targetReader, LanguageCsv.getUpdateProcessors()));
 
-		if (fileName.startsWith("menu_update"))
-			menuImportListener.save(menuImportListener.readCSVFile(targetReader, MenuCsv.getUpdateProcessors()));
+		if (fileName.startsWith("configuration_update"))
+			configurationImportListener.save(configurationImportListener.readCSVFile(targetReader, ConfigurationCsv.getUpdateProcessors()));
 
-		if (fileName.startsWith("userauthority_update"))
-			userAuthorityImportListener.save(userAuthorityImportListener.readCSVFile(targetReader, UserAuthorityCsv.getUpdateProcessors()));
+		if (fileName.startsWith("enumeration_update"))
+			enumerationImportListener.save(enumerationImportListener.readCSVFile(targetReader, EnumerationCsv.getUpdateProcessors()));
 
-		if (fileName.startsWith("usergroup_update"))
-			userGroupImportListener.save(userGroupImportListener.readCSVFile(targetReader, UserGroupCsv.getUpdateProcessors()));
+		if (fileName.startsWith("dynamicfield_update"))
+			dynamicFieldImportListener.save(dynamicFieldImportListener.readCSVFile(targetReader, DynamicFieldCsv.getUpdateProcessors()));
 
-		if (fileName.startsWith("userpermission_update"))
-			userPermissionImportListener.save(userPermissionImportListener.readCSVFile(targetReader, UserPermissionCsv.getUpdateProcessors()));
+		if (fileName.startsWith("dynamicfieldslot_update"))
+			dynamicFieldSlotImportListener.save(dynamicFieldSlotImportListener.readCSVFile(targetReader, DynamicFieldSlotCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("dynamicfieldtemplate_update"))
+			dynamicFieldTemplateImportListener.save(dynamicFieldTemplateImportListener.readCSVFile(targetReader, DynamicFieldTemplateCsv.getUpdateProcessors()));
 
 		if (fileName.startsWith("userright_update"))
 			userRightImportListener.save(userRightImportListener.readCSVFile(targetReader, UserRightCsv.getUpdateProcessors()));
 
+		if (fileName.startsWith("userpermission_update"))
+			userPermissionImportListener.save(userPermissionImportListener.readCSVFile(targetReader, UserPermissionCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("usergroup_update"))
+			userGroupImportListener.save(userGroupImportListener.readCSVFile(targetReader, UserGroupCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("userauthority_update"))
+			userAuthorityImportListener.save(userAuthorityImportListener.readCSVFile(targetReader, UserAuthorityCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("menu_update"))
+			menuImportListener.save(menuImportListener.readCSVFile(targetReader, MenuCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("cronjob_update"))
+			cronjobImportListener.save(cronjobImportListener.readCSVFile(targetReader, CronjobCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("admin_update"))
+			adminImportListener.save(adminImportListener.readCSVFile(targetReader, AdminCsv.getUpdateProcessors()));
+		if (fileName.startsWith("employee_update"))
+			employeeImportListener.save(employeeImportListener.readCSVFile(targetReader, EmployeeCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("customer_update"))
+			customerImportListener.save(customerImportListener.readCSVFile(targetReader, CustomerCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("vendor_update"))
+			vendorImportListener.save(vendorImportListener.readCSVFile(targetReader, VendorCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("site_update"))
+			siteImportListener.save(siteImportListener.readCSVFile(targetReader, SiteCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("media_update"))
+			mediaImportListener.save(mediaImportListener.readCSVFile(targetReader, MediaCsv.getUpdateProcessors()));
+
 		// Remove
 
-		if (fileName.startsWith("configuration_remove"))
-			configurationImportListener.remove(configurationImportListener.readCSVFile(targetReader, ConfigurationCsv.getRemoveProcessors()));
-
-		if (fileName.startsWith("admin_remove"))
-			adminImportListener.remove(adminImportListener.readCSVFile(targetReader, AdminCsv.getRemoveProcessors()));
-
-		if (fileName.startsWith("cronjob_remove"))
-			cronjobImportListener.remove(cronjobImportListener.readCSVFile(targetReader, CronjobCsv.getRemoveProcessors()));
-
-		if (fileName.startsWith("customer_remove"))
-			customerImportListener.remove(customerImportListener.readCSVFile(targetReader, CustomerCsv.getRemoveProcessors()));
-
-		if (fileName.startsWith("employee_remove"))
-			employeeImportListener.remove(employeeImportListener.readCSVFile(targetReader, EmployeeCsv.getRemoveProcessors()));
-
 		if (fileName.startsWith("language_remove"))
-			languageImportListener.remove(languageImportListener.readCSVFile(targetReader, LanguageCsv.getRemoveProcessors()));
+			languageImportListener.remove(languageImportListener.readCSVFile(targetReader, LanguageCsv.getUpdateProcessors()));
 
-		if (fileName.startsWith("menu_remove"))
-			menuImportListener.remove(menuImportListener.readCSVFile(targetReader, MenuCsv.getRemoveProcessors()));
+		if (fileName.startsWith("configuration_remove"))
+			configurationImportListener.remove(configurationImportListener.readCSVFile(targetReader, ConfigurationCsv.getUpdateProcessors()));
 
-		if (fileName.startsWith("userauthority_remove"))
-			userAuthorityImportListener.remove(userAuthorityImportListener.readCSVFile(targetReader, UserAuthorityCsv.getRemoveProcessors()));
+		if (fileName.startsWith("enumeration_remove"))
+			enumerationImportListener.remove(enumerationImportListener.readCSVFile(targetReader, EnumerationCsv.getUpdateProcessors()));
 
-		if (fileName.startsWith("usergroup_remove"))
-			userGroupImportListener.remove(userGroupImportListener.readCSVFile(targetReader, UserGroupCsv.getRemoveProcessors()));
+		if (fileName.startsWith("dynamicfield_remove"))
+			dynamicFieldImportListener.remove(dynamicFieldImportListener.readCSVFile(targetReader, DynamicFieldCsv.getUpdateProcessors()));
 
-		if (fileName.startsWith("userpermission_remove"))
-			userPermissionImportListener.remove(userPermissionImportListener.readCSVFile(targetReader, UserPermissionCsv.getRemoveProcessors()));
+		if (fileName.startsWith("dynamicfieldslot_remove"))
+			dynamicFieldSlotImportListener.remove(dynamicFieldSlotImportListener.readCSVFile(targetReader, DynamicFieldSlotCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("dynamicfieldtemplate_remove"))
+			dynamicFieldTemplateImportListener.remove(dynamicFieldTemplateImportListener.readCSVFile(targetReader, DynamicFieldTemplateCsv.getUpdateProcessors()));
 
 		if (fileName.startsWith("userright_remove"))
-			userRightImportListener.remove(userRightImportListener.readCSVFile(targetReader, UserRightCsv.getRemoveProcessors()));
+			userRightImportListener.remove(userRightImportListener.readCSVFile(targetReader, UserRightCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("userpermission_remove"))
+			userPermissionImportListener.remove(userPermissionImportListener.readCSVFile(targetReader, UserPermissionCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("usergroup_remove"))
+			userGroupImportListener.remove(userGroupImportListener.readCSVFile(targetReader, UserGroupCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("userauthority_remove"))
+			userAuthorityImportListener.remove(userAuthorityImportListener.readCSVFile(targetReader, UserAuthorityCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("menu_remove"))
+			menuImportListener.remove(menuImportListener.readCSVFile(targetReader, MenuCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("cronjob_remove"))
+			cronjobImportListener.remove(cronjobImportListener.readCSVFile(targetReader, CronjobCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("admin_remove"))
+			adminImportListener.remove(adminImportListener.readCSVFile(targetReader, AdminCsv.getUpdateProcessors()));
+		if (fileName.startsWith("employee_remove"))
+			employeeImportListener.remove(employeeImportListener.readCSVFile(targetReader, EmployeeCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("customer_remove"))
+			customerImportListener.remove(customerImportListener.readCSVFile(targetReader, CustomerCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("vendor_remove"))
+			vendorImportListener.remove(vendorImportListener.readCSVFile(targetReader, VendorCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("site_remove"))
+			siteImportListener.remove(siteImportListener.readCSVFile(targetReader, SiteCsv.getUpdateProcessors()));
+
+		if (fileName.startsWith("media_remove"))
+			mediaImportListener.remove(mediaImportListener.readCSVFile(targetReader, MediaCsv.getUpdateProcessors()));
 	}
 }
