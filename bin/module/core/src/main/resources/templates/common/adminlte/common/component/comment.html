@@ -10,6 +10,13 @@
 					<th th:text="#{module.comment.lastUpdatedDate}" class="text-center"></th>
 				</tr>
 			</thead>
+			<thead>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
 		</table>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
@@ -32,11 +39,14 @@
 	    	      'processing': true,
 	    	      'serverSide': true,
 	    	      'searchDelay': 1000,
+	    	      'sDom': "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+	    	      "<'row'<'col-sm-12'tr>>" +
+	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 	    	      'ajax': {
 	                    'url': ajaxUrl
 	              },
 	              'columns': [
-	                    { "data": "user" },
+	                    { "data": "user.name" },
 	                    { "data": "html" },
 	                    { "data": "lastUpdatedDate" }
 	              ],
@@ -53,7 +63,7 @@
 		    $(document).ready(function ()
 		    {
 		    	$('#commentTable thead tr:eq(1) th').each(function(index){
-		    		if(index == 1){
+		    		if(index <= 1){
 		    			var title = $('#commentTable thead tr:eq(0) th').eq( $(this).index() ).text();
 		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
 		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
