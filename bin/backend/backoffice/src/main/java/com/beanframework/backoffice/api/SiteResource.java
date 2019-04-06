@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.SiteWebConstants;
+import com.beanframework.backoffice.data.SiteDataResponse;
 import com.beanframework.cms.domain.Site;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -65,8 +66,9 @@ public class SiteResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
-
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
+		
 		Page<SiteDto> pagination = siteFacade.findPage(dataTableRequest);
 
 		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();
@@ -76,10 +78,11 @@ public class SiteResource {
 
 		for (SiteDto dto : pagination.getContent()) {
 
-			DataTableResponseData data = new DataTableResponseData();
+			SiteDataResponse data = new SiteDataResponse();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
+			data.setUrl(StringUtils.stripToEmpty(dto.getUrl()));
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;
@@ -90,7 +93,8 @@ public class SiteResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = siteFacade.findHistory(dataTableRequest);

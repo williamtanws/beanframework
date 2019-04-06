@@ -10,6 +10,13 @@
 					<th th:text="#{module.backoffice.select}" class="text-center"></th>
 				</tr>
 			</thead>
+			<thead>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
 		</table>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
@@ -37,7 +44,9 @@
 	    	      'processing': true,
 	    	      'serverSide': true,
 	    	      'searchDelay': 1000,
-	    	      'sDom': 'lftipr', 
+	    	      'sDom': "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+	    	      "<'row'<'col-sm-12'tr>>" +
+	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 	    	      'ajax': {
 	                    'url': ajaxUrl
 	              },

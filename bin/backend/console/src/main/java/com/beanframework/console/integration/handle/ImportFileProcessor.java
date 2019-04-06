@@ -2,6 +2,12 @@ package com.beanframework.console.integration.handle;
 
 import java.io.File;
 import java.io.Reader;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.input.CharSequenceReader;
@@ -46,6 +52,8 @@ import com.beanframework.console.listener.UserGroupImportListener;
 import com.beanframework.console.listener.UserPermissionImportListener;
 import com.beanframework.console.listener.UserRightImportListener;
 import com.beanframework.console.listener.VendorImportListener;
+import com.beanframework.console.registry.ImportListener;
+import com.beanframework.console.registry.ImportListenerRegistry;
 import com.beanframework.core.data.FileProcessor;
 
 @Component
@@ -106,6 +114,9 @@ public class ImportFileProcessor implements FileProcessor {
 
 	@Autowired
 	private MediaImportListener mediaImportListener;
+	
+	@Autowired
+	private ImportListenerRegistry importerRegistry;
 
 	@Override
 	public void process(Message<String> msg) throws Exception {
@@ -116,10 +127,45 @@ public class ImportFileProcessor implements FileProcessor {
 
 		byte[] buffer = FileUtils.readFileToByteArray(fileOriginalFile);
 		Reader targetReader = new CharSequenceReader(new String(buffer));
+		
+		fileName = fileName.toLowerCase();
+		
+		// TODO: use generic importlistener
+//		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
+//		List<Entry<String, ImportListener>> sortedImportListeners = new LinkedList<Entry<String, ImportListener>>(importListeners);
+//		Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
+//			@Override
+//			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
+//				Integer sort1 = ele1.getValue().getSort();
+//				Integer sort2 = ele2.getValue().getSort();
+//				return sort1.compareTo(sort2);
+//			}
+//		});
+//
+//		for (Entry<String, ImportListener> entry : sortedImportListeners) {
+//			
+//			entry.getValue().save(languageImportListener.readCSVFile(targetReader, LanguageCsv.getUpdateProcessors()));
+//
+//			
+//			if(entry.getKey().startsWith(prefix))
+//			
+//			if (requestParams.get(entry.getKey()) != null) {
+//				String keyValue = requestParams.get(entry.getKey()).toString();
+//				if (parseBoolean(keyValue)) {
+//					try {
+//						entry.getValue().update();
+//						entry.getValue().remove();
+//						successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//						LOGGER.error(e.getMessage(), e);
+//						errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " <br>");
+//					}
+//				}
+//			}
+//		}
 
 		// Update
-
-		fileName = fileName.toLowerCase();
 
 		if (fileName.startsWith("language_update"))
 			languageImportListener.save(languageImportListener.readCSVFile(targetReader, LanguageCsv.getUpdateProcessors()));

@@ -65,8 +65,10 @@ public class DynamicFieldSlotResource {
 	@ResponseBody
 	public DataTableResponse<DynamicFieldSlotDataResponse> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
-
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.getSkipColumnIndexes().add(2);
+		dataTableRequest.prepareDataTableRequest(request);
+		
 		Page<DynamicFieldSlotDto> pagination = dynamicFieldSlotFacade.findPage(dataTableRequest);
 
 		DataTableResponse<DynamicFieldSlotDataResponse> dataTableResponse = new DataTableResponse<DynamicFieldSlotDataResponse>();
@@ -91,7 +93,8 @@ public class DynamicFieldSlotResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = dynamicFieldSlotFacade.findHistory(dataTableRequest);
