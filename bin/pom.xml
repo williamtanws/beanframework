@@ -41,10 +41,12 @@
         <module>platform</module>
         <module>../config</module>
         <module>../../pcrisks/dms</module>
+        <module>../../pcrisks/dmscore</module>
         <module>../../pcrisks/dmsconsole</module>
         <module>../../pcrisks/dmsbackoffice</module>
         <module>../../pcrisks/dmscockpit</module>
         <module>../../pcrisks/ppm</module>
+        <module>../../pcrisks/ppmcore</module>
         <module>../../pcrisks/ppmconsole</module>
         <module>../../pcrisks/ppmbackoffice</module>
         <module>../../pcrisks/ppmcockpit</module>
