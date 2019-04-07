@@ -59,8 +59,13 @@ public class UserAuthorityImportListener extends ImportListener {
 
 	@Override
 	public void update() throws Exception {
+		update(IMPORT_UPDATE);
+	}
+
+	@Override
+	public void update(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = loader.getResources(IMPORT_UPDATE);
+		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
 			InputStream in = resource.getInputStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -74,8 +79,13 @@ public class UserAuthorityImportListener extends ImportListener {
 
 	@Override
 	public void remove() throws Exception {
+		remove(IMPORT_REMOVE);
+	}
+
+	@Override
+	public void remove(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = loader.getResources(IMPORT_REMOVE);
+		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
 			InputStream in = resource.getInputStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
