@@ -51,7 +51,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<finalName>beanframework</finalName>
-					<mainClass>com.beanframework.PlatformApplication</mainClass>
+					<mainClass>com.beanframework.platform.PlatformApplication</mainClass>
 					<outputDirectory>
 						..
 					</outputDirectory>
