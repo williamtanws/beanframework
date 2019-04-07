@@ -4,6 +4,7 @@
 /var
 target/
 /bin/pom.xml
+/config/pom.xml
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
