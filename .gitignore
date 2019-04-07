@@ -5,6 +5,14 @@
 target/
 /bin/pom.xml
 /config/pom.xml
+/config/src/main/resources/application.properties
+/config/src/main/resources/application-dev.properties
+/config/src/main/resources/application-prod.properties
+/config/src/main/resources/application.properties
+/config/src/main/resources/ehcache-dev.xml
+/config/src/main/resources/ehcache-prod.xml
+/config/src/main/resources/logback-dev.xml
+/config/src/main/resources/logback-prod.xml
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

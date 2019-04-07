@@ -8,6 +8,7 @@ interceptor.strict.use=true
 # ===============================
 # = QUARTZ
 # ===============================
+quartz.tasks.enable=false
 quartz.properties.location=
 quartz.properties.classpath=application-${spring.profiles.active}.properties
 
