@@ -17,7 +17,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EmailDto;
-import com.beanframework.core.specification.EmailSpecification;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.service.EmailService;
 
@@ -74,7 +73,7 @@ public class EmailFacadeImpl implements EmailFacade {
 
 	@Override
 	public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Email> page = emailService.findEntityPage(dataTableRequest, EmailSpecification.getSpecification(dataTableRequest));
+		Page<Email> page = emailService.findEntityPage(dataTableRequest);
 
 		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class);
 		return new PageImpl<EmailDto>(dtos, page.getPageable(), page.getTotalElements());

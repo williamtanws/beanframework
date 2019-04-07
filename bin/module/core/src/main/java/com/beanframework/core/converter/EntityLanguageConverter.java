@@ -13,11 +13,15 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.language.domain.Language;
+import com.beanframework.language.service.LanguageService;
 
 public class EntityLanguageConverter implements EntityConverter<LanguageDto, Language> {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private LanguageService languageService;
 
 	@Override
 	public Language convert(LanguageDto source, EntityConverterContext context) throws ConverterException {
@@ -27,21 +31,21 @@ public class EntityLanguageConverter implements EntityConverter<LanguageDto, Lan
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Language.UUID, source.getUuid());
-				Language prototype = modelService.findOneEntityByProperties(properties, true, Language.class);
+				Language prototype = languageService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Language.class));
+			return convertToEntity(source, modelService.create(Language.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private Language convertDto(LanguageDto source, Language prototype) {
+	private Language convertToEntity(LanguageDto source, Language prototype) {
 
 		Date lastModifiedDate = new Date();
 

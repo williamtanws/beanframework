@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.beanframework.backoffice.AuditorWebConstants;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.common.controller.AbstractController;
-import com.beanframework.common.data.AuditorDto;
+import com.beanframework.core.data.AuditorDto;
 import com.beanframework.core.facade.AuditorFacade;
 
 @Controller

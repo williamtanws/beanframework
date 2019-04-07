@@ -65,7 +65,9 @@ public class DynamicFieldResource {
 	@ResponseBody
 	public DataTableResponse<DynamicFieldDataResponse> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.getSkipColumnIndexes().add(2);
+		dataTableRequest.prepareDataTableRequest(request);
 
 		Page<DynamicFieldDto> pagination = dynamicFieldFacade.findPage(dataTableRequest);
 
@@ -91,7 +93,8 @@ public class DynamicFieldResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = dynamicFieldFacade.findHistory(dataTableRequest);

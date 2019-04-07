@@ -19,6 +19,7 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
@@ -26,7 +27,10 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityMenuConverter.class);
 
 	@Autowired
-	private ModelService modelService;
+	private ModelService modelService;	
+	
+	@Autowired
+	private MenuService menuService;
 
 	@Override
 	public Menu convert(MenuDto source, EntityConverterContext context) throws ConverterException {
@@ -35,14 +39,14 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 
 			if (source.getUuid() != null) {
 
-				Menu prototype = modelService.findOneEntityByUuid(source.getUuid(), true, Menu.class);
+				Menu prototype = menuService.findOneEntityByUuid(source.getUuid());
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Menu.class));
+			return convertToEntity(source, modelService.create(Menu.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -50,7 +54,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 
 	}
 
-	public List<Menu> convertDto(List<MenuDto> sources, EntityConverterContext context) throws ConverterException {
+	public List<Menu> convertToEntity(List<MenuDto> sources, EntityConverterContext context) throws ConverterException {
 		List<Menu> convertedList = new ArrayList<Menu>();
 		for (MenuDto source : sources) {
 			convertedList.add(convert(source, context));
@@ -58,7 +62,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 		return convertedList;
 	}
 
-	private Menu convertDto(MenuDto source, Menu prototype) throws ConverterException {
+	private Menu convertToEntity(MenuDto source, Menu prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();
@@ -117,15 +121,9 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (MenuFieldDto sourceField : source.getFields()) {
 
-						if (prototype.getFields().get(i).getDynamicField().getUuid().equals(sourceField.getDynamicField().getUuid())) {
+						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
 							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
-
-								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
-								prototype.setLastModifiedDate(lastModifiedDate);
-							}
-							if (sourceField.getSort() == prototype.getFields().get(i).getSort() == false) {
-								prototype.getFields().get(i).setSort(sourceField.getSort());
 
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
 								prototype.setLastModifiedDate(lastModifiedDate);
@@ -161,7 +159,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 						}
 
 						if (add) {
-							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), false, UserGroup.class);
+							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), UserGroup.class);
 							prototype.getUserGroups().add(entityUserGroups);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}

@@ -37,6 +37,7 @@ import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.facade.ConfigurationFacade;
 import com.beanframework.core.facade.EmployeeFacade;
 import com.beanframework.employee.EmployeeConstants;
+import com.beanframework.media.MediaConstants;
 
 @Controller
 public class EmployeeProfileController {
@@ -55,8 +56,11 @@ public class EmployeeProfileController {
 
 	@Value(EmployeeWebConstants.View.PROFILE)
 	private String VIEW_EMPLOYEE_PROFILE;
+	
+	@Value(MediaConstants.MEDIA_LOCATION)
+	public String MEDIA_LOCATION;
 
-	@Value(EmployeeConstants.PROFILE_PICTURE_LOCATION)
+	@Value(EmployeeConstants.EMPLOYEE_MEDIA_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
 
 	@Value(BackofficeWebConstants.Configuration.DEFAULT_AVATAR)
@@ -77,7 +81,7 @@ public class EmployeeProfileController {
 		return VIEW_EMPLOYEE_PROFILE;
 	}
 
-	@GetMapping(value = EmployeeWebConstants.Path.PROFILE_PICTURE, produces = MediaType.ALL_VALUE)
+	@GetMapping(value = EmployeeConstants.PATH_EMPLOYEE_PROFILE_PICTURE, produces = MediaType.ALL_VALUE)
 	public ResponseEntity<byte[]> getImage(@RequestParam Map<String, Object> requestParams) throws Exception {
 
 		UUID uuid = null;
@@ -96,7 +100,7 @@ public class EmployeeProfileController {
 		}
 
 		InputStream targetStream;
-		File picture = new File(PROFILE_PICTURE_LOCATION + File.separator + uuid + File.separator + type + ".png");
+		File picture = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + uuid + File.separator + type + ".png");
 
 		if (picture.exists()) {
 			targetStream = new FileInputStream(picture);

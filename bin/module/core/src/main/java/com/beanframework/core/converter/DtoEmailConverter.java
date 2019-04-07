@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.EmailDto;
@@ -39,7 +38,7 @@ public class DtoEmailConverter extends AbstractDtoConverter<Email, EmailDto> imp
 	private EmailDto convert(Email source, EmailDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setToRecipients(source.getToRecipients());

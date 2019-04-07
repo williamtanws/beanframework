@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -39,11 +38,13 @@ public class DtoDynamicFieldSlotConverter extends AbstractDtoConverter<DynamicFi
 	private DynamicFieldSlotDto convert(DynamicFieldSlot source, DynamicFieldSlotDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setSort(source.getSort());
-			prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
+
+			if (context.isFetchable(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD))
+				prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

@@ -1,6 +1,7 @@
 package com.beanframework.backoffice.api;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
 public class CommentResource {
-	
+
 	@Autowired
 	private CommentFacade commentFacade;
 
@@ -66,8 +67,11 @@ public class CommentResource {
 	@ResponseBody
 	public DataTableResponse<CommentDataResponse> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
-
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.getSkipColumnIndexes().add(2);
+		dataTableRequest.getSkipColumnIndexes().add(3);
+		dataTableRequest.prepareDataTableRequest(request);
+		
 		Page<CommentDto> pagination = commentFacade.findPage(dataTableRequest);
 
 		DataTableResponse<CommentDataResponse> dataTableResponse = new DataTableResponse<CommentDataResponse>();
@@ -83,7 +87,17 @@ public class CommentResource {
 			data.setUser(dto.getUser());
 			data.setHtml(StringUtils.substring(dto.getHtml(), 0, 100) + "...");
 			data.setVisibled(dto.getVisibled());
-			data.setLastUpdatedDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(dto.getLastUpdatedDate()));
+
+			Date lastUpdatedDate;
+			if (dto.getLastModifiedDate() == null) {
+				lastUpdatedDate = dto.getCreatedDate();
+			} else {
+				lastUpdatedDate = dto.getLastModifiedDate();
+			}
+
+			if (lastUpdatedDate != null)
+				data.setLastUpdatedDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(lastUpdatedDate));
+			
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;
@@ -94,7 +108,8 @@ public class CommentResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = commentFacade.findHistory(dataTableRequest);

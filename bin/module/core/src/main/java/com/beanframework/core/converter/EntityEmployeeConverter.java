@@ -18,13 +18,17 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.employee.domain.Employee;
+import com.beanframework.employee.service.EmployeeService;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Employee> {
 
 	@Autowired
 	private ModelService modelService;
-	
+
+	@Autowired
+	private EmployeeService employeeService;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -36,14 +40,14 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.UUID, source.getUuid());
-				Employee prototype = modelService.findOneEntityByProperties(properties, true, Employee.class);
+				Employee prototype = employeeService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Employee.class));
+			return convertToEntity(source, modelService.create(Employee.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -51,7 +55,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 
 	}
 
-	private Employee convertDto(EmployeeDto source, Employee prototype) throws ConverterException {
+	private Employee convertToEntity(EmployeeDto source, Employee prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();
@@ -128,17 +132,14 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 			if (source.getFields() != null && source.getFields().isEmpty() == false) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserFieldDto sourceField : source.getFields()) {
-						if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
-							prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
-							prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
-							prototype.setLastModifiedDate(lastModifiedDate);
-						}
-						if (sourceField.getSort() == prototype.getFields().get(i).getSort() == false) {
-							prototype.getFields().get(i).setSort(sourceField.getSort());
+						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
+							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
-							prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
-							prototype.setLastModifiedDate(lastModifiedDate);
+								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+								prototype.setLastModifiedDate(lastModifiedDate);
+							}
 						}
 					}
 				}
@@ -170,7 +171,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 						}
 
 						if (add) {
-							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), false, UserGroup.class);
+							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), UserGroup.class);
 							prototype.getUserGroups().add(entityUserGroups);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}

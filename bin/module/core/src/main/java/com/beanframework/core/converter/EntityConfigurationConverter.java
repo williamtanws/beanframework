@@ -12,12 +12,16 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.core.data.ConfigurationDto;
 
 public class EntityConfigurationConverter implements EntityConverter<ConfigurationDto, Configuration> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private ConfigurationService configurationService;
 
 	@Override
 	public Configuration convert(ConfigurationDto source, EntityConverterContext context) throws ConverterException {
@@ -27,14 +31,14 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.UUID, source.getUuid());
-				Configuration prototype = modelService.findOneEntityByProperties(properties, true, Configuration.class);
+				Configuration prototype = configurationService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Configuration.class));
+			return convertToEntity(source, modelService.create(Configuration.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -42,7 +46,7 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 
 	}
 
-	private Configuration convertDto(ConfigurationDto source, Configuration prototype) {
+	private Configuration convertToEntity(ConfigurationDto source, Configuration prototype) {
 
 		Date lastModifiedDate = new Date();
 

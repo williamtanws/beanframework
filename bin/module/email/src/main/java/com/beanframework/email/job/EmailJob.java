@@ -24,9 +24,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.service.ModelService;
+import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.domain.EmailEnum.Result;
 import com.beanframework.email.domain.EmailEnum.Status;
+import com.beanframework.media.MediaConstants;
 
 @Component
 @DisallowConcurrentExecution
@@ -42,8 +44,11 @@ public class EmailJob implements Job {
 
 	@Value("${spring.mail.from.email}")
 	private String fromEmail;
+	
+	@Value(MediaConstants.MEDIA_LOCATION)
+	private String MEDIA_LOCATION;
 
-	@Value("${module.email.attachment.location}")
+	@Value(EmailConstants.EMAIL_ATTACHMENT_LOCATION)
 	private String EMAIL_ATTACHMENT_LOCATION;
 
 	@Autowired
@@ -67,7 +72,7 @@ public class EmailJob implements Job {
 			Map<String, Sort.Direction> oldSorts = new HashMap<String, Sort.Direction>();
 			oldSorts.put(Email.CREATED_DATE, Sort.Direction.ASC);
 
-			List<Email> oldEmails = modelService.findEntityByPropertiesAndSorts(oldProperties, oldSorts, null, null, true, Email.class);
+			List<Email> oldEmails = modelService.findEntityByPropertiesAndSorts(oldProperties, oldSorts, null, null, Email.class);
 			int count = oldEmails.size();
 
 			int numberOfPendingEmails = 0;
@@ -85,7 +90,7 @@ public class EmailJob implements Job {
 				Map<String, Sort.Direction> pendingSorts = new HashMap<String, Sort.Direction>();
 				pendingSorts.put(Email.CREATED_DATE, Sort.Direction.ASC);
 
-				List<Email> pendingEmails = modelService.findEntityByPropertiesAndSorts(pendingProperties, pendingSorts, null, null, true, Email.class);
+				List<Email> pendingEmails = modelService.findEntityByPropertiesAndSorts(pendingProperties, pendingSorts, null, null, Email.class);
 
 				// Change pending email to processing email
 				for (int i = 0; i < pendingEmails.size(); i++) {
@@ -102,7 +107,7 @@ public class EmailJob implements Job {
 			Map<String, Sort.Direction> processingSorts = new HashMap<String, Sort.Direction>();
 			processingSorts.put(Email.CREATED_DATE, Sort.Direction.ASC);
 
-			List<Email> processingEmails = modelService.findEntityByPropertiesAndSorts(processingProperties, processingSorts, null, EMAIL_PROCESS_NUMBER, true, Email.class);
+			List<Email> processingEmails = modelService.findEntityByPropertiesAndSorts(processingProperties, processingSorts, null, EMAIL_PROCESS_NUMBER, Email.class);
 
 			int sentEmail = 0;
 			int failedEmail = 0;
@@ -129,9 +134,7 @@ public class EmailJob implements Job {
 							bccRecipients = email.getBccRecipients().split(";");
 						}
 
-						String workingDir = System.getProperty("user.dir");
-
-						File attachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + email.getUuid());
+						File attachmentFolder = new File(MEDIA_LOCATION, EMAIL_ATTACHMENT_LOCATION + File.separator + email.getUuid());
 						files = attachmentFolder.listFiles();
 
 						sendEmail(toRecipients, ccRecipients, bccRecipients, email.getSubject(), email.getText(), email.getHtml(), files);

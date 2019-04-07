@@ -7,18 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.mail.internet.MimeMessage;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +29,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.Email;
+import com.beanframework.email.specification.EmailSpecification;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -37,51 +40,42 @@ public class EmailServiceImpl implements EmailService {
 	@Value(EmailConstants.EMAIL_ATTACHMENT_LOCATION)
 	public String EMAIL_ATTACHMENT_LOCATION;
 
+	@Autowired
+	private JavaMailSender javaMailSender;
+
+	@Value("${spring.mail.from.email}")
+	private String fromEmail;
+
 	@Override
 	public Email create() throws Exception {
 		return modelService.create(Email.class);
 	}
 
-	@Cacheable(value = "EmailOne", key = "#uuid")
 	@Override
 	public Email findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Email.class);
+		return modelService.findOneEntityByUuid(uuid, Email.class);
 	}
 
-	@Cacheable(value = "EmailOneProperties", key = "#properties")
 	@Override
 	public Email findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Email.class);
+		return modelService.findOneEntityByProperties(properties, Email.class);
 	}
 
-	@Cacheable(value = "EmailsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<Email> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Email.class);
+	public List<Email> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Email.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "EmailOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "EmailOneProperties", allEntries = true), //
-			@CacheEvict(value = "EmailsSorts", allEntries = true), //
-			@CacheEvict(value = "EmailsPage", allEntries = true), //
-			@CacheEvict(value = "EmailsHistory", allEntries = true) }) //
 	@Override
 	public Email saveEntity(Email model) throws BusinessException {
 		return (Email) modelService.saveEntity(model, Email.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "EmailOne", key = "#uuid"), //
-			@CacheEvict(value = "EmailOneProperties", allEntries = true), //
-			@CacheEvict(value = "EmailsSorts", allEntries = true), //
-			@CacheEvict(value = "EmailsPage", allEntries = true), //
-			@CacheEvict(value = "EmailsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Email model = modelService.findOneEntityByUuid(uuid, true, Email.class);
+			Email model = modelService.findOneEntityByUuid(uuid, Email.class);
 			modelService.deleteByEntity(model, Email.class);
 
 			String workingDir = System.getProperty("user.dir");
@@ -94,13 +88,11 @@ public class EmailServiceImpl implements EmailService {
 		}
 	}
 
-	@Cacheable(value = "EmailsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
-	public <T> Page<Email> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Email.class);
+	public Page<Email> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		return modelService.findEntityPage(EmailSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Email.class);
 	}
 
-	@Cacheable(value = "EmailsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Email.class);
@@ -137,7 +129,6 @@ public class EmailServiceImpl implements EmailService {
 		}
 	}
 
-	@Cacheable(value = "EmailsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -149,11 +140,10 @@ public class EmailServiceImpl implements EmailService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Email.class);
+		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Email.class);
 
 	}
 
-	@Cacheable(value = "EmailsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -162,5 +152,43 @@ public class EmailServiceImpl implements EmailService {
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Email.class);
+	}
+
+	@Override
+	public void sendEmail(String[] to, String[] cc, String[] bcc, String subject, String text, String html, File[] files) throws Exception {
+
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+		helper.setFrom(fromEmail);
+		if (to != null) {
+			helper.setTo(to);
+		}
+		if (cc != null) {
+			helper.setCc(cc);
+		}
+		if (bcc != null) {
+			helper.setBcc(bcc);
+		}
+		if (StringUtils.isNotBlank(subject)) {
+			helper.setSubject(subject);
+		}
+		if (StringUtils.isNotBlank(text) && StringUtils.isNotBlank(html)) {
+			helper.setText(text, html);
+		} else {
+			if (StringUtils.isNotBlank(text)) {
+				helper.setText(text);
+			}
+			if (StringUtils.isNotBlank(html)) {
+				helper.setText(html);
+			}
+		}
+
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				FileSystemResource file = new FileSystemResource(files[i]);
+				helper.addAttachment(files[i].getName(), file);
+			}
+		}
+		javaMailSender.send(mimeMessage);
 	}
 }

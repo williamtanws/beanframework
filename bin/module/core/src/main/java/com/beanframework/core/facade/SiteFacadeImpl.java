@@ -15,7 +15,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.SiteDto;
-import com.beanframework.core.specification.SiteSpecification;
 
 @Component
 public class SiteFacadeImpl implements SiteFacade {
@@ -66,7 +65,7 @@ public class SiteFacadeImpl implements SiteFacade {
 
 	@Override
 	public Page<SiteDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Site> page = siteService.findEntityPage(dataTableRequest, SiteSpecification.getSpecification(dataTableRequest));
+		Page<Site> page = siteService.findEntityPage(dataTableRequest);
 
 		List<SiteDto> dtos = modelService.getDto(page.getContent(), SiteDto.class);
 		return new PageImpl<SiteDto>(dtos, page.getPageable(), page.getTotalElements());

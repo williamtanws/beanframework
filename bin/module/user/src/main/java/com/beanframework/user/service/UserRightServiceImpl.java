@@ -9,18 +9,19 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserRight;
+import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.specification.UserRightSpecification;
 
 @Service
 public class UserRightServiceImpl implements UserRightService {
@@ -28,51 +29,55 @@ public class UserRightServiceImpl implements UserRightService {
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private FetchContext fetchContext;
+
 	@Override
 	public UserRight create() throws Exception {
 		return modelService.create(UserRight.class);
 	}
 
-	@Cacheable(value = "UserRightOne", key = "#uuid")
 	@Override
 	public UserRight findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, UserRight.class);
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(UserRight.class, UserRight.FIELDS);
+		fetchContext.addFetchProperty(UserRightField.class, UserRightField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+
+		return modelService.findOneEntityByUuid(uuid, UserRight.class);
 	}
 
-	@Cacheable(value = "UserRightOneProperties", key = "#properties")
 	@Override
 	public UserRight findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, UserRight.class);
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(UserRight.class, UserRight.FIELDS);
+		fetchContext.addFetchProperty(UserRightField.class, UserRightField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+
+		return modelService.findOneEntityByProperties(properties, UserRight.class);
 	}
 
-	@Cacheable(value = "UserRightsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<UserRight> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, UserRight.class);
+	public List<UserRight> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserRight.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "UserRightOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "UserRightOneProperties", allEntries = true), //
-			@CacheEvict(value = "UserRightsSorts", allEntries = true), //
-			@CacheEvict(value = "UserRightsPage", allEntries = true), //
-			@CacheEvict(value = "UserRightsHistory", allEntries = true) }) //
 	@Override
 	public UserRight saveEntity(UserRight model) throws BusinessException {
 		return (UserRight) modelService.saveEntity(model, UserRight.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "UserRightOne", key = "#uuid"), //
-			@CacheEvict(value = "UserRightOneProperties", allEntries = true), //
-			@CacheEvict(value = "UserRightsSorts", allEntries = true), //
-			@CacheEvict(value = "UserRightsPage", allEntries = true), //
-			@CacheEvict(value = "UserRightsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			UserRight model = modelService.findOneEntityByUuid(uuid, true, UserRight.class);
+			UserRight model = modelService.findOneEntityByUuid(uuid, UserRight.class);
 			modelService.deleteByEntity(model, UserRight.class);
 
 		} catch (Exception e) {
@@ -80,19 +85,17 @@ public class UserRightServiceImpl implements UserRightService {
 		}
 	}
 
-	@Cacheable(value = "UserRightsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
-	public <T> Page<UserRight> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, UserRight.class);
+	public Page<UserRight> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties();
+		return modelService.findEntityPage(UserRightSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserRight.class);
 	}
 
-	@Cacheable(value = "UserRightsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(UserRight.class);
 	}
 
-	@Cacheable(value = "UserRightsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -104,11 +107,10 @@ public class UserRightServiceImpl implements UserRightService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), UserRight.class);
+		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), UserRight.class);
 
 	}
 
-	@Cacheable(value = "UserRightsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

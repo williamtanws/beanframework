@@ -3,12 +3,13 @@ package com.beanframework.comment.interceptor;
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.LoadInterceptor;
+import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 
-public class CommentLoadInterceptor implements LoadInterceptor<Comment> {
+public class CommentLoadInterceptor extends AbstractLoadInterceptor<Comment> {
 
 	@Override
 	public void onLoad(Comment model, InterceptorContext context) throws InterceptorException {
+		super.onLoad(model, context);
 	}
 
 }

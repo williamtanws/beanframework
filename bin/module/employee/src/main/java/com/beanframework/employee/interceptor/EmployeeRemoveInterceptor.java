@@ -2,13 +2,14 @@ package com.beanframework.employee.interceptor;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.RemoveInterceptor;
+import com.beanframework.common.interceptor.AbstractRemoveInterceptor;
 import com.beanframework.employee.domain.Employee;
 
-public class EmployeeRemoveInterceptor implements RemoveInterceptor<Employee> {
+public class EmployeeRemoveInterceptor extends AbstractRemoveInterceptor<Employee> {
 
 	@Override
 	public void onRemove(Employee model, InterceptorContext context) throws InterceptorException {
+		super.onRemove(model, context);
 	}
 
 }

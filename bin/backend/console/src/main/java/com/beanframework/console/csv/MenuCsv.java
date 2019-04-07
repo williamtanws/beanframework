@@ -2,10 +2,13 @@ package com.beanframework.console.csv;
 
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
+import org.supercsv.cellprocessor.ParseEnum;
 import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
+
+import com.beanframework.menu.domain.MenuTargetTypeEnum;
 
 public class MenuCsv extends AbstractCsv {
 
@@ -13,7 +16,7 @@ public class MenuCsv extends AbstractCsv {
 	private Integer sort;
 	private String icon;
 	private String path;
-	private String target;
+	private MenuTargetTypeEnum target;
 	private Boolean enabled;
 	private String parent;
 	private String userGroupIds;
@@ -26,7 +29,7 @@ public class MenuCsv extends AbstractCsv {
 				new Optional(new Trim(new ParseInt())), // sort
 				new Optional(new Trim()), // icon
 				new Optional(new Trim()), // path
-				new Optional(new Trim()), // target
+				new Optional(new Trim(new ParseEnum(MenuTargetTypeEnum.class, true))), // target
 				new Optional(new Trim(new ParseBool())), // enabled
 				new Optional(new Trim()), // parent
 				new Optional(new Trim()), // userGroupIds
@@ -67,15 +70,15 @@ public class MenuCsv extends AbstractCsv {
 		this.path = path;
 	}
 
-	public String getTarget() {
+	public MenuTargetTypeEnum getTarget() {
 		return target;
 	}
 
-	public void setTarget(String target) {
+	public void setTarget(MenuTargetTypeEnum target) {
 		this.target = target;
 	}
 
-	public Boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
@@ -106,4 +109,5 @@ public class MenuCsv extends AbstractCsv {
 	public void setDynamicFieldSlotIds(String dynamicFieldSlotIds) {
 		this.dynamicFieldSlotIds = dynamicFieldSlotIds;
 	}
+
 }

@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.EntityCustomerProfileConverter;
 import com.beanframework.core.data.CustomerDto;
-import com.beanframework.core.specification.CustomerSpecification;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerService;
 
@@ -26,18 +26,23 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Autowired
 	private CustomerService customerService;
 
+	@Autowired
+	private EntityCustomerProfileConverter entityCustomerProfileConverter;
+
 	@Override
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
 		Customer entity = customerService.findOneEntityByUuid(uuid);
+		CustomerDto dto = modelService.getDto(entity, CustomerDto.class);
 
-		return modelService.getDto(entity, CustomerDto.class);
+		return dto;
 	}
 
 	@Override
 	public CustomerDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Customer entity = customerService.findOneEntityByProperties(properties);
+		CustomerDto dto = modelService.getDto(entity, CustomerDto.class);
 
-		return modelService.getDto(entity, CustomerDto.class);
+		return dto;
 	}
 
 	@Override
@@ -52,8 +57,18 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	public CustomerDto save(CustomerDto dto) throws BusinessException {
 		try {
+			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == false) {
+				String mimetype = dto.getProfilePicture().getContentType();
+				String type = mimetype.split("/")[0];
+				if (type.equals("image") == false) {
+					throw new Exception("Wrong picture format");
+				}
+			}
+
 			Customer entity = modelService.getEntity(dto, Customer.class);
 			entity = (Customer) customerService.saveEntity(entity);
+
+			customerService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, CustomerDto.class);
 		} catch (Exception e) {
@@ -68,7 +83,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Customer> page = customerService.findEntityPage(dataTableRequest, CustomerSpecification.getSpecification(dataTableRequest));
+		Page<Customer> page = customerService.findEntityPage(dataTableRequest);
 
 		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class);
 		return new PageImpl<CustomerDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -104,6 +119,37 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public CustomerDto createDto() throws Exception {
 
 		return modelService.getDto(customerService.create(), CustomerDto.class);
+	}
+
+	@Override
+	public CustomerDto saveProfile(CustomerDto dto) throws BusinessException {
+
+		try {
+			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == false) {
+				String mimetype = dto.getProfilePicture().getContentType();
+				String type = mimetype.split("/")[0];
+				if (type.equals("image") == false) {
+					throw new Exception("Wrong picture format");
+				}
+			}
+			Customer entity = entityCustomerProfileConverter.convert(dto);
+
+			entity = (Customer) customerService.saveEntity(entity);
+			customerService.updatePrincipal(entity);
+			customerService.saveProfilePicture(entity, dto.getProfilePicture());
+
+			return modelService.getDto(entity, CustomerDto.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public CustomerDto getCurrentUser() throws Exception {
+		Customer entity = customerService.getCurrentUser();
+
+		return modelService.getDto(entity, CustomerDto.class);
 	}
 
 }

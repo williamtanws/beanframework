@@ -66,8 +66,10 @@ public class EnumerationResource {
 	@ResponseBody
 	public DataTableResponse<EnumDataResponse> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
-
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.getSkipColumnIndexes().add(2);
+		dataTableRequest.prepareDataTableRequest(request);
+		
 		Page<EnumerationDto> pagination = enumerationFacade.findPage(dataTableRequest);
 
 		DataTableResponse<EnumDataResponse> dataTableResponse = new DataTableResponse<EnumDataResponse>();
@@ -92,7 +94,8 @@ public class EnumerationResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = enumerationFacade.findHistory(dataTableRequest);

@@ -9,18 +9,20 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
+import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.domain.UserGroupField;
+import com.beanframework.user.specification.UserGroupSpecification;
 
 @Service
 public class UserGroupServiceImpl implements UserGroupService {
@@ -28,51 +30,65 @@ public class UserGroupServiceImpl implements UserGroupService {
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private FetchContext fetchContext;
+
 	@Override
 	public UserGroup create() throws Exception {
 		return modelService.create(UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupOne", key = "#uuid")
 	@Override
 	public UserGroup findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, UserGroup.class);
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+		
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.FIELDS);
+		fetchContext.addFetchProperty(UserGroupField.class, UserGroupField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+		
+		return modelService.findOneEntityByUuid(uuid, UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupOneProperties", key = "#properties")
 	@Override
 	public UserGroup findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, UserGroup.class);
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+		
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.FIELDS);
+		fetchContext.addFetchProperty(UserGroupField.class, UserGroupField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+		
+		return modelService.findOneEntityByProperties(properties, UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupsSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<UserGroup> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, UserGroup.class);
+	public List<UserGroup> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserGroup.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "UserGroupOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "UserGroupOneProperties", allEntries = true), //
-			@CacheEvict(value = "UserGroupsSorts", allEntries = true), //
-			@CacheEvict(value = "UserGroupsPage", allEntries = true), //
-			@CacheEvict(value = "UserGroupsHistory", allEntries = true) }) //
 	@Override
 	public UserGroup saveEntity(UserGroup model) throws BusinessException {
 		return (UserGroup) modelService.saveEntity(model, UserGroup.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "UserGroupOne", key = "#uuid"), //
-			@CacheEvict(value = "UserGroupOneProperties", allEntries = true), //
-			@CacheEvict(value = "UserGroupsSorts", allEntries = true), //
-			@CacheEvict(value = "UserGroupsPage", allEntries = true), //
-			@CacheEvict(value = "UserGroupsHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			UserGroup model = modelService.findOneEntityByUuid(uuid, true, UserGroup.class);
+			UserGroup model = modelService.findOneEntityByUuid(uuid, UserGroup.class);
 			modelService.deleteByEntity(model, UserGroup.class);
 
 		} catch (Exception e) {
@@ -80,19 +96,17 @@ public class UserGroupServiceImpl implements UserGroupService {
 		}
 	}
 
-	@Cacheable(value = "UserGroupsPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
-	public <T> Page<UserGroup> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, UserGroup.class);
+	public Page<UserGroup> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties();
+		return modelService.findEntityPage(UserGroupSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupsPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(UserGroup.class);
 	}
 
-	@Cacheable(value = "UserGroupsHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -104,11 +118,10 @@ public class UserGroupServiceImpl implements UserGroupService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), UserGroup.class);
+		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), UserGroup.class);
 
 	}
 
-	@Cacheable(value = "UserGroupsHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

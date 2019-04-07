@@ -16,7 +16,7 @@ public class CommentDtoConfig {
 	}
 
 	@Bean
-	public ConverterMapping DtoCommentConverterMapping() {
+	public ConverterMapping dtoCommentConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoCommentConverter());
 		mapping.setTypeCode(CommentDto.class.getSimpleName());

@@ -15,7 +15,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MenuDto;
-import com.beanframework.core.specification.MenuSpecification;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
 
@@ -33,13 +32,17 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
 		Menu entity = menuService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, MenuDto.class);
+		MenuDto dto = modelService.getDto(entity, MenuDto.class);
+
+		return dto;
 	}
 
 	@Override
 	public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Menu entity = menuService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, MenuDto.class);
+		MenuDto dto = modelService.getDto(entity, MenuDto.class);
+
+		return dto;
 	}
 
 	@Override
@@ -84,9 +87,11 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
-			List<Menu> entities = menuService.findEntityMenuTree(false);
 
-			return modelService.getDto(entities, MenuDto.class);
+			List<Menu> entities = menuService.findEntityMenuTree(false);
+			List<MenuDto> dtos = modelService.getDto(entities, MenuDto.class);
+
+			return dtos;
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -94,7 +99,7 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Menu> page = menuService.findEntityPage(dataTableRequest, MenuSpecification.getSpecification(dataTableRequest));
+		Page<Menu> page = menuService.findEntityPage(dataTableRequest);
 
 		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class);
 		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -128,7 +133,6 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public MenuDto createDto() throws Exception {
-
 		return modelService.getDto(menuService.create(), MenuDto.class);
 	}
 }

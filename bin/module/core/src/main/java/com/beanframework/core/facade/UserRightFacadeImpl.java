@@ -15,7 +15,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserRightDto;
-import com.beanframework.core.specification.UserRightSpecification;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserRightService;
 
@@ -31,13 +30,17 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	@Override
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
 		UserRight entity = userRightService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, UserRightDto.class);
+		UserRightDto dto = modelService.getDto(entity, UserRightDto.class);
+
+		return dto;
 	}
 
 	@Override
 	public UserRightDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserRight entity = userRightService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, UserRightDto.class);
+		UserRightDto dto = modelService.getDto(entity, UserRightDto.class);
+
+		return dto;
 	}
 
 	@Override
@@ -68,7 +71,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest, UserRightSpecification.getSpecification(dataTableRequest));
+		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest);
 
 		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class);
 		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -105,7 +108,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserRight.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(userRightService.findEntityBySorts(sorts, false), UserRightDto.class);
+		return modelService.getDto(userRightService.findEntityBySorts(sorts), UserRightDto.class);
 	}
 
 	@Override

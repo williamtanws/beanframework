@@ -1,13 +1,14 @@
 package com.beanframework.core.converter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.CronjobDataDto;
@@ -37,7 +38,7 @@ public class DtoCronjobConverter extends AbstractDtoConverter<Cronjob, CronjobDt
 
 	private CronjobDto convert(Cronjob source, CronjobDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setJobClass(source.getJobClass());
 			prototype.setJobGroup(source.getJobGroup());
@@ -53,8 +54,24 @@ public class DtoCronjobConverter extends AbstractDtoConverter<Cronjob, CronjobDt
 			prototype.setLastTriggeredDate(source.getLastTriggeredDate());
 			prototype.setLastStartExecutedDate(source.getLastStartExecutedDate());
 			prototype.setLastFinishExecutedDate(source.getLastFinishExecutedDate());
-			prototype.setCronjobDatas(modelService.getDto(source.getCronjobDatas(), CronjobDataDto.class));
-			
+
+			if (context.isFetchable(Cronjob.class, Cronjob.CRONJOB_DATAS)) {
+				prototype.setCronjobDatas(modelService.getDto(source.getCronjobDatas(), CronjobDataDto.class));
+
+				Collections.sort(prototype.getCronjobDatas(), new Comparator<CronjobDataDto>() {
+					@Override
+					public int compare(CronjobDataDto o1, CronjobDataDto o2) {
+						if (o1.getCreatedDate() == null)
+							return o2.getCreatedDate() == null ? 0 : 1;
+
+						if (o2.getCreatedDate() == null)
+							return -1;
+
+						return o2.getCreatedDate().compareTo(o1.getCreatedDate());
+					}
+				});
+			}
+
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

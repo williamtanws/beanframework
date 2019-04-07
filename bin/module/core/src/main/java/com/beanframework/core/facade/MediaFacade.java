@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -51,5 +50,4 @@ public interface MediaFacade {
 	@PreAuthorize(MediaPreAuthorizeEnum.CREATE)
 	MediaDto createDto() throws Exception;
 
-	MediaDto createByMultipartFile(MultipartFile file, String location) throws Exception;
 }

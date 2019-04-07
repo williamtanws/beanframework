@@ -37,9 +37,13 @@ public class UserGroup extends GenericEntity {
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_AUTHORITIES = "userAuthorities";
 	public static final String FIELDS = "fields";
+	public static final String USERS = "users";
 
 	@Audited(withModifiedFlag = true)
 	private String name;
+
+	@ManyToMany(mappedBy = User.USER_GROUPS, fetch = FetchType.LAZY)
+	private List<User> users = new ArrayList<User>();
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
@@ -55,7 +59,7 @@ public class UserGroup extends GenericEntity {
 	@AuditMappedBy(mappedBy = UserGroupField.USER_GROUP)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.LAZY)
-	@OrderBy(UserGroupField.DYNAMIC_FIELD)
+	@OrderBy(UserGroupField.DYNAMIC_FIELD_SLOT)
 	private List<UserGroupField> fields = new ArrayList<UserGroupField>();
 
 	public String getName() {
@@ -64,6 +68,14 @@ public class UserGroup extends GenericEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	public List<UserGroup> getUserGroups() {

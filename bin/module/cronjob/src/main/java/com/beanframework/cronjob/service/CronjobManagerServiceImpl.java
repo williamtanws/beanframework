@@ -48,7 +48,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.STARTUP, true);
 
-		List<Cronjob> jobList = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, true, Cronjob.class);
+		List<Cronjob> jobList = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, Cronjob.class);
 
 		for (Cronjob cronjob : jobList) {
 			cronjob.setJobTrigger(CronjobEnum.JobTrigger.START);

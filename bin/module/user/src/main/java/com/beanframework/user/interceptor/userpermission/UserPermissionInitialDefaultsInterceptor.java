@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
+import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
@@ -21,7 +21,7 @@ import com.beanframework.user.UserPermissionConstants;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserPermissionField;
 
-public class UserPermissionInitialDefaultsInterceptor implements InitialDefaultsInterceptor<UserPermission> {
+public class UserPermissionInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<UserPermission> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserPermissionInitialDefaultsInterceptor.class);
 
@@ -31,15 +31,16 @@ public class UserPermissionInitialDefaultsInterceptor implements InitialDefaults
 	@Autowired
 	private ConfigurationService configurationService;
 
-	@Value(UserPermissionConstants.DYNAMIC_FIELD_TEMPLATE)
-	private String DYNAMIC_FIELD_TEMPLATE;
+	@Value(UserPermissionConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
+	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 
 	@Override
 	public void onInitialDefaults(UserPermission model, InterceptorContext context) throws InterceptorException {
+		super.onInitialDefaults(model, context);
 
 		try {
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();
-			configurationProperties.put(Configuration.ID, DYNAMIC_FIELD_TEMPLATE);
+			configurationProperties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 			Configuration configuration = configurationService.findOneEntityByProperties(configurationProperties);
 
 			if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
@@ -52,8 +53,7 @@ public class UserPermissionInitialDefaultsInterceptor implements InitialDefaults
 
 					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						UserPermissionField field = new UserPermissionField();
-						field.setDynamicField(dynamicFieldSlot.getDynamicField());
-						field.setSort(dynamicFieldSlot.getSort());
+						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUserPermission(model);
 						model.getFields().add(field);
 					}

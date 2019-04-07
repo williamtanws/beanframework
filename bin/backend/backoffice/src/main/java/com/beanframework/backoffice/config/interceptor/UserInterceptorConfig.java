@@ -10,31 +10,26 @@ import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.interceptor.auditor.AuditorInitialDefaultsInterceptor;
-import com.beanframework.user.interceptor.auditor.AuditorInitializeInterceptor;
 import com.beanframework.user.interceptor.auditor.AuditorLoadInterceptor;
 import com.beanframework.user.interceptor.auditor.AuditorPrepareInterceptor;
 import com.beanframework.user.interceptor.auditor.AuditorRemoveInterceptor;
 import com.beanframework.user.interceptor.auditor.AuditorValidateInterceptor;
 import com.beanframework.user.interceptor.userauthority.UserAuthorityInitialDefaultsInterceptor;
-import com.beanframework.user.interceptor.userauthority.UserAuthorityInitializeInterceptor;
 import com.beanframework.user.interceptor.userauthority.UserAuthorityLoadInterceptor;
 import com.beanframework.user.interceptor.userauthority.UserAuthorityPrepareInterceptor;
 import com.beanframework.user.interceptor.userauthority.UserAuthorityRemoveInterceptor;
 import com.beanframework.user.interceptor.userauthority.UserAuthorityValidateInterceptor;
 import com.beanframework.user.interceptor.usergroup.UserGroupInitialDefaultsInterceptor;
-import com.beanframework.user.interceptor.usergroup.UserGroupInitializeInterceptor;
 import com.beanframework.user.interceptor.usergroup.UserGroupLoadInterceptor;
 import com.beanframework.user.interceptor.usergroup.UserGroupPrepareInterceptor;
 import com.beanframework.user.interceptor.usergroup.UserGroupRemoveInterceptor;
 import com.beanframework.user.interceptor.usergroup.UserGroupValidateInterceptor;
 import com.beanframework.user.interceptor.userpermission.UserPermissionInitialDefaultsInterceptor;
-import com.beanframework.user.interceptor.userpermission.UserPermissionInitializeInterceptor;
 import com.beanframework.user.interceptor.userpermission.UserPermissionLoadInterceptor;
 import com.beanframework.user.interceptor.userpermission.UserPermissionPrepareInterceptor;
 import com.beanframework.user.interceptor.userpermission.UserPermissionRemoveInterceptor;
 import com.beanframework.user.interceptor.userpermission.UserPermissionValidateInterceptor;
 import com.beanframework.user.interceptor.userright.UserRightInitialDefaultsInterceptor;
-import com.beanframework.user.interceptor.userright.UserRightInitializeInterceptor;
 import com.beanframework.user.interceptor.userright.UserRightLoadInterceptor;
 import com.beanframework.user.interceptor.userright.UserRightPrepareInterceptor;
 import com.beanframework.user.interceptor.userright.UserRightRemoveInterceptor;
@@ -112,80 +107,6 @@ public class UserInterceptorConfig {
 	public InterceptorMapping userRightInitialDefaultsInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(userRightInitialDefaultsInterceptor());
-		interceptorMapping.setTypeCode(UserRight.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-//////////////////////
-// Initialize Interceptor //
-//////////////////////
-
-	@Bean
-	public AuditorInitializeInterceptor auditorInitializeInterceptor() {
-		return new AuditorInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping auditorInitializeInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(auditorInitializeInterceptor());
-		interceptorMapping.setTypeCode(Auditor.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public UserAuthorityInitializeInterceptor userAuthorityInitializeInterceptor() {
-		return new UserAuthorityInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping userInitializeInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userAuthorityInitializeInterceptor());
-		interceptorMapping.setTypeCode(UserAuthority.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public UserGroupInitializeInterceptor userGroupInitializeInterceptor() {
-		return new UserGroupInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping userGroupInitializeInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userGroupInitializeInterceptor());
-		interceptorMapping.setTypeCode(UserGroup.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public UserPermissionInitializeInterceptor userPermissionInitializeInterceptor() {
-		return new UserPermissionInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping userPermissionInitializeInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userPermissionInitializeInterceptor());
-		interceptorMapping.setTypeCode(UserPermission.class.getSimpleName());
-
-		return interceptorMapping;
-	}
-
-	@Bean
-	public UserRightInitializeInterceptor userRightInitializeInterceptor() {
-		return new UserRightInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping userRightInitializeInterceptorMapping() {
-		InterceptorMapping interceptorMapping = new InterceptorMapping();
-		interceptorMapping.setInterceptor(userRightInitializeInterceptor());
 		interceptorMapping.setTypeCode(UserRight.class.getSimpleName());
 
 		return interceptorMapping;

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.admin.service.AdminService;
 import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -21,6 +22,9 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 	private ModelService modelService;
 	
 	@Autowired
+	private AdminService adminService;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
@@ -30,20 +34,20 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Admin.UUID, source.getUuid());
-				Admin prototype = modelService.findOneEntityByProperties(properties, true, Admin.class);
+				Admin prototype = adminService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convertDto(source, modelService.create(Admin.class));
+			return convertToEntity(source, modelService.create(Admin.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private Admin convertDto(AdminDto source, Admin prototype) {
+	private Admin convertToEntity(AdminDto source, Admin prototype) {
 
 		Date lastModifiedDate = new Date();
 

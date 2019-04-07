@@ -15,7 +15,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.EntityEmployeeProfileConverter;
 import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.core.specification.EmployeeSpecification;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
@@ -35,15 +34,17 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
 		Employee entity = employeeService.findOneEntityByUuid(uuid);
-
-		return modelService.getDto(entity, EmployeeDto.class);
+		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
+		
+		return dto;
 	}
 
 	@Override
 	public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Employee entity = employeeService.findOneEntityByProperties(properties);
-
-		return modelService.getDto(entity, EmployeeDto.class);
+		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
+		
+		return dto;
 	}
 
 	@Override
@@ -65,11 +66,10 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 					throw new Exception("Wrong picture format");
 				}
 			}
-			
+
 			Employee entity = modelService.getEntity(dto, Employee.class);
 			entity = (Employee) employeeService.saveEntity(entity);
-			
-			employeeService.updatePrincipal(entity);
+
 			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, EmployeeDto.class);
@@ -86,7 +86,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Employee> page = employeeService.findEntityPage(dataTableRequest, EmployeeSpecification.getSpecification(dataTableRequest));
+		Page<Employee> page = employeeService.findEntityPage(dataTableRequest);
 
 		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class);
 		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -139,9 +139,10 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public EmployeeDto getCurrentUser() throws Exception {
-		Employee employee = employeeService.getCurrentUser();
-
-		return modelService.getDto(employeeService.findOneEntityByUuid(employee.getUuid()), EmployeeDto.class);
+		Employee entity = employeeService.getCurrentUser();
+		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
+		
+		return dto;
 	}
 
 	@Override

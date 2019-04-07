@@ -18,12 +18,16 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.customer.domain.Customer;
+import com.beanframework.customer.service.CustomerService;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityCustomerConverter implements EntityConverter<CustomerDto, Customer> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private CustomerService customerService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -36,14 +40,14 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Customer.UUID, source.getUuid());
-				Customer prototype = modelService.findOneEntityByProperties(properties, true, Customer.class);
+				Customer prototype = customerService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Customer.class));
+			return convertToEntity(source, modelService.create(Customer.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -51,7 +55,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 
 	}
 
-	private Customer convertDto(CustomerDto source, Customer prototype) throws ConverterException {
+	private Customer convertToEntity(CustomerDto source, Customer prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();
@@ -129,15 +133,9 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserFieldDto sourceField : source.getFields()) {
 
-						if (prototype.getFields().get(i).getDynamicField().getUuid().equals(sourceField.getDynamicField().getUuid())) {
+						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
 							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
-
-								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
-								prototype.setLastModifiedDate(lastModifiedDate);
-							}
-							if (sourceField.getSort() == prototype.getFields().get(i).getSort() == false) {
-								prototype.getFields().get(i).setSort(sourceField.getSort());
 
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
 								prototype.setLastModifiedDate(lastModifiedDate);
@@ -173,7 +171,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 						}
 
 						if (add) {
-							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), false, UserGroup.class);
+							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), UserGroup.class);
 							prototype.getUserGroups().add(entityUserGroups);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}

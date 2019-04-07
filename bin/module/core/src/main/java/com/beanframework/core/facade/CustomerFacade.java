@@ -50,4 +50,8 @@ public interface CustomerFacade {
 	@PreAuthorize(CustomerPreAuthorizeEnum.CREATE)
 	CustomerDto createDto() throws Exception;
 
+	CustomerDto saveProfile(CustomerDto dto) throws BusinessException;
+
+	CustomerDto getCurrentUser() throws Exception;
+
 }

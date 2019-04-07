@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.configuration.interceptor.ConfigurationInitialDefaultsInterceptor;
-import com.beanframework.configuration.interceptor.ConfigurationInitializeInterceptor;
 import com.beanframework.configuration.interceptor.ConfigurationLoadInterceptor;
 import com.beanframework.configuration.interceptor.ConfigurationPrepareInterceptor;
 import com.beanframework.configuration.interceptor.ConfigurationRemoveInterceptor;
@@ -27,24 +26,6 @@ public class ConfigurationInterceptorConfig {
 	public InterceptorMapping configurationInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(configurationInitialDefaultsInterceptor());
-		mapping.setTypeCode(Configuration.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public ConfigurationInitializeInterceptor configurationInitializeInterceptor() {
-		return new ConfigurationInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping configurationInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(configurationInitializeInterceptor());
 		mapping.setTypeCode(Configuration.class.getSimpleName());
 
 		return mapping;

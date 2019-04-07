@@ -1,6 +1,6 @@
 package com.beanframework.console.data;
 
-import com.beanframework.common.data.DataTableResponseData;
+import com.beanframework.core.data.DataTableResponseData;
 
 public class ConfigurationDataResponse extends DataTableResponseData {
 

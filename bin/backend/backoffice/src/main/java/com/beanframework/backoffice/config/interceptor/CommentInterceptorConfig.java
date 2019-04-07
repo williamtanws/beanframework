@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.comment.interceptor.CommentInitialDefaultsInterceptor;
-import com.beanframework.comment.interceptor.CommentInitializeInterceptor;
 import com.beanframework.comment.interceptor.CommentLoadInterceptor;
 import com.beanframework.comment.interceptor.CommentPrepareInterceptor;
 import com.beanframework.comment.interceptor.CommentRemoveInterceptor;
@@ -28,24 +27,6 @@ public class CommentInterceptorConfig {
 	public InterceptorMapping commentInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(commentInitialDefaultsInterceptor());
-		mapping.setTypeCode(Comment.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public CommentInitializeInterceptor commentInitializeInterceptor() {
-		return new CommentInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping commentInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(commentInitializeInterceptor());
 		mapping.setTypeCode(Comment.class.getSimpleName());
 
 		return mapping;

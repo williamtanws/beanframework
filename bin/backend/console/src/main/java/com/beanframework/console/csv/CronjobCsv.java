@@ -79,7 +79,7 @@ public class CronjobCsv extends AbstractCsv {
 		this.cronExpression = cronExpression;
 	}
 
-	public Boolean isStartup() {
+	public Boolean getStartup() {
 		return startup;
 	}
 

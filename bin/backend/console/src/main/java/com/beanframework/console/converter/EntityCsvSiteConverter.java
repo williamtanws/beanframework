@@ -10,53 +10,57 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Site;
-import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.cms.service.SiteService;
+import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.SiteCsv;
 
 @Component
-public class EntityCsvSiteConverter implements EntityConverter<SiteCsv, Site> {
+public class EntityCsvSiteConverter implements EntityCsvConverter<SiteCsv, Site> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvSiteConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private SiteService siteService;
+
 	@Override
-	public Site convert(SiteCsv source, EntityConverterContext context) throws ConverterException {
+	public Site convert(SiteCsv source) throws ConverterException {
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Site.ID, source.getId());
 
-				Site prototype = modelService.findOneEntityByProperties(properties, true, Site.class);
+				Site prototype = siteService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new Site());
+			return convertToEntity(source, modelService.create(Site.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	public Site convert(SiteCsv source) throws ConverterException {
-		return convert(source, new EntityConverterContext());
-	}
-
-	private Site convert(SiteCsv source, Site prototype) throws ConverterException {
+	private Site convertToEntity(SiteCsv source, Site prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setName(StringUtils.stripToNull(source.getName()));
-			prototype.setUrl(StringUtils.stripToNull(source.getUrl()));
+			if (StringUtils.isNotBlank(source.getId()))
+				prototype.setId(source.getId());
+
+			if (StringUtils.isNotBlank(source.getName()))
+				prototype.setName(source.getName());
+
+			if (StringUtils.isNotBlank(source.getUrl()))
+				prototype.setUrl(source.getUrl());
 
 		} catch (Exception e) {
 			e.printStackTrace();

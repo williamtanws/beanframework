@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
+import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
@@ -21,7 +21,7 @@ import com.beanframework.user.UserRightConstants;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightField;
 
-public class UserRightInitialDefaultsInterceptor implements InitialDefaultsInterceptor<UserRight> {
+public class UserRightInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<UserRight> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserRightInitialDefaultsInterceptor.class);
 
@@ -31,15 +31,16 @@ public class UserRightInitialDefaultsInterceptor implements InitialDefaultsInter
 	@Autowired
 	private ConfigurationService configurationService;
 
-	@Value(UserRightConstants.DYNAMIC_FIELD_TEMPLATE)
-	private String DYNAMIC_FIELD_TEMPLATE;
+	@Value(UserRightConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
+	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 
 	@Override
 	public void onInitialDefaults(UserRight model, InterceptorContext context) throws InterceptorException {
+		super.onInitialDefaults(model, context);
 
 		try {
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();
-			configurationProperties.put(Configuration.ID, DYNAMIC_FIELD_TEMPLATE);
+			configurationProperties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 			Configuration configuration = configurationService.findOneEntityByProperties(configurationProperties);
 
 			if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
@@ -52,8 +53,7 @@ public class UserRightInitialDefaultsInterceptor implements InitialDefaultsInter
 
 					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						UserRightField field = new UserRightField();
-						field.setDynamicField(dynamicFieldSlot.getDynamicField());
-						field.setSort(dynamicFieldSlot.getSort());
+						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUserRight(model);
 						model.getFields().add(field);
 					}

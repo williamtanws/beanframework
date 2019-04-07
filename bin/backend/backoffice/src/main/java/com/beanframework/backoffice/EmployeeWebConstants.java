@@ -22,7 +22,6 @@ public interface EmployeeWebConstants {
 
 		public static final String EMPLOYEE = "${path.employee}";
 		public static final String PROFILE = "${path.employee.profile}";
-		public static final String PROFILE_PICTURE = "${path.employee.profile.picture}";
 	}
 
 	public interface View {

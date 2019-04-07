@@ -11,7 +11,8 @@ employeegroup,menu					,+,+,+,+
 employeegroup,cronjob				,+,+,+,+
 employeegroup,employeesession		,+,+,+,+
 employeegroup,employee				,+,+,+,+
-customergroup,customer				,+,+,+,+
+employeegroup,customer				,+,+,+,+
+employeegroup,vendor				,+,+,+,+
 employeegroup,auditor				,+,+,+,+
 employeegroup,filemanager			,+,+,+,+
 employeegroup,email					,+,+,+,+

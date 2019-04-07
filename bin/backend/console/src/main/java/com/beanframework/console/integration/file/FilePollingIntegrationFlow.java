@@ -60,7 +60,7 @@ public class FilePollingIntegrationFlow {
 	private ArchiveFileProcessor archiveFileProcessor;
 
 	@Autowired
-	private ImportFileProcessor updateFileProcessor;
+	private ImportFileProcessor importFileProcessor;
 
 	@Autowired
 	private PlatformTransactionManager transactionManager;
@@ -72,7 +72,7 @@ public class FilePollingIntegrationFlow {
 				.from(fileReadingMessageSource,
 						c -> c.poller(Pollers.fixedDelay(period).taskExecutor(taskExecutor).maxMessagesPerPoll(maxMessagesPerPoll)
 								.transactionSynchronizationFactory(transactionSynchronizationFactory()).transactional(transactionManager)))
-				.handle(updateFileProcessor).channel(IntegrationConfig.READ_CHANNEL).get();
+				.handle(importFileProcessor).channel(IntegrationConfig.READ_CHANNEL).get();
 	}
 
 	@Bean

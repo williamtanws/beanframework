@@ -15,7 +15,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserPermissionDto;
-import com.beanframework.core.specification.UserPermissionSpecification;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.service.UserPermissionService;
 
@@ -31,13 +30,17 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Override
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
 		UserPermission entity = userPermissionService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, UserPermissionDto.class);
+		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class);
+
+		return dto;
 	}
 
 	@Override
 	public UserPermissionDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserPermission entity = userPermissionService.findOneEntityByProperties(properties);
-		return modelService.getDto(entity, UserPermissionDto.class);
+		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class);
+
+		return dto;
 	}
 
 	@Override
@@ -68,7 +71,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Override
 	public Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<UserPermission> page = userPermissionService.findEntityPage(dataTableRequest, UserPermissionSpecification.getSpecification(dataTableRequest));
+		Page<UserPermission> page = userPermissionService.findEntityPage(dataTableRequest);
 
 		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class);
 		return new PageImpl<UserPermissionDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -105,7 +108,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserPermission.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(userPermissionService.findEntityBySorts(sorts, false), UserPermissionDto.class);
+		return modelService.getDto(userPermissionService.findEntityBySorts(sorts), UserPermissionDto.class);
 	}
 
 	@Override

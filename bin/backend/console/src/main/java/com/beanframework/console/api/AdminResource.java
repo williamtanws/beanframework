@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.AdminWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.core.data.AdminDto;
+import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.AdminFacade;
 
 @RestController
@@ -66,7 +66,8 @@ public class AdminResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 
 		Page<AdminDto> pagination = adminFacade.findPage(dataTableRequest);
 
@@ -91,7 +92,8 @@ public class AdminResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = adminFacade.findHistory(dataTableRequest);
