@@ -17,7 +17,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -44,7 +43,6 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableTransactionManagement
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableAsync
-@PropertySource("file:../../config/src/main/resources/application.properties")
 @Order(0)
 public class PlatformConfig {
 
