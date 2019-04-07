@@ -6,4 +6,5 @@
     <executable>java</executable>
     <arguments>-Xmx2048m -jar "%BASE%\beanframework.jar"</arguments>
     <logmode>rotate</logmode>
+	<logpath>%BASE%\logs</logpath>
 </service>

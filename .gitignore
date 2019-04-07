@@ -4,6 +4,9 @@
 /var
 target/
 /bin/pom.xml
+/bin/server.bat
+/bin/server.sh
+/bin/install/logs
 /config/pom.xml
 /config/src/main/resources/application.properties
 /config/src/main/resources/application-dev.properties
