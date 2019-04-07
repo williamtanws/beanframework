@@ -3,6 +3,7 @@
 /temp
 /var
 target/
+/bin/pom.xml
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
