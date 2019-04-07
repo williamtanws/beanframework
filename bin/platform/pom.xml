@@ -22,7 +22,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<!-- The main class to start by executing "java -jar" -->
-		<start-class>com.beanframework.PlatformApplication</start-class>
+		<start-class>com.beanframework.platform.PlatformApplication</start-class>
 	</properties>
 
 	<dependencies>
