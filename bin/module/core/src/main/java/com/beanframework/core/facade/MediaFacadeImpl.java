@@ -8,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MediaDto;
-import com.beanframework.core.specification.MediaSpecification;
 import com.beanframework.media.domain.Media;
 import com.beanframework.media.service.MediaService;
 
@@ -67,7 +65,7 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Override
 	public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Media> page = mediaService.findEntityPage(dataTableRequest, MediaSpecification.getSpecification(dataTableRequest));
+		Page<Media> page = mediaService.findEntityPage(dataTableRequest);
 
 		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class);
 		return new PageImpl<MediaDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -103,10 +101,5 @@ public class MediaFacadeImpl implements MediaFacade {
 	public MediaDto createDto() throws Exception {
 
 		return modelService.getDto(mediaService.create(), MediaDto.class);
-	}
-
-	@Override
-	public MediaDto createByMultipartFile(MultipartFile file, String location) throws Exception {
-		return modelService.getDto(mediaService.createByMultipartFile(file, location), MediaDto.class);
 	}
 }

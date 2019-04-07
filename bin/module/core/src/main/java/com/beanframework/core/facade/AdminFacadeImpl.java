@@ -15,7 +15,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.AdminDto;
-import com.beanframework.core.specification.AdminSpecification;
 
 @Component
 public class AdminFacadeImpl implements AdminFacade {
@@ -28,6 +27,7 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
+
 		Admin entity = adminService.findOneEntityByUuid(uuid);
 
 		return modelService.getDto(entity, AdminDto.class);
@@ -68,7 +68,7 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Admin> page = adminService.findEntityPage(dataTableRequest, AdminSpecification.getSpecification(dataTableRequest));
+		Page<Admin> page = adminService.findEntityPage(dataTableRequest);
 
 		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class);
 		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());

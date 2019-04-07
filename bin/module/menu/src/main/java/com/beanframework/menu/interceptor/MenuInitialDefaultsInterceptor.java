@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
+import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
@@ -20,8 +20,9 @@ import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 import com.beanframework.menu.MenuConstants;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
+import com.beanframework.menu.domain.MenuTargetTypeEnum;
 
-public class MenuInitialDefaultsInterceptor implements InitialDefaultsInterceptor<Menu> {
+public class MenuInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Menu> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuInitialDefaultsInterceptor.class);
 
@@ -31,15 +32,18 @@ public class MenuInitialDefaultsInterceptor implements InitialDefaultsIntercepto
 	@Autowired
 	private ConfigurationService configurationService;
 
-	@Value(MenuConstants.DYNAMIC_FIELD_TEMPLATE)
-	private String DYNAMIC_FIELD_TEMPLATE;
+	@Value(MenuConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
+	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 
 	@Override
 	public void onInitialDefaults(Menu model, InterceptorContext context) throws InterceptorException {
+		super.onInitialDefaults(model, context);
 
 		try {
+			model.setTarget(MenuTargetTypeEnum.SELF);
+			
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();
-			configurationProperties.put(Configuration.ID, DYNAMIC_FIELD_TEMPLATE);
+			configurationProperties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 			Configuration configuration = configurationService.findOneEntityByProperties(configurationProperties);
 
 			if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
@@ -52,8 +56,7 @@ public class MenuInitialDefaultsInterceptor implements InitialDefaultsIntercepto
 
 					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						MenuField field = new MenuField();
-						field.setDynamicField(dynamicFieldSlot.getDynamicField());
-						field.setSort(dynamicFieldSlot.getSort());
+						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setMenu(model);
 						model.getFields().add(field);
 					}

@@ -7,10 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.MediaDto;
+import com.beanframework.core.data.UserDto;
 import com.beanframework.media.domain.Media;
 
 public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> implements DtoConverter<Media, MediaDto> {
@@ -36,7 +36,7 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 
 	private MediaDto convert(Media source, MediaDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setFileName(source.getFileName());
 			prototype.setFileType(source.getFileType());
@@ -47,6 +47,8 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 			prototype.setDescription(source.getDescription());
 			prototype.setUrl(source.getUrl());
 			prototype.setLocation(source.getLocation());
+
+			prototype.setUser(modelService.getDto(source.getUser(), UserDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

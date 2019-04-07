@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.cms.domain.Site;
 import com.beanframework.common.data.DataTableRequest;
@@ -20,13 +19,13 @@ public interface SiteService {
 
 	Site findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Site> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Site> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Site saveEntity(Site model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
 
-	<T> Page<Site> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
+	Page<Site> findEntityPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 

@@ -16,6 +16,7 @@ public class CustomerCsv extends AbstractCsv {
 	private Boolean enabled;
 	private String userGroupIds;
 	private String dynamicFieldSlotIds;
+	private String profilePicture;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
@@ -27,7 +28,8 @@ public class CustomerCsv extends AbstractCsv {
 				new Optional(new Trim(new ParseBool())), // credentialsNonExpired
 				new Optional(new Trim(new ParseBool())), // enabled
 				new Optional(new Trim()), // userGroupIds
-				new Optional(new Trim()) // dynamicFieldSlotIds
+				new Optional(new Trim()), // dynamicFieldSlotIds
+				new Optional(new Trim()) // profilePicture
 		};
 
 		return processors;
@@ -49,7 +51,7 @@ public class CustomerCsv extends AbstractCsv {
 		this.password = password;
 	}
 
-	public Boolean isAccountNonExpired() {
+	public Boolean getAccountNonExpired() {
 		return accountNonExpired;
 	}
 
@@ -57,7 +59,7 @@ public class CustomerCsv extends AbstractCsv {
 		this.accountNonExpired = accountNonExpired;
 	}
 
-	public Boolean isAccountNonLocked() {
+	public Boolean getAccountNonLocked() {
 		return accountNonLocked;
 	}
 
@@ -65,7 +67,7 @@ public class CustomerCsv extends AbstractCsv {
 		this.accountNonLocked = accountNonLocked;
 	}
 
-	public Boolean isCredentialsNonExpired() {
+	public Boolean getCredentialsNonExpired() {
 		return credentialsNonExpired;
 	}
 
@@ -73,7 +75,7 @@ public class CustomerCsv extends AbstractCsv {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 
-	public Boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
@@ -96,4 +98,13 @@ public class CustomerCsv extends AbstractCsv {
 	public void setDynamicFieldSlotIds(String dynamicFieldSlotIds) {
 		this.dynamicFieldSlotIds = dynamicFieldSlotIds;
 	}
+
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
 }

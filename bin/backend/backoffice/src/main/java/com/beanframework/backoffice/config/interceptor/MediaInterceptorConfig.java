@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.media.domain.Media;
 import com.beanframework.media.interceptor.MediaInitialDefaultsInterceptor;
-import com.beanframework.media.interceptor.MediaInitializeInterceptor;
 import com.beanframework.media.interceptor.MediaLoadInterceptor;
 import com.beanframework.media.interceptor.MediaPrepareInterceptor;
 import com.beanframework.media.interceptor.MediaRemoveInterceptor;
@@ -28,24 +27,6 @@ public class MediaInterceptorConfig {
 	public InterceptorMapping mediaInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(mediaInitialDefaultsInterceptor());
-		mapping.setTypeCode(Media.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public MediaInitializeInterceptor mediaInitializeInterceptor() {
-		return new MediaInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping mediaInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(mediaInitializeInterceptor());
 		mapping.setTypeCode(Media.class.getSimpleName());
 
 		return mapping;

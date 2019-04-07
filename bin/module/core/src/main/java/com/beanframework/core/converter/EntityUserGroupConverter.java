@@ -18,11 +18,15 @@ import com.beanframework.core.data.UserAuthorityDto;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.UserGroupFieldDto;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.service.UserGroupService;
 
 public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, UserGroup> {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private UserGroupService userGroupService;
 
 	@Override
 	public UserGroup convert(UserGroupDto source, EntityConverterContext context) throws ConverterException {
@@ -31,10 +35,10 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 
 			if (source.getUuid() != null) {
 
-				UserGroup prototype = modelService.findOneEntityByUuid(source.getUuid(), true, UserGroup.class);
+				UserGroup prototype = userGroupService.findOneEntityByUuid(source.getUuid());
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
@@ -58,7 +62,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 		return convertedList;
 	}
 
-	private UserGroup convertDto(UserGroupDto source, UserGroup prototype) throws ConverterException {
+	private UserGroup convertToEntity(UserGroupDto source, UserGroup prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();
@@ -78,15 +82,9 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserGroupFieldDto sourceField : source.getFields()) {
 
-						if (prototype.getFields().get(i).getDynamicField().getUuid().equals(sourceField.getDynamicField().getUuid())) {
+						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
 							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
-
-								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
-								prototype.setLastModifiedDate(lastModifiedDate);
-							}
-							if (sourceField.getSort() == prototype.getFields().get(i).getSort() == false) {
-								prototype.getFields().get(i).setSort(sourceField.getSort());
 
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
 								prototype.setLastModifiedDate(lastModifiedDate);
@@ -136,7 +134,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 						}
 
 						if (add) {
-							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), false, UserGroup.class);
+							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), UserGroup.class);
 							prototype.getUserGroups().add(entityUserGroups);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}

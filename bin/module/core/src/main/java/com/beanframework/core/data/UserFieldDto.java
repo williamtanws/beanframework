@@ -1,7 +1,5 @@
 package com.beanframework.core.data;
 
-import com.beanframework.common.data.GenericDto;
-
 public class UserFieldDto extends GenericDto {
 
 	/**
@@ -9,18 +7,26 @@ public class UserFieldDto extends GenericDto {
 	 */
 	private static final long serialVersionUID = 1300411859602574005L;
 
-	private DynamicFieldDto dynamicField;
+	private UserDto user;
+
+	private DynamicFieldSlotDto dynamicFieldSlot;
 
 	private String value;
 
-	private Integer sort;
-
-	public DynamicFieldDto getDynamicField() {
-		return dynamicField;
+	public UserDto getUser() {
+		return user;
 	}
 
-	public void setDynamicField(DynamicFieldDto dynamicField) {
-		this.dynamicField = dynamicField;
+	public void setUser(UserDto user) {
+		this.user = user;
+	}
+
+	public DynamicFieldSlotDto getDynamicFieldSlot() {
+		return dynamicFieldSlot;
+	}
+
+	public void setDynamicFieldSlot(DynamicFieldSlotDto dynamicFieldSlot) {
+		this.dynamicFieldSlot = dynamicFieldSlot;
 	}
 
 	public String getValue() {
@@ -29,14 +35,6 @@ public class UserFieldDto extends GenericDto {
 
 	public void setValue(String value) {
 		this.value = value;
-	}
-
-	public Integer getSort() {
-		return sort;
-	}
-
-	public void setSort(Integer sort) {
-		this.sort = sort;
 	}
 
 }

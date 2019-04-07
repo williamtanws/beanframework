@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.cms.domain.Site;
+import com.beanframework.cms.service.SiteService;
 import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -18,6 +19,9 @@ public class EntitySiteConverter implements EntityConverter<SiteDto, Site> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private SiteService siteService;
 
 	@Override
 	public Site convert(SiteDto source, EntityConverterContext context) throws ConverterException {
@@ -27,21 +31,21 @@ public class EntitySiteConverter implements EntityConverter<SiteDto, Site> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Site.UUID, source.getUuid());
-				Site prototype = modelService.findOneEntityByProperties(properties, true, Site.class);
+				Site prototype = siteService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Site.class));
+			return convertToEntity(source, modelService.create(Site.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private Site convertDto(SiteDto source, Site prototype) {
+	private Site convertToEntity(SiteDto source, Site prototype) {
 
 		Date lastModifiedDate = new Date();
 

@@ -28,6 +28,8 @@ public class Comment extends GenericEntity {
 	private static final long serialVersionUID = 6793982140563472301L;
 	public static final String HTML = "html";
 	public static final String VISIBLED = "visibled";
+	public static final String REPLIEDTO = "repliedTo";
+	public static final String USER = "user";
 
 	@Audited(withModifiedFlag = true)
 	@Lob
@@ -64,5 +66,4 @@ public class Comment extends GenericEntity {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
 }

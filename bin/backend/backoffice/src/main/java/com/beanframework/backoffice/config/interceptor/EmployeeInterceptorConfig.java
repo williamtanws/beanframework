@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.interceptor.EmployeeInitialDefaultsInterceptor;
-import com.beanframework.employee.interceptor.EmployeeInitializeInterceptor;
 import com.beanframework.employee.interceptor.EmployeeLoadInterceptor;
 import com.beanframework.employee.interceptor.EmployeePrepareInterceptor;
 import com.beanframework.employee.interceptor.EmployeeRemoveInterceptor;
@@ -28,24 +27,6 @@ public class EmployeeInterceptorConfig {
 	public InterceptorMapping employeeInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(employeeInitialDefaultsInterceptor());
-		mapping.setTypeCode(Employee.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public EmployeeInitializeInterceptor employeeInitializeInterceptor() {
-		return new EmployeeInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping EmployeeInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(employeeInitializeInterceptor());
 		mapping.setTypeCode(Employee.class.getSimpleName());
 
 		return mapping;

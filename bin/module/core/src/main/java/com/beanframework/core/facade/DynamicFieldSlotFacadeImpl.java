@@ -13,7 +13,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldSlotDto;
-import com.beanframework.core.specification.DynamicFieldSlotSpecification;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.service.DynamicFieldSlotService;
 
@@ -29,15 +28,17 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 	@Override
 	public DynamicFieldSlotDto findOneByUuid(UUID uuid) throws Exception {
 		DynamicFieldSlot entity = dynamicFieldService.findOneEntityByUuid(uuid);
+		DynamicFieldSlotDto dto = modelService.getDto(entity, DynamicFieldSlotDto.class);
 
-		return modelService.getDto(entity, DynamicFieldSlotDto.class);
+		return dto;
 	}
 
 	@Override
 	public DynamicFieldSlotDto findOneProperties(Map<String, Object> properties) throws Exception {
 		DynamicFieldSlot entity = dynamicFieldService.findOneEntityByProperties(properties);
+		DynamicFieldSlotDto dto = modelService.getDto(entity, DynamicFieldSlotDto.class);
 
-		return modelService.getDto(entity, DynamicFieldSlotDto.class);
+		return dto;
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 
 	@Override
 	public Page<DynamicFieldSlotDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<DynamicFieldSlot> page = dynamicFieldService.findEntityPage(dataTableRequest, DynamicFieldSlotSpecification.getSpecification(dataTableRequest));
+		Page<DynamicFieldSlot> page = dynamicFieldService.findEntityPage(dataTableRequest);
 
 		List<DynamicFieldSlotDto> dtos = modelService.getDto(page.getContent(), DynamicFieldSlotDto.class);
 		return new PageImpl<DynamicFieldSlotDto>(dtos, page.getPageable(), page.getTotalElements());

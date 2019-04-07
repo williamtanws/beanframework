@@ -5,14 +5,17 @@
 <title th:utext="#{module.console.platform.license}"></title>
 <style>
 .license {
-    height: auto;
-    max-height: 350px;
-    overflow: auto;
-    background-color: #eeeeee;
-    word-break: normal !important;
-    word-wrap: normal !important;
-    white-space: pre !important;
-}​
+	height: auto;
+	max-height: 350px;
+	overflow: auto;
+	background-color: #eeeeee;
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+​
 </style>
 </head>
 <body>
@@ -48,7 +51,7 @@
 										<pre class="license">
 MIT License
 								
-Copyright 2018 <strong>Beanframework</strong>
+Copyright 2019 <strong>Beanframework</strong>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

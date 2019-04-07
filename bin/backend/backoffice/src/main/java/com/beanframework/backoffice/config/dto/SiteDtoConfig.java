@@ -16,7 +16,7 @@ public class SiteDtoConfig {
 	}
 
 	@Bean
-	public ConverterMapping DtoSiteConverterMapping() {
+	public ConverterMapping dtoSiteConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoSiteConverter());
 		mapping.setTypeCode(SiteDto.class.getSimpleName());

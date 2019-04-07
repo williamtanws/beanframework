@@ -9,81 +9,83 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.UserGroupCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupField;
+import com.beanframework.user.service.UserGroupService;
 
 @Component
-public class EntityCsvUserGroupConverter implements EntityConverter<UserGroupCsv, UserGroup> {
+public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroupCsv, UserGroup> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvUserGroupConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private UserGroupService userGroupService;
+
 	@Override
-	public UserGroup convert(UserGroupCsv source, EntityConverterContext context) throws ConverterException {
+	public UserGroup convert(UserGroupCsv source) throws ConverterException {
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserGroup.ID, source.getId());
 
-				UserGroup prototype = modelService.findOneEntityByProperties(properties, true, UserGroup.class);
+				UserGroup prototype = userGroupService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 					return convert(source, prototype);
 				}
 			}
-			return convert(source, new UserGroup());
+			return convert(source, modelService.create(UserGroup.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	public UserGroup convert(UserGroupCsv source) throws ConverterException {
-		return convert(source, new EntityConverterContext());
-	}
-
 	private UserGroup convert(UserGroupCsv source, UserGroup prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setName(StringUtils.stripToNull(source.getName()));
+			if (StringUtils.isNotBlank(source.getId()))
+				prototype.setId(source.getId());
 
-			// Dynamic Field
+			if (StringUtils.isNotBlank(source.getName()))
+				prototype.setName(source.getName());
+
+			// Dynamic Field Slot
 			if (StringUtils.isNotBlank(source.getDynamicFieldSlotIds())) {
-				String[] dynamicFields = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
-				for (String dynamicField : dynamicFields) {
-					String dynamicFieldId = dynamicField.split(ImportListener.EQUALS)[0];
-					String value = dynamicField.split(ImportListener.EQUALS)[1];
+				String[] dynamicFieldSlots = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
+				for (String dynamicFieldSlot : dynamicFieldSlots) {
+					String dynamicFieldSlotId = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[0]);
+					String value = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[1]);
 
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
-						if (StringUtils.equals(prototype.getFields().get(i).getId(), prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId)) {
+						if (StringUtils.equals(prototype.getFields().get(i).getDynamicFieldSlot().getId(), dynamicFieldSlotId)) {
 							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
 					}
 
 					if (add) {
-						Map<String, Object> dynamicFieldProperties = new HashMap<String, Object>();
-						dynamicFieldProperties.put(DynamicField.ID, dynamicFieldId);
-						DynamicField entityDynamicField = modelService.findOneEntityByProperties(dynamicFieldProperties, true, DynamicField.class);
+						Map<String, Object> dynamicFieldSlotProperties = new HashMap<String, Object>();
+						dynamicFieldSlotProperties.put(DynamicField.ID, dynamicFieldSlotId);
+						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneEntityByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
 
-						if (entityDynamicField != null) {
+						if (entityDynamicFieldSlot != null) {
 							UserGroupField field = new UserGroupField();
-							field.setId(prototype.getId() + ImportListener.UNDERSCORE + dynamicFieldId);
-							field.setValue(StringUtils.stripToNull(value));
-							field.setDynamicField(entityDynamicField);
+							field.setValue(value);
+							field.setDynamicFieldSlot(entityDynamicFieldSlot);
 							field.setUserGroup(prototype);
 							prototype.getFields().add(field);
 						}
@@ -104,7 +106,7 @@ public class EntityCsvUserGroupConverter implements EntityConverter<UserGroupCsv
 					if (add) {
 						Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 						userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-						UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, true, UserGroup.class);
+						UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 
 						if (userGroup == null) {
 							LOGGER.error("UserGroup ID not exists: " + userGroupIds[i]);

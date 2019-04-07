@@ -13,11 +13,15 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.service.CronjobService;
 
 public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronjob> {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Autowired
+	private CronjobService cronjobService;
 
 	@Override
 	public Cronjob convert(CronjobDto source, EntityConverterContext context) throws ConverterException {
@@ -29,14 +33,14 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Cronjob.UUID, source.getUuid());
 
-				Cronjob prototype = modelService.findOneEntityByProperties(properties, true, Cronjob.class);
+				Cronjob prototype = cronjobService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Cronjob.class));
+			return convertToEntity(source, modelService.create(Cronjob.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -44,7 +48,7 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 
 	}
 
-	private Cronjob convertDto(CronjobDto source, Cronjob prototype) {
+	private Cronjob convertToEntity(CronjobDto source, Cronjob prototype) {
 
 		Date lastModifiedDate = new Date();
 

@@ -30,10 +30,10 @@ import com.beanframework.backoffice.data.TreeJson;
 import com.beanframework.backoffice.data.TreeJsonState;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.core.facade.MenuFacade;
@@ -118,8 +118,8 @@ public class MenuResource {
 		Locale locale = LocaleContextHolder.getLocale();
 
 		for (MenuFieldDto menuField : menu.getFields()) {
-			if (menuField.getDynamicField().getLanguage() != null) {
-				if (menuField.getDynamicField().getLanguage().getId().equals(locale.toString())) {
+			if (menuField.getDynamicFieldSlot().getDynamicField().getLanguage() != null) {
+				if (menuField.getDynamicFieldSlot().getDynamicField().getLanguage().getId().equals(locale.toString())) {
 
 					String name = menuField.getValue();
 
@@ -147,8 +147,9 @@ public class MenuResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
-
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
+		
 		Page<MenuDto> pagination = menuFacade.findPage(dataTableRequest);
 
 		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();
@@ -173,7 +174,8 @@ public class MenuResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = menuFacade.findHistory(dataTableRequest);

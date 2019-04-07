@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -56,8 +57,13 @@ public class CustomerImportListener extends ImportListener {
 
 	@Override
 	public void update() throws Exception {
+		update(IMPORT_UPDATE);
+	}
+
+	@Override
+	public void update(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = loader.getResources(IMPORT_UPDATE);
+		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
 			InputStream in = resource.getInputStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -71,8 +77,13 @@ public class CustomerImportListener extends ImportListener {
 
 	@Override
 	public void remove() throws Exception {
+		remove(IMPORT_REMOVE);
+	}
+
+	@Override
+	public void remove(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = loader.getResources(IMPORT_REMOVE);
+		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
 			InputStream in = resource.getInputStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -124,7 +135,10 @@ public class CustomerImportListener extends ImportListener {
 		for (CustomerCsv csv : customerCsvList) {
 
 			Customer model = converter.convert(csv);
-			customerService.saveEntity(model);
+			model = customerService.saveEntity(model);
+
+			ClassPathResource resource = new ClassPathResource(csv.getProfilePicture());
+			customerService.saveProfilePicture(model, resource.getInputStream());
 		}
 	}
 

@@ -13,11 +13,15 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.email.domain.Email;
+import com.beanframework.email.service.EmailService;
 
 public class EntityEmailConverter implements EntityConverter<EmailDto, Email> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private EmailService emailService;
 
 	@Override
 	public Email convert(EmailDto source, EntityConverterContext context) throws ConverterException {
@@ -26,14 +30,14 @@ public class EntityEmailConverter implements EntityConverter<EmailDto, Email> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Email.UUID, source.getUuid());
-				Email prototype = modelService.findOneEntityByProperties(properties, true, Email.class);
+				Email prototype = emailService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
-					return convertDto(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertDto(source, modelService.create(Email.class));
+			return convertToEntity(source, modelService.create(Email.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -41,7 +45,7 @@ public class EntityEmailConverter implements EntityConverter<EmailDto, Email> {
 
 	}
 
-	private Email convertDto(EmailDto source, Email prototype) {
+	private Email convertToEntity(EmailDto source, Email prototype) {
 
 		Date lastModifiedDate = new Date();
 

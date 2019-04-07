@@ -9,68 +9,79 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.ImportListener;
-import com.beanframework.dynamicfield.DynamicFieldType;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.service.DynamicFieldService;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.language.domain.Language;
 
 @Component
-public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFieldCsv, DynamicField> {
+public class EntityCsvDynamicFieldConverter implements EntityCsvConverter<DynamicFieldCsv, DynamicField> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvDynamicFieldConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private DynamicFieldService dynamicFieldService;
+
 	@Override
-	public DynamicField convert(DynamicFieldCsv source, EntityConverterContext context) throws ConverterException {
+	public DynamicField convert(DynamicFieldCsv source) throws ConverterException {
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicField.ID, source.getId());
 
-				DynamicField prototype = modelService.findOneEntityByProperties(properties, true, DynamicField.class);
+				DynamicField prototype = dynamicFieldService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new DynamicField());
+			return convertToEntity(source, modelService.create(DynamicField.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	public DynamicField convert(DynamicFieldCsv source) throws ConverterException {
-		return convert(source, new EntityConverterContext());
-	}
-
-	private DynamicField convert(DynamicFieldCsv source, DynamicField prototype) throws ConverterException {
+	private DynamicField convertToEntity(DynamicFieldCsv source, DynamicField prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setName(StringUtils.stripToNull(source.getName()));
-			prototype.setType(DynamicFieldType.valueOf(source.getType()));
-			prototype.setRequired(source.isRequired());
-			prototype.setRule(StringUtils.stripToNull(StringUtils.stripToNull(source.getRule())));
-			prototype.setLabel(StringUtils.stripToNull(source.getLabel()));
-			prototype.setGrid(StringUtils.stripToNull(source.getGrid()));
+			if (StringUtils.isNotBlank(source.getId()))
+				prototype.setId(source.getId());
+
+			if (StringUtils.isNotBlank(source.getName()))
+				prototype.setName(source.getName());
+
+			if (source.getType() != null)
+				prototype.setType(source.getType());
+
+			if (source.getRequired() != null)
+				prototype.setRequired(source.getRequired());
+
+			if (StringUtils.isNotBlank(source.getRule()))
+				prototype.setRule(source.getRule());
+
+			if (StringUtils.isNotBlank(source.getLabel()))
+				prototype.setLabel(source.getLabel());
+
+			if (StringUtils.isNotBlank(source.getGrid()))
+				prototype.setGrid(source.getGrid());
 
 			// Language
 			if (StringUtils.isNotBlank(source.getLanguage())) {
 				Map<String, Object> languageProperties = new HashMap<String, Object>();
 				languageProperties.put(Language.ID, source.getLanguage());
-				Language entityLanguage = modelService.findOneEntityByProperties(languageProperties, true, Language.class);
+				Language entityLanguage = modelService.findOneEntityByProperties(languageProperties, Language.class);
 
 				if (entityLanguage == null) {
 					LOGGER.error("Enum ID not exists: " + source.getLanguage());
@@ -94,7 +105,7 @@ public class EntityCsvDynamicFieldConverter implements EntityConverter<DynamicFi
 					if (add) {
 						Map<String, Object> enumProperties = new HashMap<String, Object>();
 						enumProperties.put(Enumeration.ID, values[i]);
-						Enumeration entityEnum = modelService.findOneEntityByProperties(enumProperties, true, Enumeration.class);
+						Enumeration entityEnum = modelService.findOneEntityByProperties(enumProperties, Enumeration.class);
 
 						if (entityEnum == null) {
 							LOGGER.error("Enum ID not exists: " + values[i]);

@@ -32,7 +32,7 @@ public class LanguageCsv extends AbstractCsv {
 		this.name = name;
 	}
 
-	public Boolean isActive() {
+	public Boolean getActive() {
 		return active;
 	}
 
@@ -47,4 +47,5 @@ public class LanguageCsv extends AbstractCsv {
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
+
 }

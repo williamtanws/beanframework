@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.interceptor.AdminInitialDefaultsInterceptor;
-import com.beanframework.admin.interceptor.AdminInitializeInterceptor;
 import com.beanframework.admin.interceptor.AdminLoadInterceptor;
 import com.beanframework.admin.interceptor.AdminPrepareInterceptor;
 import com.beanframework.admin.interceptor.AdminRemoveInterceptor;
@@ -28,24 +27,6 @@ public class AdminInterceptorConfig {
 	public InterceptorMapping adminInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(adminInitialDefaultsInterceptor());
-		mapping.setTypeCode(Admin.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public AdminInitializeInterceptor adminInitializeInterceptor() {
-		return new AdminInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping adminInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(adminInitializeInterceptor());
 		mapping.setTypeCode(Admin.class.getSimpleName());
 
 		return mapping;

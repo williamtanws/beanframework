@@ -1,14 +1,24 @@
 package com.beanframework.dynamicfield.interceptor;
 
+import org.hibernate.Hibernate;
+
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.LoadInterceptor;
+import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 import com.beanframework.dynamicfield.domain.DynamicField;
 
-public class DynamicFieldLoadInterceptor implements LoadInterceptor<DynamicField> {
+public class DynamicFieldLoadInterceptor extends AbstractLoadInterceptor<DynamicField> {
 
 	@Override
 	public void onLoad(DynamicField model, InterceptorContext context) throws InterceptorException {
+
+		if (context.isFetchable(DynamicField.class, DynamicField.LANGUAGE))
+			Hibernate.initialize(model.getLanguage());
+
+		if (context.isFetchable(DynamicField.class, DynamicField.ENUMERATIONS))
+			Hibernate.initialize(model.getEnumerations());
+
+		super.onLoad(model, context);
 	}
 
 }

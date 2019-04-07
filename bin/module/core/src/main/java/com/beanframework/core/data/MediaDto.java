@@ -1,7 +1,5 @@
 package com.beanframework.core.data;
 
-import com.beanframework.common.data.GenericDto;
-
 public class MediaDto extends GenericDto {
 
 	/**
@@ -29,6 +27,7 @@ public class MediaDto extends GenericDto {
 	private String altText;
 	private String description;
 	private String location;
+	private UserDto user;
 
 	public String getFileName() {
 		return fileName;
@@ -101,4 +100,13 @@ public class MediaDto extends GenericDto {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+
+	public UserDto getUser() {
+		return user;
+	}
+
+	public void setUser(UserDto user) {
+		this.user = user;
+	}
+
 }

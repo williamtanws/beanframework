@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -17,7 +16,7 @@ import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.user.domain.UserAuthority;
 
-public class DtoUserAuthorityConverter extends AbstractDtoConverter<UserAuthority, UserAuthorityDto>  implements DtoConverter<UserAuthority, UserAuthorityDto> {
+public class DtoUserAuthorityConverter extends AbstractDtoConverter<UserAuthority, UserAuthorityDto> implements DtoConverter<UserAuthority, UserAuthorityDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoUserAuthorityConverter.class);
 
@@ -40,11 +39,15 @@ public class DtoUserAuthorityConverter extends AbstractDtoConverter<UserAuthorit
 	private UserAuthorityDto convert(UserAuthority source, UserAuthorityDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setEnabled(source.getEnabled());
-			prototype.setUserPermission(modelService.getDto(source.getUserPermission(), UserPermissionDto.class));
-			prototype.setUserRight(modelService.getDto(source.getUserRight(), UserRightDto.class));
+
+			if (context.isFetchable(UserAuthority.class, UserAuthority.USER_PERMISSION))
+				prototype.setUserPermission(modelService.getDto(source.getUserPermission(), UserPermissionDto.class));
+
+			if (context.isFetchable(UserAuthority.class, UserAuthority.USER_RIGHT))
+				prototype.setUserRight(modelService.getDto(source.getUserRight(), UserRightDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

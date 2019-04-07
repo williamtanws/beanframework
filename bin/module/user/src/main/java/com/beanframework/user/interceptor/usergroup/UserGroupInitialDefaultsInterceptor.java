@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
+import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
@@ -21,7 +21,7 @@ import com.beanframework.user.UserGroupConstants;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupField;
 
-public class UserGroupInitialDefaultsInterceptor implements InitialDefaultsInterceptor<UserGroup> {
+public class UserGroupInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<UserGroup> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserGroupInitialDefaultsInterceptor.class);
 
@@ -31,15 +31,16 @@ public class UserGroupInitialDefaultsInterceptor implements InitialDefaultsInter
 	@Autowired
 	private ConfigurationService configurationService;
 
-	@Value(UserGroupConstants.DYNAMIC_FIELD_TEMPLATE)
-	private String DYNAMIC_FIELD_TEMPLATE;
+	@Value(UserGroupConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
+	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 
 	@Override
 	public void onInitialDefaults(UserGroup model, InterceptorContext context) throws InterceptorException {
+		super.onInitialDefaults(model, context);
 
 		try {
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();
-			configurationProperties.put(Configuration.ID, DYNAMIC_FIELD_TEMPLATE);
+			configurationProperties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 			Configuration configuration = configurationService.findOneEntityByProperties(configurationProperties);
 
 			if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
@@ -52,8 +53,7 @@ public class UserGroupInitialDefaultsInterceptor implements InitialDefaultsInter
 
 					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						UserGroupField field = new UserGroupField();
-						field.setDynamicField(dynamicFieldSlot.getDynamicField());
-						field.setSort(dynamicFieldSlot.getSort());
+						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUserGroup(model);
 						model.getFields().add(field);
 					}

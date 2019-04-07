@@ -1,26 +1,47 @@
 package com.beanframework.customer.service;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
+import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
+import org.imgscalr.Scalr.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.customer.CustomerConstants;
 import com.beanframework.customer.domain.Customer;
+import com.beanframework.customer.specification.CustomerSpecification;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
+import com.beanframework.media.MediaConstants;
+import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserField;
+import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.service.AuditorService;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -28,51 +49,84 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private AuditorService auditorService;
+
+	@Autowired
+	private FetchContext fetchContext;
+
+	@Value(MediaConstants.MEDIA_LOCATION)
+	public String MEDIA_LOCATION;
+
+	@Value(CustomerConstants.CUSTOMER_MEDIA_LOCATION)
+	public String PROFILE_PICTURE_LOCATION;
+
+	@Value(CustomerConstants.CUSTOMER_PROFILE_PICTURE_THUMBNAIL_WIDTH)
+	public int CUSTOMER_PROFILE_PICTURE_THUMBNAIL_WIDTH;
+
+	@Value(CustomerConstants.CUSTOMER_PROFILE_PICTURE_THUMBNAIL_HEIGHT)
+	public int CUSTOMER_PROFILE_PICTURE_THUMBNAIL_HEIGHT;
+
 	@Override
 	public Customer create() throws Exception {
 		return modelService.create(Customer.class);
 	}
 
-	@Cacheable(value = "CustomerOne", key = "#uuid")
 	@Override
 	public Customer findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Customer.class);
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+
+		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+		
+		return modelService.findOneEntityByUuid(uuid, Customer.class);
 	}
 
-	@Cacheable(value = "CustomerOneProperties", key = "#properties")
 	@Override
 	public Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Customer.class);
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+
+		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+		
+		return modelService.findOneEntityByProperties(properties, Customer.class);
 	}
 
-	@Cacheable(value = "CustomersSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<Customer> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Customer.class);
+	public List<Customer> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Customer.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "CustomerOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "CustomerOneProperties", allEntries = true), //
-			@CacheEvict(value = "CustomersSorts", allEntries = true), //
-			@CacheEvict(value = "CustomersPage", allEntries = true), //
-			@CacheEvict(value = "CustomersHistory", allEntries = true) }) //
 	@Override
 	public Customer saveEntity(Customer model) throws BusinessException {
-		return (Customer) modelService.saveEntity(model, Customer.class);
+		model = (Customer) modelService.saveEntity(model, Customer.class);
+		auditorService.saveEntity(model);
+		return model;
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "CustomerOne", key = "#uuid"), //
-			@CacheEvict(value = "CustomerOneProperties", allEntries = true), //
-			@CacheEvict(value = "CustomersSorts", allEntries = true), //
-			@CacheEvict(value = "CustomersPage", allEntries = true), //
-			@CacheEvict(value = "CustomersHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Customer model = modelService.findOneEntityByUuid(uuid, true, Customer.class);
+			Customer model = modelService.findOneEntityByUuid(uuid, Customer.class);
 			modelService.deleteByEntity(model, Customer.class);
 
 		} catch (Exception e) {
@@ -80,19 +134,52 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 	}
 
-	@Cacheable(value = "CustomersPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
-	public <T> Page<Customer> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Customer.class);
+	public Page<Customer> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties();
+		return modelService.findEntityPage(CustomerSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Customer.class);
 	}
 
-	@Cacheable(value = "CustomersPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Customer.class);
 	}
 
-	@Cacheable(value = "CustomersHistory", key = "'dataTableRequest:'+#dataTableRequest")
+	@Override
+	public void saveProfilePicture(Customer model, MultipartFile picture) throws IOException {
+		if (picture != null && picture.isEmpty() == false) {
+
+			File profilePictureFolder = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid());
+			FileUtils.forceMkdir(profilePictureFolder);
+
+			File original = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid() + File.separator + "original.png");
+			original = new File(original.getAbsolutePath());
+			picture.transferTo(original);
+
+			File thumbnail = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid() + File.separator + "thumbnail.png");
+			BufferedImage img = ImageIO.read(original);
+			BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, CUSTOMER_PROFILE_PICTURE_THUMBNAIL_WIDTH, CUSTOMER_PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
+			ImageIO.write(thumbImg, "png", thumbnail);
+		}
+	}
+
+	@Override
+	public void saveProfilePicture(Customer customer, InputStream inputStream) throws IOException {
+
+		File profilePictureFolder = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + customer.getUuid());
+		FileUtils.forceMkdir(profilePictureFolder);
+
+		File original = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + customer.getUuid() + File.separator + "original.png");
+		original = new File(original.getAbsolutePath());
+		FileUtils.copyInputStreamToFile(inputStream, original);
+
+		File thumbnail = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + customer.getUuid() + File.separator + "thumbnail.png");
+		BufferedImage img = ImageIO.read(original);
+		BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, CUSTOMER_PROFILE_PICTURE_THUMBNAIL_WIDTH, CUSTOMER_PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
+		ImageIO.write(thumbImg, "png", thumbnail);
+
+	}
+
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -104,11 +191,10 @@ public class CustomerServiceImpl implements CustomerService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Customer.class);
+		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Customer.class);
 
 	}
 
-	@Cacheable(value = "CustomersHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -117,5 +203,32 @@ public class CustomerServiceImpl implements CustomerService {
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Customer.class);
+	}
+
+	@Override
+	public Customer getCurrentUser() throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (auth != null) {
+
+			Customer principal = (Customer) auth.getPrincipal();
+			return findOneEntityByUuid(principal.getUuid());
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public Customer updatePrincipal(Customer model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Customer principal = (Customer) auth.getPrincipal();
+		principal.setId(model.getId());
+		principal.setName(model.getName());
+		principal.setPassword(model.getPassword());
+
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), auth.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(token);
+
+		return principal;
 	}
 }

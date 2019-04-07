@@ -1,0 +1,9 @@
+<service>
+    <id>BeanframeworkApp</id>
+    <name>BeanframeworkApp</name>
+    <description>This runs Spring Boot as a Service.</description>
+    <env name="BEANFRAMEWORK_HOME" value="%BASE%"/>
+    <executable>java</executable>
+    <arguments>-Xmx2048m -jar "%BASE%\beanframework.jar"</arguments>
+    <logmode>rotate</logmode>
+</service>

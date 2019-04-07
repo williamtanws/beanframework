@@ -11,11 +11,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.specification.AuditorSpecification;
+import com.beanframework.core.data.AuditorDto;
 import com.beanframework.user.service.AuditorService;
 
 @Component
@@ -43,7 +42,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 
 	@Override
 	public Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Auditor> page = auditorService.findEntityPage(dataTableRequest, AuditorSpecification.getSpecification(dataTableRequest));
+		Page<Auditor> page = auditorService.findEntityPage(dataTableRequest);
 
 		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class);
 		return new PageImpl<AuditorDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -59,7 +58,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Auditor.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(auditorService.findEntityBySorts(sorts, false), AuditorDto.class);
+		return modelService.getDto(auditorService.findEntityBySorts(sorts), AuditorDto.class);
 	}
 
 	@Override

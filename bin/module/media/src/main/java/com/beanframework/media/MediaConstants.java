@@ -13,5 +13,5 @@ public class MediaConstants {
 	}
 	
 	public static final String MEDIA_LOCATION = "${module.media.location}";
-	public static final String MEDIA_URL = "${module.media.url}";
+	public static final String MEDIA_URL = "${path.media.url}";
 }

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
+import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
@@ -21,7 +21,7 @@ import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserField;
 
-public class EmployeeInitialDefaultsInterceptor implements InitialDefaultsInterceptor<Employee> {
+public class EmployeeInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Employee> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EmployeeInitialDefaultsInterceptor.class);
 
@@ -31,11 +31,12 @@ public class EmployeeInitialDefaultsInterceptor implements InitialDefaultsInterc
 	@Autowired
 	private ConfigurationService configurationService;
 
-	@Value(EmployeeConstants.DYNAMIC_FIELD_TEMPLATE)
-	private String DYNAMIC_FIELD_TEMPLATE;
+	@Value(EmployeeConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
+	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 
 	@Override
 	public void onInitialDefaults(Employee model, InterceptorContext context) throws InterceptorException {
+		super.onInitialDefaults(model, context);
 		model.setEnabled(true);
 		model.setAccountNonExpired(true);
 		model.setAccountNonLocked(true);
@@ -43,7 +44,7 @@ public class EmployeeInitialDefaultsInterceptor implements InitialDefaultsInterc
 
 		try {
 			Map<String, Object> configurationProperties = new HashMap<String, Object>();
-			configurationProperties.put(Configuration.ID, DYNAMIC_FIELD_TEMPLATE);
+			configurationProperties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 			Configuration configuration = configurationService.findOneEntityByProperties(configurationProperties);
 
 			if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
@@ -56,8 +57,7 @@ public class EmployeeInitialDefaultsInterceptor implements InitialDefaultsInterc
 
 					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						UserField field = new UserField();
-						field.setDynamicField(dynamicFieldSlot.getDynamicField());
-						field.setSort(dynamicFieldSlot.getSort());
+						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUser(model);
 						model.getFields().add(field);
 					}

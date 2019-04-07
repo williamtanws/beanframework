@@ -9,59 +9,70 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.admin.service.AdminService;
+import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.AdminCsv;
 
 @Component
-public class EntityCsvAdminConverter implements EntityConverter<AdminCsv, Admin> {
+public class EntityCsvAdminConverter implements EntityCsvConverter<AdminCsv, Admin> {
 
 	@Autowired
 	private ModelService modelService;
-	
+
+	@Autowired
+	private AdminService adminService;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public Admin convert(AdminCsv source, EntityConverterContext context) throws ConverterException {
+	public Admin convert(AdminCsv source) throws ConverterException {
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Admin.ID, source.getId());
 
-				Admin prototype = modelService.findOneEntityByProperties(properties, true, Admin.class);
+				Admin prototype = adminService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new Admin());
+			return convertToEntity(source, modelService.create(Admin.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	public Admin convert(AdminCsv source) throws ConverterException {
-		return convert(source, new EntityConverterContext());
-	}
-
-	private Admin convert(AdminCsv source, Admin prototype) throws ConverterException {
+	private Admin convertToEntity(AdminCsv source, Admin prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setAccountNonExpired(source.isAccountNonExpired());
-			prototype.setAccountNonLocked(source.isAccountNonLocked());
-			prototype.setCredentialsNonExpired(source.isCredentialsNonExpired());
-			prototype.setEnabled(source.isEnabled());
+			if (StringUtils.isNotBlank(source.getId()))
+				prototype.setId(source.getId());
+
+			if (StringUtils.isNotBlank(source.getName()))
+				prototype.setName(source.getName());
+
+			if (source.getAccountNonExpired() != null)
+				prototype.setAccountNonExpired(source.getAccountNonExpired());
+
+			if (source.getAccountNonLocked() != null)
+				prototype.setAccountNonLocked(source.getAccountNonLocked());
+
+			if (source.getCredentialsNonExpired() != null)
+				prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+
+			if (source.getEnabled() != null)
+				prototype.setEnabled(source.getEnabled());
+
 			if (StringUtils.isNotBlank(source.getPassword()))
 				prototype.setPassword(passwordEncoder.encode(source.getPassword()));
-			prototype.setName(source.getName());
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.UserDto;
@@ -37,7 +36,7 @@ public class DtoUserConverter extends AbstractDtoConverter<User, UserDto> implem
 	private UserDto convert(User source, UserDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setPassword(source.getPassword());
 			prototype.setAccountNonExpired(source.getAccountNonExpired());
@@ -45,20 +44,25 @@ public class DtoUserConverter extends AbstractDtoConverter<User, UserDto> implem
 			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
-			prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
-				@Override
-				public int compare(UserFieldDto o1, UserFieldDto o2) {
-					if (o1.getSort() == null)
-						return o2.getSort() == null ? 0 : 1;
 
-					if (o2.getSort() == null)
-						return -1;
+			if (context.isFetchable(User.class, User.USER_GROUPS))
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
-					return o1.getSort() - o2.getSort();
-				}
-			});
+			if (context.isFetchable(User.class, User.FIELDS)) {
+				prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
+				Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
+					@Override
+					public int compare(UserFieldDto o1, UserFieldDto o2) {
+						if (o1.getDynamicFieldSlot().getSort() == null)
+							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+
+						if (o2.getDynamicFieldSlot().getSort() == null)
+							return -1;
+
+						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+					}
+				});
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

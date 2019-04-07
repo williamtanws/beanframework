@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,12 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -47,15 +45,22 @@ import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
+import com.beanframework.employee.specification.EmployeeSpecification;
+import com.beanframework.media.MediaConstants;
 import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 
@@ -70,14 +75,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private AuditorService auditorService;
 
-	@Value(EmployeeConstants.PROFILE_PICTURE_LOCATION)
+	@Value(MediaConstants.MEDIA_LOCATION)
+	public String MEDIA_LOCATION;
+
+	@Value(EmployeeConstants.EMPLOYEE_MEDIA_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
 
-	@Value("${module.employee.profile.picture.thumbnail.height:100}")
-	public int PROFILE_PICTURE_THUMBNAIL_HEIGHT;
+	@Value(EmployeeConstants.EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH)
+	public int EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH;
 
-	@Value("${module.employee.profile.picture.thumbnail.weight:100}")
-	public int PROFILE_PICTURE_THUMBNAIL_WEIGHT;
+	@Value(EmployeeConstants.EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT)
+	public int EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT;
 
 	@Autowired
 	private SessionRegistry sessionRegistry;
@@ -85,35 +93,60 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private FetchContext fetchContext;
+
+	@Autowired
+	private EntityManager entityManager;
+
 	@Override
 	public Employee create() throws Exception {
 		return modelService.create(Employee.class);
 	}
 
-	@Cacheable(value = "EmployeeOne", key = "#uuid")
 	@Override
 	public Employee findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Employee.class);
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+
+		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+
+		return modelService.findOneEntityByUuid(uuid, Employee.class);
 	}
 
-	@Cacheable(value = "EmployeeOneProperties", key = "#properties")
 	@Override
 	public Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Employee.class);
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
+		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
+
+		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
+		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+
+		return modelService.findOneEntityByProperties(properties, Employee.class);
 	}
 
-	@Cacheable(value = "EmployeesSorts", key = "'sorts:'+#sorts+',initialize:'+#initialize")
 	@Override
-	public List<Employee> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, initialize, Employee.class);
+	public List<Employee> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
+		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Employee.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "EmployeeOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "EmployeeOneProperties", allEntries = true), //
-			@CacheEvict(value = "EmployeesSorts", allEntries = true), //
-			@CacheEvict(value = "EmployeesPage", allEntries = true), //
-			@CacheEvict(value = "EmployeesHistory", allEntries = true) }) //
 	@Override
 	public Employee saveEntity(Employee model) throws BusinessException {
 		model = (Employee) modelService.saveEntity(model, Employee.class);
@@ -121,17 +154,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return model;
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "EmployeeOne", key = "#uuid"), //
-			@CacheEvict(value = "EmployeeOneProperties", allEntries = true), //
-			@CacheEvict(value = "EmployeesSorts", allEntries = true), //
-			@CacheEvict(value = "EmployeesPage", allEntries = true), //
-			@CacheEvict(value = "EmployeesHistory", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Employee model = modelService.findOneEntityByUuid(uuid, true, Employee.class);
+			Employee model = modelService.findOneEntityByUuid(uuid, Employee.class);
 			modelService.deleteByEntity(model, Employee.class);
 
 		} catch (Exception e) {
@@ -139,32 +166,31 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
-	@Cacheable(value = "EmployeesPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
-	public <T> Page<Employee> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Employee.class);
+	public Page<Employee> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties();
+		return modelService.findEntityPage(EmployeeSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Employee.class);
 	}
 
-	@Cacheable(value = "EmployeesPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Employee.class);
 	}
 
 	@Override
-	public void saveProfilePicture(Employee employee, MultipartFile picture) throws IOException {
+	public void saveProfilePicture(Employee model, MultipartFile picture) throws IOException {
 		if (picture != null && picture.isEmpty() == false) {
 
-			File profilePictureFolder = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid());
+			File profilePictureFolder = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid());
 			FileUtils.forceMkdir(profilePictureFolder);
 
-			File original = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
+			File original = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid() + File.separator + "original.png");
 			original = new File(original.getAbsolutePath());
 			picture.transferTo(original);
 
-			File thumbnail = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "thumbnail.png");
+			File thumbnail = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid() + File.separator + "thumbnail.png");
 			BufferedImage img = ImageIO.read(original);
-			BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, PROFILE_PICTURE_THUMBNAIL_WEIGHT, PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
+			BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
 			ImageIO.write(thumbImg, "png", thumbnail);
 		}
 	}
@@ -172,16 +198,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public void saveProfilePicture(Employee employee, InputStream inputStream) throws IOException {
 
-		File profilePictureFolder = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid());
+		File profilePictureFolder = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid());
 		FileUtils.forceMkdir(profilePictureFolder);
 
-		File original = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
+		File original = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
 		original = new File(original.getAbsolutePath());
 		FileUtils.copyInputStreamToFile(inputStream, original);
 
-		File thumbnail = new File(PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "thumbnail.png");
+		File thumbnail = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "thumbnail.png");
 		BufferedImage img = ImageIO.read(original);
-		BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, PROFILE_PICTURE_THUMBNAIL_WEIGHT, PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
+		BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
 		ImageIO.write(thumbImg, "png", thumbnail);
 
 	}
@@ -198,6 +224,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public Employee findAuthenticate(String id, String password) throws Exception {
 
@@ -207,11 +234,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
-		Employee entity = modelService.findOneEntityByProperties(properties, true, Employee.class);
+
+		Employee entity = findOneEntityByProperties(properties);
 
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
 		} else {
+
 			if (passwordEncoder.matches(password, entity.getPassword()) == false) {
 				throw new BadCredentialsException("Bad Credentials");
 			}
@@ -237,30 +266,30 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Employee getCurrentUser() {
+	public Employee getCurrentUser() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (auth != null) {
 
-			Employee employee = (Employee) auth.getPrincipal();
-			return employee;
+			Employee principal = (Employee) auth.getPrincipal();
+			return findOneEntityByUuid(principal.getUuid());
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public Employee updatePrincipal(Employee employee) {
+	public Employee updatePrincipal(Employee model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Employee employeePrincipal = (Employee) auth.getPrincipal();
-		employeePrincipal.setId(employee.getId());
-		employeePrincipal.setName(employee.getName());
-		employeePrincipal.setPassword(employee.getPassword());
+		Employee principal = (Employee) auth.getPrincipal();
+		principal.setId(model.getId());
+		principal.setName(model.getName());
+		principal.setPassword(model.getPassword());
 
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(employeePrincipal, employeePrincipal.getPassword(), auth.getAuthorities());
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), auth.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(token);
 
-		return employeePrincipal;
+		return principal;
 	}
 
 	@Override
@@ -338,7 +367,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
-	@Cacheable(value = "EmployeesHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -350,11 +378,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
+		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
 
 	}
 
-	@Cacheable(value = "EmployeesHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -363,5 +390,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
+	}
+
+	@Override
+	public int countByUserGroups(List<UUID> userGroupsUuid) {
+		Query query = entityManager.createQuery("SELECT COUNT(DISTINCT o) FROM Employee o LEFT JOIN o.userGroups u WHERE (u.uuid IN (?1))");
+		query.setParameter(1, userGroupsUuid);
+
+		Long count = (Long) query.getSingleResult();
+		return count.intValue();
 	}
 }

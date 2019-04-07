@@ -6,11 +6,11 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.cronjob.domain.CronjobData;
 
 public interface CronjobService {
 
@@ -20,7 +20,7 @@ public interface CronjobService {
 
 	Cronjob findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Cronjob> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Cronjob> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Cronjob saveEntity(Cronjob model) throws BusinessException;
 
@@ -28,12 +28,14 @@ public interface CronjobService {
 
 	List<Cronjob> findEntityStartupJobIsFalseWithQueueJob();
 
-	<T> Page<Cronjob> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
+	Page<Cronjob> findEntityPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	CronjobData findOneEntityCronjobDataByProperties(Map<String, Object> properties) throws Exception;
 
 }

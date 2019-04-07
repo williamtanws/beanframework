@@ -3,8 +3,6 @@ package com.beanframework.core.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.beanframework.common.data.GenericDto;
-
 public class UserGroupDto extends GenericDto {
 	/**
 	 * 
@@ -16,6 +14,8 @@ public class UserGroupDto extends GenericDto {
 	public static final String FIELDS = "fields";
 
 	private String name;
+
+	private List<UserDto> users = new ArrayList<UserDto>();
 
 	private List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
 
@@ -33,6 +33,14 @@ public class UserGroupDto extends GenericDto {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<UserDto> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserDto> users) {
+		this.users = users;
 	}
 
 	public List<UserGroupDto> getUserGroups() {

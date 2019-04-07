@@ -103,8 +103,15 @@ public interface ConsoleImportListenerConstants {
 	public interface CustomerImport {
 		public static final String KEY = "customer";
 		public static final String NAME = "Customer";
-		public static final int SORT = 140;
+		public static final int SORT = 131;
 		public static final String DESCRIPTION = "Update/Remove Customer Data";
+	}
+
+	public interface VendorImport {
+		public static final String KEY = "vendor";
+		public static final String NAME = "Vendor";
+		public static final int SORT = 132;
+		public static final String DESCRIPTION = "Update/Remove Vendor Data";
 	}
 
 	public interface SiteImport {

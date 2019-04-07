@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.enumuration.interceptor.EnumerationInitialDefaultsInterceptor;
-import com.beanframework.enumuration.interceptor.EnumerationInitializeInterceptor;
 import com.beanframework.enumuration.interceptor.EnumerationLoadInterceptor;
 import com.beanframework.enumuration.interceptor.EnumerationPrepareInterceptor;
 import com.beanframework.enumuration.interceptor.EnumerationRemoveInterceptor;
@@ -28,24 +27,6 @@ public class EnumerationInterceptorConfig {
 	public InterceptorMapping enumerationInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(enumerationInitialDefaultsInterceptor());
-		mapping.setTypeCode(Enumeration.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public EnumerationInitializeInterceptor enumerationInitializeInterceptor() {
-		return new EnumerationInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping enumerationInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(enumerationInitializeInterceptor());
 		mapping.setTypeCode(Enumeration.class.getSimpleName());
 
 		return mapping;

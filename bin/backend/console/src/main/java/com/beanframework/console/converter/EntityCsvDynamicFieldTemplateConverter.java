@@ -9,55 +9,57 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldTemplateCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
+import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 
 @Component
-public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<DynamicFieldTemplateCsv, DynamicFieldTemplate> {
+public class EntityCsvDynamicFieldTemplateConverter implements EntityCsvConverter<DynamicFieldTemplateCsv, DynamicFieldTemplate> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvDynamicFieldTemplateConverter.class);
 
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private DynamicFieldTemplateService dynamicFieldTemplateService;
+
 	@Override
-	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source, EntityConverterContext context) throws ConverterException {
+	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source) throws ConverterException {
 
 		try {
 
-			if (source.getId() != null) {
+			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldTemplate.ID, source.getId());
 
-				DynamicFieldTemplate prototype = modelService.findOneEntityByProperties(properties, true, DynamicFieldTemplate.class);
+				DynamicFieldTemplate prototype = dynamicFieldTemplateService.findOneEntityByProperties(properties);
 
 				if (prototype != null) {
 
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, new DynamicFieldTemplate());
+			return convertToEntity(source, modelService.create(DynamicFieldTemplate.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source) throws ConverterException {
-		return convert(source, new EntityConverterContext());
-	}
-
-	private DynamicFieldTemplate convert(DynamicFieldTemplateCsv source, DynamicFieldTemplate prototype) throws ConverterException {
+	private DynamicFieldTemplate convertToEntity(DynamicFieldTemplateCsv source, DynamicFieldTemplate prototype) throws ConverterException {
 
 		try {
-			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setName(StringUtils.stripToNull(source.getName()));
+			if (StringUtils.isNotBlank(source.getId()))
+				prototype.setId(source.getId());
+
+			if (StringUtils.isNotBlank(source.getName()))
+				prototype.setName(source.getName());
 
 			// Dynamic Field Slot
 			if (StringUtils.isNotBlank(source.getDynamicFieldSlotIds())) {
@@ -73,7 +75,7 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityConverter<D
 					if (add) {
 						Map<String, Object> dynamicFieldSlotProperties = new HashMap<String, Object>();
 						dynamicFieldSlotProperties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
-						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneEntityByProperties(dynamicFieldSlotProperties, true, DynamicFieldSlot.class);
+						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneEntityByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
 
 						if (entityDynamicFieldSlot == null) {
 							LOGGER.error("DynamicFieldSlot ID not exists: " + dynamicFieldSlotId);

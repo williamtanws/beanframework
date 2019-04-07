@@ -18,5 +18,5 @@ public final class UserPermissionConstants {
 		public static final String UUID_NOT_EXISTS = "module.userpermission.uuid.notexists";;
 	}
 
-	public static final String DYNAMIC_FIELD_TEMPLATE = "module.userpermission.dynamicfield.template";
+	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "module.userpermission.dynamicfield.template";
 }

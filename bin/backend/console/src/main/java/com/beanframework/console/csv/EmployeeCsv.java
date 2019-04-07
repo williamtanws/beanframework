@@ -51,7 +51,7 @@ public class EmployeeCsv extends AbstractCsv {
 		this.password = password;
 	}
 
-	public Boolean isAccountNonExpired() {
+	public Boolean getAccountNonExpired() {
 		return accountNonExpired;
 	}
 
@@ -59,7 +59,7 @@ public class EmployeeCsv extends AbstractCsv {
 		this.accountNonExpired = accountNonExpired;
 	}
 
-	public Boolean isAccountNonLocked() {
+	public Boolean getAccountNonLocked() {
 		return accountNonLocked;
 	}
 
@@ -67,7 +67,7 @@ public class EmployeeCsv extends AbstractCsv {
 		this.accountNonLocked = accountNonLocked;
 	}
 
-	public Boolean isCredentialsNonExpired() {
+	public Boolean getCredentialsNonExpired() {
 		return credentialsNonExpired;
 	}
 
@@ -75,7 +75,7 @@ public class EmployeeCsv extends AbstractCsv {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 
-	public Boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 

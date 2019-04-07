@@ -46,7 +46,7 @@
 									<div class="row">
 										<div class="col-md-12">
 											<div class="box-body bg-gray">
-												<div class="row">
+												<div class="row" style="min-height:34px">
 													<div class="col-md-6">
 														<th:block th:if="${createButton == '1'}">
 															<a th:href="${editFormAction}+'?create'" type="button" class="btn btn-default" th:if="${#authorization.expression('hasAuthority('''+createAuthority+''')')}">
@@ -54,21 +54,11 @@
 															</a>
 														</th:block>
 													</div>
-													<div class="col-md-6" style="text-align: right; line-height: 34px;">
-														<span th:text="#{module.backoffice.show}"></span>
-														<select id="length-change" class="text-block">
-															<option value='10'>10</option>
-															<option value='20'>20</option>
-															<option value='50'>50</option>
-															<option value='100'>100</option>
-														</select>
-														<span th:text="#{module.backoffice.entries}"></span>
-													</div>
 												</div>
 												<!-- /.box-header -->
 											</div>
 										</div>
-										<div class="col-md-12">
+										<div class="col-md-12" style="padding-top:10px">
 											<div class="dataTables_wrapper form-inline dt-bootstrap">
 												<table id="mainTable" class="table table-bordered table-hover dataTable" style="width: 100%">
 													<thead>
@@ -87,6 +77,10 @@
 									</div>
 								</div>
 							</div>
+							<form id="edit-form" th:action="${editFormAction}+'#tab_general'" method="get" th:object="${objectDto}" style="display: none">
+								<input type="hidden" name="uuid">
+							</form>
+							<th:block layout:insert="~{/common/adminlte/common/component/list :: js}"></th:block>
 						</div>
 						<div class="panel box box-success" th:if="${objectDto.uuid != null || create}">
 							<div class="box-header with-border">
@@ -109,10 +103,6 @@
 					<!-- /.box-body -->
 				</div>
 			</div>
-			<form id="edit-form" th:action="${editFormAction}+'#tab_general'" method="get" th:object="${objectDto}" style="display: none">
-				<input type="hidden" name="uuid">
-			</form>
-			<th:block layout:insert="~{/common/adminlte/common/component/list :: js}"></th:block>
 		</div>
 	</th:block>
 
@@ -144,7 +134,9 @@
 	    	      'processing': true,
 	    	      'serverSide': true,
 	    	      'searchDelay': 1000,
-	    	      'sDom': 'tipr', 
+	    	      'sDom': "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+	    	      "<'row'<'col-sm-12'tr>>" +
+	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
 	    	      'bStateSave': true,
 	    	      'orderCellsTop': true,
 	    	      'fnStateSave': function (oSettings, oData) {
@@ -214,9 +206,9 @@
 					        $(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' ' + title + '" value="' + search + '" />');
 				        
 					        $('input', this ).on('keyup change', function () {
-					            if ( table.column(i).search() !== this.value ) {
-					                table
-					                    .column(i)
+					            if ( mainTable.column(index).search() !== this.value ) {
+					            	mainTable
+					                    .column(index)
 					                    .search( this.value )
 					                    .draw();
 					            }

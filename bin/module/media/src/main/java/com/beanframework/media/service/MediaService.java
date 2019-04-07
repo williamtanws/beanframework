@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
@@ -21,13 +20,13 @@ public interface MediaService {
 
 	Media findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Media> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Media> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Media saveEntity(Media model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
 
-	<T> Page<Media> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
+	Page<Media> findEntityPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
@@ -35,5 +34,7 @@ public interface MediaService {
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	Media createByMultipartFile(MultipartFile file, String location) throws Exception;
+	Media storeFile(Media media, MultipartFile file, String location) throws Exception;
+
+	int countMediaByProperties(Map<String, Object> properties) throws Exception;
 }

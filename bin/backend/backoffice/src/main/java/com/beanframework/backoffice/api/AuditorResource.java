@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.AuditorWebConstants;
-import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.core.data.AuditorDto;
+import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.AuditorFacade;
 import com.beanframework.user.domain.RevisionsEntity;
 
@@ -38,8 +38,9 @@ public class AuditorResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
-
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
+		
 		Page<AuditorDto> pagination = auditorFacade.findPage(dataTableRequest);
 
 		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();
@@ -63,7 +64,9 @@ public class AuditorResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
+		
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = auditorFacade.findHistory(dataTableRequest);

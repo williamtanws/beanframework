@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.configuration.domain.Configuration;
@@ -32,6 +31,7 @@ import com.beanframework.console.ConfigurationWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.data.ConfigurationDataResponse;
 import com.beanframework.core.data.ConfigurationDto;
+import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.ConfigurationFacade;
 
 @RestController
@@ -68,8 +68,9 @@ public class ConfigurationResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
-
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
+		
 		Page<ConfigurationDto> pagination = configurationFacade.findPage(dataTableRequest);
 
 		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();
@@ -93,7 +94,8 @@ public class ConfigurationResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = configurationFacade.findHistory(dataTableRequest);

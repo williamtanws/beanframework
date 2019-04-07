@@ -2,14 +2,17 @@ package com.beanframework.console.csv;
 
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseBool;
+import org.supercsv.cellprocessor.ParseEnum;
 import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
+import com.beanframework.dynamicfield.DynamicFieldType;
+
 public class DynamicFieldCsv extends AbstractCsv {
 
 	private String name;
-	private String type;
+	private DynamicFieldType type;
 	private Boolean required;
 	private String rule;
 	private String label;
@@ -21,7 +24,7 @@ public class DynamicFieldCsv extends AbstractCsv {
 		final CellProcessor[] processors = new CellProcessor[] { //
 				new NotNull(new Trim()), // id
 				new Optional(new Trim()), // name
-				new NotNull(new Trim()), // type
+				new NotNull(new Trim(new ParseEnum(DynamicFieldType.class, true))), // type
 				new Optional(new Trim(new ParseBool())), // required
 				new Optional(new Trim()), // rule
 				new NotNull(new Trim()), // label
@@ -41,15 +44,15 @@ public class DynamicFieldCsv extends AbstractCsv {
 		this.name = name;
 	}
 
-	public String getType() {
+	public DynamicFieldType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(DynamicFieldType type) {
 		this.type = type;
 	}
 
-	public Boolean isRequired() {
+	public Boolean getRequired() {
 		return required;
 	}
 
@@ -69,16 +72,16 @@ public class DynamicFieldCsv extends AbstractCsv {
 		return label;
 	}
 
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
 	public String getGrid() {
 		return grid;
 	}
 
 	public void setGrid(String grid) {
 		this.grid = grid;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
 	}
 
 	public String getLanguage() {

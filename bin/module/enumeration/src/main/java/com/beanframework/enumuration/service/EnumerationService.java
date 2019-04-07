@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -20,13 +19,13 @@ public interface EnumerationService {
 
 	Enumeration findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Enumeration> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Enumeration> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Enumeration saveEntity(Enumeration model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
 
-	<T> Page<Enumeration> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
+	Page<Enumeration> findEntityPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 

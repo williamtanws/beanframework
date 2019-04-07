@@ -13,7 +13,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EnumerationDto;
-import com.beanframework.core.specification.EnumerationSpecification;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.enumuration.service.EnumerationService;
 
@@ -68,7 +67,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 
 	@Override
 	public Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Enumeration> page = enumerationService.findEntityPage(dataTableRequest, EnumerationSpecification.getSpecification(dataTableRequest));
+		Page<Enumeration> page = enumerationService.findEntityPage(dataTableRequest);
 
 		List<EnumerationDto> dtos = modelService.getDto(page.getContent(), EnumerationDto.class);
 		return new PageImpl<EnumerationDto>(dtos, page.getPageable(), page.getTotalElements());

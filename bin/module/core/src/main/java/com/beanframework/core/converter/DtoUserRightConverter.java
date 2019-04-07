@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.UserRightDto;
@@ -37,23 +36,26 @@ public class DtoUserRightConverter extends AbstractDtoConverter<UserRight, UserR
 
 		try {
 
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setSort(source.getSort());
-			prototype.setFields(modelService.getDto(source.getFields(), UserRightFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<UserRightFieldDto>() {
-				@Override
-				public int compare(UserRightFieldDto o1, UserRightFieldDto o2) {
-					if (o1.getSort() == null)
-						return o2.getSort() == null ? 0 : 1;
 
-					if (o2.getSort() == null)
-						return -1;
+			if (context.isFetchable(UserRight.class, UserRight.FIELDS)) {
+				prototype.setFields(modelService.getDto(source.getFields(), UserRightFieldDto.class));
+				Collections.sort(prototype.getFields(), new Comparator<UserRightFieldDto>() {
+					@Override
+					public int compare(UserRightFieldDto o1, UserRightFieldDto o2) {
+						if (o1.getDynamicFieldSlot().getSort() == null)
+							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
-					return o1.getSort() - o2.getSort();
-				}
-			});
+						if (o2.getDynamicFieldSlot().getSort() == null)
+							return -1;
+
+						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+					}
+				});
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

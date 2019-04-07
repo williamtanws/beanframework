@@ -1,0 +1,2 @@
+id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,dynamicFieldSlotIds,profilePicture
+vendor	,Vendor 			,vendor		,true,true,true,true,vendorgroup		,,static/adminlte/dist/img/user8-128x128.jpg

@@ -3,11 +3,12 @@ package com.beanframework.user.interceptor.auditor;
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.exception.InterceptorException;
-import com.beanframework.common.interceptor.LoadInterceptor;
+import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 
-public class AuditorLoadInterceptor implements LoadInterceptor<Auditor> {
+public class AuditorLoadInterceptor extends AbstractLoadInterceptor<Auditor> {
 
 	@Override
 	public void onLoad(Auditor model, InterceptorContext context) throws InterceptorException {
+		super.onLoad(model, context);
 	}
 }

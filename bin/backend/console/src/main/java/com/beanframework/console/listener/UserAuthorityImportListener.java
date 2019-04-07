@@ -59,8 +59,13 @@ public class UserAuthorityImportListener extends ImportListener {
 
 	@Override
 	public void update() throws Exception {
+		update(IMPORT_UPDATE);
+	}
+
+	@Override
+	public void update(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = loader.getResources(IMPORT_UPDATE);
+		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
 			InputStream in = resource.getInputStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -74,8 +79,13 @@ public class UserAuthorityImportListener extends ImportListener {
 
 	@Override
 	public void remove() throws Exception {
+		remove(IMPORT_REMOVE);
+	}
+
+	@Override
+	public void remove(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-		Resource[] resources = loader.getResources(IMPORT_REMOVE);
+		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
 			InputStream in = resource.getInputStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -145,7 +155,7 @@ public class UserAuthorityImportListener extends ImportListener {
 
 			Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 			userGroupProperties.put(UserGroup.ID, userGroupId);
-			UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, true, UserGroup.class);
+			UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 
 			if (userGroup == null) {
 				LOGGER.error("userGroupId not exists: " + userGroupId);
@@ -154,8 +164,6 @@ public class UserAuthorityImportListener extends ImportListener {
 				generateUserAuthority(userGroup);
 
 				for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
-					Hibernate.initialize(userGroup.getUserAuthorities().get(i).getUserRight());
-					Hibernate.initialize(userGroup.getUserAuthorities().get(i).getUserPermission());
 
 					for (UserAuthorityCsv userAuthorityCsv : userGroupAuthorityList) {
 						if (userGroup.getUserAuthorities().get(i).getUserPermission().getId().equals(userAuthorityCsv.getUserPermissionId())) {
@@ -185,11 +193,11 @@ public class UserAuthorityImportListener extends ImportListener {
 
 		Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
 		userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
-		List<UserPermission> userPermissions = modelService.findEntityByPropertiesAndSorts(null, userPermissionSorts, null, null, true, UserPermission.class);
+		List<UserPermission> userPermissions = modelService.findEntityByPropertiesAndSorts(null, userPermissionSorts, null, null, UserPermission.class);
 
 		Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
 		userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
-		List<UserRight> userRights = modelService.findEntityByPropertiesAndSorts(null, userRightSorts, null, null, true, UserRight.class);
+		List<UserRight> userRights = modelService.findEntityByPropertiesAndSorts(null, userRightSorts, null, null, UserRight.class);
 
 		for (UserPermission userPermission : userPermissions) {
 			for (UserRight userRight : userRights) {

@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.interceptor.CronjobInitialDefaultsInterceptor;
-import com.beanframework.cronjob.interceptor.CronjobInitializeInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobLoadInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobPrepareInterceptor;
 import com.beanframework.cronjob.interceptor.CronjobRemoveInterceptor;
@@ -28,24 +27,6 @@ public class CronjobInterceptorConfig {
 	public InterceptorMapping cronjobInitialDefaultsInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(cronjobInitialDefaultsInterceptor());
-		mapping.setTypeCode(Cronjob.class.getSimpleName());
-
-		return mapping;
-	}
-
-	////////////////////////////
-	// Initialize Interceptor //
-	////////////////////////////
-
-	@Bean
-	public CronjobInitializeInterceptor cronjobInitializeInterceptor() {
-		return new CronjobInitializeInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping cronjobInitializeInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(cronjobInitializeInterceptor());
 		mapping.setTypeCode(Cronjob.class.getSimpleName());
 
 		return mapping;

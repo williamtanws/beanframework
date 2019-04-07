@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.DynamicFieldDto;
@@ -35,7 +34,7 @@ public class DtoDynamicFieldConverter extends AbstractDtoConverter<DynamicField,
 	private DynamicFieldDto convert(DynamicField source, DynamicFieldDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setRequired(source.getRequired());
@@ -43,8 +42,12 @@ public class DtoDynamicFieldConverter extends AbstractDtoConverter<DynamicField,
 			prototype.setType(source.getType());
 			prototype.setLabel(source.getLabel());
 			prototype.setGrid(source.getGrid());
-			prototype.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class));
-			prototype.setEnumerations(modelService.getDto(source.getEnumerations(), EnumerationDto.class));
+
+			if (context.isFetchable(DynamicField.class, DynamicField.LANGUAGE))
+				prototype.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class));
+
+			if (context.isFetchable(DynamicField.class, DynamicField.ENUMERATIONS))
+				prototype.setEnumerations(modelService.getDto(source.getEnumerations(), EnumerationDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

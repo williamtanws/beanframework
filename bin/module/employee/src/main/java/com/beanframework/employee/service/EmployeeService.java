@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,19 +26,19 @@ public interface EmployeeService {
 
 	Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
-	List<Employee> findEntityBySorts(Map<String, Direction> sorts, boolean initialize) throws Exception;
+	List<Employee> findEntityBySorts(Map<String, Direction> sorts) throws Exception;
 
 	Employee saveEntity(Employee model) throws BusinessException;
 
 	void deleteByUuid(UUID uuid) throws BusinessException;
 
-	<T> Page<Employee> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception;
+	Page<Employee> findEntityPage(DataTableRequest dataTableRequest) throws Exception;
 
 	int count() throws Exception;
 
-	void saveProfilePicture(Employee employee, MultipartFile picture) throws IOException;
+	void saveProfilePicture(Employee model, MultipartFile picture) throws IOException;
 
-	void saveProfilePicture(Employee employee, InputStream inputStream) throws IOException;
+	void saveProfilePicture(Employee model, InputStream inputStream) throws IOException;
 
 	void deleteEmployeeProfilePictureByUuid(UUID uuid);
 
@@ -47,7 +46,7 @@ public interface EmployeeService {
 
 	Employee getCurrentUser() throws Exception;
 
-	Employee updatePrincipal(Employee employee);
+	Employee updatePrincipal(Employee model);
 
 	Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids);
 
@@ -60,5 +59,7 @@ public interface EmployeeService {
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	int countByUserGroups(List<UUID> userGroupsUuid);
 
 }

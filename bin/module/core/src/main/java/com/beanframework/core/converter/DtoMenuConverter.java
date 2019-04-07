@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -42,7 +41,7 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 	private MenuDto convert(Menu source, MenuDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
-			convertGeneric(source, prototype, context);
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 			prototype.setParent(source.getParent());
@@ -51,21 +50,28 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 			prototype.setSort(source.getSort());
 			prototype.setTarget(source.getTarget());
 			prototype.setEnabled(source.getEnabled());
-			prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class));
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
-			prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
-				@Override
-				public int compare(MenuFieldDto o1, MenuFieldDto o2) {
-					if (o1.getSort() == null)
-						return o2.getSort() == null ? 0 : 1;
 
-					if (o2.getSort() == null)
-						return -1;
+			if (context.isFetchable(Menu.class, Menu.CHILDS))
+				prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class));
 
-					return o1.getSort() - o2.getSort();
-				}
-			});
+			if (context.isFetchable(Menu.class, Menu.USER_GROUPS))
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+
+			if (context.isFetchable(Menu.class, Menu.FIELDS)) {
+				prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));
+				Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
+					@Override
+					public int compare(MenuFieldDto o1, MenuFieldDto o2) {
+						if (o1.getDynamicFieldSlot().getSort() == null)
+							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+
+						if (o2.getDynamicFieldSlot().getSort() == null)
+							return -1;
+
+						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+					}
+				});
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

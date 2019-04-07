@@ -11,20 +11,21 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.repository.MenuRepository;
+import com.beanframework.menu.domain.MenuField;
+import com.beanframework.menu.specification.MenuSpecification;
+import com.beanframework.user.domain.UserGroup;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -33,45 +34,58 @@ public class MenuServiceImpl implements MenuService {
 	private ModelService modelService;
 
 	@Autowired
-	private MenuRepository menuRepository;
+	private FetchContext fetchContext;
 
 	@Override
 	public Menu create() throws Exception {
 		return modelService.create(Menu.class);
 	}
 
-	@Cacheable(value = "MenuOne", key = "#uuid")
 	@Override
 	public Menu findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, true, Menu.class);
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
+		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		
+		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
+		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
+
+		return modelService.findOneEntityByUuid(uuid, Menu.class);
 	}
 
-	@Cacheable(value = "MenuOneProperties", key = "#properties")
 	@Override
 	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, true, Menu.class);
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
+		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		
+		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
+		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
+
+		return modelService.findOneEntityByProperties(properties, Menu.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "MenuOne", key = "#model.uuid", condition = "#model.uuid != null"), //
-			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
-			@CacheEvict(value = "MenusHistory", allEntries = true), //
-			@CacheEvict(value = "MenuTree", allEntries = true) }) //
 	@Override
 	public Menu saveEntity(Menu model) throws BusinessException {
 		return (Menu) modelService.saveEntity(model, Menu.class);
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "MenuOne", key = "#uuid"), //
-			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
-			@CacheEvict(value = "MenusHistory", allEntries = true), //
-			@CacheEvict(value = "MenuTree", allEntries = true) })
 	@Override
 	public void deleteByUuid(UUID uuid) throws BusinessException {
 
 		try {
-			Menu model = modelService.findOneEntityByUuid(uuid, true, Menu.class);
+			Menu model = modelService.findOneEntityByUuid(uuid, Menu.class);
 			modelService.deleteByEntity(model, Menu.class);
 
 		} catch (Exception e) {
@@ -79,35 +93,72 @@ public class MenuServiceImpl implements MenuService {
 		}
 	}
 
-	@Caching(evict = { //
-			@CacheEvict(value = "MenuOne", key = "#fromUuid"), //
-			@CacheEvict(value = "MenuOne", key = "#toUuid", condition = "#toUuid != null"), //
-			@CacheEvict(value = "MenuOneProperties", allEntries = true), //
-			@CacheEvict(value = "MenusHistory", allEntries = true), //
-			@CacheEvict(value = "MenuTree", allEntries = true) })
 	@Transactional
 	@Override
-	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) {
+	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
 
 		if (toUuid == null) {
-			menuRepository.setParentNullByUuid(fromUuid);
+			setParentNullAndSortByUuid(fromUuid, toIndex);
 
-			menuRepository.updateSortByUuid(fromUuid, toIndex);
-
-			List<Menu> toMenuChilds = menuRepository.findByParentNullOrderBySort();
+			List<Menu> toMenuChilds = findByParentNullOrderBySort();
 
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
-			menuRepository.saveAll(menus);
+			for (Menu menu : menus) {
+				modelService.saveEntity(menu, Menu.class);
+			}
 		} else {
-			menuRepository.updateParentByUuid(fromUuid, toUuid);
+			updateParentByUuid(fromUuid, toUuid, toIndex);
 
-			menuRepository.updateSortByUuid(fromUuid, toIndex);
-
-			List<Menu> toMenuChilds = menuRepository.findByParentUuidOrderBySort(toUuid);
+			List<Menu> toMenuChilds = findByParentUuidOrderBySort(toUuid);
 
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
-			menuRepository.saveAll(menus);
+			for (Menu menu : menus) {
+				modelService.saveEntity(menu, Menu.class);
+			}
 		}
+	}
+
+	private void setParentNullAndSortByUuid(UUID fromUuid, int toIndex) throws Exception {
+		fetchContext.clearFetchProperties();
+		fetchContext.addFetchProperty(Menu.class, Menu.PARENT);
+		Menu menu = modelService.findOneEntityByUuid(fromUuid, Menu.class);
+		menu.setParent(null);
+		menu.setSort(toIndex);
+		modelService.saveEntity(menu, Menu.class);
+	}
+
+	private List<Menu> findByParentNullOrderBySort() throws Exception {
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Menu.PARENT, null);
+
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Menu.SORT, Sort.Direction.ASC);
+
+		return modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
+	}
+
+	private void updateParentByUuid(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
+		fetchContext.clearFetchProperties();
+		fetchContext.addFetchProperty(Menu.class, Menu.PARENT);
+		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
+		Menu menu = modelService.findOneEntityByUuid(fromUuid, Menu.class);
+		Menu parent = modelService.findOneEntityByUuid(toUuid, Menu.class);
+		parent.getChilds().add(menu);
+		menu.setParent(parent);
+		menu.setSort(toIndex);
+		modelService.saveEntity(menu, Menu.class);
+	}
+
+	private List<Menu> findByParentUuidOrderBySort(UUID toUuid) throws Exception {
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Menu.PARENT+"."+Menu.UUID, toUuid);
+
+		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+		sorts.put(Menu.SORT, Sort.Direction.ASC);
+
+		return modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
 	}
 
 	private List<Menu> changePosition(List<Menu> menuList, UUID fromId, int toIndex) {
@@ -153,10 +204,20 @@ public class MenuServiceImpl implements MenuService {
 		return menuList;
 	}
 
-	@Cacheable(value = "MenuTree", key = "'enabled:'+#enabled")
 	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findEntityMenuTree(boolean enabled) throws Exception {
+		fetchContext.clearFetchProperties();
+
+		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
+		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
+		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
+		
+		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
+		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
+		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
+		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.PARENT, null);
@@ -168,24 +229,22 @@ public class MenuServiceImpl implements MenuService {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
 
-		List<Menu> menuTree = modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, true, Menu.class);
+		List<Menu> menuTree = modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
 
 		return menuTree;
 	}
 
-	@Cacheable(value = "MenusPage", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
-	public <T> Page<Menu> findEntityPage(DataTableRequest dataTableRequest, Specification<T> specification) throws Exception {
-		return modelService.findEntityPage(specification, dataTableRequest.getPageable(), false, Menu.class);
+	public Page<Menu> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
+		fetchContext.clearFetchProperties();
+		return modelService.findEntityPage(MenuSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Menu.class);
 	}
 
-	@Cacheable(value = "MenusPage", key = "'count'")
 	@Override
 	public int count() throws Exception {
 		return modelService.count(Menu.class);
 	}
 
-	@Cacheable(value = "MenusHistory", key = "'dataTableRequest:'+#dataTableRequest")
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
@@ -197,11 +256,10 @@ public class MenuServiceImpl implements MenuService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
+		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
 
 	}
 
-	@Cacheable(value = "MenusHistory", key = "'count, dataTableRequest:'+#dataTableRequest")
 	@Override
 	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
 

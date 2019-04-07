@@ -70,7 +70,7 @@
 														<div class="form-group">
 															<label for="confirmPassword" th:text="#{module.usergroup}+': '"></label>
 															<th:block th:each="userGroup : *{userGroups}">
-																<p th:each="field : ${userGroup.fields}" th:text="${field.value}" th:if="${field.dynamicField.language.id == #locale.toString()}"></p>
+																<p th:each="field : ${userGroup.fields}" th:text="${field.value}" th:if="${field.dynamicFieldSlot.dynamicField.language.id == #locale.toString()}"></p>
 															</th:block>
 															<span class="help-block"></span>
 														</div>

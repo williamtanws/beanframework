@@ -25,9 +25,9 @@ import com.beanframework.backoffice.MediaWebConstants;
 import com.beanframework.backoffice.data.MediaDataResponse;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.DataTableResponseData;
 import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.core.facade.MediaFacade;
 import com.beanframework.media.domain.Media;
@@ -66,8 +66,9 @@ public class MediaResource {
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
-
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
+		
 		Page<MediaDto> pagination = mediaFacade.findPage(dataTableRequest);
 
 		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();
@@ -93,7 +94,8 @@ public class MediaResource {
 	@ResponseBody
 	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest(request);
+		DataTableRequest dataTableRequest = new DataTableRequest();
+		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
 		List<Object[]> history = mediaFacade.findHistory(dataTableRequest);

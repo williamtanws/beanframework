@@ -1,9 +1,5 @@
 package com.beanframework.core.data;
 
-import java.util.Date;
-
-import com.beanframework.common.data.GenericDto;
-
 public class CommentDto extends GenericDto {
 	/**
 	 * 
@@ -15,8 +11,6 @@ public class CommentDto extends GenericDto {
 	private String html;
 
 	private Boolean visibled;
-
-	private Date lastUpdatedDate;
 
 	private UserDto user;
 
@@ -34,14 +28,6 @@ public class CommentDto extends GenericDto {
 
 	public void setVisibled(Boolean visibled) {
 		this.visibled = visibled;
-	}
-
-	public Date getLastUpdatedDate() {
-		return lastUpdatedDate;
-	}
-
-	public void setLastUpdatedDate(Date lastUpdatedDate) {
-		this.lastUpdatedDate = lastUpdatedDate;
 	}
 
 	public UserDto getUser() {
