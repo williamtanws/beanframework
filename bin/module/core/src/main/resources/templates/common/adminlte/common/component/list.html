@@ -19,7 +19,7 @@
 		</div>-->
 		<!-- Alert Notification-->
 		<div class="row">
-			<th:block layout:insert="~{/common/adminlte/common/component/alert :: custom}"></th:block>
+			<th:block layout:insert="~{common/adminlte/common/component/alert :: custom}"></th:block>
 		</div>
 		<div class="row">
 			<div class="col-md-12">
@@ -80,7 +80,7 @@
 							<form id="edit-form" th:action="${editFormAction}+'#tab_general'" method="get" th:object="${objectDto}" style="display: none">
 								<input type="hidden" name="uuid">
 							</form>
-							<th:block layout:insert="~{/common/adminlte/common/component/list :: js}"></th:block>
+							<th:block layout:insert="~{common/adminlte/common/component/list :: js}"></th:block>
 						</div>
 						<div class="panel box box-success" th:if="${objectDto.uuid != null || create}">
 							<div class="box-header with-border">
