@@ -107,4 +107,11 @@ public class CustomerCsv extends AbstractCsv {
 		this.profilePicture = profilePicture;
 	}
 
+	@Override
+	public String toString() {
+		return "CustomerCsv [id=" + id + ", name=" + name + ", password=" + password + ", accountNonExpired=" + accountNonExpired + ", accountNonLocked=" + accountNonLocked
+				+ ", credentialsNonExpired=" + credentialsNonExpired + ", enabled=" + enabled + ", userGroupIds=" + userGroupIds + ", dynamicFieldSlotIds=" + dynamicFieldSlotIds + ", profilePicture="
+				+ profilePicture + "]";
+	}
+
 }

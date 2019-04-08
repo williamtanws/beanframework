@@ -47,4 +47,11 @@ public class UserRightCsv extends AbstractCsv {
 		this.dynamicFieldSlotIds = dynamicFieldSlotIds;
 	}
 
+	@Override
+	public String toString() {
+		return "UserRightCsv [id=" + id + ", name=" + name + ", sort=" + sort + ", dynamicFieldSlotIds=" + dynamicFieldSlotIds + "]";
+	}
+	
+	
+
 }

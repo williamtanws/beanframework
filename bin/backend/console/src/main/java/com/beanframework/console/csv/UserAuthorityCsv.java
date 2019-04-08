@@ -97,4 +97,9 @@ public class UserAuthorityCsv {
 		this.delete = delete;
 	}
 
+	@Override
+	public String toString() {
+		return "UserAuthorityCsv [userGroupId=" + userGroupId + ", userPermissionId=" + userPermissionId + ", create=" + create + ", read=" + read + ", update=" + update + ", delete=" + delete + "]";
+	}
+
 }

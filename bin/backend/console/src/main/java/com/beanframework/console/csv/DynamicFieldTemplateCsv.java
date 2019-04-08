@@ -35,4 +35,11 @@ public class DynamicFieldTemplateCsv extends AbstractCsv {
 		this.dynamicFieldSlotIds = dynamicFieldSlotIds;
 	}
 
+	@Override
+	public String toString() {
+		return "DynamicFieldTemplateCsv [id=" + id + ", name=" + name + ", dynamicFieldSlotIds=" + dynamicFieldSlotIds + "]";
+	}
+	
+	
+
 }

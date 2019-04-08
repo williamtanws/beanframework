@@ -25,4 +25,10 @@ public class ConfigurationCsv extends AbstractCsv {
 	public void setValue(String value) {
 		this.value = value;
 	}
+
+	@Override
+	public String toString() {
+		return "ConfigurationCsv [id=" + id + ", value=" + value + "]";
+	}
+
 }

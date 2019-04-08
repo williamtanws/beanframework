@@ -36,4 +36,9 @@ public class SiteCsv extends AbstractCsv {
 		this.url = url;
 	}
 
+	@Override
+	public String toString() {
+		return "SiteCsv [id=" + id + ", name=" + name + ", url=" + url + "]";
+	}
+
 }

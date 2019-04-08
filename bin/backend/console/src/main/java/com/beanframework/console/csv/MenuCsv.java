@@ -110,4 +110,12 @@ public class MenuCsv extends AbstractCsv {
 		this.dynamicFieldSlotIds = dynamicFieldSlotIds;
 	}
 
+	@Override
+	public String toString() {
+		return "MenuCsv [id=" + id + ", name=" + name + ", sort=" + sort + ", icon=" + icon + ", path=" + path + ", target=" + target + ", enabled=" + enabled + ", parent=" + parent + ", userGroupIds="
+				+ userGroupIds + ", dynamicFieldSlotIds=" + dynamicFieldSlotIds + "]";
+	}
+	
+	
+
 }

@@ -100,4 +100,12 @@ public class DynamicFieldCsv extends AbstractCsv {
 		this.enumIds = enumIds;
 	}
 
+	@Override
+	public String toString() {
+		return "DynamicFieldCsv [id=" + id + ", name=" + name + ", type=" + type + ", required=" + required + ", rule=" + rule + ", label=" + label + ", grid=" + grid + ", language=" + language + ", enumIds="
+				+ enumIds + "]";
+	}
+	
+	
+
 }
