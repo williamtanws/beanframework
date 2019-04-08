@@ -11,6 +11,11 @@ spring.devtools.add-properties=true
 spring.devtools.restart.enabled=true
 
 # ===============================
+# = CACHE
+# ===============================
+spring.cache.type=NONE
+
+# ===============================
 # = THYMELEAF
 # ===============================
 spring.thymeleaf.cache=false
@@ -34,10 +39,10 @@ platform.hibernate.dialect=org.hibernate.dialect.MariaDB53Dialect
 # ===============================
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
-spring.mail.username=williamtanarvato@gmail.com
-spring.mail.password=0126666401
-spring.mail.from.name=Beanframework
-spring.mail.from.email=williamtanarvato@gmail.com 
+spring.mail.username=
+spring.mail.password=
+spring.mail.from.name=
+spring.mail.from.email=
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 
