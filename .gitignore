@@ -1,8 +1,7 @@
-/data
-/log
-/temp
-/var
+data
+log
 target
+temp
 /bin/pom.xml
 /bin/server.bat
 /bin/server.sh
