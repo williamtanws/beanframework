@@ -24,6 +24,7 @@ a. beanframework/bin/pom.xml.template
 a. beanframework/bin/server.bat.template
 a. beanframework/bin/server.sh.template
 a. beanframework/bin/install/app.xml.template
+a. beanframework/bin/platform/pom.xml.template
 b. beanframework/config/pom.xml.template
 c. beanframework/config/src/main/resources/*.template
 2. Configure all the duplicated template files properly
