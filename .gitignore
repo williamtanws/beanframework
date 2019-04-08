@@ -8,6 +8,7 @@ temp
 /bin/server.sh
 /bin/install/logs
 /bin/install/app.xml
+/bin/platform/pom.xml
 /config/pom.xml
 /config/src/main/resources/application.properties
 /config/src/main/resources/application-dev.properties
@@ -50,10 +51,10 @@ test.html
 nbproject/private/
 build/
 nbbuild/
-dist/
 nbdist/
 .nb-gradle/
-
+### adminlte need dist folder
+###dist/
 # Compiled class file
 *.class
 
