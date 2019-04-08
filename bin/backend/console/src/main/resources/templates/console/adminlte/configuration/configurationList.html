@@ -9,7 +9,7 @@
 		<section class="content" th:with="configurationValue=#{module.configuration.value}">
 			<!-- List Table-->
 			<th:block
-				layout:insert="~{/common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.configuration.icon')}}, title=#{module.configuration}, objectDto=${configurationDto}, createAuthority='configuration_create', updateAuthority='configuration_update', tableName='configuration', listUrl=@{${@environment.getProperty('path.api.configuration.page')}}, listFields=${ {{'id', 'ID'},{'value', configurationValue}} }, editFormAction=@{${@environment.getProperty('path.configuration')}}, editForm=@{${@environment.getProperty('view.configuration.form')}}, createButton='1', filterColumnIndex=${ {0, 1} } )}"></th:block>
+				layout:insert="~{common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.configuration.icon')}}, title=#{module.configuration}, objectDto=${configurationDto}, createAuthority='configuration_create', updateAuthority='configuration_update', tableName='configuration', listUrl=@{${@environment.getProperty('path.api.configuration.page')}}, listFields=${ {{'id', 'ID'},{'value', configurationValue}} }, editFormAction=@{${@environment.getProperty('path.configuration')}}, editForm=@{${@environment.getProperty('view.configuration.form')}}, createButton='1', filterColumnIndex=${ {0, 1} } )}"></th:block>
 		</section>
 	</th:block>
 </body>

@@ -1,2 +1,2 @@
 #!/bin/bash 
-java -Xmx1024m -jar -Dspring.profiles.active=prod beanframework.jar
+java -Xmx1024m -jar beanframework.jar

@@ -6,7 +6,7 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<th:block layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.usergroup')}}, deleteUuid=${usergroupDto.uuid})}"></th:block>
+		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.usergroup')}}, deleteUuid=${usergroupDto.uuid})}"></th:block>
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.usergroup')}" method="post" th:object="${usergroupDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}" />
 			<input type="hidden" name="update" th:if="*{uuid != null}" />
@@ -17,11 +17,11 @@
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block th:if="*{uuid != null}" layout:insert="~{/common/adminlte/common/component/delete :: button (deleteAuthority='usergroup_delete')}"></th:block>
+									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='usergroup_delete')}"></th:block>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="~{/common/adminlte/common/component/refresh :: button (deleteAuthority='usergroup_delete')}"></th:block>
-									<th:block layout:insert="~{/common/adminlte/common/component/update :: button (updateAuthority='usergroup_update')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='usergroup_delete')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='usergroup_update')}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -57,7 +57,7 @@
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="~{/common/adminlte/common/component/general :: general}"></th:block>
+										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
@@ -76,7 +76,7 @@
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="~{/common/adminlte/common/component/attribute :: attribute}"></th:block>
+										<th:block layout:insert="~{common/adminlte/common/component/attribute :: attribute}"></th:block>
 									</div>
 								</div>
 								<!-- /.box-body -->
@@ -84,25 +84,25 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_usergroup">
 								<div class="box-body">
-									<th:block layout:insert="~{/common/adminlte/common/component/usergroup :: usergroup (userGroups='userGroups')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/usergroup :: usergroup (userGroups='userGroups')}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_userauthority">
 								<div class="box-body">
-									<th:block layout:insert="~{/common/adminlte/common/component/userauthority :: userauthority}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/userauthority :: userauthority}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{/common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.usergroup.history')}(uuid=*{uuid})} )}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.usergroup.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{/common/adminlte/common/component/administration :: administration}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/administration :: administration}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->

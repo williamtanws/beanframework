@@ -1,2 +1,2 @@
 @echo off
-java -Xmx2048m -jar -Dspring.profiles.active=prod beanframework.jar
+java -Xmx2048m -jar beanframework.jar
