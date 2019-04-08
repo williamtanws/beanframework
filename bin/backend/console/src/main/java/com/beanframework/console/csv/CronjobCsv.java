@@ -111,4 +111,11 @@ public class CronjobCsv extends AbstractCsv {
 		this.cronjobData = cronjobData;
 	}
 
+	@Override
+	public String toString() {
+		return "CronjobCsv [id=" + id + ", jobClass=" + jobClass + ", jobGroup=" + jobGroup + ", jobName=" + jobName + ", description=" + description + ", cronExpression=" + cronExpression + ", startup=" + startup
+				+ ", jobTrigger=" + jobTrigger + ", triggerStartDate=" + triggerStartDate + ", cronjobData=" + cronjobData + "]";
+	}
+
+	
 }

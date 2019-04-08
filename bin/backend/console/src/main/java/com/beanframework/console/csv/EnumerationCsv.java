@@ -36,4 +36,11 @@ public class EnumerationCsv extends AbstractCsv {
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
+
+	@Override
+	public String toString() {
+		return "EnumerationCsv [id=" + id + ", name=" + name + ", sort=" + sort + "]";
+	}
+	
+	
 }

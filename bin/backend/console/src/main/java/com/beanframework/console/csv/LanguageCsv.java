@@ -48,4 +48,11 @@ public class LanguageCsv extends AbstractCsv {
 		this.sort = sort;
 	}
 
+	@Override
+	public String toString() {
+		return "LanguageCsv [id=" + id + ", name=" + name + ", active=" + active + ", sort=" + sort + "]";
+	}
+	
+	
+
 }

@@ -77,4 +77,10 @@ public class AdminCsv extends AbstractCsv {
 		this.enabled = enabled;
 	}
 
+	@Override
+	public String toString() {
+		return "AdminCsv [id=" + id + ", name=" + name + ", password=" + password + ", accountNonExpired=" + accountNonExpired + ", accountNonLocked=" + accountNonLocked + ", credentialsNonExpired="
+				+ credentialsNonExpired + ", enabled=" + enabled + "]";
+	}
+
 }
