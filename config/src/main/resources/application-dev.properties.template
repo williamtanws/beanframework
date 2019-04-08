@@ -25,7 +25,7 @@ platform.hibernate.show_sql=true
 # ===============================
 datasource.platform.url=jdbc:mariadb://localhost:3306/beanframework?useUnicode=yes&characterEncoding=UTF-8
 datasource.platform.username=root
-datasource.platform.password=P@ssw0rd
+datasource.platform.password=
 datasource.platform.driverClassName=org.mariadb.jdbc.Driver
 platform.hibernate.dialect=org.hibernate.dialect.MariaDB53Dialect
 
