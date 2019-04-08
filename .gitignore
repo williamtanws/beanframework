@@ -1,3 +1,4 @@
+### Beanframework ###
 data
 log
 target
@@ -17,6 +18,19 @@ temp
 /config/src/main/resources/logback-dev.xml
 /config/src/main/resources/logback-prod.xml
 !.mvn/wrapper/maven-wrapper.jar
+
+### npm ###
+*.DS_Store
+*.log
+*.zip
+.idea
+.sass-cache/
+/nbproject/
+/nbproject/private/
+/node_modules/
+ad.js
+TODO
+test.html
 
 ### STS ###
 .apt_generated
