@@ -3,6 +3,7 @@
 # ===============================
 spring.profiles.active=dev
 spring.profiles.include=platform,console,backoffice,cockpit
+webroots=console,backoffice
 interceptor.strict.use=true
 
 # ===============================
