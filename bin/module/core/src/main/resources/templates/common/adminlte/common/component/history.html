@@ -43,6 +43,9 @@
 	                    	  if(row.entity.lastModifiedBy){
 	                    		  return row.entity.lastModifiedBy.name + ' ['+row.entity.lastModifiedBy.id+']';
 	                    	  }
+	                    	  else if(row.entity.createdBy){
+	                    		  return row.entity.createdBy.name + ' ['+row.entity.createdBy.id+']';
+	                    	  }
 	                    	  else{
 		                          return 'System';
 	                    	  }
