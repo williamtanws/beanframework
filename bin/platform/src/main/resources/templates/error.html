@@ -33,7 +33,7 @@
 <body class="hold-transition login-page">
 	<section class="content">
 		<div class="error-page" style="text-align: center;width: 500px;">
-			<h2 class="headline text-yellow" th:text="${status}"></h2>
+			<h2 class="headline text-yellow" th:text="${statusCode}"></h2>
 
 			<div class="error-content">
 				<h3>
@@ -41,10 +41,10 @@
 					<span th:text="#{error.info}"></span>
 				</h3>
 
-				<p th:text="${error}"></p>
+				<p th:text="${message}"></p>
 
-				<p>
-					<a href="#" type="button" onclick="history.back();" th:text="#{error.back}"></a>
+				<p th:if="${redirectUrl != null}">
+					<a th:href="${redirectUrl}" type="button" th:text="#{error.back}"></a>
 				</p>
 			</div>
 			<!-- /.error-content -->
