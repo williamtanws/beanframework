@@ -87,7 +87,7 @@
 								<h4 class="box-title">
 									<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" th:aria-expanded="${objectDto.uuid != null || create ? 'true':'false'}"
 										th:class="${objectDto.uuid == null ? 'collapsed':''}">
-										<span th:if="${objectDto.uuid != null}" th:text="'ID: '+${objectDto.id}"></span>
+										<span th:if="${objectDto.uuid != null}" th:text="${objectDto.id == null} ?  'UUID: '+${objectDto.uuid} : 'ID: '+${objectDto.id}"></span>
 										<span th:if="${create}" th:text="#{module.backoffice.create}"></span>
 										<i class="fa fa-fw fa-angle-double-down"></i>
 									</a>

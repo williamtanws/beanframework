@@ -20,6 +20,10 @@ public class GlobalErrorController implements ErrorController {
 	@RequestMapping("/error")
 	public String handleError(Model model, HttpServletRequest request) {
 		String originalUri = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
+		
+		if(originalUri == null) {
+			originalUri = request.getRequestURI();
+		}
 
 		if (originalUri.split("/").length > 1) {
 			String webroot = originalUri.split("/")[1];
