@@ -29,4 +29,9 @@ public class FetchContext {
 	public void clearFetchProperties() {
 		FetchProperties.getInstance().clear();
 	}
+
+	public void removeFetchProperty(Class<?> modelClass, String property) {
+		// TODO Auto-generated method stub
+		
+	}
 }

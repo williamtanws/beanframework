@@ -10,6 +10,8 @@ import org.apache.commons.io.FileUtils;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,8 @@ import com.beanframework.media.specification.MediaSpecification;
 
 @Service
 public class MediaServiceImpl implements MediaService {
+	
+	protected static final Logger LOGGER = LoggerFactory.getLogger(MediaServiceImpl.class);
 
 	@Autowired
 	private ModelService modelService;
@@ -68,7 +72,8 @@ public class MediaServiceImpl implements MediaService {
 			Media model = modelService.findOneEntityByUuid(uuid, Media.class);
 
 			File mediaFile = new File(MEDIA_LOCATION, model.getLocation());
-			FileUtils.forceDelete(mediaFile);
+			FileUtils.deleteQuietly(mediaFile);
+			
 			modelService.deleteByEntity(model, Media.class);
 
 		} catch (Exception e) {
@@ -126,7 +131,7 @@ public class MediaServiceImpl implements MediaService {
 
 		return media;
 	}
-
+	
 	@Override
 	public int countMediaByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.count(properties, Media.class);
