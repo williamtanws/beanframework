@@ -38,6 +38,7 @@ public class DtoUserConverter extends AbstractDtoConverter<User, UserDto> implem
 		try {
 			convertCommonProperties(source, prototype, context);
 
+			prototype.setType(source.getType());
 			prototype.setPassword(source.getPassword());
 			prototype.setAccountNonExpired(source.getAccountNonExpired());
 			prototype.setAccountNonLocked(source.getAccountNonLocked());

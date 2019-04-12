@@ -47,6 +47,8 @@ public abstract class User extends GenericEntity {
 
 	private static final long serialVersionUID = -7444894280894062710L;
 
+	private String type;
+
 	@Audited(withModifiedFlag = true)
 	@Column(length = 60)
 	private String password;
@@ -77,6 +79,14 @@ public abstract class User extends GenericEntity {
 	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(UserField.DYNAMIC_FIELD_SLOT)
 	private List<UserField> fields = new ArrayList<UserField>();
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getPassword() {
 		return password;

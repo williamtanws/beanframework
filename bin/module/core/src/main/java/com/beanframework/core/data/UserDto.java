@@ -18,21 +18,23 @@ public class UserDto extends GenericDto {
 	public static final String FIELDS = "fields";
 	public static final String NAME = "name";
 
+	private String type;
 	private String password;
-
 	private Boolean accountNonExpired;
-
 	private Boolean accountNonLocked;
-
 	private Boolean credentialsNonExpired;
-
 	private Boolean enabled;
-
 	private String name;
-
 	private List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
-
 	private List<UserFieldDto> fields = new ArrayList<UserFieldDto>();
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getPassword() {
 		return password;
