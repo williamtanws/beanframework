@@ -64,9 +64,6 @@ public class DataTableRequest {
 	/** The is global search. */
 	private boolean isGlobalSearch;
 
-	/** The cache queries. */
-	private List<DataTableColumnSpecs> cacheQueries = new ArrayList<DataTableColumnSpecs>(0);
-
 	private Set<Integer> skipColumnIndexes = new HashSet<Integer>();
 
 	private Pageable pageable;
@@ -231,14 +228,6 @@ public class DataTableRequest {
 	 */
 	public void setGlobalSearch(boolean isGlobalSearch) {
 		this.isGlobalSearch = isGlobalSearch;
-	}
-
-	public List<DataTableColumnSpecs> getCacheQueries() {
-		return cacheQueries;
-	}
-
-	public void setCacheQueries(List<DataTableColumnSpecs> cacheQueries) {
-		this.cacheQueries = cacheQueries;
 	}
 
 	public void setPageable(Pageable pageable) {
@@ -442,7 +431,7 @@ public class DataTableRequest {
 	@Override
 	public String toString() {
 		return "DataTableRequest [uniqueId=" + uniqueId + ", start=" + start + ", length=" + length + ", search=" + search + ", regex=" + regex + ", columns=" + columns + ", orders=" + orders
-				+ ", cacheQueries=" + cacheQueries + ", isGlobalSearch=" + isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + ", pageable=" + pageable + "]";
+				+ ", isGlobalSearch=" + isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + ", pageable=" + pageable + "]";
 	}
 
 	public Set<Integer> getSkipColumnIndexes() {
