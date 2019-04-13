@@ -47,6 +47,7 @@ public abstract class User extends GenericEntity {
 
 	private static final long serialVersionUID = -7444894280894062710L;
 
+	@Column(insertable = false, updatable = false)
 	private String type;
 
 	@Audited(withModifiedFlag = true)
