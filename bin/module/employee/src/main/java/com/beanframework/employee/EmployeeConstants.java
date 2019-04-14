@@ -24,11 +24,5 @@ public interface EmployeeConstants {
 		public static final String PICTURE_WRONGFORMAT = "module.employee.picture.wrongformat";
 	}
 
-	public static final String EMPLOYEE_MEDIA_LOCATION = "${module.employee.media.location}";
 	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "module.employee.dynamicfield.template";
-	public static final String EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH = "${module.employee.profile.picture.thumbnail.width}";
-	public static final String EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT = "${module.employee.profile.picture.thumbnail.height}";
-	
-	public static final String PATH_EMPLOYEE_PROFILE_PICTURE = "${path.employee.profile.picture}";
-
 }
