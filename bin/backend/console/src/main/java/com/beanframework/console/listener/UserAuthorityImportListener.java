@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -166,18 +167,20 @@ public class UserAuthorityImportListener extends ImportListener {
 				for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
 
 					for (UserAuthorityCsv userAuthorityCsv : userGroupAuthorityList) {
-						if (userGroup.getUserAuthorities().get(i).getUserPermission().getId().equals(userAuthorityCsv.getUserPermissionId())) {
-							if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("create")) {
-								userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getCreate()) ? Boolean.TRUE : Boolean.FALSE);
-							}
-							if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("read")) {
-								userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getRead()) ? Boolean.TRUE : Boolean.FALSE);
-							}
-							if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("update")) {
-								userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getUpdate()) ? Boolean.TRUE : Boolean.FALSE);
-							}
-							if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("delete")) {
-								userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getDelete()) ? Boolean.TRUE : Boolean.FALSE);
+						if(StringUtils.isNotBlank(userAuthorityCsv.getUserPermissionId())) {
+							if (userGroup.getUserAuthorities().get(i).getUserPermission().getId().equals(userAuthorityCsv.getUserPermissionId())) {
+								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("create")) {
+									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getCreate()) ? Boolean.TRUE : Boolean.FALSE);
+								}
+								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("read")) {
+									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getRead()) ? Boolean.TRUE : Boolean.FALSE);
+								}
+								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("update")) {
+									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getUpdate()) ? Boolean.TRUE : Boolean.FALSE);
+								}
+								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("delete")) {
+									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getDelete()) ? Boolean.TRUE : Boolean.FALSE);
+								}
 							}
 						}
 					}

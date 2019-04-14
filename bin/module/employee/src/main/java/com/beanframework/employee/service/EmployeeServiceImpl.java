@@ -1,7 +1,5 @@
 package com.beanframework.employee.service;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,22 +11,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
-import org.imgscalr.Scalr;
-import org.imgscalr.Scalr.Method;
-import org.imgscalr.Scalr.Mode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -54,15 +46,14 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
-import com.beanframework.employee.EmployeeConstants;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.specification.EmployeeSpecification;
-import com.beanframework.media.MediaConstants;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
+import com.beanframework.user.service.UserService;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -75,17 +66,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private AuditorService auditorService;
 
-	@Value(MediaConstants.MEDIA_LOCATION)
-	public String MEDIA_LOCATION;
-
-	@Value(EmployeeConstants.EMPLOYEE_MEDIA_LOCATION)
-	public String PROFILE_PICTURE_LOCATION;
-
-	@Value(EmployeeConstants.EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH)
-	public int EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH;
-
-	@Value(EmployeeConstants.EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT)
-	public int EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT;
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private SessionRegistry sessionRegistry;
@@ -179,49 +161,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public void saveProfilePicture(Employee model, MultipartFile picture) throws IOException {
-		if (picture != null && picture.isEmpty() == false) {
-
-			File profilePictureFolder = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid());
-			FileUtils.forceMkdir(profilePictureFolder);
-
-			File original = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid() + File.separator + "original.png");
-			original = new File(original.getAbsolutePath());
-			picture.transferTo(original);
-
-			File thumbnail = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + model.getUuid() + File.separator + "thumbnail.png");
-			BufferedImage img = ImageIO.read(original);
-			BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
-			ImageIO.write(thumbImg, "png", thumbnail);
-		}
+		userService.saveProfilePicture(model, picture);
 	}
 
 	@Override
-	public void saveProfilePicture(Employee employee, InputStream inputStream) throws IOException {
-
-		File profilePictureFolder = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid());
-		FileUtils.forceMkdir(profilePictureFolder);
-
-		File original = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "original.png");
-		original = new File(original.getAbsolutePath());
-		FileUtils.copyInputStreamToFile(inputStream, original);
-
-		File thumbnail = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + employee.getUuid() + File.separator + "thumbnail.png");
-		BufferedImage img = ImageIO.read(original);
-		BufferedImage thumbImg = Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_WIDTH, EMPLOYEE_PROFILE_PICTURE_THUMBNAIL_HEIGHT, Scalr.OP_ANTIALIAS);
-		ImageIO.write(thumbImg, "png", thumbnail);
-
+	public void saveProfilePicture(Employee model, InputStream inputStream) throws IOException {
+		userService.saveProfilePicture(model, inputStream);
 	}
 
 	@Override
-	public void deleteEmployeeProfilePictureByUuid(UUID uuid) {
-		File employeeProfilePictureFolder = new File(PROFILE_PICTURE_LOCATION + File.separator + uuid);
-		try {
-			if (employeeProfilePictureFolder.exists()) {
-				FileUtils.deleteDirectory(employeeProfilePictureFolder);
-			}
-		} catch (IOException e) {
-			LOGGER.error(e.toString(), e);
-		}
+	public void deleteEmployeeProfilePictureByUuid(UUID uuid) {		
+		userService.deleteProfilePictureByUuid(uuid);
 	}
 
 	@Transactional(readOnly = true)

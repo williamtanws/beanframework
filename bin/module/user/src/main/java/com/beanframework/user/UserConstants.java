@@ -23,6 +23,10 @@ public final class UserConstants {
 		public static final String PASSWORD_REQUIRED = "module.user.password.required";
 	}
 
-	public static final String MAX_SESSION_USER = "${max.session.user:1}";
-	public static final String MAX_SESSION_PREVENTS_LOGIN = "${max.session.prevents.login:1}";
+	public static final String MAX_SESSION_USER = "${module.user.session.max:-1}";
+	public static final String MAX_SESSION_PREVENTS_LOGIN = "${module.user.session.prevents.login:false}";
+	public static final String USER_MEDIA_LOCATION = "${module.user.media.location}";
+	public static final String PATH_USER_PROFILE_PICTURE = "${path.user.profile.picture}";
+	public static final String USER_PROFILE_PICTURE_THUMBNAIL_WIDTH = "${module.user.profile.picture.thumbnail.width}";
+	public static final String USER_PROFILE_PICTURE_THUMBNAIL_HEIGHT = "${module.user.profile.picture.thumbnail.height}";
 }

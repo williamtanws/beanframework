@@ -1,5 +1,6 @@
 package com.beanframework.console.csv;
 
+import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
@@ -17,11 +18,11 @@ public class UserAuthorityCsv {
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
 				new NotNull(new Trim()), // userGroupId
-				new NotNull(new Trim()), // userPermissionId
-				new NotNull(new Trim()), // create
-				new NotNull(new Trim()), // read
-				new NotNull(new Trim()), // update
-				new NotNull(new Trim()) // delete
+				new Optional(new Trim()), // userPermissionId
+				new Optional(new Trim()), // create
+				new Optional(new Trim()), // read
+				new Optional(new Trim()), // update
+				new Optional(new Trim()) // delete
 		};
 
 		return processors;
