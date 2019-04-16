@@ -16,6 +16,7 @@ import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +38,7 @@ import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.core.facade.MenuFacade;
+import com.beanframework.core.facade.MenuFacade.MenuPreAuthorizeEnum;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.RevisionsEntity;
 
@@ -49,6 +51,7 @@ public class MenuResource {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
+	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(MenuWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -69,6 +72,7 @@ public class MenuResource {
 		return data != null ? false : true;
 	}
 
+	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(MenuWebConstants.Path.Api.TREE)
 	public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams) throws BusinessException {
 		String uuid = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
@@ -143,6 +147,7 @@ public class MenuResource {
 		return "[" + menu.getId() + "]";
 	}
 
+	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = MenuWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
@@ -169,6 +174,7 @@ public class MenuResource {
 		return dataTableResponse;
 	}
 
+	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = MenuWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody

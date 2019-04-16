@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,7 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
 import com.beanframework.core.facade.DynamicFieldTemplateFacade;
+import com.beanframework.core.facade.DynamicFieldTemplateFacade.DynamicFieldTemplatePreAuthorizeEnum;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.user.domain.RevisionsEntity;
 
@@ -40,6 +42,7 @@ public class DynamicFieldTemplateResource {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
 	@RequestMapping(DynamicFieldTemplateWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -61,6 +64,7 @@ public class DynamicFieldTemplateResource {
 		return data != null ? false : true;
 	}
 
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = DynamicFieldTemplateWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
@@ -86,6 +90,7 @@ public class DynamicFieldTemplateResource {
 		return dataTableResponse;
 	}
 
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = DynamicFieldTemplateWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody

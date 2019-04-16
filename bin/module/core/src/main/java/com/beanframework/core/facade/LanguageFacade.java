@@ -14,39 +14,44 @@ import com.beanframework.core.data.LanguageDto;
 public interface LanguageFacade {
 
 	public static interface LanguagePreAuthorizeEnum {
-		public static final String READ = "hasAuthority('language_read')";
-		public static final String CREATE = "hasAuthority('language_create')";
-		public static final String UPDATE = "hasAuthority('language_update')";
-		public static final String DELETE = "hasAuthority('language_delete')";
+		public static final String AUTHORITY_READ = "language_read";
+		public static final String AUTHORITY_CREATE = "language_create";
+		public static final String AUTHORITY_UPDATE = "language_update";
+		public static final String AUTHORITY_DELETE = "language_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
 	}
 
-	@PreAuthorize(LanguagePreAuthorizeEnum.READ)
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
 	LanguageDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(LanguagePreAuthorizeEnum.READ)
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
 	LanguageDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(LanguagePreAuthorizeEnum.CREATE)
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_CREATE)
 	LanguageDto create(LanguageDto model) throws BusinessException;
 
-	@PreAuthorize(LanguagePreAuthorizeEnum.UPDATE)
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_UPDATE)
 	LanguageDto update(LanguageDto model) throws BusinessException;
 
-	@PreAuthorize(LanguagePreAuthorizeEnum.DELETE)
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(LanguagePreAuthorizeEnum.READ)
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
 	Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(LanguagePreAuthorizeEnum.READ)
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
 	int count() throws Exception;
 
-	@PreAuthorize(LanguagePreAuthorizeEnum.READ)
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(LanguagePreAuthorizeEnum.READ)
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(LanguagePreAuthorizeEnum.CREATE)
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_CREATE)
 	LanguageDto createDto() throws Exception;
 }

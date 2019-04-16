@@ -25,6 +25,8 @@ import com.beanframework.admin.service.AdminService;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.AdminWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
+import com.beanframework.core.facade.AdminFacade.AdminPreAuthorizeEnum;
+import com.beanframework.core.facade.ConfigurationFacade.ConfigurationPreAuthorizeEnum;
 
 @Component
 public class ConsoleAuthProvider implements AuthenticationProvider {
@@ -69,14 +71,14 @@ public class ConsoleAuthProvider implements AuthenticationProvider {
 		// Console
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority(CONSOLE_ACCESS));
-		authorities.add(new SimpleGrantedAuthority("admin_read"));
-		authorities.add(new SimpleGrantedAuthority("admin_create"));
-		authorities.add(new SimpleGrantedAuthority("admin_update"));
-		authorities.add(new SimpleGrantedAuthority("admin_delete"));
-		authorities.add(new SimpleGrantedAuthority("configuration_read"));
-		authorities.add(new SimpleGrantedAuthority("configuration_create"));
-		authorities.add(new SimpleGrantedAuthority("configuration_update"));
-		authorities.add(new SimpleGrantedAuthority("configuration_delete"));
+		authorities.add(new SimpleGrantedAuthority(AdminPreAuthorizeEnum.AUTHORITY_READ));
+		authorities.add(new SimpleGrantedAuthority(AdminPreAuthorizeEnum.AUTHORITY_CREATE));
+		authorities.add(new SimpleGrantedAuthority(AdminPreAuthorizeEnum.AUTHORITY_UPDATE));
+		authorities.add(new SimpleGrantedAuthority(AdminPreAuthorizeEnum.AUTHORITY_DELETE));
+		authorities.add(new SimpleGrantedAuthority(ConfigurationPreAuthorizeEnum.AUTHORITY_READ));
+		authorities.add(new SimpleGrantedAuthority(ConfigurationPreAuthorizeEnum.AUTHORITY_CREATE));
+		authorities.add(new SimpleGrantedAuthority(ConfigurationPreAuthorizeEnum.AUTHORITY_UPDATE));
+		authorities.add(new SimpleGrantedAuthority(ConfigurationPreAuthorizeEnum.AUTHORITY_DELETE));
 
 		return new UsernamePasswordAuthenticationToken(admin, admin.getPassword(), authorities);
 	}

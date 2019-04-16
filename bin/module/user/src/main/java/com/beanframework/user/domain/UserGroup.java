@@ -32,7 +32,7 @@ public class UserGroup extends GenericEntity {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5960532156682901612L;
+	private static final long serialVersionUID = -2986635395842071353L;
 	public static final String NAME = "name";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_AUTHORITIES = "userAuthorities";
