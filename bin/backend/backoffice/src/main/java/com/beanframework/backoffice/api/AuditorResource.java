@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +24,7 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.AuditorDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.AuditorFacade;
+import com.beanframework.core.facade.AuditorFacade.PreAuthorizeEnum;
 import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
@@ -34,6 +36,7 @@ public class AuditorResource {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
+	@PreAuthorize(PreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = AuditorWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
@@ -59,6 +62,7 @@ public class AuditorResource {
 		return dataTableResponse;
 	}
 
+	@PreAuthorize(PreAuthorizeEnum.HAS_READ)
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = AuditorWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody

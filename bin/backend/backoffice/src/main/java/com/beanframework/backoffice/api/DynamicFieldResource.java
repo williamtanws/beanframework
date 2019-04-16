@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,7 @@ import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.facade.DynamicFieldFacade;
+import com.beanframework.core.facade.DynamicFieldFacade.DynamicFieldPreAuthorizeEnum;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.user.domain.RevisionsEntity;
 
@@ -40,6 +42,7 @@ public class DynamicFieldResource {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
+	@PreAuthorize(DynamicFieldPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(DynamicFieldWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -61,6 +64,7 @@ public class DynamicFieldResource {
 		return data != null ? false : true;
 	}
 
+	@PreAuthorize(DynamicFieldPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = DynamicFieldWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DynamicFieldDataResponse> page(HttpServletRequest request) throws Exception {
@@ -88,6 +92,7 @@ public class DynamicFieldResource {
 		return dataTableResponse;
 	}
 
+	@PreAuthorize(DynamicFieldPreAuthorizeEnum.HAS_READ)
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = DynamicFieldWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody

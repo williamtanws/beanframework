@@ -34,11 +34,4 @@ public class FilemanagerWebConstants {
 	}
 
 	public static final String FILE_MANAGER_LOCATION = "${module.filemanager.location}";
-
-	public static interface PreAuthorize {
-		public static final String READ = "hasAuthority('filemanager_read')";
-		public static final String CREATE = "hasAuthority('filemanager_create')";
-		public static final String UPDATE = "hasAuthority('filemanager_update')";
-		public static final String DELETE = "hasAuthority('filemanager_delete')";
-	}
 }

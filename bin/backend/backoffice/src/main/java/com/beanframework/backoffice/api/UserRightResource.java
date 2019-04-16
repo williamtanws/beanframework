@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +31,7 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.facade.UserRightFacade;
+import com.beanframework.core.facade.UserRightFacade.UserRightPreAuthorizeEnum;
 import com.beanframework.user.domain.RevisionsEntity;
 import com.beanframework.user.domain.UserRight;
 
@@ -42,6 +44,7 @@ public class UserRightResource {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(UserRightWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -63,6 +66,7 @@ public class UserRightResource {
 		return data != null ? false : true;
 	}
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = UserRightWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
@@ -90,6 +94,7 @@ public class UserRightResource {
 		return dataTableResponse;
 	}
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = UserRightWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody

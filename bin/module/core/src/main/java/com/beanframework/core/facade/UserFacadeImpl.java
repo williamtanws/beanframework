@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.data.UserDto;
+import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
 
@@ -33,9 +35,16 @@ public class UserFacadeImpl implements UserFacade {
 	}
 
 	@Override
-	public UserDto saveProfile(UserDto user) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+	public UserDto saveProfile(UserDto dto) throws BusinessException {
+		try {
+			User entity = modelService.getEntity(dto, User.class);
+			entity = (User) modelService.saveEntity(entity, User.class);
+			
+			return modelService.getDto(entity, EmployeeDto.class);
+
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 }

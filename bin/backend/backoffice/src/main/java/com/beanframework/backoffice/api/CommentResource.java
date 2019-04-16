@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +32,7 @@ import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.facade.CommentFacade;
+import com.beanframework.core.facade.CommentFacade.CommentPreAuthorizeEnum;
 import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
@@ -42,6 +44,7 @@ public class CommentResource {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
+	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(CommentWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -63,6 +66,7 @@ public class CommentResource {
 		return data != null ? false : true;
 	}
 
+	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = CommentWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<CommentDataResponse> page(HttpServletRequest request) throws Exception {
@@ -103,6 +107,7 @@ public class CommentResource {
 		return dataTableResponse;
 	}
 
+	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = CommentWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody

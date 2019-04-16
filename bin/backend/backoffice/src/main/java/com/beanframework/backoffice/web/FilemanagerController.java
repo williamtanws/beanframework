@@ -28,19 +28,19 @@ public class FilemanagerController {
 	@Value(FilemanagerWebConstants.View.ANGULARFILEMANAGER)
 	private String VIEW_ANGULARFILEMANAGER;
 
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.HAS_READ)
 	@RequestMapping(value = FilemanagerWebConstants.Path.FILE_MANAGER, method = { RequestMethod.GET, RequestMethod.POST })
 	public String filemanager(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_CONTAINER;
 	}
 
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.HAS_READ)
 	@RequestMapping(value = FilemanagerWebConstants.Path.ANGULARFILEMANAGER, method = { RequestMethod.GET, RequestMethod.POST })
 	public String angularfilemanager(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_ANGULARFILEMANAGER;
 	}
 
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
+	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.HAS_READ)
 	@RequestMapping(value = FilemanagerWebConstants.Path.TEMPLATES_PAGE, method = { RequestMethod.GET, RequestMethod.POST })
 	public String template(@PathVariable("page") String page, Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEWE_TEMPLATES + "/" + page;
