@@ -20,7 +20,7 @@ public interface AdminFacade {
 		public static final String AUTHORITY_DELETE = "admin_delete";
 
 		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
-		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "'')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
 		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
 		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
 	}
