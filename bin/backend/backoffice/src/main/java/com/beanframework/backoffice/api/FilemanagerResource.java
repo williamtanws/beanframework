@@ -42,21 +42,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.beanframework.backoffice.FilemanagerWebConstants;
+import com.beanframework.backoffice.web.FilemanagerController.FilemanagerPreAuthorizeEnum;
 
 @RestController
 public class FilemanagerResource {
-
-	public static interface FilemanagerPreAuthorizeEnum {
-		public static final String AUTHORITY_READ = "filemanager_read";
-		public static final String AUTHORITY_CREATE = "filemanager_create";
-		public static final String AUTHORITY_UPDATE = "filemanager_update";
-		public static final String AUTHORITY_DELETE = "hfilemanager_delete";
-
-		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
-		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
-		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
-		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
-	}
 
 	@Value(FilemanagerWebConstants.FILE_MANAGER_LOCATION)
 	public String STORAGE;

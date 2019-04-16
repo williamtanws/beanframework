@@ -9,7 +9,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.data.UserDto;
-import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
 
