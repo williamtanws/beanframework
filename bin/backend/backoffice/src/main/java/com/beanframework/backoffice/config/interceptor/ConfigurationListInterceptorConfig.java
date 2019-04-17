@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.interceptor.ConfigurationListLoadInterceptor;
 
 @Configuration
@@ -22,7 +23,7 @@ public class ConfigurationListInterceptorConfig {
 	public InterceptorMapping configurationListLoadInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(configurationListLoadInterceptor());
-		mapping.setTypeCode(Configuration.class.getSimpleName() + "List");
+		mapping.setTypeCode(Configuration.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return mapping;
 	}

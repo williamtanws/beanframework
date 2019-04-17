@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.cronjob.interceptor.CronjobDataListLoadInterceptor;
@@ -25,7 +26,7 @@ public class CronjobListInterceptorConfig {
 	public InterceptorMapping cronjobListLoadInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(cronjobListLoadInterceptor());
-		mapping.setTypeCode(Cronjob.class.getSimpleName() + "List");
+		mapping.setTypeCode(Cronjob.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return mapping;
 	}
@@ -39,7 +40,7 @@ public class CronjobListInterceptorConfig {
 	public InterceptorMapping cronjobDataListLoadInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(cronjobDataListLoadInterceptor());
-		mapping.setTypeCode(CronjobData.class.getSimpleName() + "List");
+		mapping.setTypeCode(CronjobData.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return mapping;
 	}

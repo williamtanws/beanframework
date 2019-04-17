@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.comment.interceptor.CommentListLoadInterceptor;
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.common.service.ModelService;
 
 @Configuration
 public class CommentListInterceptorConfig {
@@ -23,7 +24,7 @@ public class CommentListInterceptorConfig {
 	public InterceptorMapping commentListLoadInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(commentListLoadInterceptor());
-		mapping.setTypeCode(Comment.class.getSimpleName() + "List");
+		mapping.setTypeCode(Comment.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return mapping;
 	}

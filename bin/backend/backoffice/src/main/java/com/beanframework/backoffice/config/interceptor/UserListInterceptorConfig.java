@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
@@ -33,7 +34,7 @@ public class UserListInterceptorConfig {
 	public InterceptorMapping auditorListLoadInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(auditorListLoadInterceptor());
-		interceptorMapping.setTypeCode(Auditor.class.getSimpleName() + "List");
+		interceptorMapping.setTypeCode(Auditor.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return interceptorMapping;
 	}
@@ -47,7 +48,7 @@ public class UserListInterceptorConfig {
 	public InterceptorMapping userListLoadInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(userListLoadInterceptor());
-		interceptorMapping.setTypeCode(User.class.getSimpleName() + "List");
+		interceptorMapping.setTypeCode(User.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return interceptorMapping;
 	}
@@ -61,7 +62,7 @@ public class UserListInterceptorConfig {
 	public InterceptorMapping userAuthorityListLoadInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(userAuthorityListLoadInterceptor());
-		interceptorMapping.setTypeCode(UserAuthority.class.getSimpleName() + "List");
+		interceptorMapping.setTypeCode(UserAuthority.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return interceptorMapping;
 	}
@@ -75,7 +76,7 @@ public class UserListInterceptorConfig {
 	public InterceptorMapping userGroupListLoadInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(userGroupListLoadInterceptor());
-		interceptorMapping.setTypeCode(UserGroup.class.getSimpleName() + "List");
+		interceptorMapping.setTypeCode(UserGroup.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return interceptorMapping;
 	}
@@ -89,7 +90,7 @@ public class UserListInterceptorConfig {
 	public InterceptorMapping userPermissionListLoadInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(userPermissionListLoadInterceptor());
-		interceptorMapping.setTypeCode(UserPermission.class.getSimpleName() + "List");
+		interceptorMapping.setTypeCode(UserPermission.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return interceptorMapping;
 	}
@@ -103,7 +104,7 @@ public class UserListInterceptorConfig {
 	public InterceptorMapping userRightListLoadInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(userRightListLoadInterceptor());
-		interceptorMapping.setTypeCode(UserRight.class.getSimpleName() + "List");
+		interceptorMapping.setTypeCode(UserRight.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return interceptorMapping;
 	}

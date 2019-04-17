@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.interceptor.EmployeeListLoadInterceptor;
 
@@ -23,7 +24,7 @@ public class EmployeeListInterceptorConfig {
 	public InterceptorMapping EmployeeListLoadInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(employeeListLoadInterceptor());
-		mapping.setTypeCode(Employee.class.getSimpleName() + "List");
+		mapping.setTypeCode(Employee.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return mapping;
 	}

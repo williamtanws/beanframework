@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.interceptor.MenuListLoadInterceptor;
 
@@ -23,7 +24,7 @@ public class MenuListInterceptorConfig {
 	public InterceptorMapping menuListLoadInterceptorMapping() {
 		InterceptorMapping interceptorMapping = new InterceptorMapping();
 		interceptorMapping.setInterceptor(menuListLoadInterceptor());
-		interceptorMapping.setTypeCode(Menu.class.getSimpleName() + "List");
+		interceptorMapping.setTypeCode(Menu.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return interceptorMapping;
 	}

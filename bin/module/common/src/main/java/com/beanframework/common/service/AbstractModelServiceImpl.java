@@ -63,7 +63,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	@Value("${interceptor.strict.use:false}")
 	protected boolean STRICT_USE_INTERCEPTOR;
 
-	protected void initialDefaultsInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
+	@Override
+	public void initialDefaultsInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -72,7 +73,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void initialDefaultsInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
+	@Override
+	public void initialDefaultsInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
@@ -90,7 +92,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected List<Object> loadInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
+	@Override
+	public <T extends Collection> T loadInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		List<Object> content = new ArrayList<Object>();
 		Iterator iterator = models.iterator();
@@ -99,10 +102,11 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			content.add(loadInterceptor(model, context, typeCode));
 		}
 		
-		return content;
+		return (T) content;
 	}
 
-	protected Object loadInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
+	@Override
+	public Object loadInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
@@ -122,7 +126,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return model;
 	}
 
-	protected void prepareInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
+	@Override
+	public void prepareInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -131,7 +136,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void prepareInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
+	@Override
+	public void prepareInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
@@ -149,7 +155,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void removeInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
+	@Override
+	public void removeInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -158,7 +165,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void removeInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
+	@Override
+	public void removeInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
@@ -176,7 +184,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void validateInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
+	@Override
+	public void validateInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -185,7 +194,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void validateInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
+	@Override
+	public void validateInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
@@ -203,7 +213,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected void entityConverter(Collection models, EntityConverterContext context, Class modelClass) throws ConverterException {
+	@Override
+	public void entityConverter(Collection models, EntityConverterContext context, Class modelClass) throws ConverterException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -212,7 +223,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected Object entityConverter(Object model, EntityConverterContext context, Class modelClass) throws ConverterException {
+	@Override
+	public Object entityConverter(Object model, EntityConverterContext context, Class modelClass) throws ConverterException {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof EntityConverter) {
 				EntityConverter interceptor = (EntityConverter) interceptorMapping.getConverter();
@@ -225,7 +237,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		throw new ConverterException("Cannot find any entity convert to convert target model: " + modelClass.getSimpleName());
 	}
 
-	protected <T extends Collection> T dtoConverter(Collection models, DtoConverterContext context, String typeCode) throws ConverterException, InterceptorException {
+	@Override
+	public <T extends Collection> T dtoConverter(Collection models, DtoConverterContext context, String typeCode) throws ConverterException, InterceptorException {
 		if (models instanceof List<?>) {
 			List<Object> listModels = new ArrayList<Object>();
 			Iterator iterator = models.iterator();
@@ -238,7 +251,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		throw new ConverterException("Cannot find available models type to convert target typeCode: " + typeCode);
 	}
 
-	protected Object dtoConverter(Object model, DtoConverterContext context, String typeCode) throws ConverterException {
+	@Override
+	public Object dtoConverter(Object model, DtoConverterContext context, String typeCode) throws ConverterException {
 		
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof DtoConverter) {
@@ -252,7 +266,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		throw new ConverterException("Cannot find any dto convert to convert target typeCode: " + typeCode);
 	}
 
-	protected <T> Page<T> page(@Nullable Specification spec, Pageable pageable, Class modelClass) {
+	@Override
+	public <T> Page<T> page(@Nullable Specification spec, Pageable pageable, Class modelClass) {
 
 		TypedQuery<T> query = getQuery(spec, pageable, modelClass);
 		return pageable.isUnpaged() ? new PageImpl<T>(query.getResultList()) : readPage(query, modelClass, pageable, spec);
