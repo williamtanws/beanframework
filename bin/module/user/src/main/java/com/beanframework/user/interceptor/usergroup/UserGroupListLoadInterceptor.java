@@ -8,11 +8,11 @@ import com.beanframework.user.domain.UserGroup;
 public class UserGroupListLoadInterceptor extends AbstractLoadInterceptor<UserGroup> {
 
 	@Override
-	public void onLoad(UserGroup model, InterceptorContext context) throws InterceptorException {
+	public UserGroup onLoad(UserGroup model, InterceptorContext context) throws InterceptorException {
 		UserGroup prototype = new UserGroup();
 		loadCommonProperties(model, prototype, context);
 		prototype.setName(model.getName());
 
-		model = prototype;
+		return prototype;
 	}
 }

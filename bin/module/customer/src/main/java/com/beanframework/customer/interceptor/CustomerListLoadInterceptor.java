@@ -8,7 +8,7 @@ import com.beanframework.customer.domain.Customer;
 public class CustomerListLoadInterceptor extends AbstractLoadInterceptor<Customer> {
 
 	@Override
-	public void onLoad(Customer model, InterceptorContext context) throws InterceptorException {
+	public Customer onLoad(Customer model, InterceptorContext context) throws InterceptorException {
 		Customer prototype = new Customer();
 		loadCommonProperties(model, prototype, context);
 		prototype.setType(model.getType());
@@ -19,7 +19,7 @@ public class CustomerListLoadInterceptor extends AbstractLoadInterceptor<Custome
 		prototype.setEnabled(model.getEnabled());
 		prototype.setName(model.getName());
 
-		model = prototype;
+		return prototype;
 	}
 
 }

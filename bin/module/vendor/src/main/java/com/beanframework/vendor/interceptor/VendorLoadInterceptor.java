@@ -16,7 +16,7 @@ import com.beanframework.vendor.domain.Vendor;
 public class VendorLoadInterceptor extends AbstractLoadInterceptor<Vendor> {
 
 	@Override
-	public void onLoad(Vendor model, InterceptorContext context) throws InterceptorException {
+	public Vendor onLoad(Vendor model, InterceptorContext context) throws InterceptorException {
 		Hibernate.initialize(model.getUserGroups());
 		for (UserGroup userGroup : model.getUserGroups()) {
 			Hibernate.initialize(userGroup.getUserAuthorities());
@@ -65,7 +65,7 @@ public class VendorLoadInterceptor extends AbstractLoadInterceptor<Vendor> {
 		prototype.setUserGroups(model.getUserGroups());
 		prototype.setFields(model.getFields());
 
-		model = prototype;
+		return prototype;
 
 	}
 

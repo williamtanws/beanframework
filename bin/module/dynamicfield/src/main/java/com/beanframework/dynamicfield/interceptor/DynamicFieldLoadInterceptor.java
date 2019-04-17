@@ -10,7 +10,7 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 public class DynamicFieldLoadInterceptor extends AbstractLoadInterceptor<DynamicField> {
 
 	@Override
-	public void onLoad(DynamicField model, InterceptorContext context) throws InterceptorException {
+	public DynamicField onLoad(DynamicField model, InterceptorContext context) throws InterceptorException {
 
 		Hibernate.initialize(model.getLanguage());
 		Hibernate.initialize(model.getEnumerations());
@@ -26,7 +26,7 @@ public class DynamicFieldLoadInterceptor extends AbstractLoadInterceptor<Dynamic
 		prototype.setLanguage(model.getLanguage());
 		prototype.setEnumerations(model.getEnumerations());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }

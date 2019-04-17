@@ -8,7 +8,7 @@ import com.beanframework.employee.domain.Employee;
 public class EmployeeListLoadInterceptor extends AbstractLoadInterceptor<Employee> {
 
 	@Override
-	public void onLoad(Employee model, InterceptorContext context) throws InterceptorException {
+	public Employee onLoad(Employee model, InterceptorContext context) throws InterceptorException {
 		Employee prototype = new Employee();
 		loadCommonProperties(model, prototype, context);
 		prototype.setType(model.getType());
@@ -19,7 +19,7 @@ public class EmployeeListLoadInterceptor extends AbstractLoadInterceptor<Employe
 		prototype.setEnabled(model.getEnabled());
 		prototype.setName(model.getName());
 
-		model = prototype;
+		return prototype;
 	}
 
 }

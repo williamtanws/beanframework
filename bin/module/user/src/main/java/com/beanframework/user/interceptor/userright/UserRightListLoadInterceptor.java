@@ -11,7 +11,7 @@ import com.beanframework.user.domain.UserRightField;
 public class UserRightListLoadInterceptor extends AbstractLoadInterceptor<UserRight> {
 
 	@Override
-	public void onLoad(UserRight model, InterceptorContext context) throws InterceptorException {
+	public UserRight onLoad(UserRight model, InterceptorContext context) throws InterceptorException {
 
 		Hibernate.initialize(model.getFields());
 		for (UserRightField field : model.getFields()) {
@@ -28,6 +28,6 @@ public class UserRightListLoadInterceptor extends AbstractLoadInterceptor<UserRi
 		prototype.setSort(model.getSort());
 		prototype.setFields(model.getFields());
 
-		model = prototype;
+		return prototype;
 	}
 }

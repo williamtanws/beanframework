@@ -10,7 +10,7 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 public class DynamicFieldSlotLoadInterceptor extends AbstractLoadInterceptor<DynamicFieldSlot> {
 
 	@Override
-	public void onLoad(DynamicFieldSlot model, InterceptorContext context) throws InterceptorException {
+	public DynamicFieldSlot onLoad(DynamicFieldSlot model, InterceptorContext context) throws InterceptorException {
 
 		Hibernate.initialize(model.getDynamicField());
 
@@ -20,7 +20,7 @@ public class DynamicFieldSlotLoadInterceptor extends AbstractLoadInterceptor<Dyn
 		prototype.setSort(model.getSort());
 		prototype.setDynamicField(model.getDynamicField());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }

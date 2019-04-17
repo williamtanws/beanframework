@@ -8,7 +8,7 @@ import com.beanframework.cronjob.domain.Cronjob;
 public class CronjobListLoadInterceptor extends AbstractLoadInterceptor<Cronjob> {
 
 	@Override
-	public void onLoad(Cronjob model, InterceptorContext context) throws InterceptorException {
+	public Cronjob onLoad(Cronjob model, InterceptorContext context) throws InterceptorException {
 		Cronjob prototype = new Cronjob();
 		loadCommonProperties(model, prototype, context);
 		prototype.setJobClass(model.getJobClass());
@@ -26,7 +26,7 @@ public class CronjobListLoadInterceptor extends AbstractLoadInterceptor<Cronjob>
 		prototype.setLastStartExecutedDate(model.getLastStartExecutedDate());
 		prototype.setLastFinishExecutedDate(model.getLastFinishExecutedDate());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }

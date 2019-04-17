@@ -3,7 +3,6 @@ package com.beanframework.common.service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -88,7 +87,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 		try {
 			Object model = modelClass.newInstance();
-			initialDefaultsInterceptor(model, interceptorContext,  modelClass.getSimpleName());
+			initialDefaultsInterceptor(model, interceptorContext, modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,7 +106,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = entityManager.find(modelClass, uuid);
 
 			if (model != null)
-				loadInterceptor(model, interceptorContext,  modelClass.getSimpleName());
+				model = loadInterceptor(model, interceptorContext, modelClass.getSimpleName());
 
 			return (T) model;
 		} catch (Exception e) {
@@ -125,7 +124,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = createQuery(properties, null, null, null, null, modelClass).getSingleResult();
 
 			if (model != null)
-				loadInterceptor(model, interceptorContext,  modelClass.getSimpleName());
+				model = loadInterceptor(model, interceptorContext, modelClass.getSimpleName());
 
 			return (T) model;
 		} catch (NoResultException e) {
@@ -187,8 +186,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 			List<Object> models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
 
-			if (models != null)
-				loadInterceptor(models, interceptorContext,  modelClass.getSimpleName()+"List");
+			if (models != null) {
+				return (T) loadInterceptor(models, interceptorContext, modelClass.getSimpleName() + "List");
+			}
 
 			return (T) models;
 		} catch (Exception e) {
@@ -271,12 +271,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
-			Iterator<T> i = page.getContent().iterator();
-			while (i.hasNext()) {
-				loadInterceptor(i.next(), interceptorContext, modelClass.getSimpleName()+"List");
-			}
+			List<T> content = (List<T>) loadInterceptor(page.getContent(), interceptorContext, modelClass.getSimpleName() + "List");
 
-			PageImpl<T> pageImpl = new PageImpl<T>(page.getContent(), page.getPageable(), page.getTotalElements());
+			PageImpl<T> pageImpl = new PageImpl<T>(content, page.getPageable(), page.getTotalElements());
 
 			return pageImpl;
 		} catch (Exception e) {
@@ -303,7 +300,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 
 			prepareInterceptor(model, interceptorContext, modelClass.getSimpleName());
-			validateInterceptor(model, interceptorContext,  modelClass.getSimpleName());
+			validateInterceptor(model, interceptorContext, modelClass.getSimpleName());
 			modelRepository.save(model);
 
 			Set<Entry<String, AfterSaveListener>> afterSaveListeners = afterSaveListenerRegistry.getListeners().entrySet();
@@ -360,7 +357,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(rollbackFor = SQLException.class)
 	private void deleteEntity(Object model, Class modelClass) throws SQLException, InterceptorException, BusinessException {
-		removeInterceptor(model, interceptorContext,  modelClass.getSimpleName());
+		removeInterceptor(model, interceptorContext, modelClass.getSimpleName());
 		modelRepository.delete(model);
 
 		AfterRemoveEvent event = new AfterRemoveEvent();
@@ -441,6 +438,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public void initDefaults(Object model, Class modelClass) throws Exception {
-		initialDefaultsInterceptor(model, interceptorContext,  modelClass.getSimpleName());
+		initialDefaultsInterceptor(model, interceptorContext, modelClass.getSimpleName());
 	}
 }

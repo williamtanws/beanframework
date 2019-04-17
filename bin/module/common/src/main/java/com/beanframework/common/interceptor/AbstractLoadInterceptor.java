@@ -7,7 +7,8 @@ import com.beanframework.common.exception.InterceptorException;
 public abstract class AbstractLoadInterceptor<T extends GenericEntity> implements LoadInterceptor<T> {
 
 	@Override
-	public void onLoad(T model, InterceptorContext context) throws InterceptorException {
+	public T onLoad(T model, InterceptorContext context) throws InterceptorException {
+		return model;
 	}
 
 	protected void loadCommonProperties(T source, T prototype, InterceptorContext context) {

@@ -11,7 +11,7 @@ import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 public class DynamicFieldTemplateLoadInterceptor extends AbstractLoadInterceptor<DynamicFieldTemplate> {
 
 	@Override
-	public void onLoad(DynamicFieldTemplate model, InterceptorContext context) throws InterceptorException {
+	public DynamicFieldTemplate onLoad(DynamicFieldTemplate model, InterceptorContext context) throws InterceptorException {
 
 		if (model.getDynamicFieldSlots() != null && model.getDynamicFieldSlots().isEmpty() == false)
 			for (DynamicFieldSlot dynamicFieldSlot : model.getDynamicFieldSlots()) {
@@ -26,7 +26,7 @@ public class DynamicFieldTemplateLoadInterceptor extends AbstractLoadInterceptor
 		prototype.setName(model.getName());
 		prototype.setDynamicFieldSlots(model.getDynamicFieldSlots());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }

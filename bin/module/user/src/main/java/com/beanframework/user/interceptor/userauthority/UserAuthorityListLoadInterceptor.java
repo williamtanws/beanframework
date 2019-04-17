@@ -8,12 +8,12 @@ import com.beanframework.user.domain.UserAuthority;
 public class UserAuthorityListLoadInterceptor extends AbstractLoadInterceptor<UserAuthority> {
 
 	@Override
-	public void onLoad(UserAuthority model, InterceptorContext context) throws InterceptorException {
+	public UserAuthority onLoad(UserAuthority model, InterceptorContext context) throws InterceptorException {
 		UserAuthority prototype = new UserAuthority();
 		loadCommonProperties(model, prototype, context);
 		prototype.setEnabled(model.getEnabled());
 
-		model = prototype;
+		return prototype;
 	}
 
 }

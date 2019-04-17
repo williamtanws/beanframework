@@ -8,7 +8,7 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 public class DynamicFieldListLoadInterceptor extends AbstractLoadInterceptor<DynamicField> {
 
 	@Override
-	public void onLoad(DynamicField model, InterceptorContext context) throws InterceptorException {
+	public DynamicField onLoad(DynamicField model, InterceptorContext context) throws InterceptorException {
 		DynamicField prototype = new DynamicField();
 		loadCommonProperties(model, prototype, context);
 		prototype.setName(model.getName());
@@ -18,7 +18,7 @@ public class DynamicFieldListLoadInterceptor extends AbstractLoadInterceptor<Dyn
 		prototype.setLabel(model.getLabel());
 		prototype.setGrid(model.getGrid());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }

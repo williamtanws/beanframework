@@ -8,13 +8,13 @@ import com.beanframework.enumuration.domain.Enumeration;
 public class EnumerationLoadInterceptor extends AbstractLoadInterceptor<Enumeration> {
 
 	@Override
-	public void onLoad(Enumeration model, InterceptorContext context) throws InterceptorException {
+	public Enumeration onLoad(Enumeration model, InterceptorContext context) throws InterceptorException {
 		Enumeration prototype = new Enumeration();
 		loadCommonProperties(model, prototype, context);
 		prototype.setName(model.getName());
 		prototype.setSort(model.getSort());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }

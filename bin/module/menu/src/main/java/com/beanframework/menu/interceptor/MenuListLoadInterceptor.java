@@ -16,7 +16,7 @@ import com.beanframework.user.domain.UserRightField;
 public class MenuListLoadInterceptor extends AbstractLoadInterceptor<Menu> {
 
 	@Override
-	public void onLoad(Menu model, InterceptorContext context) throws InterceptorException {
+	public Menu onLoad(Menu model, InterceptorContext context) throws InterceptorException {
 		Hibernate.initialize(model.getChilds());
 		for (Menu menu : model.getChilds()) {
 			initializeChilds(menu);
@@ -85,7 +85,7 @@ public class MenuListLoadInterceptor extends AbstractLoadInterceptor<Menu> {
 
 		prototype.setFields(model.getFields());
 		
-		model = prototype;
+		return prototype;
 	}
 
 	private void initializeChilds(Menu model) {

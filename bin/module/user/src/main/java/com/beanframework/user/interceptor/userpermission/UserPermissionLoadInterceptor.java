@@ -8,12 +8,12 @@ import com.beanframework.user.domain.UserPermission;
 public class UserPermissionLoadInterceptor extends AbstractLoadInterceptor<UserPermission> {
 
 	@Override
-	public void onLoad(UserPermission model, InterceptorContext context) throws InterceptorException {
+	public UserPermission onLoad(UserPermission model, InterceptorContext context) throws InterceptorException {
 		UserPermission prototype = new UserPermission();
 		loadCommonProperties(model, prototype, context);
 		prototype.setName(model.getName());
 		prototype.setSort(model.getSort());
 
-		model = prototype;
+		return prototype;
 	}
 }
