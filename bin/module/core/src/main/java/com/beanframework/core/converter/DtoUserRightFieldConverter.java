@@ -38,8 +38,7 @@ public class DtoUserRightFieldConverter extends AbstractDtoConverter<UserRightFi
 
 			prototype.setValue(source.getValue());
 
-			if (context.isFetchable(UserRightField.class, UserRightField.DYNAMIC_FIELD_SLOT))
-				prototype.setDynamicFieldSlot(modelService.getDto(source.getDynamicFieldSlot(), DynamicFieldSlotDto.class));
+			prototype.setDynamicFieldSlot(modelService.getDto(source.getDynamicFieldSlot(), DynamicFieldSlotDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

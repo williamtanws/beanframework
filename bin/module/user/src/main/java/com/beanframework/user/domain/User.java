@@ -33,7 +33,7 @@ import com.beanframework.user.UserConstants;
 @Table(name = UserConstants.Table.USER)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
-public abstract class User extends GenericEntity {
+public class User extends GenericEntity {
 
 	public static final String PASSWORD = "password";
 	public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";

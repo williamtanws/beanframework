@@ -123,8 +123,7 @@ public class PlatformUpdateController {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, errorMessages.toString());
 		}
 
-		if (cacheManager != null)
-			cacheManager.clearAll();
+		clearAllCaches();
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -135,6 +134,13 @@ public class PlatformUpdateController {
 			redirectView.setUrl(PATH_UPDATE + "?clearsessions=1");
 		}
 		return redirectView;
+	}
+
+	public void clearAllCaches() {
+		if (cacheManager != null)
+			for (String name : cacheManager.getCacheNames()) {
+				cacheManager.getCache(name).removeAll();
+			}
 	}
 
 	public boolean parseBoolean(String value) {

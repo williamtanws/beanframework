@@ -12,10 +12,27 @@ public class CronjobLoadInterceptor extends AbstractLoadInterceptor<Cronjob> {
 	@Override
 	public void onLoad(Cronjob model, InterceptorContext context) throws InterceptorException {
 		
-		if (context.isFetchable(Cronjob.class, Cronjob.CRONJOB_DATAS))
-			Hibernate.initialize(model.getCronjobDatas());
+		Hibernate.initialize(model.getCronjobDatas());
 		
-		super.onLoad(model, context);
+		Cronjob prototype = new Cronjob();
+		loadCommonProperties(model, prototype, context);
+		prototype.setJobClass(model.getJobClass());
+		prototype.setJobGroup(model.getJobGroup());
+		prototype.setName(model.getName());
+		prototype.setDescription(model.getDescription());
+		prototype.setCronExpression(model.getCronExpression());
+		prototype.setStartup(model.getStartup());
+		prototype.setStatus(model.getStatus());
+		prototype.setResult(model.getResult());
+		prototype.setMessage(model.getMessage());
+		prototype.setJobTrigger(model.getJobTrigger());
+		prototype.setTriggerStartDate(model.getTriggerStartDate());
+		prototype.setLastTriggeredDate(model.getLastTriggeredDate());
+		prototype.setLastStartExecutedDate(model.getLastStartExecutedDate());
+		prototype.setLastFinishExecutedDate(model.getLastFinishExecutedDate());
+		prototype.setCronjobDatas(model.getCronjobDatas());
+		
+		model = prototype;
 	}
 
 }

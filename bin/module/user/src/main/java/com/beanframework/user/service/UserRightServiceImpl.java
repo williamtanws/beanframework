@@ -13,14 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightField;
 import com.beanframework.user.specification.UserRightSpecification;
 
 @Service
@@ -29,9 +25,6 @@ public class UserRightServiceImpl implements UserRightService {
 	@Autowired
 	private ModelService modelService;
 
-	@Autowired
-	private FetchContext fetchContext;
-
 	@Override
 	public UserRight create() throws Exception {
 		return modelService.create(UserRight.class);
@@ -39,27 +32,11 @@ public class UserRightServiceImpl implements UserRightService {
 
 	@Override
 	public UserRight findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(UserRight.class, UserRight.FIELDS);
-		fetchContext.addFetchProperty(UserRightField.class, UserRightField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
-
 		return modelService.findOneEntityByUuid(uuid, UserRight.class);
 	}
 
 	@Override
 	public UserRight findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(UserRight.class, UserRight.FIELDS);
-		fetchContext.addFetchProperty(UserRightField.class, UserRightField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
-
 		return modelService.findOneEntityByProperties(properties, UserRight.class);
 	}
 
@@ -87,7 +64,6 @@ public class UserRightServiceImpl implements UserRightService {
 
 	@Override
 	public Page<UserRight> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(UserRightSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserRight.class);
 	}
 

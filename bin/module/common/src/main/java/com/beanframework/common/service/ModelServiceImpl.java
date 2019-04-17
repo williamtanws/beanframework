@@ -88,7 +88,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 		try {
 			Object model = modelClass.newInstance();
-			initialDefaultsInterceptor(model, interceptorContext, modelClass);
+			initialDefaultsInterceptor(model, interceptorContext,  modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,7 +107,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = entityManager.find(modelClass, uuid);
 
 			if (model != null)
-				loadInterceptor(model, interceptorContext, modelClass);
+				loadInterceptor(model, interceptorContext,  modelClass.getSimpleName());
 
 			return (T) model;
 		} catch (Exception e) {
@@ -125,7 +125,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = createQuery(properties, null, null, null, null, modelClass).getSingleResult();
 
 			if (model != null)
-				loadInterceptor(model, interceptorContext, modelClass);
+				loadInterceptor(model, interceptorContext,  modelClass.getSimpleName());
 
 			return (T) model;
 		} catch (NoResultException e) {
@@ -188,7 +188,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			List<Object> models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
 
 			if (models != null)
-				loadInterceptor(models, interceptorContext, modelClass);
+				loadInterceptor(models, interceptorContext,  modelClass.getSimpleName()+"List");
 
 			return (T) models;
 		} catch (Exception e) {
@@ -273,7 +273,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			Iterator<T> i = page.getContent().iterator();
 			while (i.hasNext()) {
-				loadInterceptor(i.next(), interceptorContext, modelClass);
+				loadInterceptor(i.next(), interceptorContext, modelClass.getSimpleName()+"List");
 			}
 
 			PageImpl<T> pageImpl = new PageImpl<T>(page.getContent(), page.getPageable(), page.getTotalElements());
@@ -302,8 +302,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				event = new AfterSaveEvent(2);
 			}
 
-			prepareInterceptor(model, interceptorContext, modelClass);
-			validateInterceptor(model, interceptorContext, modelClass);
+			prepareInterceptor(model, interceptorContext, modelClass.getSimpleName());
+			validateInterceptor(model, interceptorContext,  modelClass.getSimpleName());
 			modelRepository.save(model);
 
 			Set<Entry<String, AfterSaveListener>> afterSaveListeners = afterSaveListenerRegistry.getListeners().entrySet();
@@ -360,7 +360,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(rollbackFor = SQLException.class)
 	private void deleteEntity(Object model, Class modelClass) throws SQLException, InterceptorException, BusinessException {
-		removeInterceptor(model, interceptorContext, modelClass);
+		removeInterceptor(model, interceptorContext,  modelClass.getSimpleName());
 		modelRepository.delete(model);
 
 		AfterRemoveEvent event = new AfterRemoveEvent();
@@ -415,7 +415,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			if (model == null)
 				return null;
 
-			model = dtoConverter(model, dtoConveterContext, modelClass);
+			model = dtoConverter(model, dtoConveterContext, modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -432,7 +432,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			if (models.isEmpty())
 				return (T) new ArrayList<T>();
 
-			return (T) dtoConverter(models, dtoConveterContext, modelClass);
+			return (T) dtoConverter(models, dtoConveterContext, modelClass.getSimpleName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -441,6 +441,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public void initDefaults(Object model, Class modelClass) throws Exception {
-		initialDefaultsInterceptor(model, interceptorContext, modelClass);
+		initialDefaultsInterceptor(model, interceptorContext,  modelClass.getSimpleName());
 	}
 }

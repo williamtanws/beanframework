@@ -17,48 +17,55 @@ public class VendorLoadInterceptor extends AbstractLoadInterceptor<Vendor> {
 
 	@Override
 	public void onLoad(Vendor model, InterceptorContext context) throws InterceptorException {
-
-		if (context.isFetchable(Vendor.class, Vendor.USER_GROUPS)) {
-			Hibernate.initialize(model.getUserGroups());
-			for (UserGroup userGroup : model.getUserGroups()) {
-				Hibernate.initialize(userGroup.getUserAuthorities());
-				for (UserGroupField field : userGroup.getFields()) {
-					if (field.getDynamicFieldSlot() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-					if (field.getDynamicFieldSlot().getDynamicField() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-				}
-				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-					Hibernate.initialize(userAuthority.getUserRight());
-					for (UserRightField field : userAuthority.getUserRight().getFields()) {
-						if (field.getDynamicFieldSlot() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-						if (field.getDynamicFieldSlot().getDynamicField() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-					}
-					Hibernate.initialize(userAuthority.getUserPermission());
-					for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-						if (field.getDynamicFieldSlot() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-						if (field.getDynamicFieldSlot().getDynamicField() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-					}
-				}
-				initializeUserGroups(userGroup);
-			}
-		}
-
-		if (context.isFetchable(Vendor.class, Vendor.FIELDS)) {
-			Hibernate.initialize(model.getFields());
-			for (UserField field : model.getFields()) {
+		Hibernate.initialize(model.getUserGroups());
+		for (UserGroup userGroup : model.getUserGroups()) {
+			Hibernate.initialize(userGroup.getUserAuthorities());
+			for (UserGroupField field : userGroup.getFields()) {
 				if (field.getDynamicFieldSlot() != null)
 					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
 				if (field.getDynamicFieldSlot().getDynamicField() != null)
 					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
 			}
+			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+				Hibernate.initialize(userAuthority.getUserRight());
+				for (UserRightField field : userAuthority.getUserRight().getFields()) {
+					if (field.getDynamicFieldSlot() != null)
+						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+					if (field.getDynamicFieldSlot().getDynamicField() != null)
+						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+				}
+				Hibernate.initialize(userAuthority.getUserPermission());
+				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
+					if (field.getDynamicFieldSlot() != null)
+						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+					if (field.getDynamicFieldSlot().getDynamicField() != null)
+						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+				}
+			}
+			initializeUserGroups(userGroup);
 		}
 
-		super.onLoad(model, context);
+		Hibernate.initialize(model.getFields());
+		for (UserField field : model.getFields()) {
+			if (field.getDynamicFieldSlot() != null)
+				Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+			if (field.getDynamicFieldSlot().getDynamicField() != null)
+				Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+		}
+
+		Vendor prototype = new Vendor();
+		loadCommonProperties(model, prototype, context);
+		prototype.setType(model.getType());
+		prototype.setPassword(model.getPassword());
+		prototype.setAccountNonExpired(model.getAccountNonExpired());
+		prototype.setAccountNonLocked(model.getAccountNonLocked());
+		prototype.setCredentialsNonExpired(model.getCredentialsNonExpired());
+		prototype.setEnabled(model.getEnabled());
+		prototype.setName(model.getName());
+		prototype.setUserGroups(model.getUserGroups());
+		prototype.setFields(model.getFields());
+
+		model = prototype;
 
 	}
 
@@ -91,5 +98,4 @@ public class VendorLoadInterceptor extends AbstractLoadInterceptor<Vendor> {
 			initializeUserGroups(userGroup);
 		}
 	}
-
 }

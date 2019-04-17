@@ -9,7 +9,12 @@ public class EnumerationLoadInterceptor extends AbstractLoadInterceptor<Enumerat
 
 	@Override
 	public void onLoad(Enumeration model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
+		Enumeration prototype = new Enumeration();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+		prototype.setSort(model.getSort());
+		
+		model = prototype;
 	}
 
 }

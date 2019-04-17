@@ -12,13 +12,21 @@ public class DynamicFieldLoadInterceptor extends AbstractLoadInterceptor<Dynamic
 	@Override
 	public void onLoad(DynamicField model, InterceptorContext context) throws InterceptorException {
 
-		if (context.isFetchable(DynamicField.class, DynamicField.LANGUAGE))
-			Hibernate.initialize(model.getLanguage());
+		Hibernate.initialize(model.getLanguage());
+		Hibernate.initialize(model.getEnumerations());
 
-		if (context.isFetchable(DynamicField.class, DynamicField.ENUMERATIONS))
-			Hibernate.initialize(model.getEnumerations());
-
-		super.onLoad(model, context);
+		DynamicField prototype = new DynamicField();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+		prototype.setRequired(model.getRequired());
+		prototype.setRule(model.getRule());
+		prototype.setType(model.getType());
+		prototype.setLabel(model.getLabel());
+		prototype.setGrid(model.getGrid());
+		prototype.setLanguage(model.getLanguage());
+		prototype.setEnumerations(model.getEnumerations());
+		
+		model = prototype;
 	}
 
 }

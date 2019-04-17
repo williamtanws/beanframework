@@ -12,7 +12,7 @@ import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.AuditorDto;
 
-public class DtoAuditorConverter implements DtoConverter<Auditor, AuditorDto> {
+public class DtoAuditorConverter extends AbstractDtoConverter<Auditor, AuditorDto> implements DtoConverter<Auditor, AuditorDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoAuditorConverter.class);
 
@@ -32,10 +32,7 @@ public class DtoAuditorConverter implements DtoConverter<Auditor, AuditorDto> {
 	private AuditorDto convert(Auditor source, AuditorDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {	
-			prototype.setUuid(source.getUuid());
-			prototype.setId(source.getId());
-			prototype.setCreatedDate(source.getCreatedDate());
-			prototype.setLastModifiedDate(source.getLastModifiedDate());
+			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
 
