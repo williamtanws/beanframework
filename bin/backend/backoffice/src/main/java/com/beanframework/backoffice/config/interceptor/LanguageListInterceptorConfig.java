@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.interceptor.LanguageListLoadInterceptor;
 
@@ -23,7 +24,7 @@ public class LanguageListInterceptorConfig {
 	public InterceptorMapping languageListLoadInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(languageListLoadInterceptor());
-		mapping.setTypeCode(Language.class.getSimpleName() + "List");
+		mapping.setTypeCode(Language.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return mapping;
 	}

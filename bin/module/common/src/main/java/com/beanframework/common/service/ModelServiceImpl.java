@@ -82,6 +82,17 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
+	public void refresh(Object model) {
+		entityManager.refresh(model);
+	}
+
+	@Transactional(rollbackFor = BusinessException.class)
+	@Override
+	public void flush() throws BusinessException {
+		modelRepository.flush();
+	}
+
+	@Override
 	public <T> T create(Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -187,7 +198,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			List<Object> models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
 
 			if (models != null) {
-				return (T) loadInterceptor(models, interceptorContext, modelClass.getSimpleName() + "List");
+				return (T) loadInterceptor(models, interceptorContext, modelClass.getSimpleName() + DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 			}
 
 			return (T) models;
@@ -271,7 +282,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
-			List<T> content = (List<T>) loadInterceptor(page.getContent(), interceptorContext, modelClass.getSimpleName() + "List");
+			List<T> content = (List<T>) loadInterceptor(page.getContent(), interceptorContext, modelClass.getSimpleName() + DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 			PageImpl<T> pageImpl = new PageImpl<T>(content, page.getPageable(), page.getTotalElements());
 
@@ -280,11 +291,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
 		}
-	}
-
-	@Override
-	public void refresh(Object model) {
-		entityManager.refresh(model);
 	}
 
 	@Transactional(rollbackFor = BusinessException.class)
@@ -313,12 +319,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage(), e);
 		}
-	}
-
-	@Transactional(rollbackFor = BusinessException.class)
-	@Override
-	public void flush() throws BusinessException {
-		modelRepository.flush();
 	}
 
 	@Transactional(rollbackFor = BusinessException.class)

@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.enumuration.interceptor.EnumerationListLoadInterceptor;
 
@@ -23,7 +24,7 @@ public class EnumerationListInterceptorConfig {
 	public InterceptorMapping enumerationListLoadInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(enumerationListLoadInterceptor());
-		mapping.setTypeCode(Enumeration.class.getSimpleName() + "List");
+		mapping.setTypeCode(Enumeration.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return mapping;
 	}

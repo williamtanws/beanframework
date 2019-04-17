@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.interceptor.CustomerListLoadInterceptor;
 
@@ -23,7 +24,7 @@ public class CustomerListInterceptorConfig {
 	public InterceptorMapping customerListLoadInterceptorMapping() {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(customerListLoadInterceptor());
-		mapping.setTypeCode(Customer.class.getSimpleName() + "List");
+		mapping.setTypeCode(Customer.class.getSimpleName() + ModelService.DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
 		return mapping;
 	}
