@@ -2,21 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
 	<th:block layout:fragment="list (icon, title, objectDto, createAuthority, updateAuthority, tableName, listUrl, listFields, editFormAction, editForm, createButton, filterColumnIndex)">
-		<!-- Search Form
-		<div class="row">
-			<div class="col-md-6">
-				<div class="box box-solid">
-					<div class="box-body">
-						<div class="box-tools">
-							<div class="has-feedback">
-								<input id="searchAll" type="text" class="form-control input-sm" th:placeholder="#{module.backoffice.searchall}">
-								<span class="glyphicon glyphicon-search form-control-feedback"></span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>-->
 		<!-- Alert Notification-->
 		<div class="row">
 			<th:block layout:insert="~{common/adminlte/common/component/alert :: custom}"></th:block>

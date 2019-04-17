@@ -8,7 +8,7 @@ import com.beanframework.user.domain.User;
 public class UserListLoadInterceptor extends AbstractLoadInterceptor<User> {
 
 	@Override
-	public void onLoad(User model, InterceptorContext context) throws InterceptorException {
+	public User onLoad(User model, InterceptorContext context) throws InterceptorException {
 		User prototype = new User();
 		loadCommonProperties(model, prototype, context);
 		prototype.setType(model.getType());
@@ -19,6 +19,6 @@ public class UserListLoadInterceptor extends AbstractLoadInterceptor<User> {
 		prototype.setEnabled(model.getEnabled());
 		prototype.setName(model.getName());
 
-		model = prototype;
+		return prototype;
 	}
 }

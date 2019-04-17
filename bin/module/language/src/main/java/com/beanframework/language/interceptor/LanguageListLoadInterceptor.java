@@ -8,14 +8,14 @@ import com.beanframework.language.domain.Language;
 public class LanguageListLoadInterceptor extends AbstractLoadInterceptor<Language> {
 
 	@Override
-	public void onLoad(Language model, InterceptorContext context) throws InterceptorException {
+	public Language onLoad(Language model, InterceptorContext context) throws InterceptorException {
 		Language prototype = new Language();
 		loadCommonProperties(model, prototype, context);
 		prototype.setName(model.getName());
 		prototype.setSort(model.getSort());
 		prototype.setActive(model.getActive());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }

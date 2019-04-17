@@ -11,7 +11,7 @@ import com.beanframework.user.domain.UserPermissionField;
 public class UserPermissionListLoadInterceptor extends AbstractLoadInterceptor<UserPermission> {
 
 	@Override
-	public void onLoad(UserPermission model, InterceptorContext context) throws InterceptorException {
+	public UserPermission onLoad(UserPermission model, InterceptorContext context) throws InterceptorException {
 
 		Hibernate.initialize(model.getFields());
 		for (UserPermissionField field : model.getFields()) {
@@ -27,6 +27,6 @@ public class UserPermissionListLoadInterceptor extends AbstractLoadInterceptor<U
 		prototype.setSort(model.getSort());
 		prototype.setFields(model.getFields());
 
-		model = prototype;
+		return prototype;
 	}
 }

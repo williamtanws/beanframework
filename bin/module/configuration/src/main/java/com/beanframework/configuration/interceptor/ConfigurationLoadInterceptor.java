@@ -8,13 +8,13 @@ import com.beanframework.configuration.domain.Configuration;
 public class ConfigurationLoadInterceptor extends AbstractLoadInterceptor<Configuration> {
 
 	@Override
-	public void onLoad(Configuration model, InterceptorContext context) throws InterceptorException {
+	public Configuration onLoad(Configuration model, InterceptorContext context) throws InterceptorException {
 
 		Configuration prototype = new Configuration();
 		loadCommonProperties(model, prototype, context);
 		prototype.setValue(model.getValue());
 
-		model = prototype;
+		return prototype;
 	}
 
 }

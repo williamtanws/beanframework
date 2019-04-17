@@ -10,7 +10,7 @@ import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 public class CommentLoadInterceptor extends AbstractLoadInterceptor<Comment> {
 
 	@Override
-	public void onLoad(Comment model, InterceptorContext context) throws InterceptorException {
+	public Comment onLoad(Comment model, InterceptorContext context) throws InterceptorException {
 		
 		Hibernate.initialize(model.getUser());
 		
@@ -20,7 +20,7 @@ public class CommentLoadInterceptor extends AbstractLoadInterceptor<Comment> {
 		prototype.setVisibled(model.getVisibled());
 		prototype.setUser(model.getUser());
 
-		model = prototype;
+		return prototype;
 	}
 
 }

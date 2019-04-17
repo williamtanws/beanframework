@@ -10,7 +10,7 @@ import com.beanframework.cronjob.domain.Cronjob;
 public class CronjobLoadInterceptor extends AbstractLoadInterceptor<Cronjob> {
 
 	@Override
-	public void onLoad(Cronjob model, InterceptorContext context) throws InterceptorException {
+	public Cronjob onLoad(Cronjob model, InterceptorContext context) throws InterceptorException {
 		
 		Hibernate.initialize(model.getCronjobDatas());
 		
@@ -32,7 +32,7 @@ public class CronjobLoadInterceptor extends AbstractLoadInterceptor<Cronjob> {
 		prototype.setLastFinishExecutedDate(model.getLastFinishExecutedDate());
 		prototype.setCronjobDatas(model.getCronjobDatas());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }

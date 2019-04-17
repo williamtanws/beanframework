@@ -8,7 +8,7 @@ import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 public class AdminLoadInterceptor extends AbstractLoadInterceptor<Admin> {
 
 	@Override
-	public void onLoad(Admin model, InterceptorContext context) throws InterceptorException {
+	public Admin onLoad(Admin model, InterceptorContext context) throws InterceptorException {
 		Admin prototype = new Admin();
 		loadCommonProperties(model, prototype, context);
 		prototype.setType(model.getType());
@@ -19,7 +19,7 @@ public class AdminLoadInterceptor extends AbstractLoadInterceptor<Admin> {
 		prototype.setEnabled(model.getEnabled());
 		prototype.setName(model.getName());
 
-		model = prototype;
+		return prototype;
 	}
 
 }

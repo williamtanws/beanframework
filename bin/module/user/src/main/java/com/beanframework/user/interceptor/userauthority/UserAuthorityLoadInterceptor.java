@@ -12,7 +12,7 @@ import com.beanframework.user.domain.UserRightField;
 public class UserAuthorityLoadInterceptor extends AbstractLoadInterceptor<UserAuthority> {
 
 	@Override
-	public void onLoad(UserAuthority model, InterceptorContext context) throws InterceptorException {
+	public UserAuthority onLoad(UserAuthority model, InterceptorContext context) throws InterceptorException {
 		Hibernate.initialize(model.getUserPermission());
 		for (UserPermissionField field : model.getUserPermission().getFields()) {
 			Hibernate.initialize(field.getDynamicFieldSlot());
@@ -37,7 +37,7 @@ public class UserAuthorityLoadInterceptor extends AbstractLoadInterceptor<UserAu
 		prototype.setUserPermission(model.getUserPermission());
 		prototype.setUserRight(model.getUserRight());
 
-		model = prototype;
+		return prototype;
 	}
 
 }

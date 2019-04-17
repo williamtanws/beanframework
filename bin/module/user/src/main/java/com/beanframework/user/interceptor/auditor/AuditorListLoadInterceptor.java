@@ -8,11 +8,11 @@ import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 public class AuditorListLoadInterceptor extends AbstractLoadInterceptor<Auditor> {
 
 	@Override
-	public void onLoad(Auditor model, InterceptorContext context) throws InterceptorException {
+	public Auditor onLoad(Auditor model, InterceptorContext context) throws InterceptorException {
 		Auditor prototype = new Auditor();
 		loadCommonProperties(model, prototype, context);
 		prototype.setName(model.getName());
 
-		model = prototype;
+		return prototype;
 	}
 }

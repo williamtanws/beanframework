@@ -16,7 +16,7 @@ import com.beanframework.user.domain.UserRightField;
 public class UserLoadInterceptor extends AbstractLoadInterceptor<User> {
 
 	@Override
-	public void onLoad(User model, InterceptorContext context) throws InterceptorException {
+	public User onLoad(User model, InterceptorContext context) throws InterceptorException {
 
 		Hibernate.initialize(model.getUserGroups());
 		for (UserGroup userGroup : model.getUserGroups()) {
@@ -72,7 +72,7 @@ public class UserLoadInterceptor extends AbstractLoadInterceptor<User> {
 		prototype.setUserGroups(model.getUserGroups());
 		prototype.setFields(model.getFields());
 
-		model = prototype;
+		return prototype;
 
 	}
 

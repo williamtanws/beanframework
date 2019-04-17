@@ -8,7 +8,7 @@ import com.beanframework.email.domain.Email;
 public class EmailListLoadInterceptor extends AbstractLoadInterceptor<Email> {
 
 	@Override
-	public void onLoad(Email model, InterceptorContext context) throws InterceptorException {
+	public Email onLoad(Email model, InterceptorContext context) throws InterceptorException {
 		Email prototype = new Email();
 		loadCommonProperties(model, prototype, context);
 		prototype.setName(model.getName());
@@ -22,7 +22,7 @@ public class EmailListLoadInterceptor extends AbstractLoadInterceptor<Email> {
 		prototype.setResult(model.getResult());
 		prototype.setMessage(model.getMessage());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }

@@ -8,13 +8,13 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 public class DynamicFieldSlotListLoadInterceptor extends AbstractLoadInterceptor<DynamicFieldSlot> {
 
 	@Override
-	public void onLoad(DynamicFieldSlot model, InterceptorContext context) throws InterceptorException {
+	public DynamicFieldSlot onLoad(DynamicFieldSlot model, InterceptorContext context) throws InterceptorException {
 		DynamicFieldSlot prototype = new DynamicFieldSlot();
 		loadCommonProperties(model, prototype, context);
 		prototype.setName(model.getName());
 		prototype.setSort(model.getSort());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }

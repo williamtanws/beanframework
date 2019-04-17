@@ -8,7 +8,7 @@ import com.beanframework.media.domain.Media;
 public class MediaListLoadInterceptor extends AbstractLoadInterceptor<Media> {
 
 	@Override
-	public void onLoad(Media model, InterceptorContext context) throws InterceptorException {
+	public Media onLoad(Media model, InterceptorContext context) throws InterceptorException {
 		Media prototype = new Media();
 		loadCommonProperties(model, prototype, context);
 		prototype.setFileName(model.getFileName());
@@ -23,7 +23,7 @@ public class MediaListLoadInterceptor extends AbstractLoadInterceptor<Media> {
 
 		prototype.setUser(model.getUser());
 		
-		model = prototype;
+		return prototype;
 	}
 
 }
