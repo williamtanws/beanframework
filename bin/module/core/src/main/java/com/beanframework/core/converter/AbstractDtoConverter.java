@@ -1,6 +1,5 @@
 package com.beanframework.core.converter;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
@@ -15,11 +14,9 @@ public abstract class AbstractDtoConverter<T extends GenericEntity, E extends Ge
 	@Autowired
 	protected ModelService modelService;
 
-	@SuppressWarnings("unchecked")
 	protected void convertCommonProperties(T source, E prototype, DtoConverterContext context) throws ConverterException {
 
 		try {			
-			source = (T) Hibernate.unproxy(source);
 			prototype.setUuid(source.getUuid());
 			prototype.setId(source.getId());
 			prototype.setCreatedDate(source.getCreatedDate());

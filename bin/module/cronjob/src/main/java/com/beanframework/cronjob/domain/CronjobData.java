@@ -2,6 +2,7 @@ package com.beanframework.cronjob.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -25,7 +26,7 @@ public class CronjobData extends GenericEntity {
 	public static final String CRONJOB = "cronjob";
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cronjob_uuid")
 	private Cronjob cronjob;
 

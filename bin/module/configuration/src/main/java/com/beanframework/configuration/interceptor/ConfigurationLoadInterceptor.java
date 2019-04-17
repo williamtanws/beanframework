@@ -9,7 +9,12 @@ public class ConfigurationLoadInterceptor extends AbstractLoadInterceptor<Config
 
 	@Override
 	public void onLoad(Configuration model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
+
+		Configuration prototype = new Configuration();
+		loadCommonProperties(model, prototype, context);
+		prototype.setValue(model.getValue());
+
+		model = prototype;
 	}
 
 }

@@ -9,7 +9,20 @@ public class EmailLoadInterceptor extends AbstractLoadInterceptor<Email> {
 
 	@Override
 	public void onLoad(Email model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
+		Email prototype = new Email();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+		prototype.setToRecipients(model.getToRecipients());
+		prototype.setCcRecipients(model.getCcRecipients());
+		prototype.setBccRecipients(model.getBccRecipients());
+		prototype.setSubject(model.getSubject());
+		prototype.setText(model.getText());
+		prototype.setHtml(model.getHtml());
+		prototype.setStatus(model.getStatus());
+		prototype.setResult(model.getResult());
+		prototype.setMessage(model.getMessage());
+		
+		model = prototype;
 	}
 
 }

@@ -12,10 +12,15 @@ public class DynamicFieldSlotLoadInterceptor extends AbstractLoadInterceptor<Dyn
 	@Override
 	public void onLoad(DynamicFieldSlot model, InterceptorContext context) throws InterceptorException {
 
-		if (context.isFetchable(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD))
-			Hibernate.initialize(model.getDynamicField());
+		Hibernate.initialize(model.getDynamicField());
 
-		super.onLoad(model, context);
+		DynamicFieldSlot prototype = new DynamicFieldSlot();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+		prototype.setSort(model.getSort());
+		prototype.setDynamicField(model.getDynamicField());
+		
+		model = prototype;
 	}
 
 }

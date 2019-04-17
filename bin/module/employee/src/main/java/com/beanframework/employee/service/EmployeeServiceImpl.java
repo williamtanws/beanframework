@@ -40,17 +40,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.specification.EmployeeSpecification;
 import com.beanframework.user.domain.UserAuthority;
-import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
@@ -76,9 +72,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	private FetchContext fetchContext;
-
-	@Autowired
 	private EntityManager entityManager;
 
 	@Override
@@ -88,39 +81,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-
-		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
-		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
-
 		return modelService.findOneEntityByUuid(uuid, Employee.class);
 	}
 
 	@Override
 	public Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(Employee.class, Employee.USER_GROUPS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-
-		fetchContext.addFetchProperty(Employee.class, Employee.FIELDS);
-		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
-
 		return modelService.findOneEntityByProperties(properties, Employee.class);
 	}
 
@@ -150,7 +115,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Page<Employee> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(EmployeeSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Employee.class);
 	}
 

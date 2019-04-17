@@ -9,7 +9,12 @@ public class SiteLoadInterceptor extends AbstractLoadInterceptor<Site> {
 
 	@Override
 	public void onLoad(Site model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
+		Site prototype = new Site();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+		prototype.setUrl(model.getUrl());
+
+		model = prototype;
 	}
 
 }

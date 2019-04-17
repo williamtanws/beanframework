@@ -9,6 +9,10 @@ public class AuditorLoadInterceptor extends AbstractLoadInterceptor<Auditor> {
 
 	@Override
 	public void onLoad(Auditor model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
+		Auditor prototype = new Auditor();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+
+		model = prototype;
 	}
 }

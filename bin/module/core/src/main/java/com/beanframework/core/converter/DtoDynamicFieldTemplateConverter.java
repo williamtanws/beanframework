@@ -37,8 +37,7 @@ public class DtoDynamicFieldTemplateConverter extends AbstractDtoConverter<Dynam
 
 			prototype.setName(source.getName());
 
-			if (context.isFetchable(DynamicFieldTemplate.class, DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS))
-				prototype.setDynamicFieldSlots(modelService.getDto(source.getDynamicFieldSlots(), DynamicFieldSlotDto.class));
+			prototype.setDynamicFieldSlots(modelService.getDto(source.getDynamicFieldSlots(), DynamicFieldSlotDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

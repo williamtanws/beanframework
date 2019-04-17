@@ -19,15 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
-import com.beanframework.user.domain.UserAuthority;
-import com.beanframework.user.domain.UserField;
-import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
 import com.beanframework.vendor.domain.Vendor;
@@ -43,9 +37,6 @@ public class VendorServiceImpl implements VendorService {
 	private AuditorService auditorService;
 
 	@Autowired
-	private FetchContext fetchContext;
-
-	@Autowired
 	private UserService userService;
 
 	@Override
@@ -55,51 +46,17 @@ public class VendorServiceImpl implements VendorService {
 
 	@Override
 	public Vendor findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
-
-		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
-		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
-
 		return modelService.findOneEntityByUuid(uuid, Vendor.class);
 	}
 
 	@Override
 	public Vendor findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-
-		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
-		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 
 		return modelService.findOneEntityByProperties(properties, Vendor.class);
 	}
 
 	@Override
 	public List<Vendor> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(Vendor.class, Vendor.USER_GROUPS);
-		fetchContext.addFetchProperty(Vendor.class, Vendor.FIELDS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Vendor.class);
 	}
 
@@ -124,7 +81,6 @@ public class VendorServiceImpl implements VendorService {
 
 	@Override
 	public Page<Vendor> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(VendorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Vendor.class);
 	}
 

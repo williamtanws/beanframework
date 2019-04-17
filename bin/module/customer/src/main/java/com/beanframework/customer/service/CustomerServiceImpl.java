@@ -19,17 +19,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.specification.CustomerSpecification;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
-import com.beanframework.user.domain.UserAuthority;
-import com.beanframework.user.domain.UserField;
-import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
 
@@ -41,10 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private AuditorService auditorService;
-
-	@Autowired
-	private FetchContext fetchContext;
-
+	
 	@Autowired
 	private UserService userService;
 
@@ -55,39 +46,11 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-
-		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
-		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
-
 		return modelService.findOneEntityByUuid(uuid, Customer.class);
 	}
 
 	@Override
 	public Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(Customer.class, Customer.USER_GROUPS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-
-		fetchContext.addFetchProperty(Customer.class, Customer.FIELDS);
-		fetchContext.addFetchProperty(UserField.class, UserField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
-
 		return modelService.findOneEntityByProperties(properties, Customer.class);
 	}
 
@@ -117,7 +80,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Page<Customer> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(CustomerSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Customer.class);
 	}
 

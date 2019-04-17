@@ -9,7 +9,13 @@ public class LanguageLoadInterceptor extends AbstractLoadInterceptor<Language> {
 
 	@Override
 	public void onLoad(Language model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
+		Language prototype = new Language();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+		prototype.setSort(model.getSort());
+		prototype.setActive(model.getActive());
+		
+		model = prototype;
 	}
 
 }

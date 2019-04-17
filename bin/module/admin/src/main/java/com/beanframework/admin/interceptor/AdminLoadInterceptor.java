@@ -9,7 +9,17 @@ public class AdminLoadInterceptor extends AbstractLoadInterceptor<Admin> {
 
 	@Override
 	public void onLoad(Admin model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
+		Admin prototype = new Admin();
+		loadCommonProperties(model, prototype, context);
+		prototype.setType(model.getType());
+		prototype.setPassword(model.getPassword());
+		prototype.setAccountNonExpired(model.getAccountNonExpired());
+		prototype.setAccountNonLocked(model.getAccountNonLocked());
+		prototype.setCredentialsNonExpired(model.getCredentialsNonExpired());
+		prototype.setEnabled(model.getEnabled());
+		prototype.setName(model.getName());
+
+		model = prototype;
 	}
 
 }

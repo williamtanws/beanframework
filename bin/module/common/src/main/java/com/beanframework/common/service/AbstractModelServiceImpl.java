@@ -63,22 +63,22 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	@Value("${interceptor.strict.use:false}")
 	protected boolean STRICT_USE_INTERCEPTOR;
 
-	protected void initialDefaultsInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
+	protected void initialDefaultsInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			initialDefaultsInterceptor(model, context, modelClass);
+			initialDefaultsInterceptor(model, context, typeCode);
 		}
 	}
 
-	protected void initialDefaultsInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
+	protected void initialDefaultsInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof InitialDefaultsInterceptor) {
 				InitialDefaultsInterceptor<Object> interceptor = (InitialDefaultsInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					interceptor.onInitialDefaults(model, context);
 					notIntercepted = false;
 				}
@@ -86,26 +86,26 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 
 		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any load interceptor to intercept target model: " + modelClass.getSimpleName());
+			throw new InterceptorException("Cannot find any load interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
-	protected void loadInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
+	protected void loadInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			loadInterceptor(model, context, modelClass);
+			loadInterceptor(model, context, typeCode);
 		}
 	}
 
-	protected void loadInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
+	protected void loadInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof LoadInterceptor) {
 				LoadInterceptor<Object> interceptor = (LoadInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					interceptor.onLoad(model, context);
 					notIntercepted = false;
 				}
@@ -113,26 +113,26 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 
 		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any load interceptor to intercept target model: " + modelClass.getSimpleName());
+			throw new InterceptorException("Cannot find any load interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
-	protected void prepareInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
+	protected void prepareInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			prepareInterceptor(model, context, modelClass);
+			prepareInterceptor(model, context, typeCode);
 		}
 	}
 
-	protected void prepareInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
+	protected void prepareInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof PrepareInterceptor) {
 				PrepareInterceptor<Object> interceptor = (PrepareInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					interceptor.onPrepare(model, context);
 					notIntercepted = false;
 				}
@@ -140,26 +140,26 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 
 		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any prepare interceptor to intercept target model: " + modelClass.getSimpleName());
+			throw new InterceptorException("Cannot find any prepare interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
-	protected void removeInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
+	protected void removeInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			removeInterceptor(model, context, modelClass);
+			removeInterceptor(model, context, typeCode);
 		}
 	}
 
-	protected void removeInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
+	protected void removeInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof RemoveInterceptor) {
 				RemoveInterceptor<Object> interceptor = (RemoveInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					interceptor.onRemove(model, context);
 					notIntercepted = false;
 				}
@@ -167,26 +167,26 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 
 		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any remove interceptor to intercept target model: " + modelClass.getSimpleName());
+			throw new InterceptorException("Cannot find any remove interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
-	protected void validateInterceptor(Collection models, InterceptorContext context, Class modelClass) throws InterceptorException {
+	protected void validateInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			validateInterceptor(model, context, modelClass);
+			validateInterceptor(model, context, typeCode);
 		}
 	}
 
-	protected void validateInterceptor(Object model, InterceptorContext context, Class modelClass) throws InterceptorException {
+	protected void validateInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof ValidateInterceptor) {
 				ValidateInterceptor<Object> interceptor = (ValidateInterceptor<Object>) interceptorMapping.getInterceptor();
-				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					interceptor.onValidate(model, context);
 					notIntercepted = false;
 				}
@@ -194,7 +194,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 
 		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any validate interceptor to intercept target model: " + modelClass.getSimpleName());
+			throw new InterceptorException("Cannot find any validate interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
@@ -220,31 +220,31 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		throw new ConverterException("Cannot find any entity convert to convert target model: " + modelClass.getSimpleName());
 	}
 
-	protected <T extends Collection> T dtoConverter(Collection models, DtoConverterContext context, Class modelClass) throws ConverterException, InterceptorException {
+	protected <T extends Collection> T dtoConverter(Collection models, DtoConverterContext context, String typeCode) throws ConverterException, InterceptorException {
 		if (models instanceof List<?>) {
 			List<Object> listModels = new ArrayList<Object>();
 			Iterator iterator = models.iterator();
 			while (iterator.hasNext()) {
 				Object model = iterator.next();
-				listModels.add(dtoConverter(model, context, modelClass));
+				listModels.add(dtoConverter(model, context, typeCode));
 			}
 			return (T) listModels;
 		}
-		throw new ConverterException("Cannot find available models type to convert target model: " + modelClass.getSimpleName());
+		throw new ConverterException("Cannot find available models type to convert target typeCode: " + typeCode);
 	}
 
-	protected Object dtoConverter(Object model, DtoConverterContext context, Class modelClass) throws ConverterException {
+	protected Object dtoConverter(Object model, DtoConverterContext context, String typeCode) throws ConverterException {
 		
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof DtoConverter) {
 				DtoConverter interceptor = (DtoConverter) interceptorMapping.getConverter();
-				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					return interceptor.convert(model, context);
 				}
 			}
 		}
 
-		throw new ConverterException("Cannot find any dto convert to convert target model: " + modelClass.getSimpleName());
+		throw new ConverterException("Cannot find any dto convert to convert target typeCode: " + typeCode);
 	}
 
 	protected <T> Page<T> page(@Nullable Specification spec, Pageable pageable, Class modelClass) {

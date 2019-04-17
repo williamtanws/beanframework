@@ -18,65 +18,75 @@ public class MenuLoadInterceptor extends AbstractLoadInterceptor<Menu> {
 	@Override
 	public void onLoad(Menu model, InterceptorContext context) throws InterceptorException {
 
-		if (context.isFetchable(Menu.class, Menu.CHILDS)) {
-			Hibernate.initialize(model.getChilds());
-			for (Menu menu : model.getChilds()) {
-				initializeChilds(menu);
-			}
+		Hibernate.initialize(model.getChilds());
+		for (Menu menu : model.getChilds()) {
+			initializeChilds(menu);
 		}
 
-		if (context.isFetchable(Menu.class, Menu.USER_GROUPS)) {
-			Hibernate.initialize(model.getUserGroups());
-			for (UserGroup userGroup : model.getUserGroups()) {
-				Hibernate.initialize(userGroup.getUserAuthorities());
-				for (UserGroupField field : userGroup.getFields()) {
-					Hibernate.initialize(field.getDynamicFieldSlot());
-					if (field.getDynamicFieldSlot() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-					if (field.getDynamicFieldSlot().getDynamicField() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-				}
-				for (UserGroupField field : userGroup.getFields()) {
-					Hibernate.initialize(field.getDynamicFieldSlot());
-					if (field.getDynamicFieldSlot() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-					if (field.getDynamicFieldSlot().getDynamicField() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-				}
-				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-					Hibernate.initialize(userAuthority.getUserRight());
-					for (UserRightField field : userAuthority.getUserRight().getFields()) {
-						Hibernate.initialize(field.getDynamicFieldSlot());
-						if (field.getDynamicFieldSlot() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-						if (field.getDynamicFieldSlot().getDynamicField() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-					}
-					Hibernate.initialize(userAuthority.getUserPermission());
-					for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-						Hibernate.initialize(field.getDynamicFieldSlot());
-						if (field.getDynamicFieldSlot() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-						if (field.getDynamicFieldSlot().getDynamicField() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-					}
-				}
-				initializeUserGroups(userGroup);
-			}
-		}
-
-		if (context.isFetchable(Menu.class, Menu.FIELDS)) {
-			Hibernate.initialize(model.getFields());
-			for (MenuField field : model.getFields()) {
+		Hibernate.initialize(model.getUserGroups());
+		for (UserGroup userGroup : model.getUserGroups()) {
+			Hibernate.initialize(userGroup.getUserAuthorities());
+			for (UserGroupField field : userGroup.getFields()) {
 				Hibernate.initialize(field.getDynamicFieldSlot());
 				if (field.getDynamicFieldSlot() != null)
 					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
 				if (field.getDynamicFieldSlot().getDynamicField() != null)
 					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
 			}
+			for (UserGroupField field : userGroup.getFields()) {
+				Hibernate.initialize(field.getDynamicFieldSlot());
+				if (field.getDynamicFieldSlot() != null)
+					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+				if (field.getDynamicFieldSlot().getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+			}
+			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+				Hibernate.initialize(userAuthority.getUserRight());
+				for (UserRightField field : userAuthority.getUserRight().getFields()) {
+					Hibernate.initialize(field.getDynamicFieldSlot());
+					if (field.getDynamicFieldSlot() != null)
+						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+					if (field.getDynamicFieldSlot().getDynamicField() != null)
+						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+				}
+				Hibernate.initialize(userAuthority.getUserPermission());
+				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
+					Hibernate.initialize(field.getDynamicFieldSlot());
+					if (field.getDynamicFieldSlot() != null)
+						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+					if (field.getDynamicFieldSlot().getDynamicField() != null)
+						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+				}
+			}
+			initializeUserGroups(userGroup);
 		}
 
-		super.onLoad(model, context);
+		Hibernate.initialize(model.getFields());
+		for (MenuField field : model.getFields()) {
+			Hibernate.initialize(field.getDynamicFieldSlot());
+			if (field.getDynamicFieldSlot() != null)
+				Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+			if (field.getDynamicFieldSlot().getDynamicField() != null)
+				Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+
+		}
+
+		Menu prototype = new Menu();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+		prototype.setParent(model.getParent());
+		prototype.setIcon(model.getIcon());
+		prototype.setPath(model.getPath());
+		prototype.setSort(model.getSort());
+		prototype.setTarget(model.getTarget());
+		prototype.setEnabled(model.getEnabled());
+
+		prototype.setChilds(model.getChilds());
+		prototype.setUserGroups(model.getUserGroups());
+
+		prototype.setFields(model.getFields());
+		
+		model = prototype;
 	}
 
 	private void initializeChilds(Menu model) {

@@ -14,7 +14,6 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserAuthorityDto;
-import com.beanframework.core.data.UserDto;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.UserGroupFieldDto;
 import com.beanframework.user.domain.UserGroup;
@@ -45,31 +44,23 @@ public class DtoUserGroupConverter extends AbstractDtoConverter<UserGroup, UserG
 			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
-			
-			if (context.isFetchable(UserGroup.class, UserGroup.USERS))
-				prototype.setUsers(modelService.getDto(source.getUsers(), UserDto.class));
+			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class));
 
-			if (context.isFetchable(UserGroup.class, UserGroup.USER_GROUPS))
-				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+			prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class));
+			Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
+				@Override
+				public int compare(UserGroupFieldDto o1, UserGroupFieldDto o2) {
+					if (o1.getDynamicFieldSlot().getSort() == null)
+						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
-			if (context.isFetchable(UserGroup.class, UserGroup.USER_AUTHORITIES))
-				prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class));
+					if (o2.getDynamicFieldSlot().getSort() == null)
+						return -1;
 
-			if (context.isFetchable(UserGroup.class, UserGroup.FIELDS)) {
-				prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class));
-				Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
-					@Override
-					public int compare(UserGroupFieldDto o1, UserGroupFieldDto o2) {
-						if (o1.getDynamicFieldSlot().getSort() == null)
-							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+				}
+			});
 
-						if (o2.getDynamicFieldSlot().getSort() == null)
-							return -1;
-
-						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-					}
-				});
-			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);
