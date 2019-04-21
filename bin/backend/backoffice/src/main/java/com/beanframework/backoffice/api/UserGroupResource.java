@@ -112,14 +112,14 @@ public class UserGroupResource {
 
 			UserGroupDto dto = (UserGroupDto) object[0];
 			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
-			RevisionType eevisionType = (RevisionType) object[2];
+			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
 			HistoryDataResponse data = new HistoryDataResponse();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
-			data.setRevisionType(eevisionType.name());
+			data.setRevisionType(localeMessageService.getMessage("revision."+revisionType.name()));
 			for (String property : propertiesChanged) {
 				String localized = localeMessageService.getMessage("module.usergroup." + property);
 				data.getPropertiesChanged().add(property + "=" + localized);
