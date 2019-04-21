@@ -37,7 +37,6 @@ public interface ModelService {
 
 	void flush() throws BusinessException;
 
-	@Cacheable(value = "ModelCreate", key = "'modelClass:'+#modelClass")
 	<T> T create(Class modelClass) throws Exception;
 
 	@Cacheable(value = "Model", key = "'uuid:'+#uuid+',modelClass:'+#modelClass")
@@ -59,11 +58,11 @@ public interface ModelService {
 	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
 			throws Exception;
 
-	@Cacheable(value = "ModelHistoryList", key = "'selectDeletedEntities:'+#selectDeletedEntities+',auditCriterions:'+#auditCriterions+',auditOrders:'+#auditOrders+',firstResult:'+#firstResult+',maxResults:'+#maxResults+',modelClass:'+#modelClass")
+//	@Cacheable(value = "ModelHistoryList", key = "'selectDeletedEntities:'+#selectDeletedEntities+',auditCriterions:'+#auditCriterions+',auditOrders:'+#auditOrders+',firstResult:'+#firstResult+',maxResults:'+#maxResults+',modelClass:'+#modelClass")
 	List<Object[]> findHistories(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
 			throws Exception;
 
-	@Cacheable(value = "ModelHistoryCount", key = "'selectDeletedEntities:'+#selectDeletedEntities+',auditCriterions:'+#auditCriterions+',auditOrders:'+#auditOrders+',firstResult:'+#firstResult+',maxResults:'+#maxResults+',modelClass:'+#modelClass")
+//	@Cacheable(value = "ModelHistoryCount", key = "'selectDeletedEntities:'+#selectDeletedEntities+',auditCriterions:'+#auditCriterions+',auditOrders:'+#auditOrders+',firstResult:'+#firstResult+',maxResults:'+#maxResults+',modelClass:'+#modelClass")
 	int findCountHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
 
 	@Cacheable(value = "ModelPage", key = "'spec:'+#spec+',pageable:'+#pageable+',modelClass:'+#modelClass")
