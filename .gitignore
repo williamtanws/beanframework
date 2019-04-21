@@ -13,6 +13,7 @@ temp
 /config/src/main/resources/*
 !/config/src/main/resources/*.template
 !.mvn/wrapper/maven-wrapper.jar
+!/bin/ui/adminlte/src/main/resources/static
 
 ### npm ###
 *.DS_Store
