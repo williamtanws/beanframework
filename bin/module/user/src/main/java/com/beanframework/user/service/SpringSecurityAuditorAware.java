@@ -14,7 +14,7 @@ import com.beanframework.user.domain.User;
 
 @Component
 public class SpringSecurityAuditorAware implements AuditorAware<Auditor> {
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -28,7 +28,10 @@ public class SpringSecurityAuditorAware implements AuditorAware<Auditor> {
 
 				if (user.getUuid() != null) {
 					Auditor auditor = modelService.findOneEntityByUuid(user.getUuid(), Auditor.class);
-					return Optional.of(auditor);
+
+					if (auditor != null) {
+						return Optional.of(auditor);
+					}
 				}
 			}
 		} catch (Exception e) {

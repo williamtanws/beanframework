@@ -90,3 +90,10 @@ blockquote {
 .chat {
     padding: 5px 10px 5px 10px;
 }
+
+a.disabled {
+  /* Make the disabled links grayish*/
+  color: #c1c1c1;
+  /* And disable the pointer events */
+  pointer-events: none;
+}

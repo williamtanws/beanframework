@@ -49,11 +49,11 @@ public class ImportFileProcessor implements FileProcessor {
 		for (Entry<String, ImportListener> entry : sortedImportListeners) {
 
 			if (fileName.endsWith("_update") && entry.getKey().startsWith(fileName.toLowerCase())) {
-				entry.getValue().update(fileOriginalFile.getAbsolutePath());
+				entry.getValue().updateByPath(fileOriginalFile.getAbsolutePath());
 			}
 
 			if (fileName.endsWith("_remove") && entry.getKey().startsWith(fileName.toLowerCase())) {
-				entry.getValue().remove(fileOriginalFile.getAbsolutePath());
+				entry.getValue().removeByPath(fileOriginalFile.getAbsolutePath());
 			}
 		}
 	}

@@ -57,11 +57,11 @@ public class VendorImportListener extends ImportListener {
 
 	@Override
 	public void update() throws Exception {
-		update(IMPORT_UPDATE);
+		updateByPath(IMPORT_UPDATE);
 	}
 
 	@Override
-	public void update(String path) throws Exception {
+	public void updateByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
@@ -77,11 +77,11 @@ public class VendorImportListener extends ImportListener {
 
 	@Override
 	public void remove() throws Exception {
-		remove(IMPORT_REMOVE);
+		removeByPath(IMPORT_REMOVE);
 	}
 
 	@Override
-	public void remove(String path) throws Exception {
+	public void removeByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
@@ -93,6 +93,18 @@ public class VendorImportListener extends ImportListener {
 			List<VendorCsv> vendorCsvList = readCSVFile(reader, VendorCsv.getRemoveProcessors());
 			remove(vendorCsvList);
 		}
+	}
+
+	@Override
+	public void updateByContent(String content) throws Exception {
+		List<VendorCsv> csvList = readCSVFile(new StringReader(content), VendorCsv.getUpdateProcessors());
+		save(csvList);
+	}
+
+	@Override
+	public void removeByContent(String content) throws Exception {
+		List<VendorCsv> csvList = readCSVFile(new StringReader(content), VendorCsv.getUpdateProcessors());
+		remove(csvList);
 	}
 
 	public List<VendorCsv> readCSVFile(Reader reader, CellProcessor[] processors) {

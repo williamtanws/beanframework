@@ -52,7 +52,8 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Admin create() throws Exception {
-		return modelService.create(Admin.class);
+		Admin admin = modelService.create(Admin.class);
+		return admin;
 	}
 
 	@Override
