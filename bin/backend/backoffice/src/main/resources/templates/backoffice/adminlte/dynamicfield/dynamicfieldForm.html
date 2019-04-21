@@ -97,6 +97,7 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="required" th:text="#{module.dynamicfield.required}"></label>
+												<span>*</span>
 												<select class="form-control" name="required">
 													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{required == true}" th:text="#{module.backoffice.yes}"></option>
@@ -228,6 +229,9 @@
 		                    required: true
 		                },
 		                grid: {
+		                    required: true
+		                },
+		                required: {
 		                    required: true
 		                }
 		            },
