@@ -92,8 +92,8 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 						}
 
 						if (add) {
-							DynamicFieldSlot entityDynamicFieldSlots = modelService.findOneEntityByUuid(UUID.fromString(source.getTableDynamicFieldSlots()[i]), DynamicFieldSlot.class);
-							prototype.getDynamicFieldSlots().add(entityDynamicFieldSlots);
+							DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneEntityByUuid(UUID.fromString(source.getTableDynamicFieldSlots()[i]), DynamicFieldSlot.class);
+							prototype.getDynamicFieldSlots().add(entityDynamicFieldSlot);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
