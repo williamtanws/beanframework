@@ -33,6 +33,8 @@ public interface ModelService {
 
 	void detachAll();
 
+	<T> T merge(Object model);
+
 	void refresh(Object model);
 
 	void flush() throws BusinessException;

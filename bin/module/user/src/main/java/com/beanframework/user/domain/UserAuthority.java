@@ -37,14 +37,12 @@ public class UserAuthority extends GenericEntity {
 	@JoinColumn(name = "usergroup_uuid")
 	private UserGroup userGroup;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@NotAudited
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userpermission_uuid")
 	private UserPermission userPermission;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@NotAudited
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)

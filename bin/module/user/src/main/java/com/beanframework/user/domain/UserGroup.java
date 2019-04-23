@@ -11,6 +11,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
@@ -49,6 +50,7 @@ public class UserGroup extends GenericEntity {
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
+	@OrderColumn
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = UserGroupConstants.Table.USER_GROUP_USER_GROUP_REL, joinColumns = @JoinColumn(name = "uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();

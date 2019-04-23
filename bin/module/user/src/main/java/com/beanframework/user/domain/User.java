@@ -70,7 +70,7 @@ public class User extends GenericEntity {
 	private String name;
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
+	@Cascade({ CascadeType.REFRESH, CascadeType.MERGE })
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
