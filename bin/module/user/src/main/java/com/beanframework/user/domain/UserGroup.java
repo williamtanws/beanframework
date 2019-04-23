@@ -42,6 +42,8 @@ public class UserGroup extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
+	@AuditMappedBy(mappedBy = User.USER_GROUPS)
+	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(mappedBy = User.USER_GROUPS, fetch = FetchType.LAZY)
 	private List<User> users = new ArrayList<User>();
 
