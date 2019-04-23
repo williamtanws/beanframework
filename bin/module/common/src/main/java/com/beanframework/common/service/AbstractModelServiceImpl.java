@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -23,6 +24,7 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.OrderComparator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -62,6 +64,12 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 	@Value("${interceptor.strict.use:false}")
 	protected boolean STRICT_USE_INTERCEPTOR;
+	
+	@PostConstruct
+	public void init() {
+		OrderComparator.sort(interceptorMappings);
+		OrderComparator.sort(converterMappings);
+	}
 
 	@Override
 	public void initialDefaultsInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {

@@ -14,13 +14,13 @@ import com.beanframework.cronjob.service.CronjobManagerService;
 @Component
 public class CronjobInit implements ApplicationListener<ApplicationReadyEvent> {
 
+	protected static final Logger LOGGER = LoggerFactory.getLogger(CronjobInit.class);
+
 	@Autowired
 	private CronjobManagerService cronjobManagerService;
 
 	@Value(CronjobConstants.QUARTZ_TASKS_ENABLED)
 	private boolean enableQuartzTasks;
-
-	protected static final Logger LOGGER = LoggerFactory.getLogger(CronjobInit.class);
 
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -34,5 +34,4 @@ public class CronjobInit implements ApplicationListener<ApplicationReadyEvent> {
 			LOGGER.error(e.getMessage(), e);
 		}
 	}
-
 }
