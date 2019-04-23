@@ -198,7 +198,7 @@ public class UserAuthorityImportListener extends ImportListener {
 					}
 				}
 
-				modelService.saveEntity(userGroup, UserGroup.class);
+				modelService.merge(userGroup);
 			}
 		}
 	}

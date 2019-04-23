@@ -80,7 +80,14 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void detachAll() {
 		entityManager.clear();
 	}
+	
+	@Transactional
+	@Override
+	public <T> T merge(Object model) {
+		return (T) entityManager.merge(model);
+	}
 
+	@Transactional
 	@Override
 	public void refresh(Object model) {
 		entityManager.refresh(model);
