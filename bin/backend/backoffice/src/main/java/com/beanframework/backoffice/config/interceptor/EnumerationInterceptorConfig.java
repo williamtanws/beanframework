@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.dynamicfield.interceptor.DynamicFieldEnumerationRemoveInterceptor;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.enumuration.interceptor.EnumerationInitialDefaultsInterceptor;
 import com.beanframework.enumuration.interceptor.EnumerationLoadInterceptor;
@@ -100,6 +101,21 @@ public class EnumerationInterceptorConfig {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(enumerationRemoveInterceptor());
 		mapping.setTypeCode(Enumeration.class.getSimpleName());
+
+		return mapping;
+	}
+
+	@Bean
+	public DynamicFieldEnumerationRemoveInterceptor dynamicFieldEnumerationRemoveInterceptor() {
+		return new DynamicFieldEnumerationRemoveInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping dynamicFieldEnumerationRemoveInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(dynamicFieldEnumerationRemoveInterceptor());
+		mapping.setTypeCode(Enumeration.class.getSimpleName());
+		mapping.setOrder(Integer.MIN_VALUE);
 
 		return mapping;
 	}

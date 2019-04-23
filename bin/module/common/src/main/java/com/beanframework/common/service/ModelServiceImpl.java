@@ -358,6 +358,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Transactional(rollbackFor = SQLException.class)
 	private void deleteEntity(Object model, Class modelClass) throws SQLException, InterceptorException, BusinessException {
 		removeInterceptor(model, interceptorContext, modelClass.getSimpleName());
+
 		modelRepository.delete(model);
 
 		AfterRemoveEvent event = new AfterRemoveEvent();

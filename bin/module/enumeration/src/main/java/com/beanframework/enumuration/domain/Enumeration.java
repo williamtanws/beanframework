@@ -2,6 +2,8 @@ package com.beanframework.enumuration.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
@@ -14,6 +16,7 @@ import com.beanframework.enumuration.EnumerationConstants;
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = EnumerationConstants.Table.ENUMURATION)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Enumeration extends GenericEntity {
 
 	/**
