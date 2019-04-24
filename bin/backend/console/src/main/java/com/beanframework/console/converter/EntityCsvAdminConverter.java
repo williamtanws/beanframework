@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminService;
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -20,9 +19,6 @@ public class EntityCsvAdminConverter implements EntityCsvConverter<AdminCsv, Adm
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private AdminService adminService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -36,7 +32,7 @@ public class EntityCsvAdminConverter implements EntityCsvConverter<AdminCsv, Adm
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Admin.ID, source.getId());
 
-				Admin prototype = adminService.findOneEntityByProperties(properties);
+				Admin prototype = modelService.findOneEntityByProperties(properties, Admin.class);
 
 				if (prototype != null) {
 

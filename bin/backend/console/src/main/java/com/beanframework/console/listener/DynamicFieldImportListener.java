@@ -24,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvDynamicFieldConverter;
 import com.beanframework.console.csv.DynamicFieldCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.service.DynamicFieldService;
 
 public class DynamicFieldImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldImportListener.class);
 
 	@Autowired
-	private DynamicFieldService dynamicFieldService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvDynamicFieldConverter converter;
@@ -146,7 +146,7 @@ public class DynamicFieldImportListener extends ImportListener {
 		for (DynamicFieldCsv csv : csvList) {
 
 			DynamicField model = converter.convert(csv);
-			dynamicFieldService.saveEntity(model);
+			modelService.saveEntity(model, DynamicField.class);
 		}
 	}
 

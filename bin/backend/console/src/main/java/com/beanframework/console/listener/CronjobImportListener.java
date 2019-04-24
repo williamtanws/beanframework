@@ -24,19 +24,19 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvCronjobConverter;
 import com.beanframework.console.csv.CronjobCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.service.CronjobManagerService;
-import com.beanframework.cronjob.service.CronjobService;
 
 public class CronjobImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(CronjobImportListener.class);
 
 	@Autowired
-	private CronjobService cronjobService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvCronjobConverter converter;
@@ -152,7 +152,7 @@ public class CronjobImportListener extends ImportListener {
 		for (CronjobCsv csv : csvList) {
 
 			Cronjob model = converter.convert(csv);
-			cronjobService.saveEntity(model);
+			modelService.saveEntity(model, Cronjob.class);
 		}
 
 		cronjobManagerService.initCronJob();

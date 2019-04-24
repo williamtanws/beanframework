@@ -24,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvLanguageConverter;
 import com.beanframework.console.csv.LanguageCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 
 public class LanguageImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(LanguageImportListener.class);
 
 	@Autowired
-	private LanguageService languageService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvLanguageConverter converter;
@@ -146,7 +146,7 @@ public class LanguageImportListener extends ImportListener {
 		for (LanguageCsv csv : csvList) {
 
 			Language model = converter.convert(csv);
-			languageService.saveEntity(model);
+			modelService.saveEntity(model, Language.class);
 		}
 	}
 

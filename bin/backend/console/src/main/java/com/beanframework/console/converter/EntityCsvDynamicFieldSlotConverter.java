@@ -15,7 +15,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.DynamicFieldSlotCsv;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
-import com.beanframework.dynamicfield.service.DynamicFieldSlotService;
 
 @Component
 public class EntityCsvDynamicFieldSlotConverter implements EntityCsvConverter<DynamicFieldSlotCsv, DynamicFieldSlot> {
@@ -24,9 +23,6 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityCsvConverter<Dy
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private DynamicFieldSlotService dynamicFieldSlotService;
 
 	@Override
 	public DynamicFieldSlot convert(DynamicFieldSlotCsv source) throws ConverterException {
@@ -37,7 +33,7 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityCsvConverter<Dy
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldSlot.ID, source.getId());
 
-				DynamicFieldSlot prototype = dynamicFieldSlotService.findOneEntityByProperties(properties);
+				DynamicFieldSlot prototype = modelService.findOneEntityByProperties(properties, DynamicFieldSlot.class);
 
 				if (prototype != null) {
 

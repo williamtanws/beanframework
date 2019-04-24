@@ -24,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvMediaConverter;
 import com.beanframework.console.csv.MediaCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.media.domain.Media;
-import com.beanframework.media.service.MediaService;
 
 public class MediaImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(MediaImportListener.class);
 
 	@Autowired
-	private MediaService mediaService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvMediaConverter converter;
@@ -146,7 +146,7 @@ public class MediaImportListener extends ImportListener {
 		for (MediaCsv csv : csvList) {
 
 			Media model = converter.convert(csv);
-			mediaService.saveEntity(model);
+			modelService.saveEntity(model, Media.class);
 		}
 	}
 

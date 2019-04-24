@@ -25,7 +25,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.cms.domain.Site;
-import com.beanframework.cms.service.SiteService;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvSiteConverter;
 import com.beanframework.console.csv.SiteCsv;
@@ -35,7 +35,7 @@ public class SiteImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(SiteImportListener.class);
 
 	@Autowired
-	private SiteService mediaService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvSiteConverter converter;
@@ -146,7 +146,7 @@ public class SiteImportListener extends ImportListener {
 		for (SiteCsv csv : csvList) {
 
 			Site model = converter.convert(csv);
-			mediaService.saveEntity(model);
+			modelService.saveEntity(model, Site.class);
 		}
 	}
 

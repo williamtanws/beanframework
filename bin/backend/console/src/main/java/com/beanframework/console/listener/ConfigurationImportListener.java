@@ -24,8 +24,8 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvConfigurationConverter;
 import com.beanframework.console.csv.ConfigurationCsv;
@@ -35,7 +35,7 @@ public class ConfigurationImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(ConfigurationImportListener.class);
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvConfigurationConverter converter;
@@ -146,7 +146,7 @@ public class ConfigurationImportListener extends ImportListener {
 		for (ConfigurationCsv csv : csvList) {
 
 			Configuration model = converter.convert(csv);
-			configurationService.saveEntity(model);
+			modelService.saveEntity(model, Configuration.class);
 		}
 	}
 

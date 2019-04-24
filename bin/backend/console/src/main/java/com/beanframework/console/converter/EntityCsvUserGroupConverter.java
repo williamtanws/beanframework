@@ -18,7 +18,6 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupField;
-import com.beanframework.user.service.UserGroupService;
 
 @Component
 public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroupCsv, UserGroup> {
@@ -27,9 +26,6 @@ public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroup
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private UserGroupService userGroupService;
 
 	@Override
 	public UserGroup convert(UserGroupCsv source) throws ConverterException {
@@ -40,7 +36,7 @@ public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroup
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserGroup.ID, source.getId());
 
-				UserGroup prototype = userGroupService.findOneEntityByProperties(properties);
+				UserGroup prototype = modelService.findOneEntityByProperties(properties, UserGroup.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);

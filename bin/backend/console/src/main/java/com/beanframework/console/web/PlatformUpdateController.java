@@ -2,6 +2,7 @@ package com.beanframework.console.web;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.console.registry.ImportListenerRegistry;
+import com.beanframework.console.service.PlatformService;
 
 import net.sf.ehcache.CacheManager;
 
@@ -50,6 +52,9 @@ public class PlatformUpdateController {
 
 	@Autowired
 	private SessionRegistry sessionRegistry;
+	
+	@Autowired
+	private PlatformService platformService;
 
 	@GetMapping(value = PlatformUpdateWebConstants.Path.UPDATE)
 	public String list(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
@@ -85,42 +90,24 @@ public class PlatformUpdateController {
 	@PostMapping(value = PlatformUpdateWebConstants.Path.UPDATE)
 	public RedirectView update(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
 
-		StringBuilder successMessages = new StringBuilder();
-		StringBuilder errorMessages = new StringBuilder();
+		Set<String> keysToUpdate = new HashSet<String>();
 
-		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
-		List<Entry<String, ImportListener>> sortedImportListeners = new LinkedList<Entry<String, ImportListener>>(importListeners);
-		Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
-			@Override
-			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
-				Integer sort1 = ele1.getValue().getSort();
-				Integer sort2 = ele2.getValue().getSort();
-				return sort1.compareTo(sort2);
-			}
-		});
-
-		for (Entry<String, ImportListener> entry : sortedImportListeners) {
+		for (Entry<String, ImportListener> entry : importerRegistry.getListeners().entrySet()) {
 			if (requestParams.get(entry.getKey()) != null) {
 				String keyValue = requestParams.get(entry.getKey()).toString();
 				if (parseBoolean(keyValue)) {
-					try {
-						entry.getValue().update();
-						entry.getValue().remove();
-						successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
-					} catch (Exception e) {
-						e.printStackTrace();
-						LOGGER.error(e.getMessage(), e);
-						errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " <br><br>");
-					}
+					keysToUpdate.add(entry.getKey());
 				}
 			}
 		}
+		
+		String[] messages = platformService.update(keysToUpdate);
 
-		if (successMessages.length() != 0) {
-			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, successMessages.toString());
+		if (messages[0].length() != 0) {
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
 		}
-		if (errorMessages.length() != 0) {
-			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, errorMessages.toString());
+		if (messages[1].length() != 0) {
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
 		}
 
 		clearAllCaches();

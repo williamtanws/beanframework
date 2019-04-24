@@ -16,7 +16,6 @@ import com.beanframework.console.csv.DynamicFieldTemplateCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
-import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 
 @Component
 public class EntityCsvDynamicFieldTemplateConverter implements EntityCsvConverter<DynamicFieldTemplateCsv, DynamicFieldTemplate> {
@@ -25,9 +24,6 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityCsvConverte
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private DynamicFieldTemplateService dynamicFieldTemplateService;
 
 	@Override
 	public DynamicFieldTemplate convert(DynamicFieldTemplateCsv source) throws ConverterException {
@@ -38,7 +34,7 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityCsvConverte
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldTemplate.ID, source.getId());
 
-				DynamicFieldTemplate prototype = dynamicFieldTemplateService.findOneEntityByProperties(properties);
+				DynamicFieldTemplate prototype = modelService.findOneEntityByProperties(properties, DynamicFieldTemplate.class);
 
 				if (prototype != null) {
 
