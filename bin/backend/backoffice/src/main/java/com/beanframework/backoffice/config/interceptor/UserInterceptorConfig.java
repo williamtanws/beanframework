@@ -61,7 +61,7 @@ public class UserInterceptorConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserInitialDefaultsInterceptor userInitialDefaultsInterceptor() {
 		return new UserInitialDefaultsInterceptor();
@@ -149,7 +149,7 @@ public class UserInterceptorConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserLoadInterceptor userLoadInterceptor() {
 		return new UserLoadInterceptor();
@@ -237,7 +237,7 @@ public class UserInterceptorConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserPrepareInterceptor userPrepareInterceptor() {
 		return new UserPrepareInterceptor();
@@ -325,7 +325,7 @@ public class UserInterceptorConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserValidateInterceptor userValidateInterceptor() {
 		return new UserValidateInterceptor();
@@ -413,7 +413,7 @@ public class UserInterceptorConfig {
 
 		return interceptorMapping;
 	}
-	
+
 	@Bean
 	public UserRemoveInterceptor userRemoveInterceptor() {
 		return new UserRemoveInterceptor();
@@ -483,5 +483,4 @@ public class UserInterceptorConfig {
 
 		return interceptorMapping;
 	}
-
 }

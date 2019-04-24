@@ -6,10 +6,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -30,20 +28,17 @@ public class UserAuthority extends GenericEntity {
 	public static final String USER_PERMISSION_UUID = "userPermission.uuid";
 	public static final String USER_RIGHT = "userRight";
 
-	@NotAudited
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userpermission_uuid")
-	@NotNull
 	private UserPermission userPermission;
 
-	@NotAudited
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userright_uuid")
-	@NotNull
 	private UserRight userRight;
 
 	@Audited(withModifiedFlag = true)
-	@NotNull
 	private Boolean enabled;
 
 	public UserPermission getUserPermission() {
