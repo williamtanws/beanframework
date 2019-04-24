@@ -24,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvMenuConverter;
 import com.beanframework.console.csv.MenuCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.service.MenuService;
 
 public class MenuImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuImportListener.class);
 
 	@Autowired
-	private MenuService menuService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvMenuConverter converter;
@@ -56,11 +56,11 @@ public class MenuImportListener extends ImportListener {
 
 	@Override
 	public void update() throws Exception {
-		update(IMPORT_UPDATE);
+		updateByPath(IMPORT_UPDATE);
 	}
 
 	@Override
-	public void update(String path) throws Exception {
+	public void updateByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
@@ -76,11 +76,11 @@ public class MenuImportListener extends ImportListener {
 
 	@Override
 	public void remove() throws Exception {
-		remove(IMPORT_REMOVE);
+		removeByPath(IMPORT_REMOVE);
 	}
 
 	@Override
-	public void remove(String path) throws Exception {
+	public void removeByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
@@ -92,6 +92,18 @@ public class MenuImportListener extends ImportListener {
 			List<MenuCsv> menuCsvList = readCSVFile(reader, MenuCsv.getRemoveProcessors());
 			remove(menuCsvList);
 		}
+	}
+
+	@Override
+	public void updateByContent(String content) throws Exception {
+		List<MenuCsv> csvList = readCSVFile(new StringReader(content), MenuCsv.getUpdateProcessors());
+		save(csvList);
+	}
+
+	@Override
+	public void removeByContent(String content) throws Exception {
+		List<MenuCsv> csvList = readCSVFile(new StringReader(content), MenuCsv.getUpdateProcessors());
+		remove(csvList);
 	}
 
 	public List<MenuCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
@@ -133,7 +145,7 @@ public class MenuImportListener extends ImportListener {
 
 		for (MenuCsv csv : csvList) {
 			Menu menu = converter.convert(csv);
-			menuService.saveEntity(menu);
+			modelService.saveEntity(menu, Menu.class);
 		}
 	}
 

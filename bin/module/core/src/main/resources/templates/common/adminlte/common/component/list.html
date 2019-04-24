@@ -2,24 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
 	<th:block layout:fragment="list (icon, title, objectDto, createAuthority, updateAuthority, tableName, listUrl, listFields, editFormAction, editForm, createButton, filterColumnIndex)">
-		<!-- Search Form
-		<div class="row">
-			<div class="col-md-6">
-				<div class="box box-solid">
-					<div class="box-body">
-						<div class="box-tools">
-							<div class="has-feedback">
-								<input id="searchAll" type="text" class="form-control input-sm" th:placeholder="#{module.backoffice.searchall}">
-								<span class="glyphicon glyphicon-search form-control-feedback"></span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>-->
 		<!-- Alert Notification-->
 		<div class="row">
-			<th:block layout:insert="~{/common/adminlte/common/component/alert :: custom}"></th:block>
+			<th:block layout:insert="~{common/adminlte/common/component/alert :: custom}"></th:block>
 		</div>
 		<div class="row">
 			<div class="col-md-12">
@@ -80,14 +65,14 @@
 							<form id="edit-form" th:action="${editFormAction}+'#tab_general'" method="get" th:object="${objectDto}" style="display: none">
 								<input type="hidden" name="uuid">
 							</form>
-							<th:block layout:insert="~{/common/adminlte/common/component/list :: js}"></th:block>
+							<th:block layout:insert="~{common/adminlte/common/component/list :: js}"></th:block>
 						</div>
 						<div class="panel box box-success" th:if="${objectDto.uuid != null || create}">
 							<div class="box-header with-border">
 								<h4 class="box-title">
 									<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" th:aria-expanded="${objectDto.uuid != null || create ? 'true':'false'}"
 										th:class="${objectDto.uuid == null ? 'collapsed':''}">
-										<span th:if="${objectDto.uuid != null}" th:text="'ID: '+${objectDto.id}"></span>
+										<span th:if="${objectDto.uuid != null}" th:text="${objectDto.id == null} ?  'UUID: '+${objectDto.uuid} : 'ID: '+${objectDto.id}"></span>
 										<span th:if="${create}" th:text="#{module.backoffice.create}"></span>
 										<i class="fa fa-fw fa-angle-double-down"></i>
 									</a>
@@ -134,11 +119,10 @@
 	    	      'processing': true,
 	    	      'serverSide': true,
 	    	      'searchDelay': 1000,
+		    	  'bStateSave': true,
 	    	      'sDom': "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 	    	      "<'row'<'col-sm-12'tr>>" +
 	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
-	    	      'bStateSave': true,
-	    	      'orderCellsTop': true,
 	    	      'fnStateSave': function (oSettings, oData) {
 	    	            sessionStorage.setItem(tableName, JSON.stringify(oData));
 	    	      },

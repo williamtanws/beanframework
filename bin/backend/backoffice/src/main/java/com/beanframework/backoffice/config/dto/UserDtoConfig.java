@@ -185,7 +185,7 @@ public class UserDtoConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public DtoVendorConverter dtoVendorConverter() {
 		return new DtoVendorConverter();

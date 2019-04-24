@@ -14,7 +14,6 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.EnumerationCsv;
 import com.beanframework.enumuration.domain.Enumeration;
-import com.beanframework.enumuration.service.EnumerationService;
 
 @Component
 public class EntityCsvEnumerationConverter implements EntityCsvConverter<EnumerationCsv, Enumeration> {
@@ -23,9 +22,6 @@ public class EntityCsvEnumerationConverter implements EntityCsvConverter<Enumera
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private EnumerationService enumerationService;
 
 	@Override
 	public Enumeration convert(EnumerationCsv source) throws ConverterException {
@@ -36,7 +32,7 @@ public class EntityCsvEnumerationConverter implements EntityCsvConverter<Enumera
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Enumeration.ID, source.getId());
 
-				Enumeration prototype = enumerationService.findOneEntityByProperties(properties);
+				Enumeration prototype = modelService.findOneEntityByProperties(properties, Enumeration.class);
 
 				if (prototype != null) {
 

@@ -51,29 +51,26 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 			prototype.setTarget(source.getTarget());
 			prototype.setEnabled(source.getEnabled());
 
-			if (context.isFetchable(Menu.class, Menu.CHILDS))
-				prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class));
+			prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class));
+			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
-			if (context.isFetchable(Menu.class, Menu.USER_GROUPS))
-				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+			prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));
+			Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
+				@Override
+				public int compare(MenuFieldDto o1, MenuFieldDto o2) {
+					if (o1.getDynamicFieldSlot().getSort() == null)
+						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
-			if (context.isFetchable(Menu.class, Menu.FIELDS)) {
-				prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));
-				Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
-					@Override
-					public int compare(MenuFieldDto o1, MenuFieldDto o2) {
-						if (o1.getDynamicFieldSlot().getSort() == null)
-							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+					if (o2.getDynamicFieldSlot().getSort() == null)
+						return -1;
 
-						if (o2.getDynamicFieldSlot().getSort() == null)
-							return -1;
+					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+				}
+			});
 
-						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-					}
-				});
-			}
+		} catch (
 
-		} catch (Exception e) {
+		Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);
 		}

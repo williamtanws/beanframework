@@ -16,7 +16,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.CustomerCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerService;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserField;
@@ -31,9 +30,6 @@ public class EntityCsvCustomerConverter implements EntityCsvConverter<CustomerCs
 	private ModelService modelService;
 
 	@Autowired
-	private CustomerService customerService;
-
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
@@ -45,7 +41,7 @@ public class EntityCsvCustomerConverter implements EntityCsvConverter<CustomerCs
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Customer.ID, source.getId());
 
-				Customer prototype = customerService.findOneEntityByProperties(properties);
+				Customer prototype = modelService.findOneEntityByProperties(properties, Customer.class);
 
 				if (prototype != null) {
 

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +31,7 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.facade.UserPermissionFacade;
+import com.beanframework.core.facade.UserPermissionFacade.UserPermissionPreAuthorizeEnum;
 import com.beanframework.user.domain.RevisionsEntity;
 import com.beanframework.user.domain.UserPermission;
 
@@ -42,6 +44,7 @@ public class UserPermissionResource {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(UserPermissionWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -63,6 +66,7 @@ public class UserPermissionResource {
 		return data != null ? false : true;
 	}
 
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = UserPermissionWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
@@ -89,6 +93,7 @@ public class UserPermissionResource {
 		return dataTableResponse;
 	}
 
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = UserPermissionWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -110,14 +115,14 @@ public class UserPermissionResource {
 
 			UserPermissionDto dto = (UserPermissionDto) object[0];
 			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
-			RevisionType eevisionType = (RevisionType) object[2];
+			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
 			HistoryDataResponse data = new HistoryDataResponse();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
-			data.setRevisionType(eevisionType.name());
+			data.setRevisionType(localeMessageService.getMessage("revision."+revisionType.name()));
 			for (String property : propertiesChanged) {
 				String localized = localeMessageService.getMessage("module.userpermission." + property);
 				data.getPropertiesChanged().add(property + "=" + localized);

@@ -6,7 +6,7 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<th:block layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.vendor')}}, deleteUuid=${vendorDto.uuid})}"></th:block>
+		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.vendor')}}, deleteUuid=${vendorDto.uuid})}"></th:block>
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.vendor')}" method="post" th:object="${vendorDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}"/>
 			<input type="hidden" name="update" th:if="*{uuid != null}"/>
@@ -17,11 +17,11 @@
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block th:if="*{uuid != null}" layout:insert="~{/common/adminlte/common/component/delete :: button (deleteAuthority='vendor_delete')}"></th:block>
+									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='vendor_delete')}"></th:block>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="~{/common/adminlte/common/component/refresh :: button (deleteAuthority='vendor_delete')}"></th:block>
-									<th:block layout:insert="~{/common/adminlte/common/component/update :: button (updateAuthority='vendor_update')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='vendor_delete')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='vendor_update')}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -54,7 +54,7 @@
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="~{/common/adminlte/common/component/general :: general}"></th:block>
+										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
@@ -136,7 +136,29 @@
 												<span class="help-block"></span>
 											</div>
 											<div class="form-group" style="text-align: center;">
-												<img style="max-width: 100%" th:src="@{${@environment.getProperty('path.vendor.profile.picture')}(type='original',uuid=*{uuid})}" class="img-circle" alt="User Image">
+												<img style="max-width: 100%" th:src="@{${@environment.getProperty('path.user.profile.picture')}(type='original',uuid=*{uuid})}" class="img-circle" alt="User Image">
+											</div>
+										</div>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;" th:if="*{uuid != null}">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label th:text="#{module.backoffice.selected}+#{module.usergroup}"></label>
+												<span>:</span>
+												<table class="table table-bordered" id="usergroups-table">
+													<thead>
+														<tr>
+															<th class="text-center" th:text="#{module.backoffice.name}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="userGroup : *{userGroups}">
+															<td>
+																<span th:text="${userGroup.name}"></span>
+															</td>
+														</tr>
+													</tbody>
+												</table>
 											</div>
 										</div>
 									</div>
@@ -147,7 +169,7 @@
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="~{/common/adminlte/common/component/attribute :: attribute}"></th:block>
+										<th:block layout:insert="~{common/adminlte/common/component/attribute :: attribute}"></th:block>
 									</div>
 								</div>
 								<!-- /.box-body -->
@@ -155,19 +177,19 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_usergroup" sec:authorize="hasAuthority('usergroup_read')">
 								<div class="box-body">
-									<th:block layout:insert="~{/common/adminlte/common/component/usergroup :: usergroup}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/usergroup :: usergroup (userGroups='userGroups')}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{/common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.vendor.history')}(uuid=*{uuid})} )}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.vendor.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{/common/adminlte/common/component/administration :: administration}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/administration :: administration}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -182,6 +204,19 @@
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
+		    	
+		    	$('#usergroups-table').DataTable({
+				      'paging'      : true,
+				      'lengthChange': false,
+				      'searching'   : true,
+				      'ordering'    : true,
+				      'info'        : false,
+				      'autoWidth'   : true,
+				      'sDom': "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+		    	      "<'row'<'col-sm-12'tr>>" +
+		    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+				});
+		    	
 		        $('#update-form').validate({
 		        	onkeyup: function(element) {
 		                this.element(element);

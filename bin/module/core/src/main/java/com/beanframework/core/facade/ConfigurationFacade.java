@@ -14,40 +14,45 @@ import com.beanframework.core.data.ConfigurationDto;
 public interface ConfigurationFacade {
 
 	public static interface ConfigurationPreAuthorizeEnum {
-		public static final String READ = "hasAuthority('configuration_read')";
-		public static final String CREATE = "hasAuthority('configuration_create')";
-		public static final String UPDATE = "hasAuthority('configuration_update')";
-		public static final String DELETE = "hasAuthority('configuration_delete')";
+		public static final String AUTHORITY_READ = "configuration_read";
+		public static final String AUTHORITY_CREATE = "configuration_create";
+		public static final String AUTHORITY_UPDATE = "configuration_update";
+		public static final String AUTHORITY_DELETE = "configuration_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
 	}
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	ConfigurationDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	ConfigurationDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.CREATE)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_CREATE)
 	ConfigurationDto create(ConfigurationDto model) throws BusinessException;
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.UPDATE)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_UPDATE)
 	ConfigurationDto update(ConfigurationDto model) throws BusinessException;
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.DELETE)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	int count() throws Exception;
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.READ)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.CREATE)
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_CREATE)
 	ConfigurationDto createDto() throws Exception;
 
 	ConfigurationDto findOneDtoById(String id) throws Exception;

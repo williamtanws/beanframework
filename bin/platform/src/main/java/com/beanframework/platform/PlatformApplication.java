@@ -22,6 +22,7 @@ public class PlatformApplication {
 //		springApplication.child(BackofficeMvcConfig.class).web(WebApplicationType.SERVLET);
 ////		springApplication.application().addListeners(new ApplicationPidFileWriter());
 //		springApplication.run(args);
+
 	}
 
 //	@Bean

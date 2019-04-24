@@ -8,8 +8,13 @@ import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 public class SiteLoadInterceptor extends AbstractLoadInterceptor<Site> {
 
 	@Override
-	public void onLoad(Site model, InterceptorContext context) throws InterceptorException {
-		super.onLoad(model, context);
+	public Site onLoad(Site model, InterceptorContext context) throws InterceptorException {
+		Site prototype = new Site();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+		prototype.setUrl(model.getUrl());
+
+		return prototype;
 	}
 
 }

@@ -21,6 +21,10 @@ Beanframework is not a product and not build for any specific solution, it is a 
 
 1. Duplicate all *.template files and remove .template suffix:
 a. beanframework/bin/pom.xml.template
+a. beanframework/bin/server.bat.template
+a. beanframework/bin/server.sh.template
+a. beanframework/bin/install/app.xml.template
+a. beanframework/bin/platform/pom.xml.template
 b. beanframework/config/pom.xml.template
 c. beanframework/config/src/main/resources/*.template
 2. Configure all the duplicated template files properly

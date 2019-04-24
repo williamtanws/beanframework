@@ -1,19 +1,15 @@
-/data
-/log
-/temp
-/var
-target/
-/bin/pom.xml
-/config/pom.xml
-/config/src/main/resources/application.properties
-/config/src/main/resources/application-dev.properties
-/config/src/main/resources/application-prod.properties
-/config/src/main/resources/application.properties
-/config/src/main/resources/ehcache-dev.xml
-/config/src/main/resources/ehcache-prod.xml
-/config/src/main/resources/logback-dev.xml
-/config/src/main/resources/logback-prod.xml
-!.mvn/wrapper/maven-wrapper.jar
+### npm ###
+*.DS_Store
+*.log
+*.zip
+.idea
+.sass-cache/
+/nbproject/
+/nbproject/private/
+/node_modules/
+ad.js
+TODO
+test.html
 
 ### STS ###
 .apt_generated
@@ -31,12 +27,12 @@ target/
 
 ### NetBeans ###
 nbproject/private/
-build/
+#build/
 nbbuild/
-dist/
 nbdist/
 .nb-gradle/
-
+### adminlte need dist folder
+###dist/
 # Compiled class file
 *.class
 
@@ -59,3 +55,20 @@ nbdist/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+### Beanframework ###
+data
+log
+target
+temp
+/bin/pom.xml
+/bin/server.bat
+/bin/server.sh
+/bin/install/logs
+/bin/install/app.xml
+/bin/platform/pom.xml
+/config/pom.xml
+/config/src/main/resources/*
+!/config/src/main/resources/*.template
+!.mvn/wrapper/maven-wrapper.jar
+!/bin/ui/adminlte/src/main/resources/static/*

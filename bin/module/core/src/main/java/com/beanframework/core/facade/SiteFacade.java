@@ -14,39 +14,44 @@ import com.beanframework.core.data.SiteDto;
 public interface SiteFacade {
 
 	public static interface SitePreAuthorizeEnum {
-		public static final String READ = "hasAuthority('site_read')";
-		public static final String CREATE = "hasAuthority('site_create')";
-		public static final String UPDATE = "hasAuthority('site_update')";
-		public static final String DELETE = "hasAuthority('site_delete')";
+		public static final String AUTHORITY_READ = "site_read";
+		public static final String AUTHORITY_CREATE = "site_create";
+		public static final String AUTHORITY_UPDATE = "site_update";
+		public static final String AUTHORITY_DELETE = "site_delete";
+		
+		public static final String HAS_READ = "hasAuthority('"+AUTHORITY_READ+"')";
+		public static final String HAS_CREATE = "hasAuthority('"+AUTHORITY_CREATE+"')";
+		public static final String HAS_UPDATE = "hasAuthority('"+AUTHORITY_UPDATE+"')";
+		public static final String HAS_DELETE = "hasAuthority('"+AUTHORITY_DELETE+"')";
 	}
 
-	@PreAuthorize(SitePreAuthorizeEnum.READ)
+	@PreAuthorize(SitePreAuthorizeEnum.HAS_READ)
 	SiteDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(SitePreAuthorizeEnum.READ)
+	@PreAuthorize(SitePreAuthorizeEnum.HAS_READ)
 	SiteDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(SitePreAuthorizeEnum.CREATE)
+	@PreAuthorize(SitePreAuthorizeEnum.HAS_CREATE)
 	SiteDto create(SiteDto model) throws BusinessException;
 
-	@PreAuthorize(SitePreAuthorizeEnum.UPDATE)
+	@PreAuthorize(SitePreAuthorizeEnum.HAS_UPDATE)
 	SiteDto update(SiteDto model) throws BusinessException;
 
-	@PreAuthorize(SitePreAuthorizeEnum.DELETE)
+	@PreAuthorize(SitePreAuthorizeEnum.HAS_DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(SitePreAuthorizeEnum.READ)
+	@PreAuthorize(SitePreAuthorizeEnum.HAS_READ)
 	Page<SiteDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(SitePreAuthorizeEnum.READ)
+	@PreAuthorize(SitePreAuthorizeEnum.HAS_READ)
 	int count() throws Exception;
 
-	@PreAuthorize(SitePreAuthorizeEnum.READ)
+	@PreAuthorize(SitePreAuthorizeEnum.HAS_READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(SitePreAuthorizeEnum.READ)
+	@PreAuthorize(SitePreAuthorizeEnum.HAS_READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(SitePreAuthorizeEnum.CREATE)
+	@PreAuthorize(SitePreAuthorizeEnum.HAS_CREATE)
 	SiteDto createDto() throws Exception;
 }

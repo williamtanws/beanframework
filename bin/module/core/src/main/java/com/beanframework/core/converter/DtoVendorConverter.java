@@ -1,6 +1,8 @@
 package com.beanframework.core.converter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.vendor.domain.Vendor;
@@ -42,8 +45,21 @@ public class DtoVendorConverter extends AbstractDtoConverter<Vendor, VendorDto> 
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
 
-			if (context.isFetchable(Vendor.class, Vendor.USER_GROUPS))
-				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+			
+			prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
+			Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
+				@Override
+				public int compare(UserFieldDto o1, UserFieldDto o2) {
+					if (o1.getDynamicFieldSlot().getSort() == null)
+						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+
+					if (o2.getDynamicFieldSlot().getSort() == null)
+						return -1;
+
+					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+				}
+			});
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

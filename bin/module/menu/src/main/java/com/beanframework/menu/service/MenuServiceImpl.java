@@ -16,25 +16,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.specification.MenuSpecification;
-import com.beanframework.user.domain.UserGroup;
 
 @Service
 public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private FetchContext fetchContext;
 
 	@Override
 	public Menu create() throws Exception {
@@ -43,36 +35,11 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Menu findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
-		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		
-		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
-		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
-
 		return modelService.findOneEntityByUuid(uuid, Menu.class);
 	}
 
 	@Override
 	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
-		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		
-		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
-		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-
 		return modelService.findOneEntityByProperties(properties, Menu.class);
 	}
 
@@ -119,8 +86,6 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	private void setParentNullAndSortByUuid(UUID fromUuid, int toIndex) throws Exception {
-		fetchContext.clearFetchProperties();
-		fetchContext.addFetchProperty(Menu.class, Menu.PARENT);
 		Menu menu = modelService.findOneEntityByUuid(fromUuid, Menu.class);
 		menu.setParent(null);
 		menu.setSort(toIndex);
@@ -139,9 +104,6 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	private void updateParentByUuid(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
-		fetchContext.clearFetchProperties();
-		fetchContext.addFetchProperty(Menu.class, Menu.PARENT);
-		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
 		Menu menu = modelService.findOneEntityByUuid(fromUuid, Menu.class);
 		Menu parent = modelService.findOneEntityByUuid(toUuid, Menu.class);
 		parent.getChilds().add(menu);
@@ -207,17 +169,6 @@ public class MenuServiceImpl implements MenuService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findEntityMenuTree(boolean enabled) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(Menu.class, Menu.CHILDS);
-		fetchContext.addFetchProperty(Menu.class, Menu.USER_GROUPS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		
-		fetchContext.addFetchProperty(Menu.class, Menu.FIELDS);
-		fetchContext.addFetchProperty(MenuField.class, MenuField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.PARENT, null);
@@ -236,7 +187,6 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Page<Menu> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(MenuSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Menu.class);
 	}
 

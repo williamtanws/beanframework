@@ -31,7 +31,10 @@ public class AbstractSpecification {
 			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return getPredicate(dataTableRequest, root, query, cb);
 			}
-
+			
+			public String toString() {
+				return dataTableRequest.toString();
+			}
 		};
 	}
 

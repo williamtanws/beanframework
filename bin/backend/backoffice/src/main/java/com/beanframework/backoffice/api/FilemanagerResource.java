@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.beanframework.backoffice.FilemanagerWebConstants;
+import com.beanframework.backoffice.web.FilemanagerController.FilemanagerPreAuthorizeEnum;
 
 @RestController
 public class FilemanagerResource {
@@ -57,14 +58,14 @@ public class FilemanagerResource {
 		}
 	}
 
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_LIST)
 	public Object list(@RequestBody JSONObject json) throws ServletException {
 
 		try {
 			// Directory Listing
 			String path = json.getString("path");
-			
+
 			// Returned result
 			List<JSONObject> fileItems = new ArrayList<>();
 
@@ -106,7 +107,7 @@ public class FilemanagerResource {
 	/**
 	 * Upload File
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.CREATE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_CREATE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_UPLOAD)
 	public Object upload(@RequestParam("destination") String destination, HttpServletRequest request) {
 
@@ -117,7 +118,7 @@ public class FilemanagerResource {
 			for (Part part : parts) {
 				if (part.getContentType() != null) { // Ignore path fields, file type
 					String path = STORAGE + destination;
-					
+
 					checkDirectoryTraversalSecuirty(STORAGE, path);
 					File f = new File(path, com.beanframework.filemanager.utils.FileUtils.getFileName(part.getHeader("content-disposition")));
 					if (!com.beanframework.filemanager.utils.FileUtils.write(part.getInputStream(), f)) {
@@ -133,12 +134,13 @@ public class FilemanagerResource {
 
 	/**
 	 * File download/preview
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.READ)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_PREVIEW)
 	public void preview(HttpServletResponse response, String path) throws Exception {
-		
+
 		checkDirectoryTraversalSecuirty(STORAGE, path);
 		File file = new File(STORAGE, path);
 		if (!file.exists()) {
@@ -166,12 +168,12 @@ public class FilemanagerResource {
 	/**
 	 * Create directory
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.CREATE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_CREATE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_CREATEFOLDER)
 	public Object createFolder(@RequestBody JSONObject json) {
 		try {
 			String newPath = json.getString("newPath");
-			
+
 			checkDirectoryTraversalSecuirty(STORAGE, newPath);
 			File newDir = new File(STORAGE + newPath);
 			if (!newDir.mkdir()) {
@@ -186,7 +188,7 @@ public class FilemanagerResource {
 	/**
 	 * Modify file or directory
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.UPDATE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_UPDATE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_CHANGEPERMISSIONS)
 	public Object changePermissions(@RequestBody JSONObject json) {
 		try {
@@ -197,7 +199,7 @@ public class FilemanagerResource {
 			JSONArray items = json.getJSONArray("items");
 			for (int i = 0; i < items.size(); i++) {
 				String path = items.getString(i);
-				
+
 				checkDirectoryTraversalSecuirty(STORAGE, path);
 				File f = new File(STORAGE, path);
 				com.beanframework.filemanager.utils.FileUtils.setPermissions(f, perms, recursive); // 设置�?��?
@@ -211,7 +213,7 @@ public class FilemanagerResource {
 	/**
 	 * Create File or directory
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.CREATE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_CREATE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_COPY)
 	public Object copy(@RequestBody JSONObject json, HttpServletRequest request) {
 		try {
@@ -220,7 +222,7 @@ public class FilemanagerResource {
 
 			for (int i = 0; i < items.size(); i++) {
 				String path = items.getString(i);
-				
+
 				checkDirectoryTraversalSecuirty(STORAGE, path);
 				File srcFile = new File(STORAGE, path);
 				File destFile = new File(STORAGE + newpath, srcFile.getName());
@@ -237,7 +239,7 @@ public class FilemanagerResource {
 	/**
 	 * Move files or directories
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.UPDATE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_UPDATE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_MOVE)
 	public Object move(@RequestBody JSONObject json) {
 		try {
@@ -246,7 +248,7 @@ public class FilemanagerResource {
 
 			for (int i = 0; i < items.size(); i++) {
 				String path = items.getString(i);
-				
+
 				checkDirectoryTraversalSecuirty(STORAGE, path);
 				File srcFile = new File(STORAGE, path);
 				File destFile = new File(STORAGE + newpath, srcFile.getName());
@@ -267,14 +269,14 @@ public class FilemanagerResource {
 	/**
 	 * Delete file or directory
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.DELETE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_DELETE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_REMOVE)
 	public Object remove(@RequestBody JSONObject json) {
 		try {
 			JSONArray items = json.getJSONArray("items");
 			for (int i = 0; i < items.size(); i++) {
 				String path = items.getString(i);
-				
+
 				checkDirectoryTraversalSecuirty(STORAGE, path);
 				File srcFile = new File(STORAGE, path);
 				if (!FileUtils.deleteQuietly(srcFile)) {
@@ -290,13 +292,13 @@ public class FilemanagerResource {
 	/**
 	 * Rename file or directory
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.UPDATE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_UPDATE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_RENAME)
 	public Object rename(@RequestBody JSONObject json) {
 		try {
 			String path = json.getString("item");
 			String newPath = json.getString("newItemPath");
-			
+
 			checkDirectoryTraversalSecuirty(STORAGE, path);
 			checkDirectoryTraversalSecuirty(STORAGE, newPath);
 			File srcFile = new File(STORAGE, path);
@@ -315,12 +317,12 @@ public class FilemanagerResource {
 	/**
 	 * View the contents of the file, for html?txt, etc. Edit the file
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.CREATE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_CREATE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_GETCONTENT)
 	public Object getContent(@RequestBody JSONObject json) {
 		try {
 			String path = json.getString("item");
-			
+
 			checkDirectoryTraversalSecuirty(STORAGE, path);
 			File srcFile = new File(STORAGE, path);
 
@@ -337,13 +339,13 @@ public class FilemanagerResource {
 	/**
 	 * Modify the contents of the file, for html?txt, etc. Edit the file
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.UPDATE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_UPDATE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_EDIT)
 	public Object edit(@RequestBody JSONObject json) {
 		try {
 			String path = json.getString("item");
 			String content = json.getString("content");
-			
+
 			checkDirectoryTraversalSecuirty(STORAGE, path);
 			File srcFile = new File(STORAGE, path);
 			FileUtils.writeStringToFile(srcFile, content, "UTF-8");
@@ -357,7 +359,7 @@ public class FilemanagerResource {
 	/**
 	 * File compression
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.UPDATE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_UPDATE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_COMPRESS)
 	public Object compress(@RequestBody JSONObject json) {
 		try {
@@ -366,12 +368,12 @@ public class FilemanagerResource {
 			JSONArray items = json.getJSONArray("items");
 			List<File> files = new ArrayList<>();
 			for (int i = 0; i < items.size(); i++) {
-				
+
 				checkDirectoryTraversalSecuirty(STORAGE, items.getString(i));
 				File f = new File(STORAGE, items.getString(i));
 				files.add(f);
 			}
-			
+
 			checkDirectoryTraversalSecuirty(STORAGE + destination, compressedFilename);
 			File zip = new File(STORAGE + destination, compressedFilename);
 
@@ -387,14 +389,14 @@ public class FilemanagerResource {
 	/**
 	 * File decompression
 	 */
-	@PreAuthorize(FilemanagerWebConstants.PreAuthorize.CREATE)
+	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_CREATE)
 	@RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_EXTRACT)
 	public Object extract(@RequestBody JSONObject json) {
 		try {
 			String destination = json.getString("destination");
 			String zipName = json.getString("item");
 			String folderName = json.getString("folderName");
-			
+
 			checkDirectoryTraversalSecuirty(STORAGE, zipName);
 			File file = new File(STORAGE, zipName);
 

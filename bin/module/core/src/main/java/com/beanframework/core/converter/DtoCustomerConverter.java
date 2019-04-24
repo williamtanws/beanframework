@@ -42,8 +42,7 @@ public class DtoCustomerConverter extends AbstractDtoConverter<Customer, Custome
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
 
-			if (context.isFetchable(Customer.class, Customer.USER_GROUPS))
-				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

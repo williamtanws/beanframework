@@ -45,24 +45,21 @@ public class DtoEmployeeConverter extends AbstractDtoConverter<Employee, Employe
 			prototype.setEnabled(source.getEnabled());
 			prototype.setName(source.getName());
 
-			if (context.isFetchable(Employee.class, Employee.USER_GROUPS))
-				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
-			if (context.isFetchable(Employee.class, Employee.FIELDS)) {
-				prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
-				Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
-					@Override
-					public int compare(UserFieldDto o1, UserFieldDto o2) {
-						if (o1.getDynamicFieldSlot().getSort() == null)
-							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+			prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
+			Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
+				@Override
+				public int compare(UserFieldDto o1, UserFieldDto o2) {
+					if (o1.getDynamicFieldSlot().getSort() == null)
+						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
-						if (o2.getDynamicFieldSlot().getSort() == null)
-							return -1;
+					if (o2.getDynamicFieldSlot().getSort() == null)
+						return -1;
 
-						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-					}
-				});
-			}
+					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+				}
+			});
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

@@ -24,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvLanguageConverter;
 import com.beanframework.console.csv.LanguageCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 
 public class LanguageImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(LanguageImportListener.class);
 
 	@Autowired
-	private LanguageService languageService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvLanguageConverter converter;
@@ -56,11 +56,11 @@ public class LanguageImportListener extends ImportListener {
 
 	@Override
 	public void update() throws Exception {
-		update(IMPORT_UPDATE);
+		updateByPath(IMPORT_UPDATE);
 	}
 
 	@Override
-	public void update(String path) throws Exception {
+	public void updateByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
@@ -76,11 +76,11 @@ public class LanguageImportListener extends ImportListener {
 
 	@Override
 	public void remove() throws Exception {
-		remove(IMPORT_REMOVE);
+		removeByPath(IMPORT_REMOVE);
 	}
 
 	@Override
-	public void remove(String path) throws Exception {
+	public void removeByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
@@ -92,6 +92,18 @@ public class LanguageImportListener extends ImportListener {
 			List<LanguageCsv> languageCsvList = readCSVFile(reader, LanguageCsv.getRemoveProcessors());
 			remove(languageCsvList);
 		}
+	}
+
+	@Override
+	public void updateByContent(String content) throws Exception {
+		List<LanguageCsv> csvList = readCSVFile(new StringReader(content), LanguageCsv.getUpdateProcessors());
+		save(csvList);
+	}
+
+	@Override
+	public void removeByContent(String content) throws Exception {
+		List<LanguageCsv> csvList = readCSVFile(new StringReader(content), LanguageCsv.getUpdateProcessors());
+		remove(csvList);
 	}
 
 	public List<LanguageCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
@@ -134,7 +146,7 @@ public class LanguageImportListener extends ImportListener {
 		for (LanguageCsv csv : csvList) {
 
 			Language model = converter.convert(csv);
-			languageService.saveEntity(model);
+			modelService.saveEntity(model, Language.class);
 		}
 	}
 

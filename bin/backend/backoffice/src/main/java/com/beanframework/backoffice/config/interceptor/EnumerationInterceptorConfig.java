@@ -4,11 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.dynamicfield.interceptor.DynamicFieldEnumerationRemoveInterceptor;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.enumuration.interceptor.EnumerationInitialDefaultsInterceptor;
 import com.beanframework.enumuration.interceptor.EnumerationLoadInterceptor;
 import com.beanframework.enumuration.interceptor.EnumerationPrepareInterceptor;
-import com.beanframework.enumuration.interceptor.EnumerationRemoveInterceptor;
 import com.beanframework.enumuration.interceptor.EnumerationValidateInterceptor;
 
 @Configuration
@@ -91,8 +91,8 @@ public class EnumerationInterceptorConfig {
 	////////////////////////
 
 	@Bean
-	public EnumerationRemoveInterceptor enumerationRemoveInterceptor() {
-		return new EnumerationRemoveInterceptor();
+	public DynamicFieldEnumerationRemoveInterceptor enumerationRemoveInterceptor() {
+		return new DynamicFieldEnumerationRemoveInterceptor();
 	}
 
 	@Bean

@@ -13,7 +13,6 @@ import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.console.csv.ConfigurationCsv;
 
 @Component
@@ -24,9 +23,6 @@ public class EntityCsvConfigurationConverter implements EntityCsvConverter<Confi
 	@Autowired
 	private ModelService modelService;
 
-	@Autowired
-	private ConfigurationService configurationService;
-
 	@Override
 	public Configuration convert(ConfigurationCsv source) throws ConverterException {
 
@@ -36,7 +32,7 @@ public class EntityCsvConfigurationConverter implements EntityCsvConverter<Confi
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.ID, source.getId());
 
-				Configuration prototype = configurationService.findOneEntityByProperties(properties);
+				Configuration prototype = modelService.findOneEntityByProperties(properties, Configuration.class);
 
 				if (prototype != null) {
 

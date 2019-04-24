@@ -4,7 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
+import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateDynamicFieldSlotRemoveInterceptor;
 import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateInitialDefaultsInterceptor;
 import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplateLoadInterceptor;
 import com.beanframework.dynamicfield.interceptor.template.DynamicFieldTemplatePrepareInterceptor;
@@ -100,6 +102,25 @@ public class DynamicFieldTemplateInterceptorConfig {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(dynamicFieldTemplateRemoveInterceptor());
 		mapping.setTypeCode(DynamicFieldTemplate.class.getSimpleName());
+
+		return mapping;
+	}
+
+	//////////////////////////////////
+	// DynamicFieldSlot Interceptor //
+	//////////////////////////////////
+
+	@Bean
+	public DynamicFieldTemplateDynamicFieldSlotRemoveInterceptor dynamicFieldTemplateDynamicFieldSlotRemoveInterceptor() {
+		return new DynamicFieldTemplateDynamicFieldSlotRemoveInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping dynamicFieldTemplateDynamicFieldSlotRemoveInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(dynamicFieldTemplateDynamicFieldSlotRemoveInterceptor());
+		mapping.setTypeCode(DynamicFieldSlot.class.getSimpleName());
+		mapping.setOrder(Integer.MIN_VALUE);
 
 		return mapping;
 	}

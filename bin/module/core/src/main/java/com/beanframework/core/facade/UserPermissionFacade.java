@@ -14,42 +14,48 @@ import com.beanframework.core.data.UserPermissionDto;
 public interface UserPermissionFacade {
 
 	public static interface UserPermissionPreAuthorizeEnum {
-		public static final String READ = "hasAuthority('userpermission_read')";
-		public static final String CREATE = "hasAuthority('userpermission_create')";
-		public static final String UPDATE = "hasAuthority('userpermission_update')";
-		public static final String DELETE = "hasAuthority('userpermission_delete')";
+		public static final String AUTHORITY_READ = "userpermission_read";
+		public static final String AUTHORITY_CREATE = "userpermission_create";
+		public static final String AUTHORITY_UPDATE = "userpermission_update";
+		public static final String AUTHORITY_DELETE = "userpermission_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
 	}
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.READ)
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	UserPermissionDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.READ)
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	UserPermissionDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.CREATE)
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_CREATE)
 	UserPermissionDto create(UserPermissionDto model) throws BusinessException;
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.UPDATE)
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_UPDATE)
 	UserPermissionDto update(UserPermissionDto model) throws BusinessException;
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.DELETE)
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.READ)
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.READ)
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	int count() throws Exception;
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.READ)
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.READ)
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(UserPermissionPreAuthorizeEnum.CREATE)
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_CREATE)
 	UserPermissionDto createDto() throws Exception;
 
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	List<UserPermissionDto> findAllDtoUserPermissions() throws Exception;
 
 }

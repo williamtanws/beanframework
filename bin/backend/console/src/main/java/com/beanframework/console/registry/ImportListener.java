@@ -4,11 +4,15 @@ public abstract class ImportListener {
 
 	public abstract void update() throws Exception;
 
-	public abstract void update(String path) throws Exception;
+	public abstract void updateByPath(String path) throws Exception;
+	
+	public abstract void updateByContent(String content) throws Exception;
 	
 	public abstract void remove() throws Exception;
 
-	public abstract void remove(String path) throws Exception;
+	public abstract void removeByPath(String path) throws Exception;
+
+	public abstract void removeByContent(String content) throws Exception;
 
 	private String key;
 	private String name;

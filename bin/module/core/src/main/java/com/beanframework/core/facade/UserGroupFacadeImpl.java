@@ -1,6 +1,5 @@
 package com.beanframework.core.facade;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -8,7 +7,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.data.DataTableRequest;
@@ -101,14 +99,6 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	@Override
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
 		return userGroupService.findCountHistory(dataTableRequest);
-	}
-
-	@Override
-	public List<UserGroupDto> findAllDtoUserGroups() throws Exception {
-		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(UserGroup.CREATED_DATE, Sort.Direction.DESC);
-
-		return modelService.getDto(userGroupService.findEntityBySorts(sorts), UserGroupDto.class);
 	}
 
 	@Override

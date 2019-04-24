@@ -8,7 +8,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -33,8 +32,8 @@ public class DynamicFieldSlot extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private Integer sort;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
+	@Audited(withModifiedFlag = true)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dynamicfield_uuid")
 	private DynamicField dynamicField;
 

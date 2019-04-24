@@ -18,6 +18,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.security.BackofficeAuthProvider;
 import com.beanframework.backoffice.security.BackofficeSuccessHandler;
+import com.beanframework.user.UserConstants;
 import com.beanframework.backoffice.security.BackofficeCsrfHeaderFilter;
 import com.beanframework.backoffice.security.BackofficeSessionExpiredDetectingLoginUrlAuthenticationEntryPoint;
 
@@ -59,10 +60,10 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value(BackofficeWebConstants.Authority.BACKOFFICE)
 	private String BACKOFFICE_ACCESS;
 
-	@Value("${module.backoffice.session.max:-1}")
+	@Value(UserConstants.MAX_SESSION_USER)
 	private int SESSION_MAX;
 
-	@Value("${module.backoffice.session.login.prevent:false}")
+	@Value(UserConstants.MAX_SESSION_PREVENTS_LOGIN)
 	private boolean SESSION_LOGIN_PREVENT;
 
 	@Autowired

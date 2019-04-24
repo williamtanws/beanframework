@@ -14,8 +14,8 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +59,11 @@ public class UserAuthorityImportListener extends ImportListener {
 
 	@Override
 	public void update() throws Exception {
-		update(IMPORT_UPDATE);
+		updateByPath(IMPORT_UPDATE);
 	}
 
 	@Override
-	public void update(String path) throws Exception {
+	public void updateByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
@@ -79,11 +79,11 @@ public class UserAuthorityImportListener extends ImportListener {
 
 	@Override
 	public void remove() throws Exception {
-		remove(IMPORT_REMOVE);
+		removeByPath(IMPORT_REMOVE);
 	}
 
 	@Override
-	public void remove(String path) throws Exception {
+	public void removeByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
@@ -95,6 +95,18 @@ public class UserAuthorityImportListener extends ImportListener {
 			List<UserAuthorityCsv> csvList = readCSVFile(reader, UserAuthorityCsv.getRemoveProcessors());
 			remove(csvList);
 		}
+	}
+
+	@Override
+	public void updateByContent(String content) throws Exception {
+		List<UserAuthorityCsv> csvList = readCSVFile(new StringReader(content), UserAuthorityCsv.getUpdateProcessors());
+		save(csvList);
+	}
+
+	@Override
+	public void removeByContent(String content) throws Exception {
+		List<UserAuthorityCsv> csvList = readCSVFile(new StringReader(content), UserAuthorityCsv.getUpdateProcessors());
+		remove(csvList);
 	}
 
 	public List<UserAuthorityCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
@@ -166,18 +178,20 @@ public class UserAuthorityImportListener extends ImportListener {
 				for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
 
 					for (UserAuthorityCsv userAuthorityCsv : userGroupAuthorityList) {
-						if (userGroup.getUserAuthorities().get(i).getUserPermission().getId().equals(userAuthorityCsv.getUserPermissionId())) {
-							if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("create")) {
-								userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getCreate()) ? Boolean.TRUE : Boolean.FALSE);
-							}
-							if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("read")) {
-								userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getRead()) ? Boolean.TRUE : Boolean.FALSE);
-							}
-							if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("update")) {
-								userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getUpdate()) ? Boolean.TRUE : Boolean.FALSE);
-							}
-							if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("delete")) {
-								userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getDelete()) ? Boolean.TRUE : Boolean.FALSE);
+						if(StringUtils.isNotBlank(userAuthorityCsv.getUserPermissionId())) {
+							if (userGroup.getUserAuthorities().get(i).getUserPermission().getId().equals(userAuthorityCsv.getUserPermissionId())) {
+								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("create")) {
+									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getCreate()) ? Boolean.TRUE : Boolean.FALSE);
+								}
+								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("read")) {
+									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getRead()) ? Boolean.TRUE : Boolean.FALSE);
+								}
+								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("update")) {
+									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getUpdate()) ? Boolean.TRUE : Boolean.FALSE);
+								}
+								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("delete")) {
+									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getDelete()) ? Boolean.TRUE : Boolean.FALSE);
+								}
 							}
 						}
 					}
@@ -189,7 +203,6 @@ public class UserAuthorityImportListener extends ImportListener {
 	}
 
 	private void generateUserAuthority(UserGroup model) throws Exception {
-		Hibernate.initialize(model.getUserAuthorities());
 
 		Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
 		userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
@@ -219,7 +232,6 @@ public class UserAuthorityImportListener extends ImportListener {
 					userAuthority.setUserPermission(userPermission);
 					userAuthority.setUserRight(userRight);
 
-					userAuthority.setUserGroup(model);
 					model.getUserAuthorities().add(userAuthority);
 				}
 			}

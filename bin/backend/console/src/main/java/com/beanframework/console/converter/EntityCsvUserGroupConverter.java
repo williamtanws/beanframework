@@ -18,7 +18,6 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserGroupField;
-import com.beanframework.user.service.UserGroupService;
 
 @Component
 public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroupCsv, UserGroup> {
@@ -27,9 +26,6 @@ public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroup
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private UserGroupService userGroupService;
 
 	@Override
 	public UserGroup convert(UserGroupCsv source) throws ConverterException {
@@ -40,7 +36,7 @@ public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroup
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserGroup.ID, source.getId());
 
-				UserGroup prototype = userGroupService.findOneEntityByProperties(properties);
+				UserGroup prototype = modelService.findOneEntityByProperties(properties, UserGroup.class);
 
 				if (prototype != null) {
 					return convert(source, prototype);
@@ -93,25 +89,29 @@ public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroup
 				}
 			}
 
-			// User Group
+			// UserGroup
 			if (StringUtils.isNotBlank(source.getUserGroupIds())) {
 				String[] userGroupIds = source.getUserGroupIds().split(ImportListener.SPLITTER);
-				for (int i = 0; i < userGroupIds.length; i++) {
-					boolean add = true;
-					for (UserGroup userGroup : prototype.getUserGroups()) {
-						if (StringUtils.equals(userGroup.getId(), userGroupIds[i]))
-							add = false;
-					}
 
-					if (add) {
+				boolean add = true;
+				for (UserGroup userGroup : prototype.getUserGroups()) {
+					for (int i = 0; i < userGroupIds.length; i++) {
+						if (userGroupIds[i].equals(userGroup.getId())) {
+							add = false;
+						}
+					}
+				}
+
+				if (add) {
+					for (int i = 0; i < userGroupIds.length; i++) {
 						Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 						userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-						UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+						UserGroup entity = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 
-						if (userGroup == null) {
-							LOGGER.error("UserGroup ID not exists: " + userGroupIds[i]);
+						if (entity == null) {
+							LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
 						} else {
-							prototype.getUserGroups().add(userGroup);
+							prototype.getUserGroups().add(entity);
 						}
 					}
 				}

@@ -6,14 +6,31 @@ import java.util.Set;
 
 public class FetchProperties {
 
-	private static final Map<String, Set<String>> instance = new HashMap<String, Set<String>>();
+	private static volatile FetchProperties instance;
 
-	protected FetchProperties() {
+	private static Map<String, Set<String>> properties = new HashMap<String, Set<String>>();
+
+	private FetchProperties() {
 	}
 
-	// Runtime initialization
-	// By defualt ThreadSafe
-	public static Map<String, Set<String>> getInstance() {
-		return instance;
+	public static FetchProperties getInstance() {
+		FetchProperties result = instance;
+		if (result == null) {
+			synchronized (properties) {
+				result = instance;
+				if (result == null)
+					instance = result = new FetchProperties();
+			}
+		}
+		return result;
 	}
+
+	public Map<String, Set<String>> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Map<String, Set<String>> properties) {
+		FetchProperties.properties = properties;
+	}
+
 }

@@ -15,7 +15,6 @@ import javax.persistence.MappedSuperclass;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -58,7 +57,7 @@ public abstract class GenericEntity implements Serializable {
 	@Audited
 	private Date lastModifiedDate;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+	@Audited(withModifiedFlag = true)
 	@LastModifiedBy
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "lastmodifiedby_uuid")

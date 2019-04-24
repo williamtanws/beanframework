@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -26,9 +25,6 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 	@Autowired
 	private ModelService modelService;
 
-	@Autowired
-	private FetchContext fetchContext;
-
 	@Override
 	public DynamicField create() throws Exception {
 		return modelService.create(DynamicField.class);
@@ -36,19 +32,11 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 
 	@Override
 	public DynamicField findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 		return modelService.findOneEntityByUuid(uuid, DynamicField.class);
 	}
 
 	@Override
 	public DynamicField findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
 		return modelService.findOneEntityByProperties(properties, DynamicField.class);
 	}
 
@@ -76,7 +64,6 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 
 	@Override
 	public Page<DynamicField> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(DynamicFieldSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicField.class);
 	}
 

@@ -86,4 +86,12 @@ public class MediaCsv extends AbstractCsv {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		return "MediaCsv [id=" + id + ", fileName=" + fileName + ", fileType=" + fileType + ", url=" + url + ", title=" + title + ", caption=" + caption + ", altText=" + altText + ", description=" + description
+				+ "]";
+	}
+	
+	
+
 }

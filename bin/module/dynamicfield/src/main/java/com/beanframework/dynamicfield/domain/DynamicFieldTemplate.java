@@ -13,8 +13,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -37,10 +37,11 @@ public class DynamicFieldTemplate extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
-	@Cascade({ CascadeType.ALL })
+	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "dynamicfieldslot_uuid"))
+	@Audited(withModifiedFlag = true)
+	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = DynamicFieldTemplateConstants.Table.DYNAMIC_FIELD_TEMPLATE_FIELDSLOT_REL, joinColumns = @JoinColumn(name = "template_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "slot_uuid", referencedColumnName = "uuid"))
+	@JoinTable(name = DynamicFieldTemplateConstants.Table.DYNAMIC_FIELD_TEMPLATE_FIELDSLOT_REL, joinColumns = @JoinColumn(name = "template_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "dynamicfieldslot_uuid", referencedColumnName = "uuid"))
 	private List<DynamicFieldSlot> dynamicFieldSlots = new ArrayList<DynamicFieldSlot>();
 
 	public String getName() {

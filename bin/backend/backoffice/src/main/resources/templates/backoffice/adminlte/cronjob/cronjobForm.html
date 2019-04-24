@@ -16,14 +16,14 @@
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-									<th:block th:if="*{uuid != null}" layout:insert="~{/common/adminlte/common/component/delete :: button (deleteAuthority='cronjob_delete')}"></th:block>
+									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='cronjob_delete')}"></th:block>
 								</div>
 								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
 									<button th:if="*{uuid != null}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-trigger" th:text="#{module.cronjob.trigger}" sec:authorize="hasAuthority('cronjob_update')"></button>
 								</div>
 								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: right">
-									<th:block layout:insert="~{/common/adminlte/common/component/refresh :: button (deleteAuthority='cronjob_delete')}"></th:block>
-									<th:block layout:insert="~{/common/adminlte/common/component/update :: button (updateAuthority='cronjob_update')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='cronjob_delete')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='cronjob_update')}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -40,9 +40,6 @@
 								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_status" data-toggle="tab" th:text="#{module.cronjob.status}" onclick="changeTab('status')"></a>
-							</li>
-							<li th:if="*{uuid != null}">
 								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
@@ -53,7 +50,33 @@
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="~{/common/adminlte/common/component/general :: general}"></th:block>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="status" th:text="#{module.cronjob.status} + ':'"></label>
+												<span class="text-block" th:text="*{status}"></span>
+											</div>
+											<div class="form-group">
+												<label for="result" th:text="#{module.cronjob.result} + ':'"></label>
+												<span class="text-block" th:text="*{result}"></span>
+											</div>
+											<div class="form-group">
+												<label for="result" th:text="#{module.cronjob.message} + ':'"></label>
+												<span class="text-block" th:text="*{message}"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="lastStartExecutedDate" th:text="#{module.cronjob.laststartexecuteddate} + ':'"></label>
+												<span class="text-block" th:text="*{lastStartExecutedDate != null} ? *{#dates.format(lastStartExecutedDate, ' dd MMMM yyyy hh:mma')}"></span>
+											</div>
+											<div class="form-group">
+												<label for="lastFinishExecutedDate" th:text="#{module.cronjob.lastfinishexecuteddate} + ':'"></label>
+												<span class="text-block" th:text="*{lastFinishExecutedDate != null} ? *{#dates.format(lastFinishExecutedDate, ' dd MMMM yyyy hh:mma')}"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
@@ -98,48 +121,59 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
-										<div class="col-md-12" th:if="*{uuid != null}">
-											<label for="startup" th:text="#{module.cronjob.jobdata}"></label>
-											<table id="jobdatasTable" class="table table-bordered table-hover">
-												<thead>
-													<tr>
-														<th th:text="#{module.cronjob.jobdata.name}"></th>
-														<th th:text="#{module.cronjob.jobdata.value}"></th>
-														<th style="width: 70px" class="action" sec:authorize="hasAuthority('cronjob_update')" th:text="#{module.backoffice.action}"></th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr th:each="row : ${cronjobDto.cronjobDatas}">
-														<td th:text="${row.name}"></td>
-														<td th:text="${row.value}"></td>
-														<td sec:authorize="hasAuthority('cronjob_update')">
-															<button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" data-target="#modal-deletejobdata" th:data-jobdatauuid="${row.uuid}"
-																th:text="#{module.backoffice.delete}"></button>
-														</td>
-													</tr>
-												</tbody>
-											</table>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;" th:if="*{uuid != null}">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="startup" th:text="#{module.cronjob.jobdata}"></label>
+												<span>:</span>
+												<table id="jobdatasTable" class="table table-bordered table-hover">
+													<thead>
+														<tr>
+															<th th:text="#{module.cronjob.jobdata.name}"></th>
+															<th th:text="#{module.cronjob.jobdata.value}"></th>
+															<th style="width: 70px" class="action" sec:authorize="hasAuthority('cronjob_update')" th:text="#{module.backoffice.action}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="row : ${cronjobDto.cronjobDatas}">
+															<td th:text="${row.name}"></td>
+															<td th:text="${row.value}"></td>
+															<td sec:authorize="hasAuthority('cronjob_update')">
+																<button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" data-target="#modal-deletejobdata" th:data-jobdatauuid="${row.uuid}"
+																	th:text="#{module.backoffice.delete}"></button>
+															</td>
+														</tr>
+													</tbody>
+													<tfoot sec:authorize="hasAuthority('cronjob_update')">
+														<tr>
+															<td colspan="2"></td>
+															<td>
+																<!-- Button trigger modal -->
+																<a class="btn btn-block btn-default" data-toggle="modal" data-target="#modal-createjobdata">
+																	<span class="fa fa-plus color"></span>
+																	<span th:text="#{module.backoffice.add}"></span>
+																</a>
+															</td>
+														</tr>
+													</tfoot>
+												</table>
+											</div>
 										</div>
 									</div>
 								</div>
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_status" th:if="*{uuid != null}">
-								<div class="box-body">
-									<th:block layout:insert="~{/backoffice/adminlte/cronjob/cronjobForm :: status}"></th:block>
-								</div>
-							</div>
-							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{/common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.cronjob.history')}(uuid=*{uuid})} )}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.cronjob.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{/common/adminlte/common/component/administration :: administration}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/administration :: administration}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -241,7 +275,7 @@
 		</script>
 
 		<th:block
-			layout:insert="~{/common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.cronjob')}}, deleteUuid=${cronjobDto.uuid})}"></th:block>
+			layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.cronjob')}}, deleteUuid=${cronjobDto.uuid})}"></th:block>
 
 		<div class="modal fade" id="modal-trigger" sec:authorize="hasAuthority('cronjob_update')">
 			<div class="modal-dialog">
@@ -323,6 +357,7 @@
 					</div>
 					<form id="cronjob-createjobdata-form" role="form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post" th:object="${cronjobDto}">
 						<input type="hidden" name="createjobdata">
+						<input type="hidden" name="uuid" th:value="${cronjobDto.uuid}">
 						<div class="modal-body">
 							<div class="modal-body">
 								<div class="container-fluid">
@@ -370,6 +405,7 @@
 						<form id="delete-cronjob-form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post">
 							<input type="hidden" name="deletejobdata">
 							<input type="hidden" name="jobDataUuid">
+							<input type="hidden" name="uuid" th:value="${cronjobDto.uuid}">
 							<button type="submit" class="btn btn-danger" th:text="#{module.backoffice.delete}"></button>
 						</form>
 					</div>
@@ -393,34 +429,6 @@
 		    /*]]>*/
 		</script>
 	</th:block>
-	</th:block>
-	<th:block layout:fragment="status">
-		<div class="row">
-			<div class="col-md-6">
-				<div class="form-group">
-					<label for="status" th:text="#{module.cronjob.status} + ':'"></label>
-					<span class="text-block" th:text="*{status}"></span>
-				</div>
-				<div class="form-group">
-					<label for="result" th:text="#{module.cronjob.result} + ':'"></label>
-					<span class="text-block" th:text="*{result}"></span>
-				</div>
-				<div class="form-group">
-					<label for="result" th:text="#{module.cronjob.message} + ':'"></label>
-					<span class="text-block" th:text="*{message}"></span>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="form-group">
-					<label for="lastStartExecutedDate" th:text="#{module.cronjob.laststartexecuteddate} + ':'"></label>
-					<span class="text-block" th:text="*{lastStartExecutedDate != null} ? *{#dates.format(lastStartExecutedDate, ' dd MMMM yyyy hh:mma')}"></span>
-				</div>
-				<div class="form-group">
-					<label for="lastFinishExecutedDate" th:text="#{module.cronjob.lastfinishexecuteddate} + ':'"></label>
-					<span class="text-block" th:text="*{lastFinishExecutedDate != null} ? *{#dates.format(lastFinishExecutedDate, ' dd MMMM yyyy hh:mma')}"></span>
-				</div>
-			</div>
-		</div>
 	</th:block>
 </body>
 </html>

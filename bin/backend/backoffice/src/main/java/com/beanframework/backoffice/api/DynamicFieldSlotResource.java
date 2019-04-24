@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,7 @@ import com.beanframework.common.data.HistoryDataResponse;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.facade.DynamicFieldSlotFacade;
+import com.beanframework.core.facade.DynamicFieldSlotFacade.DynamicFieldSlotPreAuthorizeEnum;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.RevisionsEntity;
 
@@ -40,6 +42,7 @@ public class DynamicFieldSlotResource {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(DynamicFieldSlotWebConstants.Path.Api.CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
@@ -61,6 +64,7 @@ public class DynamicFieldSlotResource {
 		return data != null ? false : true;
 	}
 
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = DynamicFieldSlotWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DynamicFieldSlotDataResponse> page(HttpServletRequest request) throws Exception {
@@ -88,6 +92,7 @@ public class DynamicFieldSlotResource {
 		return dataTableResponse;
 	}
 
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = DynamicFieldSlotWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -108,14 +113,14 @@ public class DynamicFieldSlotResource {
 
 			DynamicFieldSlotDto dto = (DynamicFieldSlotDto) object[0];
 			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
-			RevisionType eevisionType = (RevisionType) object[2];
+			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
 			HistoryDataResponse data = new HistoryDataResponse();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
-			data.setRevisionType(eevisionType.name());
+			data.setRevisionType(localeMessageService.getMessage("revision."+revisionType.name()));
 			for (String property : propertiesChanged) {
 				String localized = localeMessageService.getMessage("module.dynamicfieldslot." + property);
 				data.getPropertiesChanged().add(property + "=" + localized);

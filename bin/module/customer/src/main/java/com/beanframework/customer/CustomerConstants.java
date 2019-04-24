@@ -18,8 +18,5 @@ public interface CustomerConstants {
 		public static final String SAVE_CURRENT_CUSTOMER_ERROR = "module.customer.current.save.error";
 	}
 
-	public static final String CUSTOMER_MEDIA_LOCATION = "${module.customer.media.location}";
 	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "module.customer.dynamicfield.template";
-	public static final String CUSTOMER_PROFILE_PICTURE_THUMBNAIL_WIDTH = "${module.customer.profile.picture.thumbnail.width}";
-	public static final String CUSTOMER_PROFILE_PICTURE_THUMBNAIL_HEIGHT = "${module.customer.profile.picture.thumbnail.height}";
 }

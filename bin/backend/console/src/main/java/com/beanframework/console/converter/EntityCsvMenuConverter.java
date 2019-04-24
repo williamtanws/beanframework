@@ -18,7 +18,6 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
-import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.domain.UserGroup;
 
 @Component
@@ -29,9 +28,6 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 	@Autowired
 	private ModelService modelService;
 
-	@Autowired
-	private MenuService menuService;
-
 	@Override
 	public Menu convert(MenuCsv source) throws ConverterException {
 
@@ -41,7 +37,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Menu.ID, source.getId());
 
-				Menu prototype = menuService.findOneEntityByProperties(properties);
+				Menu prototype = modelService.findOneEntityByProperties(properties, Menu.class);
 
 				if (prototype != null) {
 
@@ -84,7 +80,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 				Map<String, Object> parentProperties = new HashMap<String, Object>();
 				parentProperties.put(Menu.ID, source.getParent());
 
-				Menu parent = menuService.findOneEntityByProperties(parentProperties);
+				Menu parent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
 
 				if (parent == null) {
 					LOGGER.error("Parent not exists: " + source.getParent());

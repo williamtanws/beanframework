@@ -16,54 +16,64 @@ import com.beanframework.employee.EmployeeSession;
 public interface EmployeeFacade {
 
 	public static interface EmployeePreAuthorizeEnum {
-		public static final String READ = "hasAuthority('employee_read')";
-		public static final String CREATE = "hasAuthority('employee_create')";
-		public static final String UPDATE = "hasAuthority('employee_update')";
-		public static final String DELETE = "hasAuthority('employee_delete')";
+
+		public static final String AUTHORITY_READ = "employee_read";
+		public static final String AUTHORITY_CREATE = "employee_create";
+		public static final String AUTHORITY_UPDATE = "employee_update";
+		public static final String AUTHORITY_DELETE = "employee_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
 	}
 
 	public static interface EmployeeSessionPreAuthorizeEnum {
-		public static final String READ = "hasAuthority('employeesession_read')";
-		public static final String DELETE = "hasAuthority('employeesession_delete')";
+
+		public static final String AUTHORITY_READ = "employeesession_read";
+		public static final String AUTHORITY_DELETE = "employeesession_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
 	}
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
 	EmployeeDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
 	EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.CREATE)
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_CREATE)
 	EmployeeDto create(EmployeeDto model) throws BusinessException;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.UPDATE)
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_UPDATE)
 	EmployeeDto update(EmployeeDto model) throws BusinessException;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.DELETE)
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
 	Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
 	int count() throws Exception;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.READ)
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.READ)
+	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.HAS_READ)
 	Set<EmployeeSession> findAllSessions();
 
-	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.DELETE)
+	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.HAS_DELETE)
 	void expireAllSessionsByUuid(UUID uuid);
 
-	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.DELETE)
+	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.HAS_DELETE)
 	void expireAllSessions();
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.CREATE)
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_CREATE)
 	EmployeeDto createDto() throws Exception;
 
 	EmployeeDto saveProfile(EmployeeDto employee) throws BusinessException;

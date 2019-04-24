@@ -8,7 +8,7 @@
 	<th:block layout:fragment="content">
 		<section class="content">
 			<div class="row">
-				<th:block layout:insert="~{/common/adminlte/common/component/alert :: custom}"></th:block>
+				<th:block layout:insert="~{common/adminlte/common/component/alert :: custom}"></th:block>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -82,7 +82,7 @@
 															<span class="help-block"></span>
 														</div>
 														<div class="form-group" style="text-align: center;">
-															<img style="max-width: 100%" th:src="@{${@environment.getProperty('path.employee.profile.picture')}}+'?type=original'" class="img-circle" alt="User Image">
+															<img style="max-width: 100%" th:src="@{${@environment.getProperty('path.user.profile.picture')}}+'?type=original'" class="img-circle" alt="User Image">
 														</div>
 													</div>
 												</div>

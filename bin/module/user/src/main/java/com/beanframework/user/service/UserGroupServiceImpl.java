@@ -13,15 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.beanframework.common.context.FetchContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
-import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupField;
 import com.beanframework.user.specification.UserGroupSpecification;
 
 @Service
@@ -30,9 +25,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 	@Autowired
 	private ModelService modelService;
 
-	@Autowired
-	private FetchContext fetchContext;
-
 	@Override
 	public UserGroup create() throws Exception {
 		return modelService.create(UserGroup.class);
@@ -40,37 +32,11 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Override
 	public UserGroup findOneEntityByUuid(UUID uuid) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-		
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.FIELDS);
-		fetchContext.addFetchProperty(UserGroupField.class, UserGroupField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
-		
 		return modelService.findOneEntityByUuid(uuid, UserGroup.class);
 	}
 
 	@Override
 	public UserGroup findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		fetchContext.clearFetchProperties();
-
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_GROUPS);
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.USER_AUTHORITIES);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_PERMISSION);
-		fetchContext.addFetchProperty(UserAuthority.class, UserAuthority.USER_RIGHT);
-		
-		fetchContext.addFetchProperty(UserGroup.class, UserGroup.FIELDS);
-		fetchContext.addFetchProperty(UserGroupField.class, UserGroupField.DYNAMIC_FIELD_SLOT);
-		fetchContext.addFetchProperty(DynamicFieldSlot.class, DynamicFieldSlot.DYNAMIC_FIELD);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.LANGUAGE);
-		fetchContext.addFetchProperty(DynamicField.class, DynamicField.ENUMERATIONS);
-		
 		return modelService.findOneEntityByProperties(properties, UserGroup.class);
 	}
 
@@ -98,7 +64,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Override
 	public Page<UserGroup> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		fetchContext.clearFetchProperties();
 		return modelService.findEntityPage(UserGroupSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserGroup.class);
 	}
 

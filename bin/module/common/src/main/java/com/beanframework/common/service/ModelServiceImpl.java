@@ -3,7 +3,6 @@ package com.beanframework.common.service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -81,6 +80,24 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void detachAll() {
 		entityManager.clear();
 	}
+	
+	@Transactional
+	@Override
+	public <T> T merge(Object model) {
+		return (T) entityManager.merge(model);
+	}
+
+	@Transactional
+	@Override
+	public void refresh(Object model) {
+		entityManager.refresh(model);
+	}
+
+	@Transactional(rollbackFor = BusinessException.class)
+	@Override
+	public void flush() throws BusinessException {
+		modelRepository.flush();
+	}
 
 	@Override
 	public <T> T create(Class modelClass) throws Exception {
@@ -88,7 +105,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 		try {
 			Object model = modelClass.newInstance();
-			initialDefaultsInterceptor(model, interceptorContext, modelClass);
+			initialDefaultsInterceptor(model, interceptorContext, modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,7 +124,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = entityManager.find(modelClass, uuid);
 
 			if (model != null)
-				loadInterceptor(model, interceptorContext, modelClass);
+				model = loadInterceptor(model, interceptorContext, modelClass.getSimpleName());
 
 			return (T) model;
 		} catch (Exception e) {
@@ -125,7 +142,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = createQuery(properties, null, null, null, null, modelClass).getSingleResult();
 
 			if (model != null)
-				loadInterceptor(model, interceptorContext, modelClass);
+				model = loadInterceptor(model, interceptorContext, modelClass.getSimpleName());
 
 			return (T) model;
 		} catch (NoResultException e) {
@@ -187,8 +204,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 			List<Object> models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
 
-			if (models != null)
-				loadInterceptor(models, interceptorContext, modelClass);
+			if (models != null) {
+				return (T) loadInterceptor(models, interceptorContext, modelClass.getSimpleName());
+			}
 
 			return (T) models;
 		} catch (Exception e) {
@@ -271,23 +289,15 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
-			Iterator<T> i = page.getContent().iterator();
-			while (i.hasNext()) {
-				loadInterceptor(i.next(), interceptorContext, modelClass);
-			}
+			List<T> content = (List<T>) loadInterceptor(page.getContent(), interceptorContext, modelClass.getSimpleName() + DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
 
-			PageImpl<T> pageImpl = new PageImpl<T>(page.getContent(), page.getPageable(), page.getTotalElements());
+			PageImpl<T> pageImpl = new PageImpl<T>(content, page.getPageable(), page.getTotalElements());
 
 			return pageImpl;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
 		}
-	}
-
-	@Override
-	public void refresh(Object model) {
-		entityManager.refresh(model);
 	}
 
 	@Transactional(rollbackFor = BusinessException.class)
@@ -302,8 +312,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				event = new AfterSaveEvent(2);
 			}
 
-			prepareInterceptor(model, interceptorContext, modelClass);
-			validateInterceptor(model, interceptorContext, modelClass);
+			prepareInterceptor(model, interceptorContext, modelClass.getSimpleName());
+			validateInterceptor(model, interceptorContext, modelClass.getSimpleName());
 			modelRepository.save(model);
 
 			Set<Entry<String, AfterSaveListener>> afterSaveListeners = afterSaveListenerRegistry.getListeners().entrySet();
@@ -316,12 +326,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage(), e);
 		}
-	}
-
-	@Transactional(rollbackFor = BusinessException.class)
-	@Override
-	public void flush() throws BusinessException {
-		modelRepository.flush();
 	}
 
 	@Transactional(rollbackFor = BusinessException.class)
@@ -360,7 +364,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional(rollbackFor = SQLException.class)
 	private void deleteEntity(Object model, Class modelClass) throws SQLException, InterceptorException, BusinessException {
-		removeInterceptor(model, interceptorContext, modelClass);
+		removeInterceptor(model, interceptorContext, modelClass.getSimpleName());
+
 		modelRepository.delete(model);
 
 		AfterRemoveEvent event = new AfterRemoveEvent();
@@ -415,7 +420,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			if (model == null)
 				return null;
 
-			model = dtoConverter(model, dtoConveterContext, modelClass);
+			model = dtoConverter(model, dtoConveterContext, modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -432,7 +437,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			if (models.isEmpty())
 				return (T) new ArrayList<T>();
 
-			return (T) dtoConverter(models, dtoConveterContext, modelClass);
+			return (T) dtoConverter(models, dtoConveterContext, modelClass.getSimpleName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -441,6 +446,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public void initDefaults(Object model, Class modelClass) throws Exception {
-		initialDefaultsInterceptor(model, interceptorContext, modelClass);
+		initialDefaultsInterceptor(model, interceptorContext, modelClass.getSimpleName());
 	}
 }

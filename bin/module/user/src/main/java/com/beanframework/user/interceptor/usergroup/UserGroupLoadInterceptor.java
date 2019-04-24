@@ -14,18 +14,48 @@ import com.beanframework.user.domain.UserRightField;
 public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup> {
 
 	@Override
-	public void onLoad(UserGroup model, InterceptorContext context) throws InterceptorException {
+	public UserGroup onLoad(UserGroup model, InterceptorContext context) throws InterceptorException {
 
-		if (context.isFetchable(UserGroup.class, UserGroup.USER_AUTHORITIES)) {
-			Hibernate.initialize(model.getUserAuthorities());
-			for (UserAuthority userAuthority : model.getUserAuthorities()) {
+		Hibernate.initialize(model.getUserAuthorities());
+		for (UserAuthority userAuthority : model.getUserAuthorities()) {
+			Hibernate.initialize(userAuthority.getUserRight());
+			for (UserRightField field : userAuthority.getUserRight().getFields()) {
+				if (field.getDynamicFieldSlot() != null)
+					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+				if (field.getDynamicFieldSlot().getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+			}
+			Hibernate.initialize(userAuthority.getUserPermission());
+			for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
+				if (field.getDynamicFieldSlot() != null)
+					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+				if (field.getDynamicFieldSlot().getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+			}
+		}
+
+		Hibernate.initialize(model.getUserGroups());
+		for (UserGroup userGroup : model.getUserGroups()) {
+
+			Hibernate.initialize(userGroup.getUserAuthorities());
+			for (UserGroupField field : userGroup.getFields()) {
+				if (field.getDynamicFieldSlot() != null)
+					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+				if (field.getDynamicFieldSlot().getDynamicField() != null)
+					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+			}
+
+			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+
 				Hibernate.initialize(userAuthority.getUserRight());
 				for (UserRightField field : userAuthority.getUserRight().getFields()) {
+					Hibernate.initialize(field.getDynamicFieldSlot());
 					if (field.getDynamicFieldSlot() != null)
 						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
 					if (field.getDynamicFieldSlot().getDynamicField() != null)
 						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
 				}
+
 				Hibernate.initialize(userAuthority.getUserPermission());
 				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
 					if (field.getDynamicFieldSlot() != null)
@@ -36,49 +66,22 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 			}
 		}
 
-		if (context.isFetchable(UserGroup.class, UserGroup.USER_GROUPS)) {
-			Hibernate.initialize(model.getUserGroups());
-			for (UserGroup userGroup : model.getUserGroups()) {
-
-				Hibernate.initialize(userGroup.getUserAuthorities());
-				for (UserGroupField field : userGroup.getFields()) {
-					if (field.getDynamicFieldSlot() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-					if (field.getDynamicFieldSlot().getDynamicField() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-				}
-
-				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-
-					Hibernate.initialize(userAuthority.getUserRight());
-					for (UserRightField field : userAuthority.getUserRight().getFields()) {
-						Hibernate.initialize(field.getDynamicFieldSlot());
-						if (field.getDynamicFieldSlot() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-						if (field.getDynamicFieldSlot().getDynamicField() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-					}
-
-					Hibernate.initialize(userAuthority.getUserPermission());
-					for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-						if (field.getDynamicFieldSlot() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-						if (field.getDynamicFieldSlot().getDynamicField() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-					}
-				}
-			}
+		Hibernate.initialize(model.getFields());
+		for (UserGroupField field : model.getFields()) {
+			if (field.getDynamicFieldSlot() != null)
+				Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+			if (field.getDynamicFieldSlot().getDynamicField() != null)
+				Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
 		}
 
-		if (context.isFetchable(UserGroup.class, UserGroup.FIELDS)) {
-			Hibernate.initialize(model.getFields());
-			for (UserGroupField field : model.getFields()) {
-				if (field.getDynamicFieldSlot() != null)
-					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-				if (field.getDynamicFieldSlot().getDynamicField() != null)
-					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-			}
-		}
-		super.onLoad(model, context);
+		UserGroup prototype = new UserGroup();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+		prototype.setUserGroups(model.getUserGroups());
+		prototype.setUserAuthorities(model.getUserAuthorities());
+		prototype.setFields(model.getFields());
+
+		return prototype;
+
 	}
 }

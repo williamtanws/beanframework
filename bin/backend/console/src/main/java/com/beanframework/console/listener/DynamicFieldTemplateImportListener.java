@@ -24,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvDynamicFieldTemplateConverter;
 import com.beanframework.console.csv.DynamicFieldTemplateCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
-import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 
 public class DynamicFieldTemplateImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldTemplateImportListener.class);
 
 	@Autowired
-	private DynamicFieldTemplateService dynamicFieldService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvDynamicFieldTemplateConverter converter;
@@ -56,11 +56,11 @@ public class DynamicFieldTemplateImportListener extends ImportListener {
 
 	@Override
 	public void update() throws Exception {
-		update(IMPORT_UPDATE);
+		updateByPath(IMPORT_UPDATE);
 	}
 
 	@Override
-	public void update(String path) throws Exception {
+	public void updateByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
@@ -76,11 +76,11 @@ public class DynamicFieldTemplateImportListener extends ImportListener {
 
 	@Override
 	public void remove() throws Exception {
-		remove(IMPORT_REMOVE);
+		removeByPath(IMPORT_REMOVE);
 	}
 
 	@Override
-	public void remove(String path) throws Exception {
+	public void removeByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 		Resource[] resources = loader.getResources(path);
 		for (Resource resource : resources) {
@@ -92,6 +92,18 @@ public class DynamicFieldTemplateImportListener extends ImportListener {
 			List<DynamicFieldTemplateCsv> cronjobCsvList = readCSVFile(reader, DynamicFieldTemplateCsv.getRemoveProcessors());
 			remove(cronjobCsvList);
 		}
+	}
+
+	@Override
+	public void updateByContent(String content) throws Exception {
+		List<DynamicFieldTemplateCsv> csvList = readCSVFile(new StringReader(content), DynamicFieldTemplateCsv.getUpdateProcessors());
+		save(csvList);
+	}
+
+	@Override
+	public void removeByContent(String content) throws Exception {
+		List<DynamicFieldTemplateCsv> csvList = readCSVFile(new StringReader(content), DynamicFieldTemplateCsv.getUpdateProcessors());
+		remove(csvList);
 	}
 
 	public List<DynamicFieldTemplateCsv> readCSVFile(Reader reader, CellProcessor[] processors) {
@@ -134,7 +146,7 @@ public class DynamicFieldTemplateImportListener extends ImportListener {
 		for (DynamicFieldTemplateCsv csv : csvList) {
 
 			DynamicFieldTemplate model = converter.convert(csv);
-			dynamicFieldService.saveEntity(model);
+			modelService.saveEntity(model, DynamicFieldTemplate.class);
 		}
 	}
 

@@ -15,9 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditMappedBy;
+import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -32,33 +31,30 @@ public class UserGroup extends GenericEntity {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5960532156682901612L;
+	private static final long serialVersionUID = -2986635395842071353L;
 	public static final String NAME = "name";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_AUTHORITIES = "userAuthorities";
 	public static final String FIELDS = "fields";
-	public static final String USERS = "users";
 
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@ManyToMany(mappedBy = User.USER_GROUPS, fetch = FetchType.LAZY)
-	private List<User> users = new ArrayList<User>();
-
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = UserGroupConstants.Table.USER_GROUP_USER_GROUP_REL, joinColumns = @JoinColumn(name = "uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
-	@AuditMappedBy(mappedBy = UserAuthority.USER_GROUP)
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserAuthority.USER_GROUP, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
 
-	@AuditMappedBy(mappedBy = UserGroupField.USER_GROUP)
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserGroupField.USER_GROUP, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(UserGroupField.DYNAMIC_FIELD_SLOT)
 	private List<UserGroupField> fields = new ArrayList<UserGroupField>();
 
@@ -68,14 +64,6 @@ public class UserGroup extends GenericEntity {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
 	}
 
 	public List<UserGroup> getUserGroups() {

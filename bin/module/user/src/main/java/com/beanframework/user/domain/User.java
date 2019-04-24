@@ -19,9 +19,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditMappedBy;
+import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -33,7 +32,7 @@ import com.beanframework.user.UserConstants;
 @Table(name = UserConstants.Table.USER)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
-public abstract class User extends GenericEntity {
+public class User extends GenericEntity {
 
 	public static final String PASSWORD = "password";
 	public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";
@@ -46,6 +45,9 @@ public abstract class User extends GenericEntity {
 	public static final String NAME = "name";
 
 	private static final long serialVersionUID = -7444894280894062710L;
+
+	@Column(insertable = false, updatable = false)
+	private String type;
 
 	@Audited(withModifiedFlag = true)
 	@Column(length = 60)
@@ -66,17 +68,26 @@ public abstract class User extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@AuditJoinTable(inverseJoinColumns=@JoinColumn(name = "usergroup_uuid"))
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
-	@AuditMappedBy(mappedBy = UserField.USER)
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserField.USER, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(UserField.DYNAMIC_FIELD_SLOT)
 	private List<UserField> fields = new ArrayList<UserField>();
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getPassword() {
 		return password;

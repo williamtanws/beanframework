@@ -29,7 +29,12 @@ public class AbstractController {
 			if (errorMessage.length() != 0) {
 				errorMessage.append("<br>");
 			}
-			errorMessage.append(error.getCode() + ": " + error.getDefaultMessage());
+			if(error.getDefaultMessage().contains("ConstraintViolationException")) {
+				errorMessage.append(localeMessageService.getMessage("error.ConstraintViolationException"));
+			}
+			else {
+				errorMessage.append(error.getCode() + ": " + error.getDefaultMessage());				
+			}
 		}
 
 		redirectAttributes.addFlashAttribute(ERROR, errorMessage.toString());

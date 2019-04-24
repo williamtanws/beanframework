@@ -46,4 +46,11 @@ public class UserPermissionCsv extends AbstractCsv {
 	public void setDynamicFieldSlotIds(String dynamicFieldSlotIds) {
 		this.dynamicFieldSlotIds = dynamicFieldSlotIds;
 	}
+
+	@Override
+	public String toString() {
+		return "UserPermissionCsv [id=" + id + ", name=" + name + ", sort=" + sort + ", dynamicFieldSlotIds=" + dynamicFieldSlotIds + "]";
+	}
+	
+	
 }

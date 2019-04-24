@@ -6,19 +6,30 @@ import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.language.domain.Language;
 
 public class DynamicFieldLoadInterceptor extends AbstractLoadInterceptor<DynamicField> {
 
 	@Override
-	public void onLoad(DynamicField model, InterceptorContext context) throws InterceptorException {
+	public DynamicField onLoad(DynamicField model, InterceptorContext context) throws InterceptorException {
 
-		if (context.isFetchable(DynamicField.class, DynamicField.LANGUAGE))
-			Hibernate.initialize(model.getLanguage());
+		Hibernate.initialize(model.getLanguage());
+		Hibernate.initialize(model.getEnumerations());
 
-		if (context.isFetchable(DynamicField.class, DynamicField.ENUMERATIONS))
-			Hibernate.initialize(model.getEnumerations());
-
-		super.onLoad(model, context);
+		DynamicField prototype = new DynamicField();
+		loadCommonProperties(model, prototype, context);
+		prototype.setName(model.getName());
+		prototype.setRequired(model.getRequired());
+		prototype.setRule(model.getRule());
+		prototype.setType(model.getType());
+		prototype.setLabel(model.getLabel());
+		prototype.setGrid(model.getGrid());
+		prototype.setLanguage((Language) Hibernate.unproxy(model.getLanguage()));
+		for (Enumeration enumeration : model.getEnumerations()) {
+			prototype.getEnumerations().add((Enumeration) Hibernate.unproxy(enumeration));
+		}
+		return prototype;
 	}
 
 }

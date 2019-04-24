@@ -80,40 +80,42 @@ public class CronjobGlobalListener implements JobListener {
 		try {
 			Cronjob cronjob = cronjobService.findOneEntityByUuid(uuid);
 
-			String message = null;
-			CronjobEnum.Status status = null;
-			CronjobEnum.Result result = null;
+			if (cronjob != null) {
+				String message = null;
+				CronjobEnum.Status status = null;
+				CronjobEnum.Result result = null;
 
-			if (cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)) {
-				status = CronjobEnum.Status.FINISHED;
+				if (CronjobEnum.JobTrigger.RUN_ONCE.equals(cronjob.getJobTrigger())) {
+					status = CronjobEnum.Status.FINISHED;
 
-				if (jobException == null) {
-					result = CronjobEnum.Result.SUCCESS;
-					message = context.getResult() != null ? context.getResult().toString() : null;
+					if (jobException == null) {
+						result = CronjobEnum.Result.SUCCESS;
+						message = context.getResult() != null ? context.getResult().toString() : null;
+					} else {
+						result = CronjobEnum.Result.ERROR;
+						message = jobException.getMessage();
+					}
+
 				} else {
-					result = CronjobEnum.Result.ERROR;
-					message = jobException.getMessage();
+					status = CronjobEnum.Status.RUNNING;
+
+					if (jobException == null) {
+						result = CronjobEnum.Result.SUCCESS;
+						message = context.getResult() != null ? context.getResult().toString() : null;
+					} else {
+						result = CronjobEnum.Result.ERROR;
+						message = jobException.getMessage();
+					}
 				}
 
-			} else {
-				status = CronjobEnum.Status.RUNNING;
+				cronjob.setStatus(status);
+				cronjob.setResult(result);
+				cronjob.setMessage(message);
+				cronjob.setLastFinishExecutedDate(new Date());
+				cronjob.setLastModifiedBy(null);
 
-				if (jobException == null) {
-					result = CronjobEnum.Result.SUCCESS;
-					message = context.getResult() != null ? context.getResult().toString() : null;
-				} else {
-					result = CronjobEnum.Result.ERROR;
-					message = jobException.getMessage();
-				}
+				cronjobService.saveEntity(cronjob);
 			}
-
-			cronjob.setStatus(status);
-			cronjob.setResult(result);
-			cronjob.setMessage(message);
-			cronjob.setLastFinishExecutedDate(new Date());
-			cronjob.setLastModifiedBy(null);
-
-			cronjobService.saveEntity(cronjob);
 
 		} catch (Exception e) {
 			e.printStackTrace();

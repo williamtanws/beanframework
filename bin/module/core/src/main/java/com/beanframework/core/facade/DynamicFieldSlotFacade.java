@@ -14,40 +14,45 @@ import com.beanframework.core.data.DynamicFieldSlotDto;
 public interface DynamicFieldSlotFacade {
 
 	public static interface DynamicFieldSlotPreAuthorizeEnum {
-		public static final String READ = "hasAuthority('dynamicfieldslot_read')";
-		public static final String CREATE = "hasAuthority('dynamicfieldslot_create')";
-		public static final String UPDATE = "hasAuthority('dynamicfieldslot_update')";
-		public static final String DELETE = "hasAuthority('dynamicfieldslot_delete')";
+		public static final String AUTHORITY_READ = "dynamicfieldslot_read";
+		public static final String AUTHORITY_CREATE = "dynamicfieldslot_create";
+		public static final String AUTHORITY_UPDATE = "dynamicfieldslot_update";
+		public static final String AUTHORITY_DELETE = "dynamicfieldslot_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
 	}
 
-	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.READ)
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	DynamicFieldSlotDto findOneByUuid(UUID uuid) throws Exception;
 
-	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.READ)
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	DynamicFieldSlotDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.CREATE)
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_CREATE)
 	DynamicFieldSlotDto create(DynamicFieldSlotDto model) throws BusinessException;
 
-	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.UPDATE)
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_UPDATE)
 	DynamicFieldSlotDto update(DynamicFieldSlotDto model) throws BusinessException;
 
-	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.DELETE)
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_DELETE)
 	void delete(UUID uuid) throws BusinessException;
 
-	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.READ)
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	Page<DynamicFieldSlotDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.READ)
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	int count() throws Exception;
 
-	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.READ)
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.READ)
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.CREATE)
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_CREATE)
 	DynamicFieldSlotDto createDto() throws Exception;
 
 }
