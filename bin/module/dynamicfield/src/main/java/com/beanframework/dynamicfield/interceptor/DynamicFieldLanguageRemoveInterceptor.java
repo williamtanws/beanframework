@@ -11,34 +11,27 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractRemoveInterceptor;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.language.domain.Language;
 
-public class DynamicFieldEnumerationRemoveInterceptor extends AbstractRemoveInterceptor<Enumeration> {
+public class DynamicFieldLanguageRemoveInterceptor extends AbstractRemoveInterceptor<Language> {
 
 	@Autowired
 	private ModelService modelService;
 
 	@Override
-	public void onRemove(Enumeration model, InterceptorContext context) throws InterceptorException {
+	public void onRemove(Language model, InterceptorContext context) throws InterceptorException {
 
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(DynamicField.ENUMERATIONS + "." + Enumeration.UUID, model.getUuid());
+			properties.put(DynamicField.LANGUAGE + "." + Language.UUID, model.getUuid());
 			List<DynamicField> entities = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, DynamicField.class);
 
 			for (int i = 0; i < entities.size(); i++) {
 
-				boolean removed = false;
-				for (int j = 0; j < entities.get(i).getEnumerations().size(); j++) {
-					if (entities.get(i).getEnumerations().get(j).getUuid().equals(model.getUuid())) {
-						entities.get(i).getEnumerations().remove(j);
-						removed = true;
-						break;
-					}
-				}
-
-				if (removed)
+				if (entities.get(i).getLanguage().getUuid().equals(model.getUuid())) {
+					entities.get(i).setLanguage(null);
 					modelService.saveEntity(entities.get(i), DynamicField.class);
+				}
 			}
 		} catch (Exception e) {
 			throw new InterceptorException(e.getMessage(), e);

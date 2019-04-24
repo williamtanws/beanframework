@@ -6,6 +6,8 @@ import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.language.domain.Language;
 
 public class DynamicFieldLoadInterceptor extends AbstractLoadInterceptor<DynamicField> {
 
@@ -23,9 +25,10 @@ public class DynamicFieldLoadInterceptor extends AbstractLoadInterceptor<Dynamic
 		prototype.setType(model.getType());
 		prototype.setLabel(model.getLabel());
 		prototype.setGrid(model.getGrid());
-		prototype.setLanguage(model.getLanguage());
-		prototype.setEnumerations(model.getEnumerations());
-		
+		prototype.setLanguage((Language) Hibernate.unproxy(model.getLanguage()));
+		for (Enumeration enumeration : model.getEnumerations()) {
+			prototype.getEnumerations().add((Enumeration) Hibernate.unproxy(enumeration));
+		}
 		return prototype;
 	}
 

@@ -5,11 +5,15 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.interceptor.DynamicFieldEnumerationRemoveInterceptor;
 import com.beanframework.dynamicfield.interceptor.DynamicFieldInitialDefaultsInterceptor;
+import com.beanframework.dynamicfield.interceptor.DynamicFieldLanguageRemoveInterceptor;
 import com.beanframework.dynamicfield.interceptor.DynamicFieldLoadInterceptor;
 import com.beanframework.dynamicfield.interceptor.DynamicFieldPrepareInterceptor;
 import com.beanframework.dynamicfield.interceptor.DynamicFieldRemoveInterceptor;
 import com.beanframework.dynamicfield.interceptor.DynamicFieldValidateInterceptor;
+import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.language.domain.Language;
 
 @Configuration
 public class DynamicFieldInterceptorConfig {
@@ -100,6 +104,44 @@ public class DynamicFieldInterceptorConfig {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(dynamicFieldRemoveInterceptor());
 		mapping.setTypeCode(DynamicField.class.getSimpleName());
+
+		return mapping;
+	}
+
+	/////////////////////////////
+	// Enumeration Interceptor //
+	/////////////////////////////
+
+	@Bean
+	public DynamicFieldEnumerationRemoveInterceptor dynamicFieldEnumerationRemoveInterceptor() {
+		return new DynamicFieldEnumerationRemoveInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping dynamicFieldEnumerationRemoveInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(dynamicFieldEnumerationRemoveInterceptor());
+		mapping.setTypeCode(Enumeration.class.getSimpleName());
+		mapping.setOrder(Integer.MIN_VALUE);
+
+		return mapping;
+	}
+
+	//////////////////////////
+	// Language Interceptor //
+	//////////////////////////
+
+	@Bean
+	public DynamicFieldLanguageRemoveInterceptor dynamicFieldLanguageRemoveInterceptor() {
+		return new DynamicFieldLanguageRemoveInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping dynamicFieldLanguageRemoveInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(dynamicFieldLanguageRemoveInterceptor());
+		mapping.setTypeCode(Language.class.getSimpleName());
+		mapping.setOrder(Integer.MIN_VALUE);
 
 		return mapping;
 	}

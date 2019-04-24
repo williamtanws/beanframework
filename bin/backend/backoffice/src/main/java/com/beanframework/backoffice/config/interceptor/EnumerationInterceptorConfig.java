@@ -9,7 +9,6 @@ import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.enumuration.interceptor.EnumerationInitialDefaultsInterceptor;
 import com.beanframework.enumuration.interceptor.EnumerationLoadInterceptor;
 import com.beanframework.enumuration.interceptor.EnumerationPrepareInterceptor;
-import com.beanframework.enumuration.interceptor.EnumerationRemoveInterceptor;
 import com.beanframework.enumuration.interceptor.EnumerationValidateInterceptor;
 
 @Configuration
@@ -92,8 +91,8 @@ public class EnumerationInterceptorConfig {
 	////////////////////////
 
 	@Bean
-	public EnumerationRemoveInterceptor enumerationRemoveInterceptor() {
-		return new EnumerationRemoveInterceptor();
+	public DynamicFieldEnumerationRemoveInterceptor enumerationRemoveInterceptor() {
+		return new DynamicFieldEnumerationRemoveInterceptor();
 	}
 
 	@Bean
@@ -101,21 +100,6 @@ public class EnumerationInterceptorConfig {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(enumerationRemoveInterceptor());
 		mapping.setTypeCode(Enumeration.class.getSimpleName());
-
-		return mapping;
-	}
-
-	@Bean
-	public DynamicFieldEnumerationRemoveInterceptor dynamicFieldEnumerationRemoveInterceptor() {
-		return new DynamicFieldEnumerationRemoveInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping dynamicFieldEnumerationRemoveInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(dynamicFieldEnumerationRemoveInterceptor());
-		mapping.setTypeCode(Enumeration.class.getSimpleName());
-		mapping.setOrder(Integer.MIN_VALUE);
 
 		return mapping;
 	}

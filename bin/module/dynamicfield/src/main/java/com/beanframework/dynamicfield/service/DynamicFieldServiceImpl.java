@@ -1,7 +1,6 @@
 package com.beanframework.dynamicfield.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -96,22 +95,5 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
 		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), DynamicField.class);
-	}
-
-	@Override
-	public void removeEnumerationByUuid(UUID uuid) throws Exception {
-		Map<String, Object> properties = new HashMap<String, Object>();
-		List<DynamicField> entities = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, DynamicField.class);
-
-		for (int i = 0; i < entities.size(); i++) {
-			for (int j = 0; j < entities.get(i).getEnumerations().size(); j++) {
-				if (entities.get(i).getEnumerations().get(j).getUuid().equals(uuid)) {
-					entities.get(i).getEnumerations().remove(j);
-					break;
-				}
-			}
-
-			modelService.saveEntity(entities.get(i), DynamicField.class);
-		}
 	}
 }
