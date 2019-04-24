@@ -77,7 +77,6 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 		UserGroup prototype = new UserGroup();
 		loadCommonProperties(model, prototype, context);
 		prototype.setName(model.getName());
-		prototype.setUsers(model.getUsers());
 		prototype.setUserGroups(model.getUserGroups());
 		prototype.setUserAuthorities(model.getUserAuthorities());
 		prototype.setFields(model.getFields());

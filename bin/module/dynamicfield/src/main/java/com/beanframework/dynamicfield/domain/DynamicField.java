@@ -17,8 +17,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -67,14 +67,16 @@ public class DynamicField extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String grid;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "language_uuid")
 	private Language language;
 
+	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "enumeration_uuid"))
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "enum_uuid", referencedColumnName = "uuid"))
+	@JoinTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "enumeration_uuid", referencedColumnName = "uuid"))
 	private List<Enumeration> enumerations = new ArrayList<Enumeration>();
 
 	public String getName() {

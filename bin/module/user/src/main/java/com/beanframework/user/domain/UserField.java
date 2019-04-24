@@ -9,7 +9,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -29,12 +28,12 @@ public class UserField extends GenericEntity {
 	public static final String USER = "user";
 	public static final String DYNAMIC_FIELD_SLOT = "dynamicFieldSlot";
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_uuid")
 	private User user;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfieldslot_uuid")
 	@OrderBy(DynamicFieldSlot.SORT + " ASC")

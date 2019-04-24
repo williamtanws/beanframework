@@ -62,6 +62,7 @@ public class Media extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String location;
 
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_uuid")
 	private User user;

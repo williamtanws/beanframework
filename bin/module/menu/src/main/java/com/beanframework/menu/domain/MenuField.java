@@ -9,7 +9,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -27,15 +26,14 @@ public class MenuField extends GenericEntity {
 	 */
 	private static final long serialVersionUID = -7666190244677961254L;
 	public static final String MENU = "menu";
-	public static final String USER_RIGHT = "menu";
 	public static final String DYNAMIC_FIELD_SLOT = "dynamicFieldSlot";
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "menu_uuid")
 	private Menu menu;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfieldslot_uuid")
 	@OrderBy(DynamicFieldSlot.SORT + " ASC")

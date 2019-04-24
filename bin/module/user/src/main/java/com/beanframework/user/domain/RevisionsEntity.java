@@ -6,8 +6,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionEntity;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -26,7 +24,6 @@ public class RevisionsEntity extends DefaultRevisionEntity {
 	private static final long serialVersionUID = 3217484900214041461L;
 
 	@LastModifiedBy
-	@Cascade({ CascadeType.MERGE })
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "lastmodifiedby_uuid")
 	private Auditor lastModifiedBy;
