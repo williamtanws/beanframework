@@ -16,7 +16,6 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -198,13 +197,12 @@ public class UserAuthorityImportListener extends ImportListener {
 					}
 				}
 
-				modelService.merge(userGroup);
+				modelService.saveEntity(userGroup, UserGroup.class);
 			}
 		}
 	}
 
 	private void generateUserAuthority(UserGroup model) throws Exception {
-		Hibernate.initialize(model.getUserAuthorities());
 
 		Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
 		userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
@@ -234,7 +232,6 @@ public class UserAuthorityImportListener extends ImportListener {
 					userAuthority.setUserPermission(userPermission);
 					userAuthority.setUserRight(userRight);
 
-					userAuthority.setUserGroup(model);
 					model.getUserAuthorities().add(userAuthority);
 				}
 			}

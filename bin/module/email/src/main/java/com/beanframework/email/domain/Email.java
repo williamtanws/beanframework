@@ -69,7 +69,7 @@ public class Email extends GenericEntity {
 	@Enumerated(EnumType.STRING)
 	private Result result;
 
-	@Audited(withModifiedFlag = true)
+	@NotAudited
 	@Lob
 	@Column(length = 100000)
 	private String message;

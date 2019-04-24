@@ -39,6 +39,7 @@ public class Comment extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private Boolean visibled;
 
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_uuid")
 	private User user;

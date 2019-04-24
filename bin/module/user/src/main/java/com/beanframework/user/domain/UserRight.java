@@ -12,7 +12,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -36,9 +35,9 @@ public class UserRight extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@AuditMappedBy(mappedBy = UserRightField.USER_RIGHT)
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = UserRightField.USER_RIGHT, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(UserRightField.DYNAMIC_FIELD_SLOT)
 	private List<UserRightField> fields = new ArrayList<UserRightField>();
 

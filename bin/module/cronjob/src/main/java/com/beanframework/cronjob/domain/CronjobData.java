@@ -8,7 +8,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -25,7 +24,7 @@ public class CronjobData extends GenericEntity {
 	public static final String VALUE = "value";
 	public static final String CRONJOB = "cronjob";
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cronjob_uuid")
 	private Cronjob cronjob;

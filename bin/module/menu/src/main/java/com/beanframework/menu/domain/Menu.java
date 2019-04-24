@@ -19,9 +19,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditMappedBy;
+import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -29,8 +28,8 @@ import com.beanframework.menu.MenuConstants;
 import com.beanframework.user.domain.UserGroup;
 
 @Entity
-@Audited
 @EntityListeners(AuditingEntityListener.class)
+@Audited
 @Table(name = MenuConstants.Table.MENU)
 public class Menu extends GenericEntity {
 
@@ -73,26 +72,27 @@ public class Menu extends GenericEntity {
 	@NotNull
 	private Boolean enabled;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_uuid")
 	private Menu parent;
 
-	@AuditMappedBy(mappedBy = PARENT)
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = PARENT, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(SORT + " ASC")
 	private List<Menu> childs = new ArrayList<Menu>();
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
+	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = MenuConstants.Table.MENU_USER_GROUP_REL, joinColumns = @JoinColumn(name = "menu_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
-	@AuditMappedBy(mappedBy = MenuField.MENU)
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = MenuField.MENU, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(MenuField.DYNAMIC_FIELD_SLOT)
 	private List<MenuField> fields = new ArrayList<MenuField>();
 

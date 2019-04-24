@@ -17,7 +17,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -101,9 +100,9 @@ public class Cronjob extends GenericEntity {
 	@NotAudited
 	private Date lastFinishExecutedDate;
 
-	@AuditMappedBy(mappedBy = CronjobData.CRONJOB)
+	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(mappedBy = CronjobData.CRONJOB, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy("createdDate DESC")
 	private List<CronjobData> cronjobDatas = new ArrayList<CronjobData>(0);
 

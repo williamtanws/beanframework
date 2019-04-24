@@ -130,12 +130,12 @@ public class EntityCsvEmployeeConverter implements EntityCsvConverter<EmployeeCs
 					for (int i = 0; i < userGroupIds.length; i++) {
 						Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 						userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-						UserGroup entity = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+						UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
 
-						if (entity == null) {
+						if (userGroup == null) {
 							LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
 						} else {
-							prototype.getUserGroups().add(entity);
+							prototype.getUserGroups().add(userGroup);
 						}
 					}
 				}

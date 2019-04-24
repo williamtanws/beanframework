@@ -110,7 +110,7 @@ public class PlatformUpdateController {
 					} catch (Exception e) {
 						e.printStackTrace();
 						LOGGER.error(e.getMessage(), e);
-						errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " <br>");
+						errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " <br><br>");
 					}
 				}
 			}
