@@ -9,6 +9,7 @@ public class DynamicFieldListLoadInterceptor extends AbstractLoadInterceptor<Dyn
 
 	@Override
 	public DynamicField onLoad(DynamicField model, InterceptorContext context) throws InterceptorException {
+		
 		DynamicField prototype = new DynamicField();
 		loadCommonProperties(model, prototype, context);
 		prototype.setName(model.getName());

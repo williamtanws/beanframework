@@ -205,7 +205,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			List<Object> models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
 
 			if (models != null) {
-				return (T) loadInterceptor(models, interceptorContext, modelClass.getSimpleName() + DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
+				return (T) loadInterceptor(models, interceptorContext, modelClass.getSimpleName());
 			}
 
 			return (T) models;

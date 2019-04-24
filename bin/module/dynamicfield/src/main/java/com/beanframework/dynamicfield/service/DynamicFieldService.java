@@ -32,6 +32,4 @@ public interface DynamicFieldService {
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
-
-	void removeEnumerationByUuid(UUID uuid) throws Exception;
 }

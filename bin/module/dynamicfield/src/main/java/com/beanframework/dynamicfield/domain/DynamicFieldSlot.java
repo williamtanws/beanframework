@@ -33,7 +33,7 @@ public class DynamicFieldSlot extends GenericEntity {
 	private Integer sort;
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dynamicfield_uuid")
 	private DynamicField dynamicField;
 
