@@ -27,7 +27,7 @@ test.html
 
 ### NetBeans ###
 nbproject/private/
-#build/
+build/
 nbbuild/
 nbdist/
 .nb-gradle/
