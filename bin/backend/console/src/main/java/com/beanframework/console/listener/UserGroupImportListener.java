@@ -24,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvUserGroupConverter;
 import com.beanframework.console.csv.UserGroupCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupService;
 
 public class UserGroupImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserGroupImportListener.class);
 
 	@Autowired
-	private UserGroupService userGroupService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvUserGroupConverter converter;
@@ -146,7 +146,7 @@ public class UserGroupImportListener extends ImportListener {
 		for (UserGroupCsv csv : userGroupCsvList) {
 
 			UserGroup model = converter.convert(csv);
-			userGroupService.saveEntity(model);
+			modelService.saveEntity(model, UserGroup.class);
 		}
 	}
 

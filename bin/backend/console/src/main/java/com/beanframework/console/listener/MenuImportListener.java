@@ -24,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvMenuConverter;
 import com.beanframework.console.csv.MenuCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.service.MenuService;
 
 public class MenuImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuImportListener.class);
 
 	@Autowired
-	private MenuService menuService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvMenuConverter converter;
@@ -145,7 +145,7 @@ public class MenuImportListener extends ImportListener {
 
 		for (MenuCsv csv : csvList) {
 			Menu menu = converter.convert(csv);
-			menuService.saveEntity(menu);
+			modelService.saveEntity(menu, Menu.class);
 		}
 	}
 

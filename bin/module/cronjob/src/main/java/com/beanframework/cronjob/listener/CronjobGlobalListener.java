@@ -84,7 +84,7 @@ public class CronjobGlobalListener implements JobListener {
 			CronjobEnum.Status status = null;
 			CronjobEnum.Result result = null;
 
-			if (cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)) {
+			if (CronjobEnum.JobTrigger.RUN_ONCE.equals(cronjob.getJobTrigger())) {
 				status = CronjobEnum.Status.FINISHED;
 
 				if (jobException == null) {

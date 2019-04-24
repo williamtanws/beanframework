@@ -14,7 +14,6 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.MediaCsv;
 import com.beanframework.media.domain.Media;
-import com.beanframework.media.service.MediaService;
 
 @Component
 public class EntityCsvMediaConverter implements EntityCsvConverter<MediaCsv, Media> {
@@ -23,9 +22,6 @@ public class EntityCsvMediaConverter implements EntityCsvConverter<MediaCsv, Med
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private MediaService mediaService;
 
 	@Override
 	public Media convert(MediaCsv source) throws ConverterException {
@@ -36,7 +32,7 @@ public class EntityCsvMediaConverter implements EntityCsvConverter<MediaCsv, Med
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Media.ID, source.getId());
 
-				Media prototype = mediaService.findOneEntityByProperties(properties);
+				Media prototype = modelService.findOneEntityByProperties(properties, Media.class);
 
 				if (prototype != null) {
 

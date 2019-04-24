@@ -16,7 +16,6 @@ import com.beanframework.console.csv.CronjobCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
-import com.beanframework.cronjob.service.CronjobService;
 
 @Component
 public class EntityCsvCronjobConverter implements EntityCsvConverter<CronjobCsv, Cronjob> {
@@ -25,9 +24,6 @@ public class EntityCsvCronjobConverter implements EntityCsvConverter<CronjobCsv,
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private CronjobService cronjobService;
 
 	@Override
 	public Cronjob convert(CronjobCsv source) throws ConverterException {
@@ -38,7 +34,7 @@ public class EntityCsvCronjobConverter implements EntityCsvConverter<CronjobCsv,
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Cronjob.ID, source.getId());
 
-				Cronjob prototype = cronjobService.findOneEntityByProperties(properties);
+				Cronjob prototype = modelService.findOneEntityByProperties(properties, Cronjob.class);
 
 				if (prototype != null) {
 

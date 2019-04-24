@@ -25,6 +25,7 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvVendorConverter;
 import com.beanframework.console.csv.VendorCsv;
@@ -35,6 +36,9 @@ import com.beanframework.vendor.service.VendorService;
 public class VendorImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(VendorImportListener.class);
 
+	@Autowired
+	private ModelService modelService;
+	
 	@Autowired
 	private VendorService vendorService;
 
@@ -147,7 +151,7 @@ public class VendorImportListener extends ImportListener {
 		for (VendorCsv csv : vendorCsvList) {
 
 			Vendor model = converter.convert(csv);
-			model = vendorService.saveEntity(model);
+			model = (Vendor) modelService.saveEntity(model, Vendor.class);
 
 			ClassPathResource resource = new ClassPathResource(csv.getProfilePicture());
 			vendorService.saveProfilePicture(model, resource.getInputStream());

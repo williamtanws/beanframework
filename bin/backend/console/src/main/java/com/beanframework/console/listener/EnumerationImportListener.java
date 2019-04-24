@@ -24,18 +24,18 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvEnumerationConverter;
 import com.beanframework.console.csv.EnumerationCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.enumuration.domain.Enumeration;
-import com.beanframework.enumuration.service.EnumerationService;
 
 public class EnumerationImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(EnumerationImportListener.class);
 
 	@Autowired
-	private EnumerationService enumerationService;
+	private ModelService modelService;
 
 	@Autowired
 	private EntityCsvEnumerationConverter converter;
@@ -146,7 +146,7 @@ public class EnumerationImportListener extends ImportListener {
 		for (EnumerationCsv csv : csvList) {
 
 			Enumeration model = converter.convert(csv);
-			enumerationService.saveEntity(model);
+			modelService.saveEntity(model, Enumeration.class);
 		}
 	}
 

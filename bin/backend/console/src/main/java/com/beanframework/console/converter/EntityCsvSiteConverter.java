@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Site;
-import com.beanframework.cms.service.SiteService;
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -24,9 +23,6 @@ public class EntityCsvSiteConverter implements EntityCsvConverter<SiteCsv, Site>
 	@Autowired
 	private ModelService modelService;
 
-	@Autowired
-	private SiteService siteService;
-
 	@Override
 	public Site convert(SiteCsv source) throws ConverterException {
 
@@ -36,7 +32,7 @@ public class EntityCsvSiteConverter implements EntityCsvConverter<SiteCsv, Site>
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Site.ID, source.getId());
 
-				Site prototype = siteService.findOneEntityByProperties(properties);
+				Site prototype = modelService.findOneEntityByProperties(properties, Site.class);
 
 				if (prototype != null) {
 

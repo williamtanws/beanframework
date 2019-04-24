@@ -18,7 +18,6 @@ import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeService;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 
@@ -29,9 +28,6 @@ public class EntityCsvEmployeeConverter implements EntityCsvConverter<EmployeeCs
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private EmployeeService employeeService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -45,7 +41,7 @@ public class EntityCsvEmployeeConverter implements EntityCsvConverter<EmployeeCs
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.ID, source.getId());
 
-				Employee prototype = employeeService.findOneEntityByProperties(properties);
+				Employee prototype = modelService.findOneEntityByProperties(properties, Employee.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
