@@ -145,4 +145,14 @@ public class MenuDto extends GenericDto {
 		this.tableSelectedUserGroups = tableSelectedUserGroups;
 	}
 
+	public boolean hasAnyFieldLanguage() {
+		for (MenuFieldDto field : fields) {
+			if (field.getDynamicFieldSlot().getDynamicField().getLanguage() == null) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 }

@@ -67,6 +67,8 @@ public class MenuLoadInterceptor extends AbstractLoadInterceptor<Menu> {
 			if (field.getDynamicFieldSlot() != null)
 				Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
 			if (field.getDynamicFieldSlot().getDynamicField() != null)
+				Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getLanguage());
+			if (field.getDynamicFieldSlot().getDynamicField() != null)
 				Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
 
 		}
@@ -85,7 +87,7 @@ public class MenuLoadInterceptor extends AbstractLoadInterceptor<Menu> {
 		prototype.setUserGroups(model.getUserGroups());
 
 		prototype.setFields(model.getFields());
-		
+
 		return prototype;
 	}
 

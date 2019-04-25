@@ -54,8 +54,6 @@ public class PlatformImportController extends AbstractController {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
 		}
 
-		addSuccessMessage(redirectAttributes, "Successfully Imported");
-
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
 		redirectView.setUrl(PATH_IMPORT);

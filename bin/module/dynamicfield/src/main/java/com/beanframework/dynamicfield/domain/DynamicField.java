@@ -69,7 +69,7 @@ public class DynamicField extends GenericEntity {
 	private String grid;
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "language_uuid")
 	private Language language;
 
