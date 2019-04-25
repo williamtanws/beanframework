@@ -33,12 +33,18 @@ public class UserGroup extends GenericEntity {
 	 */
 	private static final long serialVersionUID = -2986635395842071353L;
 	public static final String NAME = "name";
+	public static final String USERS = "users";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_AUTHORITIES = "userAuthorities";
 	public static final String FIELDS = "fields";
 
 	@Audited(withModifiedFlag = true)
 	private String name;
+
+	@Audited(withModifiedFlag = true)
+	@Cascade({ CascadeType.REFRESH })
+	@ManyToMany(fetch = FetchType.LAZY)
+	private List<User> users = new ArrayList<User>();
 
 	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
 	@Audited(withModifiedFlag = true)
@@ -64,6 +70,14 @@ public class UserGroup extends GenericEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	public List<UserGroup> getUserGroups() {
