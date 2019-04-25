@@ -86,31 +86,42 @@ public class PlatformServiceImpl implements PlatformService {
 			}
 		});
 
-		for (Entry<String, ImportListener> entry : sortedImportListeners) {
+		for (MultipartFile multipartFile : files) {
+			if (multipartFile.isEmpty() == false) {
 
-			for (MultipartFile multipartFile : files) {
-				if (multipartFile.isEmpty() == false) {
+				String fileName = multipartFile.getOriginalFilename();
+
+				boolean updated = false;
+				for (Entry<String, ImportListener> entry : sortedImportListeners) {
+
 					try {
-						String content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
-
-						String fileName = multipartFile.getOriginalFilename();
-
-						if (fileName.endsWith("_update") && entry.getKey().startsWith(fileName.toLowerCase())) {
-							entry.getValue().updateByContent(content);
-							successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
-						} else if (fileName.endsWith("_remove") && entry.getKey().startsWith(fileName.toLowerCase())) {
-							entry.getValue().removeByContent(content);
-							successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
-						} else {
-							errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: File Name not valid. <br>");
+						if (fileName.endsWith("_update.csv")) {
+							if (fileName.toLowerCase().startsWith(entry.getKey())) {
+								String content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
+								entry.getValue().updateByContent(content);
+								successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
+								updated = true;
+							}
+						} else if (fileName.endsWith("_remove.csv")) {
+							if (fileName.toLowerCase().startsWith(entry.getKey())) {
+								String content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
+								entry.getValue().removeByContent(content);
+								successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
+								updated = true;
+							}
 						}
 
 					} catch (Exception e) {
 						errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " <br>");
 					}
 				}
+
+				if (updated == false) {
+					errorMessages.append(fileName + " is updated failed. Reason: File Name not valid. <br>");
+				}
 			}
 		}
+
 		String[] messages = new String[2];
 		messages[0] = successMessages.toString();
 		messages[1] = errorMessages.toString();
