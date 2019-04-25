@@ -145,12 +145,14 @@ public class PlatformServiceImpl implements PlatformService {
 
 		for (Entry<String, ImportListener> entry : sortedImportListeners) {
 
-			if (entry.getKey().startsWith(file.getName().toLowerCase()) && file.getName().endsWith("_update")) {
-				entry.getValue().updateByPath(file.getAbsolutePath());
+			if (file.getName().endsWith("_update.csv")) {
+				if (file.getName().toLowerCase().startsWith(entry.getKey()))
+					entry.getValue().updateByPath(file.getAbsolutePath());
 			}
 
-			if (entry.getKey().startsWith(file.getName().toLowerCase()) && file.getName().endsWith("_remove")) {
-				entry.getValue().removeByPath(file.getAbsolutePath());
+			if (file.getName().endsWith("_remove.csv")) {
+				if (file.getName().toLowerCase().startsWith(entry.getKey()))
+					entry.getValue().removeByPath(file.getAbsolutePath());
 			}
 		}
 	}
