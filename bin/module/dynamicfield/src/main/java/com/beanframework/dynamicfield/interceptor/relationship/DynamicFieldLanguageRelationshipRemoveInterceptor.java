@@ -28,10 +28,11 @@ public class DynamicFieldLanguageRelationshipRemoveInterceptor extends AbstractR
 
 			for (int i = 0; i < entities.size(); i++) {
 
-				if (entities.get(i).getLanguage().getUuid().equals(model.getUuid())) {
-					entities.get(i).setLanguage(null);
-					modelService.saveEntity(entities.get(i), DynamicField.class);
-				}
+				if (entities.get(i).getLanguage() != null)
+					if (entities.get(i).getLanguage().getUuid().equals(model.getUuid())) {
+						entities.get(i).setLanguage(null);
+						modelService.saveEntity(entities.get(i), DynamicField.class);
+					}
 			}
 		} catch (Exception e) {
 			throw new InterceptorException(e.getMessage(), e);
