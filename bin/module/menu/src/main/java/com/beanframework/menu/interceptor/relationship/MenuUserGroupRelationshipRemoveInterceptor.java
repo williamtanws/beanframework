@@ -1,4 +1,4 @@
-package com.beanframework.menu.interceptor;
+package com.beanframework.menu.interceptor.relationship;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
 
-public class MenuUserGroupRemoveInterceptor extends AbstractRemoveInterceptor<UserGroup> {
+public class MenuUserGroupRelationshipRemoveInterceptor extends AbstractRemoveInterceptor<UserGroup> {
 
 	@Autowired
 	private ModelService modelService;

@@ -14,7 +14,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.media.domain.Media;
 import com.beanframework.media.service.MediaService;
-import com.beanframework.user.domain.User;
 
 public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 
@@ -106,20 +105,6 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 			if (StringUtils.equals(StringUtils.stripToNull(source.getLocation()), prototype.getLocation()) == false) {
 				prototype.setLocation(StringUtils.stripToNull(source.getLocation()));
 				prototype.setLastModifiedDate(lastModifiedDate);
-			}
-
-			if (prototype.getUser() != null && source.getUser() == null) {
-				prototype.setUser(null);
-				prototype.setLastModifiedDate(lastModifiedDate);
-			} else if (prototype.getUser().getUuid().equals(source.getUser().getUuid()) == false) {
-				User entityUser = modelService.findOneEntityByUuid(source.getUser().getUuid(), User.class);
-
-				if (entityUser != null) {
-					prototype.setUser(entityUser);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				} else {
-					throw new ConverterException("User UUID not found: " + source.getUser().getUuid());
-				}
 			}
 
 		} catch (Exception e) {
