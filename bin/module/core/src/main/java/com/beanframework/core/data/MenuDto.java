@@ -3,11 +3,14 @@ package com.beanframework.core.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuTargetTypeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class MenuDto extends GenericDto {
+
 	/**
 	 * 
 	 */
@@ -145,14 +148,18 @@ public class MenuDto extends GenericDto {
 		this.tableSelectedUserGroups = tableSelectedUserGroups;
 	}
 
-	public boolean hasAnyFieldLanguage() {
+	public String getName(String languageId) {
 		for (MenuFieldDto field : fields) {
-			if (field.getDynamicFieldSlot().getDynamicField().getLanguage() == null) {
-				return false;
+			if (field.getDynamicFieldSlot().getDynamicField().getLanguage() != null && field.getDynamicFieldSlot().getDynamicField().getLanguage().getId().equals(languageId)) {
+
+				if (StringUtils.isBlank(field.getValue())) {
+					return StringUtils.isBlank(this.getName()) ? "[" + this.getId() + "]" : this.getName();
+				} else {
+					return field.getValue();
+				}
 			}
 		}
 
-		return true;
+		return StringUtils.isBlank(this.getName()) ? "[" + this.getId() + "]" : this.getName();
 	}
-
 }
