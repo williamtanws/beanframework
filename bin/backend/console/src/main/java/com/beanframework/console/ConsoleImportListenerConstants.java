@@ -2,18 +2,18 @@ package com.beanframework.console;
 
 public interface ConsoleImportListenerConstants {
 
-	public interface LanguageImport {
-		public static final String KEY = "language";
-		public static final String NAME = "Language";
-		public static final int SORT = 10;
-		public static final String DESCRIPTION = "Update/Remove Language Data";
-	}
-
 	public interface ConfigurationImport {
 		public static final String KEY = "configuration";
 		public static final String NAME = "Configuration";
-		public static final int SORT = 20;
+		public static final int SORT = 10;
 		public static final String DESCRIPTION = "Update/Remove Configuration Data";
+	}
+
+	public interface LanguageImport {
+		public static final String KEY = "language";
+		public static final String NAME = "Language";
+		public static final int SORT = 20;
+		public static final String DESCRIPTION = "Update/Remove Language Data";
 	}
 
 	public interface EnumerationImport {
