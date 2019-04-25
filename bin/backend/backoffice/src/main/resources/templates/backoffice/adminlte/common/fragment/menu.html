@@ -64,14 +64,7 @@
 		</th:block>
 	</th:block>
 	<th:block th:fragment="name">
-		<th:block th:if="${not #lists.isEmpty(menu.fields)}" th:each="menuField: ${menu.fields}">
-			<th:block th:if="(${menuField.dynamicFieldSlot.dynamicField.language != null} and ${menuField.dynamicFieldSlot.dynamicField.name == 'Name'} and ${menuField.dynamicFieldSlot.dynamicField.language.id} == ${#locale.toString()})">
-				<span th:with="displayLocaleName=1" th:text="${menuField.value != null and menuField.value != ''} ? ${menuField.value}:'['+${menu.id}+']'"></span>
-			</th:block>
-		</th:block>
-		<th:block th:if="${#lists.isEmpty(menu.fields)} or ${menu.hasAnyFieldLanguage == false}">
-			<span th:text="${menu.name != null} ? ${menu.name}:'['+${menu.id}+']'"></span>
-		</th:block>
+		<span th:text="${menu.getName(#locale.toString())}"></span>
 	</th:block>
 </body>
 </html>
