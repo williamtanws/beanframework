@@ -1,12 +1,18 @@
 package com.beanframework.dynamicfield.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -23,8 +29,10 @@ public class DynamicFieldSlot extends GenericEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -9103174021745051522L;
-	public static final String DYNAMIC_FIELD = "dynamicField";
+	public static final String NAME = "name";
 	public static final String SORT = "sort";
+	public static final String DYNAMIC_FIELD = "dynamicField";
+	public static final String DYNAMIC_FIELD_TEMPLATE = "dynamicFieldTemplates";
 
 	@Audited(withModifiedFlag = true)
 	private String name;
@@ -33,9 +41,15 @@ public class DynamicFieldSlot extends GenericEntity {
 	private Integer sort;
 
 	@Audited(withModifiedFlag = true)
+	@Cascade({ CascadeType.REFRESH })
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dynamicfield_uuid")
 	private DynamicField dynamicField;
+
+	@Audited(withModifiedFlag = true)
+	@Cascade({ CascadeType.REFRESH })
+	@ManyToMany(fetch = FetchType.LAZY)
+	private List<DynamicFieldTemplate> dynamicFieldTemplates = new ArrayList<DynamicFieldTemplate>();
 
 	public String getName() {
 		return name;
@@ -60,4 +74,13 @@ public class DynamicFieldSlot extends GenericEntity {
 	public void setDynamicField(DynamicField dynamicField) {
 		this.dynamicField = dynamicField;
 	}
+
+	public List<DynamicFieldTemplate> getDynamicFieldTemplates() {
+		return dynamicFieldTemplates;
+	}
+
+	public void setDynamicFieldTemplates(List<DynamicFieldTemplate> dynamicFieldTemplates) {
+		this.dynamicFieldTemplates = dynamicFieldTemplates;
+	}
+
 }

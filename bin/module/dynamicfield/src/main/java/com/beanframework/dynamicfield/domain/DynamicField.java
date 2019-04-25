@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -79,6 +80,11 @@ public class DynamicField extends GenericEntity {
 	@JoinTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "enumeration_uuid", referencedColumnName = "uuid"))
 	private List<Enumeration> enumerations = new ArrayList<Enumeration>();
 
+	@Audited(withModifiedFlag = true)
+	@Cascade({ CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.LAZY)
+	private List<DynamicFieldSlot> dynamicFieldSlots = new ArrayList<DynamicFieldSlot>(0);
+
 	public String getName() {
 		return name;
 	}
@@ -142,4 +148,13 @@ public class DynamicField extends GenericEntity {
 	public void setEnumerations(List<Enumeration> enumerations) {
 		this.enumerations = enumerations;
 	}
+
+	public List<DynamicFieldSlot> getDynamicFieldSlots() {
+		return dynamicFieldSlots;
+	}
+
+	public void setDynamicFieldSlots(List<DynamicFieldSlot> dynamicFieldSlots) {
+		this.dynamicFieldSlots = dynamicFieldSlots;
+	}
+
 }

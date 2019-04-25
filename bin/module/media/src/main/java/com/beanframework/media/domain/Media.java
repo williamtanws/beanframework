@@ -2,9 +2,6 @@ package com.beanframework.media.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
@@ -12,7 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.media.MediaConstants;
-import com.beanframework.user.domain.User;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -61,11 +57,6 @@ public class Media extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	private String location;
-
-	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_uuid")
-	private User user;
 
 	public String getFileName() {
 		return fileName;
@@ -138,13 +129,4 @@ public class Media extends GenericEntity {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 }
