@@ -40,11 +40,13 @@ public class CronjobGlobalListener implements JobListener {
 			UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
 
 			Cronjob cronjob = cronjobService.findOneEntityByUuid(uuid);
-			cronjob.setStatus(CronjobEnum.Status.RUNNING);
-			cronjob.setLastStartExecutedDate(new Date());
-			cronjob.setLastModifiedBy(null);
+			if (cronjob != null) {
+				cronjob.setStatus(CronjobEnum.Status.RUNNING);
+				cronjob.setLastStartExecutedDate(new Date());
+				cronjob.setLastModifiedBy(null);
 
-			cronjobService.saveEntity(cronjob);
+				cronjobService.saveEntity(cronjob);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error(e.getMessage(), e);
