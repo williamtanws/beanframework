@@ -89,35 +89,34 @@ public class PlatformServiceImpl implements PlatformService {
 		for (MultipartFile multipartFile : files) {
 			if (multipartFile.isEmpty() == false) {
 
-				String fileName = multipartFile.getOriginalFilename();
+				try {
 
-				boolean updated = false;
-				for (Entry<String, ImportListener> entry : sortedImportListeners) {
+					String content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
+					String fileName = multipartFile.getOriginalFilename();
 
-					try {
+					boolean updated = false;
+					for (Entry<String, ImportListener> entry : sortedImportListeners) {
+
 						if (fileName.endsWith("_update.csv")) {
-							if (fileName.toLowerCase().startsWith(entry.getKey())) {
-								String content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
+							if (fileName.toLowerCase().endsWith(entry.getKey() + "_update.csv")) {
 								entry.getValue().updateByContent(content);
 								successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
 								updated = true;
 							}
 						} else if (fileName.endsWith("_remove.csv")) {
-							if (fileName.toLowerCase().startsWith(entry.getKey())) {
-								String content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
+							if (fileName.toLowerCase().endsWith(entry.getKey() + "_remove.csv")) {
 								entry.getValue().removeByContent(content);
 								successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
 								updated = true;
 							}
 						}
-
-					} catch (Exception e) {
-						errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " <br>");
 					}
-				}
+					if (updated == false) {
+						errorMessages.append(fileName + " is failed to import. Reason: Filename not valid. <br>");
+					}
 
-				if (updated == false) {
-					errorMessages.append(fileName + " is updated failed. Reason: File Name not valid. <br>");
+				} catch (Exception e) {
+					errorMessages.append(multipartFile.getOriginalFilename() + " is updated failed. Reason: " + e.getMessage() + " <br>");
 				}
 			}
 		}
@@ -143,17 +142,21 @@ public class PlatformServiceImpl implements PlatformService {
 			}
 		});
 
-		for (Entry<String, ImportListener> entry : sortedImportListeners) {
+		try {
+			for (Entry<String, ImportListener> entry : sortedImportListeners) {
 
-			if (file.getName().endsWith("_update.csv")) {
-				if (file.getName().toLowerCase().startsWith(entry.getKey()))
-					entry.getValue().updateByPath(file.getAbsolutePath());
+				if (file.getName().endsWith("_update.csv")) {
+					if (file.getName().toLowerCase().endsWith(entry.getKey() + "_update.csv"))
+						entry.getValue().updateByPath(file.getAbsolutePath());
+				} else if (file.getName().endsWith("_remove.csv")) {
+					if (file.getName().toLowerCase().endsWith(entry.getKey() + "_remove.csv"))
+						entry.getValue().removeByPath(file.getAbsolutePath());
+				} else {
+					throw new Exception(file.getName() + " is failed to import. Reason: Filename not valid.");
+				}
 			}
-
-			if (file.getName().endsWith("_remove.csv")) {
-				if (file.getName().toLowerCase().startsWith(entry.getKey()))
-					entry.getValue().removeByPath(file.getAbsolutePath());
-			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage(), e);
 		}
 	}
 
