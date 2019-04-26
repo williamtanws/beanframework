@@ -20,7 +20,7 @@ public class MediaLoadInterceptor extends AbstractLoadInterceptor<Media> {
 		prototype.setAltText(model.getAltText());
 		prototype.setDescription(model.getDescription());
 		prototype.setUrl(model.getUrl());
-		prototype.setLocation(model.getLocation());
+		prototype.setFolder(model.getFolder());
 		
 		return prototype;
 	}

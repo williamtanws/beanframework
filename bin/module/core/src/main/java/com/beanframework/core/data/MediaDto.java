@@ -16,7 +16,7 @@ public class MediaDto extends GenericDto {
 	public static final String CAPTION = "caption";
 	public static final String ALTTEXT = "altText";
 	public static final String DESCRIPTION = "description";
-	public static final String LOCATION = "location";
+	public static final String FOLDER = "folder";
 
 	private String fileName;
 	private String fileType;
@@ -26,7 +26,7 @@ public class MediaDto extends GenericDto {
 	private String caption;
 	private String altText;
 	private String description;
-	private String location;
+	private String folder;
 
 	public String getFileName() {
 		return fileName;
@@ -92,12 +92,12 @@ public class MediaDto extends GenericDto {
 		this.description = description;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getFolder() {
+		return folder;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setFolder(String folder) {
+		this.folder = folder;
 	}
 
 }
