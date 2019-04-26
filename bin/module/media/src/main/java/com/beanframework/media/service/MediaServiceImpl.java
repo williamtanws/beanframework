@@ -28,7 +28,7 @@ import com.beanframework.media.specification.MediaSpecification;
 
 @Service
 public class MediaServiceImpl implements MediaService {
-	
+
 	protected static final Logger LOGGER = LoggerFactory.getLogger(MediaServiceImpl.class);
 
 	@Autowired
@@ -36,9 +36,6 @@ public class MediaServiceImpl implements MediaService {
 
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
-
-	@Value(MediaConstants.MEDIA_URL)
-	public String MEDIA_URL;
 
 	@Override
 	public Media create() throws Exception {
@@ -71,9 +68,9 @@ public class MediaServiceImpl implements MediaService {
 		try {
 			Media model = modelService.findOneEntityByUuid(uuid, Media.class);
 
-			File mediaFile = new File(MEDIA_LOCATION, model.getLocation());
-			FileUtils.deleteQuietly(mediaFile);
-			
+			File mediaFolder = new File(MEDIA_LOCATION + File.separator + model.getFolder() + File.separator + model.getUuid().toString());
+			FileUtils.deleteQuietly(mediaFolder);
+
 			modelService.deleteByEntity(model, Media.class);
 
 		} catch (Exception e) {
@@ -117,21 +114,16 @@ public class MediaServiceImpl implements MediaService {
 	}
 
 	@Override
-	public Media storeFile(Media media, MultipartFile file, String location) throws Exception {
-		File mediaFolder = new File(MEDIA_LOCATION + File.separator + location);
+	public Media storeMultipartFile(Media media, MultipartFile file) throws Exception {
+		File mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
 		FileUtils.forceMkdir(mediaFolder);
 
 		File original = new File(mediaFolder.getAbsolutePath(), media.getFileName());
 		file.transferTo(original);
 
-		media.setUrl(MEDIA_URL + "/" + media.getUuid());
-		media.setLocation(location);
-
-		media = (Media) modelService.saveEntity(media, Media.class);
-
 		return media;
 	}
-	
+
 	@Override
 	public int countMediaByProperties(Map<String, Object> properties) throws Exception {
 		return modelService.count(properties, Media.class);

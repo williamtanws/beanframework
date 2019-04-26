@@ -1,5 +1,6 @@
 package com.beanframework.media.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -28,7 +29,7 @@ public class Media extends GenericEntity {
 	public static final String ALTTEXT = "altText";
 	public static final String DESCRIPTION = "description";
 	public static final String URL = "url";
-	public static final String LOCATION = "location";
+	public static final String FOLDER = "folder";
 	public static final String USER = "user";
 
 	@Audited(withModifiedFlag = true)
@@ -53,10 +54,11 @@ public class Media extends GenericEntity {
 	private String description;
 
 	@Audited(withModifiedFlag = true)
+	@Column(unique = true)
 	private String url;
 
 	@Audited(withModifiedFlag = true)
-	private String location;
+	private String folder;
 
 	public String getFileName() {
 		return fileName;
@@ -122,11 +124,11 @@ public class Media extends GenericEntity {
 		this.url = url;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getFolder() {
+		return folder;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setFolder(String folder) {
+		this.folder = folder;
 	}
 }

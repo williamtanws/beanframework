@@ -45,7 +45,7 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 			prototype.setAltText(source.getAltText());
 			prototype.setDescription(source.getDescription());
 			prototype.setUrl(source.getUrl());
-			prototype.setLocation(source.getLocation());
+			prototype.setFolder(source.getFolder());
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

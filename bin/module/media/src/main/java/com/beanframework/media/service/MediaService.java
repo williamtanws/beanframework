@@ -34,7 +34,7 @@ public interface MediaService {
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
-	Media storeFile(Media media, MultipartFile file, String location) throws Exception;
+	Media storeMultipartFile(Media media, MultipartFile file) throws Exception;
 
 	int countMediaByProperties(Map<String, Object> properties) throws Exception;
 }

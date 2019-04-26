@@ -102,8 +102,8 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getLocation()), prototype.getLocation()) == false) {
-				prototype.setLocation(StringUtils.stripToNull(source.getLocation()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getFolder()), prototype.getFolder()) == false) {
+				prototype.setFolder(StringUtils.stripToNull(source.getFolder()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
