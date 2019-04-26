@@ -68,9 +68,6 @@
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.update') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.console.platform.update')}}" th:text="#{module.console.platform.update}"></a>
 									</li>
-									<!-- <li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.remove') ? 'active':''}">
-										<a th:href="@{${@environment.getProperty('path.console.platform.remove')}}" th:text="#{module.console.platform.remove}"></a>
-									</li>-->
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.import') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.console.platform.import')}}" th:text="#{module.console.platform.import}"></a>
 									</li> 
