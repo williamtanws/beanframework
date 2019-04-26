@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.console.registry.ImportListenerRegistry;
 import com.beanframework.console.web.PlatformUpdateController;
@@ -28,6 +29,9 @@ public class PlatformServiceImpl implements PlatformService {
 
 	@Autowired
 	private ImportListenerRegistry importerRegistry;
+
+	@Autowired
+	private LocaleMessageService localeMessageService;
 
 	@Transactional(readOnly = false)
 	@Override
@@ -52,11 +56,11 @@ public class PlatformServiceImpl implements PlatformService {
 				try {
 					entry.getValue().update();
 					entry.getValue().remove();
-					successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
+					successMessages.append(localeMessageService.getMessage("module.console.platform.update.success", new Object[] { entry.getValue().getName() }) + "<br>");
 				} catch (Exception e) {
 					e.printStackTrace();
 					LOGGER.error(e.getMessage(), e);
-					errorMessages.append(entry.getValue().getName() + " is updated failed. Reason: " + e.getMessage() + " <br><br>");
+					errorMessages.append(localeMessageService.getMessage("module.console.platform.update.fail", new Object[] { entry.getValue().getName(), e.getMessage() }) + "<br><br>");
 				}
 			}
 		}
@@ -100,23 +104,23 @@ public class PlatformServiceImpl implements PlatformService {
 						if (fileName.endsWith("_update.csv")) {
 							if (fileName.toLowerCase().endsWith(entry.getKey() + "_update.csv")) {
 								entry.getValue().updateByContent(content);
-								successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
+								successMessages.append(localeMessageService.getMessage("module.console.platform.import.success", new Object[] { entry.getValue().getName() }) + "<br>");
 								updated = true;
 							}
 						} else if (fileName.endsWith("_remove.csv")) {
 							if (fileName.toLowerCase().endsWith(entry.getKey() + "_remove.csv")) {
 								entry.getValue().removeByContent(content);
-								successMessages.append(entry.getValue().getName() + " is updated successfully. <br>");
+								successMessages.append(localeMessageService.getMessage("module.console.platform.import.success", new Object[] { entry.getValue().getName() }) + "<br>");
 								updated = true;
 							}
 						}
 					}
 					if (updated == false) {
-						errorMessages.append(fileName + " is failed to import. Reason: Filename not valid. <br>");
+						errorMessages.append(localeMessageService.getMessage("module.console.platform.import.notvalid", new Object[] { fileName }) + "<br><br>");
 					}
 
 				} catch (Exception e) {
-					errorMessages.append(multipartFile.getOriginalFilename() + " is updated failed. Reason: " + e.getMessage() + " <br>");
+					errorMessages.append(localeMessageService.getMessage("module.console.platform.import.fail", new Object[] { multipartFile.getOriginalFilename(), e.getMessage() }) + "<br><br>");
 				}
 			}
 		}
