@@ -46,20 +46,21 @@ public class DtoVendorConverter extends AbstractDtoConverter<Vendor, VendorDto> 
 			prototype.setName(source.getName());
 
 			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
-			
+
 			prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
-				@Override
-				public int compare(UserFieldDto o1, UserFieldDto o2) {
-					if (o1.getDynamicFieldSlot().getSort() == null)
-						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+			if (prototype.getFields() != null)
+				Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
+					@Override
+					public int compare(UserFieldDto o1, UserFieldDto o2) {
+						if (o1.getDynamicFieldSlot().getSort() == null)
+							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
-					if (o2.getDynamicFieldSlot().getSort() == null)
-						return -1;
+						if (o2.getDynamicFieldSlot().getSort() == null)
+							return -1;
 
-					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-				}
-			});
+						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+					}
+				});
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

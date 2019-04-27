@@ -42,18 +42,19 @@ public class DtoUserRightConverter extends AbstractDtoConverter<UserRight, UserR
 			prototype.setSort(source.getSort());
 
 			prototype.setFields(modelService.getDto(source.getFields(), UserRightFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<UserRightFieldDto>() {
-				@Override
-				public int compare(UserRightFieldDto o1, UserRightFieldDto o2) {
-					if (o1.getDynamicFieldSlot().getSort() == null)
-						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+			if (prototype.getFields() != null)
+				Collections.sort(prototype.getFields(), new Comparator<UserRightFieldDto>() {
+					@Override
+					public int compare(UserRightFieldDto o1, UserRightFieldDto o2) {
+						if (o1.getDynamicFieldSlot().getSort() == null)
+							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
-					if (o2.getDynamicFieldSlot().getSort() == null)
-						return -1;
+						if (o2.getDynamicFieldSlot().getSort() == null)
+							return -1;
 
-					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-				}
-			});
+						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+					}
+				});
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

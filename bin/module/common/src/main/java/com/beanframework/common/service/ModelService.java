@@ -27,9 +27,9 @@ public interface ModelService {
 
 	public static final String DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX = "List";
 
-	void attach(Object model, Class modelClass);
+	void attach(Object model);
 
-	void detach(Object model, Class modelClass);
+	void detach(Object model);
 
 	void detachAll();
 

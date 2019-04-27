@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Hibernate;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
@@ -41,6 +42,8 @@ import com.beanframework.user.UserConstants;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.domain.UserPermissionField;
+import com.beanframework.user.domain.UserRightField;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -114,38 +117,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids) {
-
-		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-
-		for (UserGroup userGroup : userGroups) {
-			if (processedUserGroupUuids.contains(userGroup.getUuid().toString()) == false) {
-				processedUserGroupUuids.add(userGroup.getUuid().toString());
-
-				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-
-					if (Boolean.TRUE.equals(userAuthority.getEnabled())) {
-						StringBuilder authority = new StringBuilder();
-
-						authority.append(userAuthority.getUserPermission().getId());
-						authority.append("_");
-						authority.append(userAuthority.getUserRight().getId());
-
-						authorities.add(new SimpleGrantedAuthority(authority.toString()));
-					}
-
-				}
-
-				if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
-					authorities.addAll(getAuthorities(userGroup.getUserGroups(), processedUserGroupUuids));
-				}
-			}
-		}
-
-		return authorities;
-	}
-
-	@Override
 	public User getCurrentUser() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -203,5 +174,176 @@ public class UserServiceImpl implements UserService {
 		} catch (IOException e) {
 			LOGGER.error(e.toString(), e);
 		}
+	}
+
+	@Transactional
+	@Override
+	public Set<GrantedAuthority> getAuthorities(UUID userUuid, String userGroupId) throws Exception {
+
+		User user = modelService.findOneEntityByUuid(userUuid, User.class);
+		Hibernate.initialize(user.getUserGroups());
+
+		Set<String> checkedUserGroupUuid = new HashSet<String>();
+		for (UserGroup userGroup : user.getUserGroups()) {
+			checkedUserGroupUuid.add(userGroup.getUuid().toString());
+		}
+
+		boolean isAuthorized = false;
+
+		for (UserGroup userGroup : user.getUserGroups()) {
+			if (userGroup.getId().equals(userGroupId)) {
+				isAuthorized = true;
+			} else {
+				checkedUserGroupUuid.add(userGroup.getUuid().toString());
+				if (isAuthorized(userGroup, userGroupId, checkedUserGroupUuid))
+					isAuthorized = true;
+			}
+		}
+
+		if (isAuthorized) {
+			return getAuthorities(user.getUserGroups(), new HashSet<String>());
+		} else {
+			return new HashSet<GrantedAuthority>();
+		}
+	}
+
+	@Transactional
+	@Override
+	public List<UserGroup> getUserGroupsByCurrentUser() throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (auth != null) {
+
+			User principal = (User) auth.getPrincipal();
+
+			User user = modelService.findOneEntityByUuid(principal.getUuid(), User.class);
+
+			Hibernate.initialize(user.getUserGroups());
+
+			Set<String> checkedUserGroupUuid = new HashSet<String>();
+			for (UserGroup userGroup : user.getUserGroups()) {
+				checkedUserGroupUuid.add(userGroup.getUuid().toString());
+				
+				Hibernate.initialize(userGroup.getUserAuthorities());
+
+				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+					Hibernate.initialize(userAuthority.getUserRight());
+					for (UserRightField field : userAuthority.getUserRight().getFields()) {
+						Hibernate.initialize(field.getDynamicFieldSlot());
+						if (field.getDynamicFieldSlot() != null)
+							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+						if (field.getDynamicFieldSlot().getDynamicField() != null)
+							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+					}
+					Hibernate.initialize(userAuthority.getUserPermission());
+					for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
+						Hibernate.initialize(field.getDynamicFieldSlot());
+						if (field.getDynamicFieldSlot() != null)
+							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+						if (field.getDynamicFieldSlot().getDynamicField() != null)
+							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+					}
+				}
+			}
+			
+			for (UserGroup userGroup : user.getUserGroups()) {
+				initializeUserGroups(userGroup, checkedUserGroupUuid);
+			}
+			
+			return user.getUserGroups();
+
+		} else {
+			return null;
+		}
+	}
+
+	private void initializeUserGroups(UserGroup userGroup, Set<String> checkedUserGroupUuid) {
+		if (checkedUserGroupUuid.contains(userGroup.getUuid().toString()) == false) {
+			
+			Hibernate.initialize(userGroup.getUserGroups());
+			
+			for (UserGroup child : userGroup.getUserGroups()) {
+				checkedUserGroupUuid.add(child.getUuid().toString());
+				
+				Hibernate.initialize(userGroup.getUserAuthorities());
+
+				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+					Hibernate.initialize(userAuthority.getUserRight());
+					for (UserRightField field : userAuthority.getUserRight().getFields()) {
+						Hibernate.initialize(field.getDynamicFieldSlot());
+						if (field.getDynamicFieldSlot() != null)
+							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+						if (field.getDynamicFieldSlot().getDynamicField() != null)
+							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+					}
+					Hibernate.initialize(userAuthority.getUserPermission());
+					for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
+						Hibernate.initialize(field.getDynamicFieldSlot());
+						if (field.getDynamicFieldSlot() != null)
+							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
+						if (field.getDynamicFieldSlot().getDynamicField() != null)
+							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
+					}
+				}
+			}
+			
+			for (UserGroup child : userGroup.getUserGroups()) {
+				initializeUserGroups(child, checkedUserGroupUuid);
+			}
+		}
+	}
+
+	private boolean isAuthorized(UserGroup userGroup, String userGroupId, Set<String> checkedUserGroupUuid) {
+
+		if (checkedUserGroupUuid.contains(userGroup.getUuid().toString())) {
+			return false;
+		}
+
+		Hibernate.initialize(userGroup.getUserGroups());
+
+		for (UserGroup child : userGroup.getUserGroups()) {
+			checkedUserGroupUuid.add(child.getUuid().toString());
+		}
+
+		for (UserGroup child : userGroup.getUserGroups()) {
+			if (child.getId().equals(userGroupId)) {
+				return true;
+			} else {
+				return isAuthorized(child, userGroupId, checkedUserGroupUuid);
+			}
+		}
+
+		return false;
+	}
+
+	private Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids) {
+
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+
+		for (UserGroup userGroup : userGroups) {
+			if (processedUserGroupUuids.contains(userGroup.getUuid().toString()) == false) {
+				processedUserGroupUuids.add(userGroup.getUuid().toString());
+
+				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
+
+					if (Boolean.TRUE.equals(userAuthority.getEnabled())) {
+						StringBuilder authority = new StringBuilder();
+
+						authority.append(userAuthority.getUserPermission().getId());
+						authority.append("_");
+						authority.append(userAuthority.getUserRight().getId());
+
+						authorities.add(new SimpleGrantedAuthority(authority.toString()));
+					}
+
+				}
+
+				if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
+					authorities.addAll(getAuthorities(userGroup.getUserGroups(), processedUserGroupUuids));
+				}
+			}
+		}
+
+		return authorities;
 	}
 }

@@ -9,14 +9,12 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.user.domain.UserGroup;
 
 public interface EmployeeService {
 
@@ -47,8 +45,6 @@ public interface EmployeeService {
 	Employee getCurrentUser() throws Exception;
 
 	Employee updatePrincipal(Employee model);
-
-	Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids);
 
 	Set<EmployeeSession> findAllSessions();
 

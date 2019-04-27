@@ -56,18 +56,19 @@ public class DtoCronjobConverter extends AbstractDtoConverter<Cronjob, CronjobDt
 			prototype.setLastFinishExecutedDate(source.getLastFinishExecutedDate());
 
 			prototype.setCronjobDatas(modelService.getDto(source.getCronjobDatas(), CronjobDataDto.class));
-			Collections.sort(prototype.getCronjobDatas(), new Comparator<CronjobDataDto>() {
-				@Override
-				public int compare(CronjobDataDto o1, CronjobDataDto o2) {
-					if (o1.getCreatedDate() == null)
-						return o2.getCreatedDate() == null ? 0 : 1;
+			if (prototype.getCronjobDatas() != null)
+				Collections.sort(prototype.getCronjobDatas(), new Comparator<CronjobDataDto>() {
+					@Override
+					public int compare(CronjobDataDto o1, CronjobDataDto o2) {
+						if (o1.getCreatedDate() == null)
+							return o2.getCreatedDate() == null ? 0 : 1;
 
-					if (o2.getCreatedDate() == null)
-						return -1;
+						if (o2.getCreatedDate() == null)
+							return -1;
 
-					return o2.getCreatedDate().compareTo(o1.getCreatedDate());
-				}
-			});
+						return o2.getCreatedDate().compareTo(o1.getCreatedDate());
+					}
+				});
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

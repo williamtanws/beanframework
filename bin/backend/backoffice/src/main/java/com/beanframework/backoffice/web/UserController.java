@@ -14,26 +14,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.core.data.ConfigurationDto;
-import com.beanframework.core.data.UserDto;
 import com.beanframework.core.facade.ConfigurationFacade;
-import com.beanframework.core.facade.UserFacade;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.user.UserConstants;
+import com.beanframework.user.domain.User;
 
 @Controller
 public class UserController {
 
 	@Autowired
 	private ConfigurationFacade configurationFacade;
-
-	@Autowired
-	private UserFacade userFacade;
 
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
@@ -47,12 +45,20 @@ public class UserController {
 	@GetMapping(value = UserConstants.PATH_USER_PROFILE_PICTURE, produces = MediaType.ALL_VALUE)
 	public ResponseEntity<byte[]> getImage(@RequestParam Map<String, Object> requestParams) throws Exception {
 
-		UserDto userDto;
+		UUID userUuid;
 
 		if (requestParams.get("uuid") != null) {
-			userDto = userFacade.findOneByUuid(UUID.fromString((String) requestParams.get("uuid")));
+			userUuid = UUID.fromString((String) requestParams.get("uuid"));
 		} else {
-			userDto = userFacade.getCurrentUser();
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+			if (auth != null) {
+
+				User principal = (User) auth.getPrincipal();
+				userUuid = principal.getUuid();
+			} else {
+				return null;
+			}
 		}
 
 		String type = (String) requestParams.get("type");
@@ -62,7 +68,7 @@ public class UserController {
 		}
 
 		InputStream targetStream;
-		File picture = new File(MEDIA_LOCATION, PROFILE_PICTURE_LOCATION + File.separator + userDto.getUuid() + File.separator + type + ".png");
+		File picture = new File(MEDIA_LOCATION + File.separator + PROFILE_PICTURE_LOCATION, userUuid.toString() + File.separator + type + ".png");
 
 		if (picture.exists()) {
 			targetStream = new FileInputStream(picture);

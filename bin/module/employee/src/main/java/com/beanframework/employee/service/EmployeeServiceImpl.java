@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +29,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
@@ -46,8 +43,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.specification.EmployeeSpecification;
-import com.beanframework.user.domain.UserAuthority;
-import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
 
@@ -205,39 +200,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		return principal;
 	}
-
-	@Override
-	public Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids) {
-
-		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-
-		for (UserGroup userGroup : userGroups) {
-			if (processedUserGroupUuids.contains(userGroup.getUuid().toString()) == false) {
-				processedUserGroupUuids.add(userGroup.getUuid().toString());
-
-				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-
-					if (Boolean.TRUE.equals(userAuthority.getEnabled())) {
-						StringBuilder authority = new StringBuilder();
-
-						authority.append(userAuthority.getUserPermission().getId());
-						authority.append("_");
-						authority.append(userAuthority.getUserRight().getId());
-
-						authorities.add(new SimpleGrantedAuthority(authority.toString()));
-					}
-
-				}
-
-				if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
-					authorities.addAll(getAuthorities(userGroup.getUserGroups(), processedUserGroupUuids));
-				}
-			}
-		}
-
-		return authorities;
-	}
-
+	
 	@Override
 	public Set<EmployeeSession> findAllSessions() {
 		final List<Object> allPrincipals = sessionRegistry.getAllPrincipals();

@@ -41,18 +41,19 @@ public class DtoUserPermissionConverter extends AbstractDtoConverter<UserPermiss
 			prototype.setSort(source.getSort());
 
 			prototype.setFields(modelService.getDto(source.getFields(), UserPermissionFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<UserPermissionFieldDto>() {
-				@Override
-				public int compare(UserPermissionFieldDto o1, UserPermissionFieldDto o2) {
-					if (o1.getDynamicFieldSlot().getSort() == null)
-						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+			if (prototype.getFields() != null)
+				Collections.sort(prototype.getFields(), new Comparator<UserPermissionFieldDto>() {
+					@Override
+					public int compare(UserPermissionFieldDto o1, UserPermissionFieldDto o2) {
+						if (o1.getDynamicFieldSlot().getSort() == null)
+							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
-					if (o2.getDynamicFieldSlot().getSort() == null)
-						return -1;
+						if (o2.getDynamicFieldSlot().getSort() == null)
+							return -1;
 
-					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-				}
-			});
+						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+					}
+				});
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

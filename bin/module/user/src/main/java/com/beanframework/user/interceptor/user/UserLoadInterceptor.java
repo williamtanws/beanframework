@@ -46,7 +46,6 @@ public class UserLoadInterceptor extends AbstractLoadInterceptor<User> {
 						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
 				}
 			}
-			initializeUserGroups(userGroup);
 		}
 
 		Hibernate.initialize(model.getFields());
@@ -58,8 +57,6 @@ public class UserLoadInterceptor extends AbstractLoadInterceptor<User> {
 				Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
 		}
 
-
-		
 		User prototype = new User();
 		loadCommonProperties(model, prototype, context);
 		prototype.setType(model.getType());
@@ -74,39 +71,6 @@ public class UserLoadInterceptor extends AbstractLoadInterceptor<User> {
 
 		return prototype;
 
-	}
-
-	private void initializeUserGroups(UserGroup model) {
-		Hibernate.initialize(model.getUserGroups());
-		for (UserGroup userGroup : model.getUserGroups()) {
-			Hibernate.initialize(userGroup.getUserAuthorities());
-			for (UserGroupField field : userGroup.getFields()) {
-				Hibernate.initialize(field.getDynamicFieldSlot());
-				if (field.getDynamicFieldSlot() != null)
-					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-				if (field.getDynamicFieldSlot().getDynamicField() != null)
-					Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-			}
-			for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-				Hibernate.initialize(userAuthority.getUserRight());
-				for (UserRightField field : userAuthority.getUserRight().getFields()) {
-					Hibernate.initialize(field.getDynamicFieldSlot());
-					if (field.getDynamicFieldSlot() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-					if (field.getDynamicFieldSlot().getDynamicField() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-				}
-				Hibernate.initialize(userAuthority.getUserPermission());
-				for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-					Hibernate.initialize(field.getDynamicFieldSlot());
-					if (field.getDynamicFieldSlot() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-					if (field.getDynamicFieldSlot().getDynamicField() != null)
-						Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-				}
-			}
-			initializeUserGroups(userGroup);
-		}
 	}
 
 }

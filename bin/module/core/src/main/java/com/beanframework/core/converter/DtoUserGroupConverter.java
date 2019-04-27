@@ -48,18 +48,19 @@ public class DtoUserGroupConverter extends AbstractDtoConverter<UserGroup, UserG
 			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class));
 
 			prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
-				@Override
-				public int compare(UserGroupFieldDto o1, UserGroupFieldDto o2) {
-					if (o1.getDynamicFieldSlot().getSort() == null)
-						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+			if (prototype.getFields() != null)
+				Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
+					@Override
+					public int compare(UserGroupFieldDto o1, UserGroupFieldDto o2) {
+						if (o1.getDynamicFieldSlot().getSort() == null)
+							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
-					if (o2.getDynamicFieldSlot().getSort() == null)
-						return -1;
+						if (o2.getDynamicFieldSlot().getSort() == null)
+							return -1;
 
-					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-				}
-			});
+						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+					}
+				});
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

@@ -8,21 +8,21 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.UserAuthorityDto;
 import com.beanframework.core.data.UserGroupDto;
-import com.beanframework.core.facade.EmployeeFacade;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
+import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.service.UserService;
 
 public class MenuNavigationBeanImpl implements MenuNavigationBean {
 
 	@Autowired
 	private MenuService menuService;
-
+	
 	@Autowired
-	private EmployeeFacade employeeFacade;
+	private UserService userService;
 
 	@Autowired
 	private ModelService modelService;
@@ -33,13 +33,22 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean {
 		List<Menu> entities = menuService.findEntityMenuTree(true);
 		List<MenuDto> menuDtoTree = modelService.getDto(entities, MenuDto.class);
 
-		EmployeeDto employee = employeeFacade.getCurrentUser();
-
-		filterAuthorizedMenu(menuDtoTree, collectUserGroupDtoUuid(employee.getUserGroups()));
+		filterAuthorizedMenu(menuDtoTree, collectUserGroupUuid(userService.getUserGroupsByCurrentUser()));
 
 		return menuDtoTree;
 	}
 
+	private Set<String> collectUserGroupUuid(List<UserGroup> userGroups) {
+		Set<String> userGroupUuids = new HashSet<String>();
+		for (UserGroup userGroup : userGroups) {
+			userGroupUuids.add(userGroup.getUuid().toString());
+			if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
+				userGroupUuids.addAll(collectUserGroupUuid(userGroup.getUserGroups()));
+			}
+		}
+		return userGroupUuids;
+	}
+	
 	private Set<String> collectUserGroupDtoUuid(List<UserGroupDto> userGroups) {
 		Set<String> userGroupUuids = new HashSet<String>();
 		for (UserGroupDto userGroup : userGroups) {

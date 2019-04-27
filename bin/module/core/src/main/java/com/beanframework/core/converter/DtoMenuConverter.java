@@ -55,18 +55,19 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
 
 			prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));
-			Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
-				@Override
-				public int compare(MenuFieldDto o1, MenuFieldDto o2) {
-					if (o1.getDynamicFieldSlot().getSort() == null)
-						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+			if (prototype.getFields() != null)
+				Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
+					@Override
+					public int compare(MenuFieldDto o1, MenuFieldDto o2) {
+						if (o1.getDynamicFieldSlot().getSort() == null)
+							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
-					if (o2.getDynamicFieldSlot().getSort() == null)
-						return -1;
+						if (o2.getDynamicFieldSlot().getSort() == null)
+							return -1;
 
-					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-				}
-			});
+						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+					}
+				});
 
 		} catch (
 
