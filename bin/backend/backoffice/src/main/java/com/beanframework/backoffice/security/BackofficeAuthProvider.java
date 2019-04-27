@@ -32,12 +32,12 @@ import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
-import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.service.UserService;
 
 @Component
 public class BackofficeAuthProvider implements AuthenticationProvider {
 
-	protected static final Logger logger = LoggerFactory.getLogger(BackofficeAuthProvider.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(BackofficeAuthProvider.class);
 
 	public static final String LOGIN_WRONG_USERNAME_PASSWORD = "form.login.error.wrongusernameorpassword";
 	public static final String LOGIN_ACCOUNT_DISABLED = "form.login.account.disabled";
@@ -47,6 +47,9 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 
 	@Autowired
 	private LocaleMessageService localeMessageService;
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private EmployeeService employeeService;
@@ -64,78 +67,68 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 	private String BACKOFFICE_ACCESS;
 
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		String id = authentication.getName();
-		String password = (String) authentication.getCredentials();
-
-		if (StringUtils.stripToNull(id) == null) {
-			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
-		}
-		if (StringUtils.stripToNull(password) == null) {
-			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
-		}
-
-		Employee employee;
 		try {
-			employee = employeeService.findAuthenticate(id, password);
+			String id = authentication.getName();
+			String password = (String) authentication.getCredentials();
 
-			if (isAuthorized(employee) == false) {
+			if (StringUtils.stripToNull(id) == null) {
+				throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
+			}
+			if (StringUtils.stripToNull(password) == null) {
 				throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 			}
 
-		} catch (BadCredentialsException e) {
-			throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
-		} catch (DisabledException e) {
-			throw new DisabledException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_DISABLED));
-		} catch (AccountExpiredException e) {
-			throw new AccountExpiredException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_EXPIRED));
-		} catch (LockedException e) {
-			throw new LockedException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_LOCKED));
-		} catch (CredentialsExpiredException e) {
-			throw new CredentialsExpiredException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_PASSWORD_EXPIRED));
+			Employee employee;
+			try {
+				employee = employeeService.findAuthenticate(id, password);
+
+			} catch (BadCredentialsException e) {
+				throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
+			} catch (DisabledException e) {
+				throw new DisabledException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_DISABLED));
+			} catch (AccountExpiredException e) {
+				throw new AccountExpiredException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_EXPIRED));
+			} catch (LockedException e) {
+				throw new LockedException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_LOCKED));
+			} catch (CredentialsExpiredException e) {
+				throw new CredentialsExpiredException(localeMessageService.getMessage(EmployeeWebConstants.Locale.ACCOUNT_PASSWORD_EXPIRED));
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new AuthenticationServiceException(e.getMessage(), e);
+			}
+
+			Set<GrantedAuthority> authorities = getAuthorities(employee);
+			if (authorities.isEmpty()) {
+				throw new BadCredentialsException(localeMessageService.getMessage(BackofficeWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
+			}
+			authorities.add(new SimpleGrantedAuthority(BACKOFFICE_ACCESS));
+
+			return new UsernamePasswordAuthenticationToken(employee, employee.getPassword(), authorities);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new AuthenticationServiceException(e.getMessage(), e);
+			throw new BadCredentialsException(e.getMessage(), e);
 		}
-
-		Set<GrantedAuthority> authorities = employeeService.getAuthorities(employee.getUserGroups(), new HashSet<String>());
-		authorities.add(new SimpleGrantedAuthority(BACKOFFICE_ACCESS));
-
-		return new UsernamePasswordAuthenticationToken(employee, employee.getPassword(), authorities);
 	}
 
 	public boolean supports(Class<? extends Object> authentication) {
 		return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
 	}
 
-	boolean isAuthorized(Employee employee) throws Exception {
+	private Set<GrantedAuthority> getAuthorities(Employee employee) throws Exception {
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, BACKOFFICE_CONFIGURATION_USERGROUP);
 		Configuration usergroupConfiguration = configurationService.findOneEntityByProperties(properties);
 		if (usergroupConfiguration != null) {
-			Set<String> usergroups = new HashSet<String>(Arrays.asList(usergroupConfiguration.getValue().split(BACKOFFICE_CONFIGURATION_SPLITTER)));
+			Set<String> usergroupIds = new HashSet<String>(Arrays.asList(usergroupConfiguration.getValue().split(BACKOFFICE_CONFIGURATION_SPLITTER)));
 
-			for (UserGroup userGroup : employee.getUserGroups()) {
-				if (usergroups.contains(userGroup.getId())) {
-					return true;
-				} else if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
-					return isAuthorized(userGroup, usergroups);
+			if (usergroupIds != null)
+				for (String userGroupId : usergroupIds) {
+					authorities.addAll(userService.getAuthorities(employee.getUuid(), userGroupId));
 				}
-			}
 		}
 
-		return false;
-	}
-
-	boolean isAuthorized(UserGroup model, Set<String> usergroups) {
-		for (UserGroup userGroup : model.getUserGroups()) {
-			if (usergroups.contains(userGroup.getId())) {
-				return true;
-			} else if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
-				return isAuthorized(userGroup, usergroups);
-			}
-		}
-
-		return false;
+		return authorities;
 	}
 
 }

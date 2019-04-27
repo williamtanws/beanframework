@@ -30,10 +30,8 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvUserGroupConverter;
 import com.beanframework.console.csv.UserGroupCsv;
-import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserPermission;
 
 public class UserGroupImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserGroupImportListener.class);

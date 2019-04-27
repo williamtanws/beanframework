@@ -30,10 +30,8 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvDynamicFieldConverter;
 import com.beanframework.console.csv.DynamicFieldCsv;
-import com.beanframework.console.csv.DynamicFieldSlotCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 
 public class DynamicFieldImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldImportListener.class);

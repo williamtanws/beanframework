@@ -65,13 +65,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Transactional
 	@Override
-	public void attach(Object model, Class modelClass) {
+	public void attach(Object model) {
 		entityManager.merge(model);
 	}
 
 	@Transactional
 	@Override
-	public void detach(Object model, Class modelClass) {
+	public void detach(Object model) {
 		entityManager.detach(model);
 	}
 

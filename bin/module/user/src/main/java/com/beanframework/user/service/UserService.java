@@ -20,8 +20,6 @@ public interface UserService {
 	User findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
 	User findAuthenticate(String id, String password) throws Exception;
-
-	Set<GrantedAuthority> getAuthorities(List<UserGroup> userGroups, Set<String> processedUserGroupUuids);
 	
 	User getCurrentUser() throws Exception;
 
@@ -30,4 +28,8 @@ public interface UserService {
 	void saveProfilePicture(User model, InputStream inputStream) throws IOException;
 
 	void deleteProfilePictureByUuid(UUID uuid);
+	
+	Set<GrantedAuthority> getAuthorities(UUID userUuid, String userGroupId) throws Exception;
+
+	List<UserGroup> getUserGroupsByCurrentUser() throws Exception;
 }
