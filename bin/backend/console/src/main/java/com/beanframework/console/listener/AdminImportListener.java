@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -151,6 +153,12 @@ public class AdminImportListener extends ImportListener {
 	}
 
 	public void remove(List<AdminCsv> csvList) throws Exception {
+		for (AdminCsv csv : csvList) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Admin.ID, csv.getId());
 
+			Admin entity = modelService.findOneEntityByProperties(properties, Admin.class);
+			modelService.deleteByEntity(entity, Admin.class);
+		}
 	}
 }

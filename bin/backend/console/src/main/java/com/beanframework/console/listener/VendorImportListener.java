@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -38,7 +40,7 @@ public class VendorImportListener extends ImportListener {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private VendorService vendorService;
 
@@ -159,5 +161,12 @@ public class VendorImportListener extends ImportListener {
 	}
 
 	public void remove(List<VendorCsv> csvList) throws Exception {
+		for (VendorCsv csv : csvList) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Vendor.ID, csv.getId());
+
+			Vendor entity = modelService.findOneEntityByProperties(properties, Vendor.class);
+			modelService.deleteByEntity(entity, Vendor.class);
+		}
 	}
 }
