@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -28,8 +30,10 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvUserGroupConverter;
 import com.beanframework.console.csv.UserGroupCsv;
+import com.beanframework.console.csv.UserPermissionCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.domain.UserPermission;
 
 public class UserGroupImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserGroupImportListener.class);
@@ -151,6 +155,12 @@ public class UserGroupImportListener extends ImportListener {
 	}
 
 	public void remove(List<UserGroupCsv> csvList) throws Exception {
+		for (UserGroupCsv csv : csvList) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(UserGroup.ID, csv.getId());
 
+			UserGroup entity = modelService.findOneEntityByProperties(properties, UserGroup.class);
+			modelService.deleteByEntity(entity, UserGroup.class);
+		}
 	}
 }

@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -28,8 +30,10 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvDynamicFieldConverter;
 import com.beanframework.console.csv.DynamicFieldCsv;
+import com.beanframework.console.csv.DynamicFieldSlotCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 
 public class DynamicFieldImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldImportListener.class);
@@ -58,7 +62,7 @@ public class DynamicFieldImportListener extends ImportListener {
 	public void update() throws Exception {
 		updateByPath(IMPORT_UPDATE);
 	}
-	
+
 	@Override
 	public void updateByPath(String path) throws Exception {
 		PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -77,7 +81,7 @@ public class DynamicFieldImportListener extends ImportListener {
 	@Override
 	public void remove() throws Exception {
 		removeByPath(IMPORT_REMOVE);
-	}	
+	}
 
 	@Override
 	public void removeByPath(String path) throws Exception {
@@ -151,9 +155,12 @@ public class DynamicFieldImportListener extends ImportListener {
 	}
 
 	public void remove(List<DynamicFieldCsv> csvList) throws Exception {
+		for (DynamicFieldCsv csv : csvList) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(DynamicField.ID, csv.getId());
 
+			DynamicField entity = modelService.findOneEntityByProperties(properties, DynamicField.class);
+			modelService.deleteByEntity(entity, DynamicField.class);
+		}
 	}
-
-
-
 }

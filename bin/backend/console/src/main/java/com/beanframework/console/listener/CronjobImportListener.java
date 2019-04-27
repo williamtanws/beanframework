@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -158,6 +160,13 @@ public class CronjobImportListener extends ImportListener {
 		cronjobManagerService.initCronJob();
 	}
 
-	public void remove(List<CronjobCsv> configurationCsvList) throws Exception {
+	public void remove(List<CronjobCsv> csvList) throws Exception {
+		for (CronjobCsv csv : csvList) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Cronjob.ID, csv.getId());
+
+			Cronjob entity = modelService.findOneEntityByProperties(properties, Cronjob.class);
+			modelService.deleteByEntity(entity, Cronjob.class);
+		}
 	}
 }

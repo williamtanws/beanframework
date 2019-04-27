@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -159,6 +161,13 @@ public class CustomerImportListener extends ImportListener {
 	}
 
 	public void remove(List<CustomerCsv> csvList) throws Exception {
+		for (CustomerCsv csv : csvList) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Customer.ID, csv.getId());
+
+			Customer entity = modelService.findOneEntityByProperties(properties, Customer.class);
+			modelService.deleteByEntity(entity, Customer.class);
+		}
 	}
 
 }
