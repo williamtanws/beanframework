@@ -1,4 +1,5 @@
 id,value
+demo										,true
 footer										,"<div class='pull-right hidden-xs'><b>Version</b> 2.0.x </div><strong>Copyright &copy; 2018-2019 <a href='https://beanframework.com'>Beanframework</a>.</strong> All rights reserved."
 defaultavatar								,"/static/common/img/avatar.png"
 module.backoffice.usergroup					,"employeegroup"
