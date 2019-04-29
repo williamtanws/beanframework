@@ -28,8 +28,6 @@ public interface ApplicationWebConstants {
 		public static final String APPLICATION_OVERVIEW = "${path.console.application.overview}";
 		public static final String APPLICATION_METRICS = "${path.console.application.metrics}";
 		public static final String APPLICATION_ENVIRONMENT = "${path.console.application.environment}";
-		public static final String APPLICATION_LOGFILE = "${path.console.application.logfile}";
-		public static final String APPLICATION_LOGGERS = "${path.console.application.loggers}";
 		public static final String APPLICATION_THREADS = "${path.console.application.threads}";
 		public static final String APPLICATION_HTTPTRACES = "${path.console.application.httptraces}";
 		public static final String APPLICATION_AUDITLOG = "${path.console.application.auditlog}";
@@ -40,8 +38,6 @@ public interface ApplicationWebConstants {
 		public static final String APPLICATION_OVERVIEW = "${view.console.application.overview}";
 		public static final String APPLICATION_METRICS = "${view.console.application.metrics}";
 		public static final String APPLICATION_ENVIRONMENT = "${view.console.application.environment}";
-		public static final String APPLICATION_LOGFILE = "${view.console.application.logfile}";
-		public static final String APPLICATION_LOGGERS = "${view.console.application.loggers}";
 		public static final String APPLICATION_THREADS = "${view.console.application.threads}";
 		public static final String APPLICATION_HTTPTRACES = "${view.console.application.httptraces}";
 		public static final String APPLICATION_AUDITLOG = "${view.console.application.auditlog}";

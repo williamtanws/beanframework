@@ -28,30 +28,6 @@
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.application.overview') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.console.application')}}" th:text="#{module.console.application.overview}"></a>
 									</li>
-									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.application.metrics}"></a>
-									</li>
-									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.application.environment}"></a>
-									</li>
-									<li>
-										<a th:href="@{${@environment.getProperty('path.console.application.logfile')}}" th:text="#{module.console.application.logfile}"></a>
-									</li>
-									<li>
-										<a th:href="@{${@environment.getProperty('path.console.application.loggers')}}" th:text="#{module.console.application.loggers}"></a>
-									</li>
-									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.application.threads}"></a>
-									</li>
-									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.application.httptraces}"></a>
-									</li>
-									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.application.auditlog}"></a>
-									</li>
-									<li>
-										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.console.application.heapdump}"></a>
-									</li>
 								</ul>
 							</li>
 
@@ -64,6 +40,9 @@
 								<ul class="dropdown-menu" role="menu">
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.configuration') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.configuration')}}" th:text="#{module.configuration}"></a>
+									</li>
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.logging') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.logging')}}" th:text="#{module.logging}"></a>
 									</li>
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.update') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.console.platform.update')}}" th:text="#{module.console.platform.update}"></a>
