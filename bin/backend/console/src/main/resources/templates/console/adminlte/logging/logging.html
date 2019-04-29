@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
 	layout:decorate="~{${@environment.getProperty('layout.console')}}">
 <head>
-<title th:utext="#{module.console.application.loggers}"></title>
+<title th:utext="#{module.logging}"></title>
 </head>
 <body>
 	<th:block layout:fragment="content">
@@ -11,14 +11,14 @@
 				<div class="col-md-12">
 					<div class="box box-default">
 						<div class="box-header with-border">
-							<h3 class="box-title" th:text="#{module.console.application.loggers}"></h3>
+							<h3 class="box-title" th:text="#{module.logging}"></h3>
 						</div>
 						<div class="box-body">
 							<table id="loggersTable" class="table table-hover">
 								<thead>
 									<tr>
-										<th th:text="#{module.console.application.loggers.logger}"></th>
-										<th th:text="#{module.console.application.loggers.effectivelevel}"></th>
+										<th th:text="#{module.logging.logger}"></th>
+										<th th:text="#{module.logging.effectivelevel}"></th>
 									</tr>
 								</thead>
 								<tbody>
