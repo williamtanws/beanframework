@@ -60,7 +60,7 @@ public class UserGroup extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy(UserGroupField.DYNAMIC_FIELD_SLOT)
 	private List<UserGroupField> fields = new ArrayList<UserGroupField>();
 

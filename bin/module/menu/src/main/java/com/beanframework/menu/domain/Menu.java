@@ -73,7 +73,7 @@ public class Menu extends GenericEntity {
 	private Boolean enabled;
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "parent_uuid")
 	private Menu parent;
 
@@ -92,7 +92,7 @@ public class Menu extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy(MenuField.DYNAMIC_FIELD_SLOT)
 	private List<MenuField> fields = new ArrayList<MenuField>();
 

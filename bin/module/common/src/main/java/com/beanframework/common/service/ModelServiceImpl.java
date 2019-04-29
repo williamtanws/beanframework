@@ -19,7 +19,6 @@ import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -43,6 +42,7 @@ import com.beanframework.common.repository.ModelRepository;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Service
+@Transactional(readOnly = true)
 public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Autowired
@@ -54,40 +54,26 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Autowired
 	private AfterRemoveListenerRegistry afterRemoveListenerRegistry;
 
-	@Autowired
-	private DtoConverterContext dtoConveterContext;
-
-	@Autowired
-	private EntityConverterContext entityConveterContext;
-
-	@Autowired
-	private InterceptorContext interceptorContext;
-
-	@Transactional
 	@Override
 	public void attach(Object model) {
 		entityManager.merge(model);
 	}
 
-	@Transactional
 	@Override
 	public void detach(Object model) {
 		entityManager.detach(model);
 	}
 
-	@Transactional
 	@Override
 	public void detachAll() {
 		entityManager.clear();
 	}
-	
-	@Transactional
+
 	@Override
 	public <T> T merge(Object model) {
 		return (T) entityManager.merge(model);
 	}
 
-	@Transactional
 	@Override
 	public void refresh(Object model) {
 		entityManager.refresh(model);
@@ -105,7 +91,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 		try {
 			Object model = modelClass.newInstance();
-			initialDefaultsInterceptor(model, interceptorContext, modelClass.getSimpleName());
+			initialDefaultsInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,7 +99,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public <T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception {
 		Assert.notNull(uuid, "uuid was null");
@@ -124,7 +109,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = entityManager.find(modelClass, uuid);
 
 			if (model != null)
-				model = loadInterceptor(model, interceptorContext, modelClass.getSimpleName());
+				loadInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 
 			return (T) model;
 		} catch (Exception e) {
@@ -133,7 +118,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public <T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
@@ -142,7 +126,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = createQuery(properties, null, null, null, null, modelClass).getSingleResult();
 
 			if (model != null)
-				model = loadInterceptor(model, interceptorContext, modelClass.getSimpleName());
+				loadInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 
 			return (T) model;
 		} catch (NoResultException e) {
@@ -153,7 +137,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public int count(Class modelClass) throws Exception {
 		try {
@@ -166,7 +149,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public int count(Map<String, Object> properties, Class modelClass) throws Exception {
 		try {
@@ -179,7 +161,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(properties, "properties was null");
@@ -195,7 +176,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
 			throws Exception {
@@ -204,9 +184,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 			List<Object> models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
 
-			if (models != null) {
-				return (T) loadInterceptor(models, interceptorContext, modelClass.getSimpleName());
-			}
+			if (models != null)
+				loadInterceptor(models, new InterceptorContext(), modelClass.getSimpleName());
 
 			return (T) models;
 		} catch (Exception e) {
@@ -215,7 +194,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public List<Object[]> findHistories(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
 			throws Exception {
@@ -249,7 +227,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		return result;
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public int findCountHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
 			throws Exception {
@@ -283,24 +260,21 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		return count.intValue();
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public <T> Page<T> findEntityPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
-			List<T> content = (List<T>) loadInterceptor(page.getContent(), interceptorContext, modelClass.getSimpleName() + DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX);
+			loadInterceptor(page.getContent(), new InterceptorContext(), modelClass.getSimpleName());
 
-			PageImpl<T> pageImpl = new PageImpl<T>(content, page.getPageable(), page.getTotalElements());
-
-			return pageImpl;
+			return page;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
 		}
 	}
 
-	@Transactional(rollbackFor = BusinessException.class)
+	@Transactional(readOnly = false, rollbackFor = BusinessException.class)
 	@Override
 	public Object saveEntity(Object model, Class modelClass) throws BusinessException {
 
@@ -312,8 +286,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				event = new AfterSaveEvent(2);
 			}
 
-			prepareInterceptor(model, interceptorContext, modelClass.getSimpleName());
-			validateInterceptor(model, interceptorContext, modelClass.getSimpleName());
+			prepareInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+			validateInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 			modelRepository.save(model);
 
 			Set<Entry<String, AfterSaveListener>> afterSaveListeners = afterSaveListenerRegistry.getListeners().entrySet();
@@ -328,7 +302,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(rollbackFor = BusinessException.class)
+	@Transactional(readOnly = false, rollbackFor = BusinessException.class)
 	@Override
 	public void deleteByEntity(Object entityModel, Class modelClass) throws BusinessException {
 		try {
@@ -344,7 +318,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(rollbackFor = BusinessException.class)
+	@Transactional(readOnly = false, rollbackFor = BusinessException.class)
 	@Override
 	public void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException {
 		try {
@@ -362,9 +336,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(rollbackFor = SQLException.class)
+	@Transactional(readOnly = false, rollbackFor = SQLException.class)
 	private void deleteEntity(Object model, Class modelClass) throws SQLException, InterceptorException, BusinessException {
-		removeInterceptor(model, interceptorContext, modelClass.getSimpleName());
+		removeInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 
 		modelRepository.delete(model);
 
@@ -378,13 +352,18 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public <T> T getEntity(Object model, Class modelClass) throws Exception {
+		return getEntity(model, modelClass, new EntityConverterContext());
+	}
+	
+	@Override
+	public <T> T getEntity(Object model, Class modelClass, EntityConverterContext context) throws Exception {
 		try {
 
 			if (model == null) {
 				return null;
 			}
 
-			model = entityConverter(model, entityConveterContext, modelClass);
+			model = entityConverter(model, context, modelClass);
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -394,6 +373,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public <T extends Collection> T getEntity(Collection models, Class modelClass) throws Exception {
+		return getEntity(models, modelClass, new EntityConverterContext());
+	}
+	
+	@Override
+	public <T extends Collection> T getEntity(Collection models, Class modelClass, EntityConverterContext context) throws Exception {
 		try {
 
 			if (models == null)
@@ -404,7 +388,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			List<Object> entityObjects = new ArrayList<Object>();
 			for (Object model : models) {
-				model = entityConverter(model, entityConveterContext, modelClass);
+				model = entityConverter(model, context, modelClass);
 				entityObjects.add(model);
 			}
 			return (T) entityObjects;
@@ -416,11 +400,16 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public <T> T getDto(Object model, Class modelClass) throws Exception {
+		return getDto(model, modelClass, new DtoConverterContext());
+	}
+	
+	@Override
+	public <T> T getDto(Object model, Class modelClass, DtoConverterContext context) throws Exception {
 		try {
 			if (model == null)
 				return null;
 
-			model = dtoConverter(model, dtoConveterContext, modelClass.getSimpleName());
+			model = dtoConverter(model, context, modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -430,6 +419,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public <T extends Collection> T getDto(Collection models, Class modelClass) throws Exception {
+		return getDto(models, modelClass, new DtoConverterContext());
+	}
+	
+	@Override
+	public <T extends Collection> T getDto(Collection models, Class modelClass, DtoConverterContext context) throws Exception {
 		try {
 			if (models == null)
 				return null;
@@ -437,7 +431,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			if (models.isEmpty())
 				return (T) new ArrayList<T>();
 
-			return (T) dtoConverter(models, dtoConveterContext, modelClass.getSimpleName());
+			return (T) dtoConverter(models, context, modelClass.getSimpleName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
@@ -446,6 +440,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public void initDefaults(Object model, Class modelClass) throws Exception {
-		initialDefaultsInterceptor(model, interceptorContext, modelClass.getSimpleName());
+		initialDefaultsInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 	}
 }

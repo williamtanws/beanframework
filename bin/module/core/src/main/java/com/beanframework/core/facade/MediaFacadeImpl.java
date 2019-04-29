@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -28,7 +30,7 @@ public class MediaFacadeImpl implements MediaFacade {
 	@Override
 	public MediaDto findOneByUuid(UUID uuid) throws Exception {
 		Media entity = mediaService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, MediaDto.class);
+		return modelService.getDto(entity, MediaDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
@@ -67,7 +69,7 @@ public class MediaFacadeImpl implements MediaFacade {
 	public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Media> page = mediaService.findEntityPage(dataTableRequest);
 
-		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class);
+		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<MediaDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

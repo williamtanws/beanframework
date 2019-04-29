@@ -76,7 +76,7 @@ public class DynamicField extends GenericEntity {
 	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "enumeration_uuid"))
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "enumeration_uuid", referencedColumnName = "uuid"))
 	private List<Enumeration> enumerations = new ArrayList<Enumeration>();
 

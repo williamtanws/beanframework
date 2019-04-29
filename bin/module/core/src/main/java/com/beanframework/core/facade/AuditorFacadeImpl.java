@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.service.ModelService;
@@ -30,7 +32,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	public AuditorDto findOneByUuid(UUID uuid) throws Exception {
 		Auditor entity = auditorService.findOneEntityByUuid(uuid);
 
-		return modelService.getDto(entity, AuditorDto.class);
+		return modelService.getDto(entity, AuditorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
@@ -44,7 +46,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	public Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Auditor> page = auditorService.findEntityPage(dataTableRequest);
 
-		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class);
+		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<AuditorDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

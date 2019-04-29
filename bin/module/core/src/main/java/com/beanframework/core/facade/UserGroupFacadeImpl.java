@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -28,7 +30,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	@Override
 	public UserGroupDto findOneByUuid(UUID uuid) throws Exception {
 		UserGroup entity = userGroupService.findOneEntityByUuid(uuid);
-		UserGroupDto dto = modelService.getDto(entity, UserGroupDto.class);
+		UserGroupDto dto = modelService.getDto(entity, UserGroupDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
 	}
@@ -71,7 +73,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserGroup> page = userGroupService.findEntityPage(dataTableRequest);
 
-		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class);
+		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<UserGroupDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

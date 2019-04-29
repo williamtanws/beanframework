@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Site;
 import com.beanframework.cms.service.SiteService;
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -28,7 +30,7 @@ public class SiteFacadeImpl implements SiteFacade {
 	@Override
 	public SiteDto findOneByUuid(UUID uuid) throws Exception {
 		Site entity = siteService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, SiteDto.class);
+		return modelService.getDto(entity, SiteDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
@@ -67,7 +69,7 @@ public class SiteFacadeImpl implements SiteFacade {
 	public Page<SiteDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Site> page = siteService.findEntityPage(dataTableRequest);
 
-		List<SiteDto> dtos = modelService.getDto(page.getContent(), SiteDto.class);
+		List<SiteDto> dtos = modelService.getDto(page.getContent(), SiteDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<SiteDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -32,7 +34,7 @@ public class VendorFacadeImpl implements VendorFacade {
 	@Override
 	public VendorDto findOneByUuid(UUID uuid) throws Exception {
 		Vendor entity = vendorService.findOneEntityByUuid(uuid);
-		VendorDto dto = modelService.getDto(entity, VendorDto.class);
+		VendorDto dto = modelService.getDto(entity, VendorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
 	}
@@ -85,7 +87,7 @@ public class VendorFacadeImpl implements VendorFacade {
 	public Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Vendor> page = vendorService.findEntityPage(dataTableRequest);
 
-		List<VendorDto> dtos = modelService.getDto(page.getContent(), VendorDto.class);
+		List<VendorDto> dtos = modelService.getDto(page.getContent(), VendorDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<VendorDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

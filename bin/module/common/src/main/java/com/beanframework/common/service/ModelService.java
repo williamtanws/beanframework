@@ -24,9 +24,7 @@ import com.beanframework.common.exception.InterceptorException;
 
 @SuppressWarnings("rawtypes")
 public interface ModelService {
-
-	public static final String DEFAULT_LIST_LOAD_INTERCEPTOR_POSTFIX = "List";
-
+	
 	void attach(Object model);
 
 	void detach(Object model);
@@ -107,12 +105,20 @@ public interface ModelService {
 	void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
 	<T> T getEntity(Object model, Class modelClass) throws Exception;
+	
+	<T> T getEntity(Object model, Class modelClass, EntityConverterContext context) throws Exception;
 
 	<T extends Collection> T getEntity(Collection model, Class modelClass) throws Exception;
+	
+	<T extends Collection> T getEntity(Collection model, Class modelClass, EntityConverterContext context) throws Exception;
 
 	<T> T getDto(Object model, Class modelClass) throws Exception;
+	
+	<T> T getDto(Object model, Class modelClass, DtoConverterContext context) throws Exception;
 
 	<T extends Collection> T getDto(Collection models, Class modelClass) throws Exception;
+	
+	<T extends Collection> T getDto(Collection models, Class modelClass, DtoConverterContext context) throws Exception;
 
 	void initDefaults(Object model, Class modelClass) throws Exception;
 
@@ -122,9 +128,9 @@ public interface ModelService {
 
 	void initialDefaultsInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException;
 
-	<T extends Collection> T loadInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException;
+	void loadInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException;
 
-	Object loadInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException;
+	void loadInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException;
 
 	void prepareInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException;
 

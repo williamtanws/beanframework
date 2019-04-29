@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beanframework.comment.domain.Comment;
+import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -36,8 +37,8 @@ public class DtoCommentConverter extends AbstractDtoConverter<Comment, CommentDt
 
 			prototype.setHtml(source.getHtml());
 			prototype.setVisibled(source.getVisibled());
-			prototype.setUser(modelService.getDto(source.getUser(), UserDto.class));
-			
+			prototype.setUser(modelService.getDto(source.getUser(), UserDto.class, new DtoConverterContext(ConvertRelationType.RELATION)));
+
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);

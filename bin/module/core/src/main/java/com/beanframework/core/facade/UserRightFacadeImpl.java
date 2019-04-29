@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -30,7 +32,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	@Override
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
 		UserRight entity = userRightService.findOneEntityByUuid(uuid);
-		UserRightDto dto = modelService.getDto(entity, UserRightDto.class);
+		UserRightDto dto = modelService.getDto(entity, UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
 	}
@@ -73,7 +75,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest);
 
-		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class);
+		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -108,7 +110,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserRight.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(userRightService.findEntityBySorts(sorts), UserRightDto.class);
+		return modelService.getDto(userRightService.findEntityBySorts(sorts), UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override

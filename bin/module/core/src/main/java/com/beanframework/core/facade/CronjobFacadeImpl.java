@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
@@ -42,7 +44,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public CronjobDto findOneByUuid(UUID uuid) throws Exception {
 		Cronjob entity = cronjobService.findOneEntityByUuid(uuid);
 
-		return modelService.getDto(entity, CronjobDto.class);
+		return modelService.getDto(entity, CronjobDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
@@ -82,7 +84,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Cronjob> page = cronjobService.findEntityPage(dataTableRequest);
 
-		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class);
+		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<CronjobDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

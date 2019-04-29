@@ -42,7 +42,7 @@ public class DynamicFieldSlot extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dynamicfield_uuid")
 	private DynamicField dynamicField;
 

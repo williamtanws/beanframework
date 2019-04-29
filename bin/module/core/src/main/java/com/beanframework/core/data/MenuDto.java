@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuTargetTypeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,7 +28,7 @@ public class MenuDto extends GenericDto {
 	private Boolean enabled;
 
 	@JsonIgnore
-	private Menu parent;
+	private MenuDto parent;
 
 	@JsonIgnore
 	private List<MenuDto> childs = new ArrayList<MenuDto>();
@@ -92,11 +91,11 @@ public class MenuDto extends GenericDto {
 		this.enabled = enabled;
 	}
 
-	public Menu getParent() {
+	public MenuDto getParent() {
 		return parent;
 	}
 
-	public void setParent(Menu parent) {
+	public void setParent(MenuDto parent) {
 		this.parent = parent;
 	}
 

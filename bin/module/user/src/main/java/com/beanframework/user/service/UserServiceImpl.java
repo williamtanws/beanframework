@@ -42,8 +42,6 @@ import com.beanframework.user.UserConstants;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserPermissionField;
-import com.beanframework.user.domain.UserRightField;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -75,7 +73,6 @@ public class UserServiceImpl implements UserService {
 		return modelService.findOneEntityByProperties(properties, User.class);
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public User findAuthenticate(String id, String password) throws Exception {
 
@@ -176,27 +173,31 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	@Override
 	public Set<GrantedAuthority> getAuthorities(UUID userUuid, String userGroupId) throws Exception {
 
 		User user = modelService.findOneEntityByUuid(userUuid, User.class);
+
 		Hibernate.initialize(user.getUserGroups());
 
 		Set<String> checkedUserGroupUuid = new HashSet<String>();
 		for (UserGroup userGroup : user.getUserGroups()) {
 			checkedUserGroupUuid.add(userGroup.getUuid().toString());
+
+			Hibernate.initialize(userGroup.getUserAuthorities());
 		}
 
+		for (UserGroup userGroup : user.getUserGroups()) {
+			initializeUserGroups(userGroup, checkedUserGroupUuid);
+		}
 		boolean isAuthorized = false;
 
 		for (UserGroup userGroup : user.getUserGroups()) {
-			if (userGroup.getId().equals(userGroupId)) {
-				isAuthorized = true;
+			if (isAuthorized == false) {
+				isAuthorized = isAuthorized(userGroup, userGroupId);
 			} else {
-				checkedUserGroupUuid.add(userGroup.getUuid().toString());
-				if (isAuthorized(userGroup, userGroupId, checkedUserGroupUuid))
-					isAuthorized = true;
+				break;
 			}
 		}
 
@@ -207,7 +208,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	@Override
 	public List<UserGroup> getUserGroupsByCurrentUser() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -223,93 +224,82 @@ public class UserServiceImpl implements UserService {
 			Set<String> checkedUserGroupUuid = new HashSet<String>();
 			for (UserGroup userGroup : user.getUserGroups()) {
 				checkedUserGroupUuid.add(userGroup.getUuid().toString());
-				
-				Hibernate.initialize(userGroup.getUserAuthorities());
 
-				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-					Hibernate.initialize(userAuthority.getUserRight());
-					for (UserRightField field : userAuthority.getUserRight().getFields()) {
-						Hibernate.initialize(field.getDynamicFieldSlot());
-						if (field.getDynamicFieldSlot() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-						if (field.getDynamicFieldSlot().getDynamicField() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-					}
-					Hibernate.initialize(userAuthority.getUserPermission());
-					for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-						Hibernate.initialize(field.getDynamicFieldSlot());
-						if (field.getDynamicFieldSlot() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-						if (field.getDynamicFieldSlot().getDynamicField() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-					}
-				}
+				Hibernate.initialize(userGroup.getUserAuthorities());
 			}
-			
+
 			for (UserGroup userGroup : user.getUserGroups()) {
 				initializeUserGroups(userGroup, checkedUserGroupUuid);
 			}
-			
+
 			return user.getUserGroups();
 
 		} else {
 			return null;
 		}
 	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public Set<String> getAllUserGroupUuidsByCurrentUser() throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User principal = (User) auth.getPrincipal();
+		
+		return getAllUserGroupUuidsByUserUuid(principal.getUuid());
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public Set<String> getAllUserGroupUuidsByUserUuid(UUID uuid) throws Exception {
+	
+		User user = modelService.findOneEntityByUuid(uuid, User.class);
 
-	private void initializeUserGroups(UserGroup userGroup, Set<String> checkedUserGroupUuid) {
-		if (checkedUserGroupUuid.contains(userGroup.getUuid().toString()) == false) {
-			
-			Hibernate.initialize(userGroup.getUserGroups());
-			
-			for (UserGroup child : userGroup.getUserGroups()) {
-				checkedUserGroupUuid.add(child.getUuid().toString());
-				
-				Hibernate.initialize(userGroup.getUserAuthorities());
+		Hibernate.initialize(user.getUserGroups());
 
-				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
-					Hibernate.initialize(userAuthority.getUserRight());
-					for (UserRightField field : userAuthority.getUserRight().getFields()) {
-						Hibernate.initialize(field.getDynamicFieldSlot());
-						if (field.getDynamicFieldSlot() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-						if (field.getDynamicFieldSlot().getDynamicField() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-					}
-					Hibernate.initialize(userAuthority.getUserPermission());
-					for (UserPermissionField field : userAuthority.getUserPermission().getFields()) {
-						Hibernate.initialize(field.getDynamicFieldSlot());
-						if (field.getDynamicFieldSlot() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField());
-						if (field.getDynamicFieldSlot().getDynamicField() != null)
-							Hibernate.initialize(field.getDynamicFieldSlot().getDynamicField().getEnumerations());
-					}
-				}
-			}
-			
-			for (UserGroup child : userGroup.getUserGroups()) {
-				initializeUserGroups(child, checkedUserGroupUuid);
-			}
+		Set<String> checkedUserGroupUuid = new HashSet<String>();
+		for (UserGroup userGroup : user.getUserGroups()) {
+			checkedUserGroupUuid.add(userGroup.getUuid().toString());
+
+			Hibernate.initialize(userGroup.getUserAuthorities());
 		}
+
+		for (UserGroup userGroup : user.getUserGroups()) {
+			initializeUserGroups(userGroup, checkedUserGroupUuid);
+		}
+
+		return checkedUserGroupUuid;
 	}
 
-	private boolean isAuthorized(UserGroup userGroup, String userGroupId, Set<String> checkedUserGroupUuid) {
-
-		if (checkedUserGroupUuid.contains(userGroup.getUuid().toString())) {
-			return false;
-		}
+	@Transactional(readOnly = true)
+	private void initializeUserGroups(UserGroup userGroup, Set<String> checkedUserGroupUuid) {
 
 		Hibernate.initialize(userGroup.getUserGroups());
 
 		for (UserGroup child : userGroup.getUserGroups()) {
-			checkedUserGroupUuid.add(child.getUuid().toString());
+			if (checkedUserGroupUuid.contains(child.getUuid().toString()) == false) {
+				checkedUserGroupUuid.add(child.getUuid().toString());
+
+				Hibernate.initialize(userGroup.getUserAuthorities());
+
+				if (child.getUserGroups() != null && child.getUserGroups().isEmpty() == false) {
+					initializeUserGroups(child, checkedUserGroupUuid);
+				}
+
+			}
+		}
+	}
+
+	private boolean isAuthorized(UserGroup userGroup, String userGroupId) {
+		
+		if(userGroup.getId().equals(userGroupId)) {
+			return true;
 		}
 
 		for (UserGroup child : userGroup.getUserGroups()) {
 			if (child.getId().equals(userGroupId)) {
 				return true;
 			} else {
-				return isAuthorized(child, userGroupId, checkedUserGroupUuid);
+				return isAuthorized(child, userGroupId);
 			}
 		}
 

@@ -45,5 +45,4 @@ public class DtoLanguageConverter extends AbstractDtoConverter<Language, Languag
 
 		return prototype;
 	}
-
 }

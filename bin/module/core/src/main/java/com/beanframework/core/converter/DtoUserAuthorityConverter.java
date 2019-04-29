@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -41,9 +42,11 @@ public class DtoUserAuthorityConverter extends AbstractDtoConverter<UserAuthorit
 
 			convertCommonProperties(source, prototype, context);
 
-			prototype.setEnabled(source.getEnabled());
-			prototype.setUserPermission(modelService.getDto(source.getUserPermission(), UserPermissionDto.class));
-			prototype.setUserRight(modelService.getDto(source.getUserRight(), UserRightDto.class));
+			if (ConvertRelationType.ALL == context.getConverModelType()) {
+				convertAll(source, prototype, context);
+			} else if (ConvertRelationType.RELATION == context.getConverModelType()) {
+				convertRelation(source, prototype, context);
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -51,6 +54,17 @@ public class DtoUserAuthorityConverter extends AbstractDtoConverter<UserAuthorit
 		}
 
 		return prototype;
+	}
+
+	private void convertAll(UserAuthority source, UserAuthorityDto prototype, DtoConverterContext context) throws Exception {
+		prototype.setEnabled(source.getEnabled());
+		prototype.setUserPermission(modelService.getDto(source.getUserPermission(), UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+		prototype.setUserRight(modelService.getDto(source.getUserRight(), UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+
+	}
+
+	private void convertRelation(UserAuthority source, UserAuthorityDto prototype, DtoConverterContext context) throws Exception {
+		prototype.setEnabled(source.getEnabled());
 	}
 
 }

@@ -32,4 +32,8 @@ public interface UserService {
 	Set<GrantedAuthority> getAuthorities(UUID userUuid, String userGroupId) throws Exception;
 
 	List<UserGroup> getUserGroupsByCurrentUser() throws Exception;
+
+	Set<String> getAllUserGroupUuidsByCurrentUser() throws Exception;
+
+	Set<String> getAllUserGroupUuidsByUserUuid(UUID uuid) throws Exception;
 }

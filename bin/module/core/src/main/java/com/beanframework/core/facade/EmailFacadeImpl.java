@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -35,7 +37,7 @@ public class EmailFacadeImpl implements EmailFacade {
 	public EmailDto findOneByUuid(UUID uuid) throws Exception {
 		Email entity = emailService.findOneEntityByUuid(uuid);
 
-		return modelService.getDto(entity, EmailDto.class);
+		return modelService.getDto(entity, EmailDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
@@ -75,7 +77,7 @@ public class EmailFacadeImpl implements EmailFacade {
 	public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Email> page = emailService.findEntityPage(dataTableRequest);
 
-		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class);
+		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<EmailDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

@@ -31,7 +31,7 @@ public class DtoAuditorConverter extends AbstractDtoConverter<Auditor, AuditorDt
 
 	private AuditorDto convert(Auditor source, AuditorDto prototype, DtoConverterContext context) throws ConverterException {
 
-		try {	
+		try {
 			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());

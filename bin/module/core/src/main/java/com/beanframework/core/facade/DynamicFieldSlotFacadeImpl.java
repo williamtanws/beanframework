@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -28,7 +30,7 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 	@Override
 	public DynamicFieldSlotDto findOneByUuid(UUID uuid) throws Exception {
 		DynamicFieldSlot entity = dynamicFieldService.findOneEntityByUuid(uuid);
-		DynamicFieldSlotDto dto = modelService.getDto(entity, DynamicFieldSlotDto.class);
+		DynamicFieldSlotDto dto = modelService.getDto(entity, DynamicFieldSlotDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
 	}
@@ -71,7 +73,7 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 	public Page<DynamicFieldSlotDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<DynamicFieldSlot> page = dynamicFieldService.findEntityPage(dataTableRequest);
 
-		List<DynamicFieldSlotDto> dtos = modelService.getDto(page.getContent(), DynamicFieldSlotDto.class);
+		List<DynamicFieldSlotDto> dtos = modelService.getDto(page.getContent(), DynamicFieldSlotDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<DynamicFieldSlotDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

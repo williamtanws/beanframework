@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -32,7 +34,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
 		Customer entity = customerService.findOneEntityByUuid(uuid);
-		CustomerDto dto = modelService.getDto(entity, CustomerDto.class);
+		CustomerDto dto = modelService.getDto(entity, CustomerDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
 	}
@@ -85,7 +87,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Customer> page = customerService.findEntityPage(dataTableRequest);
 
-		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class);
+		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<CustomerDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

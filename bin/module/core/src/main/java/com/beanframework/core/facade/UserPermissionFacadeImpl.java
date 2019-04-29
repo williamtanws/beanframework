@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -30,7 +32,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Override
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
 		UserPermission entity = userPermissionService.findOneEntityByUuid(uuid);
-		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class);
+		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
 	}
@@ -73,7 +75,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserPermission> page = userPermissionService.findEntityPage(dataTableRequest);
 
-		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class);
+		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<UserPermissionDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -108,7 +110,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserPermission.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(userPermissionService.findEntityBySorts(sorts), UserPermissionDto.class);
+		return modelService.getDto(userPermissionService.findEntityBySorts(sorts), UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override

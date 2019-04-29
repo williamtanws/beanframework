@@ -8,12 +8,6 @@ import com.beanframework.user.domain.UserRight;
 public class UserRightLoadInterceptor extends AbstractLoadInterceptor<UserRight> {
 
 	@Override
-	public UserRight onLoad(UserRight model, InterceptorContext context) throws InterceptorException {
-		UserRight prototype = new UserRight();
-		loadCommonProperties(model, prototype, context);
-		prototype.setName(model.getName());
-		prototype.setSort(model.getSort());
-
-		return prototype;
+	public void onLoad(UserRight model, InterceptorContext context) throws InterceptorException {
 	}
 }
