@@ -27,5 +27,4 @@ public abstract class AbstractDtoConverter<T extends GenericEntity, E extends Ge
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
-
 }

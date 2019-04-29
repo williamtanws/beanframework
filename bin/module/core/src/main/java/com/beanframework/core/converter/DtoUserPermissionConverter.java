@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -37,23 +38,11 @@ public class DtoUserPermissionConverter extends AbstractDtoConverter<UserPermiss
 		try {
 			convertCommonProperties(source, prototype, context);
 
-			prototype.setName(source.getName());
-			prototype.setSort(source.getSort());
-
-			prototype.setFields(modelService.getDto(source.getFields(), UserPermissionFieldDto.class));
-			if (prototype.getFields() != null)
-				Collections.sort(prototype.getFields(), new Comparator<UserPermissionFieldDto>() {
-					@Override
-					public int compare(UserPermissionFieldDto o1, UserPermissionFieldDto o2) {
-						if (o1.getDynamicFieldSlot().getSort() == null)
-							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
-
-						if (o2.getDynamicFieldSlot().getSort() == null)
-							return -1;
-
-						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-					}
-				});
+			if (ConvertRelationType.ALL == context.getConverModelType()) {
+				convertAll(source, prototype, context);
+			} else if (ConvertRelationType.RELATION == context.getConverModelType()) {
+				convertRelation(source, prototype, context);
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -61,6 +50,32 @@ public class DtoUserPermissionConverter extends AbstractDtoConverter<UserPermiss
 		}
 
 		return prototype;
+	}
+
+	private void convertAll(UserPermission source, UserPermissionDto prototype, DtoConverterContext context) throws Exception {
+		prototype.setName(source.getName());
+		prototype.setSort(source.getSort());
+
+		prototype.setFields(modelService.getDto(source.getFields(), UserPermissionFieldDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+		if (prototype.getFields() != null)
+			Collections.sort(prototype.getFields(), new Comparator<UserPermissionFieldDto>() {
+				@Override
+				public int compare(UserPermissionFieldDto o1, UserPermissionFieldDto o2) {
+					if (o1.getDynamicFieldSlot().getSort() == null)
+						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+
+					if (o2.getDynamicFieldSlot().getSort() == null)
+						return -1;
+
+					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+				}
+			});
+
+	}
+
+	private void convertRelation(UserPermission source, UserPermissionDto prototype, DtoConverterContext context) throws Exception {
+		prototype.setName(source.getName());
+		prototype.setSort(source.getSort());
 	}
 
 }

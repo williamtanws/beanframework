@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.hibernate.Hibernate;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -21,6 +22,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.specification.MenuSpecification;
+import com.beanframework.user.domain.UserGroup;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -181,8 +183,33 @@ public class MenuServiceImpl implements MenuService {
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
 
 		List<Menu> menuTree = modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
+		
+		for (Menu model : menuTree) {
+			Hibernate.initialize(model.getChilds());
+			for (Menu menu : model.getChilds()) {
+				initializeChilds(menu);
+			}
+
+			Hibernate.initialize(model.getUserGroups());
+			for (UserGroup userGroup : model.getUserGroups()) {
+				Hibernate.initialize(userGroup.getUserAuthorities());
+			}
+		}
 
 		return menuTree;
+	}
+	
+	private void initializeChilds(Menu model) {
+
+		Hibernate.initialize(model.getChilds());
+		for (Menu menu : model.getChilds()) {
+			initializeChilds(menu);
+		}
+
+		Hibernate.initialize(model.getUserGroups());
+		for (UserGroup userGroup : model.getUserGroups()) {
+			Hibernate.initialize(userGroup.getUserAuthorities());
+		}
 	}
 
 	@Override

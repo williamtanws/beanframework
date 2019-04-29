@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -30,7 +32,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	public ConfigurationDto findOneByUuid(UUID uuid) throws Exception {
 		Configuration entity = configurationService.findOneEntityByUuid(uuid);
 
-		return modelService.getDto(entity, ConfigurationDto.class);
+		return modelService.getDto(entity, ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
@@ -70,7 +72,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	public Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Configuration> page = configurationService.findEntityPage(dataTableRequest);
 
-		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), ConfigurationDto.class);
+		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<ConfigurationDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

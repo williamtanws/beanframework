@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -28,7 +30,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	@Override
 	public LanguageDto findOneByUuid(UUID uuid) throws Exception {
 		Language entity = languageService.findOneEntityByUuid(uuid);
-		return modelService.getDto(entity, LanguageDto.class);
+		return modelService.getDto(entity, LanguageDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
@@ -67,7 +69,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Language> page = languageService.findEntityPage(dataTableRequest);
 
-		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class);
+		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

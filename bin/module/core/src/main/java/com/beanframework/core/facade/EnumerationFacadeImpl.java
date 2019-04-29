@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -29,7 +31,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	public EnumerationDto findOneByUuid(UUID uuid) throws Exception {
 		Enumeration entity = enumerationService.findOneEntityByUuid(uuid);
 
-		return modelService.getDto(entity, EnumerationDto.class);
+		return modelService.getDto(entity, EnumerationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
@@ -69,7 +71,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	public Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Enumeration> page = enumerationService.findEntityPage(dataTableRequest);
 
-		List<EnumerationDto> dtos = modelService.getDto(page.getContent(), EnumerationDto.class);
+		List<EnumerationDto> dtos = modelService.getDto(page.getContent(), EnumerationDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<EnumerationDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

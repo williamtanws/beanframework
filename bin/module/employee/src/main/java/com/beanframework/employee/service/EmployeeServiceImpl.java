@@ -129,7 +129,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public void deleteEmployeeProfilePictureByUuid(UUID uuid) {		
+	public void deleteEmployeeProfilePictureByUuid(UUID uuid) {
 		userService.deleteProfilePictureByUuid(uuid);
 	}
 
@@ -200,7 +200,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		return principal;
 	}
-	
+
 	@Override
 	public Set<EmployeeSession> findAllSessions() {
 		final List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
@@ -271,6 +271,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public int countByUserGroups(List<UUID> userGroupsUuid) {
+		if (userGroupsUuid == null || userGroupsUuid.size() == 0) {
+			return 0;
+		}
+
 		Query query = entityManager.createQuery("SELECT COUNT(DISTINCT o) FROM Employee o LEFT JOIN o.userGroups u WHERE (u.uuid IN (?1))");
 		query.setParameter(1, userGroupsUuid);
 

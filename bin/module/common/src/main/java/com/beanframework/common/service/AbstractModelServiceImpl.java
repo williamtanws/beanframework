@@ -93,28 +93,25 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public <T extends Collection> T loadInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
+	public void loadInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException {
 
-		List<Object> content = new ArrayList<Object>();
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			content.add(loadInterceptor(model, context, typeCode));
+			loadInterceptor(model, context, typeCode);
 		}
-		
-		return (T) content;
 	}
 
 	@Override
-	public Object loadInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
+	public void loadInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
 
 		boolean notIntercepted = true;
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof LoadInterceptor) {
 				LoadInterceptor<Object> interceptor = (LoadInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(typeCode)) {
+					interceptor.onLoad(model, context);
 					notIntercepted = false;
-					return interceptor.onLoad(model, context);
 				}
 			}
 		}
@@ -122,8 +119,6 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
 			throw new InterceptorException("Cannot find any load interceptor to intercept target typeCode: " + typeCode);
 		}
-		
-		return model;
 	}
 
 	@Override

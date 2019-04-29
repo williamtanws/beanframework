@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.service.AdminService;
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -30,7 +32,7 @@ public class AdminFacadeImpl implements AdminFacade {
 
 		Admin entity = adminService.findOneEntityByUuid(uuid);
 
-		return modelService.getDto(entity, AdminDto.class);
+		return modelService.getDto(entity, AdminDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
@@ -70,7 +72,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	public Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Admin> page = adminService.findEntityPage(dataTableRequest);
 
-		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class);
+		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

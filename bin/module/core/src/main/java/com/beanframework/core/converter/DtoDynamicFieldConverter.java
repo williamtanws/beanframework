@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -42,8 +43,8 @@ public class DtoDynamicFieldConverter extends AbstractDtoConverter<DynamicField,
 			prototype.setType(source.getType());
 			prototype.setLabel(source.getLabel());
 			prototype.setGrid(source.getGrid());
-			prototype.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class));
-			prototype.setEnumerations(modelService.getDto(source.getEnumerations(), EnumerationDto.class));
+			prototype.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+			prototype.setEnumerations(modelService.getDto(source.getEnumerations(), EnumerationDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

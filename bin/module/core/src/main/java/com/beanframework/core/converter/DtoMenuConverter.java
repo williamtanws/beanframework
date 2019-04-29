@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -44,18 +45,19 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
-			prototype.setParent(source.getParent());
+			prototype.setParent(modelService.getDto(source.getParent(), MenuDto.class, new DtoConverterContext(ConvertRelationType.RELATION)));
 			prototype.setIcon(source.getIcon());
 			prototype.setPath(source.getPath());
 			prototype.setSort(source.getSort());
 			prototype.setTarget(source.getTarget());
 			prototype.setEnabled(source.getEnabled());
 
-			prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class));
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
+			if (context.getConverModelType() == ConvertRelationType.ALL) {
 
-			prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class));
-			if (prototype.getFields() != null)
+				prototype.setChilds(modelService.getDto(source.getChilds(), MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+				prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+
+				prototype.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
 				Collections.sort(prototype.getFields(), new Comparator<MenuFieldDto>() {
 					@Override
 					public int compare(MenuFieldDto o1, MenuFieldDto o2) {
@@ -68,6 +70,7 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
 					}
 				});
+			}
 
 		} catch (
 

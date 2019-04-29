@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -37,7 +38,11 @@ public class DtoDynamicFieldTemplateConverter extends AbstractDtoConverter<Dynam
 
 			prototype.setName(source.getName());
 
-			prototype.setDynamicFieldSlots(modelService.getDto(source.getDynamicFieldSlots(), DynamicFieldSlotDto.class));
+			if (ConvertRelationType.ALL == context.getConverModelType()) {
+				convertAll(source, prototype, context);
+			} else if (ConvertRelationType.RELATION == context.getConverModelType()) {
+				convertRelation(source, prototype, context);
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -45,6 +50,14 @@ public class DtoDynamicFieldTemplateConverter extends AbstractDtoConverter<Dynam
 		}
 
 		return prototype;
+	}
+
+	private void convertAll(DynamicFieldTemplate source, DynamicFieldTemplateDto prototype, DtoConverterContext context) throws Exception {
+		prototype.setDynamicFieldSlots(modelService.getDto(source.getDynamicFieldSlots(), DynamicFieldSlotDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+	}
+
+	private void convertRelation(DynamicFieldTemplate source, DynamicFieldTemplateDto prototype, DtoConverterContext context) throws Exception {
+
 	}
 
 }

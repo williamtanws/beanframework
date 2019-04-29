@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.comment.service.CommentService;
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -31,7 +33,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	public CommentDto findOneByUuid(UUID uuid) throws Exception {
 		Comment entity = commentService.findOneEntityByUuid(uuid);
 
-		return modelService.getDto(entity, CommentDto.class);
+		return modelService.getDto(entity, CommentDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Comment> page = commentService.findEntityPage(dataTableRequest);
 
-		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class);
+		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

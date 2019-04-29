@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -38,29 +39,12 @@ public class DtoEmployeeConverter extends AbstractDtoConverter<Employee, Employe
 		try {
 			convertCommonProperties(source, prototype, context);
 
-			prototype.setPassword(source.getPassword());
-			prototype.setAccountNonExpired(source.getAccountNonExpired());
-			prototype.setAccountNonLocked(source.getAccountNonLocked());
-			prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
-			prototype.setEnabled(source.getEnabled());
+			if (ConvertRelationType.ALL == context.getConverModelType()) {
+				convertAll(source, prototype, context);
+			} else if (ConvertRelationType.RELATION == context.getConverModelType()) {
+				convertRelation(source, prototype, context);
+			}
 			prototype.setName(source.getName());
-
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
-
-			prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class));
-			if (prototype.getFields() != null)
-				Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
-					@Override
-					public int compare(UserFieldDto o1, UserFieldDto o2) {
-						if (o1.getDynamicFieldSlot().getSort() == null)
-							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
-
-						if (o2.getDynamicFieldSlot().getSort() == null)
-							return -1;
-
-						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-					}
-				});
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -68,6 +52,35 @@ public class DtoEmployeeConverter extends AbstractDtoConverter<Employee, Employe
 		}
 
 		return prototype;
+	}
+
+	private void convertAll(Employee source, EmployeeDto prototype, DtoConverterContext context) throws Exception {
+
+		prototype.setPassword(source.getPassword());
+		prototype.setAccountNonExpired(source.getAccountNonExpired());
+		prototype.setAccountNonLocked(source.getAccountNonLocked());
+		prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+		prototype.setEnabled(source.getEnabled());
+		prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext()));
+
+		prototype.setFields(modelService.getDto(source.getFields(), UserFieldDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+		if (prototype.getFields() != null)
+			Collections.sort(prototype.getFields(), new Comparator<UserFieldDto>() {
+				@Override
+				public int compare(UserFieldDto o1, UserFieldDto o2) {
+					if (o1.getDynamicFieldSlot().getSort() == null)
+						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+
+					if (o2.getDynamicFieldSlot().getSort() == null)
+						return -1;
+
+					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+				}
+			});
+
+	}
+
+	private void convertRelation(Employee source, EmployeeDto prototype, DtoConverterContext context) throws Exception {
 	}
 
 }

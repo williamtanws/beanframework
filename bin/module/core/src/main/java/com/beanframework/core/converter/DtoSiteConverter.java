@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beanframework.cms.domain.Site;
+import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -37,8 +38,11 @@ public class DtoSiteConverter extends AbstractDtoConverter<Site, SiteDto> implem
 		try {
 			convertCommonProperties(source, prototype, context);
 
-			prototype.setName(source.getName());
-			prototype.setUrl(source.getUrl());
+			if (ConvertRelationType.ALL == context.getConverModelType()) {
+				convertAll(source, prototype, context);
+			} else if (ConvertRelationType.RELATION == context.getConverModelType()) {
+				convertRelation(source, prototype, context);
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -46,6 +50,18 @@ public class DtoSiteConverter extends AbstractDtoConverter<Site, SiteDto> implem
 		}
 
 		return prototype;
+	}
+
+	private void convertAll(Site source, SiteDto prototype, DtoConverterContext context) throws Exception {
+		prototype.setName(source.getName());
+		prototype.setUrl(source.getUrl());
+
+	}
+
+	private void convertRelation(Site source, SiteDto prototype, DtoConverterContext context) throws Exception {
+		prototype.setName(source.getName());
+		prototype.setUrl(source.getUrl());
+
 	}
 
 }

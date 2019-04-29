@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EmployeeDto;
@@ -24,7 +26,7 @@ public class UserFacadeImpl implements UserFacade {
 	@Override
 	public UserDto findOneByUuid(UUID uuid) throws Exception {
 		User user = userService.findOneEntityByUuid(uuid);
-		return modelService.getDto(user, UserDto.class);
+		return modelService.getDto(user, UserDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override

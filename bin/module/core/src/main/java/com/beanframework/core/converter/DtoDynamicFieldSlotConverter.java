@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -43,7 +44,7 @@ public class DtoDynamicFieldSlotConverter extends AbstractDtoConverter<DynamicFi
 			prototype.setName(source.getName());
 			prototype.setSort(source.getSort());
 
-			prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class));
+			prototype.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

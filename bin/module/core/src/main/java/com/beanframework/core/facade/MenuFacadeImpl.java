@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -32,7 +34,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
 		Menu entity = menuService.findOneEntityByUuid(uuid);
-		MenuDto dto = modelService.getDto(entity, MenuDto.class);
+		MenuDto dto = modelService.getDto(entity, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
 	}
@@ -101,7 +103,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Menu> page = menuService.findEntityPage(dataTableRequest);
 
-		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class);
+		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

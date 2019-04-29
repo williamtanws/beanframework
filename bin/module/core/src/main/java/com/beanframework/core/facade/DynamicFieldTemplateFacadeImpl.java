@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.context.ConvertRelationType;
+import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -28,7 +30,7 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 	@Override
 	public DynamicFieldTemplateDto findOneByUuid(UUID uuid) throws Exception {
 		DynamicFieldTemplate entity = dynamicFieldTemplateService.findOneEntityByUuid(uuid);
-		DynamicFieldTemplateDto dto = modelService.getDto(entity, DynamicFieldTemplateDto.class);
+		DynamicFieldTemplateDto dto = modelService.getDto(entity, DynamicFieldTemplateDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 		
 		return dto;
 	}
@@ -71,7 +73,7 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 	public Page<DynamicFieldTemplateDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<DynamicFieldTemplate> page = dynamicFieldTemplateService.findEntityPage(dataTableRequest);
 
-		List<DynamicFieldTemplateDto> dtos = modelService.getDto(page.getContent(), DynamicFieldTemplateDto.class);
+		List<DynamicFieldTemplateDto> dtos = modelService.getDto(page.getContent(), DynamicFieldTemplateDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<DynamicFieldTemplateDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

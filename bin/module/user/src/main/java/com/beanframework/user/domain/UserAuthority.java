@@ -29,12 +29,12 @@ public class UserAuthority extends GenericEntity {
 	public static final String USER_RIGHT = "userRight";
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userpermission_uuid")
 	private UserPermission userPermission;
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userright_uuid")
 	private UserRight userRight;
 

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -41,31 +42,43 @@ public class DtoUserGroupConverter extends AbstractDtoConverter<UserGroup, UserG
 	private UserGroupDto convert(UserGroup source, UserGroupDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
+
 			convertCommonProperties(source, prototype, context);
-
 			prototype.setName(source.getName());
-			prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class));
-			prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class));
 
-			prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class));
-			if (prototype.getFields() != null)
-				Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
-					@Override
-					public int compare(UserGroupFieldDto o1, UserGroupFieldDto o2) {
-						if (o1.getDynamicFieldSlot().getSort() == null)
-							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
-
-						if (o2.getDynamicFieldSlot().getSort() == null)
-							return -1;
-
-						return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
-					}
-				});
+			if (ConvertRelationType.ALL == context.getConverModelType()) {
+				convertAll(source, prototype, context);
+			} else if (ConvertRelationType.RELATION == context.getConverModelType()) {
+				convertRelation(source, prototype, context);
+			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);
 		}
 		return prototype;
+	}
+
+	private void convertAll(UserGroup source, UserGroupDto prototype, DtoConverterContext context) throws Exception {
+
+		prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+		prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(ConvertRelationType.RELATION)));
+		prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+		if (prototype.getFields() != null)
+			Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
+				@Override
+				public int compare(UserGroupFieldDto o1, UserGroupFieldDto o2) {
+					if (o1.getDynamicFieldSlot().getSort() == null)
+						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
+
+					if (o2.getDynamicFieldSlot().getSort() == null)
+						return -1;
+
+					return o1.getDynamicFieldSlot().getSort() - o2.getDynamicFieldSlot().getSort();
+				}
+			});
+	}
+
+	private void convertRelation(UserGroup source, UserGroupDto prototype, DtoConverterContext context) throws Exception {
 	}
 }

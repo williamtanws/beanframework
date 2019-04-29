@@ -8,14 +8,7 @@ import com.beanframework.cronjob.domain.CronjobData;
 public class CronjobDataLoadInterceptor extends AbstractLoadInterceptor<CronjobData> {
 
 	@Override
-	public CronjobData onLoad(CronjobData model, InterceptorContext context) throws InterceptorException {
-				
-		CronjobData prototype = new CronjobData();
-		loadCommonProperties(model, prototype, context);
-		prototype.setName(model.getName());
-		prototype.setValue(model.getValue());
-		
-		return prototype;
+	public void onLoad(CronjobData model, InterceptorContext context) throws InterceptorException {
 	}
 
 }
