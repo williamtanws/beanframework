@@ -14,15 +14,11 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserPermissionFieldDto;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.service.UserPermissionService;
 
 public class EntityUserPermissionConverter implements EntityConverter<UserPermissionDto, UserPermission> {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private UserPermissionService userPermissionService;
 
 	@Override
 	public UserPermission convert(UserPermissionDto source, EntityConverterContext context) throws ConverterException {
@@ -34,7 +30,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserPermission.UUID, source.getUuid());
 
-				UserPermission prototype = userPermissionService.findOneEntityByProperties(properties);
+				UserPermission prototype = modelService.findByProperties(properties, UserPermission.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

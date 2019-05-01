@@ -13,15 +13,11 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.service.CronjobService;
 
 public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronjob> {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private CronjobService cronjobService;
 
 	@Override
 	public Cronjob convert(CronjobDto source, EntityConverterContext context) throws ConverterException {
@@ -33,7 +29,7 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Cronjob.UUID, source.getUuid());
 
-				Cronjob prototype = cronjobService.findOneEntityByProperties(properties);
+				Cronjob prototype = modelService.findByProperties(properties, Cronjob.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

@@ -17,6 +17,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
+import com.beanframework.dynamicfield.specification.DynamicFieldTemplateSpecification;
 
 @Component
 public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacade {
@@ -29,17 +30,17 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 
 	@Override
 	public DynamicFieldTemplateDto findOneByUuid(UUID uuid) throws Exception {
-		DynamicFieldTemplate entity = dynamicFieldTemplateService.findOneEntityByUuid(uuid);
+		DynamicFieldTemplate entity = modelService.findByUuid(uuid, DynamicFieldTemplate.class);
 		DynamicFieldTemplateDto dto = modelService.getDto(entity, DynamicFieldTemplateDto.class, new DtoConverterContext(ConvertRelationType.ALL));
-		
+
 		return dto;
 	}
 
 	@Override
 	public DynamicFieldTemplateDto findOneProperties(Map<String, Object> properties) throws Exception {
-		DynamicFieldTemplate entity = dynamicFieldTemplateService.findOneEntityByProperties(properties);
+		DynamicFieldTemplate entity = modelService.findByProperties(properties, DynamicFieldTemplate.class);
 		DynamicFieldTemplateDto dto = modelService.getDto(entity, DynamicFieldTemplateDto.class);
-		
+
 		return dto;
 	}
 
@@ -56,7 +57,7 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 	public DynamicFieldTemplateDto save(DynamicFieldTemplateDto dto) throws BusinessException {
 		try {
 			DynamicFieldTemplate entity = modelService.getEntity(dto, DynamicFieldTemplate.class);
-			entity = (DynamicFieldTemplate) dynamicFieldTemplateService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, DynamicFieldTemplate.class);
 
 			return modelService.getDto(entity, DynamicFieldTemplateDto.class);
 		} catch (Exception e) {
@@ -66,12 +67,12 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		dynamicFieldTemplateService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, DynamicFieldTemplate.class);
 	}
 
 	@Override
 	public Page<DynamicFieldTemplateDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<DynamicFieldTemplate> page = dynamicFieldTemplateService.findEntityPage(dataTableRequest);
+		Page<DynamicFieldTemplate> page = modelService.findPage(DynamicFieldTemplateSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicFieldTemplate.class);
 
 		List<DynamicFieldTemplateDto> dtos = modelService.getDto(page.getContent(), DynamicFieldTemplateDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<DynamicFieldTemplateDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -79,7 +80,7 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 
 	@Override
 	public int count() throws Exception {
-		return dynamicFieldTemplateService.count();
+		return modelService.countAll(DynamicFieldTemplate.class);
 	}
 
 	@Override
@@ -106,6 +107,6 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 	@Override
 	public DynamicFieldTemplateDto createDto() throws Exception {
 
-		return modelService.getDto(dynamicFieldTemplateService.create(), DynamicFieldTemplateDto.class);
+		return modelService.getDto(modelService.create(DynamicFieldTemplate.class), DynamicFieldTemplateDto.class);
 	}
 }

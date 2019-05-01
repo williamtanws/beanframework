@@ -17,6 +17,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupService;
+import com.beanframework.user.specification.UserGroupSpecification;
 
 @Component
 public class UserGroupFacadeImpl implements UserGroupFacade {
@@ -29,7 +30,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public UserGroupDto findOneByUuid(UUID uuid) throws Exception {
-		UserGroup entity = userGroupService.findOneEntityByUuid(uuid);
+		UserGroup entity = modelService.findByUuid(uuid, UserGroup.class);
 		UserGroupDto dto = modelService.getDto(entity, UserGroupDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -37,7 +38,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public UserGroupDto findOneProperties(Map<String, Object> properties) throws Exception {
-		UserGroup entity = userGroupService.findOneEntityByProperties(properties);
+		UserGroup entity = modelService.findByProperties(properties, UserGroup.class);
 		UserGroupDto dto = modelService.getDto(entity, UserGroupDto.class);
 
 		return dto;
@@ -56,7 +57,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public UserGroupDto save(UserGroupDto dto) throws BusinessException {
 		try {
 			UserGroup entity = modelService.getEntity(dto, UserGroup.class);
-			entity = (UserGroup) userGroupService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, UserGroup.class);
 
 			return modelService.getDto(entity, UserGroupDto.class);
 		} catch (Exception e) {
@@ -66,12 +67,12 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		userGroupService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, UserGroup.class);
 	}
 
 	@Override
 	public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<UserGroup> page = userGroupService.findEntityPage(dataTableRequest);
+		Page<UserGroup> page = modelService.findPage(UserGroupSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserGroup.class);
 
 		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<UserGroupDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -79,7 +80,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public int count() throws Exception {
-		return userGroupService.count();
+		return modelService.countAll(UserGroup.class);
 	}
 
 	@Override

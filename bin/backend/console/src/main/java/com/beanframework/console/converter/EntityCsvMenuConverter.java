@@ -37,7 +37,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Menu.ID, source.getId());
 
-				Menu prototype = modelService.findOneEntityByProperties(properties, Menu.class);
+				Menu prototype = modelService.findByProperties(properties, Menu.class);
 
 				if (prototype != null) {
 
@@ -80,7 +80,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 				Map<String, Object> parentProperties = new HashMap<String, Object>();
 				parentProperties.put(Menu.ID, source.getParent());
 
-				Menu parent = modelService.findOneEntityByProperties(parentProperties, Menu.class);
+				Menu parent = modelService.findByProperties(parentProperties, Menu.class);
 
 				if (parent == null) {
 					LOGGER.error("Parent not exists: " + source.getParent());
@@ -116,7 +116,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 					if (add) {
 						Map<String, Object> dynamicFieldSlotProperties = new HashMap<String, Object>();
 						dynamicFieldSlotProperties.put(DynamicField.ID, dynamicFieldSlotId);
-						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneEntityByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
+						DynamicFieldSlot entityDynamicFieldSlot = modelService.findByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
 
 						if (entityDynamicFieldSlot != null) {
 							MenuField field = new MenuField();
@@ -135,7 +135,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 				for (int i = 0; i < userGroupIds.length; i++) {
 					Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 					userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-					UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+					UserGroup userGroup = modelService.findByProperties(userGroupProperties, UserGroup.class);
 
 					if (userGroup == null) {
 						LOGGER.error("UserGroup not exists: " + userGroupIds[i]);

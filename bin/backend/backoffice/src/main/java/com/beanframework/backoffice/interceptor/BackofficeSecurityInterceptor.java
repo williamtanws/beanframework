@@ -19,9 +19,9 @@ import org.springframework.web.util.UrlPathHelper;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
 
 public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 
@@ -30,7 +30,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 	UrlPathHelper urlPathHelper = new UrlPathHelper();
 
 	@Autowired
-	private LanguageService languageService;
+	private ModelService modelService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -53,7 +53,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 			sorts.put(Language.SORT, Sort.Direction.ASC);
 
-			List<Language> languages = languageService.findEntityBySorts(sorts);
+			List<Language> languages = modelService.findByPropertiesBySortByResult(null, sorts, null, null, Language.class);
 			modelAndView.getModelMap().addAttribute(BackofficeWebConstants.Model.MODULE_LANGUAGES, languages);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);

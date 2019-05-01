@@ -5,20 +5,20 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationService;
 
 public class ConfigBeanImpl implements ConfigBean {
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ModelService modelService;
 
 	@Override
 	public String get(String id) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
-		Configuration entity = configurationService.findOneEntityByProperties(properties);
+		Configuration entity = modelService.findByProperties(properties, Configuration.class);
 		if (entity == null) {
 			return null;
 		} else {
@@ -30,7 +30,7 @@ public class ConfigBeanImpl implements ConfigBean {
 	public boolean is(String id) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
-		Configuration entity = configurationService.findOneEntityByProperties(properties);
+		Configuration entity = modelService.findByProperties(properties, Configuration.class);
 		if (entity == null) {
 			return false;
 		} else {
@@ -42,7 +42,7 @@ public class ConfigBeanImpl implements ConfigBean {
 	public String get(String id, String defaultValue) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
-		Configuration entity = configurationService.findOneEntityByProperties(properties);
+		Configuration entity = modelService.findByProperties(properties, Configuration.class);
 		if (entity == null) {
 			return defaultValue;
 		} else {
@@ -54,7 +54,7 @@ public class ConfigBeanImpl implements ConfigBean {
 	public boolean is(String id, boolean defaultValue) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
-		Configuration entity = configurationService.findOneEntityByProperties(properties);
+		Configuration entity = modelService.findByProperties(properties, Configuration.class);
 		if (entity == null) {
 			return defaultValue;
 		} else {

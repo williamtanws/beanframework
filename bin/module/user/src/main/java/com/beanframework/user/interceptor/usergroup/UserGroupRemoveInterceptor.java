@@ -23,7 +23,7 @@ public class UserGroupRemoveInterceptor extends AbstractRemoveInterceptor<UserGr
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(User.USER_GROUPS + "." + UserGroup.UUID, model.getUuid());
-			List<User> entities = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, User.class);
+			List<User> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, User.class);
 
 			for (int i = 0; i < entities.size(); i++) {
 

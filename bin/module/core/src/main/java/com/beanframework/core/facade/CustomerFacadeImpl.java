@@ -42,7 +42,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
-		Customer entity = modelService.findOneEntityByUuid(uuid, Customer.class);
+		Customer entity = modelService.findByUuid(uuid, Customer.class);
 		CustomerDto dto = modelService.getDto(entity, CustomerDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -50,7 +50,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public CustomerDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Customer entity = modelService.findOneEntityByProperties(properties, Customer.class);
+		Customer entity = modelService.findByProperties(properties, Customer.class);
 		CustomerDto dto = modelService.getDto(entity, CustomerDto.class);
 
 		return dto;
@@ -78,7 +78,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 			Customer entity = modelService.getEntity(dto, Customer.class);
 			entity = modelService.saveEntity(entity, Customer.class);
-			auditorService.saveEntity(entity);
+			auditorService.saveEntityByUser(entity);
 
 			userService.saveProfilePicture(entity, dto.getProfilePicture());
 
@@ -95,7 +95,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Customer> page = modelService.findEntityPage(CustomerSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Customer.class);
+		Page<Customer> page = modelService.findPage(CustomerSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Customer.class);
 
 		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<CustomerDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -103,7 +103,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public int count() throws Exception {
-		return modelService.count(Customer.class);
+		return modelService.countAll(Customer.class);
 	}
 
 	@Override

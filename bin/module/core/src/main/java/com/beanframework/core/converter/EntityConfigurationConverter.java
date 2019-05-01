@@ -12,16 +12,12 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.core.data.ConfigurationDto;
 
 public class EntityConfigurationConverter implements EntityConverter<ConfigurationDto, Configuration> {
 
 	@Autowired
 	private ModelService modelService;
-	
-	@Autowired
-	private ConfigurationService configurationService;
 
 	@Override
 	public Configuration convert(ConfigurationDto source, EntityConverterContext context) throws ConverterException {
@@ -31,7 +27,7 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.UUID, source.getUuid());
-				Configuration prototype = configurationService.findOneEntityByProperties(properties);
+				Configuration prototype = modelService.findByProperties(properties, Configuration.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

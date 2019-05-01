@@ -2,71 +2,23 @@ package com.beanframework.user.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.data.DataTableRequest;
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.specification.UserPermissionSpecification;
 
 @Service
 public class UserPermissionServiceImpl implements UserPermissionService {
 
 	@Autowired
 	private ModelService modelService;
-	
-	@Override
-	public UserPermission findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, UserPermission.class);
-	}
-
-	@Override
-	public UserPermission findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, UserPermission.class);
-	}
-
-	@Override
-	public List<UserPermission> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, UserPermission.class);
-	}
-
-	@Override
-	public UserPermission saveEntity(UserPermission model) throws BusinessException {
-		return (UserPermission) modelService.saveEntity(model, UserPermission.class);
-	}
-
-	@Override
-	public void deleteByUuid(UUID uuid) throws BusinessException {
-
-		try {
-			UserPermission model = modelService.findOneEntityByUuid(uuid, UserPermission.class);
-			modelService.deleteByEntity(model, UserPermission.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-
-	@Override
-	public Page<UserPermission> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		return modelService.findEntityPage(UserPermissionSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserPermission.class);
-	}
-
-	@Override
-	public int count() throws Exception {
-		return modelService.count(UserPermission.class);
-
-	}
 
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -79,7 +31,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), UserPermission.class);
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), UserPermission.class);
 
 	}
 
@@ -90,6 +42,6 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 		if (dataTableRequest.getAuditCriterion() != null)
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
-		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), UserPermission.class);
+		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), UserPermission.class);
 	}
 }

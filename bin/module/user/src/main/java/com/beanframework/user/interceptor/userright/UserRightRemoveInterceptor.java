@@ -24,7 +24,7 @@ public class UserRightRemoveInterceptor extends AbstractRemoveInterceptor<UserRi
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(UserGroup.USER_AUTHORITIES + "." + UserAuthority.USER_RIGHT + "." + UserRight.UUID, model.getUuid());
-			List<UserGroup> entities = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, UserGroup.class);
+			List<UserGroup> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, UserGroup.class);
 
 			for (int i = 0; i < entities.size(); i++) {
 

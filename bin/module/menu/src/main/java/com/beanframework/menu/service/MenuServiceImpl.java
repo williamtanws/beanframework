@@ -12,16 +12,13 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.data.DataTableRequest;
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.specification.MenuSpecification;
 import com.beanframework.user.domain.UserGroup;
 
 @Service
@@ -29,33 +26,6 @@ public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Override
-	public Menu findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Menu.class);
-	}
-
-	@Override
-	public Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Menu.class);
-	}
-
-	@Override
-	public Menu saveEntity(Menu model) throws BusinessException {
-		return (Menu) modelService.saveEntity(model, Menu.class);
-	}
-
-	@Override
-	public void deleteByUuid(UUID uuid) throws BusinessException {
-
-		try {
-			Menu model = modelService.findOneEntityByUuid(uuid, Menu.class);
-			modelService.deleteByEntity(model, Menu.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
 
 	@Transactional
 	@Override
@@ -83,7 +53,7 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	private void setParentNullAndSortByUuid(UUID fromUuid, int toIndex) throws Exception {
-		Menu menu = modelService.findOneEntityByUuid(fromUuid, Menu.class);
+		Menu menu = modelService.findByUuid(fromUuid, Menu.class);
 		menu.setParent(null);
 		menu.setSort(toIndex);
 		modelService.saveEntity(menu, Menu.class);
@@ -97,12 +67,12 @@ public class MenuServiceImpl implements MenuService {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
 
-		return modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
+		return modelService.findByPropertiesBySortByResult(properties, sorts, null, null, Menu.class);
 	}
 
 	private void updateParentByUuid(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
-		Menu menu = modelService.findOneEntityByUuid(fromUuid, Menu.class);
-		Menu parent = modelService.findOneEntityByUuid(toUuid, Menu.class);
+		Menu menu = modelService.findByUuid(fromUuid, Menu.class);
+		Menu parent = modelService.findByUuid(toUuid, Menu.class);
 		parent.getChilds().add(menu);
 		menu.setParent(parent);
 		menu.setSort(toIndex);
@@ -117,7 +87,7 @@ public class MenuServiceImpl implements MenuService {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
 
-		return modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
+		return modelService.findByPropertiesBySortByResult(properties, sorts, null, null, Menu.class);
 	}
 
 	private List<Menu> changePosition(List<Menu> menuList, UUID fromId, int toIndex) {
@@ -165,7 +135,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<Menu> findEntityMenuTree(boolean enabled) throws Exception {
+	public List<Menu> findMenuTree(boolean enabled) throws Exception {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.PARENT, null);
@@ -177,7 +147,7 @@ public class MenuServiceImpl implements MenuService {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
 
-		List<Menu> menuTree = modelService.findEntityByPropertiesAndSorts(properties, sorts, null, null, Menu.class);
+		List<Menu> menuTree = modelService.findByPropertiesBySortByResult(properties, sorts, null, null, Menu.class);
 		
 		for (Menu model : menuTree) {
 			Hibernate.initialize(model.getChilds());
@@ -208,16 +178,6 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public Page<Menu> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		return modelService.findEntityPage(MenuSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Menu.class);
-	}
-
-	@Override
-	public int count() throws Exception {
-		return modelService.count(Menu.class);
-	}
-
-	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
 
 		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
@@ -228,7 +188,7 @@ public class MenuServiceImpl implements MenuService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
 
 	}
 
@@ -239,6 +199,6 @@ public class MenuServiceImpl implements MenuService {
 		if (dataTableRequest.getAuditCriterion() != null)
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
-		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
+		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
 	}
 }

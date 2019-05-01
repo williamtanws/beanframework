@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobEnum;
-import com.beanframework.cronjob.service.CronjobService;
 import com.beanframework.cronjob.service.QuartzManager;
 
 @Component
@@ -25,7 +25,7 @@ public class CronjobGlobalListener implements JobListener {
 	public static final String LISTENER_NAME = "quartJobSchedulingListener";
 
 	@Autowired
-	private CronjobService cronjobService;
+	private ModelService modelService;
 
 	@Override
 	public String getName() {
@@ -39,13 +39,13 @@ public class CronjobGlobalListener implements JobListener {
 
 			UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
 
-			Cronjob cronjob = cronjobService.findOneEntityByUuid(uuid);
+			Cronjob cronjob = modelService.findByUuid(uuid, Cronjob.class);
 			if (cronjob != null) {
 				cronjob.setStatus(CronjobEnum.Status.RUNNING);
 				cronjob.setLastStartExecutedDate(new Date());
 				cronjob.setLastModifiedBy(null);
 
-				cronjobService.saveEntity(cronjob);
+				modelService.saveEntity(cronjob, Cronjob.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,13 +60,13 @@ public class CronjobGlobalListener implements JobListener {
 
 			UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
 
-			Cronjob cronjob = cronjobService.findOneEntityByUuid(uuid);
+			Cronjob cronjob = modelService.findByUuid(uuid, Cronjob.class);
 			cronjob.setStatus(CronjobEnum.Status.ABORTED);
 			cronjob.setResult(CronjobEnum.Result.ERROR);
 			cronjob.setLastFinishExecutedDate(new Date());
 			cronjob.setLastModifiedBy(null);
 
-			cronjobService.saveEntity(cronjob);
+			modelService.saveEntity(cronjob, Cronjob.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error(e.getMessage(), e);
@@ -80,7 +80,7 @@ public class CronjobGlobalListener implements JobListener {
 		UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
 
 		try {
-			Cronjob cronjob = cronjobService.findOneEntityByUuid(uuid);
+			Cronjob cronjob = modelService.findByUuid(uuid, Cronjob.class);
 
 			if (cronjob != null) {
 				String message = null;
@@ -116,7 +116,7 @@ public class CronjobGlobalListener implements JobListener {
 				cronjob.setLastFinishExecutedDate(new Date());
 				cronjob.setLastModifiedBy(null);
 
-				cronjobService.saveEntity(cronjob);
+				modelService.saveEntity(cronjob, Cronjob.class);
 			}
 
 		} catch (Exception e) {

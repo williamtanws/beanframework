@@ -31,7 +31,7 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean {
 	@Override
 	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
 
-		List<Menu> entities = menuService.findEntityMenuTree(true);
+		List<Menu> entities = menuService.findMenuTree(true);
 		List<MenuDto> menuDtoTree = modelService.getDto(entities, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		List<UserGroup> userGroups = userService.getUserGroupsByCurrentUser();

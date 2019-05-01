@@ -3,7 +3,6 @@ package com.beanframework.user.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,10 +13,6 @@ import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
 
 public interface UserService {
-
-	User findOneEntityByUuid(UUID uuid) throws Exception;
-
-	User findOneEntityByProperties(Map<String, Object> properties) throws Exception;
 
 	User findAuthenticate(String id, String password) throws Exception;
 	

@@ -51,7 +51,7 @@ public class MenuUserGroupRelationshipRemoveInterceptor extends AbstractRemoveIn
 		};
 
 		try {
-			List<Menu> entities = modelService.findEntityBySpecification(specification, null, Menu.class);
+			List<Menu> entities = modelService.findBySpecificationBySort(specification, null, Menu.class);
 
 			for (int i = 0; i < entities.size(); i++) {
 

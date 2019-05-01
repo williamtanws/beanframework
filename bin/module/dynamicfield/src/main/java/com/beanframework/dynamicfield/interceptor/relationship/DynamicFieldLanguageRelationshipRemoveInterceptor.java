@@ -24,7 +24,7 @@ public class DynamicFieldLanguageRelationshipRemoveInterceptor extends AbstractR
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(DynamicField.LANGUAGE + "." + Language.UUID, model.getUuid());
-			List<DynamicField> entities = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, DynamicField.class);
+			List<DynamicField> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, DynamicField.class);
 
 			for (int i = 0; i < entities.size(); i++) {
 

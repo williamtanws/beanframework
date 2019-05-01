@@ -16,7 +16,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.service.DynamicFieldService;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.language.domain.Language;
 
@@ -24,9 +23,6 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private DynamicFieldService dynamicFieldService;
 
 	@Override
 	public DynamicField convert(DynamicFieldDto source, EntityConverterContext context) throws ConverterException {
@@ -36,7 +32,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicField.UUID, source.getUuid());
-				DynamicField prototype = dynamicFieldService.findOneEntityByProperties(properties);
+				DynamicField prototype = modelService.findByProperties(properties, DynamicField.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
@@ -103,7 +99,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 				prototype.setLanguage(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				Language entityLanguage = modelService.findOneEntityByUuid(UUID.fromString(source.getTableSelectedLanguage()), Language.class);
+				Language entityLanguage = modelService.findByUuid(UUID.fromString(source.getTableSelectedLanguage()), Language.class);
 
 				if (entityLanguage != null) {
 
@@ -140,7 +136,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 						}
 
 						if (add) {
-							Enumeration entityEnumerations = modelService.findOneEntityByUuid(UUID.fromString(source.getTableEnumerations()[i]), Enumeration.class);
+							Enumeration entityEnumerations = modelService.findByUuid(UUID.fromString(source.getTableEnumerations()[i]), Enumeration.class);
 							prototype.getEnumerations().add(entityEnumerations);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}

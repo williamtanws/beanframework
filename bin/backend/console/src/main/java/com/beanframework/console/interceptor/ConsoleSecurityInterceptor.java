@@ -16,8 +16,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
 import com.beanframework.admin.domain.Admin;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.LicenseWebConstants;
 import com.mchange.v1.lang.BooleanUtils;
@@ -27,7 +27,7 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 	protected static final Logger logger = LoggerFactory.getLogger(ConsoleSecurityInterceptor.class);
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ModelService modelService;
 
 	@Value(ConsoleWebConstants.Path.LOGIN)
 	private String PATH_LOGIN;
@@ -48,7 +48,7 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 
-				Configuration license = configurationService.findOneEntityByProperties(properties);
+				Configuration license = modelService.findByProperties(properties, Configuration.class);
 
 				if (license == null || BooleanUtils.parseBoolean(license.getValue()) == false) {
 					response.sendRedirect(PATH_LICENSE);

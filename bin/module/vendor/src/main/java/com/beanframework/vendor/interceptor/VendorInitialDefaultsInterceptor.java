@@ -12,11 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
-import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.vendor.VendorConstants;
 import com.beanframework.vendor.domain.Vendor;
@@ -26,10 +25,7 @@ public class VendorInitialDefaultsInterceptor extends AbstractInitialDefaultsInt
 	protected static Logger LOGGER = LoggerFactory.getLogger(VendorInitialDefaultsInterceptor.class);
 
 	@Autowired
-	private DynamicFieldTemplateService dynamicFieldTemplateService;
-
-	@Autowired
-	private ConfigurationService configurationService;
+	private ModelService modelService;
 
 	@Value(VendorConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
 	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
@@ -43,15 +39,15 @@ public class VendorInitialDefaultsInterceptor extends AbstractInitialDefaultsInt
 		model.setCredentialsNonExpired(true);
 
 		try {
-			Map<String, Object> configurationProperties = new HashMap<String, Object>();
-			configurationProperties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
-			Configuration configuration = configurationService.findOneEntityByProperties(configurationProperties);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
+			Configuration configuration = modelService.findByProperties(properties, Configuration.class);
 
 			if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
-				Map<String, Object> properties = new HashMap<String, Object>();
+				properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldTemplate.ID, configuration.getValue());
 
-				DynamicFieldTemplate dynamicFieldTemplate = dynamicFieldTemplateService.findOneEntityByProperties(properties);
+				DynamicFieldTemplate dynamicFieldTemplate = modelService.findByProperties(properties, DynamicFieldTemplate.class);
 
 				if (dynamicFieldTemplate != null) {
 

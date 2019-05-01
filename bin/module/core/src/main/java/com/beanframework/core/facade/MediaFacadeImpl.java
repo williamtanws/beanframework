@@ -30,13 +30,13 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Override
 	public MediaDto findOneByUuid(UUID uuid) throws Exception {
-		Media entity = modelService.findOneEntityByUuid(uuid, Media.class);
+		Media entity = modelService.findByUuid(uuid, Media.class);
 		return modelService.getDto(entity, MediaDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public MediaDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Media entity = modelService.findOneEntityByProperties(properties, Media.class);
+		Media entity = modelService.findByProperties(properties, Media.class);
 		return modelService.getDto(entity, MediaDto.class);
 	}
 
@@ -68,7 +68,7 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Override
 	public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Media> page = modelService.findEntityPage(MediaSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Media.class);
+		Page<Media> page = modelService.findPage(MediaSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Media.class);
 
 		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<MediaDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -76,7 +76,7 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Override
 	public int count() throws Exception {
-		return modelService.count(Media.class);
+		return modelService.countAll(Media.class);
 	}
 
 	@Override

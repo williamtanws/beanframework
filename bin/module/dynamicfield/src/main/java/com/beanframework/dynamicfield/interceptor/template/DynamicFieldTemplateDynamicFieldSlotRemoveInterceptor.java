@@ -24,7 +24,7 @@ public class DynamicFieldTemplateDynamicFieldSlotRemoveInterceptor extends Abstr
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(DynamicFieldTemplate.DYNAMIC_FIELD_SLOTS + "." + DynamicFieldSlot.UUID, model.getUuid());
-			List<DynamicFieldTemplate> entities = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, DynamicFieldTemplate.class);
+			List<DynamicFieldTemplate> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, DynamicFieldTemplate.class);
 
 			for (int i = 0; i < entities.size(); i++) {
 

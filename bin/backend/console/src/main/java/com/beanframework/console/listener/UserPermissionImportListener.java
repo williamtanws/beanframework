@@ -156,7 +156,7 @@ public class UserPermissionImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(UserPermission.ID, csv.getId());
 
-			UserPermission entity = modelService.findOneEntityByProperties(properties, UserPermission.class);
+			UserPermission entity = modelService.findByProperties(properties, UserPermission.class);
 			modelService.deleteByEntity(entity, UserPermission.class);
 		}
 	}

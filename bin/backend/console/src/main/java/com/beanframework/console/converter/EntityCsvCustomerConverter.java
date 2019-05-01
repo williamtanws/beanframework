@@ -41,7 +41,7 @@ public class EntityCsvCustomerConverter implements EntityCsvConverter<CustomerCs
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Customer.ID, source.getId());
 
-				Customer prototype = modelService.findOneEntityByProperties(properties, Customer.class);
+				Customer prototype = modelService.findByProperties(properties, Customer.class);
 
 				if (prototype != null) {
 
@@ -97,7 +97,7 @@ public class EntityCsvCustomerConverter implements EntityCsvConverter<CustomerCs
 					if (add) {
 						Map<String, Object> dynamicFieldSlotProperties = new HashMap<String, Object>();
 						dynamicFieldSlotProperties.put(DynamicField.ID, dynamicFieldSlotId);
-						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneEntityByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
+						DynamicFieldSlot entityDynamicFieldSlot = modelService.findByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
 
 						if (entityDynamicFieldSlot != null) {
 							UserField field = new UserField();
@@ -123,7 +123,7 @@ public class EntityCsvCustomerConverter implements EntityCsvConverter<CustomerCs
 					if (add) {
 						Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 						userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-						UserGroup userGroup = modelService.findOneEntityByProperties(userGroupProperties, UserGroup.class);
+						UserGroup userGroup = modelService.findByProperties(userGroupProperties, UserGroup.class);
 
 						if (userGroup == null) {
 							LOGGER.error("UserGroup ID not exists: " + userGroupIds[i]);

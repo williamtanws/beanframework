@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.cms.domain.Site;
-import com.beanframework.cms.service.SiteService;
 import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -19,9 +18,6 @@ public class EntitySiteConverter implements EntityConverter<SiteDto, Site> {
 
 	@Autowired
 	private ModelService modelService;
-	
-	@Autowired
-	private SiteService siteService;
 
 	@Override
 	public Site convert(SiteDto source, EntityConverterContext context) throws ConverterException {
@@ -31,7 +27,7 @@ public class EntitySiteConverter implements EntityConverter<SiteDto, Site> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Site.UUID, source.getUuid());
-				Site prototype = siteService.findOneEntityByProperties(properties);
+				Site prototype = modelService.findByProperties(properties, Site.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

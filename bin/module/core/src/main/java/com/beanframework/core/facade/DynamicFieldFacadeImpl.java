@@ -16,7 +16,9 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.service.DynamicFieldService;
+import com.beanframework.dynamicfield.specification.DynamicFieldSlotSpecification;
 
 @Component
 public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
@@ -29,7 +31,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Override
 	public DynamicFieldDto findOneByUuid(UUID uuid) throws Exception {
-		DynamicField entity = dynamicFieldService.findOneEntityByUuid(uuid);
+		DynamicField entity = modelService.findByUuid(uuid, DynamicField.class);
 		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -37,7 +39,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Override
 	public DynamicFieldDto findOneProperties(Map<String, Object> properties) throws Exception {
-		DynamicField entity = dynamicFieldService.findOneEntityByProperties(properties);
+		DynamicField entity = modelService.findByProperties(properties, DynamicField.class);
 		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class);
 
 		return dto;
@@ -56,7 +58,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	public DynamicFieldDto save(DynamicFieldDto dto) throws BusinessException {
 		try {
 			DynamicField entity = modelService.getEntity(dto, DynamicField.class);
-			entity = (DynamicField) dynamicFieldService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, DynamicField.class);
 
 			return modelService.getDto(entity, DynamicFieldDto.class);
 		} catch (Exception e) {
@@ -66,12 +68,12 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		dynamicFieldService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, DynamicField.class);
 	}
 
 	@Override
 	public Page<DynamicFieldDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<DynamicField> page = dynamicFieldService.findEntityPage(dataTableRequest);
+		Page<DynamicField> page = modelService.findPage(DynamicFieldSlotSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicFieldSlot.class);
 
 		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), DynamicFieldDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<DynamicFieldDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -79,7 +81,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Override
 	public int count() throws Exception {
-		return dynamicFieldService.count();
+		return modelService.countAll(DynamicField.class);
 	}
 
 	@Override

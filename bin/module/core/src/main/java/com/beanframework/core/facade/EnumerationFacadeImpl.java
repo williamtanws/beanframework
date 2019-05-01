@@ -17,6 +17,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.enumuration.service.EnumerationService;
+import com.beanframework.enumuration.specification.EnumerationSpecification;
 
 @Component
 public class EnumerationFacadeImpl implements EnumerationFacade {
@@ -29,14 +30,14 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 
 	@Override
 	public EnumerationDto findOneByUuid(UUID uuid) throws Exception {
-		Enumeration entity = enumerationService.findOneEntityByUuid(uuid);
+		Enumeration entity = modelService.findByUuid(uuid, Enumeration.class);
 
 		return modelService.getDto(entity, EnumerationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public EnumerationDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Enumeration entity = enumerationService.findOneEntityByProperties(properties);
+		Enumeration entity = modelService.findByProperties(properties, Enumeration.class);
 
 		return modelService.getDto(entity, EnumerationDto.class);
 	}
@@ -54,7 +55,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	public EnumerationDto save(EnumerationDto dto) throws BusinessException {
 		try {
 			Enumeration entity = modelService.getEntity(dto, Enumeration.class);
-			entity = (Enumeration) enumerationService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Enumeration.class);
 
 			return modelService.getDto(entity, EnumerationDto.class);
 		} catch (Exception e) {
@@ -64,12 +65,12 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		enumerationService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, Enumeration.class);
 	}
 
 	@Override
 	public Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Enumeration> page = enumerationService.findEntityPage(dataTableRequest);
+		Page<Enumeration> page = modelService.findPage(EnumerationSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Enumeration.class);
 
 		List<EnumerationDto> dtos = modelService.getDto(page.getContent(), EnumerationDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<EnumerationDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -77,7 +78,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 
 	@Override
 	public int count() throws Exception {
-		return enumerationService.count();
+		return modelService.countAll(Enumeration.class);
 	}
 
 	@Override
@@ -103,7 +104,6 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 
 	@Override
 	public EnumerationDto createDto() throws Exception {
-
 		return modelService.getDto(modelService.create(Enumeration.class), EnumerationDto.class);
 	}
 

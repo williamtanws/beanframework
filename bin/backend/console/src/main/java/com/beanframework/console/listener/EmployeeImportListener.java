@@ -153,7 +153,7 @@ public class EmployeeImportListener extends ImportListener {
 		for (EmployeeCsv csv : csvList) {
 
 			Employee model = converter.convert(csv);
-			model = employeeService.saveEntity(model);
+			model = modelService.saveEntity(model, Employee.class);
 
 			ClassPathResource resource = new ClassPathResource(csv.getProfilePicture());
 			employeeService.saveProfilePicture(model, resource.getInputStream());
@@ -165,7 +165,7 @@ public class EmployeeImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Employee.ID, csv.getId());
 
-			Employee entity = modelService.findOneEntityByProperties(properties, Employee.class);
+			Employee entity = modelService.findByProperties(properties, Employee.class);
 			modelService.deleteByEntity(entity, Employee.class);
 		}
 	}

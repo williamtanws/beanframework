@@ -20,6 +20,8 @@ import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
+import com.beanframework.employee.specification.EmployeeSpecification;
+import com.beanframework.user.service.AuditorService;
 
 @Component
 public class EmployeeFacadeImpl implements EmployeeFacade {
@@ -29,23 +31,26 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private AuditorService auditorService;
 
 	@Autowired
 	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
 
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
-		Employee entity = employeeService.findOneEntityByUuid(uuid);
+		Employee entity = modelService.findByUuid(uuid, Employee.class);
 		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class, new DtoConverterContext(ConvertRelationType.ALL));
-		
+
 		return dto;
 	}
 
 	@Override
 	public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Employee entity = employeeService.findOneEntityByProperties(properties);
+		Employee entity = modelService.findByProperties(properties, Employee.class);
 		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
-		
+
 		return dto;
 	}
 
@@ -70,7 +75,8 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			}
 
 			Employee entity = modelService.getEntity(dto, Employee.class);
-			entity = (Employee) employeeService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Employee.class);
+			auditorService.saveEntityByUser(entity);
 
 			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
 
@@ -82,13 +88,13 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		employeeService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, Employee.class);
 		employeeService.deleteEmployeeProfilePictureByUuid(uuid);
 	}
 
 	@Override
 	public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Employee> page = employeeService.findEntityPage(dataTableRequest);
+		Page<Employee> page = modelService.findPage(EmployeeSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Employee.class);
 
 		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -96,7 +102,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public int count() throws Exception {
-		return employeeService.count();
+		return modelService.countAll(Employee.class);
 	}
 
 	@Override
@@ -128,7 +134,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			}
 			Employee entity = entityEmployeeProfileConverter.convert(dto);
 
-			entity = (Employee) employeeService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Employee.class);
 			employeeService.updatePrincipal(entity);
 			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
 
@@ -143,7 +149,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public EmployeeDto getCurrentUser() throws Exception {
 		Employee entity = employeeService.getCurrentUser();
 		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
-		
+
 		return dto;
 	}
 
@@ -170,7 +176,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public EmployeeDto createDto() throws Exception {
-
 		return modelService.getDto(modelService.create(Employee.class), EmployeeDto.class);
 	}
 }

@@ -64,16 +64,6 @@ public class UserServiceImpl implements UserService {
 	public int USER_PROFILE_PICTURE_THUMBNAIL_HEIGHT;
 
 	@Override
-	public User findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, User.class);
-	}
-
-	@Override
-	public User findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, User.class);
-	}
-
-	@Override
 	public User findAuthenticate(String id, String password) throws Exception {
 
 		if (StringUtils.isBlank(id) || StringUtils.isBlank(password)) {
@@ -83,7 +73,7 @@ public class UserServiceImpl implements UserService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(User.ID, id);
 
-		User entity = findOneEntityByProperties(properties);
+		User entity = modelService.findByProperties(properties, User.class);
 
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
@@ -120,7 +110,7 @@ public class UserServiceImpl implements UserService {
 		if (auth != null) {
 
 			User principal = (User) auth.getPrincipal();
-			return findOneEntityByUuid(principal.getUuid());
+			return modelService.findByUuid(principal.getUuid(), User.class);
 		} else {
 			return null;
 		}
@@ -177,7 +167,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Set<GrantedAuthority> getAuthorities(UUID userUuid, String userGroupId) throws Exception {
 
-		User user = modelService.findOneEntityByUuid(userUuid, User.class);
+		User user = modelService.findByUuid(userUuid, User.class);
 
 		Hibernate.initialize(user.getUserGroups());
 
@@ -217,7 +207,7 @@ public class UserServiceImpl implements UserService {
 
 			User principal = (User) auth.getPrincipal();
 
-			User user = modelService.findOneEntityByUuid(principal.getUuid(), User.class);
+			User user = modelService.findByUuid(principal.getUuid(), User.class);
 
 			Hibernate.initialize(user.getUserGroups());
 
@@ -252,7 +242,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Set<String> getAllUserGroupUuidsByUserUuid(UUID uuid) throws Exception {
 	
-		User user = modelService.findOneEntityByUuid(uuid, User.class);
+		User user = modelService.findByUuid(uuid, User.class);
 
 		Hibernate.initialize(user.getUserGroups());
 

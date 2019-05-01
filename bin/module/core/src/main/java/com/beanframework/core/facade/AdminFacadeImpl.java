@@ -35,14 +35,14 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
 
-		Admin entity = modelService.findOneEntityByUuid(uuid, Admin.class);
+		Admin entity = modelService.findByUuid(uuid, Admin.class);
 
 		return modelService.getDto(entity, AdminDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public AdminDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Admin entity = modelService.findOneEntityByProperties(properties, Admin.class);
+		Admin entity = modelService.findByProperties(properties, Admin.class);
 
 		return modelService.getDto(entity, AdminDto.class);
 	}
@@ -61,7 +61,7 @@ public class AdminFacadeImpl implements AdminFacade {
 		try {
 			Admin entity = modelService.getEntity(dto, Admin.class);
 			entity = (Admin) modelService.saveEntity(entity, Admin.class);
-			auditorService.saveEntity(entity);
+			auditorService.saveEntityByUser(entity);
 
 			return modelService.getDto(entity, AdminDto.class);
 		} catch (Exception e) {
@@ -72,7 +72,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		try {
-			modelService.findOneEntityByUuid(uuid, Admin.class);
+			modelService.findByUuid(uuid, Admin.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -80,7 +80,7 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Admin> page = modelService.findEntityPage(AdminSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Admin.class);
+		Page<Admin> page = modelService.findPage(AdminSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Admin.class);
 
 		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -88,7 +88,7 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public int count() throws Exception {
-		return modelService.count(Admin.class);
+		return modelService.countAll(Admin.class);
 	}
 
 	@Override

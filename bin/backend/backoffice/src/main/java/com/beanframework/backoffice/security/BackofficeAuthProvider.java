@@ -28,8 +28,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
 import com.beanframework.user.service.UserService;
@@ -55,7 +55,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 	private EmployeeService employeeService;
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ModelService modelService;
 
 	@Value(BackofficeWebConstants.Configuration.USERGROUP)
 	private String BACKOFFICE_CONFIGURATION_USERGROUP;
@@ -118,7 +118,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, BACKOFFICE_CONFIGURATION_USERGROUP);
-		Configuration usergroupConfiguration = configurationService.findOneEntityByProperties(properties);
+		Configuration usergroupConfiguration = modelService.findByProperties(properties, Configuration.class);
 		if (usergroupConfiguration != null) {
 			Set<String> usergroupIds = new HashSet<String>(Arrays.asList(usergroupConfiguration.getValue().split(BACKOFFICE_CONFIGURATION_SPLITTER)));
 

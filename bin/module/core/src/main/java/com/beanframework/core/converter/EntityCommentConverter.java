@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.comment.domain.Comment;
-import com.beanframework.comment.service.CommentService;
 import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -20,9 +19,6 @@ public class EntityCommentConverter implements EntityConverter<CommentDto, Comme
 
 	@Autowired
 	private ModelService modelService;
-	
-	@Autowired
-	private CommentService commentService;
 
 	@Override
 	public Comment convert(CommentDto source, EntityConverterContext context) throws ConverterException {
@@ -32,7 +28,7 @@ public class EntityCommentConverter implements EntityConverter<CommentDto, Comme
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Comment.UUID, source.getUuid());
-				Comment prototype = commentService.findOneEntityByProperties(properties);
+				Comment prototype = modelService.findByProperties(properties, Comment.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
@@ -70,7 +66,7 @@ public class EntityCommentConverter implements EntityConverter<CommentDto, Comme
 				prototype.setUser(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			} else if (prototype.getUser().getUuid().equals(source.getUser().getUuid()) == false) {
-				User entityUser = modelService.findOneEntityByUuid(source.getUser().getUuid(), User.class);
+				User entityUser = modelService.findByUuid(source.getUser().getUuid(), User.class);
 				
 				if(entityUser != null) {
 					prototype.setUser(entityUser);
