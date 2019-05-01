@@ -13,8 +13,6 @@ import com.beanframework.language.domain.Language;
 
 public interface LanguageService {
 
-	Language create() throws Exception;
-
 	Language findOneEntityByUuid(UUID uuid) throws Exception;
 
 	Language findOneEntityByProperties(Map<String, Object> properties) throws Exception;

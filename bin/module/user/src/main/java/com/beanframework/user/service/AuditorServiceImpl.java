@@ -30,11 +30,6 @@ public class AuditorServiceImpl implements AuditorService {
 	private ModelService modelService;
 
 	@Override
-	public Auditor create() throws Exception {
-		return modelService.create(Auditor.class);
-	}
-
-	@Override
 	public Auditor findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Auditor.class);
 	}

@@ -13,8 +13,6 @@ import com.beanframework.user.domain.UserPermission;
 
 public interface UserPermissionService {
 
-	UserPermission create() throws Exception;
-
 	UserPermission findOneEntityByUuid(UUID uuid) throws Exception;
 
 	UserPermission findOneEntityByProperties(Map<String, Object> properties) throws Exception;

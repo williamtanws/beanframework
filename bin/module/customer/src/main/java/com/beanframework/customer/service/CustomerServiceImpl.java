@@ -1,102 +1,27 @@
 package com.beanframework.customer.service;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.specification.CustomerSpecification;
-import com.beanframework.user.service.AuditorService;
-import com.beanframework.user.service.UserService;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private AuditorService auditorService;
-	
-	@Autowired
-	private UserService userService;
-
-	@Override
-	public Customer create() throws Exception {
-		return modelService.create(Customer.class);
-	}
-
-	@Override
-	public Customer findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Customer.class);
-	}
-
-	@Override
-	public Customer findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Customer.class);
-	}
-
-	@Override
-	public List<Customer> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Customer.class);
-	}
-
-	@Override
-	public Customer saveEntity(Customer model) throws BusinessException {
-		model = (Customer) modelService.saveEntity(model, Customer.class);
-		auditorService.saveEntity(model);
-		return model;
-	}
-
-	@Override
-	public void deleteByUuid(UUID uuid) throws BusinessException {
-
-		try {
-			Customer model = modelService.findOneEntityByUuid(uuid, Customer.class);
-			modelService.deleteByEntity(model, Customer.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-
-	@Override
-	public Page<Customer> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		return modelService.findEntityPage(CustomerSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Customer.class);
-	}
-
-	@Override
-	public int count() throws Exception {
-		return modelService.count(Customer.class);
-	}
-
-	@Override
-	public void saveProfilePicture(Customer model, MultipartFile picture) throws IOException {
-		userService.saveProfilePicture(model, picture);
-	}
-
-	@Override
-	public void saveProfilePicture(Customer model, InputStream inputStream) throws IOException {
-		userService.saveProfilePicture(model, inputStream);
-	}
 
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -130,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if (auth != null) {
 
 			Customer principal = (Customer) auth.getPrincipal();
-			return findOneEntityByUuid(principal.getUuid());
+			return modelService.findOneEntityByUuid(principal.getUuid(), Customer.class);
 		} else {
 			return null;
 		}

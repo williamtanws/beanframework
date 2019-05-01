@@ -13,8 +13,6 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 
 public interface DynamicFieldSlotService {
 
-	DynamicFieldSlot create() throws Exception;
-
 	DynamicFieldSlot findOneEntityByUuid(UUID uuid) throws Exception;
 
 	DynamicFieldSlot findOneEntityByProperties(Map<String, Object> properties) throws Exception;

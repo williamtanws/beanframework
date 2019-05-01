@@ -13,15 +13,11 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.media.domain.Media;
-import com.beanframework.media.service.MediaService;
 
 public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private MediaService mediaService;
 
 	@Override
 	public Media convert(MediaDto source, EntityConverterContext context) throws ConverterException {
@@ -31,7 +27,7 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Media.UUID, source.getUuid());
-				Media prototype = mediaService.findOneEntityByProperties(properties);
+				Media prototype = modelService.findOneEntityByProperties(properties, Media.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

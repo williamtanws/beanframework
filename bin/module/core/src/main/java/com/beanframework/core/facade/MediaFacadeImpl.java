@@ -17,6 +17,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.media.domain.Media;
 import com.beanframework.media.service.MediaService;
+import com.beanframework.media.specification.MediaSpecification;
 
 @Component
 public class MediaFacadeImpl implements MediaFacade {
@@ -29,13 +30,13 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Override
 	public MediaDto findOneByUuid(UUID uuid) throws Exception {
-		Media entity = mediaService.findOneEntityByUuid(uuid);
+		Media entity = modelService.findOneEntityByUuid(uuid, Media.class);
 		return modelService.getDto(entity, MediaDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public MediaDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Media entity = mediaService.findOneEntityByProperties(properties);
+		Media entity = modelService.findOneEntityByProperties(properties, Media.class);
 		return modelService.getDto(entity, MediaDto.class);
 	}
 
@@ -52,7 +53,7 @@ public class MediaFacadeImpl implements MediaFacade {
 	public MediaDto save(MediaDto dto) throws BusinessException {
 		try {
 			Media entity = modelService.getEntity(dto, Media.class);
-			entity = (Media) mediaService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Media.class);
 
 			return modelService.getDto(entity, MediaDto.class);
 		} catch (Exception e) {
@@ -62,12 +63,12 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		mediaService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, Media.class);
 	}
 
 	@Override
 	public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Media> page = mediaService.findEntityPage(dataTableRequest);
+		Page<Media> page = modelService.findEntityPage(MediaSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Media.class);
 
 		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<MediaDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -75,7 +76,7 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Override
 	public int count() throws Exception {
-		return mediaService.count();
+		return modelService.count(Media.class);
 	}
 
 	@Override
@@ -102,6 +103,6 @@ public class MediaFacadeImpl implements MediaFacade {
 	@Override
 	public MediaDto createDto() throws Exception {
 
-		return modelService.getDto(mediaService.create(), MediaDto.class);
+		return modelService.getDto(modelService.create(Media.class), MediaDto.class);
 	}
 }

@@ -26,11 +26,6 @@ public class LanguageServiceImpl implements LanguageService {
 	private ModelService modelService;
 
 	@Override
-	public Language create() throws Exception {
-		return modelService.create(Language.class);
-	}
-
-	@Override
 	public Language findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Language.class);
 	}

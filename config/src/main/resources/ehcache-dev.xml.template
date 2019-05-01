@@ -15,9 +15,6 @@
 	<cache name="ModelProperties" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 
-	<cache name="ModelPropertiesCount" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
-		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
-
 	<cache name="ModelPropertiesExists" maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="21600" timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU"
 		overflowToDisk="true" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" />
 

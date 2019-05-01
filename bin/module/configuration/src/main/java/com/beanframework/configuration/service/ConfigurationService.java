@@ -13,8 +13,6 @@ import com.beanframework.configuration.domain.Configuration;
 
 public interface ConfigurationService {
 
-	Configuration create() throws Exception;
-
 	Configuration findOneEntityByUuid(UUID uuid) throws Exception;
 
 	Configuration findOneEntityByProperties(Map<String, Object> properties) throws Exception;

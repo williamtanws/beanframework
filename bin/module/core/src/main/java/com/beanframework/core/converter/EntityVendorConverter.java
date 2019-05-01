@@ -19,15 +19,11 @@ import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.vendor.domain.Vendor;
-import com.beanframework.vendor.service.VendorService;
 
 public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor> {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private VendorService vendorService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -40,7 +36,7 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Vendor.UUID, source.getUuid());
-				Vendor prototype = vendorService.findOneEntityByProperties(properties);
+				Vendor prototype = modelService.findOneEntityByProperties(properties, Vendor.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

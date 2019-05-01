@@ -13,8 +13,6 @@ import com.beanframework.user.domain.UserRight;
 
 public interface UserRightService {
 
-	UserRight create() throws Exception;
-
 	UserRight findOneEntityByUuid(UUID uuid) throws Exception;
 
 	UserRight findOneEntityByProperties(Map<String, Object> properties) throws Exception;

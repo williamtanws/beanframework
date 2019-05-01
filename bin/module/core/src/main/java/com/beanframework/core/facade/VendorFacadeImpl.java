@@ -18,22 +18,31 @@ import com.beanframework.core.converter.EntityVendorProfileConverter;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.vendor.domain.Vendor;
 import com.beanframework.vendor.service.VendorService;
+import com.beanframework.vendor.specification.VendorSpecification;
+import com.beanframework.user.service.AuditorService;
+import com.beanframework.user.service.UserService;
 
 @Component
 public class VendorFacadeImpl implements VendorFacade {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private VendorService vendorService;
+	
+	@Autowired
+	private AuditorService auditorService;
 
 	@Autowired
 	private EntityVendorProfileConverter entityVendorProfileConverter;
 
 	@Override
 	public VendorDto findOneByUuid(UUID uuid) throws Exception {
-		Vendor entity = vendorService.findOneEntityByUuid(uuid);
+		Vendor entity = modelService.findOneEntityByUuid(uuid, Vendor.class);
 		VendorDto dto = modelService.getDto(entity, VendorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -41,7 +50,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public VendorDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Vendor entity = vendorService.findOneEntityByProperties(properties);
+		Vendor entity = modelService.findOneEntityByProperties(properties, Vendor.class);
 		VendorDto dto = modelService.getDto(entity, VendorDto.class);
 
 		return dto;
@@ -68,9 +77,10 @@ public class VendorFacadeImpl implements VendorFacade {
 			}
 
 			Vendor entity = modelService.getEntity(dto, Vendor.class);
-			entity = (Vendor) vendorService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Vendor.class);
+			auditorService.saveEntity(entity);
 
-			vendorService.saveProfilePicture(entity, dto.getProfilePicture());
+			userService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, VendorDto.class);
 		} catch (Exception e) {
@@ -80,12 +90,12 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		vendorService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, Vendor.class);
 	}
 
 	@Override
 	public Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Vendor> page = vendorService.findEntityPage(dataTableRequest);
+		Page<Vendor> page = modelService.findEntityPage(VendorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Vendor.class);
 
 		List<VendorDto> dtos = modelService.getDto(page.getContent(), VendorDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<VendorDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -93,7 +103,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public int count() throws Exception {
-		return vendorService.count();
+		return modelService.count(Vendor.class);
 	}
 
 	@Override
@@ -120,7 +130,7 @@ public class VendorFacadeImpl implements VendorFacade {
 	@Override
 	public VendorDto createDto() throws Exception {
 
-		return modelService.getDto(vendorService.create(), VendorDto.class);
+		return modelService.getDto(modelService.create(Vendor.class), VendorDto.class);
 	}
 
 	@Override
@@ -136,9 +146,9 @@ public class VendorFacadeImpl implements VendorFacade {
 			}
 			Vendor entity = entityVendorProfileConverter.convert(dto);
 
-			entity = (Vendor) vendorService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Vendor.class);
 			vendorService.updatePrincipal(entity);
-			vendorService.saveProfilePicture(entity, dto.getProfilePicture());
+			userService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, VendorDto.class);
 

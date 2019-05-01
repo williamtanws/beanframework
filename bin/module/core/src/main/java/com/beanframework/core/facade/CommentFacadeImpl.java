@@ -114,7 +114,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	@Override
 	public CommentDto createDto() throws Exception {
 
-		return modelService.getDto(commentService.create(), CommentDto.class);
+		return modelService.getDto(modelService.create(Comment.class), CommentDto.class);
 	}
 
 }

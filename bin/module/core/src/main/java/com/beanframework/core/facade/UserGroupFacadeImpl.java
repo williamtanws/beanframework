@@ -106,6 +106,6 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	@Override
 	public UserGroupDto createDto() throws Exception {
 
-		return modelService.getDto(userGroupService.create(), UserGroupDto.class);
+		return modelService.getDto(modelService.create(UserGroup.class), UserGroupDto.class);
 	}
 }

@@ -33,7 +33,7 @@ import com.beanframework.console.converter.EntityCsvCustomerConverter;
 import com.beanframework.console.csv.CustomerCsv;
 import com.beanframework.console.registry.ImportListener;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerService;
+import com.beanframework.user.service.UserService;
 
 public class CustomerImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(CustomerImportListener.class);
@@ -42,7 +42,7 @@ public class CustomerImportListener extends ImportListener {
 	private ModelService modelService;
 
 	@Autowired
-	private CustomerService customerService;
+	private UserService userService;
 
 	@Autowired
 	private EntityCsvCustomerConverter converter;
@@ -156,7 +156,7 @@ public class CustomerImportListener extends ImportListener {
 			model = (Customer) modelService.saveEntity(model, Customer.class);
 
 			ClassPathResource resource = new ClassPathResource(csv.getProfilePicture());
-			customerService.saveProfilePicture(model, resource.getInputStream());
+			userService.saveProfilePicture(model, resource.getInputStream());
 		}
 	}
 

@@ -26,11 +26,6 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 	private ModelService modelService;
 
 	@Override
-	public DynamicField create() throws Exception {
-		return modelService.create(DynamicField.class);
-	}
-
-	@Override
 	public DynamicField findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, DynamicField.class);
 	}

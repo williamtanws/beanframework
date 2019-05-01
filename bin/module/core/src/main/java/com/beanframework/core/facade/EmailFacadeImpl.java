@@ -128,6 +128,6 @@ public class EmailFacadeImpl implements EmailFacade {
 	@Override
 	public EmailDto createDto() throws Exception {
 
-		return modelService.getDto(emailService.create(), EmailDto.class);
+		return modelService.getDto(modelService.create(Email.class), EmailDto.class);
 	}
 }

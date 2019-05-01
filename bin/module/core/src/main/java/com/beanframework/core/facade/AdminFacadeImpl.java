@@ -11,12 +11,14 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.admin.service.AdminService;
+import com.beanframework.admin.specification.AdminSpecification;
 import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.AdminDto;
+import com.beanframework.user.service.AuditorService;
 
 @Component
 public class AdminFacadeImpl implements AdminFacade {
@@ -27,17 +29,20 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Autowired
 	private AdminService adminService;
 
+	@Autowired
+	private AuditorService auditorService;
+
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
 
-		Admin entity = adminService.findOneEntityByUuid(uuid);
+		Admin entity = modelService.findOneEntityByUuid(uuid, Admin.class);
 
 		return modelService.getDto(entity, AdminDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public AdminDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Admin entity = adminService.findOneEntityByProperties(properties);
+		Admin entity = modelService.findOneEntityByProperties(properties, Admin.class);
 
 		return modelService.getDto(entity, AdminDto.class);
 	}
@@ -55,7 +60,8 @@ public class AdminFacadeImpl implements AdminFacade {
 	public AdminDto save(AdminDto dto) throws BusinessException {
 		try {
 			Admin entity = modelService.getEntity(dto, Admin.class);
-			entity = (Admin) adminService.saveEntity(entity);
+			entity = (Admin) modelService.saveEntity(entity, Admin.class);
+			auditorService.saveEntity(entity);
 
 			return modelService.getDto(entity, AdminDto.class);
 		} catch (Exception e) {
@@ -65,12 +71,16 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		adminService.deleteByUuid(uuid);
+		try {
+			modelService.findOneEntityByUuid(uuid, Admin.class);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@Override
 	public Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Admin> page = adminService.findEntityPage(dataTableRequest);
+		Page<Admin> page = modelService.findEntityPage(AdminSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Admin.class);
 
 		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -78,7 +88,7 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public int count() throws Exception {
-		return adminService.count();
+		return modelService.count(Admin.class);
 	}
 
 	@Override
@@ -104,8 +114,7 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public AdminDto createDto() throws Exception {
-
-		return modelService.getDto(adminService.create(), AdminDto.class);
+		return modelService.getDto(modelService.create(Admin.class), AdminDto.class);
 	}
 
 }

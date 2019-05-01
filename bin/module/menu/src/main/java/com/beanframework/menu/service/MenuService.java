@@ -12,8 +12,6 @@ import com.beanframework.menu.domain.Menu;
 
 public interface MenuService {
 
-	Menu create() throws Exception;
-
 	Menu findOneEntityByUuid(UUID uuid) throws Exception;
 
 	Menu findOneEntityByProperties(Map<String, Object> properties) throws Exception;

@@ -18,16 +18,12 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerService;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityCustomerConverter implements EntityConverter<CustomerDto, Customer> {
 
 	@Autowired
 	private ModelService modelService;
-	
-	@Autowired
-	private CustomerService customerService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -40,7 +36,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Customer.UUID, source.getUuid());
-				Customer prototype = customerService.findOneEntityByProperties(properties);
+				Customer prototype = modelService.findOneEntityByProperties(properties, Customer.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
