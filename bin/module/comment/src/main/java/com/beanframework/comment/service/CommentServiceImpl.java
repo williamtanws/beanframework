@@ -24,12 +24,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Override
-	public Comment create() throws Exception {
-		return modelService.create(Comment.class);
-	}
-
+	
 	@Override
 	public Comment findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Comment.class);

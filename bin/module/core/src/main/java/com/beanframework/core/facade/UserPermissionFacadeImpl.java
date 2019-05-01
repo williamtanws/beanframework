@@ -116,7 +116,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Override
 	public UserPermissionDto createDto() throws Exception {
 
-		return modelService.getDto(userPermissionService.create(), UserPermissionDto.class);
+		return modelService.getDto(modelService.create(UserPermission.class), UserPermissionDto.class);
 	}
 
 }

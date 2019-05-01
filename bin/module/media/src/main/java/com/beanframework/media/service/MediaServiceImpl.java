@@ -3,7 +3,6 @@ package com.beanframework.media.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -14,17 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.media.domain.Media;
-import com.beanframework.media.specification.MediaSpecification;
 
 @Service
 public class MediaServiceImpl implements MediaService {
@@ -36,57 +31,6 @@ public class MediaServiceImpl implements MediaService {
 
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
-
-	@Override
-	public Media create() throws Exception {
-		return modelService.create(Media.class);
-	}
-
-	@Override
-	public Media findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Media.class);
-	}
-
-	@Override
-	public Media findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Media.class);
-	}
-
-	@Override
-	public List<Media> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Media.class);
-	}
-
-	@Override
-	public Media saveEntity(Media model) throws BusinessException {
-		return (Media) modelService.saveEntity(model, Media.class);
-	}
-
-	@Override
-	public void deleteByUuid(UUID uuid) throws BusinessException {
-
-		try {
-			Media model = modelService.findOneEntityByUuid(uuid, Media.class);
-
-			File mediaFolder = new File(MEDIA_LOCATION + File.separator + model.getFolder() + File.separator + model.getUuid().toString());
-			FileUtils.deleteQuietly(mediaFolder);
-
-			modelService.deleteByEntity(model, Media.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-
-	@Override
-	public Page<Media> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		return modelService.findEntityPage(MediaSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Media.class);
-	}
-
-	@Override
-	public int count() throws Exception {
-		return modelService.count(Media.class);
-	}
 
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -122,10 +66,5 @@ public class MediaServiceImpl implements MediaService {
 		file.transferTo(original);
 
 		return media;
-	}
-
-	@Override
-	public int countMediaByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.count(properties, Media.class);
 	}
 }

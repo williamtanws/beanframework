@@ -32,8 +32,8 @@ import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvVendorConverter;
 import com.beanframework.console.csv.VendorCsv;
 import com.beanframework.console.registry.ImportListener;
+import com.beanframework.user.service.UserService;
 import com.beanframework.vendor.domain.Vendor;
-import com.beanframework.vendor.service.VendorService;
 
 public class VendorImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(VendorImportListener.class);
@@ -42,7 +42,7 @@ public class VendorImportListener extends ImportListener {
 	private ModelService modelService;
 
 	@Autowired
-	private VendorService vendorService;
+	private UserService userService;
 
 	@Autowired
 	private EntityCsvVendorConverter converter;
@@ -156,7 +156,7 @@ public class VendorImportListener extends ImportListener {
 			model = (Vendor) modelService.saveEntity(model, Vendor.class);
 
 			ClassPathResource resource = new ClassPathResource(csv.getProfilePicture());
-			vendorService.saveProfilePicture(model, resource.getInputStream());
+			userService.saveProfilePicture(model, resource.getInputStream());
 		}
 	}
 

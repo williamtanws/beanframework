@@ -15,16 +15,12 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerService;
 
 @Component
 public class EntityCustomerProfileConverter implements EntityConverter<CustomerDto, Customer> {
 
 	@Autowired
 	private ModelService modelService;
-	
-	@Autowired
-	private CustomerService customerService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -37,7 +33,7 @@ public class EntityCustomerProfileConverter implements EntityConverter<CustomerD
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Customer.UUID, source.getUuid());
-				Customer prototype = customerService.findOneEntityByProperties(properties);
+				Customer prototype = modelService.findOneEntityByProperties(properties, Customer.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

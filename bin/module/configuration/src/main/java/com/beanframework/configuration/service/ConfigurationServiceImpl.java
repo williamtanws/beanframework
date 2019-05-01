@@ -26,11 +26,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	private ModelService modelService;
 
 	@Override
-	public Configuration create() throws Exception {
-		return modelService.create(Configuration.class);
-	}
-
-	@Override
 	public Configuration findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Configuration.class);
 	}

@@ -171,6 +171,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public EmployeeDto createDto() throws Exception {
 
-		return modelService.getDto(employeeService.create(), EmployeeDto.class);
+		return modelService.getDto(modelService.create(Employee.class), EmployeeDto.class);
 	}
 }

@@ -322,7 +322,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 		query.select(root).distinct(true);
 
-		if (sort.isSorted()) {
+		if (sort != null && sort.isSorted()) {
 			query.orderBy(toOrders(sort, root, builder));
 		}
 

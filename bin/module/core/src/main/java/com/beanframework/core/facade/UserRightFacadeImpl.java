@@ -116,6 +116,6 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	@Override
 	public UserRightDto createDto() throws Exception {
 
-		return modelService.getDto(userRightService.create(), UserRightDto.class);
+		return modelService.getDto(modelService.create(UserRight.class), UserRightDto.class);
 	}
 }

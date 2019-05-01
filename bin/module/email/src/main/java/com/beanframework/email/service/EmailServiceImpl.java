@@ -47,11 +47,6 @@ public class EmailServiceImpl implements EmailService {
 	private String fromEmail;
 
 	@Override
-	public Email create() throws Exception {
-		return modelService.create(Email.class);
-	}
-
-	@Override
 	public Email findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Email.class);
 	}

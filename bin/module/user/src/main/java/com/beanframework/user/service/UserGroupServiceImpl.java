@@ -26,11 +26,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 	private ModelService modelService;
 
 	@Override
-	public UserGroup create() throws Exception {
-		return modelService.create(UserGroup.class);
-	}
-
-	@Override
 	public UserGroup findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, UserGroup.class);
 	}

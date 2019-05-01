@@ -70,11 +70,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EntityManager entityManager;
 
 	@Override
-	public Employee create() throws Exception {
-		return modelService.create(Employee.class);
-	}
-
-	@Override
 	public Employee findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Employee.class);
 	}

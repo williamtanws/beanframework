@@ -32,11 +32,6 @@ public class CronjobServiceImpl implements CronjobService {
 	private ModelService modelService;
 
 	@Override
-	public Cronjob create() throws Exception {
-		return modelService.create(Cronjob.class);
-	}
-
-	@Override
 	public Cronjob findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Cronjob.class);
 	}

@@ -14,8 +14,6 @@ import com.beanframework.user.domain.User;
 
 public interface AuditorService {
 
-	Auditor create() throws Exception;
-
 	Auditor findOneEntityByUuid(UUID uuid) throws Exception;
 
 	Auditor findOneEntityByProperties(Map<String, Object> properties) throws Exception;

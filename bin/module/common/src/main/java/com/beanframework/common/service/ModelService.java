@@ -24,7 +24,7 @@ import com.beanframework.common.exception.InterceptorException;
 
 @SuppressWarnings("rawtypes")
 public interface ModelService {
-	
+
 	void attach(Object model);
 
 	void detach(Object model);
@@ -48,15 +48,37 @@ public interface ModelService {
 	@Cacheable(value = "ModelCount", key = "'modelClass:'+#modelClass")
 	int count(Class modelClass) throws Exception;
 
-	@Cacheable(value = "ModelPropertiesCount", key = "'properties:'+#properties+',modelClass:'+#modelClass")
+	@Cacheable(value = "ModelCount", key = "'properties:'+#properties+',modelClass:'+#modelClass")
 	int count(Map<String, Object> properties, Class modelClass) throws Exception;
+
+	@Cacheable(value = "ModelCount", key = "'specification:'+#specification+',modelClass:'+#modelClass")
+	int count(Specification specification, Class modelClass) throws Exception;
 
 	@Cacheable(value = "ModelPropertiesExists", key = "'properties:'+#properties+',modelClass:'+#modelClass")
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
+	/**
+	 * 
+	 * Properties doesn't work with many to many or one to many. Only many to one or
+	 * one to one.
+	 * 
+	 * @param properties
+	 * @param sorts
+	 * @param firstResult
+	 * @param maxResult
+	 * @param modelClass
+	 * @return
+	 * @throws Exception
+	 */
 	@Cacheable(value = "ModelList", key = "'properties:'+#properties+',sorts:'+#sorts+',firstResult:'+#firstResult+',maxResult:'+#maxResult+',modelClass:'+#modelClass")
 	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
 			throws Exception;
+
+	@Cacheable(value = "ModelList", key = "'specification:'+#specification+',sorts:'+#sorts+',modelClass:'+#modelClass")
+	<T extends Collection> T findEntityBySpecification(Specification specification, Sort sort, Class modelClass) throws Exception;
+
+	@Cacheable(value = "ModelList", key = "modelClass:'+#modelClass")
+	<T extends Collection> T findAll(Class modelClass);
 
 //	@Cacheable(value = "ModelHistoryList", key = "'selectDeletedEntities:'+#selectDeletedEntities+',auditCriterions:'+#auditCriterions+',auditOrders:'+#auditOrders+',firstResult:'+#firstResult+',maxResults:'+#maxResults+',modelClass:'+#modelClass")
 	List<Object[]> findHistories(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
@@ -72,19 +94,17 @@ public interface ModelService {
 			@CacheEvict(value = "Model", key = "'uuid:'+#model.uuid+',modelClass:'+#modelClass", condition = "#model.uuid != null"), //
 			@CacheEvict(value = "ModelProperties", allEntries = true), //
 			@CacheEvict(value = "ModelCount", key = "'modelClass:'+#modelClass"), //
-			@CacheEvict(value = "ModelPropertiesCount", allEntries = true), //
 			@CacheEvict(value = "ModelPropertiesExists", allEntries = true), //
 			@CacheEvict(value = "ModelList", allEntries = true), //
 			@CacheEvict(value = "ModelHistoryList", allEntries = true), //
 			@CacheEvict(value = "ModelHistoryCount", allEntries = true), //
 			@CacheEvict(value = "ModelPage", allEntries = true) })
-	Object saveEntity(Object model, Class modelClass) throws BusinessException;
+	<T> T saveEntity(Object model, Class modelClass) throws BusinessException;
 
 	@Caching(evict = { //
 			@CacheEvict(value = "Model", allEntries = true), //
 			@CacheEvict(value = "ModelProperties", allEntries = true), //
 			@CacheEvict(value = "ModelCount", key = "'modelClass:'+#modelClass"), //
-			@CacheEvict(value = "ModelPropertiesCount", allEntries = true), //
 			@CacheEvict(value = "ModelPropertiesExists", allEntries = true), //
 			@CacheEvict(value = "ModelList", allEntries = true), //
 			@CacheEvict(value = "ModelHistoryList", allEntries = true), //
@@ -96,7 +116,6 @@ public interface ModelService {
 			@CacheEvict(value = "Model", key = "'uuid:'+#uuid+',modelClass:'+#modelClass", condition = "#uuid != null"), //
 			@CacheEvict(value = "ModelProperties", allEntries = true), //
 			@CacheEvict(value = "ModelCount", key = "'modelClass:'+#modelClass"), //
-			@CacheEvict(value = "ModelPropertiesCount", allEntries = true), //
 			@CacheEvict(value = "ModelPropertiesExists", allEntries = true), //
 			@CacheEvict(value = "ModelList", allEntries = true), //
 			@CacheEvict(value = "ModelHistoryList", allEntries = true), //
@@ -105,19 +124,19 @@ public interface ModelService {
 	void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
 	<T> T getEntity(Object model, Class modelClass) throws Exception;
-	
+
 	<T> T getEntity(Object model, Class modelClass, EntityConverterContext context) throws Exception;
 
 	<T extends Collection> T getEntity(Collection model, Class modelClass) throws Exception;
-	
+
 	<T extends Collection> T getEntity(Collection model, Class modelClass, EntityConverterContext context) throws Exception;
 
 	<T> T getDto(Object model, Class modelClass) throws Exception;
-	
+
 	<T> T getDto(Object model, Class modelClass, DtoConverterContext context) throws Exception;
 
 	<T extends Collection> T getDto(Collection models, Class modelClass) throws Exception;
-	
+
 	<T extends Collection> T getDto(Collection models, Class modelClass, DtoConverterContext context) throws Exception;
 
 	void initDefaults(Object model, Class modelClass) throws Exception;
@@ -146,10 +165,10 @@ public interface ModelService {
 
 	void entityConverter(Collection models, EntityConverterContext context, Class modelClass) throws ConverterException;
 
-	Object entityConverter(Object model, EntityConverterContext context, Class modelClass) throws ConverterException;
+	<T> T entityConverter(Object model, EntityConverterContext context, Class modelClass) throws ConverterException;
 
 	<T extends Collection> T dtoConverter(Collection models, DtoConverterContext context, String typeCode) throws ConverterException, InterceptorException;
 
-	Object dtoConverter(Object model, DtoConverterContext context, String typeCode) throws ConverterException;
+	<T> T dtoConverter(Object model, DtoConverterContext context, String typeCode) throws ConverterException;
 
 }

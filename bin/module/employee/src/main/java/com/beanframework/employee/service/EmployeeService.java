@@ -18,8 +18,6 @@ import com.beanframework.employee.domain.Employee;
 
 public interface EmployeeService {
 
-	Employee create() throws Exception;
-
 	Employee findOneEntityByUuid(UUID uuid) throws Exception;
 
 	Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception;

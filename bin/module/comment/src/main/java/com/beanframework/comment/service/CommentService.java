@@ -13,8 +13,6 @@ import com.beanframework.common.exception.BusinessException;
 
 public interface CommentService {
 
-	Comment create() throws Exception;
-
 	Comment findOneEntityByUuid(UUID uuid) throws Exception;
 
 	Comment findOneEntityByProperties(Map<String, Object> properties) throws Exception;

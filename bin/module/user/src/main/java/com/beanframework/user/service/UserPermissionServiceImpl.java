@@ -24,12 +24,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Override
-	public UserPermission create() throws Exception {
-		return modelService.create(UserPermission.class);
-	}
-
+	
 	@Override
 	public UserPermission findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, UserPermission.class);

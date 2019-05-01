@@ -31,11 +31,6 @@ public class MenuServiceImpl implements MenuService {
 	private ModelService modelService;
 
 	@Override
-	public Menu create() throws Exception {
-		return modelService.create(Menu.class);
-	}
-
-	@Override
 	public Menu findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Menu.class);
 	}

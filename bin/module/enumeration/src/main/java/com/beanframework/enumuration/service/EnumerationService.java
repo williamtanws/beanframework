@@ -13,8 +13,6 @@ import com.beanframework.enumuration.domain.Enumeration;
 
 public interface EnumerationService {
 
-	Enumeration create() throws Exception;
-
 	Enumeration findOneEntityByUuid(UUID uuid) throws Exception;
 
 	Enumeration findOneEntityByProperties(Map<String, Object> properties) throws Exception;

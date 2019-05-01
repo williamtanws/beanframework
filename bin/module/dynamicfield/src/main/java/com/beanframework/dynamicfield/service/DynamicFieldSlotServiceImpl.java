@@ -26,11 +26,6 @@ public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 	private ModelService modelService;
 
 	@Override
-	public DynamicFieldSlot create() throws Exception {
-		return modelService.create(DynamicFieldSlot.class);
-	}
-
-	@Override
 	public DynamicFieldSlot findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, DynamicFieldSlot.class);
 	}

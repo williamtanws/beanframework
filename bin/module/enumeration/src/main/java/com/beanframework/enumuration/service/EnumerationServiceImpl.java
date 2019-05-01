@@ -26,11 +26,6 @@ public class EnumerationServiceImpl implements EnumerationService {
 	private ModelService modelService;
 
 	@Override
-	public Enumeration create() throws Exception {
-		return modelService.create(Enumeration.class);
-	}
-
-	@Override
 	public Enumeration findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Enumeration.class);
 	}

@@ -14,8 +14,6 @@ import com.beanframework.cronjob.domain.CronjobData;
 
 public interface CronjobService {
 
-	Cronjob create() throws Exception;
-
 	Cronjob findOneEntityByUuid(UUID uuid) throws Exception;
 
 	Cronjob findOneEntityByProperties(Map<String, Object> properties) throws Exception;

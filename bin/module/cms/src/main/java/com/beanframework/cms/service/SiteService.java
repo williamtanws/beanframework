@@ -13,8 +13,6 @@ import com.beanframework.common.exception.BusinessException;
 
 public interface SiteService {
 
-	Site create() throws Exception;
-
 	Site findOneEntityByUuid(UUID uuid) throws Exception;
 
 	Site findOneEntityByProperties(Map<String, Object> properties) throws Exception;

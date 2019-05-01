@@ -26,11 +26,6 @@ public class SiteServiceImpl implements SiteService {
 	private ModelService modelService;
 
 	@Override
-	public Site create() throws Exception {
-		return modelService.create(Site.class);
-	}
-
-	@Override
 	public Site findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, Site.class);
 	}

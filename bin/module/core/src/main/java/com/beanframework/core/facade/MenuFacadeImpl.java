@@ -135,6 +135,6 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public MenuDto createDto() throws Exception {
-		return modelService.getDto(menuService.create(), MenuDto.class);
+		return modelService.getDto(modelService.create(Menu.class), MenuDto.class);
 	}
 }

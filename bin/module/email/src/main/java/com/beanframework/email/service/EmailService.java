@@ -16,8 +16,6 @@ import com.beanframework.email.domain.Email;
 
 public interface EmailService {
 
-	Email create() throws Exception;
-
 	Email findOneEntityByUuid(UUID uuid) throws Exception;
 
 	Email findOneEntityByProperties(Map<String, Object> properties) throws Exception;

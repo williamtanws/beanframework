@@ -13,8 +13,6 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 
 public interface DynamicFieldService {
 
-	DynamicField create() throws Exception;
-
 	DynamicField findOneEntityByUuid(UUID uuid) throws Exception;
 
 	DynamicField findOneEntityByProperties(Map<String, Object> properties) throws Exception;

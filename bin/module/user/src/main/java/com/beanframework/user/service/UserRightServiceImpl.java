@@ -26,11 +26,6 @@ public class UserRightServiceImpl implements UserRightService {
 	private ModelService modelService;
 
 	@Override
-	public UserRight create() throws Exception {
-		return modelService.create(UserRight.class);
-	}
-
-	@Override
 	public UserRight findOneEntityByUuid(UUID uuid) throws Exception {
 		return modelService.findOneEntityByUuid(uuid, UserRight.class);
 	}

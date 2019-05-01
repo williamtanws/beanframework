@@ -162,6 +162,18 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
+	public int count(Specification specification, Class modelClass) throws Exception {
+		try {
+			Long count = (Long) executeCountQuery(getCountQuery(specification, modelClass));
+
+			return count.intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage(), e);
+		}
+	}
+
+	@Override
 	public boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(properties, "properties was null");
 		Assert.notNull(modelClass, "modelClass was null");
@@ -192,6 +204,28 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public <T extends Collection> T findEntityBySpecification(Specification specification, Sort sort, Class modelClass) throws Exception {
+		Assert.notNull(modelClass, "modelClass was null");
+
+		try {
+			List<Object> models = getQuery(specification, modelClass, sort).getResultList();
+
+			if (models != null)
+				loadInterceptor(models, new InterceptorContext(), modelClass.getSimpleName());
+
+			return (T) models;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public <T extends Collection> T findAll(Class modelClass) {
+		return (T) getQuery(null, modelClass, Sort.unsorted()).getResultList();
 	}
 
 	@Override
@@ -354,7 +388,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public <T> T getEntity(Object model, Class modelClass) throws Exception {
 		return getEntity(model, modelClass, new EntityConverterContext());
 	}
-	
+
 	@Override
 	public <T> T getEntity(Object model, Class modelClass, EntityConverterContext context) throws Exception {
 		try {
@@ -375,7 +409,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public <T extends Collection> T getEntity(Collection models, Class modelClass) throws Exception {
 		return getEntity(models, modelClass, new EntityConverterContext());
 	}
-	
+
 	@Override
 	public <T extends Collection> T getEntity(Collection models, Class modelClass, EntityConverterContext context) throws Exception {
 		try {
@@ -402,7 +436,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public <T> T getDto(Object model, Class modelClass) throws Exception {
 		return getDto(model, modelClass, new DtoConverterContext());
 	}
-	
+
 	@Override
 	public <T> T getDto(Object model, Class modelClass, DtoConverterContext context) throws Exception {
 		try {
@@ -421,7 +455,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public <T extends Collection> T getDto(Collection models, Class modelClass) throws Exception {
 		return getDto(models, modelClass, new DtoConverterContext());
 	}
-	
+
 	@Override
 	public <T extends Collection> T getDto(Collection models, Class modelClass, DtoConverterContext context) throws Exception {
 		try {
