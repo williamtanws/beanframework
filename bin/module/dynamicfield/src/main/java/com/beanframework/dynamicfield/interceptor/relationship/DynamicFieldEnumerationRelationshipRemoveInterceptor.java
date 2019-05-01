@@ -51,7 +51,7 @@ public class DynamicFieldEnumerationRelationshipRemoveInterceptor extends Abstra
 		};
 
 		try {
-			List<DynamicField> entities = modelService.findEntityBySpecification(specification, null, DynamicField.class);
+			List<DynamicField> entities = modelService.findBySpecificationBySort(specification, null, DynamicField.class);
 
 			for (int i = 0; i < entities.size(); i++) {
 

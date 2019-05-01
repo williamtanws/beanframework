@@ -32,7 +32,7 @@ public class EntityCsvConfigurationConverter implements EntityCsvConverter<Confi
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.ID, source.getId());
 
-				Configuration prototype = modelService.findOneEntityByProperties(properties, Configuration.class);
+				Configuration prototype = modelService.findByProperties(properties, Configuration.class);
 
 				if (prototype != null) {
 

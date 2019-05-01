@@ -10,9 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
@@ -20,8 +17,6 @@ import org.hibernate.envers.query.order.AuditOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -38,12 +33,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.specification.EmployeeSpecification;
-import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
 
 @Service
@@ -55,9 +47,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private ModelService modelService;
 
 	@Autowired
-	private AuditorService auditorService;
-
-	@Autowired
 	private UserService userService;
 
 	@Autowired
@@ -65,53 +54,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	private EntityManager entityManager;
-
-	@Override
-	public Employee findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Employee.class);
-	}
-
-	@Override
-	public Employee findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Employee.class);
-	}
-
-	@Override
-	public List<Employee> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Employee.class);
-	}
-
-	@Override
-	public Employee saveEntity(Employee model) throws BusinessException {
-		model = (Employee) modelService.saveEntity(model, Employee.class);
-		auditorService.saveEntity(model);
-		return model;
-	}
-
-	@Override
-	public void deleteByUuid(UUID uuid) throws BusinessException {
-
-		try {
-			Employee model = modelService.findOneEntityByUuid(uuid, Employee.class);
-			modelService.deleteByEntity(model, Employee.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-
-	@Override
-	public Page<Employee> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		return modelService.findEntityPage(EmployeeSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Employee.class);
-	}
-
-	@Override
-	public int count() throws Exception {
-		return modelService.count(Employee.class);
-	}
 
 	@Override
 	public void saveProfilePicture(Employee model, MultipartFile picture) throws IOException {
@@ -139,7 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
 
-		Employee entity = findOneEntityByProperties(properties);
+		Employee entity = modelService.findByProperties(properties, Employee.class);
 
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
@@ -176,7 +118,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (auth != null) {
 
 			Employee principal = (Employee) auth.getPrincipal();
-			return findOneEntityByUuid(principal.getUuid());
+			return modelService.findByUuid(principal.getUuid(), Employee.class);
 		} else {
 			return null;
 		}
@@ -250,7 +192,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
 
 	}
 
@@ -261,19 +203,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (dataTableRequest.getAuditCriterion() != null)
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
-		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
-	}
-
-	@Override
-	public int countByUserGroups(List<UUID> userGroupsUuid) {
-		if (userGroupsUuid == null || userGroupsUuid.size() == 0) {
-			return 0;
-		}
-
-		Query query = entityManager.createQuery("SELECT COUNT(DISTINCT o) FROM Employee o LEFT JOIN o.userGroups u WHERE (u.uuid IN (?1))");
-		query.setParameter(1, userGroupsUuid);
-
-		Long count = (Long) query.getSingleResult();
-		return count.intValue();
+		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Employee.class);
 	}
 }

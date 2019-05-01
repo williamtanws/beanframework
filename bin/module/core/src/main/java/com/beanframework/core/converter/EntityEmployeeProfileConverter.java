@@ -15,16 +15,12 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeService;
 
 @Component
 public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeDto, Employee> {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private EmployeeService employeeService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -37,7 +33,7 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.UUID, source.getUuid());
-				Employee prototype = employeeService.findOneEntityByProperties(properties);
+				Employee prototype = modelService.findByProperties(properties, Employee.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
@@ -59,7 +55,7 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.UUID, source.getUuid());
-				Employee prototype = modelService.findOneEntityByProperties(properties, Employee.class);
+				Employee prototype = modelService.findByProperties(properties, Employee.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

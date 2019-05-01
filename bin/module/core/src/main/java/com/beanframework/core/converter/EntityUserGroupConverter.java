@@ -18,15 +18,11 @@ import com.beanframework.core.data.UserAuthorityDto;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.UserGroupFieldDto;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserGroupService;
 
 public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, UserGroup> {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private UserGroupService userGroupService;
 
 	@Override
 	public UserGroup convert(UserGroupDto source, EntityConverterContext context) throws ConverterException {
@@ -35,7 +31,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 
 			if (source.getUuid() != null) {
 
-				UserGroup prototype = userGroupService.findOneEntityByUuid(source.getUuid());
+				UserGroup prototype = modelService.findByUuid(source.getUuid(), UserGroup.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
@@ -134,7 +130,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 						}
 
 						if (add) {
-							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), UserGroup.class);
+							UserGroup entityUserGroups = modelService.findByUuid(UUID.fromString(source.getTableUserGroups()[i]), UserGroup.class);
 							prototype.getUserGroups().add(entityUserGroups);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.comment.service.CommentService;
+import com.beanframework.comment.specification.CommentSpecification;
 import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
@@ -31,14 +32,14 @@ public class CommentFacadeImpl implements CommentFacade {
 
 	@Override
 	public CommentDto findOneByUuid(UUID uuid) throws Exception {
-		Comment entity = commentService.findOneEntityByUuid(uuid);
+		Comment entity = modelService.findByUuid(uuid, Comment.class);
 
 		return modelService.getDto(entity, CommentDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public CommentDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Comment entity = commentService.findOneEntityByProperties(properties);
+		Comment entity = modelService.findByProperties(properties, Comment.class);
 
 		return modelService.getDto(entity, CommentDto.class);
 	}
@@ -56,7 +57,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	public CommentDto save(CommentDto dto) throws BusinessException {
 		try {
 			Comment entity = modelService.getEntity(dto, Comment.class);
-			entity = (Comment) commentService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Comment.class);
 
 			return modelService.getDto(entity, CommentDto.class);
 		} catch (Exception e) {
@@ -66,12 +67,12 @@ public class CommentFacadeImpl implements CommentFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		commentService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, Comment.class);
 	}
 
 	@Override
 	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Comment> page = commentService.findEntityPage(dataTableRequest);
+		Page<Comment> page = modelService.findPage(CommentSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Comment.class);
 
 		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -79,7 +80,7 @@ public class CommentFacadeImpl implements CommentFacade {
 
 	@Override
 	public int count() throws Exception {
-		return commentService.count();
+		return modelService.countAll(Comment.class);
 	}
 
 	@Override
@@ -108,7 +109,7 @@ public class CommentFacadeImpl implements CommentFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Comment.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(commentService.findEntityBySorts(sorts), CommentDto.class);
+		return modelService.getDto(modelService.findByPropertiesBySortByResult(null, sorts, null, null, Comment.class), CommentDto.class);
 	}
 
 	@Override

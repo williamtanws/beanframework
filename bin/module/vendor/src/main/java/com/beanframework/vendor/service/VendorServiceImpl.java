@@ -34,7 +34,7 @@ public class VendorServiceImpl implements VendorService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Vendor.class);
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Vendor.class);
 
 	}
 
@@ -45,7 +45,7 @@ public class VendorServiceImpl implements VendorService {
 		if (dataTableRequest.getAuditCriterion() != null)
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
-		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Vendor.class);
+		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Vendor.class);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class VendorServiceImpl implements VendorService {
 		if (auth != null) {
 
 			Vendor principal = (Vendor) auth.getPrincipal();
-			return modelService.findOneEntityByUuid(principal.getUuid(), Vendor.class);
+			return modelService.findByUuid(principal.getUuid(), Vendor.class);
 		} else {
 			return null;
 		}

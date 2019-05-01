@@ -48,7 +48,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.STARTUP, true);
 
-		List<Cronjob> jobList = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, Cronjob.class);
+		List<Cronjob> jobList = modelService.findByPropertiesBySortByResult(properties, null, null, null, Cronjob.class);
 
 		for (Cronjob cronjob : jobList) {
 			cronjob.setJobTrigger(CronjobEnum.JobTrigger.START);
@@ -64,7 +64,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 			cronjob.setStatus(CronjobEnum.Status.ABORTED);
 			cronjob.setResult(null);
 
-			cronjobService.saveEntity(cronjob);
+			modelService.saveEntity(cronjob, Cronjob.class);
 		}
 	}
 
@@ -125,7 +125,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.UUID, cronjob.getUuid());
 
-		Cronjob updateCronjob = cronjobService.findOneEntityByProperties(properties);
+		Cronjob updateCronjob = modelService.findByProperties(properties, Cronjob.class);
 		updateCronjob.setStatus(cronjob.getStatus());
 		updateCronjob.setResult(cronjob.getResult());
 		updateCronjob.setMessage(cronjob.getMessage());
@@ -133,7 +133,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		updateCronjob.setLastStartExecutedDate(null);
 		updateCronjob.setLastFinishExecutedDate(null);
 
-		cronjobService.saveEntity(updateCronjob);
+		modelService.saveEntity(updateCronjob, Cronjob.class);
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Cronjob.UUID, uuid);
 
-			Cronjob cronjob = cronjobService.findOneEntityByProperties(properties);
+			Cronjob cronjob = modelService.findByProperties(properties, Cronjob.class);
 
 			quartzManager.deleteJob(cronjob);
 
@@ -158,7 +158,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.UUID, uuid);
 
-		Cronjob cronjob = cronjobService.findOneEntityByProperties(properties);
+		Cronjob cronjob = modelService.findByProperties(properties, Cronjob.class);
 
 		return cronjob;
 	}

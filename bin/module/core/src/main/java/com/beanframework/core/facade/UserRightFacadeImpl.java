@@ -19,6 +19,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserRightService;
+import com.beanframework.user.specification.UserRightSpecification;
 
 @Component
 public class UserRightFacadeImpl implements UserRightFacade {
@@ -31,7 +32,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
-		UserRight entity = userRightService.findOneEntityByUuid(uuid);
+		UserRight entity = modelService.findByUuid(uuid, UserRight.class);
 		UserRightDto dto = modelService.getDto(entity, UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -39,7 +40,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public UserRightDto findOneProperties(Map<String, Object> properties) throws Exception {
-		UserRight entity = userRightService.findOneEntityByProperties(properties);
+		UserRight entity = modelService.findByProperties(properties, UserRight.class);
 		UserRightDto dto = modelService.getDto(entity, UserRightDto.class);
 
 		return dto;
@@ -58,7 +59,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public UserRightDto save(UserRightDto dto) throws BusinessException {
 		try {
 			UserRight entity = modelService.getEntity(dto, UserRight.class);
-			entity = (UserRight) userRightService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, UserRight.class);
 
 			return modelService.getDto(entity, UserRightDto.class);
 		} catch (Exception e) {
@@ -68,12 +69,12 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		userRightService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, UserRight.class);
 	}
 
 	@Override
 	public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<UserRight> page = userRightService.findEntityPage(dataTableRequest);
+		Page<UserRight> page = modelService.findPage(UserRightSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserRight.class);
 
 		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -81,7 +82,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public int count() throws Exception {
-		return userRightService.count();
+		return modelService.countAll(UserRight.class);
 	}
 
 	@Override
@@ -110,7 +111,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserRight.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(userRightService.findEntityBySorts(sorts), UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(modelService.findByPropertiesBySortByResult(null, sorts, null, null, UserRight.class), UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override

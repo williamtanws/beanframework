@@ -32,7 +32,7 @@ public class EntityCsvLanguageConverter implements EntityCsvConverter<LanguageCs
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Language.ID, source.getId());
 
-				Language prototype = modelService.findOneEntityByProperties(properties, Language.class);
+				Language prototype = modelService.findByProperties(properties, Language.class);
 
 				if (prototype != null) {
 

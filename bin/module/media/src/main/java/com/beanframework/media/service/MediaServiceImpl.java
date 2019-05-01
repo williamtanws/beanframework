@@ -43,7 +43,7 @@ public class MediaServiceImpl implements MediaService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		List<Object[]> histories = modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Media.class);
+		List<Object[]> histories = modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Media.class);
 		return histories;
 	}
 
@@ -54,7 +54,7 @@ public class MediaServiceImpl implements MediaService {
 		if (dataTableRequest.getAuditCriterion() != null)
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
-		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Media.class);
+		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Media.class);
 	}
 
 	@Override

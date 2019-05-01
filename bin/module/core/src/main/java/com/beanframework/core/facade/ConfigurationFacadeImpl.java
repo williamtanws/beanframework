@@ -17,6 +17,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
+import com.beanframework.configuration.specification.ConfigurationSpecification;
 import com.beanframework.core.data.ConfigurationDto;
 
 @Component
@@ -30,14 +31,14 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 
 	@Override
 	public ConfigurationDto findOneByUuid(UUID uuid) throws Exception {
-		Configuration entity = configurationService.findOneEntityByUuid(uuid);
+		Configuration entity = modelService.findByUuid(uuid, Configuration.class);
 
 		return modelService.getDto(entity, ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public ConfigurationDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Configuration entity = configurationService.findOneEntityByProperties(properties);
+		Configuration entity = modelService.findByProperties(properties, Configuration.class);
 
 		return modelService.getDto(entity, ConfigurationDto.class);
 	}
@@ -55,7 +56,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	public ConfigurationDto save(ConfigurationDto dto) throws BusinessException {
 		try {
 			Configuration entity = modelService.getEntity(dto, Configuration.class);
-			entity = (Configuration) configurationService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Configuration.class);
 
 			return modelService.getDto(entity, ConfigurationDto.class);
 		} catch (Exception e) {
@@ -65,12 +66,12 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		configurationService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, Configuration.class);
 	}
 
 	@Override
 	public Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Configuration> page = configurationService.findEntityPage(dataTableRequest);
+		Page<Configuration> page = modelService.findPage(ConfigurationSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Configuration.class);
 
 		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<ConfigurationDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -78,7 +79,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 
 	@Override
 	public int count() throws Exception {
-		return configurationService.count();
+		return modelService.countAll(Configuration.class);
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
 
-		return modelService.getDto(configurationService.findOneEntityByProperties(properties), ConfigurationDto.class);
+		return modelService.getDto(modelService.findByProperties(properties, Configuration.class), ConfigurationDto.class);
 	}
 
 	@Override

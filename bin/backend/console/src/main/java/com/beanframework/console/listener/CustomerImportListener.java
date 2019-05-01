@@ -165,7 +165,7 @@ public class CustomerImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Customer.ID, csv.getId());
 
-			Customer entity = modelService.findOneEntityByProperties(properties, Customer.class);
+			Customer entity = modelService.findByProperties(properties, Customer.class);
 			modelService.deleteByEntity(entity, Customer.class);
 		}
 	}

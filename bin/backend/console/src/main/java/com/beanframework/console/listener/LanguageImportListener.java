@@ -157,7 +157,7 @@ public class LanguageImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Language.ID, csv.getId());
 
-			Language entity = modelService.findOneEntityByProperties(properties, Language.class);
+			Language entity = modelService.findByProperties(properties, Language.class);
 			modelService.deleteByEntity(entity, Language.class);
 		}
 	}

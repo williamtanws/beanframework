@@ -18,6 +18,7 @@ import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.AuditorDto;
 import com.beanframework.user.service.AuditorService;
+import com.beanframework.user.specification.AuditorSpecification;
 
 @Component
 public class AuditorFacadeImpl implements AuditorFacade {
@@ -30,21 +31,21 @@ public class AuditorFacadeImpl implements AuditorFacade {
 
 	@Override
 	public AuditorDto findOneByUuid(UUID uuid) throws Exception {
-		Auditor entity = auditorService.findOneEntityByUuid(uuid);
+		Auditor entity = modelService.findByUuid(uuid, Auditor.class);
 
 		return modelService.getDto(entity, AuditorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public AuditorDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Auditor entity = auditorService.findOneEntityByProperties(properties);
+		Auditor entity = modelService.findByProperties(properties, Auditor.class);
 
 		return modelService.getDto(entity, AuditorDto.class);
 	}
 
 	@Override
 	public Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Auditor> page = auditorService.findEntityPage(dataTableRequest);
+		Page<Auditor> page = modelService.findPage(AuditorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Auditor.class);
 
 		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<AuditorDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -52,7 +53,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 
 	@Override
 	public int count() throws Exception {
-		return auditorService.count();
+		return modelService.countAll(Auditor.class);
 	}
 
 	@Override
@@ -60,7 +61,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Auditor.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(auditorService.findEntityBySorts(sorts), AuditorDto.class);
+		return modelService.getDto(modelService.findByPropertiesBySortByResult(null, sorts, null, null, Auditor.class), AuditorDto.class);
 	}
 
 	@Override

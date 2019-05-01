@@ -24,6 +24,7 @@ import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.cronjob.service.CronjobManagerService;
 import com.beanframework.cronjob.service.CronjobService;
+import com.beanframework.cronjob.specification.CronjobSpecification;
 
 @Component
 public class CronjobFacadeImpl implements CronjobFacade {
@@ -42,14 +43,14 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Override
 	public CronjobDto findOneByUuid(UUID uuid) throws Exception {
-		Cronjob entity = cronjobService.findOneEntityByUuid(uuid);
+		Cronjob entity = modelService.findByUuid(uuid, Cronjob.class);
 
 		return modelService.getDto(entity, CronjobDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public CronjobDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Cronjob entity = cronjobService.findOneEntityByProperties(properties);
+		Cronjob entity = modelService.findByProperties(properties, Cronjob.class);
 
 		return modelService.getDto(entity, CronjobDto.class);
 	}
@@ -67,7 +68,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public CronjobDto save(CronjobDto dto) throws BusinessException {
 		try {
 			Cronjob entity = modelService.getEntity(dto, Cronjob.class);
-			entity = (Cronjob) cronjobService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Cronjob.class);
 
 			return modelService.getDto(entity, CronjobDto.class);
 		} catch (Exception e) {
@@ -77,12 +78,12 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		cronjobService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, Cronjob.class);
 	}
 
 	@Override
 	public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Cronjob> page = cronjobService.findEntityPage(dataTableRequest);
+		Page<Cronjob> page = modelService.findPage(CronjobSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Cronjob.class);
 
 		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<CronjobDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -90,13 +91,13 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Override
 	public int count() throws Exception {
-		return cronjobService.count();
+		return modelService.countAll(Cronjob.class);
 	}
 
 	@Override
 	public void trigger(CronjobDto cronjob) throws BusinessException {
 		try {
-			Cronjob updateCronjob = cronjobService.findOneEntityByUuid(cronjob.getUuid());
+			Cronjob updateCronjob = modelService.findByUuid(cronjob.getUuid(), Cronjob.class);
 
 			updateCronjob.setJobTrigger(cronjob.getJobTrigger());
 			updateCronjob.setTriggerStartDate(cronjob.getTriggerStartDate());
@@ -112,7 +113,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public CronjobDto addCronjobData(UUID uuid, String name, String value) throws BusinessException {
 
 		try {
-			Cronjob updateCronjob = cronjobService.findOneEntityByUuid(uuid);
+			Cronjob updateCronjob = modelService.findByUuid(uuid, Cronjob.class);
 
 			List<CronjobData> datas = updateCronjob.getCronjobDatas();
 
@@ -129,7 +130,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 			updateCronjob.getCronjobDatas().add(data);
 
-			updateCronjob = (Cronjob) cronjobService.saveEntity(updateCronjob);
+			updateCronjob = modelService.saveEntity(updateCronjob, Cronjob.class);
 
 			return modelService.getDto(updateCronjob, Cronjob.class);
 		} catch (Exception e) {
@@ -142,7 +143,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 		try {
 
-			Cronjob entityCronjob = cronjobService.findOneEntityByUuid(cronjobUuid);
+			Cronjob entityCronjob = modelService.findByUuid(cronjobUuid, Cronjob.class);
 
 			CronjobData entityCronjobData = modelService.getEntity(dto, CronjobData.class);
 			entityCronjobData.setCronjob(entityCronjob);
@@ -160,7 +161,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 		try {
 
-			Cronjob entityCronjob = cronjobService.findOneEntityByUuid(cronjobUuid);
+			Cronjob entityCronjob = modelService.findByUuid(cronjobUuid, Cronjob.class);
 
 			Iterator<CronjobData> cronjobDatas = entityCronjob.getCronjobDatas().iterator();
 			while (cronjobDatas.hasNext()) {
@@ -169,7 +170,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 				}
 			}
 
-			cronjobService.saveEntity(entityCronjob);
+			modelService.saveEntity(entityCronjob, Cronjob.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}

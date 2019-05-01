@@ -19,6 +19,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
+import com.beanframework.menu.specification.MenuSpecification;
 
 @Component
 public class MenuFacadeImpl implements MenuFacade {
@@ -33,7 +34,7 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
-		Menu entity = menuService.findOneEntityByUuid(uuid);
+		Menu entity = modelService.findByUuid(uuid, Menu.class);
 		MenuDto dto = modelService.getDto(entity, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -41,7 +42,7 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Menu entity = menuService.findOneEntityByProperties(properties);
+		Menu entity = modelService.findByProperties(properties, Menu.class);
 		MenuDto dto = modelService.getDto(entity, MenuDto.class);
 
 		return dto;
@@ -60,7 +61,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	public MenuDto save(MenuDto dto) throws BusinessException {
 		try {
 			Menu entity = modelService.getEntity(dto, Menu.class);
-			entity = (Menu) menuService.saveEntity(entity);
+			entity = modelService.saveEntity(entity,Menu.class);
 
 			return modelService.getDto(entity, MenuDto.class);
 		} catch (Exception e) {
@@ -79,18 +80,14 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		try {
-			menuService.deleteByUuid(uuid);
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
+		modelService.deleteByUuid(uuid, Menu.class);
 	}
 
 	@Override
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
 
-			List<Menu> entities = menuService.findEntityMenuTree(false);
+			List<Menu> entities = menuService.findMenuTree(false);
 			List<MenuDto> dtos = modelService.getDto(entities, MenuDto.class);
 
 			return dtos;
@@ -101,7 +98,7 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Menu> page = menuService.findEntityPage(dataTableRequest);
+		Page<Menu> page = modelService.findPage(MenuSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Menu.class);
 
 		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -109,7 +106,7 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public int count() throws Exception {
-		return menuService.count();
+		return modelService.countAll(Menu.class);
 	}
 
 	@Override

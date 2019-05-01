@@ -2,70 +2,23 @@ package com.beanframework.dynamicfield.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.data.DataTableRequest;
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
-import com.beanframework.dynamicfield.specification.DynamicFieldSlotSpecification;
 
 @Service
 public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Override
-	public DynamicFieldSlot findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, DynamicFieldSlot.class);
-	}
-
-	@Override
-	public DynamicFieldSlot findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, DynamicFieldSlot.class);
-	}
-
-	@Override
-	public List<DynamicFieldSlot> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, DynamicFieldSlot.class);
-	}
-
-	@Override
-	public DynamicFieldSlot saveEntity(DynamicFieldSlot model) throws BusinessException {
-		return (DynamicFieldSlot) modelService.saveEntity(model, DynamicFieldSlot.class);
-	}
-
-	@Override
-	public void deleteByUuid(UUID uuid) throws BusinessException {
-
-		try {
-			DynamicFieldSlot model = modelService.findOneEntityByUuid(uuid, DynamicFieldSlot.class);
-			modelService.deleteByEntity(model, DynamicFieldSlot.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-
-	@Override
-	public Page<DynamicFieldSlot> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		return modelService.findEntityPage(DynamicFieldSlotSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicFieldSlot.class);
-	}
-
-	@Override
-	public int count() throws Exception {
-		return modelService.count(DynamicFieldSlot.class);
-	}
 
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -78,7 +31,7 @@ public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), DynamicFieldSlot.class);
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), DynamicFieldSlot.class);
 
 	}
 
@@ -89,6 +42,6 @@ public class DynamicFieldSlotServiceImpl implements DynamicFieldSlotService {
 		if (dataTableRequest.getAuditCriterion() != null)
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
-		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), DynamicFieldSlot.class);
+		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), DynamicFieldSlot.class);
 	}
 }

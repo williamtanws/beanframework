@@ -21,6 +21,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.service.EmailService;
+import com.beanframework.email.specification.EmailSpecification;
 
 @Component
 public class EmailFacadeImpl implements EmailFacade {
@@ -35,14 +36,14 @@ public class EmailFacadeImpl implements EmailFacade {
 
 	@Override
 	public EmailDto findOneByUuid(UUID uuid) throws Exception {
-		Email entity = emailService.findOneEntityByUuid(uuid);
+		Email entity = modelService.findByUuid(uuid, Email.class);
 
 		return modelService.getDto(entity, EmailDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public EmailDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Email entity = emailService.findOneEntityByProperties(properties);
+		Email entity = modelService.findByProperties(properties, Email.class);
 
 		return modelService.getDto(entity, EmailDto.class);
 	}
@@ -60,7 +61,7 @@ public class EmailFacadeImpl implements EmailFacade {
 	public EmailDto save(EmailDto dto) throws BusinessException {
 		try {
 			Email entity = modelService.getEntity(dto, Email.class);
-			entity = (Email) emailService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Email.class);
 
 			return modelService.getDto(entity, EmailDto.class);
 		} catch (Exception e) {
@@ -70,12 +71,12 @@ public class EmailFacadeImpl implements EmailFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		emailService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, Email.class);
 	}
 
 	@Override
 	public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Email> page = emailService.findEntityPage(dataTableRequest);
+		Page<Email> page = modelService.findPage(EmailSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Email.class);
 
 		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<EmailDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -83,7 +84,7 @@ public class EmailFacadeImpl implements EmailFacade {
 
 	@Override
 	public int count() throws Exception {
-		return emailService.count();
+		return modelService.countAll(Email.class);
 	}
 
 	@Override

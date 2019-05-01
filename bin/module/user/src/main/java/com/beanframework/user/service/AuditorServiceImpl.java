@@ -12,8 +12,6 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.data.DataTableRequest;
@@ -21,7 +19,6 @@ import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.domain.User;
-import com.beanframework.user.specification.AuditorSpecification;
 
 @Service
 public class AuditorServiceImpl implements AuditorService {
@@ -30,28 +27,38 @@ public class AuditorServiceImpl implements AuditorService {
 	private ModelService modelService;
 
 	@Override
-	public Auditor findOneEntityByUuid(UUID uuid) throws Exception {
-		return modelService.findOneEntityByUuid(uuid, Auditor.class);
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(dataTableRequest.getAuditCriterion());
+
+		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
+		if (dataTableRequest.getAuditOrder() != null)
+			auditOrders.add(dataTableRequest.getAuditOrder());
+
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Auditor.class);
+
 	}
 
 	@Override
-	public Auditor findOneEntityByProperties(Map<String, Object> properties) throws Exception {
-		return modelService.findOneEntityByProperties(properties, Auditor.class);
+	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
+
+		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+		if (dataTableRequest.getAuditCriterion() != null)
+			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
+
+		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Auditor.class);
 	}
 
 	@Override
-	public List<Auditor> findEntityBySorts(Map<String, Direction> sorts) throws Exception {
-		return modelService.findEntityByPropertiesAndSorts(null, sorts, null, null, Auditor.class);
-	}
-
-	@Override
-	public Auditor saveEntity(User model) throws BusinessException {
+	public Auditor saveEntityByUser(User model) throws BusinessException {
 		try {
-			Auditor auditor = modelService.findOneEntityByUuid(model.getUuid(), Auditor.class);
+			Auditor auditor = modelService.findByUuid(model.getUuid(), Auditor.class);
 			if (auditor == null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Auditor.ID, model.getId());
-				auditor = modelService.findOneEntityByProperties(properties, Auditor.class);
+				auditor = modelService.findByProperties(properties, Auditor.class);
 			}
 
 			if (auditor == null) {
@@ -78,52 +85,5 @@ public class AuditorServiceImpl implements AuditorService {
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
-	}
-
-	@Override
-	public void deleteByUuid(UUID uuid) throws BusinessException {
-
-		try {
-			Auditor model = modelService.findOneEntityByUuid(uuid, Auditor.class);
-			modelService.deleteByEntity(model, Auditor.class);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
-
-	@Override
-	public Page<Auditor> findEntityPage(DataTableRequest dataTableRequest) throws Exception {
-		return modelService.findEntityPage(AuditorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Auditor.class);
-	}
-
-	@Override
-	public int count() throws Exception {
-		return modelService.count(Auditor.class);
-	}
-
-	@Override
-	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
-		if (dataTableRequest.getAuditCriterion() != null)
-			auditCriterions.add(dataTableRequest.getAuditCriterion());
-
-		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
-		if (dataTableRequest.getAuditOrder() != null)
-			auditOrders.add(dataTableRequest.getAuditOrder());
-
-		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Auditor.class);
-
-	}
-
-	@Override
-	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
-		if (dataTableRequest.getAuditCriterion() != null)
-			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
-
-		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Auditor.class);
 	}
 }

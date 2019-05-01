@@ -51,7 +51,7 @@ public class AdminServiceImpl implements AdminService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Admin.ID, id);
-		Admin entity = modelService.findOneEntityByProperties(properties, Admin.class);
+		Admin entity = modelService.findByProperties(properties, Admin.class);
 
 		if (entity == null) {
 			if (StringUtils.compare(password, defaultAdminPassword) != 0) {
@@ -109,7 +109,7 @@ public class AdminServiceImpl implements AdminService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Admin.class);
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Admin.class);
 
 	}
 
@@ -120,7 +120,7 @@ public class AdminServiceImpl implements AdminService {
 		if (dataTableRequest.getAuditCriterion() != null)
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
-		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Admin.class);
+		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Admin.class);
 	}
 
 }

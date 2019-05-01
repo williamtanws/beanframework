@@ -42,7 +42,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public VendorDto findOneByUuid(UUID uuid) throws Exception {
-		Vendor entity = modelService.findOneEntityByUuid(uuid, Vendor.class);
+		Vendor entity = modelService.findByUuid(uuid, Vendor.class);
 		VendorDto dto = modelService.getDto(entity, VendorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -50,7 +50,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public VendorDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Vendor entity = modelService.findOneEntityByProperties(properties, Vendor.class);
+		Vendor entity = modelService.findByProperties(properties, Vendor.class);
 		VendorDto dto = modelService.getDto(entity, VendorDto.class);
 
 		return dto;
@@ -78,7 +78,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 			Vendor entity = modelService.getEntity(dto, Vendor.class);
 			entity = modelService.saveEntity(entity, Vendor.class);
-			auditorService.saveEntity(entity);
+			auditorService.saveEntityByUser(entity);
 
 			userService.saveProfilePicture(entity, dto.getProfilePicture());
 
@@ -95,7 +95,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Vendor> page = modelService.findEntityPage(VendorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Vendor.class);
+		Page<Vendor> page = modelService.findPage(VendorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Vendor.class);
 
 		List<VendorDto> dtos = modelService.getDto(page.getContent(), VendorDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<VendorDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -103,7 +103,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public int count() throws Exception {
-		return modelService.count(Vendor.class);
+		return modelService.countAll(Vendor.class);
 	}
 
 	@Override

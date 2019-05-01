@@ -34,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistories(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Customer.class);
+		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Customer.class);
 
 	}
 
@@ -45,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if (dataTableRequest.getAuditCriterion() != null)
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
-		return modelService.findCountHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Customer.class);
+		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Customer.class);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if (auth != null) {
 
 			Customer principal = (Customer) auth.getPrincipal();
-			return modelService.findOneEntityByUuid(principal.getUuid(), Customer.class);
+			return modelService.findByUuid(principal.getUuid(), Customer.class);
 		} else {
 			return null;
 		}

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Site;
 import com.beanframework.cms.service.SiteService;
+import com.beanframework.cms.specification.SiteSpecification;
 import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
@@ -29,13 +30,13 @@ public class SiteFacadeImpl implements SiteFacade {
 
 	@Override
 	public SiteDto findOneByUuid(UUID uuid) throws Exception {
-		Site entity = siteService.findOneEntityByUuid(uuid);
+		Site entity = modelService.findByUuid(uuid, Site.class);
 		return modelService.getDto(entity, SiteDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public SiteDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Site entity = siteService.findOneEntityByProperties(properties);
+		Site entity = modelService.findByProperties(properties, Site.class);
 		return modelService.getDto(entity, SiteDto.class);
 	}
 
@@ -52,7 +53,7 @@ public class SiteFacadeImpl implements SiteFacade {
 	public SiteDto save(SiteDto dto) throws BusinessException {
 		try {
 			Site entity = modelService.getEntity(dto, Site.class);
-			entity = (Site) siteService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Site.class);
 
 			return modelService.getDto(entity, SiteDto.class);
 		} catch (Exception e) {
@@ -62,12 +63,12 @@ public class SiteFacadeImpl implements SiteFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		siteService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, Site.class);
 	}
 
 	@Override
 	public Page<SiteDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Site> page = siteService.findEntityPage(dataTableRequest);
+		Page<Site> page = modelService.findPage(SiteSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Site.class);
 
 		List<SiteDto> dtos = modelService.getDto(page.getContent(), SiteDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<SiteDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -75,7 +76,7 @@ public class SiteFacadeImpl implements SiteFacade {
 
 	@Override
 	public int count() throws Exception {
-		return siteService.count();
+		return modelService.countAll(Site.class);
 	}
 
 	@Override

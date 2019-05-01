@@ -157,7 +157,7 @@ public class DynamicFieldSlotImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(DynamicFieldSlot.ID, csv.getId());
 
-			DynamicFieldSlot entity = modelService.findOneEntityByProperties(properties, DynamicFieldSlot.class);
+			DynamicFieldSlot entity = modelService.findByProperties(properties, DynamicFieldSlot.class);
 			modelService.deleteByEntity(entity, DynamicFieldSlot.class);
 		}
 	}

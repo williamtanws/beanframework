@@ -100,7 +100,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception {
+	public <T> T findByUuid(UUID uuid, Class modelClass) throws Exception {
 		Assert.notNull(uuid, "uuid was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -119,7 +119,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
+	public <T> T findByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
@@ -138,7 +138,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public int count(Class modelClass) throws Exception {
+	public int countAll(Class modelClass) throws Exception {
 		try {
 			Long count = (Long) createQuery(null, null, "count(o)", null, null, modelClass).getSingleResult();
 
@@ -150,7 +150,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public int count(Map<String, Object> properties, Class modelClass) throws Exception {
+	public int countByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		try {
 			Long count = (Long) createQuery(properties, null, "count(o)", null, null, modelClass).getSingleResult();
 
@@ -162,7 +162,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public int count(Specification specification, Class modelClass) throws Exception {
+	public int countBySpecification(Specification specification, Class modelClass) throws Exception {
 		try {
 			Long count = (Long) executeCountQuery(getCountQuery(specification, modelClass));
 
@@ -189,7 +189,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
+	public <T extends Collection> T findByPropertiesBySortByResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
 			throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -207,7 +207,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T extends Collection> T findEntityBySpecification(Specification specification, Sort sort, Class modelClass) throws Exception {
+	public <T extends Collection> T findBySpecificationBySort(Specification specification, Sort sort, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
@@ -229,7 +229,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public List<Object[]> findHistories(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
+	public List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
 			throws Exception {
 
 		// Create the Audit Reader. It uses the EntityManager, which will be opened when
@@ -262,7 +262,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public int findCountHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
+	public int countHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
 			throws Exception {
 
 		// Create the Audit Reader. It uses the EntityManager, which will be opened when
@@ -295,7 +295,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T> Page<T> findEntityPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
+	public <T> Page<T> findPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
@@ -357,7 +357,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException {
 		try {
 
-			Object model = findOneEntityByUuid(uuid, modelClass);
+			Object model = findByUuid(uuid, modelClass);
 
 			deleteEntity(model, modelClass);
 

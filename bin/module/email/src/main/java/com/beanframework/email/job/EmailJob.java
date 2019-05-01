@@ -72,7 +72,7 @@ public class EmailJob implements Job {
 			Map<String, Sort.Direction> oldSorts = new HashMap<String, Sort.Direction>();
 			oldSorts.put(Email.CREATED_DATE, Sort.Direction.ASC);
 
-			List<Email> oldEmails = modelService.findEntityByPropertiesAndSorts(oldProperties, oldSorts, null, null, Email.class);
+			List<Email> oldEmails = modelService.findByPropertiesBySortByResult(oldProperties, oldSorts, null, null, Email.class);
 			int count = oldEmails.size();
 
 			int numberOfPendingEmails = 0;
@@ -90,7 +90,7 @@ public class EmailJob implements Job {
 				Map<String, Sort.Direction> pendingSorts = new HashMap<String, Sort.Direction>();
 				pendingSorts.put(Email.CREATED_DATE, Sort.Direction.ASC);
 
-				List<Email> pendingEmails = modelService.findEntityByPropertiesAndSorts(pendingProperties, pendingSorts, null, null, Email.class);
+				List<Email> pendingEmails = modelService.findByPropertiesBySortByResult(pendingProperties, pendingSorts, null, null, Email.class);
 
 				// Change pending email to processing email
 				for (int i = 0; i < pendingEmails.size(); i++) {
@@ -107,7 +107,7 @@ public class EmailJob implements Job {
 			Map<String, Sort.Direction> processingSorts = new HashMap<String, Sort.Direction>();
 			processingSorts.put(Email.CREATED_DATE, Sort.Direction.ASC);
 
-			List<Email> processingEmails = modelService.findEntityByPropertiesAndSorts(processingProperties, processingSorts, null, EMAIL_PROCESS_NUMBER, Email.class);
+			List<Email> processingEmails = modelService.findByPropertiesBySortByResult(processingProperties, processingSorts, null, EMAIL_PROCESS_NUMBER, Email.class);
 
 			int sentEmail = 0;
 			int failedEmail = 0;

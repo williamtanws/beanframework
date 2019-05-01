@@ -19,6 +19,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.service.UserPermissionService;
+import com.beanframework.user.specification.UserPermissionSpecification;
 
 @Component
 public class UserPermissionFacadeImpl implements UserPermissionFacade {
@@ -31,7 +32,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Override
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
-		UserPermission entity = userPermissionService.findOneEntityByUuid(uuid);
+		UserPermission entity = modelService.findByUuid(uuid, UserPermission.class);
 		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -39,7 +40,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Override
 	public UserPermissionDto findOneProperties(Map<String, Object> properties) throws Exception {
-		UserPermission entity = userPermissionService.findOneEntityByProperties(properties);
+		UserPermission entity = modelService.findByProperties(properties, UserPermission.class);
 		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class);
 
 		return dto;
@@ -58,7 +59,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public UserPermissionDto save(UserPermissionDto dto) throws BusinessException {
 		try {
 			UserPermission entity = modelService.getEntity(dto, UserPermission.class);
-			entity = (UserPermission) userPermissionService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, UserPermission.class);
 
 			return modelService.getDto(entity, UserPermissionDto.class);
 		} catch (Exception e) {
@@ -68,12 +69,12 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		userPermissionService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, UserPermission.class);
 	}
 
 	@Override
 	public Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<UserPermission> page = userPermissionService.findEntityPage(dataTableRequest);
+		Page<UserPermission> page = modelService.findPage(UserPermissionSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserPermission.class);
 
 		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<UserPermissionDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -81,7 +82,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Override
 	public int count() throws Exception {
-		return userPermissionService.count();
+		return modelService.countAll(UserPermission.class);
 	}
 
 	@Override
@@ -110,7 +111,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserPermission.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(userPermissionService.findEntityBySorts(sorts), UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(modelService.findByPropertiesBySortByResult(null, sorts, null, null, UserPermission.class), UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override

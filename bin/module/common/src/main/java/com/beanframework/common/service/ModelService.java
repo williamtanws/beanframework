@@ -40,19 +40,19 @@ public interface ModelService {
 	<T> T create(Class modelClass) throws Exception;
 
 	@Cacheable(value = "Model", key = "'uuid:'+#uuid+',modelClass:'+#modelClass")
-	<T> T findOneEntityByUuid(UUID uuid, Class modelClass) throws Exception;
+	<T> T findByUuid(UUID uuid, Class modelClass) throws Exception;
 
 	@Cacheable(value = "ModelProperties", key = "'properties:'+#properties+',modelClass:'+#modelClass")
-	<T> T findOneEntityByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
+	<T> T findByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	@Cacheable(value = "ModelCount", key = "'modelClass:'+#modelClass")
-	int count(Class modelClass) throws Exception;
+	int countAll(Class modelClass) throws Exception;
 
 	@Cacheable(value = "ModelCount", key = "'properties:'+#properties+',modelClass:'+#modelClass")
-	int count(Map<String, Object> properties, Class modelClass) throws Exception;
+	int countByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	@Cacheable(value = "ModelCount", key = "'specification:'+#specification+',modelClass:'+#modelClass")
-	int count(Specification specification, Class modelClass) throws Exception;
+	int countBySpecification(Specification specification, Class modelClass) throws Exception;
 
 	@Cacheable(value = "ModelPropertiesExists", key = "'properties:'+#properties+',modelClass:'+#modelClass")
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
@@ -71,24 +71,24 @@ public interface ModelService {
 	 * @throws Exception
 	 */
 	@Cacheable(value = "ModelList", key = "'properties:'+#properties+',sorts:'+#sorts+',firstResult:'+#firstResult+',maxResult:'+#maxResult+',modelClass:'+#modelClass")
-	<T extends Collection> T findEntityByPropertiesAndSorts(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
+	<T extends Collection> T findByPropertiesBySortByResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
 			throws Exception;
 
 	@Cacheable(value = "ModelList", key = "'specification:'+#specification+',sorts:'+#sorts+',modelClass:'+#modelClass")
-	<T extends Collection> T findEntityBySpecification(Specification specification, Sort sort, Class modelClass) throws Exception;
+	<T extends Collection> T findBySpecificationBySort(Specification specification, Sort sort, Class modelClass) throws Exception;
 
 	@Cacheable(value = "ModelList", key = "modelClass:'+#modelClass")
 	<T extends Collection> T findAll(Class modelClass);
 
 //	@Cacheable(value = "ModelHistoryList", key = "'selectDeletedEntities:'+#selectDeletedEntities+',auditCriterions:'+#auditCriterions+',auditOrders:'+#auditOrders+',firstResult:'+#firstResult+',maxResults:'+#maxResults+',modelClass:'+#modelClass")
-	List<Object[]> findHistories(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
+	List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
 			throws Exception;
 
 //	@Cacheable(value = "ModelHistoryCount", key = "'selectDeletedEntities:'+#selectDeletedEntities+',auditCriterions:'+#auditCriterions+',auditOrders:'+#auditOrders+',firstResult:'+#firstResult+',maxResults:'+#maxResults+',modelClass:'+#modelClass")
-	int findCountHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
+	int countHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
 
 	@Cacheable(value = "ModelPage", key = "'spec:'+#spec+',pageable:'+#pageable+',modelClass:'+#modelClass")
-	<T> Page<T> findEntityPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
+	<T> Page<T> findPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
 
 	@Caching(evict = { //
 			@CacheEvict(value = "Model", key = "'uuid:'+#model.uuid+',modelClass:'+#modelClass", condition = "#model.uuid != null"), //

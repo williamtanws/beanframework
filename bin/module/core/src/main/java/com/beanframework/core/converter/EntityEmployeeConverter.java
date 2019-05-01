@@ -18,16 +18,12 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeService;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Employee> {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private EmployeeService employeeService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -40,7 +36,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.UUID, source.getUuid());
-				Employee prototype = employeeService.findOneEntityByProperties(properties);
+				Employee prototype = modelService.findByProperties(properties, Employee.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
@@ -171,7 +167,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 						}
 
 						if (add) {
-							UserGroup entityUserGroups = modelService.findOneEntityByUuid(UUID.fromString(source.getTableUserGroups()[i]), UserGroup.class);
+							UserGroup entityUserGroups = modelService.findByUuid(UUID.fromString(source.getTableUserGroups()[i]), UserGroup.class);
 							prototype.getUserGroups().add(entityUserGroups);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}

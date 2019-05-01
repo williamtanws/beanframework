@@ -18,15 +18,11 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightField;
-import com.beanframework.user.service.UserRightService;
 
 public class EntityUserRightConverter implements EntityConverter<UserRightDto, UserRight> {
 
 	@Autowired
 	private ModelService modelService;
-	
-	@Autowired
-	private UserRightService userRightService;
 
 	@Override
 	public UserRight convert(UserRightDto source, EntityConverterContext context) throws ConverterException {
@@ -38,7 +34,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserRight.UUID, source.getUuid());
 
-				UserRight prototype = userRightService.findOneEntityByProperties(properties);
+				UserRight prototype = modelService.findByProperties(properties, UserRight.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
@@ -104,7 +100,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 					if (sourceField.getDynamicFieldSlot().getUuid() == null && StringUtils.isNotBlank(sourceField.getDynamicFieldSlot().getId())) {
 						Map<String, Object> properties = new HashMap<String, Object>();
 						properties.put(DynamicField.ID, sourceField.getDynamicFieldSlot().getId());
-						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneEntityByProperties(properties, DynamicFieldSlot.class);
+						DynamicFieldSlot entityDynamicFieldSlot = modelService.findByProperties(properties, DynamicFieldSlot.class);
 
 						UserRightField field = new UserRightField();
 						field.setUserRight(prototype);

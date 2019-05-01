@@ -157,7 +157,7 @@ public class AdminImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Admin.ID, csv.getId());
 
-			Admin entity = modelService.findOneEntityByProperties(properties, Admin.class);
+			Admin entity = modelService.findByProperties(properties, Admin.class);
 			modelService.deleteByEntity(entity, Admin.class);
 		}
 	}

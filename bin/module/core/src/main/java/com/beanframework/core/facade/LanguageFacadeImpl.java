@@ -17,6 +17,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.language.domain.Language;
 import com.beanframework.language.service.LanguageService;
+import com.beanframework.language.specification.LanguageSpecification;
 
 @Component
 public class LanguageFacadeImpl implements LanguageFacade {
@@ -29,13 +30,13 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
 	@Override
 	public LanguageDto findOneByUuid(UUID uuid) throws Exception {
-		Language entity = languageService.findOneEntityByUuid(uuid);
+		Language entity = modelService.findByUuid(uuid, Language.class);
 		return modelService.getDto(entity, LanguageDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public LanguageDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Language entity = languageService.findOneEntityByProperties(properties);
+		Language entity = modelService.findByProperties(properties, Language.class);
 		return modelService.getDto(entity, LanguageDto.class);
 	}
 
@@ -52,7 +53,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public LanguageDto save(LanguageDto dto) throws BusinessException {
 		try {
 			Language entity = modelService.getEntity(dto, Language.class);
-			entity = (Language) languageService.saveEntity(entity);
+			entity = modelService.saveEntity(entity, Language.class);
 
 			return modelService.getDto(entity, LanguageDto.class);
 		} catch (Exception e) {
@@ -62,12 +63,12 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		languageService.deleteByUuid(uuid);
+		modelService.deleteByUuid(uuid, Language.class);
 	}
 
 	@Override
 	public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Language> page = languageService.findEntityPage(dataTableRequest);
+		Page<Language> page = modelService.findPage(LanguageSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Language.class);
 
 		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());
@@ -75,7 +76,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
 	@Override
 	public int count() throws Exception {
-		return languageService.count();
+		return modelService.countAll(Language.class);
 	}
 
 	@Override

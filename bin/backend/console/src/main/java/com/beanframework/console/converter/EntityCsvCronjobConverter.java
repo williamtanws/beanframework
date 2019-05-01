@@ -34,7 +34,7 @@ public class EntityCsvCronjobConverter implements EntityCsvConverter<CronjobCsv,
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Cronjob.ID, source.getId());
 
-				Cronjob prototype = modelService.findOneEntityByProperties(properties, Cronjob.class);
+				Cronjob prototype = modelService.findByProperties(properties, Cronjob.class);
 
 				if (prototype != null) {
 

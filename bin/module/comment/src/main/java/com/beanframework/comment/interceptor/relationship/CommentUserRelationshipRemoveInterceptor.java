@@ -25,7 +25,7 @@ public class CommentUserRelationshipRemoveInterceptor extends AbstractRemoveInte
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Comment.USER + "." + GenericEntity.UUID, model.getUuid());
-			List<Comment> entities = modelService.findEntityByPropertiesAndSorts(properties, null, null, null, Comment.class);
+			List<Comment> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, Comment.class);
 
 			for (Comment comment : entities) {
 				modelService.deleteByEntity(comment, Comment.class);

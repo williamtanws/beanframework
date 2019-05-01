@@ -32,7 +32,7 @@ public class EntityCsvAdminConverter implements EntityCsvConverter<AdminCsv, Adm
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Admin.ID, source.getId());
 
-				Admin prototype = modelService.findOneEntityByProperties(properties, Admin.class);
+				Admin prototype = modelService.findByProperties(properties, Admin.class);
 
 				if (prototype != null) {
 
