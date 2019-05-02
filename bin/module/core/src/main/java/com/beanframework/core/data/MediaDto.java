@@ -20,7 +20,7 @@ public class MediaDto extends GenericDto {
 
 	private String fileName;
 	private String fileType;
-	private Long fileSize;
+	private String fileSize;
 	private String url;
 	private String title;
 	private String caption;
@@ -44,11 +44,11 @@ public class MediaDto extends GenericDto {
 		this.fileType = fileType;
 	}
 
-	public Long getFileSize() {
+	public String getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(Long fileSize) {
+	public void setFileSize(String fileSize) {
 		this.fileSize = fileSize;
 	}
 

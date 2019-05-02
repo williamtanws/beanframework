@@ -20,8 +20,11 @@ public class GlobalErrorController implements ErrorController {
 	@RequestMapping("/error")
 	public String handleError(Model model, HttpServletRequest request) {
 		String originalUri = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
-		
-		if(originalUri == null) {
+		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+		Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
+		String message = (String) request.getAttribute("javax.servlet.error.message");
+
+		if (originalUri == null) {
 			originalUri = request.getRequestURI();
 		}
 
@@ -29,13 +32,14 @@ public class GlobalErrorController implements ErrorController {
 			String webroot = originalUri.split("/")[1];
 
 			if (WEBROOTS.contains(webroot)) {
+
+				if (statusCode == 405) {
+					return "redirect:/" + webroot;
+				}
+
 				model.addAttribute("redirectUrl", "/" + webroot);
 			}
 		}
-
-		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-		Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
-		String message = (String) request.getAttribute("javax.servlet.error.message");
 
 		if (statusCode != null)
 			model.addAttribute("statusCode", statusCode);
