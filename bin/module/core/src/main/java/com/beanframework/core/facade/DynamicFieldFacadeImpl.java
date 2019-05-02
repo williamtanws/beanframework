@@ -16,9 +16,8 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
-import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.service.DynamicFieldService;
-import com.beanframework.dynamicfield.specification.DynamicFieldSlotSpecification;
+import com.beanframework.dynamicfield.specification.DynamicFieldSpecification;
 
 @Component
 public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
@@ -73,7 +72,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Override
 	public Page<DynamicFieldDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<DynamicField> page = modelService.findPage(DynamicFieldSlotSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicFieldSlot.class);
+		Page<DynamicField> page = modelService.findPage(DynamicFieldSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicField.class);
 
 		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), DynamicFieldDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
 		return new PageImpl<DynamicFieldDto>(dtos, page.getPageable(), page.getTotalElements());
