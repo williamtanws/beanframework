@@ -61,18 +61,6 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (source.getFileSize() == null) {
-				if (prototype.getFileSize() != null) {
-					prototype.setFileSize(null);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			} else {
-				if (prototype.getFileSize() == null || prototype.getFileSize().equals(source.getFileSize()) == false) {
-					prototype.setFileSize(source.getFileSize());
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			}
-
 			if (StringUtils.equals(StringUtils.stripToNull(source.getTitle()), prototype.getTitle()) == false) {
 				prototype.setTitle(StringUtils.stripToNull(source.getTitle()));
 				prototype.setLastModifiedDate(lastModifiedDate);

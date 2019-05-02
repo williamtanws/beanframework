@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.utils.SizeUtils;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.media.domain.Media;
 
@@ -39,7 +40,7 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 
 			prototype.setFileName(source.getFileName());
 			prototype.setFileType(source.getFileType());
-			prototype.setFileSize(source.getFileSize());
+			prototype.setFileSize(SizeUtils.humanReadableByteCount(source.getFileSize(), true));
 			prototype.setTitle(source.getTitle());
 			prototype.setCaption(source.getCaption());
 			prototype.setAltText(source.getAltText());
