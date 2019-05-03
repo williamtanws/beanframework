@@ -2,6 +2,7 @@ package com.beanframework.backoffice.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.core.facade.LanguageFacade;
+import com.beanframework.core.facade.LanguageFacade.LanguagePreAuthorizeEnum;
 
 @Controller
 public class LanguageController extends AbstractController {
@@ -30,6 +32,7 @@ public class LanguageController extends AbstractController {
 	@Value(LanguageWebConstants.View.LIST)
 	private String VIEW_LANGUAGE_LIST;
 
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = LanguageWebConstants.Path.LANGUAGE)
 	public String list(@ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model) throws Exception {
 		model.addAttribute("create", false);
@@ -48,6 +51,7 @@ public class LanguageController extends AbstractController {
 		return VIEW_LANGUAGE_LIST;
 	}
 
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "create")
 	public String createView(@ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model) throws Exception {
 
@@ -58,6 +62,7 @@ public class LanguageController extends AbstractController {
 		return VIEW_LANGUAGE_LIST;
 	}
 
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "create")
 	public RedirectView create(@ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -83,6 +88,7 @@ public class LanguageController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "update")
 	public RedirectView update(@ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -108,6 +114,7 @@ public class LanguageController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "delete")
 	public RedirectView delete(@ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {

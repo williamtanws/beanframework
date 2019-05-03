@@ -2,6 +2,7 @@ package com.beanframework.backoffice.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.facade.DynamicFieldSlotFacade;
+import com.beanframework.core.facade.DynamicFieldSlotFacade.DynamicFieldSlotPreAuthorizeEnum;
 
 @Controller
 public class DynamicFieldSlotController extends AbstractController {
@@ -30,6 +32,7 @@ public class DynamicFieldSlotController extends AbstractController {
 	@Value(DynamicFieldSlotWebConstants.View.LIST)
 	private String VIEW_DYNAMICFIELDSLOT_LIST;
 
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT)
 	public String list(@ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dynamicFieldSlotDto, Model model) throws Exception {
 		model.addAttribute("create", false);
@@ -50,6 +53,7 @@ public class DynamicFieldSlotController extends AbstractController {
 		return VIEW_DYNAMICFIELDSLOT_LIST;
 	}
 
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT, params = "create")
 	public String createView(@ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dynamicFieldSlotDto, Model model) throws Exception {
 
@@ -60,6 +64,7 @@ public class DynamicFieldSlotController extends AbstractController {
 		return VIEW_DYNAMICFIELDSLOT_LIST;
 	}
 
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT, params = "create")
 	public RedirectView create(@ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dynamicFieldSlotDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -85,6 +90,7 @@ public class DynamicFieldSlotController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT, params = "update")
 	public RedirectView update(@ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dynamicFieldSlotDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -109,6 +115,7 @@ public class DynamicFieldSlotController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT, params = "delete")
 	public RedirectView delete(@ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dynamicFieldSlotDto, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {

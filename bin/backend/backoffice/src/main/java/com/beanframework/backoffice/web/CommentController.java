@@ -2,6 +2,7 @@ package com.beanframework.backoffice.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.facade.CommentFacade;
+import com.beanframework.core.facade.CommentFacade.CommentPreAuthorizeEnum;
 
 @Controller
 public class CommentController extends AbstractController {
@@ -30,6 +32,7 @@ public class CommentController extends AbstractController {
 	@Value(CommentWebConstants.View.LIST)
 	private String VIEW_COMMENT_LIST;
 
+	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = CommentWebConstants.Path.COMMENT)
 	public String list(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model) throws Exception {
 		model.addAttribute("create", false);
@@ -49,6 +52,7 @@ public class CommentController extends AbstractController {
 		return VIEW_COMMENT_LIST;
 	}
 
+	@PreAuthorize(CommentPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = CommentWebConstants.Path.COMMENT, params = "create")
 	public String createView(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model) throws Exception {
 
@@ -59,6 +63,7 @@ public class CommentController extends AbstractController {
 		return VIEW_COMMENT_LIST;
 	}
 
+	@PreAuthorize(CommentPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = CommentWebConstants.Path.COMMENT, params = "create")
 	public RedirectView create(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
@@ -109,6 +114,7 @@ public class CommentController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(CommentPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = CommentWebConstants.Path.COMMENT, params = "delete")
 	public RedirectView delete(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 

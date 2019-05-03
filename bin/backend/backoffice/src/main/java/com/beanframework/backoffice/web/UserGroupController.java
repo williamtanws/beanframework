@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.facade.UserGroupFacade;
 import com.beanframework.core.facade.UserPermissionFacade;
 import com.beanframework.core.facade.UserRightFacade;
+import com.beanframework.core.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
 
 @Controller
 public class UserGroupController extends AbstractController {
@@ -44,6 +46,7 @@ public class UserGroupController extends AbstractController {
 	@Value(UserGroupWebConstants.View.LIST)
 	private String VIEW_USERGROUP_LIST;
 
+	@PreAuthorize(UserGroupPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP)
 	public String list(@ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto, Model model) throws Exception {
 		model.addAttribute("create", false);
@@ -69,6 +72,7 @@ public class UserGroupController extends AbstractController {
 		return VIEW_USERGROUP_LIST;
 	}
 
+	@PreAuthorize(UserGroupPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "create")
 	public String createView(Model model, @ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto) throws Exception {
 
@@ -86,6 +90,7 @@ public class UserGroupController extends AbstractController {
 		return VIEW_USERGROUP_LIST;
 	}
 
+	@PreAuthorize(UserGroupPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "create")
 	public RedirectView create(@ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -110,6 +115,7 @@ public class UserGroupController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(UserGroupPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "update")
 	public RedirectView update(@ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
@@ -135,6 +141,7 @@ public class UserGroupController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(UserGroupPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = UserGroupWebConstants.Path.USERGROUP, params = "delete")
 	public RedirectView delete(@ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {

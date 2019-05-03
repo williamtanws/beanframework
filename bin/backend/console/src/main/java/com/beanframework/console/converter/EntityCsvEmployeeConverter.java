@@ -109,27 +109,23 @@ public class EntityCsvEmployeeConverter implements EntityCsvConverter<EmployeeCs
 				}
 			}
 
-			// UserGroup
+			// User Group
 			if (StringUtils.isNotBlank(source.getUserGroupIds())) {
 				String[] userGroupIds = source.getUserGroupIds().split(ImportListener.SPLITTER);
-
-				boolean add = true;
-				for (UserGroup userGroup : prototype.getUserGroups()) {
-					for (int i = 0; i < userGroupIds.length; i++) {
-						if (userGroupIds[i].equals(userGroup.getId())) {
+				for (int i = 0; i < userGroupIds.length; i++) {
+					boolean add = true;
+					for (UserGroup userGroup : prototype.getUserGroups()) {
+						if (StringUtils.equals(userGroup.getId(), userGroupIds[i]))
 							add = false;
-						}
 					}
-				}
 
-				if (add) {
-					for (int i = 0; i < userGroupIds.length; i++) {
+					if (add) {
 						Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 						userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
 						UserGroup userGroup = modelService.findByProperties(userGroupProperties, UserGroup.class);
 
 						if (userGroup == null) {
-							LOGGER.error("UserGroup not exists: " + userGroupIds[i]);
+							LOGGER.error("UserGroup ID not exists: " + userGroupIds[i]);
 						} else {
 							prototype.getUserGroups().add(userGroup);
 						}

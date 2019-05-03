@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.core.facade.EmailFacade;
+import com.beanframework.core.facade.EmailFacade.EmailPreAuthorizeEnum;
 
 @Controller
 public class EmailController extends AbstractController {
@@ -34,6 +36,7 @@ public class EmailController extends AbstractController {
 	@Value(EmailWebConstants.View.LIST)
 	private String VIEW_EMAIL_LIST;
 
+	@PreAuthorize(EmailPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = EmailWebConstants.Path.EMAIL)
 	public String list(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
@@ -54,6 +57,7 @@ public class EmailController extends AbstractController {
 		return VIEW_EMAIL_LIST;
 	}
 
+	@PreAuthorize(EmailPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
 	public String createView(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model) throws Exception {
 
@@ -64,6 +68,7 @@ public class EmailController extends AbstractController {
 		return VIEW_EMAIL_LIST;
 	}
 
+	@PreAuthorize(EmailPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
 	public RedirectView create(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -88,6 +93,7 @@ public class EmailController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(EmailPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "update")
 	public RedirectView update(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -112,6 +118,7 @@ public class EmailController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(EmailPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "delete")
 	public RedirectView delete(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
@@ -132,6 +139,7 @@ public class EmailController extends AbstractController {
 
 	}
 
+	@PreAuthorize(EmailPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "createattachment")
 	public RedirectView createAttachment(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("uploadAttachments") MultipartFile[] uploadAttachments) {
@@ -156,6 +164,7 @@ public class EmailController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(EmailPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "deleteattachment")
 	public RedirectView deleteAttachment(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("filename") String filename) {
