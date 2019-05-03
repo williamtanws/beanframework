@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.facade.EmployeeFacade;
+import com.beanframework.core.facade.EmployeeFacade.EmployeePreAuthorizeEnum;
 
 @Controller
 public class EmployeeController extends AbstractController {
@@ -38,6 +40,7 @@ public class EmployeeController extends AbstractController {
 	@Value(EmployeeWebConstants.View.LIST)
 	private String VIEW_EMPLOYEE_LIST;
 
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
 	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
@@ -58,6 +61,7 @@ public class EmployeeController extends AbstractController {
 		return VIEW_EMPLOYEE_LIST;
 	}
 
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
 	public String createView(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model) throws Exception {
 
@@ -68,6 +72,7 @@ public class EmployeeController extends AbstractController {
 		return VIEW_EMPLOYEE_LIST;
 	}
 
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
 	public RedirectView create(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
@@ -93,6 +98,7 @@ public class EmployeeController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "update")
 	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
@@ -155,6 +161,7 @@ public class EmployeeController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "delete")
 	public RedirectView delete(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {

@@ -2,6 +2,7 @@ package com.beanframework.backoffice.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
 import com.beanframework.core.facade.DynamicFieldTemplateFacade;
+import com.beanframework.core.facade.DynamicFieldTemplateFacade.DynamicFieldTemplatePreAuthorizeEnum;
 
 @Controller
 public class DynamicFieldTemplateController extends AbstractController {
@@ -30,6 +32,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 	@Value(DynamicFieldTemplateWebConstants.View.LIST)
 	private String VIEW_DYNAMICFILEDTEMPLATE_LIST;
 
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE)
 	public String list(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model) throws Exception {
 		model.addAttribute("create", false);
@@ -48,6 +51,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 		return VIEW_DYNAMICFILEDTEMPLATE_LIST;
 	}
 
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "create")
 	public String createView(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model) throws Exception {
 
@@ -58,6 +62,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 		return VIEW_DYNAMICFILEDTEMPLATE_LIST;
 	}
 
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "create")
 	public RedirectView create(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
@@ -83,6 +88,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "update")
 	public RedirectView update(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
@@ -108,6 +114,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "delete")
 	public RedirectView delete(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) {

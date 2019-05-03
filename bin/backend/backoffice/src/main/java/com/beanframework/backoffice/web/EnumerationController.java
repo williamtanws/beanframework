@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.facade.EnumerationFacade;
+import com.beanframework.core.facade.EnumerationFacade.EnumPreAuthorizeEnum;
 
 @Controller
 public class EnumerationController extends AbstractController {
@@ -33,6 +35,7 @@ public class EnumerationController extends AbstractController {
 	@Value(EnumerationWebConstants.View.LIST)
 	private String VIEW_ENUMERATION_LIST;
 
+	@PreAuthorize(EnumPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = EnumerationWebConstants.Path.ENUMERATION)
 	public String list(@ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model) throws Exception {
 		model.addAttribute("create", false);
@@ -52,6 +55,7 @@ public class EnumerationController extends AbstractController {
 		return VIEW_ENUMERATION_LIST;
 	}
 
+	@PreAuthorize(EnumPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = EnumerationWebConstants.Path.ENUMERATION, params = "create")
 	public String createView(@ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model) throws Exception {
 
@@ -62,6 +66,7 @@ public class EnumerationController extends AbstractController {
 		return VIEW_ENUMERATION_LIST;
 	}
 
+	@PreAuthorize(EnumPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = EnumerationWebConstants.Path.ENUMERATION, params = "create")
 	public RedirectView create(@ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -87,6 +92,7 @@ public class EnumerationController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(EnumPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = EnumerationWebConstants.Path.ENUMERATION, params = "update")
 	public RedirectView update(@ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -112,6 +118,7 @@ public class EnumerationController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(EnumPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = EnumerationWebConstants.Path.ENUMERATION, params = "delete")
 	public RedirectView delete(@ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {

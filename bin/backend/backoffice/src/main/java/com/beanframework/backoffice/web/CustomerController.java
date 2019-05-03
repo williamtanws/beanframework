@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.facade.CustomerFacade;
+import com.beanframework.core.facade.CustomerFacade.CustomerPreAuthorizeEnum;
 
 @Controller
 public class CustomerController extends AbstractController {
@@ -33,6 +35,7 @@ public class CustomerController extends AbstractController {
 	@Value(CustomerWebConstants.View.LIST)
 	private String VIEW_CUSTOMER_LIST;
 
+	@PreAuthorize(CustomerPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER)
 	public String list(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
@@ -53,6 +56,7 @@ public class CustomerController extends AbstractController {
 		return VIEW_CUSTOMER_LIST;
 	}
 
+	@PreAuthorize(CustomerPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "create")
 	public String createView(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model) throws Exception {
 
@@ -63,6 +67,7 @@ public class CustomerController extends AbstractController {
 		return VIEW_CUSTOMER_LIST;
 	}
 
+	@PreAuthorize(CustomerPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "create")
 	public RedirectView create(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -88,6 +93,7 @@ public class CustomerController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(CustomerPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "update")
 	public RedirectView update(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
@@ -113,6 +119,7 @@ public class CustomerController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(CustomerPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "delete")
 	public RedirectView delete(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {

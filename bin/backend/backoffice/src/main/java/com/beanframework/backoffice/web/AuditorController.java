@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.core.data.AuditorDto;
 import com.beanframework.core.facade.AuditorFacade;
+import com.beanframework.core.facade.AuditorFacade.PreAuthorizeEnum;
 
 @Controller
 public class AuditorController extends AbstractController {
@@ -28,6 +30,7 @@ public class AuditorController extends AbstractController {
 	@Value(AuditorWebConstants.View.LIST)
 	private String VIEW_LANGUAGE_LIST;
 
+	@PreAuthorize(PreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = AuditorWebConstants.Path.AUDITOR)
 	public String list(@ModelAttribute(AuditorWebConstants.ModelAttribute.AUDITOR_DTO) AuditorDto auditorDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);

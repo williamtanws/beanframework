@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.core.facade.MediaFacade;
+import com.beanframework.core.facade.MediaFacade.MediaPreAuthorizeEnum;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.media.domain.Media;
 
@@ -51,6 +53,7 @@ public class MediaController extends AbstractController {
 	@Value(MediaConstants.MEDIA_URL)
 	public String MEDIA_URL;
 
+	@PreAuthorize(MediaPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = MediaWebConstants.Path.MEDIA)
 	public String list(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model) throws Exception {
 		model.addAttribute("create", false);
@@ -69,6 +72,7 @@ public class MediaController extends AbstractController {
 		return VIEW_MEDIA_LIST;
 	}
 
+	@PreAuthorize(MediaPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = MediaWebConstants.Path.MEDIA, params = "create")
 	public String createView(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model) throws Exception {
 
@@ -79,6 +83,7 @@ public class MediaController extends AbstractController {
 		return VIEW_MEDIA_LIST;
 	}
 
+	@PreAuthorize(MediaPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = MediaWebConstants.Path.MEDIA, params = "create")
 	public RedirectView create(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
@@ -104,6 +109,7 @@ public class MediaController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(MediaPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = MediaWebConstants.Path.MEDIA, params = "update")
 	public RedirectView update(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
@@ -129,6 +135,7 @@ public class MediaController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(MediaPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = MediaWebConstants.Path.MEDIA, params = "delete")
 	public RedirectView delete(@ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 

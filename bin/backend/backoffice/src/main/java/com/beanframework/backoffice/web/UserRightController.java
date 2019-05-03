@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.facade.UserRightFacade;
+import com.beanframework.core.facade.UserRightFacade.UserRightPreAuthorizeEnum;
 
 @Controller
 public class UserRightController extends AbstractController {
@@ -33,6 +35,7 @@ public class UserRightController extends AbstractController {
 	@Value(UserRightWebConstants.View.LIST)
 	private String VIEW_USERRIGHT_LIST;
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT)
 	public String list(@ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model) throws Exception {
 		model.addAttribute("create", false);
@@ -52,6 +55,7 @@ public class UserRightController extends AbstractController {
 		return VIEW_USERRIGHT_LIST;
 	}
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "create")
 	public String createView(@ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model) throws Exception {
 
@@ -62,6 +66,7 @@ public class UserRightController extends AbstractController {
 		return VIEW_USERRIGHT_LIST;
 	}
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "create")
 	public RedirectView create(@ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
@@ -87,6 +92,7 @@ public class UserRightController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "update")
 	public RedirectView update(@ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -111,6 +117,7 @@ public class UserRightController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "delete")
 	public RedirectView delete(@ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {

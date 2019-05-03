@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.facade.CronjobFacade;
+import com.beanframework.core.facade.CronjobFacade.CronjobPreAuthorizeEnum;
 import com.beanframework.cronjob.service.CronjobManagerService;
 
 @Controller
@@ -44,6 +46,7 @@ public class CronjobController extends AbstractController {
 	@Value(CronjobWebConstants.View.LIST)
 	private String VIEW_CRONJOB_LIST;
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB)
 	public String list(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
@@ -64,6 +67,7 @@ public class CronjobController extends AbstractController {
 		return VIEW_CRONJOB_LIST;
 	}
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB, params = "create")
 	public String createView(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model) throws Exception {
 
@@ -74,6 +78,7 @@ public class CronjobController extends AbstractController {
 		return VIEW_CRONJOB_LIST;
 	}
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "create")
 	public RedirectView create(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -98,6 +103,7 @@ public class CronjobController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "update")
 	public RedirectView update(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
@@ -123,6 +129,7 @@ public class CronjobController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "delete")
 	public RedirectView delete(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -143,6 +150,7 @@ public class CronjobController extends AbstractController {
 
 	}
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "trigger")
 	public RedirectView trigger(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws ParseException {
@@ -174,6 +182,7 @@ public class CronjobController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "createjobdata")
 	public RedirectView createjobdata(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
@@ -206,6 +215,7 @@ public class CronjobController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "deletejobdata")
 	public RedirectView deletejobdata(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CustomerDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
