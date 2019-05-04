@@ -106,8 +106,8 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 
 	@Override
 	public DynamicFieldSlotDto createDto() throws Exception {
-
-		return modelService.getDto(modelService.create(DynamicFieldSlot.class), DynamicFieldSlotDto.class);
+		DynamicFieldSlot dynamicFieldSlot= modelService.create(DynamicFieldSlot.class);
+		return modelService.getDto(dynamicFieldSlot, DynamicFieldSlotDto.class);
 	}
 
 }

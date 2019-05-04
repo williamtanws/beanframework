@@ -27,13 +27,13 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private UserService userService;
 
 	@Autowired
 	private VendorService vendorService;
-	
+
 	@Autowired
 	private AuditorService auditorService;
 
@@ -129,8 +129,8 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public VendorDto createDto() throws Exception {
-
-		return modelService.getDto(modelService.create(Vendor.class), VendorDto.class);
+		Vendor vendor = modelService.create(Vendor.class);
+		return modelService.getDto(vendor, VendorDto.class);
 	}
 
 	@Override

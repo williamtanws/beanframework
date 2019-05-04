@@ -107,13 +107,14 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	public ConfigurationDto findOneDtoById(String id) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
-
-		return modelService.getDto(modelService.findByProperties(properties, Configuration.class), ConfigurationDto.class);
+		
+		Configuration configuration = modelService.findByProperties(properties, Configuration.class);
+		return modelService.getDto(configuration, ConfigurationDto.class);
 	}
 
 	@Override
 	public ConfigurationDto createDto() throws Exception {
-
-		return modelService.getDto(modelService.create(Configuration.class), ConfigurationDto.class);
+		Configuration configuration = modelService.create(Configuration.class);
+		return modelService.getDto(configuration, ConfigurationDto.class);
 	}
 }
