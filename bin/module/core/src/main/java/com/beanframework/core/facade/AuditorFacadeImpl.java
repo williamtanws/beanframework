@@ -61,7 +61,8 @@ public class AuditorFacadeImpl implements AuditorFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Auditor.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(modelService.findByPropertiesBySortByResult(null, sorts, null, null, Auditor.class), AuditorDto.class);
+		List<Auditor> auditor = modelService.findByPropertiesBySortByResult(null, sorts, null, null, Auditor.class);
+		return modelService.getDto(auditor, AuditorDto.class);
 	}
 
 	@Override

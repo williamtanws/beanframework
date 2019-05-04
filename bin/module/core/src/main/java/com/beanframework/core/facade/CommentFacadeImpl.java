@@ -109,13 +109,14 @@ public class CommentFacadeImpl implements CommentFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Comment.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(modelService.findByPropertiesBySortByResult(null, sorts, null, null, Comment.class), CommentDto.class);
+		List<Comment> comments = modelService.findByPropertiesBySortByResult(null, sorts, null, null, Comment.class);
+		return modelService.getDto(comments, CommentDto.class);
 	}
 
 	@Override
 	public CommentDto createDto() throws Exception {
-
-		return modelService.getDto(modelService.create(Comment.class), CommentDto.class);
+		Comment comment = modelService.create(Comment.class);
+		return modelService.getDto(comment, CommentDto.class);
 	}
 
 }

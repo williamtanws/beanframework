@@ -111,13 +111,14 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserPermission.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(modelService.findByPropertiesBySortByResult(null, sorts, null, null, UserPermission.class), UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		List<UserPermission> userPermissions = modelService.findByPropertiesBySortByResult(null, sorts, null, null, UserPermission.class);
+		return modelService.getDto(userPermissions, UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public UserPermissionDto createDto() throws Exception {
-
-		return modelService.getDto(modelService.create(UserPermission.class), UserPermissionDto.class);
+		UserPermission userPermission = modelService.create(UserPermission.class);
+		return modelService.getDto(userPermission, UserPermissionDto.class);
 	}
 
 }

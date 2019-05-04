@@ -102,7 +102,7 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Override
 	public MediaDto createDto() throws Exception {
-
-		return modelService.getDto(modelService.create(Media.class), MediaDto.class);
+		Media media= modelService.create(Media.class);
+		return modelService.getDto(media, MediaDto.class);
 	}
 }

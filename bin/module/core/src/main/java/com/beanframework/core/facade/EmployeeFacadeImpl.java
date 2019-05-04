@@ -31,7 +31,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private EmployeeService employeeService;
-	
+
 	@Autowired
 	private AuditorService auditorService;
 
@@ -176,6 +176,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public EmployeeDto createDto() throws Exception {
-		return modelService.getDto(modelService.create(Employee.class), EmployeeDto.class);
+		Employee employee = modelService.create(Employee.class);
+		return modelService.getDto(employee, EmployeeDto.class);
 	}
 }

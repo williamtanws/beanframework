@@ -106,8 +106,8 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Override
 	public DynamicFieldDto createDto() throws Exception {
-
-		return modelService.getDto(modelService.create(DynamicField.class), DynamicFieldDto.class);
+		DynamicField dynamicField = modelService.create(DynamicField.class);
+		return modelService.getDto(dynamicField, DynamicFieldDto.class);
 	}
 
 }

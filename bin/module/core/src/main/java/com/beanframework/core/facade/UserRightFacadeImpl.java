@@ -111,12 +111,13 @@ public class UserRightFacadeImpl implements UserRightFacade {
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(UserRight.CREATED_DATE, Sort.Direction.DESC);
 
-		return modelService.getDto(modelService.findByPropertiesBySortByResult(null, sorts, null, null, UserRight.class), UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		List<UserRight> userRights = modelService.findByPropertiesBySortByResult(null, sorts, null, null, UserRight.class);
+		return modelService.getDto(userRights, UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public UserRightDto createDto() throws Exception {
-
-		return modelService.getDto(modelService.create(UserRight.class), UserRightDto.class);
+		UserRight userRight = modelService.create(UserRight.class);
+		return modelService.getDto(userRight, UserRightDto.class);
 	}
 }

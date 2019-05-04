@@ -199,8 +199,8 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Override
 	public CronjobDto createDto() throws Exception {
-
-		return modelService.getDto(modelService.create(Cronjob.class), CronjobDto.class);
+		Cronjob cronjob = modelService.create(Cronjob.class);
+		return modelService.getDto(cronjob, CronjobDto.class);
 	}
 
 }

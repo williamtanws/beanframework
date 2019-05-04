@@ -114,7 +114,8 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Override
 	public AdminDto createDto() throws Exception {
-		return modelService.getDto(modelService.create(Admin.class), AdminDto.class);
+		Admin admin = modelService.create(Admin.class);
+		return modelService.getDto(admin, AdminDto.class);
 	}
 
 }
