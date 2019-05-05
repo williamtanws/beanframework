@@ -128,4 +128,11 @@ public interface ConsoleImportListenerConstants {
 		public static final String DESCRIPTION = "Update/Remove Media Data";
 	}
 
+	public interface WorkflowImport {
+		public static final String KEY = "workflow";
+		public static final String NAME = "Workflow";
+		public static final int SORT = 170;
+		public static final String DESCRIPTION = "Update/Remove Workflow Data";
+	}
+
 }
