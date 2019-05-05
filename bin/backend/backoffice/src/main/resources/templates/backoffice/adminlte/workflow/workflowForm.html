@@ -2,26 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
 	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
 <head>
-<title th:utext="#{module.site}"></title>
+<title th:utext="#{module.workflow}"></title>
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.site')}}, deleteUuid=${siteDto.uuid})}"></th:block>
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.site')}" method="post" th:object="${siteDto}">
+		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.workflow')}}, deleteUuid=${workflowDto.uuid})}"></th:block>
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.workflow')}" method="post" th:object="${workflowDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}"/>
 			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${siteDto.uuid}" />
+			<input type="hidden" name="uuid" th:value="${workflowDto.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='site_delete')}"></th:block>
+									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='workflow_delete')}"></th:block>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='site_delete')}"></th:block>
-									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='site_update')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='workflow_delete')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='workflow_update')}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -53,17 +53,9 @@
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="name" th:text="#{module.site.name}"></label>
+												<label for="name" th:text="#{module.workflow.name}"></label>
 												<span>*</span>
 												<input type="text" class="form-control" name="name" th:value="*{name}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="url" th:text="#{module.site.url}"></label>
-												<span>*</span>
-												<input type="text" class="form-control" name="url" th:value="*{url}">
 												<span class="help-block"></span>
 											</div>
 										</div>
@@ -74,7 +66,7 @@
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.site.history')}(uuid=*{uuid})} )}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.workflow.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -110,10 +102,10 @@
 		            	id: {
 		                    required: true,
 		                    remote: {
-		                        url: /*[[${@environment.getProperty('path.api.site.checkid')}]]*/ ,
+		                        url: /*[[${@environment.getProperty('path.api.workflow.checkid')}]]*/ ,
 		                        type: "get",
 		                        data: {
-		                            uuid: /*[[${siteDto.uuid}]]*/ ,
+		                            uuid: /*[[${workflowDto.uuid}]]*/ ,
 		                            id: function() {
 		                                return $("#update-form input[name='id']").val();
 		                            }
@@ -121,9 +113,6 @@
 		                    }
 		                },
 		                name: {
-		                    required: true
-		                },
-		                url: {
 		                    required: true
 		                }
 		            },
@@ -133,7 +122,7 @@
 		                    remote: /*[[#{module.backoffice.id.exists}]]*/
 		                },
 		                name: {
-		                    required: /*[[#{module.site.name.required}]]*/
+		                    required: /*[[#{module.workflow.name.required}]]*/
 		                }
 		            },
 		            highlight: function(element) {
