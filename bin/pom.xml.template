@@ -16,11 +16,13 @@
 
     <modules>
     	<module>module/common</module>
+    	<module>module/enumeration</module>
     	<module>module/language</module>
     	<module>module/user</module>
     	<module>module/employee</module>
     	<module>module/admin</module>
     	<module>module/customer</module>
+    	<module>module/vendor</module>
     	<module>module/email</module>
     	<module>module/cronjob</module>
     	<module>module/configuration</module>
@@ -30,6 +32,7 @@
         <module>module/media</module>
         <module>module/comment</module>
         <module>module/cms</module>
+        <module>module/workflow</module>
         <module>module/core</module>
 		<module>ui/adminlte</module>
         <module>backend/console</module>
