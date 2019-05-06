@@ -29,6 +29,7 @@ import com.beanframework.console.listener.UserGroupImportListener;
 import com.beanframework.console.listener.UserPermissionImportListener;
 import com.beanframework.console.listener.UserRightImportListener;
 import com.beanframework.console.listener.VendorImportListener;
+import com.beanframework.console.listener.WorkflowImportListener;
 import com.beanframework.console.registry.ImportListenerRegistry;
 
 @Configuration
@@ -126,6 +127,11 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	}
 
 	@Bean
+	public WorkflowImportListener workflowImportListener() {
+		return new WorkflowImportListener();
+	}
+
+	@Bean
 	public MediaImportListener mediaImportListener() {
 		return new MediaImportListener();
 	}
@@ -183,6 +189,9 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.SiteImport.KEY))
 			importListenerRegistry.addListener(siteImportListener());
+
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.WorkflowImport.KEY))
+			importListenerRegistry.addListener(workflowImportListener());
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.MediaImport.KEY))
 			importListenerRegistry.addListener(mediaImportListener());

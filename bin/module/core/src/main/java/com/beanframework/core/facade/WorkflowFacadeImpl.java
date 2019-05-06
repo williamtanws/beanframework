@@ -9,14 +9,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.cms.domain.Workflow;
-import com.beanframework.cms.service.WorkflowService;
 import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.WorkflowDto;
+import com.beanframework.workflow.domain.Workflow;
+import com.beanframework.workflow.service.WorkflowService;
 import com.beanframework.workflow.specification.WorkflowSpecification;
 
 @Component

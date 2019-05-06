@@ -3,13 +3,13 @@ package com.beanframework.backoffice.config.interceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.beanframework.cms.domain.Workflow;
-import com.beanframework.cms.interceptor.WorkflowInitialDefaultsInterceptor;
-import com.beanframework.cms.interceptor.WorkflowLoadInterceptor;
-import com.beanframework.cms.interceptor.WorkflowPrepareInterceptor;
-import com.beanframework.cms.interceptor.WorkflowRemoveInterceptor;
-import com.beanframework.cms.interceptor.WorkflowValidateInterceptor;
 import com.beanframework.common.interceptor.InterceptorMapping;
+import com.beanframework.workflow.domain.Workflow;
+import com.beanframework.workflow.interceptor.WorkflowInitialDefaultsInterceptor;
+import com.beanframework.workflow.interceptor.WorkflowLoadInterceptor;
+import com.beanframework.workflow.interceptor.WorkflowPrepareInterceptor;
+import com.beanframework.workflow.interceptor.WorkflowRemoveInterceptor;
+import com.beanframework.workflow.interceptor.WorkflowValidateInterceptor;
 
 @Configuration
 public class WorkflowInterceptorConfig {
