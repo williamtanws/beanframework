@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.WorkflowWebConstants;
 import com.beanframework.backoffice.data.WorkflowDataResponse;
-import com.beanframework.cms.domain.Workflow;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataResponse;
@@ -34,6 +33,7 @@ import com.beanframework.core.data.WorkflowDto;
 import com.beanframework.core.facade.WorkflowFacade;
 import com.beanframework.core.facade.WorkflowFacade.WorkflowPreAuthorizeEnum;
 import com.beanframework.user.domain.RevisionsEntity;
+import com.beanframework.workflow.domain.Workflow;
 
 @RestController
 public class WorkflowResource {

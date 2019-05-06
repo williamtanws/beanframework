@@ -1,9 +1,9 @@
-package com.beanframework.cms.interceptor;
+package com.beanframework.workflow.interceptor;
 
-import com.beanframework.cms.domain.Workflow;
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractPrepareInterceptor;
+import com.beanframework.workflow.domain.Workflow;
 
 public class WorkflowPrepareInterceptor extends AbstractPrepareInterceptor<Workflow> {
 

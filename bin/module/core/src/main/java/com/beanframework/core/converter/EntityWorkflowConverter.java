@@ -7,12 +7,12 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.cms.domain.Workflow;
 import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.WorkflowDto;
+import com.beanframework.workflow.domain.Workflow;
 
 public class EntityWorkflowConverter implements EntityConverter<WorkflowDto, Workflow> {
 
@@ -52,6 +52,11 @@ public class EntityWorkflowConverter implements EntityConverter<WorkflowDto, Wor
 
 		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
 			prototype.setName(StringUtils.stripToNull(source.getName()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
+
+		if (StringUtils.equals(StringUtils.stripToNull(source.getClasspath()), prototype.getClasspath()) == false) {
+			prototype.setClasspath(StringUtils.stripToNull(source.getClasspath()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 

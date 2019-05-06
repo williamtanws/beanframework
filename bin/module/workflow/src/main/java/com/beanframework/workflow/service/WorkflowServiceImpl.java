@@ -1,4 +1,4 @@
-package com.beanframework.cms.service;
+package com.beanframework.workflow.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,9 @@ import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.beanframework.cms.domain.Workflow;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.workflow.domain.Workflow;
 
 @Service
 public class WorkflowServiceImpl implements WorkflowService {

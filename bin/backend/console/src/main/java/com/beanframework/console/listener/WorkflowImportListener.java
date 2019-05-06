@@ -26,12 +26,12 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.beanframework.cms.domain.Workflow;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.converter.EntityCsvWorkflowConverter;
 import com.beanframework.console.csv.WorkflowCsv;
 import com.beanframework.console.registry.ImportListener;
+import com.beanframework.workflow.domain.Workflow;
 
 public class WorkflowImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(WorkflowImportListener.class);

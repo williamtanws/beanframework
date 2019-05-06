@@ -9,11 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.cms.domain.Workflow;
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.WorkflowCsv;
+import com.beanframework.workflow.domain.Workflow;
 
 @Component
 public class EntityCsvWorkflowConverter implements EntityCsvConverter<WorkflowCsv, Workflow> {
@@ -54,6 +54,9 @@ public class EntityCsvWorkflowConverter implements EntityCsvConverter<WorkflowCs
 
 			if (StringUtils.isNotBlank(source.getName()))
 				prototype.setName(source.getName());
+
+			if (StringUtils.isNotBlank(source.getClasspath()))
+				prototype.setClasspath(source.getClasspath());
 
 		} catch (Exception e) {
 			e.printStackTrace();

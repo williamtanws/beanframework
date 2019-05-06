@@ -6,12 +6,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beanframework.cms.domain.Workflow;
 import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.WorkflowDto;
+import com.beanframework.workflow.domain.Workflow;
 
 public class DtoWorkflowConverter extends AbstractDtoConverter<Workflow, WorkflowDto> implements DtoConverter<Workflow, WorkflowDto> {
 
@@ -38,6 +38,9 @@ public class DtoWorkflowConverter extends AbstractDtoConverter<Workflow, Workflo
 		try {
 			convertCommonProperties(source, prototype, context);
 
+			prototype.setName(source.getName());
+			prototype.setClasspath(source.getClasspath());
+
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
 			} else if (ConvertRelationType.RELATION == context.getConverModelType()) {
@@ -53,13 +56,10 @@ public class DtoWorkflowConverter extends AbstractDtoConverter<Workflow, Workflo
 	}
 
 	private void convertAll(Workflow source, WorkflowDto prototype, DtoConverterContext context) throws Exception {
-		prototype.setName(source.getName());
 
 	}
 
 	private void convertRelation(Workflow source, WorkflowDto prototype, DtoConverterContext context) throws Exception {
-		prototype.setName(source.getName());
-
 	}
 
 }

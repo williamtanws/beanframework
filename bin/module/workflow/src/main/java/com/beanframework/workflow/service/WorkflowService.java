@@ -1,4 +1,4 @@
-package com.beanframework.cms.service;
+package com.beanframework.workflow.service;
 
 import java.util.List;
 

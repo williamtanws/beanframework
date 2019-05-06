@@ -8,11 +8,13 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 public class WorkflowCsv extends AbstractCsv {
 
 	private String name;
+	private String classpath;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
 				new NotNull(new Trim()), // id
-				new Optional(new Trim()) // name
+				new Optional(new Trim()), // name
+				new Optional(new Trim()) // classpath
 		};
 
 		return processors;
@@ -29,6 +31,14 @@ public class WorkflowCsv extends AbstractCsv {
 	@Override
 	public String toString() {
 		return "WorkflowCsv [id=" + id + ", name=" + name + "]";
+	}
+
+	public String getClasspath() {
+		return classpath;
+	}
+
+	public void setClasspath(String classpath) {
+		this.classpath = classpath;
 	}
 
 }

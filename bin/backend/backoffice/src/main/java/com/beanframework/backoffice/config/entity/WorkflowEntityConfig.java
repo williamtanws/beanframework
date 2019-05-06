@@ -3,9 +3,9 @@ package com.beanframework.backoffice.config.entity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.beanframework.cms.domain.Workflow;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.core.converter.EntityWorkflowConverter;
+import com.beanframework.workflow.domain.Workflow;
 
 @Configuration
 public class WorkflowEntityConfig {
