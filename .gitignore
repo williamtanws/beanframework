@@ -57,7 +57,7 @@ nbdist/
 hs_err_pid*
 
 ### Beanframework ###
-data
+/data
 log
 target
 temp
