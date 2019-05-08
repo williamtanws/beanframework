@@ -16,11 +16,10 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.EntityVendorProfileConverter;
 import com.beanframework.core.data.VendorDto;
+import com.beanframework.user.service.UserService;
 import com.beanframework.vendor.domain.Vendor;
 import com.beanframework.vendor.service.VendorService;
 import com.beanframework.vendor.specification.VendorSpecification;
-import com.beanframework.user.service.AuditorService;
-import com.beanframework.user.service.UserService;
 
 @Component
 public class VendorFacadeImpl implements VendorFacade {
@@ -33,9 +32,6 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Autowired
 	private VendorService vendorService;
-
-	@Autowired
-	private AuditorService auditorService;
 
 	@Autowired
 	private EntityVendorProfileConverter entityVendorProfileConverter;
@@ -78,7 +74,6 @@ public class VendorFacadeImpl implements VendorFacade {
 
 			Vendor entity = modelService.getEntity(dto, Vendor.class);
 			entity = modelService.saveEntity(entity, Vendor.class);
-			auditorService.saveEntityByUser(entity);
 
 			userService.saveProfilePicture(entity, dto.getProfilePicture());
 

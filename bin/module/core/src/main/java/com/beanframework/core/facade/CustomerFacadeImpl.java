@@ -19,7 +19,6 @@ import com.beanframework.core.data.CustomerDto;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerService;
 import com.beanframework.customer.specification.CustomerSpecification;
-import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
 
 @Component
@@ -33,9 +32,6 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Autowired
 	private CustomerService customerService;
-	
-	@Autowired
-	private AuditorService auditorService;
 
 	@Autowired
 	private EntityCustomerProfileConverter entityCustomerProfileConverter;
@@ -78,7 +74,6 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 			Customer entity = modelService.getEntity(dto, Customer.class);
 			entity = modelService.saveEntity(entity, Customer.class);
-			auditorService.saveEntityByUser(entity);
 
 			userService.saveProfilePicture(entity, dto.getProfilePicture());
 

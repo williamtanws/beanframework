@@ -21,7 +21,6 @@ import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.employee.service.EmployeeService;
 import com.beanframework.employee.specification.EmployeeSpecification;
-import com.beanframework.user.service.AuditorService;
 
 @Component
 public class EmployeeFacadeImpl implements EmployeeFacade {
@@ -31,9 +30,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private EmployeeService employeeService;
-
-	@Autowired
-	private AuditorService auditorService;
 
 	@Autowired
 	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
@@ -76,7 +72,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 			Employee entity = modelService.getEntity(dto, Employee.class);
 			entity = modelService.saveEntity(entity, Employee.class);
-			auditorService.saveEntityByUser(entity);
 
 			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
 
