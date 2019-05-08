@@ -8,12 +8,9 @@ public final class UserConstants {
 
 	public interface Table {
 		public static final String USER = "user";
-		public static final String USER_FIELD = "userfield";
-		public static final String USER_AUTHORITY = "userauthority";
-
-		public static final String USER_USER_GROUP_REL = "userusergrouprel";
-		public static final String USER_GROUP_LANG_DYNAMIC_FIELD_REL = "usergroupdynrel";
-
+		public static final String USER_FIELD = "user_field";
+		public static final String USER_AUTHORITY = "user_authority";
+		public static final String USER_USER_GROUP_REL = "user_usergrouprel";
 	}
 
 	public interface Locale {

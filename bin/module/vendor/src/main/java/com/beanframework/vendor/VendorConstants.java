@@ -6,9 +6,6 @@ public interface VendorConstants {
 		public static final String VENDOR = "vendor";
 	}
 
-	public static interface Table {
-	}
-
 	public static interface Locale {
 		public static final String ID_REQUIRED = "module.vendor.id.required";
 		public static final String ID_EXISTS = "module.vendor.id.exists";

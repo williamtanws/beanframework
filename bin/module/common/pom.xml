@@ -96,14 +96,14 @@
 			<artifactId>spring-integration-zip</artifactId>
 			<version>1.0.2.RELEASE</version>
 		</dependency>
-		
+
 		<!-- Spring Flowable -->
 		<dependency>
 			<groupId>org.flowable</groupId>
 			<artifactId>flowable-spring-boot-starter-basic</artifactId>
 			<version>${flowable.version}</version>
 		</dependency>
-		
+
 		<!-- Third Party Library -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

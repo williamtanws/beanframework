@@ -19,4 +19,5 @@ employeegroup,email					,+,+,+,+
 employeegroup,media					,+,+,+,+
 employeegroup,site					,+,+,+,+
 employeegroup,workflow				,+,+,+,+
+employeegroup,task					,+,+,+,+
 employeegroup,comment				,+,+,+,+

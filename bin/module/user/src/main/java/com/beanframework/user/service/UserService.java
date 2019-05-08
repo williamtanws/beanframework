@@ -31,4 +31,6 @@ public interface UserService {
 	Set<String> getAllUserGroupUuidsByCurrentUser() throws Exception;
 
 	Set<String> getAllUserGroupUuidsByUserUuid(UUID uuid) throws Exception;
+
+	Set<String> getAllUserGroupIdsByUserUuid(UUID uuid) throws Exception;
 }

@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.flowable.engine.RepositoryService;
-import org.flowable.engine.repository.Deployment;
-import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,9 +27,6 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 
 	@Autowired
 	private WorkflowService workflowService;
-
-	@Autowired
-	private RepositoryService repositoryService;
 
 	@Override
 	public WorkflowDto findOneByUuid(UUID uuid) throws Exception {
@@ -60,10 +54,6 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 		try {
 			Workflow entity = modelService.getEntity(dto, Workflow.class);
 			entity = modelService.saveEntity(entity, Workflow.class);
-
-			Deployment deployment = repositoryService.createDeployment().addClasspathResource(dto.getClasspath()).deploy();
-			ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
-			System.out.println("Found process definition : " + processDefinition.getName());
 			
 			return modelService.getDto(entity, WorkflowDto.class);
 		} catch (Exception e) {

@@ -5,13 +5,13 @@ spring.profiles.active=dev
 spring.profiles.include=platform,console,backoffice,cockpit
 webroots=console,backoffice
 interceptor.strict.use=true
+favicon=/static/common/favicon.png
 
 # ===============================
 # = QUARTZ
 # ===============================
-quartz.tasks.enable=false
-quartz.properties.location=
-quartz.properties.classpath=application-${spring.profiles.active}.properties
+quartz.enabled=true
+quartz.task.enabled=true
 
 # ===============================
 # = CACHE
@@ -22,3 +22,7 @@ spring.cache.ehcache.config=classpath:ehcache-${spring.profiles.active}.xml
 # = LOGGING
 # ===============================
 logging.config=classpath:logback-${spring.profiles.active}.xml
+
+# ===============================
+# = FLOWABLE
+# ===============================

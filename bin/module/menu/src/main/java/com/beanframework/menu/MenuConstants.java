@@ -4,9 +4,9 @@ public interface MenuConstants {
 
 	public interface Table {
 		public static final String MENU = "menu";
-		public static final String MENU_FIELD = "menufield";
+		public static final String MENU_FIELD = "menu_field";
 
-		public static final String MENU_USER_GROUP_REL = "menuusergrouprel";
+		public static final String MENU_USER_GROUP_REL = "menu_usergrouprel";
 	}
 
 	public static interface Locale {
