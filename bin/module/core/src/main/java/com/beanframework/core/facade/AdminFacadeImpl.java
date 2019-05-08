@@ -18,7 +18,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.AdminDto;
-import com.beanframework.user.service.AuditorService;
 
 @Component
 public class AdminFacadeImpl implements AdminFacade {
@@ -28,9 +27,6 @@ public class AdminFacadeImpl implements AdminFacade {
 
 	@Autowired
 	private AdminService adminService;
-
-	@Autowired
-	private AuditorService auditorService;
 
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
@@ -61,7 +57,6 @@ public class AdminFacadeImpl implements AdminFacade {
 		try {
 			Admin entity = modelService.getEntity(dto, Admin.class);
 			entity = (Admin) modelService.saveEntity(entity, Admin.class);
-			auditorService.saveEntityByUser(entity);
 
 			return modelService.getDto(entity, AdminDto.class);
 		} catch (Exception e) {
