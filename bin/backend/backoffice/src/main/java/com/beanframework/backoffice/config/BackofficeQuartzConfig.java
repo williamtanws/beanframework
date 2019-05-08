@@ -2,16 +2,14 @@ package com.beanframework.backoffice.config;
 
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -20,35 +18,17 @@ import com.beanframework.cronjob.context.AutowiringSpringBeanJobFactory;
 import com.beanframework.cronjob.listener.CronjobGlobalListener;
 
 @Configuration
-@ConditionalOnProperty(name = "quartz.enabled")
+@ConditionalOnProperty(name = CronjobConstants.PROPERTY_CONDITION_QUARTZ_ENABLED)
 public class BackofficeQuartzConfig {
 
 	@Autowired
 	private ApplicationContext applicationContext;
-
-	@Value(CronjobConstants.QUARTZ_PROPERTIES_LOCATION)
-	private String QUARTZ_PROPERTIES_LOCATION;
-
-	@Value(CronjobConstants.QUARTZ_PROPERTIES_CLASSPATH)
-	private String QUARTZ_PROPERTIES_CLASSPATH;
-
-	@Bean
-	public Properties quartzProperties() throws Exception {
-
-		PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-
-		if (StringUtils.isNotBlank(QUARTZ_PROPERTIES_LOCATION)) {
-			FileSystemResource fileSystemResource = new FileSystemResource(QUARTZ_PROPERTIES_LOCATION);
-			propertiesFactoryBean.setLocation(fileSystemResource);
-		}
-
-		if (StringUtils.isNotBlank(QUARTZ_PROPERTIES_CLASSPATH)) {
-			propertiesFactoryBean.setLocation(new ClassPathResource(QUARTZ_PROPERTIES_CLASSPATH));
-		}
-
-		propertiesFactoryBean.afterPropertiesSet();
-		return propertiesFactoryBean.getObject();
-	}
+	
+	@Autowired
+	private QuartzProperties quartzProperties;
+	
+	@Autowired
+	private DataSource dataSource;
 
 	@Bean
 	public CronjobGlobalListener globalJobListener() {
@@ -58,8 +38,11 @@ public class BackofficeQuartzConfig {
 	@Bean
 	public SchedulerFactoryBean schedulerFactory(PlatformTransactionManager transactionManager) throws Exception {
 		SchedulerFactoryBean schedulerFactory = new SchedulerFactoryBean();
-		schedulerFactory.setQuartzProperties(quartzProperties());
+		Properties properties = new Properties();
+		properties.putAll(quartzProperties.getProperties());
+		schedulerFactory.setQuartzProperties(properties);
 		schedulerFactory.setOverwriteExistingJobs(true);
+		schedulerFactory.setDataSource(dataSource);
 
 		// Custom job factory of spring with DI support for @Autowired
 		AutowiringSpringBeanJobFactory jobFactory = new AutowiringSpringBeanJobFactory();

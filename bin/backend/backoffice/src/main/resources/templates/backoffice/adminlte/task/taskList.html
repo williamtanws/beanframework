@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<head>
+<title th:utext="#{module.task}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<section class="content" th:with="name=#{module.task.name}">
+			<!-- List Table-->
+			<th:block
+				layout:insert="~{common/adminlte/common/component/listId :: list (icon=@{${@environment.getProperty('module.task.icon')}}, title=#{module.task}, objectDto=${taskDto}, createAuthority='task_create', updateAuthority='task_update', tableName='task', listUrl=@{${@environment.getProperty('path.api.task.page')}}, listFields=${ {{'id', 'ID'},{'name', name}} }, editFormAction=@{${@environment.getProperty('path.task')}}, editForm=@{${@environment.getProperty('view.task.form')}}, createButton='1', filterColumnIndex=${ {0, 1} } )}"></th:block>
+		</section>
+	</th:block>
+</body>
+</html>

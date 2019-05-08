@@ -2,13 +2,12 @@ package com.beanframework.cronjob;
 
 public final class CronjobConstants {
 
-	public static final String QUARTZ_TASKS_ENABLED = "${quartz.tasks.enable}";
-	public static final String QUARTZ_PROPERTIES_LOCATION = "${quartz.properties.location}";
-	public static final String QUARTZ_PROPERTIES_CLASSPATH = "${quartz.properties.classpath}";
+	public static final String PROPERTY_CONDITION_QUARTZ_ENABLED = "quartz.enabled";
+	public static final String QUARTZ_TASK_ENABLED = "${quartz.task.enabled}";
 
 	public static interface Table {
 		public static final String CRONJOB = "cronjob";
-		public static final String CRONJOB_DATA = "cronjobdata";
+		public static final String CRONJOB_DATA = "cronjob_data";
 	}
 
 	public static interface Locale {

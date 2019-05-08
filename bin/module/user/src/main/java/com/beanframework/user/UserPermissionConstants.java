@@ -8,7 +8,7 @@ public final class UserPermissionConstants {
 
 	public interface Table {
 		public static final String USER_PERMISSION = "userpermission";
-		public static final String USER_PERMISSION_FIELD = "userpermissionfield";
+		public static final String USER_PERMISSION_FIELD = "userpermission_field";
 
 	}
 

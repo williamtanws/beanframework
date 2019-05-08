@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
 		}
 
 		for (UserGroup userGroup : user.getUserGroups()) {
-			initializeUserGroups(userGroup, checkedUserGroupUuid);
+			initializeUserGroupUuids(userGroup, checkedUserGroupUuid);
 		}
 		boolean isAuthorized = false;
 
@@ -219,7 +219,7 @@ public class UserServiceImpl implements UserService {
 			}
 
 			for (UserGroup userGroup : user.getUserGroups()) {
-				initializeUserGroups(userGroup, checkedUserGroupUuid);
+				initializeUserGroupUuids(userGroup, checkedUserGroupUuid);
 			}
 
 			return user.getUserGroups();
@@ -249,30 +249,65 @@ public class UserServiceImpl implements UserService {
 		Set<String> checkedUserGroupUuid = new HashSet<String>();
 		for (UserGroup userGroup : user.getUserGroups()) {
 			checkedUserGroupUuid.add(userGroup.getUuid().toString());
-
-			Hibernate.initialize(userGroup.getUserAuthorities());
 		}
 
 		for (UserGroup userGroup : user.getUserGroups()) {
-			initializeUserGroups(userGroup, checkedUserGroupUuid);
+			initializeUserGroupUuids(userGroup, checkedUserGroupUuid);
 		}
 
 		return checkedUserGroupUuid;
 	}
 
 	@Transactional(readOnly = true)
-	private void initializeUserGroups(UserGroup userGroup, Set<String> checkedUserGroupUuid) {
+	private void initializeUserGroupUuids(UserGroup userGroup, Set<String> checkedUserGroupUuids) {
 
 		Hibernate.initialize(userGroup.getUserGroups());
 
 		for (UserGroup child : userGroup.getUserGroups()) {
-			if (checkedUserGroupUuid.contains(child.getUuid().toString()) == false) {
-				checkedUserGroupUuid.add(child.getUuid().toString());
-
-				Hibernate.initialize(userGroup.getUserAuthorities());
+			if (checkedUserGroupUuids.contains(child.getUuid().toString()) == false) {
+				checkedUserGroupUuids.add(child.getUuid().toString());
 
 				if (child.getUserGroups() != null && child.getUserGroups().isEmpty() == false) {
-					initializeUserGroups(child, checkedUserGroupUuid);
+					initializeUserGroupUuids(child, checkedUserGroupUuids);
+				}
+
+			}
+		}
+	}
+	
+
+	
+	@Transactional(readOnly = true)
+	@Override
+	public Set<String> getAllUserGroupIdsByUserUuid(UUID uuid) throws Exception {
+	
+		User user = modelService.findByUuid(uuid, User.class);
+
+		Hibernate.initialize(user.getUserGroups());
+
+		Set<String> checkedUserGroupId = new HashSet<String>();
+		for (UserGroup userGroup : user.getUserGroups()) {
+			checkedUserGroupId.add(userGroup.getId());
+		}
+
+		for (UserGroup userGroup : user.getUserGroups()) {
+			initializeUserGroupIds(userGroup, checkedUserGroupId);
+		}
+
+		return checkedUserGroupId;
+	}
+	
+	@Transactional(readOnly = true)
+	private void initializeUserGroupIds(UserGroup userGroup, Set<String> checkedUserGroupIds) {
+
+		Hibernate.initialize(userGroup.getUserGroups());
+
+		for (UserGroup child : userGroup.getUserGroups()) {
+			if (checkedUserGroupIds.contains(child.getUuid().toString()) == false) {
+				checkedUserGroupIds.add(child.getId());
+
+				if (child.getUserGroups() != null && child.getUserGroups().isEmpty() == false) {
+					initializeUserGroupIds(child, checkedUserGroupIds);
 				}
 
 			}

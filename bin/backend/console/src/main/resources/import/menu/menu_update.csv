@@ -25,3 +25,4 @@ media				,Media					,20	,fa fa-file-image-o	,/backoffice/media					,,true,multim
 cms					,CMS					,40	,fa fa-gears		,									,,true,				,employeegroup				,menu_0_name_en=CMS;menu_1_name_cn=内容管理系统
 site				,Site					,10	,fa fa-globe		,/backoffice/site					,,true,cms			,employeegroup				,menu_0_name_en=Site;menu_1_name_cn=网站
 comment				,Comment				,50	,fa fa-commenting-o	,/backoffice/comment				,,true,				,employeegroup				,menu_0_name_en=Comment;menu_1_name_cn=留言
+task				,Task					,60	,fa fa-tasks		,/backoffice/task					,,true,				,employeegroup				,menu_0_name_en=Task;menu_1_name_cn=任务

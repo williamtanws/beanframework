@@ -2,26 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
 	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
 <head>
-<title th:utext="#{module.workflow}"></title>
+<title th:utext="#{module.task}"></title>
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.workflow')}}, deleteUuid=${workflowDto.uuid})}"></th:block>
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.workflow')}" method="post" th:object="${workflowDto}">
-			<input type="hidden" name="create" th:if="*{uuid == null}"/>
-			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${workflowDto.uuid}" />
+		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.task')}}, deleteUuid=${taskDto.id})}"></th:block>
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.task')}" method="post" th:object="${taskDto}">
+			<input type="hidden" name="create" th:if="*{id == null}"/>
+			<input type="hidden" name="update" th:if="*{id != null}"/>
+			<input type="hidden" name="id" th:value="${taskDto.id}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
 						<div class="box-body bg-gray">
 							<div class="row">
 								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='workflow_delete')}"></th:block>
+									<th:block th:if="*{id != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='task_delete')}"></th:block>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='workflow_delete')}"></th:block>
-									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='workflow_update')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='task_delete')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='task_update')}"></th:block>
 								</div>
 							</div>
 						</div>
@@ -37,10 +37,10 @@
 							<li class="active">
 								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
 							</li>
-							<li th:if="*{uuid != null}">
+							<li th:if="*{id != null}">
 								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
 							</li>
-							<li th:if="*{uuid != null}">
+							<li th:if="*{id != null}">
 								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
@@ -48,27 +48,14 @@
 							<div class="tab-pane active" id="tab_general">
 								<div class="box-body">
 									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="id" th:text="#{module.workflow.id}"></label>
-												<span>:</span>
-												<span class="help-block" th:text="*{id}"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="name" th:text="#{module.workflow.name}"></label>
-												<span>:</span>
-												<span class="help-block" th:text="*{name}"></span>
-											</div>
-										</div>
+										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="classpath" th:text="#{module.workflow.classpath}"></label>
+												<label for="name" th:text="#{module.task.name}"></label>
 												<span>*</span>
-												<input type="text" class="form-control" name="classpath" th:value="*{classpath}">
+												<input type="text" class="form-control" name="name" th:value="*{name}">
 												<span class="help-block"></span>
 											</div>
 										</div>
@@ -77,13 +64,13 @@
 								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
+							<div class="tab-pane" id="tab_history" th:if="*{id != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.workflow.history')}(uuid=*{uuid})} )}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.task.history')}(id=*{id})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
+							<div class="tab-pane" id="tab_administration" th:if="*{id != null}">
 								<div class="box-body">
 									<th:block layout:insert="~{common/adminlte/common/component/administration :: administration}"></th:block>
 								</div>
@@ -112,18 +99,7 @@
 		                }
 		            },
 		            rules: {
-		                classpath: {
-		                    required: true
-		                }
-		            },
-		            messages: {
-		                id: {
-		                    required: /*[[#{module.backoffice.id.required}]]*/ ,
-		                    remote: /*[[#{module.backoffice.id.exists}]]*/
-		                },
-		                name: {
-		                    required: /*[[#{module.workflow.name.required}]]*/
-		                }
+		            	
 		            },
 		            highlight: function(element) {
 		                $(element).closest('.form-group').addClass('has-error');

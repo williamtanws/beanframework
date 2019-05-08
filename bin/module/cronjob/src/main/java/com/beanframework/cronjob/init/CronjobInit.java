@@ -19,7 +19,7 @@ public class CronjobInit implements ApplicationListener<ApplicationReadyEvent> {
 	@Autowired
 	private CronjobManagerService cronjobManagerService;
 
-	@Value(CronjobConstants.QUARTZ_TASKS_ENABLED)
+	@Value(CronjobConstants.QUARTZ_TASK_ENABLED)
 	private boolean enableQuartzTasks;
 
 	@Override
