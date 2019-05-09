@@ -3,7 +3,7 @@ package com.beanframework.common.data;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HistoryDataResponse {
+public class HistoryDataTableResponseData {
 
 	Object entity;
 	String revisionId;

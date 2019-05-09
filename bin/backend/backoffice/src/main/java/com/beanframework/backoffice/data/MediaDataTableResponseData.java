@@ -2,7 +2,7 @@ package com.beanframework.backoffice.data;
 
 import com.beanframework.core.data.DataTableResponseData;
 
-public class MediaDataResponse extends DataTableResponseData {
+public class MediaDataTableResponseData extends DataTableResponseData {
 
 	private String fileName;
 	private String fileType;

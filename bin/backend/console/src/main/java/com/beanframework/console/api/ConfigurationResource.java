@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.console.ConfigurationWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
-import com.beanframework.console.data.ConfigurationDataResponse;
+import com.beanframework.console.data.ConfigurationDataTableResponseData;
 import com.beanframework.core.data.ConfigurationDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.ConfigurationFacade;
@@ -84,7 +84,7 @@ public class ConfigurationResource {
 
 		for (ConfigurationDto dto : pagination.getContent()) {
 
-			ConfigurationDataResponse data = new ConfigurationDataResponse();
+			ConfigurationDataTableResponseData data = new ConfigurationDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setValue(dto.getValue());
@@ -97,7 +97,7 @@ public class ConfigurationResource {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = ConfigurationWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
+	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
@@ -105,7 +105,7 @@ public class ConfigurationResource {
 
 		List<Object[]> history = configurationFacade.findHistory(dataTableRequest);
 
-		DataTableResponse<HistoryDataResponse> dataTableResponse = new DataTableResponse<HistoryDataResponse>();
+		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(configurationFacade.countHistory(dataTableRequest));
 		dataTableResponse.setRecordsFiltered(history.size());
@@ -117,7 +117,7 @@ public class ConfigurationResource {
 			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
-			HistoryDataResponse data = new HistoryDataResponse();
+			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));

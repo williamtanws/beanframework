@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldSlotWebConstants;
-import com.beanframework.backoffice.data.DynamicFieldSlotDataResponse;
+import com.beanframework.backoffice.data.DynamicFieldSlotDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.facade.DynamicFieldSlotFacade;
@@ -67,7 +67,7 @@ public class DynamicFieldSlotResource {
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = DynamicFieldSlotWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<DynamicFieldSlotDataResponse> page(HttpServletRequest request) throws Exception {
+	public DataTableResponse<DynamicFieldSlotDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.getSkipColumnIndexes().add(2);
@@ -75,14 +75,14 @@ public class DynamicFieldSlotResource {
 		
 		Page<DynamicFieldSlotDto> pagination = dynamicFieldSlotFacade.findPage(dataTableRequest);
 
-		DataTableResponse<DynamicFieldSlotDataResponse> dataTableResponse = new DataTableResponse<DynamicFieldSlotDataResponse>();
+		DataTableResponse<DynamicFieldSlotDataTableResponseData> dataTableResponse = new DataTableResponse<DynamicFieldSlotDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(dynamicFieldSlotFacade.count());
 		dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
 
 		for (DynamicFieldSlotDto dto : pagination.getContent()) {
 
-			DynamicFieldSlotDataResponse data = new DynamicFieldSlotDataResponse();
+			DynamicFieldSlotDataTableResponseData data = new DynamicFieldSlotDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
@@ -96,7 +96,7 @@ public class DynamicFieldSlotResource {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = DynamicFieldSlotWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
+	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
@@ -104,7 +104,7 @@ public class DynamicFieldSlotResource {
 
 		List<Object[]> history = dynamicFieldSlotFacade.findHistory(dataTableRequest);
 
-		DataTableResponse<HistoryDataResponse> dataTableResponse = new DataTableResponse<HistoryDataResponse>();
+		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(dynamicFieldSlotFacade.countHistory(dataTableRequest));
 		dataTableResponse.setRecordsFiltered(history.size());
@@ -116,7 +116,7 @@ public class DynamicFieldSlotResource {
 			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
-			HistoryDataResponse data = new HistoryDataResponse();
+			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
