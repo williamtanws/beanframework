@@ -12,9 +12,9 @@ public class WorkflowCsv extends AbstractCsv {
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
-				new NotNull(new Trim()), // id
+				new Optional(new Trim()), // id
 				new Optional(new Trim()), // name
-				new Optional(new Trim()) // classpath
+				new NotNull(new Trim()) // classpath
 		};
 
 		return processors;
@@ -28,17 +28,17 @@ public class WorkflowCsv extends AbstractCsv {
 		this.name = name;
 	}
 
-	@Override
-	public String toString() {
-		return "WorkflowCsv [id=" + id + ", name=" + name + "]";
-	}
-
 	public String getClasspath() {
 		return classpath;
 	}
 
 	public void setClasspath(String classpath) {
 		this.classpath = classpath;
+	}
+
+	@Override
+	public String toString() {
+		return "WorkflowCsv [id=" + id + ",name=" + name + ", classpath=" + classpath + "]";
 	}
 
 }

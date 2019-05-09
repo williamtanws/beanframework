@@ -31,7 +31,6 @@ public class EntityCsvWorkflowConverter implements EntityCsvConverter<WorkflowCs
 			if (StringUtils.isNotBlank(source.getId())) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Workflow.ID, source.getId());
-
 				Workflow prototype = modelService.findByProperties(properties, Workflow.class);
 
 				if (prototype != null) {
@@ -51,7 +50,7 @@ public class EntityCsvWorkflowConverter implements EntityCsvConverter<WorkflowCs
 		try {
 			if (StringUtils.isNotBlank(source.getId()))
 				prototype.setId(source.getId());
-
+			
 			if (StringUtils.isNotBlank(source.getName()))
 				prototype.setName(source.getName());
 

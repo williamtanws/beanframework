@@ -1,8 +1,8 @@
 package com.beanframework.workflow.interceptor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.repository.Deployment;
-import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.InterceptorContext;
@@ -18,12 +18,10 @@ public class WorkflowPrepareInterceptor extends AbstractPrepareInterceptor<Workf
 	@Override
 	public void onPrepare(Workflow model, InterceptorContext context) throws InterceptorException {
 		try {
-			Deployment deployment = repositoryService.createDeployment().addClasspathResource(model.getClasspath()).deploy();
-			ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
-
-			model.setId(processDefinition.getId());
-			model.setName(processDefinition.getName());
-
+			if (StringUtils.isBlank(model.getDeploymentId()) && StringUtils.isNotBlank(model.getClasspath())) {
+				Deployment deployment = repositoryService.createDeployment().addClasspathResource(model.getClasspath()).deploy();
+				model.setDeploymentId(deployment.getId());
+			}
 		} catch (Exception e) {
 			throw new InterceptorException(e.getMessage(), e);
 		}
