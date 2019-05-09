@@ -16,7 +16,7 @@
 						<form method="post" id="import-form" th:action="@{${@environment.getProperty('path.console.import')}}" enctype="multipart/form-data">
 							<div class="col-md-12">
 								<div class="form-group">
-									<input class="form-control" type="file" onchange="loadfile(this)" name="files">
+									<input class="form-control" type="file" onchange="loadfile(this)" name="files" multiple>
 								</div>
 							</div>
 							<div class="col-md-12">
