@@ -40,6 +40,7 @@ public class DtoWorkflowConverter extends AbstractDtoConverter<Workflow, Workflo
 
 			prototype.setName(source.getName());
 			prototype.setClasspath(source.getClasspath());
+			prototype.setDeploymentId(source.getDeploymentId());
 
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);

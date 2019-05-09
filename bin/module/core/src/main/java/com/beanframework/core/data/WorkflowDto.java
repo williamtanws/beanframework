@@ -9,6 +9,7 @@ public class WorkflowDto extends GenericDto {
 
 	private String name;
 	private String classpath;
+	private String deploymentId;
 
 	public String getName() {
 		return name;
@@ -24,6 +25,14 @@ public class WorkflowDto extends GenericDto {
 
 	public void setClasspath(String classpath) {
 		this.classpath = classpath;
+	}
+
+	public String getDeploymentId() {
+		return deploymentId;
+	}
+
+	public void setDeploymentId(String deploymentId) {
+		this.deploymentId = deploymentId;
 	}
 
 }

@@ -29,6 +29,9 @@ public class Workflow extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String classpath;
 
+	@Audited(withModifiedFlag = true)
+	private String deploymentId;
+
 	public String getName() {
 		return name;
 	}
@@ -43,6 +46,14 @@ public class Workflow extends GenericEntity {
 
 	public void setClasspath(String classpath) {
 		this.classpath = classpath;
+	}
+
+	public String getDeploymentId() {
+		return deploymentId;
+	}
+
+	public void setDeploymentId(String deploymentId) {
+		this.deploymentId = deploymentId;
 	}
 
 }
