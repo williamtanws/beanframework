@@ -37,12 +37,12 @@ public class TaskController extends AbstractController {
 
 	@PreAuthorize(TaskPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = TaskWebConstants.Path.TASK)
-	public String list(@ModelAttribute(TaskWebConstants.ModelAttribute.TASK_DTO) Task task, Model model) throws Exception {
+	public String list(@ModelAttribute(TaskWebConstants.ModelAttribute.TASK_DTO) Task task, @RequestParam Map<String, Object> requestParams, Model model) throws Exception {
 		model.addAttribute("create", false);
 
-		if (task.getId() != null) {
+		if (requestParams.get("id") != null) {
 
-			Task existsDto = taskFacade.findOneById(task.getId());
+			Task existsDto = taskFacade.findOneById((String) requestParams.get("id"));
 
 			if (existsDto != null) {
 				model.addAttribute(TaskWebConstants.ModelAttribute.TASK_DTO, existsDto);

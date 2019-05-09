@@ -5,10 +5,15 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -154,15 +160,40 @@ public class MediaController extends AbstractController {
 		return redirectView;
 	}
 
-	@GetMapping(value = MediaConstants.MEDIA_URL + "/{uuid}/{fileName}")
+	@PreAuthorize(MediaPreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = MediaWebConstants.Path.MEDIA, params = "download")
+	public ResponseEntity<InputStreamResource> downloadFile(@RequestParam Map<String, Object> requestParams) throws Exception {
+
+		String uuid = (String) requestParams.get("mediaUuid");
+		if (StringUtils.isBlank(uuid)) {
+			return new ResponseEntity<InputStreamResource>(HttpStatus.NOT_FOUND);
+		}
+
+		MediaDto mediaDto = mediaFacade.findOneByUuid(UUID.fromString(uuid));
+		if (mediaDto == null) {
+			return new ResponseEntity<InputStreamResource>(HttpStatus.NOT_FOUND);
+		}
+
+		File file = new File(MEDIA_LOCATION + File.separator + mediaDto.getFolder() + File.separator + mediaDto.getUuid().toString(), mediaDto.getFileName());
+		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName()).contentType(MediaType.valueOf(mediaDto.getFileType())).contentLength(file.length())
+				.body(resource);
+	}
+
+	@GetMapping(value = { MediaWebConstants.Path.MEDIA + "/{uuid}/{fileName:.+}", MediaConstants.MEDIA_URL + "/{uuid}/{fileName:.+}" })
 	public ResponseEntity<byte[]> media(@PathVariable String uuid, @PathVariable String fileName) throws Exception {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Media.URL, MEDIA_URL + "/" + uuid + "/" + fileName);
 		MediaDto mediaDto = mediaFacade.findOneProperties(properties);
 
-		File mediaFile = new File(MEDIA_LOCATION + File.separator + mediaDto.getFolder() + File.separator + mediaDto.getUuid(), fileName);
-		InputStream targetStream = new FileInputStream(mediaFile);
+		if (mediaDto == null) {
+			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
+		}
+
+		File file = new File(MEDIA_LOCATION + File.separator + mediaDto.getFolder() + File.separator + mediaDto.getUuid().toString(), mediaDto.getFileName());
+		InputStream targetStream = new FileInputStream(file);
 
 		return ResponseEntity.ok().contentType(MediaType.valueOf(mediaDto.getFileType())).body(IOUtils.toByteArray(targetStream));
 	}

@@ -88,7 +88,7 @@ public class MenuFacadeImpl implements MenuFacade {
 		try {
 
 			List<Menu> entities = menuService.findMenuTree(false);
-			List<MenuDto> dtos = modelService.getDto(entities, MenuDto.class);
+			List<MenuDto> dtos = modelService.getDto(entities, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 			return dtos;
 		} catch (Exception e) {

@@ -71,17 +71,16 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="fileType" th:text="#{module.media.fileType}"></label>
-												<span>*</span>
-												<input type="text" class="form-control" name="fileType" th:value="*{fileType}">
-												<span class="help-block"></span>
+												<label for="fileSize" th:text="#{module.media.fileSize}"></label>
+												<span>:</span>
+												<span class="text-block" th:text="*{fileSize}"></span>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="fileSize" th:text="#{module.media.fileSize}"></label>
+												<label for="fileSize" th:text="#{module.backoffice.download}"></label>
 												<span>:</span>
-												<span class="text-block" th:text="*{fileSize}"></span>
+												<a th:href="@{${@environment.getProperty('path.media')}(download=,mediaUuid=*{uuid})}"><i class="glyphicon glyphicon-download-alt"></i></a>
 											</div>
 										</div>
 									</div>

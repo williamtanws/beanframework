@@ -38,9 +38,6 @@
 								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li th:if="*{id != null}">
-								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
-							</li>
-							<li th:if="*{id != null}">
 								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
@@ -62,12 +59,6 @@
 									</div>
 								</div>
 								<!-- /.box-body -->
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_history" th:if="*{id != null}">
-								<div class="box-body">
-									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.task.history')}(id=*{id})} )}"></th:block>
-								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_administration" th:if="*{id != null}">
