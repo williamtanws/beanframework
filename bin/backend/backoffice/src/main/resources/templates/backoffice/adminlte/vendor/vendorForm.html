@@ -7,10 +7,10 @@
 <body>
 	<th:block layout:fragment="update">
 		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.vendor')}}, deleteUuid=${vendorDto.uuid})}"></th:block>
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.vendor')}" method="post" th:object="${vendorDto}">
-			<input type="hidden" name="create" th:if="*{uuid == null}"/>
-			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${vendorDto.uuid}"/>
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.vendor')}" enctype="multipart/form-data" method="post" th:object="${vendorDto}">
+			<input type="hidden" name="create" th:if="*{uuid == null}" />
+			<input type="hidden" name="update" th:if="*{uuid != null}" />
+			<input type="hidden" name="uuid" th:value="${vendorDto.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -84,9 +84,8 @@
 												<label for="enabled" th:text="#{module.vendor.enabled}"></label>
 												<small th:text="#{module.vendor.enabled.indicate}"></small>
 												<select class="form-control" name="enabled">
-													<option th:text="'&nbsp'"></option>
-													<option value="1" th:selected="${vendorDto.enabled == true} " th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="${vendorDto.enabled == false}" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="*{enabled == true} " th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="*{enabled == false}" th:text="#{module.backoffice.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -96,9 +95,8 @@
 												<label for="accountNonLocked" th:text="#{module.vendor.locked}"></label>
 												<small th:text="#{module.vendor.locked.indicate}"></small>
 												<select class="form-control" name="accountNonLocked">
-													<option th:text="'&nbsp'"></option>
-													<option value="1" th:selected="${vendorNonLocked == true} " th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="${vendorNonLocked == false}" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="*{accountNonLocked == true} " th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="*{accountNonLocked == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -108,9 +106,8 @@
 												<label for="accountNonExpired" th:text="#{module.vendor.expired}"></label>
 												<small th:text="#{module.vendor.expired.indicate}"></small>
 												<select class="form-control" name="accountNonExpired">
-													<option th:text="'&nbsp'"></option>
-													<option value="1" th:selected="${vendorNonExpired == true} " th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="${vendorNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="*{accountNonExpired == true} " th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="*{accountNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -120,9 +117,8 @@
 												<label for="credentialsNonExpired" th:text="#{module.vendor.credentials.expired}"></label>
 												<small th:text="#{module.vendor.credentials.expired.indicate}"></small>
 												<select class="form-control" name="credentialsNonExpired">
-													<option th:text="'&nbsp'"></option>
-													<option value="1" th:selected="${vendorDto.credentialsNonExpired == true}" th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="${vendorDto.credentialsNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="*{credentialsNonExpired == true}" th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="*{credentialsNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>

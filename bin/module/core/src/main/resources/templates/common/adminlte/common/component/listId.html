@@ -63,7 +63,7 @@
 								</div>
 							</div>
 							<form id="edit-form" th:action="${editFormAction}+'#tab_general'" method="get" th:object="${objectDto}" style="display: none">
-								<input type="hidden" name="uuid">
+								<input type="hidden" name="id">
 							</form>
 							<th:block layout:insert="~{common/adminlte/common/component/list :: js}"></th:block>
 						</div>
@@ -157,8 +157,8 @@
 		    	$('#total-records').text(mainTable.page.info().recordsTotal);
 		    }
 		    
-			function editForm(uuid) {
-				$('#edit-form input[name="uuid"]').val(uuid);
+			function editForm(id) {
+				$('#edit-form input[name="id"]').val(id);
 				$('#edit-form').submit();
 			}
 			
@@ -168,8 +168,8 @@
 			
 			$('#mainTable').on('click', 'tbody tr', function() {
 				//console.log('API row values : ', mainTable.row(this).data());
-				var uuid = mainTable.row(this).data().uuid;
-				editForm(uuid);
+				var id = mainTable.row(this).data().id;
+				editForm(id);
 			});
 			
 			$(document).ready(function() {

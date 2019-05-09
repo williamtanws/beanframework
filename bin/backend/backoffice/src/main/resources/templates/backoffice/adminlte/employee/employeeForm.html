@@ -8,9 +8,9 @@
 	<th:block layout:fragment="update">
 		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.employee')}}, deleteUuid=${employeeDto.uuid})}"></th:block>
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.employee')}" enctype="multipart/form-data" method="post" th:object="${employeeDto}">
-			<input type="hidden" name="create" th:if="*{uuid == null}"/>
-			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${employeeDto.uuid}"/>
+			<input type="hidden" name="create" th:if="*{uuid == null}" />
+			<input type="hidden" name="update" th:if="*{uuid != null}" />
+			<input type="hidden" name="uuid" th:value="${employeeDto.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -84,7 +84,6 @@
 												<label for="enabled" th:text="#{module.employee.enabled}"></label>
 												<small th:text="#{module.employee.enabled.indicate}"></small>
 												<select class="form-control" name="enabled">
-													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{enabled == true} " th:text="#{module.backoffice.yes}"></option>
 													<option value="0" th:selected="*{enabled == false}" th:text="#{module.backoffice.no}"></option>
 												</select>
@@ -96,7 +95,6 @@
 												<label for="accountNonLocked" th:text="#{module.employee.locked}"></label>
 												<small th:text="#{module.employee.locked.indicate}"></small>
 												<select class="form-control" name="accountNonLocked">
-													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{accountNonLocked == true} " th:text="#{module.backoffice.no}"></option>
 													<option value="0" th:selected="*{accountNonLocked == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
@@ -108,7 +106,6 @@
 												<label for="accountNonExpired" th:text="#{module.employee.expired}"></label>
 												<small th:text="#{module.employee.expired.indicate}"></small>
 												<select class="form-control" name="accountNonExpired">
-													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{accountNonExpired == true} " th:text="#{module.backoffice.no}"></option>
 													<option value="0" th:selected="*{accountNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
@@ -120,7 +117,6 @@
 												<label for="credentialsNonExpired" th:text="#{module.employee.credentials.expired}"></label>
 												<small th:text="#{module.employee.credentials.expired.indicate}"></small>
 												<select class="form-control" name="credentialsNonExpired">
-													<option th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{credentialsNonExpired == true}" th:text="#{module.backoffice.no}"></option>
 													<option value="0" th:selected="*{credentialsNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>

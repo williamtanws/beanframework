@@ -40,7 +40,7 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 
 			prototype.setFileName(source.getFileName());
 			prototype.setFileType(source.getFileType());
-			prototype.setFileSize(SizeUtils.humanReadableByteCount(source.getFileSize(), true));
+			prototype.setFileSize(source.getFileSize() == null ? null : SizeUtils.humanReadableByteCount(source.getFileSize(), true));
 			prototype.setTitle(source.getTitle());
 			prototype.setCaption(source.getCaption());
 			prototype.setAltText(source.getAltText());

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.TaskWebConstants;
+import com.beanframework.backoffice.data.TaskDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.core.data.DataTableResponseData;
@@ -40,7 +41,10 @@ public class TaskResource {
 		dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
 
 		for (Task dto : pagination.getContent()) {
-			dataTableResponse.getData().add(dto);
+			TaskDataTableResponseData data = new TaskDataTableResponseData();
+			data.setId(dto.getId());
+			data.setName(dto.getName());
+			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;
 	}
