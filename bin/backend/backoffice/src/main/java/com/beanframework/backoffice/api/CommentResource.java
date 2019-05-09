@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CommentWebConstants;
-import com.beanframework.backoffice.data.CommentDataResponse;
+import com.beanframework.backoffice.data.CommentDataTableResponseData;
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.facade.CommentFacade;
@@ -69,7 +69,7 @@ public class CommentResource {
 	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = CommentWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<CommentDataResponse> page(HttpServletRequest request) throws Exception {
+	public DataTableResponse<CommentDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.getSkipColumnIndexes().add(2);
@@ -78,14 +78,14 @@ public class CommentResource {
 		
 		Page<CommentDto> pagination = commentFacade.findPage(dataTableRequest);
 
-		DataTableResponse<CommentDataResponse> dataTableResponse = new DataTableResponse<CommentDataResponse>();
+		DataTableResponse<CommentDataTableResponseData> dataTableResponse = new DataTableResponse<CommentDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(commentFacade.count());
 		dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
 
 		for (CommentDto dto : pagination.getContent()) {
 
-			CommentDataResponse data = new CommentDataResponse();
+			CommentDataTableResponseData data = new CommentDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setUser(dto.getUser());
@@ -111,7 +111,7 @@ public class CommentResource {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = CommentWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
+	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
@@ -119,7 +119,7 @@ public class CommentResource {
 
 		List<Object[]> history = commentFacade.findHistory(dataTableRequest);
 
-		DataTableResponse<HistoryDataResponse> dataTableResponse = new DataTableResponse<HistoryDataResponse>();
+		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(commentFacade.countHistory(dataTableRequest));
 		dataTableResponse.setRecordsFiltered(history.size());
@@ -131,7 +131,7 @@ public class CommentResource {
 			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
-			HistoryDataResponse data = new HistoryDataResponse();
+			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));

@@ -23,16 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.VendorWebConstants;
+import com.beanframework.backoffice.data.VendorDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.core.facade.VendorFacade;
 import com.beanframework.core.facade.VendorFacade.VendorPreAuthorizeEnum;
-import com.beanframework.vendor.domain.Vendor;
 import com.beanframework.user.domain.RevisionsEntity;
+import com.beanframework.vendor.domain.Vendor;
 
 @RestController
 public class VendorResource {
@@ -81,7 +82,7 @@ public class VendorResource {
 
 		for (VendorDto dto : pagination.getContent()) {
 
-			DataTableResponseData data = new DataTableResponseData();
+			VendorDataTableResponseData data = new VendorDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
@@ -94,7 +95,7 @@ public class VendorResource {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = VendorWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
+	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
@@ -102,7 +103,7 @@ public class VendorResource {
 
 		List<Object[]> history = vendorFacade.findHistory(dataTableRequest);
 
-		DataTableResponse<HistoryDataResponse> dataTableResponse = new DataTableResponse<HistoryDataResponse>();
+		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(vendorFacade.countHistory(dataTableRequest));
 		dataTableResponse.setRecordsFiltered(history.size());
@@ -114,7 +115,7 @@ public class VendorResource {
 			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
-			HistoryDataResponse data = new HistoryDataResponse();
+			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));

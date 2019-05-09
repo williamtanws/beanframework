@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.WorkflowWebConstants;
-import com.beanframework.backoffice.data.WorkflowDataResponse;
+import com.beanframework.backoffice.data.WorkflowDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.WorkflowDto;
@@ -83,7 +83,7 @@ public class WorkflowResource {
 
 		for (WorkflowDto dto : pagination.getContent()) {
 
-			WorkflowDataResponse data = new WorkflowDataResponse();
+			WorkflowDataTableResponseData data = new WorkflowDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
@@ -96,7 +96,7 @@ public class WorkflowResource {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = WorkflowWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
+	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
@@ -104,7 +104,7 @@ public class WorkflowResource {
 
 		List<Object[]> history = workflowFacade.findHistory(dataTableRequest);
 
-		DataTableResponse<HistoryDataResponse> dataTableResponse = new DataTableResponse<HistoryDataResponse>();
+		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(workflowFacade.countHistory(dataTableRequest));
 		dataTableResponse.setRecordsFiltered(history.size());
@@ -116,7 +116,7 @@ public class WorkflowResource {
 			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
-			HistoryDataResponse data = new HistoryDataResponse();
+			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));

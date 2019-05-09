@@ -23,9 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CustomerWebConstants;
+import com.beanframework.backoffice.data.CustomerDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.DataTableResponseData;
@@ -81,7 +82,7 @@ public class CustomerResource {
 
 		for (CustomerDto dto : pagination.getContent()) {
 
-			DataTableResponseData data = new DataTableResponseData();
+			CustomerDataTableResponseData data = new CustomerDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
@@ -94,7 +95,7 @@ public class CustomerResource {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = CustomerWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
+	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
@@ -102,7 +103,7 @@ public class CustomerResource {
 
 		List<Object[]> history = customerFacade.findHistory(dataTableRequest);
 
-		DataTableResponse<HistoryDataResponse> dataTableResponse = new DataTableResponse<HistoryDataResponse>();
+		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(customerFacade.countHistory(dataTableRequest));
 		dataTableResponse.setRecordsFiltered(history.size());
@@ -114,7 +115,7 @@ public class CustomerResource {
 			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
-			HistoryDataResponse data = new HistoryDataResponse();
+			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));

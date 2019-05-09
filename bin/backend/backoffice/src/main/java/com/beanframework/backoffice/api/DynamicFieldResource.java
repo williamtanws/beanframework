@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
-import com.beanframework.backoffice.data.DynamicFieldDataResponse;
+import com.beanframework.backoffice.data.DynamicFieldDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.facade.DynamicFieldFacade;
@@ -67,7 +67,7 @@ public class DynamicFieldResource {
 	@PreAuthorize(DynamicFieldPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = DynamicFieldWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<DynamicFieldDataResponse> page(HttpServletRequest request) throws Exception {
+	public DataTableResponse<DynamicFieldDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.getSkipColumnIndexes().add(2);
@@ -75,14 +75,14 @@ public class DynamicFieldResource {
 
 		Page<DynamicFieldDto> pagination = dynamicFieldFacade.findPage(dataTableRequest);
 
-		DataTableResponse<DynamicFieldDataResponse> dataTableResponse = new DataTableResponse<DynamicFieldDataResponse>();
+		DataTableResponse<DynamicFieldDataTableResponseData> dataTableResponse = new DataTableResponse<DynamicFieldDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(dynamicFieldFacade.count());
 		dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
 
 		for (DynamicFieldDto dto : pagination.getContent()) {
 
-			DynamicFieldDataResponse data = new DynamicFieldDataResponse();
+			DynamicFieldDataTableResponseData data = new DynamicFieldDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
@@ -96,7 +96,7 @@ public class DynamicFieldResource {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = DynamicFieldWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
+	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
@@ -104,7 +104,7 @@ public class DynamicFieldResource {
 
 		List<Object[]> history = dynamicFieldFacade.findHistory(dataTableRequest);
 
-		DataTableResponse<HistoryDataResponse> dataTableResponse = new DataTableResponse<HistoryDataResponse>();
+		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(dynamicFieldFacade.countHistory(dataTableRequest));
 		dataTableResponse.setRecordsFiltered(history.size());
@@ -116,7 +116,7 @@ public class DynamicFieldResource {
 			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
-			HistoryDataResponse data = new HistoryDataResponse();
+			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));

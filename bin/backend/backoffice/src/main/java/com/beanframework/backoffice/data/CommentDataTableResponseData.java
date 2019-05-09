@@ -3,7 +3,7 @@ package com.beanframework.backoffice.data;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.UserDto;
 
-public class CommentDataResponse extends DataTableResponseData {
+public class CommentDataTableResponseData extends DataTableResponseData {
 
 	private UserDto user;
 	private String html;

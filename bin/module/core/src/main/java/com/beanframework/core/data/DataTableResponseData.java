@@ -8,7 +8,6 @@ public class DataTableResponseData {
 	private AuditorDto createdBy;
 	private String lastModifiedDate;
 	private AuditorDto lastModifiedBy;
-	private String name;
 
 	public String getUuid() {
 		return uuid;
@@ -56,13 +55,5 @@ public class DataTableResponseData {
 
 	public void setLastModifiedBy(AuditorDto lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 }

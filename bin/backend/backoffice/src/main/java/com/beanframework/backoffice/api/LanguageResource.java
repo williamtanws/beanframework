@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants;
-import com.beanframework.backoffice.data.LanguageDataResponse;
+import com.beanframework.backoffice.data.LanguageDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
-import com.beanframework.common.data.HistoryDataResponse;
+import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.core.facade.LanguageFacade;
@@ -68,7 +68,7 @@ public class LanguageResource {
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = LanguageWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<LanguageDataResponse> page(HttpServletRequest request) throws Exception {
+	public DataTableResponse<LanguageDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.getSkipColumnIndexes().add(2);
@@ -77,14 +77,14 @@ public class LanguageResource {
 		
 		Page<LanguageDto> pagination = languageFacade.findPage(dataTableRequest);
 
-		DataTableResponse<LanguageDataResponse> dataTableResponse = new DataTableResponse<LanguageDataResponse>();
+		DataTableResponse<LanguageDataTableResponseData> dataTableResponse = new DataTableResponse<LanguageDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(languageFacade.count());
 		dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
 
 		for (LanguageDto dto : pagination.getContent()) {
 
-			LanguageDataResponse data = new LanguageDataResponse();
+			LanguageDataTableResponseData data = new LanguageDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
@@ -99,7 +99,7 @@ public class LanguageResource {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = LanguageWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<HistoryDataResponse> history(HttpServletRequest request) throws Exception {
+	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
@@ -107,7 +107,7 @@ public class LanguageResource {
 
 		List<Object[]> history = languageFacade.findHistory(dataTableRequest);
 
-		DataTableResponse<HistoryDataResponse> dataTableResponse = new DataTableResponse<HistoryDataResponse>();
+		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(languageFacade.countHistory(dataTableRequest));
 		dataTableResponse.setRecordsFiltered(history.size());
@@ -119,7 +119,7 @@ public class LanguageResource {
 			RevisionType revisionType = (RevisionType) object[2];
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
-			HistoryDataResponse data = new HistoryDataResponse();
+			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
