@@ -16,7 +16,7 @@
 						<form method="post" id="import-form" th:action="@{${@environment.getProperty('path.console.import')}}" enctype="multipart/form-data">
 							<div class="col-md-12">
 								<div class="form-group">
-									<input class="form-control" type="file" onchange="loadfile(this)" name="files" multiple>
+									<input class="form-control" type="file" name="files" multiple="multiple">
 								</div>
 							</div>
 							<div class="col-md-12">
@@ -38,15 +38,6 @@
 				</div>
 			</div>
 		</section>
-		<script>
-			function loadfile(input) {
-				var reader = new FileReader();
-				reader.onload = function(e) {
-					document.getElementById('text').value = e.target.result;
-				}
-				reader.readAsText(input.files[0]);
-			}
-		</script>
 	</th:block>
 </body>
 </html>
