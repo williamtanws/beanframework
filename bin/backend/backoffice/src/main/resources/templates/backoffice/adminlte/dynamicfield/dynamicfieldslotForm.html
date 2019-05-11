@@ -56,7 +56,7 @@
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="sort" th:text="#{module.dynamicfieldslot.name}"></label>
+												<label for="name" th:text="#{module.dynamicfieldslot.name}"></label>
 												<input type="text" class="form-control" name="name" th:value="*{name}">
 												<span class="help-block"></span>
 											</div>
@@ -65,7 +65,7 @@
 											<div class="form-group">
 												<label for="sort" th:text="#{module.dynamicfieldslot.sort}"></label>
 												<span>*</span>
-												<input type="text" class="form-control" name="sort" th:value="*{sort}">
+												<input type="number" class="form-control" name="sort" th:value="*{sort}">
 												<span class="help-block"></span>
 											</div>
 										</div>

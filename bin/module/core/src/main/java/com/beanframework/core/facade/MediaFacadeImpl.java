@@ -54,6 +54,8 @@ public class MediaFacadeImpl implements MediaFacade {
 		try {
 			Media entity = modelService.getEntity(dto, Media.class);
 			entity = modelService.saveEntity(entity, Media.class);
+			
+			mediaService.storeMultipartFile(entity, dto.getFile());
 
 			return modelService.getDto(entity, MediaDto.class);
 		} catch (Exception e) {
