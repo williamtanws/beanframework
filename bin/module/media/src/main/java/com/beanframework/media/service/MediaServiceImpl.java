@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -59,7 +60,13 @@ public class MediaServiceImpl implements MediaService {
 
 	@Override
 	public Media storeMultipartFile(Media media, MultipartFile file) throws Exception {
-		File mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
+		File mediaFolder;
+		if (StringUtils.isBlank(media.getFolder())) {
+			mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getUuid().toString());
+		} else {
+			mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
+		}
+
 		FileUtils.forceMkdir(mediaFolder);
 
 		File original = new File(mediaFolder.getAbsolutePath(), media.getFileName());

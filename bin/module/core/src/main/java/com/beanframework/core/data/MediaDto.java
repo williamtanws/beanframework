@@ -1,5 +1,7 @@
 package com.beanframework.core.data;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class MediaDto extends GenericDto {
 
 	/**
@@ -27,6 +29,8 @@ public class MediaDto extends GenericDto {
 	private String altText;
 	private String description;
 	private String folder;
+
+	private MultipartFile file;
 
 	public String getFileName() {
 		return fileName;
@@ -98,6 +102,14 @@ public class MediaDto extends GenericDto {
 
 	public void setFolder(String folder) {
 		this.folder = folder;
+	}
+
+	public MultipartFile getFile() {
+		return file;
+	}
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
 	}
 
 }

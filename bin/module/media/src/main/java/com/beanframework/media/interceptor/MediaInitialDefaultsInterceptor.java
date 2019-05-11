@@ -9,7 +9,6 @@ public class MediaInitialDefaultsInterceptor extends AbstractInitialDefaultsInte
 
 	@Override
 	public void onInitialDefaults(Media model, InterceptorContext context) throws InterceptorException {
-		super.onInitialDefaults(model, context);
 	}
 
 }

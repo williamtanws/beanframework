@@ -74,7 +74,7 @@
 											<div class="form-group">
 												<label for="sort" th:text="#{module.menu.sort}"></label>
 												<span>*</span>
-												<input type="text" class="form-control" name="sort" th:value="*{sort}" min="0" step="1" onkeypress="return isNumberKey(event)">
+												<input type="number" class="form-control" name="sort" th:value="*{sort}">
 												<span class="help-block"></span>
 											</div>
 										</div>
