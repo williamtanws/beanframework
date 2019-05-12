@@ -33,7 +33,7 @@ public class AbstractController {
 				errorMessage.append(localeMessageService.getMessage("error.ConstraintViolationException"));
 			}
 			else {
-				errorMessage.append(error.getCode() + ": " + error.getDefaultMessage());				
+				errorMessage.append(localeMessageService.getMessage(error.getDefaultMessage()));				
 			}
 		}
 
