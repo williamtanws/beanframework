@@ -312,6 +312,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	@Override
 	public Object saveEntity(Object model, Class modelClass) throws BusinessException {
 
+		if (model == null) {
+			return null;
+		}
+
 		try {
 			AfterSaveEvent event;
 			if (((GenericEntity) model).getUuid() == null) {
@@ -341,7 +345,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void deleteByEntity(Object entityModel, Class modelClass) throws BusinessException {
 		try {
 
-			deleteEntity(entityModel, modelClass);
+			if (entityModel != null)
+				deleteEntity(entityModel, modelClass);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -359,7 +364,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			Object model = findByUuid(uuid, modelClass);
 
-			deleteEntity(model, modelClass);
+			if (model != null)
+				deleteEntity(model, modelClass);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
