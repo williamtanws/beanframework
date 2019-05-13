@@ -75,7 +75,7 @@ public class EmailServiceImpl implements EmailService {
 		FileUtils.forceMkdir(emailAttachmentFolder);
 
 		for (int i = 0; i < attachments.length; i++) {
-			if (attachments[i].isEmpty() == false) {
+			if (attachments[i].isEmpty() == Boolean.FALSE) {
 				File attachment = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + email.getUuid() + File.separator + attachments[i].getOriginalFilename());
 				attachments[i].transferTo(attachment);
 			}

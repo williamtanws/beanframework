@@ -52,12 +52,12 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
 				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
 				prototype.setName(StringUtils.stripToNull(source.getName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
@@ -68,28 +68,28 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				if (prototype.getRequired() == null || prototype.getRequired().equals(source.getRequired()) == false) {
+				if (prototype.getRequired() == null || prototype.getRequired().equals(source.getRequired()) == Boolean.FALSE) {
 					prototype.setRequired(source.getRequired());
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getRule()), prototype.getRule()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getRule()), prototype.getRule()) == Boolean.FALSE) {
 				prototype.setRule(StringUtils.stripToNull(source.getRule()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (prototype.getType() == source.getType() == false) {
+			if (prototype.getType() == source.getType() == Boolean.FALSE) {
 				prototype.setType(source.getType());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getLabel()), prototype.getLabel()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getLabel()), prototype.getLabel()) == Boolean.FALSE) {
 				prototype.setLabel(StringUtils.stripToNull(source.getLabel()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getGrid()), prototype.getGrid()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getGrid()), prototype.getGrid()) == Boolean.FALSE) {
 				prototype.setGrid(StringUtils.stripToNull(source.getGrid()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
@@ -103,7 +103,7 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 
 				if (entityLanguage != null) {
 
-					if (prototype.getLanguage() == null || prototype.getLanguage().getUuid().equals(entityLanguage.getUuid()) == false) {
+					if (prototype.getLanguage() == null || prototype.getLanguage().getUuid().equals(entityLanguage.getUuid()) == Boolean.FALSE) {
 						prototype.setLanguage(entityLanguage);
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}

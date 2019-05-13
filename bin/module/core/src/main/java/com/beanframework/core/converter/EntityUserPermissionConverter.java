@@ -50,12 +50,12 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 		try {
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
 				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(source.getName(), prototype.getName()) == false) {
+			if (StringUtils.equals(source.getName(), prototype.getName()) == Boolean.FALSE) {
 				prototype.setName(StringUtils.stripToNull(source.getName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
@@ -66,19 +66,19 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				if (prototype.getSort() == null || prototype.getSort() == source.getSort() == false) {
+				if (prototype.getSort() == null || prototype.getSort() == source.getSort() == Boolean.FALSE) {
 					prototype.setSort(source.getSort());
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
 
 			// Field
-			if (source.getFields() != null && source.getFields().isEmpty() == false) {
+			if (source.getFields() != null && source.getFields().isEmpty() == Boolean.FALSE) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserPermissionFieldDto sourceField : source.getFields()) {
 
 						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
-							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == Boolean.FALSE) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);

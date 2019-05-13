@@ -47,7 +47,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 
 		Date lastModifiedDate = new Date();
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
@@ -58,7 +58,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getAccountNonExpired() == null || prototype.getAccountNonExpired().equals(source.getAccountNonExpired()) == false) {
+			if (prototype.getAccountNonExpired() == null || prototype.getAccountNonExpired().equals(source.getAccountNonExpired()) == Boolean.FALSE) {
 				prototype.setAccountNonExpired(source.getAccountNonExpired());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
@@ -70,7 +70,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getAccountNonLocked() == null || prototype.getAccountNonLocked().equals(source.getAccountNonLocked()) == false) {
+			if (prototype.getAccountNonLocked() == null || prototype.getAccountNonLocked().equals(source.getAccountNonLocked()) == Boolean.FALSE) {
 				prototype.setAccountNonLocked(source.getAccountNonLocked());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
@@ -82,7 +82,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getCredentialsNonExpired() == null || prototype.getCredentialsNonExpired().equals(source.getCredentialsNonExpired()) == false) {
+			if (prototype.getCredentialsNonExpired() == null || prototype.getCredentialsNonExpired().equals(source.getCredentialsNonExpired()) == Boolean.FALSE) {
 				prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
@@ -94,7 +94,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getEnabled() == null || prototype.getEnabled().equals(source.getEnabled()) == false) {
+			if (prototype.getEnabled() == null || prototype.getEnabled().equals(source.getEnabled()) == Boolean.FALSE) {
 				prototype.setEnabled(source.getEnabled());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
@@ -105,7 +105,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}

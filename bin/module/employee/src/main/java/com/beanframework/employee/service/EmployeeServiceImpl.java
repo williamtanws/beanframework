@@ -87,24 +87,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 			throw new BadCredentialsException("Bad Credentials");
 		} else {
 
-			if (passwordEncoder.matches(password, entity.getPassword()) == false) {
+			if (passwordEncoder.matches(password, entity.getPassword()) == Boolean.FALSE) {
 				throw new BadCredentialsException("Bad Credentials");
 			}
 		}
 
-		if (entity.getEnabled() == false) {
+		if (entity.getEnabled() == Boolean.FALSE) {
 			throw new DisabledException("Account Disabled");
 		}
 
-		if (entity.getAccountNonExpired() == false) {
+		if (entity.getAccountNonExpired() == Boolean.FALSE) {
 			throw new AccountExpiredException("Account Expired");
 		}
 
-		if (entity.getAccountNonLocked() == false) {
+		if (entity.getAccountNonLocked() == Boolean.FALSE) {
 			throw new LockedException("Account Locked");
 		}
 
-		if (entity.getCredentialsNonExpired() == false) {
+		if (entity.getCredentialsNonExpired() == Boolean.FALSE) {
 			throw new CredentialsExpiredException("Password Expired");
 		}
 

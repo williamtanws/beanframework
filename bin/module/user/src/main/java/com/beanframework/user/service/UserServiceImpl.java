@@ -79,24 +79,24 @@ public class UserServiceImpl implements UserService {
 			throw new BadCredentialsException("Bad Credentials");
 		} else {
 
-			if (passwordEncoder.matches(password, entity.getPassword()) == false) {
+			if (passwordEncoder.matches(password, entity.getPassword()) == Boolean.FALSE) {
 				throw new BadCredentialsException("Bad Credentials");
 			}
 		}
 
-		if (entity.getEnabled() == false) {
+		if (entity.getEnabled() == Boolean.FALSE) {
 			throw new DisabledException("Account Disabled");
 		}
 
-		if (entity.getAccountNonExpired() == false) {
+		if (entity.getAccountNonExpired() == Boolean.FALSE) {
 			throw new AccountExpiredException("Account Expired");
 		}
 
-		if (entity.getAccountNonLocked() == false) {
+		if (entity.getAccountNonLocked() == Boolean.FALSE) {
 			throw new LockedException("Account Locked");
 		}
 
-		if (entity.getCredentialsNonExpired() == false) {
+		if (entity.getCredentialsNonExpired() == Boolean.FALSE) {
 			throw new CredentialsExpiredException("Password Expired");
 		}
 
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void saveProfilePicture(User model, MultipartFile picture) throws IOException {
-		if (picture != null && picture.isEmpty() == false) {
+		if (picture != null && picture.isEmpty() == Boolean.FALSE) {
 
 			File profilePictureFolder = new File(PROFILE_PICTURE_LOCATION, model.getUuid().toString());
 			FileUtils.forceMkdir(profilePictureFolder);
@@ -184,7 +184,7 @@ public class UserServiceImpl implements UserService {
 		boolean isAuthorized = false;
 
 		for (UserGroup userGroup : user.getUserGroups()) {
-			if (isAuthorized == false) {
+			if (isAuthorized == Boolean.FALSE) {
 				isAuthorized = isAuthorized(userGroup, userGroupId);
 			} else {
 				break;
@@ -264,10 +264,10 @@ public class UserServiceImpl implements UserService {
 		Hibernate.initialize(userGroup.getUserGroups());
 
 		for (UserGroup child : userGroup.getUserGroups()) {
-			if (checkedUserGroupUuids.contains(child.getUuid().toString()) == false) {
+			if (checkedUserGroupUuids.contains(child.getUuid().toString()) == Boolean.FALSE) {
 				checkedUserGroupUuids.add(child.getUuid().toString());
 
-				if (child.getUserGroups() != null && child.getUserGroups().isEmpty() == false) {
+				if (child.getUserGroups() != null && child.getUserGroups().isEmpty() == Boolean.FALSE) {
 					initializeUserGroupUuids(child, checkedUserGroupUuids);
 				}
 
@@ -303,10 +303,10 @@ public class UserServiceImpl implements UserService {
 		Hibernate.initialize(userGroup.getUserGroups());
 
 		for (UserGroup child : userGroup.getUserGroups()) {
-			if (checkedUserGroupIds.contains(child.getUuid().toString()) == false) {
+			if (checkedUserGroupIds.contains(child.getUuid().toString()) == Boolean.FALSE) {
 				checkedUserGroupIds.add(child.getId());
 
-				if (child.getUserGroups() != null && child.getUserGroups().isEmpty() == false) {
+				if (child.getUserGroups() != null && child.getUserGroups().isEmpty() == Boolean.FALSE) {
 					initializeUserGroupIds(child, checkedUserGroupIds);
 				}
 
@@ -336,7 +336,7 @@ public class UserServiceImpl implements UserService {
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
 		for (UserGroup userGroup : userGroups) {
-			if (processedUserGroupUuids.contains(userGroup.getUuid().toString()) == false) {
+			if (processedUserGroupUuids.contains(userGroup.getUuid().toString()) == Boolean.FALSE) {
 				processedUserGroupUuids.add(userGroup.getUuid().toString());
 
 				for (UserAuthority userAuthority : userGroup.getUserAuthorities()) {
@@ -353,7 +353,7 @@ public class UserServiceImpl implements UserService {
 
 				}
 
-				if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
+				if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == Boolean.FALSE) {
 					authorities.addAll(getAuthorities(userGroup.getUserGroups(), processedUserGroupUuids));
 				}
 			}

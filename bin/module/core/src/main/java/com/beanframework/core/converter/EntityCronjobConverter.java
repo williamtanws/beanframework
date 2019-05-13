@@ -48,32 +48,32 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 
 		Date lastModifiedDate = new Date();
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getJobClass()), prototype.getJobClass()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getJobClass()), prototype.getJobClass()) == Boolean.FALSE) {
 			prototype.setJobClass(StringUtils.stripToNull(source.getJobClass()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getJobGroup()), prototype.getJobGroup()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getJobGroup()), prototype.getJobGroup()) == Boolean.FALSE) {
 			prototype.setJobGroup(StringUtils.stripToNull(source.getJobGroup()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getDescription()), prototype.getDescription()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getDescription()), prototype.getDescription()) == Boolean.FALSE) {
 			prototype.setDescription(StringUtils.stripToNull(source.getDescription()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getCronExpression()), prototype.getCronExpression()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getCronExpression()), prototype.getCronExpression()) == Boolean.FALSE) {
 			prototype.setCronExpression(StringUtils.stripToNull(source.getCronExpression()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
@@ -84,7 +84,7 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getStartup() == null || prototype.getStartup().equals(source.getStartup()) == false) {
+			if (prototype.getStartup() == null || prototype.getStartup().equals(source.getStartup()) == Boolean.FALSE) {
 				prototype.setStartup(source.getStartup());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}

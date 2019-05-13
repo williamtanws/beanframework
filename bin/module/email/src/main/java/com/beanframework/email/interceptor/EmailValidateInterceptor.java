@@ -32,7 +32,7 @@ public class EmailValidateInterceptor extends AbstractValidateInterceptor<Email>
 	private void valiateRecipients(final String recipients) throws InterceptorException {
 		String[] recipientsArray = recipients.split(";");
 		for (int i = 0; i < recipientsArray.length; i++) {
-			if (validateEmail(recipientsArray[i]) == false) {
+			if (validateEmail(recipientsArray[i]) == Boolean.FALSE) {
 				throw new InterceptorException("Wrong email format");
 			}
 		}

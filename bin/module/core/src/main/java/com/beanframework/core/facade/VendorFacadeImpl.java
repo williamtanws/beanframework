@@ -64,10 +64,10 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	public VendorDto save(VendorDto dto) throws BusinessException {
 		try {
-			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == false) {
+			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == Boolean.FALSE) {
 				String mimetype = dto.getProfilePicture().getContentType();
 				String type = mimetype.split("/")[0];
-				if (type.equals("image") == false) {
+				if (type.equals("image") == Boolean.FALSE) {
 					throw new Exception("Wrong picture format");
 				}
 			}
@@ -132,10 +132,10 @@ public class VendorFacadeImpl implements VendorFacade {
 	public VendorDto saveProfile(VendorDto dto) throws BusinessException {
 
 		try {
-			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == false) {
+			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == Boolean.FALSE) {
 				String mimetype = dto.getProfilePicture().getContentType();
 				String type = mimetype.split("/")[0];
-				if (type.equals("image") == false) {
+				if (type.equals("image") == Boolean.FALSE) {
 					throw new Exception("Wrong picture format");
 				}
 			}

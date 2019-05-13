@@ -124,7 +124,7 @@ public class AngularFileManagerServlet extends HttpServlet {
     
     private void checkDirectoryTraversalSecuirty(String parent, String child) throws Exception {
 		File file = new File(parent, child);
-		if (file.getCanonicalPath().startsWith(new File(parent).getCanonicalPath()) == false) {
+		if (file.getCanonicalPath().startsWith(new File(parent).getCanonicalPath()) == Boolean.FALSE) {
 			System.out.println(file.getCanonicalPath());
 			throw new Exception("Directory Traversal Attack Detected!!!");
 		}
