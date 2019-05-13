@@ -46,47 +46,47 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 		try {
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
 				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getFileName()), prototype.getFileName()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getFileName()), prototype.getFileName()) == Boolean.FALSE) {
 				prototype.setFileName(StringUtils.stripToNull(source.getFileName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getFileType()), prototype.getFileType()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getFileType()), prototype.getFileType()) == Boolean.FALSE) {
 				prototype.setFileType(StringUtils.stripToNull(source.getFileType()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getTitle()), prototype.getTitle()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getTitle()), prototype.getTitle()) == Boolean.FALSE) {
 				prototype.setTitle(StringUtils.stripToNull(source.getTitle()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getCaption()), prototype.getCaption()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getCaption()), prototype.getCaption()) == Boolean.FALSE) {
 				prototype.setCaption(StringUtils.stripToNull(source.getCaption()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getAltText()), prototype.getAltText()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getAltText()), prototype.getAltText()) == Boolean.FALSE) {
 				prototype.setAltText(StringUtils.stripToNull(source.getAltText()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getDescription()), prototype.getDescription()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getDescription()), prototype.getDescription()) == Boolean.FALSE) {
 				prototype.setDescription(StringUtils.stripToNull(source.getDescription()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getUrl()), prototype.getUrl()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getUrl()), prototype.getUrl()) == Boolean.FALSE) {
 				prototype.setUrl(StringUtils.stripToNull(source.getUrl()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getFolder()), prototype.getFolder()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getFolder()), prototype.getFolder()) == Boolean.FALSE) {
 				prototype.setFolder(StringUtils.stripToNull(source.getFolder()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}

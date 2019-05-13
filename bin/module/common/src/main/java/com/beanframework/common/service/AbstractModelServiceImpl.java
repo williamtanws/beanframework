@@ -361,15 +361,15 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer firstResult, Integer maxResult, Class modelClass) {
 		String qlString = "select " + (StringUtils.isBlank(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
-		if (properties != null && properties.isEmpty() == false) {
+		if (properties != null && properties.isEmpty() == Boolean.FALSE) {
 			qlString = qlString + " where " + sqlProperties(properties);
 		}
-		if (sorts != null && sorts.isEmpty() == false) {
+		if (sorts != null && sorts.isEmpty() == Boolean.FALSE) {
 			qlString = qlString + " " + sqlSorts(sorts);
 		}
 
 		Query query = entityManager.createQuery(qlString);
-		if (properties != null && properties.isEmpty() == false) {
+		if (properties != null && properties.isEmpty() == Boolean.FALSE) {
 			for (Map.Entry<String, Object> entry : properties.entrySet()) {
 				if (entry.getValue() != null) {
 					query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());

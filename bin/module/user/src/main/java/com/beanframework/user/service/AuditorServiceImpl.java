@@ -68,12 +68,12 @@ public class AuditorServiceImpl implements AuditorService {
 				auditor.setName(model.getName());
 			} else {
 				Date lastModifiedDate = new Date();
-				if (StringUtils.equals(model.getId(), auditor.getId()) == false) {
+				if (StringUtils.equals(model.getId(), auditor.getId()) == Boolean.FALSE) {
 					auditor.setId(model.getId());
 					auditor.setLastModifiedDate(lastModifiedDate);
 				}
 
-				if (StringUtils.equals(model.getName(), auditor.getName()) == false) {
+				if (StringUtils.equals(model.getName(), auditor.getName()) == Boolean.FALSE) {
 					auditor.setName(model.getName());
 					auditor.setLastModifiedDate(lastModifiedDate);
 				}

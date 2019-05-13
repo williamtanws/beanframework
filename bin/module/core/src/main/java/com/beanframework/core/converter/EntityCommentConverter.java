@@ -47,17 +47,17 @@ public class EntityCommentConverter implements EntityConverter<CommentDto, Comme
 		try {
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
 				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getHtml()), prototype.getHtml()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getHtml()), prototype.getHtml()) == Boolean.FALSE) {
 				prototype.setHtml(StringUtils.stripToNull(source.getHtml()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (prototype.getVisibled() == source.getVisibled() == false) {
+			if (prototype.getVisibled() == source.getVisibled() == Boolean.FALSE) {
 				prototype.setVisibled(source.getVisibled());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
@@ -65,7 +65,7 @@ public class EntityCommentConverter implements EntityConverter<CommentDto, Comme
 			if (prototype.getUser() != null && source.getUser() == null) {
 				prototype.setUser(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
-			} else if (prototype.getUser().getUuid().equals(source.getUser().getUuid()) == false) {
+			} else if (prototype.getUser().getUuid().equals(source.getUser().getUuid()) == Boolean.FALSE) {
 				User entityUser = modelService.findByUuid(source.getUser().getUuid(), User.class);
 				
 				if(entityUser != null) {

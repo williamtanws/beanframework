@@ -17,7 +17,7 @@ import com.beanframework.common.data.DataTableRequest;
 public class AbstractSpecification {
 
 	public static String convertToLikePattern(String value) {
-		if (value.contains("%") == false) {
+		if (value.contains("%") == Boolean.FALSE) {
 			value = "%" + value + "%";
 		}
 		return value;

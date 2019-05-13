@@ -53,12 +53,12 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 		try {
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
 				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
 				prototype.setName(StringUtils.stripToNull(source.getName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
@@ -69,7 +69,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				if (prototype.getSort() == null || prototype.getSort() == source.getSort() == false) {
+				if (prototype.getSort() == null || prototype.getSort() == source.getSort() == Boolean.FALSE) {
 					prototype.setSort(source.getSort());
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
@@ -77,7 +77,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 
 			// Field
 			if (source.getFields() == null || source.getFields().isEmpty()) {
-				if (prototype.getFields().isEmpty() == false) {
+				if (prototype.getFields().isEmpty() == Boolean.FALSE) {
 					prototype.setFields(new ArrayList<UserRightField>());
 				}
 			} else {
@@ -85,7 +85,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserRightFieldDto sourceField : source.getFields()) {
 						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
-							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == Boolean.FALSE) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);

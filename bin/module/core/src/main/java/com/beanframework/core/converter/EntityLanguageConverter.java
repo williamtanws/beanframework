@@ -45,12 +45,12 @@ public class EntityLanguageConverter implements EntityConverter<LanguageDto, Lan
 
 		Date lastModifiedDate = new Date();
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
@@ -61,13 +61,13 @@ public class EntityLanguageConverter implements EntityConverter<LanguageDto, Lan
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		} else {
-			if (prototype.getSort() == null || prototype.getSort() == source.getSort() == false) {
+			if (prototype.getSort() == null || prototype.getSort() == source.getSort() == Boolean.FALSE) {
 				prototype.setSort(source.getSort());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
 
-		if (prototype.getActive() == source.getActive() == false) {
+		if (prototype.getActive() == source.getActive() == Boolean.FALSE) {
 			prototype.setActive(source.getActive());
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}

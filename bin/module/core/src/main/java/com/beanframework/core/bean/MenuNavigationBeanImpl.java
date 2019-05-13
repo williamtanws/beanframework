@@ -43,9 +43,9 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean {
 	private Set<String> collectUserGroupUuid(List<UserGroup> userGroups) {
 		Set<String> userGroupUuids = new HashSet<String>();
 		for (UserGroup userGroup : userGroups) {
-			if (userGroupUuids.contains(userGroup.getUuid().toString()) == false) {
+			if (userGroupUuids.contains(userGroup.getUuid().toString()) == Boolean.FALSE) {
 				userGroupUuids.add(userGroup.getUuid().toString());
-				if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
+				if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == Boolean.FALSE) {
 					userGroupUuids.addAll(collectUserGroupUuid(userGroup.getUserGroups()));
 				}
 			}
@@ -56,9 +56,9 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean {
 	private Set<String> collectUserGroupDtoUuid(List<UserGroupDto> userGroups) {
 		Set<String> userGroupUuids = new HashSet<String>();
 		for (UserGroupDto userGroup : userGroups) {
-			if (userGroupUuids.contains(userGroup.getUuid().toString()) == false) {
+			if (userGroupUuids.contains(userGroup.getUuid().toString()) == Boolean.FALSE) {
 				userGroupUuids.add(userGroup.getUuid().toString());
-				if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == false) {
+				if (userGroup.getUserGroups() != null && userGroup.getUserGroups().isEmpty() == Boolean.FALSE) {
 					userGroupUuids.addAll(collectUserGroupDtoUuid(userGroup.getUserGroups()));
 				}
 			}
@@ -73,19 +73,19 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean {
 
 			boolean removed = false;
 
-			if (removed == false && menu.getEnabled() == false) {
+			if (removed == Boolean.FALSE && menu.getEnabled() == Boolean.FALSE) {
 				parent.remove();
 				removed = true;
 			}
 
 			// If menu groups or authorities is not authorized
-			if (removed == false && isUserGroupAuthorized(menu, userGroups) == false) {
+			if (removed == Boolean.FALSE && isUserGroupAuthorized(menu, userGroups) == Boolean.FALSE) {
 				parent.remove();
 				removed = true;
 			}
 
 			// If menu has childs
-			if (menu.getChilds().isEmpty() == false) {
+			if (menu.getChilds().isEmpty() == Boolean.FALSE) {
 				filterAuthorizedMenu(menu.getChilds(), userGroups);
 			}
 		}

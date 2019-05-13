@@ -45,17 +45,17 @@ public class EntitySiteConverter implements EntityConverter<SiteDto, Site> {
 
 		Date lastModifiedDate = new Date();
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
 			prototype.setId(StringUtils.stripToNull(source.getId()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
 			prototype.setName(StringUtils.stripToNull(source.getName()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getUrl()), prototype.getUrl()) == false) {
+		if (StringUtils.equals(StringUtils.stripToNull(source.getUrl()), prototype.getUrl()) == Boolean.FALSE) {
 			prototype.setUrl(StringUtils.stripToNull(source.getUrl()));
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}

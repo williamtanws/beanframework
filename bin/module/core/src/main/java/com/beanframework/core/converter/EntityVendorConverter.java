@@ -56,12 +56,12 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 		try {
 			Date lastModifiedDate = new Date();
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
 				prototype.setId(StringUtils.stripToNull(source.getId()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
 				prototype.setName(StringUtils.stripToNull(source.getName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
@@ -72,7 +72,7 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				if (prototype.getAccountNonExpired() == null || prototype.getAccountNonExpired().equals(source.getAccountNonExpired()) == false) {
+				if (prototype.getAccountNonExpired() == null || prototype.getAccountNonExpired().equals(source.getAccountNonExpired()) == Boolean.FALSE) {
 					prototype.setAccountNonExpired(source.getAccountNonExpired());
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
@@ -84,7 +84,7 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				if (prototype.getAccountNonLocked() == null || prototype.getAccountNonLocked().equals(source.getAccountNonLocked()) == false) {
+				if (prototype.getAccountNonLocked() == null || prototype.getAccountNonLocked().equals(source.getAccountNonLocked()) == Boolean.FALSE) {
 					prototype.setAccountNonLocked(source.getAccountNonLocked());
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
@@ -96,7 +96,7 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				if (prototype.getCredentialsNonExpired() == null || prototype.getCredentialsNonExpired().equals(source.getCredentialsNonExpired()) == false) {
+				if (prototype.getCredentialsNonExpired() == null || prototype.getCredentialsNonExpired().equals(source.getCredentialsNonExpired()) == Boolean.FALSE) {
 					prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
@@ -108,7 +108,7 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				if (prototype.getEnabled() == null || prototype.getEnabled().equals(source.getEnabled()) == false) {
+				if (prototype.getEnabled() == null || prototype.getEnabled().equals(source.getEnabled()) == Boolean.FALSE) {
 					prototype.setEnabled(source.getEnabled());
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
@@ -119,18 +119,18 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == false) {
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
 				prototype.setName(StringUtils.stripToNull(source.getName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
 			// Field
-			if (source.getFields() != null && source.getFields().isEmpty() == false) {
+			if (source.getFields() != null && source.getFields().isEmpty() == Boolean.FALSE) {
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserFieldDto sourceField : source.getFields()) {
 
 						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
-							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == false) {
+							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == Boolean.FALSE) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
 								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);

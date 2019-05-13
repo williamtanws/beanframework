@@ -266,7 +266,7 @@ public class DataTableRequest {
 			maxParamsToCheck = getNumberOfColumns(request);
 
 			for (int i = 0; i < maxParamsToCheck; i++) {
-				if (skipColumnIndexes.contains(i) == false) {
+				if (skipColumnIndexes.contains(i) == Boolean.FALSE) {
 					if (null != request.getParameter("columns[" + i + "][data]") && !"null".equalsIgnoreCase(request.getParameter("columns[" + i + "][data]"))
 							&& !AppUtil.isObjectEmpty(request.getParameter("columns[" + i + "][data]"))) {
 						DataTableColumnSpecs colSpec = new DataTableColumnSpecs(request, i);
@@ -285,7 +285,7 @@ public class DataTableRequest {
 			}
 
 			for (int i = 0; i < maxParamsToCheck; i++) {
-				if (skipColumnIndexes.contains(i) == false) {
+				if (skipColumnIndexes.contains(i) == Boolean.FALSE) {
 					if (request.getParameter("order[" + i + "][column]") != null) {
 						String columnIndex = request.getParameter("order[" + i + "][column]");
 
@@ -313,7 +313,7 @@ public class DataTableRequest {
 		}
 
 		List<Order> sortOrders = new ArrayList<Order>();
-		if (orders.isEmpty() == false) {
+		if (orders.isEmpty() == Boolean.FALSE) {
 			for (DataTableColumnSpecs spec : orders) {
 				if (StringUtils.isNotBlank(spec.getSortDir())) {
 					Order order = new Order(Direction.fromString(spec.getSortDir()), spec.getData());
