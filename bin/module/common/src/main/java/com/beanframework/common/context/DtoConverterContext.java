@@ -9,21 +9,19 @@ public class DtoConverterContext {
 
 	private Map<String, Object> parameters = new HashMap<String, Object>();
 
-	public DtoConverterContext()
-	{
+	public DtoConverterContext() {
 	}
 
 	public DtoConverterContext(ConvertRelationType converModelType) {
 		super();
 		this.converModelType = converModelType;
 	}
-	
+
 	public DtoConverterContext(ConvertRelationType converModelType, Map<String, Object> parameters) {
 		super();
 		this.converModelType = converModelType;
 		this.parameters = parameters;
 	}
-
 
 	public ConvertRelationType getConverModelType() {
 		return converModelType;
@@ -35,6 +33,11 @@ public class DtoConverterContext {
 
 	public Map<String, Object> getParameters() {
 		return parameters;
+	}
+
+	@Override
+	public String toString() {
+		return "DtoConverterContext [converModelType=" + converModelType + ", parameters=" + parameters + "]";
 	}
 
 }

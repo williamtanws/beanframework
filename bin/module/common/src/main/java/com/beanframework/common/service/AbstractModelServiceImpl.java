@@ -252,7 +252,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 	@Override
 	public Object dtoConverter(Object model, DtoConverterContext context, String typeCode) throws ConverterException {
-		
+
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof DtoConverter) {
 				DtoConverter interceptor = (DtoConverter) interceptorMapping.getConverter();
@@ -263,13 +263,6 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 
 		throw new ConverterException("Cannot find any dto convert to convert target typeCode: " + typeCode);
-	}
-
-	@Override
-	public <T> Page<T> page(@Nullable Specification spec, Pageable pageable, Class modelClass) {
-
-		TypedQuery<T> query = getQuery(spec, pageable, modelClass);
-		return pageable.isUnpaged() ? new PageImpl<T>(query.getResultList()) : readPage(query, modelClass, pageable, spec);
 	}
 
 	protected <T> Page readPage(TypedQuery query, final Class domainClass, Pageable pageable, @Nullable Specification spec) {
@@ -420,5 +413,11 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 		return sortsBuilder.toString();
+	}
+
+	protected <T> Page<T> page(@Nullable Specification spec, Pageable pageable, Class modelClass) {
+
+		TypedQuery<T> query = getQuery(spec, pageable, modelClass);
+		return pageable.isUnpaged() ? new PageImpl<T>(query.getResultList()) : readPage(query, modelClass, pageable, spec);
 	}
 }
