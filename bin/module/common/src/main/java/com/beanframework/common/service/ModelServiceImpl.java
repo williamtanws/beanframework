@@ -42,7 +42,7 @@ import com.beanframework.common.repository.ModelRepository;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Autowired
@@ -79,7 +79,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		entityManager.refresh(model);
 	}
 
-	@Transactional(rollbackFor = BusinessException.class)
 	@Override
 	public void flush() throws BusinessException {
 		modelRepository.flush();
@@ -308,7 +307,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = false, rollbackFor = BusinessException.class)
 	@Override
 	public Object saveEntity(Object model, Class modelClass) throws BusinessException {
 
@@ -340,7 +338,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = false, rollbackFor = BusinessException.class)
 	@Override
 	public void deleteByEntity(Object entityModel, Class modelClass) throws BusinessException {
 		try {
@@ -357,7 +354,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = false, rollbackFor = BusinessException.class)
 	@Override
 	public void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException {
 		try {
@@ -376,7 +372,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	@Transactional(readOnly = false, rollbackFor = SQLException.class)
 	private void deleteEntity(Object model, Class modelClass) throws SQLException, InterceptorException, BusinessException {
 		removeInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 
@@ -473,7 +468,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return (T) dtoConverter(models, context, modelClass.getSimpleName());
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new Exception(e.getMessage(), e);
 		}
 	}
