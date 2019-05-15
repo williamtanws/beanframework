@@ -32,7 +32,7 @@ public class EntityCsvMediaConverter implements EntityCsvConverter<MediaCsv, Med
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Media.ID, source.getId());
 
-				Media prototype = modelService.findByProperties(properties, Media.class);
+				Media prototype = modelService.findOneByProperties(properties, Media.class);
 
 				if (prototype != null) {
 

@@ -33,7 +33,7 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.UUID, source.getUuid());
-				Employee prototype = modelService.findByProperties(properties, Employee.class);
+				Employee prototype = modelService.findOneByProperties(properties, Employee.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
@@ -55,7 +55,7 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Employee.UUID, source.getUuid());
-				Employee prototype = modelService.findByProperties(properties, Employee.class);
+				Employee prototype = modelService.findOneByProperties(properties, Employee.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

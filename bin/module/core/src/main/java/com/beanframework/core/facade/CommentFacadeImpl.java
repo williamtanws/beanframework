@@ -32,14 +32,14 @@ public class CommentFacadeImpl implements CommentFacade {
 
 	@Override
 	public CommentDto findOneByUuid(UUID uuid) throws Exception {
-		Comment entity = modelService.findByUuid(uuid, Comment.class);
+		Comment entity = modelService.findOneByUuid(uuid, Comment.class);
 
 		return modelService.getDto(entity, CommentDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public CommentDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Comment entity = modelService.findByProperties(properties, Comment.class);
+		Comment entity = modelService.findOneByProperties(properties, Comment.class);
 
 		return modelService.getDto(entity, CommentDto.class);
 	}

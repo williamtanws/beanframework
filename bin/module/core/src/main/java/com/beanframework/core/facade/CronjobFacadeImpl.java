@@ -43,14 +43,14 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 	@Override
 	public CronjobDto findOneByUuid(UUID uuid) throws Exception {
-		Cronjob entity = modelService.findByUuid(uuid, Cronjob.class);
+		Cronjob entity = modelService.findOneByUuid(uuid, Cronjob.class);
 
 		return modelService.getDto(entity, CronjobDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public CronjobDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Cronjob entity = modelService.findByProperties(properties, Cronjob.class);
+		Cronjob entity = modelService.findOneByProperties(properties, Cronjob.class);
 
 		return modelService.getDto(entity, CronjobDto.class);
 	}
@@ -97,7 +97,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	@Override
 	public void trigger(CronjobDto cronjob) throws BusinessException {
 		try {
-			Cronjob updateCronjob = modelService.findByUuid(cronjob.getUuid(), Cronjob.class);
+			Cronjob updateCronjob = modelService.findOneByUuid(cronjob.getUuid(), Cronjob.class);
 
 			updateCronjob.setJobTrigger(cronjob.getJobTrigger());
 			updateCronjob.setTriggerStartDate(cronjob.getTriggerStartDate());
@@ -113,7 +113,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public CronjobDto addCronjobData(UUID uuid, String name, String value) throws BusinessException {
 
 		try {
-			Cronjob updateCronjob = modelService.findByUuid(uuid, Cronjob.class);
+			Cronjob updateCronjob = modelService.findOneByUuid(uuid, Cronjob.class);
 
 			List<CronjobData> datas = updateCronjob.getCronjobDatas();
 
@@ -143,7 +143,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 		try {
 
-			Cronjob entityCronjob = modelService.findByUuid(cronjobUuid, Cronjob.class);
+			Cronjob entityCronjob = modelService.findOneByUuid(cronjobUuid, Cronjob.class);
 
 			CronjobData entityCronjobData = modelService.getEntity(dto, CronjobData.class);
 			entityCronjobData.setCronjob(entityCronjob);
@@ -161,7 +161,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 		try {
 
-			Cronjob entityCronjob = modelService.findByUuid(cronjobUuid, Cronjob.class);
+			Cronjob entityCronjob = modelService.findOneByUuid(cronjobUuid, Cronjob.class);
 
 			Iterator<CronjobData> cronjobDatas = entityCronjob.getCronjobDatas().iterator();
 			while (cronjobDatas.hasNext()) {

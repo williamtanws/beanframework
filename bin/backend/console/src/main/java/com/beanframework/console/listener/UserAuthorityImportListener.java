@@ -167,7 +167,7 @@ public class UserAuthorityImportListener extends ImportListener {
 
 			Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 			userGroupProperties.put(UserGroup.ID, userGroupId);
-			UserGroup userGroup = modelService.findByProperties(userGroupProperties, UserGroup.class);
+			UserGroup userGroup = modelService.findOneByProperties(userGroupProperties, UserGroup.class);
 
 			if (userGroup == null) {
 				LOGGER.error("userGroupId not exists: " + userGroupId);

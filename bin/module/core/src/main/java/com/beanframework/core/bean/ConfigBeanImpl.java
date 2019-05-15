@@ -18,7 +18,7 @@ public class ConfigBeanImpl implements ConfigBean {
 	public String get(String id) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
-		Configuration entity = modelService.findByProperties(properties, Configuration.class);
+		Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
 		if (entity == null) {
 			return null;
 		} else {
@@ -30,7 +30,7 @@ public class ConfigBeanImpl implements ConfigBean {
 	public boolean is(String id) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
-		Configuration entity = modelService.findByProperties(properties, Configuration.class);
+		Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
 		if (entity == null) {
 			return false;
 		} else {
@@ -42,7 +42,7 @@ public class ConfigBeanImpl implements ConfigBean {
 	public String get(String id, String defaultValue) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
-		Configuration entity = modelService.findByProperties(properties, Configuration.class);
+		Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
 		if (entity == null) {
 			return defaultValue;
 		} else {
@@ -54,7 +54,7 @@ public class ConfigBeanImpl implements ConfigBean {
 	public boolean is(String id, boolean defaultValue) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
-		Configuration entity = modelService.findByProperties(properties, Configuration.class);
+		Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
 		if (entity == null) {
 			return defaultValue;
 		} else {

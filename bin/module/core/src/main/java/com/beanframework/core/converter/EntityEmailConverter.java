@@ -26,7 +26,7 @@ public class EntityEmailConverter implements EntityConverter<EmailDto, Email> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Email.UUID, source.getUuid());
-				Email prototype = modelService.findByProperties(properties, Email.class);
+				Email prototype = modelService.findOneByProperties(properties, Email.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

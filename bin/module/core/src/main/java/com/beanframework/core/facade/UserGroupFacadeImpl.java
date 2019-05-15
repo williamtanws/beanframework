@@ -30,7 +30,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public UserGroupDto findOneByUuid(UUID uuid) throws Exception {
-		UserGroup entity = modelService.findByUuid(uuid, UserGroup.class);
+		UserGroup entity = modelService.findOneByUuid(uuid, UserGroup.class);
 		UserGroupDto dto = modelService.getDto(entity, UserGroupDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -38,7 +38,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Override
 	public UserGroupDto findOneProperties(Map<String, Object> properties) throws Exception {
-		UserGroup entity = modelService.findByProperties(properties, UserGroup.class);
+		UserGroup entity = modelService.findOneByProperties(properties, UserGroup.class);
 		UserGroupDto dto = modelService.getDto(entity, UserGroupDto.class);
 
 		return dto;

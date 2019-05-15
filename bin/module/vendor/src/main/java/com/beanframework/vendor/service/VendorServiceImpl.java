@@ -55,7 +55,7 @@ public class VendorServiceImpl implements VendorService {
 		if (auth != null) {
 
 			Vendor principal = (Vendor) auth.getPrincipal();
-			return modelService.findByUuid(principal.getUuid(), Vendor.class);
+			return modelService.findOneByUuid(principal.getUuid(), Vendor.class);
 		} else {
 			return null;
 		}

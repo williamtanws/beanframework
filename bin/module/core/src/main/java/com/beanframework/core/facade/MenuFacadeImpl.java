@@ -34,7 +34,7 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
-		Menu entity = modelService.findByUuid(uuid, Menu.class);
+		Menu entity = modelService.findOneByUuid(uuid, Menu.class);
 		MenuDto dto = modelService.getDto(entity, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -42,7 +42,7 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Override
 	public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Menu entity = modelService.findByProperties(properties, Menu.class);
+		Menu entity = modelService.findOneByProperties(properties, Menu.class);
 		MenuDto dto = modelService.getDto(entity, MenuDto.class);
 
 		return dto;

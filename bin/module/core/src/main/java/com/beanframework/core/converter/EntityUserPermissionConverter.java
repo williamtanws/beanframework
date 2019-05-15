@@ -30,7 +30,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserPermission.UUID, source.getUuid());
 
-				UserPermission prototype = modelService.findByProperties(properties, UserPermission.class);
+				UserPermission prototype = modelService.findOneByProperties(properties, UserPermission.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

@@ -31,14 +31,14 @@ public class AuditorFacadeImpl implements AuditorFacade {
 
 	@Override
 	public AuditorDto findOneByUuid(UUID uuid) throws Exception {
-		Auditor entity = modelService.findByUuid(uuid, Auditor.class);
+		Auditor entity = modelService.findOneByUuid(uuid, Auditor.class);
 
 		return modelService.getDto(entity, AuditorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public AuditorDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Auditor entity = modelService.findByProperties(properties, Auditor.class);
+		Auditor entity = modelService.findOneByProperties(properties, Auditor.class);
 
 		return modelService.getDto(entity, AuditorDto.class);
 	}

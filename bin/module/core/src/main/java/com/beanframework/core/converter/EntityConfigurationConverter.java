@@ -27,7 +27,7 @@ public class EntityConfigurationConverter implements EntityConverter<Configurati
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.UUID, source.getUuid());
-				Configuration prototype = modelService.findByProperties(properties, Configuration.class);
+				Configuration prototype = modelService.findOneByProperties(properties, Configuration.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

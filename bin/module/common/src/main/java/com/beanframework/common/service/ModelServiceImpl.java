@@ -99,7 +99,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T> T findByUuid(UUID uuid, Class modelClass) throws Exception {
+	public <T> T findOneByUuid(UUID uuid, Class modelClass) throws Exception {
 		Assert.notNull(uuid, "uuid was null");
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -118,7 +118,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T> T findByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
+	public <T> T findOneByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
@@ -358,7 +358,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException {
 		try {
 
-			Object model = findByUuid(uuid, modelClass);
+			Object model = findOneByUuid(uuid, modelClass);
 
 			if (model != null)
 				deleteEntity(model, modelClass);

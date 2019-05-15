@@ -27,7 +27,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<Auditor> {
 				User user = (User) auth.getPrincipal();
 
 				if (user.getUuid() != null) {
-					Auditor auditor = modelService.findByUuid(user.getUuid(), Auditor.class);
+					Auditor auditor = modelService.findOneByUuid(user.getUuid(), Auditor.class);
 
 					if (auditor != null) {
 						return Optional.of(auditor);

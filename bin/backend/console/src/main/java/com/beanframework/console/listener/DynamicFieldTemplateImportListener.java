@@ -157,7 +157,7 @@ public class DynamicFieldTemplateImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(DynamicFieldTemplate.ID, csv.getId());
 
-			DynamicFieldTemplate entity = modelService.findByProperties(properties, DynamicFieldTemplate.class);
+			DynamicFieldTemplate entity = modelService.findOneByProperties(properties, DynamicFieldTemplate.class);
 			modelService.deleteByEntity(entity, DynamicFieldTemplate.class);
 		}
 	}

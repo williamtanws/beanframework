@@ -118,7 +118,7 @@ public class BackofficeAuthProvider implements AuthenticationProvider {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, BACKOFFICE_CONFIGURATION_USERGROUP);
-		Configuration usergroupConfiguration = modelService.findByProperties(properties, Configuration.class);
+		Configuration usergroupConfiguration = modelService.findOneByProperties(properties, Configuration.class);
 		if (usergroupConfiguration != null) {
 			Set<String> usergroupIds = new HashSet<String>(Arrays.asList(usergroupConfiguration.getValue().split(BACKOFFICE_CONFIGURATION_SPLITTER)));
 

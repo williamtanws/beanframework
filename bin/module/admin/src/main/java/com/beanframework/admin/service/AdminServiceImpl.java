@@ -51,7 +51,7 @@ public class AdminServiceImpl implements AdminService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Admin.ID, id);
-		Admin entity = modelService.findByProperties(properties, Admin.class);
+		Admin entity = modelService.findOneByProperties(properties, Admin.class);
 
 		if (entity == null) {
 			if (StringUtils.compare(password, defaultAdminPassword) != 0) {

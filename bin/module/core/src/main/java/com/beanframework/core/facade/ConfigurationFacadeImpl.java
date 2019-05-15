@@ -31,14 +31,14 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 
 	@Override
 	public ConfigurationDto findOneByUuid(UUID uuid) throws Exception {
-		Configuration entity = modelService.findByUuid(uuid, Configuration.class);
+		Configuration entity = modelService.findOneByUuid(uuid, Configuration.class);
 
 		return modelService.getDto(entity, ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public ConfigurationDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Configuration entity = modelService.findByProperties(properties, Configuration.class);
+		Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
 
 		return modelService.getDto(entity, ConfigurationDto.class);
 	}
@@ -108,7 +108,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, id);
 		
-		Configuration configuration = modelService.findByProperties(properties, Configuration.class);
+		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
 		return modelService.getDto(configuration, ConfigurationDto.class);
 	}
 

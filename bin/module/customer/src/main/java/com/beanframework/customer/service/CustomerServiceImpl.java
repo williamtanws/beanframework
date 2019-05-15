@@ -55,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if (auth != null) {
 
 			Customer principal = (Customer) auth.getPrincipal();
-			return modelService.findByUuid(principal.getUuid(), Customer.class);
+			return modelService.findOneByUuid(principal.getUuid(), Customer.class);
 		} else {
 			return null;
 		}

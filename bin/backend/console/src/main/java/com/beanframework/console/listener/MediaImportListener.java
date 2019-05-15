@@ -157,7 +157,7 @@ public class MediaImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Media.ID, csv.getId());
 
-			Media entity = modelService.findByProperties(properties, Media.class);
+			Media entity = modelService.findOneByProperties(properties, Media.class);
 			modelService.deleteByEntity(entity, Media.class);
 		}
 	}

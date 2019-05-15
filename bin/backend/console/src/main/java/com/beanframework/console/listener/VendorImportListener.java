@@ -165,7 +165,7 @@ public class VendorImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Vendor.ID, csv.getId());
 
-			Vendor entity = modelService.findByProperties(properties, Vendor.class);
+			Vendor entity = modelService.findOneByProperties(properties, Vendor.class);
 			modelService.deleteByEntity(entity, Vendor.class);
 		}
 	}

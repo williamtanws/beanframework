@@ -38,7 +38,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
-		Customer entity = modelService.findByUuid(uuid, Customer.class);
+		Customer entity = modelService.findOneByUuid(uuid, Customer.class);
 		CustomerDto dto = modelService.getDto(entity, CustomerDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -46,7 +46,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 	@Override
 	public CustomerDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Customer entity = modelService.findByProperties(properties, Customer.class);
+		Customer entity = modelService.findOneByProperties(properties, Customer.class);
 		CustomerDto dto = modelService.getDto(entity, CustomerDto.class);
 
 		return dto;

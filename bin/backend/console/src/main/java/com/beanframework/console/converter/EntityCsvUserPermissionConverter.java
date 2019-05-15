@@ -36,7 +36,7 @@ public class EntityCsvUserPermissionConverter implements EntityCsvConverter<User
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserPermission.ID, source.getId());
 
-				UserPermission prototype = modelService.findByProperties(properties, UserPermission.class);
+				UserPermission prototype = modelService.findOneByProperties(properties, UserPermission.class);
 
 				if (prototype != null) {
 
@@ -80,7 +80,7 @@ public class EntityCsvUserPermissionConverter implements EntityCsvConverter<User
 					if (add) {
 						Map<String, Object> dynamicFieldSlotProperties = new HashMap<String, Object>();
 						dynamicFieldSlotProperties.put(DynamicField.ID, dynamicFieldSlotId);
-						DynamicFieldSlot entityDynamicFieldSlot = modelService.findByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
+						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
 
 						if (entityDynamicFieldSlot != null) {
 							UserPermissionField field = new UserPermissionField();

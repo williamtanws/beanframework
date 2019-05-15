@@ -32,7 +32,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Override
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
-		UserPermission entity = modelService.findByUuid(uuid, UserPermission.class);
+		UserPermission entity = modelService.findOneByUuid(uuid, UserPermission.class);
 		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -40,7 +40,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Override
 	public UserPermissionDto findOneProperties(Map<String, Object> properties) throws Exception {
-		UserPermission entity = modelService.findByProperties(properties, UserPermission.class);
+		UserPermission entity = modelService.findOneByProperties(properties, UserPermission.class);
 		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class);
 
 		return dto;

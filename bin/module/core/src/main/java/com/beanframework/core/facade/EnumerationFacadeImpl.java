@@ -30,14 +30,14 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 
 	@Override
 	public EnumerationDto findOneByUuid(UUID uuid) throws Exception {
-		Enumeration entity = modelService.findByUuid(uuid, Enumeration.class);
+		Enumeration entity = modelService.findOneByUuid(uuid, Enumeration.class);
 
 		return modelService.getDto(entity, EnumerationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public EnumerationDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Enumeration entity = modelService.findByProperties(properties, Enumeration.class);
+		Enumeration entity = modelService.findOneByProperties(properties, Enumeration.class);
 
 		return modelService.getDto(entity, EnumerationDto.class);
 	}

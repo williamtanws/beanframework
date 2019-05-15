@@ -30,7 +30,7 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 
 	@Override
 	public DynamicFieldSlotDto findOneByUuid(UUID uuid) throws Exception {
-		DynamicFieldSlot entity = modelService.findByUuid(uuid, DynamicFieldSlot.class);
+		DynamicFieldSlot entity = modelService.findOneByUuid(uuid, DynamicFieldSlot.class);
 		DynamicFieldSlotDto dto = modelService.getDto(entity, DynamicFieldSlotDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -38,7 +38,7 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 
 	@Override
 	public DynamicFieldSlotDto findOneProperties(Map<String, Object> properties) throws Exception {
-		DynamicFieldSlot entity = modelService.findByProperties(properties, DynamicFieldSlot.class);
+		DynamicFieldSlot entity = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
 		DynamicFieldSlotDto dto = modelService.getDto(entity, DynamicFieldSlotDto.class);
 
 		return dto;

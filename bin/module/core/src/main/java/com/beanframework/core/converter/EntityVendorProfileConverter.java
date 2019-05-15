@@ -33,7 +33,7 @@ public class EntityVendorProfileConverter implements EntityConverter<VendorDto, 
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Vendor.UUID, source.getUuid());
-				Vendor prototype = modelService.findByProperties(properties, Vendor.class);
+				Vendor prototype = modelService.findOneByProperties(properties, Vendor.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
@@ -55,7 +55,7 @@ public class EntityVendorProfileConverter implements EntityConverter<VendorDto, 
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Vendor.UUID, source.getUuid());
-				Vendor prototype = modelService.findByProperties(properties, Vendor.class);
+				Vendor prototype = modelService.findOneByProperties(properties, Vendor.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

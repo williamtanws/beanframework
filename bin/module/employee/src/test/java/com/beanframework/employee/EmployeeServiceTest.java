@@ -32,6 +32,6 @@ public class EmployeeServiceTest {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, "employee");
-		when(modelService.findByProperties(properties, Employee.class)).thenReturn(employee);
+		when(modelService.findOneByProperties(properties, Employee.class)).thenReturn(employee);
 	}
 }

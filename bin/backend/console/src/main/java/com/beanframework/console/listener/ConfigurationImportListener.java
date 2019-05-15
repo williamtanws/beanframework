@@ -157,7 +157,7 @@ public class ConfigurationImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Configuration.ID, csv.getId());
 
-			Configuration entity = modelService.findByProperties(properties, Configuration.class);
+			Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
 			modelService.deleteByEntity(entity, Configuration.class);
 		}
 	}

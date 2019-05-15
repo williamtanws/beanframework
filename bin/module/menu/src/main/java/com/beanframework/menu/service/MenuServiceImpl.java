@@ -53,7 +53,7 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	private void setParentNullAndSortByUuid(UUID fromUuid, int toIndex) throws Exception {
-		Menu menu = modelService.findByUuid(fromUuid, Menu.class);
+		Menu menu = modelService.findOneByUuid(fromUuid, Menu.class);
 		menu.setParent(null);
 		menu.setSort(toIndex);
 		modelService.saveEntity(menu, Menu.class);
@@ -71,8 +71,8 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	private void updateParentByUuid(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
-		Menu menu = modelService.findByUuid(fromUuid, Menu.class);
-		Menu parent = modelService.findByUuid(toUuid, Menu.class);
+		Menu menu = modelService.findOneByUuid(fromUuid, Menu.class);
+		Menu parent = modelService.findOneByUuid(toUuid, Menu.class);
 		parent.getChilds().add(menu);
 		menu.setParent(parent);
 		menu.setSort(toIndex);
