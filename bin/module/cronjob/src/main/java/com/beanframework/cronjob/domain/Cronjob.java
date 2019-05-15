@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -27,6 +28,7 @@ import com.beanframework.cronjob.domain.CronjobEnum.JobTrigger;
 import com.beanframework.cronjob.domain.CronjobEnum.Result;
 import com.beanframework.cronjob.domain.CronjobEnum.Status;
 
+@Cacheable(true)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
@@ -102,7 +104,7 @@ public class Cronjob extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy("createdDate DESC")
 	private List<CronjobData> cronjobDatas = new ArrayList<CronjobData>(0);
 

@@ -1,5 +1,6 @@
 package com.beanframework.cronjob.domain;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -13,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.cronjob.CronjobConstants;
 
+@Cacheable(true)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
