@@ -81,7 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Employee.ID, id);
 
-		Employee entity = modelService.findByProperties(properties, Employee.class);
+		Employee entity = modelService.findOneByProperties(properties, Employee.class);
 
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
@@ -118,7 +118,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (auth != null) {
 
 			Employee principal = (Employee) auth.getPrincipal();
-			return modelService.findByUuid(principal.getUuid(), Employee.class);
+			return modelService.findOneByUuid(principal.getUuid(), Employee.class);
 		} else {
 			return null;
 		}

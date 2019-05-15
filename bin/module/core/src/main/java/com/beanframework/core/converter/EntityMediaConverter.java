@@ -27,7 +27,7 @@ public class EntityMediaConverter implements EntityConverter<MediaDto, Media> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Media.UUID, source.getUuid());
-				Media prototype = modelService.findByProperties(properties, Media.class);
+				Media prototype = modelService.findOneByProperties(properties, Media.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

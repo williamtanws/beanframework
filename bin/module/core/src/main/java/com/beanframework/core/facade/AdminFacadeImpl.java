@@ -31,14 +31,14 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
 
-		Admin entity = modelService.findByUuid(uuid, Admin.class);
+		Admin entity = modelService.findOneByUuid(uuid, Admin.class);
 
 		return modelService.getDto(entity, AdminDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public AdminDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Admin entity = modelService.findByProperties(properties, Admin.class);
+		Admin entity = modelService.findOneByProperties(properties, Admin.class);
 
 		return modelService.getDto(entity, AdminDto.class);
 	}
@@ -67,7 +67,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		try {
-			modelService.findByUuid(uuid, Admin.class);
+			modelService.findOneByUuid(uuid, Admin.class);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}

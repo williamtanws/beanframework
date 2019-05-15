@@ -157,7 +157,7 @@ public class EnumerationImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Enumeration.ID, csv.getId());
 
-			Enumeration entity = modelService.findByProperties(properties, Enumeration.class);
+			Enumeration entity = modelService.findOneByProperties(properties, Enumeration.class);
 			modelService.deleteByEntity(entity, Enumeration.class);
 		}
 	}

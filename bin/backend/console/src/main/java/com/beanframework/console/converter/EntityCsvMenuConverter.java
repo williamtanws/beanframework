@@ -37,7 +37,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Menu.ID, source.getId());
 
-				Menu prototype = modelService.findByProperties(properties, Menu.class);
+				Menu prototype = modelService.findOneByProperties(properties, Menu.class);
 
 				if (prototype != null) {
 
@@ -80,7 +80,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 				Map<String, Object> parentProperties = new HashMap<String, Object>();
 				parentProperties.put(Menu.ID, source.getParent());
 
-				Menu parent = modelService.findByProperties(parentProperties, Menu.class);
+				Menu parent = modelService.findOneByProperties(parentProperties, Menu.class);
 
 				if (parent == null) {
 					LOGGER.error("Parent not exists: " + source.getParent());
@@ -116,7 +116,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 					if (add) {
 						Map<String, Object> dynamicFieldSlotProperties = new HashMap<String, Object>();
 						dynamicFieldSlotProperties.put(DynamicField.ID, dynamicFieldSlotId);
-						DynamicFieldSlot entityDynamicFieldSlot = modelService.findByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
+						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
 
 						if (entityDynamicFieldSlot != null) {
 							MenuField field = new MenuField();
@@ -142,7 +142,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 					if (add) {
 						Map<String, Object> userGroupProperties = new HashMap<String, Object>();
 						userGroupProperties.put(UserGroup.ID, userGroupIds[i]);
-						UserGroup userGroup = modelService.findByProperties(userGroupProperties, UserGroup.class);
+						UserGroup userGroup = modelService.findOneByProperties(userGroupProperties, UserGroup.class);
 
 						if (userGroup == null) {
 							LOGGER.error("UserGroup ID not exists: " + userGroupIds[i]);

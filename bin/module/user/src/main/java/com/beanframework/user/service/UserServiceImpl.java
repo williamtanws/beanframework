@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(User.ID, id);
 
-		User entity = modelService.findByProperties(properties, User.class);
+		User entity = modelService.findOneByProperties(properties, User.class);
 
 		if (entity == null) {
 			throw new BadCredentialsException("Bad Credentials");
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
 		if (auth != null) {
 
 			User principal = (User) auth.getPrincipal();
-			return modelService.findByUuid(principal.getUuid(), User.class);
+			return modelService.findOneByUuid(principal.getUuid(), User.class);
 		} else {
 			return null;
 		}
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Set<GrantedAuthority> getAuthorities(UUID userUuid, String userGroupId) throws Exception {
 
-		User user = modelService.findByUuid(userUuid, User.class);
+		User user = modelService.findOneByUuid(userUuid, User.class);
 
 		Hibernate.initialize(user.getUserGroups());
 
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
 
 			User principal = (User) auth.getPrincipal();
 
-			User user = modelService.findByUuid(principal.getUuid(), User.class);
+			User user = modelService.findOneByUuid(principal.getUuid(), User.class);
 
 			Hibernate.initialize(user.getUserGroups());
 
@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Set<String> getAllUserGroupUuidsByUserUuid(UUID uuid) throws Exception {
 	
-		User user = modelService.findByUuid(uuid, User.class);
+		User user = modelService.findOneByUuid(uuid, User.class);
 
 		Hibernate.initialize(user.getUserGroups());
 
@@ -281,7 +281,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Set<String> getAllUserGroupIdsByUserUuid(UUID uuid) throws Exception {
 	
-		User user = modelService.findByUuid(uuid, User.class);
+		User user = modelService.findOneByUuid(uuid, User.class);
 
 		Hibernate.initialize(user.getUserGroups());
 

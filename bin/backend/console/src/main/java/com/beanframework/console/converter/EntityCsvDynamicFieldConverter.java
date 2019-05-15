@@ -35,7 +35,7 @@ public class EntityCsvDynamicFieldConverter implements EntityCsvConverter<Dynami
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicField.ID, source.getId());
 
-				DynamicField prototype = modelService.findByProperties(properties, DynamicField.class);
+				DynamicField prototype = modelService.findOneByProperties(properties, DynamicField.class);
 
 				if (prototype != null) {
 
@@ -77,7 +77,7 @@ public class EntityCsvDynamicFieldConverter implements EntityCsvConverter<Dynami
 			if (StringUtils.isNotBlank(source.getLanguage())) {
 				Map<String, Object> languageProperties = new HashMap<String, Object>();
 				languageProperties.put(Language.ID, source.getLanguage());
-				Language entityLanguage = modelService.findByProperties(languageProperties, Language.class);
+				Language entityLanguage = modelService.findOneByProperties(languageProperties, Language.class);
 
 				if (entityLanguage == null) {
 					LOGGER.error("Enum ID not exists: " + source.getLanguage());
@@ -101,7 +101,7 @@ public class EntityCsvDynamicFieldConverter implements EntityCsvConverter<Dynami
 					if (add) {
 						Map<String, Object> enumProperties = new HashMap<String, Object>();
 						enumProperties.put(Enumeration.ID, values[i]);
-						Enumeration entityEnum = modelService.findByProperties(enumProperties, Enumeration.class);
+						Enumeration entityEnum = modelService.findOneByProperties(enumProperties, Enumeration.class);
 
 						if (entityEnum == null) {
 							LOGGER.error("Enum ID not exists: " + values[i]);

@@ -39,7 +39,7 @@ public class CronjobGlobalListener implements JobListener {
 
 			UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
 
-			Cronjob cronjob = modelService.findByUuid(uuid, Cronjob.class);
+			Cronjob cronjob = modelService.findOneByUuid(uuid, Cronjob.class);
 			if (cronjob != null) {
 				cronjob.setStatus(CronjobEnum.Status.RUNNING);
 				cronjob.setLastStartExecutedDate(new Date());
@@ -60,7 +60,7 @@ public class CronjobGlobalListener implements JobListener {
 
 			UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
 
-			Cronjob cronjob = modelService.findByUuid(uuid, Cronjob.class);
+			Cronjob cronjob = modelService.findOneByUuid(uuid, Cronjob.class);
 			cronjob.setStatus(CronjobEnum.Status.ABORTED);
 			cronjob.setResult(CronjobEnum.Result.ERROR);
 			cronjob.setLastFinishExecutedDate(new Date());
@@ -80,7 +80,7 @@ public class CronjobGlobalListener implements JobListener {
 		UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
 
 		try {
-			Cronjob cronjob = modelService.findByUuid(uuid, Cronjob.class);
+			Cronjob cronjob = modelService.findOneByUuid(uuid, Cronjob.class);
 
 			if (cronjob != null) {
 				String message = null;

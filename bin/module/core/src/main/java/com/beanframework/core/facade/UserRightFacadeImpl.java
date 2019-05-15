@@ -32,7 +32,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
-		UserRight entity = modelService.findByUuid(uuid, UserRight.class);
+		UserRight entity = modelService.findOneByUuid(uuid, UserRight.class);
 		UserRightDto dto = modelService.getDto(entity, UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -40,7 +40,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Override
 	public UserRightDto findOneProperties(Map<String, Object> properties) throws Exception {
-		UserRight entity = modelService.findByProperties(properties, UserRight.class);
+		UserRight entity = modelService.findOneByProperties(properties, UserRight.class);
 		UserRightDto dto = modelService.getDto(entity, UserRightDto.class);
 
 		return dto;

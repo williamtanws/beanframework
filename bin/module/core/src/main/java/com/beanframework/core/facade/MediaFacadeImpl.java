@@ -30,13 +30,13 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Override
 	public MediaDto findOneByUuid(UUID uuid) throws Exception {
-		Media entity = modelService.findByUuid(uuid, Media.class);
+		Media entity = modelService.findOneByUuid(uuid, Media.class);
 		return modelService.getDto(entity, MediaDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public MediaDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Media entity = modelService.findByProperties(properties, Media.class);
+		Media entity = modelService.findOneByProperties(properties, Media.class);
 		return modelService.getDto(entity, MediaDto.class);
 	}
 

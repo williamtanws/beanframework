@@ -40,13 +40,13 @@ public class MenuInitialDefaultsInterceptor extends AbstractInitialDefaultsInter
 			
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
-			Configuration configuration = modelService.findByProperties(properties, Configuration.class);
+			Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
 
 			if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
 				properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldTemplate.ID, configuration.getValue());
 
-				DynamicFieldTemplate dynamicFieldTemplate = modelService.findByProperties(properties, DynamicFieldTemplate.class);
+				DynamicFieldTemplate dynamicFieldTemplate = modelService.findOneByProperties(properties, DynamicFieldTemplate.class);
 
 				if (dynamicFieldTemplate != null) {
 

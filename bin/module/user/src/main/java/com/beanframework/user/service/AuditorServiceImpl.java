@@ -54,11 +54,11 @@ public class AuditorServiceImpl implements AuditorService {
 	@Override
 	public Auditor saveEntityByUser(User model) throws BusinessException {
 		try {
-			Auditor auditor = modelService.findByUuid(model.getUuid(), Auditor.class);
+			Auditor auditor = modelService.findOneByUuid(model.getUuid(), Auditor.class);
 			if (auditor == null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Auditor.ID, model.getId());
-				auditor = modelService.findByProperties(properties, Auditor.class);
+				auditor = modelService.findOneByProperties(properties, Auditor.class);
 			}
 
 			if (auditor == null) {

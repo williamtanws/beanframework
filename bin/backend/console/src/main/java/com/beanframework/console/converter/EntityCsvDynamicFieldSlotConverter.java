@@ -33,7 +33,7 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityCsvConverter<Dy
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(DynamicFieldSlot.ID, source.getId());
 
-				DynamicFieldSlot prototype = modelService.findByProperties(properties, DynamicFieldSlot.class);
+				DynamicFieldSlot prototype = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
 
 				if (prototype != null) {
 
@@ -63,7 +63,7 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityCsvConverter<Dy
 			if (StringUtils.isNotBlank(source.getDynamicFieldId())) {
 				Map<String, Object> parentProperties = new HashMap<String, Object>();
 				parentProperties.put(DynamicField.ID, source.getDynamicFieldId());
-				DynamicField entityDynamicField = modelService.findByProperties(parentProperties, DynamicField.class);
+				DynamicField entityDynamicField = modelService.findOneByProperties(parentProperties, DynamicField.class);
 
 				if (entityDynamicField == null) {
 					LOGGER.error("DynamicField ID not exists: " + source.getDynamicFieldId());

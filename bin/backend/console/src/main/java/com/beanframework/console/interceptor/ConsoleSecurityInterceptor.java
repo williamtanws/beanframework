@@ -48,7 +48,7 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 
-				Configuration license = modelService.findByProperties(properties, Configuration.class);
+				Configuration license = modelService.findOneByProperties(properties, Configuration.class);
 
 				if (license == null || BooleanUtils.parseBoolean(license.getValue()) == false) {
 					response.sendRedirect(PATH_LICENSE);

@@ -91,8 +91,9 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any load interceptor to intercept target typeCode: " + typeCode);
+		if (STRICT_USE_INTERCEPTOR) {
+			if (notIntercepted)
+				throw new InterceptorException("Cannot find any load interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
@@ -120,8 +121,9 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any load interceptor to intercept target typeCode: " + typeCode);
+		if (STRICT_USE_INTERCEPTOR) {
+			if (notIntercepted)
+				throw new InterceptorException("Cannot find any load interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
@@ -149,8 +151,9 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any prepare interceptor to intercept target typeCode: " + typeCode);
+		if (STRICT_USE_INTERCEPTOR) {
+			if (notIntercepted)
+				throw new InterceptorException("Cannot find any prepare interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
@@ -178,8 +181,9 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any remove interceptor to intercept target typeCode: " + typeCode);
+		if (STRICT_USE_INTERCEPTOR) {
+			if (notIntercepted)
+				throw new InterceptorException("Cannot find any remove interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
@@ -207,8 +211,9 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			}
 		}
 
-		if (notIntercepted && STRICT_USE_INTERCEPTOR) {
-			throw new InterceptorException("Cannot find any validate interceptor to intercept target typeCode: " + typeCode);
+		if (notIntercepted) {
+			if (STRICT_USE_INTERCEPTOR)
+				throw new InterceptorException("Cannot find any validate interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 

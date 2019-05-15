@@ -38,7 +38,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public VendorDto findOneByUuid(UUID uuid) throws Exception {
-		Vendor entity = modelService.findByUuid(uuid, Vendor.class);
+		Vendor entity = modelService.findOneByUuid(uuid, Vendor.class);
 		VendorDto dto = modelService.getDto(entity, VendorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -46,7 +46,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Override
 	public VendorDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Vendor entity = modelService.findByProperties(properties, Vendor.class);
+		Vendor entity = modelService.findOneByProperties(properties, Vendor.class);
 		VendorDto dto = modelService.getDto(entity, VendorDto.class);
 
 		return dto;

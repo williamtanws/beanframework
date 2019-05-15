@@ -30,13 +30,13 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
 	@Override
 	public LanguageDto findOneByUuid(UUID uuid) throws Exception {
-		Language entity = modelService.findByUuid(uuid, Language.class);
+		Language entity = modelService.findOneByUuid(uuid, Language.class);
 		return modelService.getDto(entity, LanguageDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public LanguageDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Language entity = modelService.findByProperties(properties, Language.class);
+		Language entity = modelService.findOneByProperties(properties, Language.class);
 		return modelService.getDto(entity, LanguageDto.class);
 	}
 

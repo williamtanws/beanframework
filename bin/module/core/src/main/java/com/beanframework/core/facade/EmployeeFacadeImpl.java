@@ -36,7 +36,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
-		Employee entity = modelService.findByUuid(uuid, Employee.class);
+		Employee entity = modelService.findOneByUuid(uuid, Employee.class);
 		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -44,7 +44,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Override
 	public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Employee entity = modelService.findByProperties(properties, Employee.class);
+		Employee entity = modelService.findOneByProperties(properties, Employee.class);
 		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
 
 		return dto;

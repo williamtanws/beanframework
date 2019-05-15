@@ -157,7 +157,7 @@ public class UserGroupImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(UserGroup.ID, csv.getId());
 
-			UserGroup entity = modelService.findByProperties(properties, UserGroup.class);
+			UserGroup entity = modelService.findOneByProperties(properties, UserGroup.class);
 			modelService.deleteByEntity(entity, UserGroup.class);
 		}
 	}

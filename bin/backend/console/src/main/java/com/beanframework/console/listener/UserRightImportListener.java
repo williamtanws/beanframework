@@ -156,7 +156,7 @@ public class UserRightImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(UserRight.ID, csv.getId());
 
-			UserRight entity = modelService.findByProperties(properties, UserRight.class);
+			UserRight entity = modelService.findOneByProperties(properties, UserRight.class);
 			modelService.deleteByEntity(entity, UserRight.class);
 		}
 	}

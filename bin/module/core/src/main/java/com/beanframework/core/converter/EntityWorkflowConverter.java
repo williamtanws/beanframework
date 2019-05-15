@@ -27,7 +27,7 @@ public class EntityWorkflowConverter implements EntityConverter<WorkflowDto, Wor
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Workflow.UUID, source.getUuid());
-				Workflow prototype = modelService.findByProperties(properties, Workflow.class);
+				Workflow prototype = modelService.findOneByProperties(properties, Workflow.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);

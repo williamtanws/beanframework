@@ -30,13 +30,13 @@ public class SiteFacadeImpl implements SiteFacade {
 
 	@Override
 	public SiteDto findOneByUuid(UUID uuid) throws Exception {
-		Site entity = modelService.findByUuid(uuid, Site.class);
+		Site entity = modelService.findOneByUuid(uuid, Site.class);
 		return modelService.getDto(entity, SiteDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public SiteDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Site entity = modelService.findByProperties(properties, Site.class);
+		Site entity = modelService.findOneByProperties(properties, Site.class);
 		return modelService.getDto(entity, SiteDto.class);
 	}
 

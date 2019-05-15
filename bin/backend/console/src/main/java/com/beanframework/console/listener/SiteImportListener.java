@@ -157,7 +157,7 @@ public class SiteImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Site.ID, csv.getId());
 
-			Site entity = modelService.findByProperties(properties, Site.class);
+			Site entity = modelService.findOneByProperties(properties, Site.class);
 			modelService.deleteByEntity(entity, Site.class);
 		}
 	}

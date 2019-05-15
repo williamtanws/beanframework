@@ -36,7 +36,7 @@ public class EntityCsvUserRightConverter implements EntityCsvConverter<UserRight
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(UserRight.ID, source.getId());
 
-				UserRight prototype = modelService.findByProperties(properties, UserRight.class);
+				UserRight prototype = modelService.findOneByProperties(properties, UserRight.class);
 
 				if (prototype != null) {
 
@@ -80,7 +80,7 @@ public class EntityCsvUserRightConverter implements EntityCsvConverter<UserRight
 					if (add) {
 						Map<String, Object> dynamicFieldSlotProperties = new HashMap<String, Object>();
 						dynamicFieldSlotProperties.put(DynamicField.ID, dynamicFieldSlotId);
-						DynamicFieldSlot entityDynamicFieldSlot = modelService.findByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
+						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
 
 						if (entityDynamicFieldSlot != null) {
 							UserRightField field = new UserRightField();

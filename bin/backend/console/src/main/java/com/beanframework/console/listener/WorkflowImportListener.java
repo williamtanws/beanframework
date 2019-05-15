@@ -157,7 +157,7 @@ public class WorkflowImportListener extends ImportListener {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Workflow.ID, csv.getId());
 
-			Workflow entity = modelService.findByProperties(properties, Workflow.class);
+			Workflow entity = modelService.findOneByProperties(properties, Workflow.class);
 			modelService.deleteByEntity(entity, Workflow.class);
 		}
 	}

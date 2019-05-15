@@ -36,9 +36,9 @@ public interface ModelService {
 
 	<T> T create(Class modelClass) throws Exception;
 
-	<T> T findByUuid(UUID uuid, Class modelClass) throws Exception;
+	<T> T findOneByUuid(UUID uuid, Class modelClass) throws Exception;
 
-	<T> T findByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
+	<T> T findOneByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
 	int countAll(Class modelClass) throws Exception;
 

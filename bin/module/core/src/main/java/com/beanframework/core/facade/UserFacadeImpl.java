@@ -25,7 +25,7 @@ public class UserFacadeImpl implements UserFacade {
 
 	@Override
 	public UserDto findOneByUuid(UUID uuid) throws Exception {
-		User user = modelService.findByUuid(uuid, User.class);
+		User user = modelService.findOneByUuid(uuid, User.class);
 		return modelService.getDto(user, UserDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 

@@ -125,7 +125,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.UUID, cronjob.getUuid());
 
-		Cronjob updateCronjob = modelService.findByProperties(properties, Cronjob.class);
+		Cronjob updateCronjob = modelService.findOneByProperties(properties, Cronjob.class);
 		updateCronjob.setStatus(cronjob.getStatus());
 		updateCronjob.setResult(cronjob.getResult());
 		updateCronjob.setMessage(cronjob.getMessage());
@@ -143,7 +143,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(Cronjob.UUID, uuid);
 
-			Cronjob cronjob = modelService.findByProperties(properties, Cronjob.class);
+			Cronjob cronjob = modelService.findOneByProperties(properties, Cronjob.class);
 
 			quartzManager.deleteJob(cronjob);
 
@@ -158,7 +158,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Cronjob.UUID, uuid);
 
-		Cronjob cronjob = modelService.findByProperties(properties, Cronjob.class);
+		Cronjob cronjob = modelService.findOneByProperties(properties, Cronjob.class);
 
 		return cronjob;
 	}

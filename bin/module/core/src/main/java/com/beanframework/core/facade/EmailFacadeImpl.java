@@ -36,14 +36,14 @@ public class EmailFacadeImpl implements EmailFacade {
 
 	@Override
 	public EmailDto findOneByUuid(UUID uuid) throws Exception {
-		Email entity = modelService.findByUuid(uuid, Email.class);
+		Email entity = modelService.findOneByUuid(uuid, Email.class);
 
 		return modelService.getDto(entity, EmailDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public EmailDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Email entity = modelService.findByProperties(properties, Email.class);
+		Email entity = modelService.findOneByProperties(properties, Email.class);
 
 		return modelService.getDto(entity, EmailDto.class);
 	}

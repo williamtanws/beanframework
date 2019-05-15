@@ -30,7 +30,7 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 
 	@Override
 	public DynamicFieldTemplateDto findOneByUuid(UUID uuid) throws Exception {
-		DynamicFieldTemplate entity = modelService.findByUuid(uuid, DynamicFieldTemplate.class);
+		DynamicFieldTemplate entity = modelService.findOneByUuid(uuid, DynamicFieldTemplate.class);
 		DynamicFieldTemplateDto dto = modelService.getDto(entity, DynamicFieldTemplateDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -38,7 +38,7 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 
 	@Override
 	public DynamicFieldTemplateDto findOneProperties(Map<String, Object> properties) throws Exception {
-		DynamicFieldTemplate entity = modelService.findByProperties(properties, DynamicFieldTemplate.class);
+		DynamicFieldTemplate entity = modelService.findOneByProperties(properties, DynamicFieldTemplate.class);
 		DynamicFieldTemplateDto dto = modelService.getDto(entity, DynamicFieldTemplateDto.class);
 
 		return dto;

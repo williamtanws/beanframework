@@ -30,13 +30,13 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 
 	@Override
 	public WorkflowDto findOneByUuid(UUID uuid) throws Exception {
-		Workflow entity = modelService.findByUuid(uuid, Workflow.class);
+		Workflow entity = modelService.findOneByUuid(uuid, Workflow.class);
 		return modelService.getDto(entity, WorkflowDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override
 	public WorkflowDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Workflow entity = modelService.findByProperties(properties, Workflow.class);
+		Workflow entity = modelService.findOneByProperties(properties, Workflow.class);
 		return modelService.getDto(entity, WorkflowDto.class);
 	}
 

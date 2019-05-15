@@ -49,18 +49,6 @@ public class PlatformConfig {
 	@Value("${platform.datasource.maxPoolSize:10}")
 	private int PLATFORM_DATASOURCE_MAX_POOL_SIZE;
 
-	@Value("${platform.hibernate.hbm2ddl.auto}")
-	private String PLATFORM_HIBERNATE_HDM2DDL_AUTO;
-
-	@Value("${platform.hibernate.show_sql:false}")
-	private boolean PLATFORM_HIBERNATE_SHOW_SQL;
-
-	@Value("${platform.hibernate.format_sql:false}")
-	private boolean PLATFORM_HIBERNATE_FORMAT_SQL;
-
-	@Value("${platform.hibernate.dialect}")
-	private String PLATFORM_HIBERNATE_DIALECT;
-
 	@Value("${platform.import.startup}")
 	private String PLATFORM_IMPORT_STARTUP;
 
@@ -75,6 +63,57 @@ public class PlatformConfig {
 
 	@Value("${log.dir}")
 	private String DIR_LOG;
+
+	@Value("${platform.hibernate.hbm2ddl.auto}")
+	private String PLATFORM_HIBERNATE_HDM2DDL_AUTO;
+
+	@Value("${platform.hibernate.show_sql:false}")
+	private boolean PLATFORM_HIBERNATE_SHOW_SQL;
+
+	@Value("${platform.hibernate.format_sql:false}")
+	private boolean PLATFORM_HIBERNATE_FORMAT_SQL;
+
+	@Value("${platform.hibernate.dialect}")
+	private String PLATFORM_HIBERNATE_DIALECT;
+
+	@Value("${platform.hibernate.connection.release_mode:auto}")
+	private String PLATFORM_HIBERNATE_CONNECTION_RELEASE_MODE;
+
+	@Value("${platform.hibernate.connection.autoReconnect:true}")
+	private boolean PLATFORM_HIBERNATE_CONNECTION_AUTORECONNECT;
+
+	@Value("${platform.hibernate.c3p0.testWhileIdle:true}")
+	private boolean PLATFORM_HIBERNATE_C3P0_TESTWHILTEIDLE;
+
+	@Value("${platform.hibernate.c3p0.preferredTestQuery:SELECT 1}")
+	private String PLATFORM_HIBERNATE_C3P0_PREFERREDTESTQUERY;
+
+	@Value("${platform.hibernate.c3p0.autoCommitOnClose:true}")
+	private boolean PLATFORM_HIBERNATE_C3P0_AUTOCOMMITONCLOSE;
+
+	@Value("${platform.hibernate.c3p0.testConnectionOnCheckout:true}")
+	private boolean PLATFORM_HIBERNATE_C3P0_TESTCONNECTIONONCHECKOUT;
+
+	@Value("${platform.current_session_context_class:thread}")
+	private String PLATFORM_CURRENT_SESSION_CONTEXT_CLASS;
+
+	@Value("${platform.hibernate.envers.autoRegisterListeners:false}")
+	private boolean PLATFORM_HIBERNATE_ENVERS_AUTOREGISTERLISTENERS;
+
+	@Value("${platform.hibernate.cache.use_second_level_cache:true}")
+	private boolean PLATFORM_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
+
+	@Value("${platform.hibernate.cache.region.factory_class:org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory}")
+	private String PLATFORM_HIBERNATE_CACHE_REGION_FACTORY_CLASS;
+
+	@Value("${platform.hibernate.cache.ehcache.missing_cache_strategy:false}")
+	private String PLATFORM_HIBERNATE_CACHE_EHCAHCE_MISSING_CACHE_STRATEGY;
+
+	@Value("${platform.javax.persistence.sharedCache.mode:ALL}")
+	private String PLATFORM_JAVAX_PERSISTENCE_SHAREDCACHE_MODE;
+
+	@Value("${platform.net.sf.ehcache.configurationResourceName:ehcache.xml}")
+	private String PLATFORM_EHCACHE_CONFIGURATION;
 
 	/*
 	 * Populate SpringBoot DataSourceProperties object directly from application.yml
@@ -183,14 +222,25 @@ public class PlatformConfig {
 		properties.put("hibernate.show_sql", PLATFORM_HIBERNATE_SHOW_SQL);
 		properties.put("hibernate.format_sql", PLATFORM_HIBERNATE_FORMAT_SQL);
 		properties.put("hibernate.dialect", PLATFORM_HIBERNATE_DIALECT);
-		properties.put("hibernate.connection.release_mode", "auto");
-		properties.put("hibernate.connection.autoReconnect", "true");
-		properties.put("hibernate.c3p0.testWhileIdle", "true");
-		properties.put("hibernate.c3p0.preferredTestQuery", "SELECT 1");
-		properties.put("hibernate.c3p0.autoCommitOnClose", "true");
-		properties.put("hibernate.c3p0.testConnectionOnCheckout", "true");
-		properties.put("current_session_context_class", "thread");
-		properties.put("hibernate.envers.autoRegisterListeners", "false");
+
+		properties.put("hibernate.connection.release_mode", PLATFORM_HIBERNATE_CONNECTION_RELEASE_MODE);
+		properties.put("hibernate.connection.autoReconnect", PLATFORM_HIBERNATE_C3P0_TESTWHILTEIDLE);
+
+		properties.put("hibernate.c3p0.testWhileIdle", PLATFORM_HIBERNATE_C3P0_TESTWHILTEIDLE);
+		properties.put("hibernate.c3p0.preferredTestQuery", PLATFORM_HIBERNATE_C3P0_PREFERREDTESTQUERY);
+		properties.put("hibernate.c3p0.autoCommitOnClose", PLATFORM_HIBERNATE_C3P0_AUTOCOMMITONCLOSE);
+		properties.put("hibernate.c3p0.testConnectionOnCheckout", PLATFORM_HIBERNATE_C3P0_TESTCONNECTIONONCHECKOUT);
+
+		properties.put("current_session_context_class", PLATFORM_CURRENT_SESSION_CONTEXT_CLASS);
+		properties.put("hibernate.envers.autoRegisterListeners", PLATFORM_HIBERNATE_ENVERS_AUTOREGISTERLISTENERS);
+
+		properties.put("hibernate.cache.use_second_level_cache", PLATFORM_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE);
+		properties.put("hibernate.cache.use_query_cache", PLATFORM_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE);
+		properties.put("hibernate.cache.region.factory_class", PLATFORM_HIBERNATE_CACHE_REGION_FACTORY_CLASS);
+		properties.put("hibernate.cache.ehcache.missing_cache_strategy", PLATFORM_HIBERNATE_CACHE_EHCAHCE_MISSING_CACHE_STRATEGY);
+		properties.put("javax.persistence.sharedCache.mode", PLATFORM_JAVAX_PERSISTENCE_SHAREDCACHE_MODE);
+		properties.put("net.sf.ehcache.configurationResourceName", PLATFORM_EHCACHE_CONFIGURATION);
+
 		return properties;
 	}
 
@@ -201,10 +251,10 @@ public class PlatformConfig {
 		txManager.setEntityManagerFactory(emf);
 		return txManager;
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
 
 }

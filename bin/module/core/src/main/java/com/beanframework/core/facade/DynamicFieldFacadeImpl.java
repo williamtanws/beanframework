@@ -30,7 +30,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Override
 	public DynamicFieldDto findOneByUuid(UUID uuid) throws Exception {
-		DynamicField entity = modelService.findByUuid(uuid, DynamicField.class);
+		DynamicField entity = modelService.findOneByUuid(uuid, DynamicField.class);
 		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 
 		return dto;
@@ -38,7 +38,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Override
 	public DynamicFieldDto findOneProperties(Map<String, Object> properties) throws Exception {
-		DynamicField entity = modelService.findByProperties(properties, DynamicField.class);
+		DynamicField entity = modelService.findOneByProperties(properties, DynamicField.class);
 		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class);
 
 		return dto;

@@ -28,7 +28,7 @@ public class EntityCommentConverter implements EntityConverter<CommentDto, Comme
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Comment.UUID, source.getUuid());
-				Comment prototype = modelService.findByProperties(properties, Comment.class);
+				Comment prototype = modelService.findOneByProperties(properties, Comment.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
@@ -66,7 +66,7 @@ public class EntityCommentConverter implements EntityConverter<CommentDto, Comme
 				prototype.setUser(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			} else if (prototype.getUser().getUuid().equals(source.getUser().getUuid()) == Boolean.FALSE) {
-				User entityUser = modelService.findByUuid(source.getUser().getUuid(), User.class);
+				User entityUser = modelService.findOneByUuid(source.getUser().getUuid(), User.class);
 				
 				if(entityUser != null) {
 					prototype.setUser(entityUser);

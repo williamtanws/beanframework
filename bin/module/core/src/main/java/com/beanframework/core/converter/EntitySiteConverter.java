@@ -27,7 +27,7 @@ public class EntitySiteConverter implements EntityConverter<SiteDto, Site> {
 			if (source.getUuid() != null) {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(Site.UUID, source.getUuid());
-				Site prototype = modelService.findByProperties(properties, Site.class);
+				Site prototype = modelService.findOneByProperties(properties, Site.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
