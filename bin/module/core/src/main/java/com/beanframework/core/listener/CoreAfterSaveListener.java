@@ -1,4 +1,4 @@
-package com.beanframework.user.listener;
+package com.beanframework.core.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,25 +9,19 @@ import com.beanframework.common.registry.AfterSaveListener;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.AuditorService;
 
-public class UserAfterSaveListener implements AfterSaveListener {
+public class CoreAfterSaveListener implements AfterSaveListener {
 
 	@Autowired
 	private AuditorService auditorService;
 
 	@Override
-	public void afterSave(Object model, AfterSaveEvent event) throws ListenerException {
+	public void afterSave(final Object model, final AfterSaveEvent event) throws ListenerException {
 
 		try {
 			if (model instanceof User) {
 				User user = (User) model;
 
-				if (AfterSaveEvent.CREATE == event.getType()) {
-					auditorService.saveEntityByUser(user);
-
-				} else if (AfterSaveEvent.UPDATE == event.getType()) {
-					auditorService.saveEntityByUser(user);
-				}
-
+				auditorService.saveEntityByUser(user);
 			}
 		} catch (BusinessException e) {
 			throw new ListenerException(e.getMessage(), e);

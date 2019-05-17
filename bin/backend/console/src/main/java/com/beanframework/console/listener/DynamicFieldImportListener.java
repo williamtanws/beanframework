@@ -158,7 +158,7 @@ public class DynamicFieldImportListener extends ImportListener {
 			properties.put(DynamicField.ID, csv.getId());
 
 			DynamicField entity = modelService.findOneByProperties(properties, DynamicField.class);
-			modelService.deleteByEntity(entity, DynamicField.class);
+			modelService.deleteEntity(entity, DynamicField.class);
 		}
 	}
 }

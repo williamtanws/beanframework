@@ -157,7 +157,7 @@ public class MenuImportListener extends ImportListener {
 			properties.put(Menu.ID, csv.getId());
 
 			Menu entity = modelService.findOneByProperties(properties, Menu.class);
-			modelService.deleteByEntity(entity, Menu.class);
+			modelService.deleteEntity(entity, Menu.class);
 		}
 	}
 }

@@ -158,7 +158,7 @@ public class ConfigurationImportListener extends ImportListener {
 			properties.put(Configuration.ID, csv.getId());
 
 			Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
-			modelService.deleteByEntity(entity, Configuration.class);
+			modelService.deleteEntity(entity, Configuration.class);
 		}
 	}
 

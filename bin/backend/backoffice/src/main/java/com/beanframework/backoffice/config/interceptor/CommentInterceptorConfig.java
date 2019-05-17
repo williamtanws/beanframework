@@ -9,12 +9,7 @@ import com.beanframework.comment.interceptor.CommentLoadInterceptor;
 import com.beanframework.comment.interceptor.CommentPrepareInterceptor;
 import com.beanframework.comment.interceptor.CommentRemoveInterceptor;
 import com.beanframework.comment.interceptor.CommentValidateInterceptor;
-import com.beanframework.comment.interceptor.relationship.CommentUserRelationshipRemoveInterceptor;
 import com.beanframework.common.interceptor.InterceptorMapping;
-import com.beanframework.customer.domain.Customer;
-import com.beanframework.employee.domain.Employee;
-import com.beanframework.user.domain.User;
-import com.beanframework.vendor.domain.Vendor;
 
 @Configuration
 public class CommentInterceptorConfig {
@@ -105,70 +100,6 @@ public class CommentInterceptorConfig {
 		InterceptorMapping mapping = new InterceptorMapping();
 		mapping.setInterceptor(commentRemoveInterceptor());
 		mapping.setTypeCode(Comment.class.getSimpleName());
-
-		return mapping;
-	}
-
-	//////////////////////////
-	// User Interceptor //
-	//////////////////////////
-
-	@Bean
-	public CommentUserRelationshipRemoveInterceptor commentUserRemoveInterceptor() {
-		return new CommentUserRelationshipRemoveInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping commentUserRemoveInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(commentUserRemoveInterceptor());
-		mapping.setTypeCode(User.class.getSimpleName());
-		mapping.setOrder(Integer.MIN_VALUE);
-
-		return mapping;
-	}
-
-	@Bean
-	public CommentUserRelationshipRemoveInterceptor commentEmployeeRemoveInterceptor() {
-		return new CommentUserRelationshipRemoveInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping commentEmployeeRemoveInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(commentEmployeeRemoveInterceptor());
-		mapping.setTypeCode(Employee.class.getSimpleName());
-		mapping.setOrder(Integer.MIN_VALUE);
-
-		return mapping;
-	}
-
-	@Bean
-	public CommentUserRelationshipRemoveInterceptor commentCustomerRemoveInterceptor() {
-		return new CommentUserRelationshipRemoveInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping commentCustomerRemoveInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(commentEmployeeRemoveInterceptor());
-		mapping.setTypeCode(Customer.class.getSimpleName());
-		mapping.setOrder(Integer.MIN_VALUE);
-
-		return mapping;
-	}
-
-	@Bean
-	public CommentUserRelationshipRemoveInterceptor commentVendorRelationshipRemoveInterceptor() {
-		return new CommentUserRelationshipRemoveInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping commentVendorRelationshipRemoveInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(commentVendorRelationshipRemoveInterceptor());
-		mapping.setTypeCode(Vendor.class.getSimpleName());
-		mapping.setOrder(Integer.MIN_VALUE);
 
 		return mapping;
 	}

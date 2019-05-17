@@ -158,7 +158,7 @@ public class LanguageImportListener extends ImportListener {
 			properties.put(Language.ID, csv.getId());
 
 			Language entity = modelService.findOneByProperties(properties, Language.class);
-			modelService.deleteByEntity(entity, Language.class);
+			modelService.deleteEntity(entity, Language.class);
 		}
 	}
 

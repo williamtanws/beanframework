@@ -158,7 +158,7 @@ public class AdminImportListener extends ImportListener {
 			properties.put(Admin.ID, csv.getId());
 
 			Admin entity = modelService.findOneByProperties(properties, Admin.class);
-			modelService.deleteByEntity(entity, Admin.class);
+			modelService.deleteEntity(entity, Admin.class);
 		}
 	}
 }
