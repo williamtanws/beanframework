@@ -31,13 +31,18 @@ import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.registry.AfterRemoveEvent;
 import com.beanframework.common.registry.AfterRemoveListener;
 import com.beanframework.common.registry.AfterRemoveListenerRegistry;
 import com.beanframework.common.registry.AfterSaveEvent;
 import com.beanframework.common.registry.AfterSaveListener;
 import com.beanframework.common.registry.AfterSaveListenerRegistry;
+import com.beanframework.common.registry.BeforeRemoveEvent;
+import com.beanframework.common.registry.BeforeRemoveListener;
+import com.beanframework.common.registry.BeforeRemoveListenerRegistry;
+import com.beanframework.common.registry.BeforeSaveEvent;
+import com.beanframework.common.registry.BeforeSaveListener;
+import com.beanframework.common.registry.BeforeSaveListenerRegistry;
 import com.beanframework.common.repository.ModelRepository;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -49,7 +54,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	private ModelRepository modelRepository;
 
 	@Autowired
+	private BeforeSaveListenerRegistry beforeSaveListenerRegistry;
+
+	@Autowired
 	private AfterSaveListenerRegistry afterSaveListenerRegistry;
+
+	@Autowired
+	private BeforeRemoveListenerRegistry beforeRemoveListenerRegistry;
 
 	@Autowired
 	private AfterRemoveListenerRegistry afterRemoveListenerRegistry;
@@ -315,21 +326,49 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 
 		try {
-			AfterSaveEvent event;
+			BeforeSaveEvent beforeSaveEvent;
+			AfterSaveEvent afterSaveEvent;
 			if (((GenericEntity) model).getUuid() == null) {
-				event = new AfterSaveEvent(1);
+				beforeSaveEvent = new BeforeSaveEvent(1);
+				afterSaveEvent = new AfterSaveEvent(1);
 			} else {
-				event = new AfterSaveEvent(2);
+				beforeSaveEvent = new BeforeSaveEvent(2);
+				afterSaveEvent = new AfterSaveEvent(2);
 			}
 
 			prepareInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 			validateInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
-			modelRepository.save(model);
+
+			Set<Entry<String, BeforeSaveListener>> beforeSaveListeners = beforeSaveListenerRegistry.getListeners().entrySet();
+			for (Entry<String, BeforeSaveListener> entry : beforeSaveListeners) {
+				entry.getValue().beforeSave(model, beforeSaveEvent);
+			}
+
+			model = modelRepository.save(model);
 
 			Set<Entry<String, AfterSaveListener>> afterSaveListeners = afterSaveListenerRegistry.getListeners().entrySet();
 			for (Entry<String, AfterSaveListener> entry : afterSaveListeners) {
-				entry.getValue().afterSave(model, event);
+				entry.getValue().afterSave(model, afterSaveEvent);
 			}
+
+			return findOneByUuid(((GenericEntity) model).getUuid(), modelClass);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public Object saveEntityQuietly(Object model, Class modelClass) throws BusinessException {
+
+		if (model == null) {
+			return null;
+		}
+
+		try {
+			prepareInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+			validateInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+			model = modelRepository.save(model);
 
 			return model;
 		} catch (Exception e) {
@@ -339,15 +378,41 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public void deleteByEntity(Object entityModel, Class modelClass) throws BusinessException {
+	public void deleteEntity(Object model, Class modelClass) throws BusinessException {
 		try {
 
-			if (entityModel != null)
-				deleteEntity(entityModel, modelClass);
+			if (model != null) {
+				removeInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 
-		} catch (SQLException e) {
+				Set<Entry<String, BeforeRemoveListener>> beforeRemoveListeners = beforeRemoveListenerRegistry.getListeners().entrySet();
+				for (Entry<String, BeforeRemoveListener> entry : beforeRemoveListeners) {
+					entry.getValue().beforeRemove(model, new BeforeRemoveEvent());
+				}
+
+				modelRepository.delete(model);
+
+				Set<Entry<String, AfterRemoveListener>> afterRemoveListeners = afterRemoveListenerRegistry.getListeners().entrySet();
+				for (Entry<String, AfterRemoveListener> entry : afterRemoveListeners) {
+					entry.getValue().afterRemove(model, new AfterRemoveEvent());
+				}
+			}
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void deleteEntityQuietly(Object model, Class modelClass) throws BusinessException {
+		try {
+
+			if (model != null) {
+				removeInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+
+				modelRepository.delete(model);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage(), e);
@@ -372,16 +437,21 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-	private void deleteEntity(Object model, Class modelClass) throws SQLException, InterceptorException, BusinessException {
-		removeInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+	@Override
+	public void deleteQuietlyByUuid(UUID uuid, Class modelClass) throws BusinessException {
+		try {
 
-		modelRepository.delete(model);
+			Object model = findOneByUuid(uuid, modelClass);
 
-		AfterRemoveEvent event = new AfterRemoveEvent();
+			if (model != null)
+				deleteEntityQuietly(model, modelClass);
 
-		Set<Entry<String, AfterRemoveListener>> afterRemoveListeners = afterRemoveListenerRegistry.getListeners().entrySet();
-		for (Entry<String, AfterRemoveListener> entry : afterRemoveListeners) {
-			entry.getValue().afterRemove(model, event);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new BusinessException(e.getMessage(), e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException(e.getMessage(), e);
 		}
 	}
 

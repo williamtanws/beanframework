@@ -5,3 +5,7 @@ function icheck() {
 		increaseArea : '20%' // optional
 	});
 }
+
+$(function () {
+	$('.select2').select2();
+})

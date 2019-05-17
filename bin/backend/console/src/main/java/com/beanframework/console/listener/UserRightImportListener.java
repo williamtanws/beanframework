@@ -157,7 +157,7 @@ public class UserRightImportListener extends ImportListener {
 			properties.put(UserRight.ID, csv.getId());
 
 			UserRight entity = modelService.findOneByProperties(properties, UserRight.class);
-			modelService.deleteByEntity(entity, UserRight.class);
+			modelService.deleteEntity(entity, UserRight.class);
 		}
 	}
 

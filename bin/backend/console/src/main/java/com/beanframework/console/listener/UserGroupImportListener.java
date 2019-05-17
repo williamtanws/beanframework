@@ -158,7 +158,7 @@ public class UserGroupImportListener extends ImportListener {
 			properties.put(UserGroup.ID, csv.getId());
 
 			UserGroup entity = modelService.findOneByProperties(properties, UserGroup.class);
-			modelService.deleteByEntity(entity, UserGroup.class);
+			modelService.deleteEntity(entity, UserGroup.class);
 		}
 	}
 }

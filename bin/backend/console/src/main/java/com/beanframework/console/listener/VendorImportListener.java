@@ -166,7 +166,7 @@ public class VendorImportListener extends ImportListener {
 			properties.put(Vendor.ID, csv.getId());
 
 			Vendor entity = modelService.findOneByProperties(properties, Vendor.class);
-			modelService.deleteByEntity(entity, Vendor.class);
+			modelService.deleteEntity(entity, Vendor.class);
 		}
 	}
 }

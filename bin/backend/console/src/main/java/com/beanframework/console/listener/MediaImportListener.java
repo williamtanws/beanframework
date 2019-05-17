@@ -158,7 +158,7 @@ public class MediaImportListener extends ImportListener {
 			properties.put(Media.ID, csv.getId());
 
 			Media entity = modelService.findOneByProperties(properties, Media.class);
-			modelService.deleteByEntity(entity, Media.class);
+			modelService.deleteEntity(entity, Media.class);
 		}
 	}
 

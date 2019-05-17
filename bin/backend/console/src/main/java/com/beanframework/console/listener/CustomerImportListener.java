@@ -166,7 +166,7 @@ public class CustomerImportListener extends ImportListener {
 			properties.put(Customer.ID, csv.getId());
 
 			Customer entity = modelService.findOneByProperties(properties, Customer.class);
-			modelService.deleteByEntity(entity, Customer.class);
+			modelService.deleteEntity(entity, Customer.class);
 		}
 	}
 

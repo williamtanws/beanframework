@@ -10,8 +10,6 @@ import com.beanframework.menu.interceptor.MenuLoadInterceptor;
 import com.beanframework.menu.interceptor.MenuPrepareInterceptor;
 import com.beanframework.menu.interceptor.MenuRemoveInterceptor;
 import com.beanframework.menu.interceptor.MenuValidateInterceptor;
-import com.beanframework.menu.interceptor.relationship.MenuUserGroupRelationshipRemoveInterceptor;
-import com.beanframework.user.domain.UserGroup;
 
 @Configuration
 public class MenuInterceptorConfig {
@@ -105,24 +103,4 @@ public class MenuInterceptorConfig {
 
 		return interceptorMapping;
 	}
-	
-	///////////////////////////
-	// UserGroup Interceptor //
-	///////////////////////////
-
-	@Bean
-	public MenuUserGroupRelationshipRemoveInterceptor menuUserGroupRelationshipRemoveInterceptor() {
-		return new MenuUserGroupRelationshipRemoveInterceptor();
-	}
-
-	@Bean
-	public InterceptorMapping menuUserGroupRemoveInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(menuUserGroupRelationshipRemoveInterceptor());
-		mapping.setTypeCode(UserGroup.class.getSimpleName());
-		mapping.setOrder(Integer.MIN_VALUE);
-
-		return mapping;
-	}
-
 }

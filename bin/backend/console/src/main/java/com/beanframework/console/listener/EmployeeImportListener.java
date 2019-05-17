@@ -166,7 +166,7 @@ public class EmployeeImportListener extends ImportListener {
 			properties.put(Employee.ID, csv.getId());
 
 			Employee entity = modelService.findOneByProperties(properties, Employee.class);
-			modelService.deleteByEntity(entity, Employee.class);
+			modelService.deleteEntity(entity, Employee.class);
 		}
 	}
 

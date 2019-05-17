@@ -158,7 +158,7 @@ public class SiteImportListener extends ImportListener {
 			properties.put(Site.ID, csv.getId());
 
 			Site entity = modelService.findOneByProperties(properties, Site.class);
-			modelService.deleteByEntity(entity, Site.class);
+			modelService.deleteEntity(entity, Site.class);
 		}
 	}
 

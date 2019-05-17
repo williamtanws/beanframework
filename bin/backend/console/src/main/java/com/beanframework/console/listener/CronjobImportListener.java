@@ -166,7 +166,7 @@ public class CronjobImportListener extends ImportListener {
 			properties.put(Cronjob.ID, csv.getId());
 
 			Cronjob entity = modelService.findOneByProperties(properties, Cronjob.class);
-			modelService.deleteByEntity(entity, Cronjob.class);
+			modelService.deleteEntity(entity, Cronjob.class);
 		}
 	}
 }
