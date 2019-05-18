@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.PlatformUpdateWebConstants;
@@ -52,7 +51,7 @@ public class PlatformUpdateController {
 
 	@Autowired
 	private SessionRegistry sessionRegistry;
-	
+
 	@Autowired
 	private PlatformService platformService;
 
@@ -71,24 +70,13 @@ public class PlatformUpdateController {
 		});
 
 		model.addAttribute("updates", aList);
-
-		if (requestParams.get("clearsessions") != null) {
-			String clearsessions = (String) requestParams.get("clearsessions");
-			if (clearsessions.equals("1")) {
-				for (Object principal : sessionRegistry.getAllPrincipals()) {
-					List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principal, false);
-					for (SessionInformation sessionInformation : sessionInformations) {
-						sessionInformation.expireNow();
-					}
-				}
-			}
-		}
+		model.addAttribute("clearSession", false);
 
 		return VIEW_UPDATE;
 	}
 
 	@PostMapping(value = PlatformUpdateWebConstants.Path.UPDATE)
-	public RedirectView update(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
+	public String update(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
 
 		Set<String> keysToUpdate = new HashSet<String>();
 
@@ -100,27 +88,39 @@ public class PlatformUpdateController {
 				}
 			}
 		}
-		
-		String[] messages = platformService.update(keysToUpdate);
-
-		if (messages[0].length() != 0) {
-			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
-		}
-		if (messages[1].length() != 0) {
-			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
-		}
 
 		clearAllCaches();
 
-		RedirectView redirectView = new RedirectView();
-		redirectView.setContextRelative(true);
+		String[] messages = platformService.update(keysToUpdate);
 
-		if (requestParams.get("clearsessions") == null) {
-			redirectView.setUrl(PATH_UPDATE + "?clearsessions=0");
+		if (requestParams.get("clearsessions") != null) {
+			model.addAttribute("clearSession", true);
+
+			for (Object principal : sessionRegistry.getAllPrincipals()) {
+				List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principal, false);
+				for (SessionInformation sessionInformation : sessionInformations) {
+					sessionInformation.expireNow();
+				}
+			}
+
+			if (messages[0].length() != 0)
+				model.addAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
+
+			if (messages[1].length() != 0)
+				model.addAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
+
+			return VIEW_UPDATE;
 		} else {
-			redirectView.setUrl(PATH_UPDATE + "?clearsessions=1");
+
+			if (messages[0].length() != 0)
+				redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
+
+			if (messages[1].length() != 0)
+				redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
+
+			return "redirect:" + PATH_UPDATE;
 		}
-		return redirectView;
+
 	}
 
 	public void clearAllCaches() {
