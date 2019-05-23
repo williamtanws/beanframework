@@ -1,4 +1,4 @@
-INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dynamicFieldSlotIds
+INSERT Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dynamicFieldSlotIds
 ,system				,System					,10	,fa fa-gears		,									,,true,				,employeegroup				,menu_0_name_en=System;menu_1_name_cn=系统
 ,language			,Language				,10	,fa fa-language		,/backoffice/language				,,true,system		,employeegroup				,menu_0_name_en=Language;menu_1_name_cn=语言
 ,enumeration		,Enumeration			,20	,fa fa-list-ol		,/backoffice/enumeration			,,true,system		,employeegroup				,menu_0_name_en=Enumeration;menu_1_name_cn=列举

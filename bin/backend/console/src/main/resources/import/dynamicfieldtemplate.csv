@@ -1,4 +1,4 @@
-INSERT_UPDATE DynamicFieldTemplate,id,name,dynamicFieldSlotIds
+INSERT DynamicFieldTemplate,id,name,dynamicFieldSlotIds
 ,menutemplate			,Menu Template				,menu_0_name_en;menu_1_name_cn
 ,userrighttemplate		,User Right Template		,userright_0_name_en;userright_1_name_cn
 ,userpermissiontemplate	,User Permission Template	,userpermission_0_name_en;userpermission_1_name_cn

@@ -1,4 +1,4 @@
-INSERT_UPDATE Enumeration,id,name,sort
+INSERT Enumeration,id,name,sort
 ,task_en,Task,10
 ,subtask_en,Sub Task,20
 ,incident_en,Incident,30
