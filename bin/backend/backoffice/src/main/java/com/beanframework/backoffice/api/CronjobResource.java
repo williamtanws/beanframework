@@ -74,7 +74,7 @@ public class CronjobResource {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
-		
+
 		Page<CronjobDto> pagination = cronjobFacade.findPage(dataTableRequest);
 
 		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();
@@ -88,6 +88,7 @@ public class CronjobResource {
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
+			data.setStatus(dto.getStatus() == null ? "" : dto.getStatus().toString());
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;
@@ -121,7 +122,7 @@ public class CronjobResource {
 			data.setEntity(dto);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
-			data.setRevisionType(localeMessageService.getMessage("revision."+revisionType.name()));
+			data.setRevisionType(localeMessageService.getMessage("revision." + revisionType.name()));
 			for (String property : propertiesChanged) {
 				String localized = localeMessageService.getMessage("module.cronjob." + property);
 				data.getPropertiesChanged().add(property + "=" + localized);

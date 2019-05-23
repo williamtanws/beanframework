@@ -59,6 +59,9 @@ public class EntityCsvEmployeeConverter implements EntityCsvConverter<EmployeeCs
 		try {
 			if (StringUtils.isNotBlank(source.getId()))
 				prototype.setId(source.getId());
+			
+			if (StringUtils.isNotBlank(source.getProfilePicture()))
+				prototype.setProfilePicture(source.getProfilePicture());
 
 			if (StringUtils.isNotBlank(source.getName()))
 				prototype.setName(source.getName());

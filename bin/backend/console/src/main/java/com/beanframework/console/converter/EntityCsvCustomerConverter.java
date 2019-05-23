@@ -60,6 +60,9 @@ public class EntityCsvCustomerConverter implements EntityCsvConverter<CustomerCs
 		try {
 			if (StringUtils.isNotBlank(source.getId()))
 				prototype.setId(source.getId());
+			
+			if (StringUtils.isNotBlank(source.getProfilePicture()))
+				prototype.setProfilePicture(source.getProfilePicture());
 
 			if (StringUtils.isNotBlank(source.getName()))
 				prototype.setName(source.getName());

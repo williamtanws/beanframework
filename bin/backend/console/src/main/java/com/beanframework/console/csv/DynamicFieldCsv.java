@@ -22,6 +22,7 @@ public class DynamicFieldCsv extends AbstractCsv {
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
+				new Optional(new Trim()), // ModeType
 				new NotNull(new Trim()), // id
 				new Optional(new Trim()), // name
 				new NotNull(new Trim(new ParseEnum(DynamicFieldType.class, true))), // type

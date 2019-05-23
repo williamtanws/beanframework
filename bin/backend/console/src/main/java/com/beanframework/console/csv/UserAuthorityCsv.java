@@ -17,6 +17,7 @@ public class UserAuthorityCsv {
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
+				new Optional(new Trim()), // ModeType
 				new NotNull(new Trim()), // userGroupId
 				new Optional(new Trim()), // userPermissionId
 				new Optional(new Trim()), // create

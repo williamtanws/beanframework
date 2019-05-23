@@ -1,6 +1,14 @@
 package com.beanframework.core.listener;
 
+import java.io.IOException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.repository.Deployment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.exception.ListenerException;
@@ -8,11 +16,20 @@ import com.beanframework.common.registry.AfterSaveEvent;
 import com.beanframework.common.registry.AfterSaveListener;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.AuditorService;
+import com.beanframework.user.service.UserService;
+import com.beanframework.workflow.domain.Workflow;
 
 public class CoreAfterSaveListener implements AfterSaveListener {
+	protected static Logger LOGGER = LoggerFactory.getLogger(CoreAfterSaveListener.class);
 
 	@Autowired
 	private AuditorService auditorService;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private RepositoryService repositoryService;
 
 	@Override
 	public void afterSave(final Object model, final AfterSaveEvent event) throws ListenerException {
@@ -22,6 +39,22 @@ public class CoreAfterSaveListener implements AfterSaveListener {
 				User user = (User) model;
 
 				auditorService.saveEntityByUser(user);
+
+				if (StringUtils.isNotBlank(user.getProfilePicture())) {
+					ClassPathResource resource = new ClassPathResource(user.getProfilePicture());
+					try {
+						userService.saveProfilePicture(user, resource.getInputStream());
+					} catch (IOException e) {
+						e.printStackTrace();
+						LOGGER.error(e.getMessage(), e);
+					}
+				}
+			} else if (model instanceof Workflow) {
+				Workflow workflow = (Workflow) model;
+				if (StringUtils.isBlank(workflow.getDeploymentId()) && StringUtils.isNotBlank(workflow.getClasspath())) {
+					Deployment deployment = repositoryService.createDeployment().addClasspathResource(workflow.getClasspath()).deploy();
+					workflow.setDeploymentId(deployment.getId());
+				}
 			}
 		} catch (BusinessException e) {
 			throw new ListenerException(e.getMessage(), e);

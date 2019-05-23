@@ -1,0 +1,15 @@
+INSERT_UPDATE DynamicFieldSlot,id,name,sort,dynamicFieldId
+,menu_0_name_en			,Menu Name(en) Slot				,0,name_en
+,menu_1_name_cn			,Menu Name(cn) Slot				,1,name_cn
+,userright_0_name_en		,User Right Name(en) Slot		,0,name_en
+,userright_1_name_cn		,User Right Name(cn) Slot		,1,name_cn
+,userpermission_0_name_en,User Permission Name(en) Slot	,0,name_en
+,userpermission_1_name_cn,User Permission Name(cn) Slot	,1,name_cn
+,usergroup_0_name_en		,User Group Name(en) Slot		,0,name_en
+,usergroup_1_name_cn		,User Group Name(cn) Slot		,1,name_cn
+,employee_0_name_en		,Employee Name(en) Slot			,0,name_en
+,employee_1_name_cn		,Employee Name(cn) Slot			,1,name_cn
+,customer_0_name_en		,Customer Name(en) Slot			,0,name_en
+,customer_1_name_cn		,Customer Name(cn) Slot			,1,name_cn
+,vendor_0_name_en		,Vendor Name(en) Slot			,0,name_en
+,vendor_1_name_cn		,Vendor Name(cn) Slot			,1,name_cn

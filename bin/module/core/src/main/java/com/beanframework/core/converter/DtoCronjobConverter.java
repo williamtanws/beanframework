@@ -43,6 +43,17 @@ public class DtoCronjobConverter extends AbstractDtoConverter<Cronjob, CronjobDt
 			prototype.setJobClass(source.getJobClass());
 			prototype.setJobGroup(source.getJobGroup());
 			prototype.setName(source.getName());
+			prototype.setDescription(source.getDescription());
+			prototype.setCronExpression(source.getCronExpression());
+			prototype.setStartup(source.getStartup());
+			prototype.setStatus(source.getStatus());
+			prototype.setResult(source.getResult());
+			prototype.setMessage(source.getMessage());
+			prototype.setJobTrigger(source.getJobTrigger());
+			prototype.setTriggerStartDate(source.getTriggerStartDate());
+			prototype.setLastTriggeredDate(source.getLastTriggeredDate());
+			prototype.setLastStartExecutedDate(source.getLastStartExecutedDate());
+			prototype.setLastFinishExecutedDate(source.getLastFinishExecutedDate());
 
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
@@ -58,18 +69,6 @@ public class DtoCronjobConverter extends AbstractDtoConverter<Cronjob, CronjobDt
 	}
 
 	private void convertAll(Cronjob source, CronjobDto prototype, DtoConverterContext context) throws Exception {
-
-		prototype.setDescription(source.getDescription());
-		prototype.setCronExpression(source.getCronExpression());
-		prototype.setStartup(source.getStartup());
-		prototype.setStatus(source.getStatus());
-		prototype.setResult(source.getResult());
-		prototype.setMessage(source.getMessage());
-		prototype.setJobTrigger(source.getJobTrigger());
-		prototype.setTriggerStartDate(source.getTriggerStartDate());
-		prototype.setLastTriggeredDate(source.getLastTriggeredDate());
-		prototype.setLastStartExecutedDate(source.getLastStartExecutedDate());
-		prototype.setLastFinishExecutedDate(source.getLastFinishExecutedDate());
 
 		prototype.setCronjobDatas(modelService.getDto(source.getCronjobDatas(), CronjobDataDto.class));
 		if (prototype.getCronjobDatas() != null)
