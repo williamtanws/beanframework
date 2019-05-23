@@ -237,7 +237,15 @@ public class PlatformServiceImpl implements PlatformService {
 							}
 						}
 
-						if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE") || mode.equalsIgnoreCase("INSERT_UPDATE")) {
+						if (mode.equalsIgnoreCase("INSERT")) {
+							if (((GenericEntity) entity).getUuid() == null)
+								modelService.saveEntity(entity, entry.getValue().getClassEntity());
+
+						} else if (mode.equalsIgnoreCase("UPDATE")) {
+							if (((GenericEntity) entity).getUuid() != null)
+								modelService.saveEntity(entity, entry.getValue().getClassEntity());
+
+						} else if (mode.equalsIgnoreCase("INSERT_UPDATE")) {
 							modelService.saveEntity(entity, entry.getValue().getClassEntity());
 
 						} else if (mode.equalsIgnoreCase("REMOVE")) {
