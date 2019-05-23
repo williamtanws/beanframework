@@ -1,10 +1,10 @@
 package com.beanframework.console.registry;
 
-import org.supercsv.io.ICsvBeanReader;
+import java.io.Reader;
 
 public abstract class ImportListener {
 	
-	public void customImport(ICsvBeanReader beanReader) {
+	public void customImport(Reader reader) throws Exception {
 	}
 
 	private String key;

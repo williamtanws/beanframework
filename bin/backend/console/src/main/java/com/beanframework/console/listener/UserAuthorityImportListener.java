@@ -1,5 +1,6 @@
 package com.beanframework.console.listener;
 
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
+import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
@@ -40,25 +43,21 @@ public class UserAuthorityImportListener extends ImportListener {
 		setCustomImport(true);
 	}
 
+	@SuppressWarnings("resource")
 	@Override
-	public void customImport(ICsvBeanReader beanReader) {
-		try {
-			final String[] header = beanReader.getHeader(true);
+	public void customImport(Reader reader) throws Exception {
+		ICsvBeanReader beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
+		final String[] header = beanReader.getHeader(true);
 
-			List<UserAuthorityCsv> csvList = new ArrayList<UserAuthorityCsv>();
-			
-			UserAuthorityCsv csv;
-			while ((csv = beanReader.read(UserAuthorityCsv.class, header, UserAuthorityCsv.getUpdateProcessors())) != null) {
-				LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
-				csvList.add(csv);
-			}
-			
-			save(csvList);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			LOGGER.info(e.getMessage(), e);
+		List<UserAuthorityCsv> csvList = new ArrayList<UserAuthorityCsv>();
+
+		UserAuthorityCsv csv;
+		while ((csv = beanReader.read(UserAuthorityCsv.class, header, UserAuthorityCsv.getUpdateProcessors())) != null) {
+			LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
+			csvList.add(csv);
 		}
+
+		save(csvList);
 	}
 
 	public void save(List<UserAuthorityCsv> csvList) throws Exception {
