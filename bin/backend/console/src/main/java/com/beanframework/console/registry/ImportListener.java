@@ -1,10 +1,8 @@
 package com.beanframework.console.registry;
 
-import java.io.Reader;
-
 public abstract class ImportListener {
 	
-	public void customImport(Reader reader) throws Exception {
+	public void customImport(Object objectCsv) throws Exception {
 	}
 
 	private String key;

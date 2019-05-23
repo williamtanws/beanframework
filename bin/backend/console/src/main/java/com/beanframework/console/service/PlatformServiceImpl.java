@@ -75,6 +75,7 @@ public class PlatformServiceImpl implements PlatformService {
 				BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
 				try {
+					LOGGER.info("Import path: " + resource.getFile().getAbsolutePath());
 					readCsvFile(keys, reader);
 					successMessages.append(localeMessageService.getMessage("module.console.platform.update.success", new Object[] { resource.getFile().getAbsolutePath() }) + "<br>");
 				} catch (Exception e) {
@@ -107,6 +108,7 @@ public class PlatformServiceImpl implements PlatformService {
 				try {
 
 					String content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
+					LOGGER.info("Import path: " + multipartFile.getResource().getFile().getAbsolutePath());
 					readCsvFile(null, new StringReader(content));
 					successMessages
 							.append(localeMessageService.getMessage("module.console.platform.update.success", new Object[] { multipartFile.getResource().getFile().getAbsolutePath() }) + "<br>");
@@ -148,6 +150,7 @@ public class PlatformServiceImpl implements PlatformService {
 				BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
 
 				try {
+					LOGGER.info("Import path: " + resource.getFile().getAbsolutePath());
 					readCsvFile(null, reader);
 					successMessages.append(localeMessageService.getMessage("module.console.platform.update.success", new Object[] { resource.getFile().getAbsolutePath() }) + "<br>");
 				} catch (Exception e) {
@@ -188,40 +191,41 @@ public class PlatformServiceImpl implements PlatformService {
 		String mode = header[0].trim().replace("  ", " ").split(" ")[0];
 		String type = header[0].trim().replace("  ", " ").split(" ")[1];
 
+		LOGGER.info("Import mode: " + mode.toUpperCase());
+		LOGGER.info("Import type: " + type.toUpperCase());
+
 		for (Entry<String, ImportListener> entry : sortedImportListeners) {
 			if (keys.contains(entry.getKey()) && entry.getKey().equalsIgnoreCase(type)) {
-				LOGGER.info("Start import " + entry.getValue().getName());
+				LOGGER.info("Import name: " + entry.getValue().getName());
 
 				CellProcessor[] processors = null;
 				if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE") || mode.equalsIgnoreCase("INSERT_UPDATE")) {
-					LOGGER.info("Mode=" + mode.toUpperCase());
 					Method method = entry.getValue().getClassCsv().getMethod("getUpdateProcessors", new Class[] {});
 					processors = (CellProcessor[]) method.invoke(entry.getValue().getClassCsv(), new Object[] {});
 
 				} else if (mode.equalsIgnoreCase("REMOVE")) {
-					LOGGER.info("Mode=" + mode.toUpperCase());
 					Method method = entry.getValue().getClassCsv().getMethod("getRemoveProcessors", new Class[] {});
 					processors = (CellProcessor[]) method.invoke(entry.getValue().getClassCsv(), new Object[] {});
 				}
-				LOGGER.info("Csv Class=" + entry.getValue().getClassCsv().getName());
-				LOGGER.info("Entity Class=" + entry.getValue().getClassEntity().getName());
+				LOGGER.info("Import csv class: " + entry.getValue().getClassCsv().getName());
+				LOGGER.info("Import entity class: " + entry.getValue().getClassEntity().getName());
 
-				if (entry.getValue().isCustomImport()) {
-					entry.getValue().customImport(reader);
-				} else {
-
-					for (ConverterMapping converterMapping : converterMappings) {
-						if (converterMapping.getConverter() instanceof EntityCsvConverter) {
-							EntityCsvConverter<?, ?> entityCsvConverter = (EntityCsvConverter<?, ?>) converterMapping.getConverter();
-							if (converterMapping.getTypeCode().equals(entry.getValue().getClassCsv().getSimpleName())) {
-								LOGGER.info("EntityCsvConverter Class=" + entityCsvConverter.getClass().getName());
-							}
+				for (ConverterMapping converterMapping : converterMappings) {
+					if (converterMapping.getConverter() instanceof EntityCsvConverter) {
+						EntityCsvConverter<?, ?> entityCsvConverter = (EntityCsvConverter<?, ?>) converterMapping.getConverter();
+						if (converterMapping.getTypeCode().equals(entry.getValue().getClassCsv().getSimpleName())) {
+							LOGGER.info("Import entity csv converter class: " + entityCsvConverter.getClass().getName());
 						}
 					}
+				}
 
-					Object csv;
-					while ((csv = beanReader.read(entry.getValue().getClassCsv(), header, processors)) != null) {
-						LOGGER.info("lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
+				Object csv;
+				while ((csv = beanReader.read(entry.getValue().getClassCsv(), header, processors)) != null) {
+					LOGGER.info("Import line: lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
+
+					if (entry.getValue().isCustomImport()) {
+						entry.getValue().customImport(csv);
+					} else {
 
 						Object entity = null;
 						for (ConverterMapping converterMapping : converterMappings) {
@@ -243,6 +247,7 @@ public class PlatformServiceImpl implements PlatformService {
 							}
 						}
 					}
+
 				}
 			}
 		}
