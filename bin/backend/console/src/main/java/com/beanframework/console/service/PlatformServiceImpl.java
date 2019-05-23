@@ -108,11 +108,14 @@ public class PlatformServiceImpl implements PlatformService {
 
 					String content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
 					readCsvFile(null, new StringReader(content));
-					successMessages.append(localeMessageService.getMessage("module.console.platform.update.success", new Object[] { multipartFile.getResource().getFile().getAbsolutePath() }) + "<br>");
+					successMessages
+							.append(localeMessageService.getMessage("module.console.platform.update.success", new Object[] { multipartFile.getResource().getFile().getAbsolutePath() }) + "<br>");
 				} catch (Exception e) {
 					LOGGER.error(e.getMessage(), e);
 					try {
-						errorMessages.append(localeMessageService.getMessage("module.console.platform.import.fail", new Object[] { multipartFile.getResource().getFile().getAbsolutePath(), e.getMessage() }) + "<br><br>");
+						errorMessages
+								.append(localeMessageService.getMessage("module.console.platform.import.fail", new Object[] { multipartFile.getResource().getFile().getAbsolutePath(), e.getMessage() })
+										+ "<br><br>");
 					} catch (IOException e1) {
 						LOGGER.error(e1.getMessage(), e1);
 					}
@@ -164,13 +167,8 @@ public class PlatformServiceImpl implements PlatformService {
 			LOGGER.info("Error: " + errorMessages.toString());
 	}
 
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ "unchecked", "resource" })
 	private void readCsvFile(Set<String> keys, Reader reader) throws Exception {
-		ICsvBeanReader beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
-		final String[] header = beanReader.getHeader(true);
-
-		String mode = header[0].trim().replace("  ", " ").split(" ")[0];
-		String type = header[0].trim().replace("  ", " ").split(" ")[1];
 
 		// Sort Import Listener
 		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
@@ -184,12 +182,17 @@ public class PlatformServiceImpl implements PlatformService {
 			}
 		});
 
+		ICsvBeanReader beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
+		final String[] header = beanReader.getHeader(true);
+
+		String mode = header[0].trim().replace("  ", " ").split(" ")[0];
+		String type = header[0].trim().replace("  ", " ").split(" ")[1];
+
 		for (Entry<String, ImportListener> entry : sortedImportListeners) {
-			if (keys == null || (type.equalsIgnoreCase(entry.getKey()) && keys.contains(entry.getKey()))) {
-
+			if (keys.contains(entry.getKey()) && entry.getKey().equalsIgnoreCase(type)) {
 				LOGGER.info("Start import " + entry.getValue().getName());
-				CellProcessor[] processors = null;
 
+				CellProcessor[] processors = null;
 				if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE") || mode.equalsIgnoreCase("INSERT_UPDATE")) {
 					LOGGER.info("Mode=" + mode.toUpperCase());
 					Method method = entry.getValue().getClassCsv().getMethod("getUpdateProcessors", new Class[] {});
@@ -204,8 +207,9 @@ public class PlatformServiceImpl implements PlatformService {
 				LOGGER.info("Entity Class=" + entry.getValue().getClassEntity().getName());
 
 				if (entry.getValue().isCustomImport()) {
-					entry.getValue().customImport(beanReader);
+					entry.getValue().customImport(reader);
 				} else {
+
 					for (ConverterMapping converterMapping : converterMappings) {
 						if (converterMapping.getConverter() instanceof EntityCsvConverter) {
 							EntityCsvConverter<?, ?> entityCsvConverter = (EntityCsvConverter<?, ?>) converterMapping.getConverter();

@@ -20,6 +20,7 @@ public class AbstractCsv {
 
 	public static CellProcessor[] getRemoveProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
+				new Optional(new Trim()), // ModeType
 				new NotNull(new Trim()), // ID
 		};
 
