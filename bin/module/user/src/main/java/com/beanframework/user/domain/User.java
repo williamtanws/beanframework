@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -68,7 +69,7 @@ public class User extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@AuditJoinTable(inverseJoinColumns=@JoinColumn(name = "usergroup_uuid"))
+	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -80,6 +81,9 @@ public class User extends GenericEntity {
 	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(UserField.DYNAMIC_FIELD_SLOT)
 	private List<UserField> fields = new ArrayList<UserField>();
+
+	@Transient
+	private String profilePicture;
 
 	public String getType() {
 		return type;
@@ -129,6 +133,14 @@ public class User extends GenericEntity {
 		this.enabled = enabled;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public List<UserGroup> getUserGroups() {
 		return userGroups;
 	}
@@ -145,12 +157,12 @@ public class User extends GenericEntity {
 		this.fields = fields;
 	}
 
-	public String getName() {
-		return name;
+	public String getProfilePicture() {
+		return profilePicture;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 
 }

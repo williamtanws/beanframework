@@ -14,6 +14,7 @@ public class UserRightCsv extends AbstractCsv {
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
+				new Optional(new Trim()), // ModeType
 				new NotNull(new Trim()), // id
 				new Optional(new Trim()), // name
 				new Optional(new Trim(new ParseInt())), // sort

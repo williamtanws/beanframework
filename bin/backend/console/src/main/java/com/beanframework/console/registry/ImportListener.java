@@ -1,23 +1,19 @@
 package com.beanframework.console.registry;
 
+import org.supercsv.io.ICsvBeanReader;
+
 public abstract class ImportListener {
-
-	public abstract void update() throws Exception;
-
-	public abstract void updateByPath(String path) throws Exception;
 	
-	public abstract void updateByContent(String content) throws Exception;
-	
-	public abstract void remove() throws Exception;
-
-	public abstract void removeByPath(String path) throws Exception;
-
-	public abstract void removeByContent(String content) throws Exception;
+	public void customImport(ICsvBeanReader beanReader) {
+	}
 
 	private String key;
 	private String name;
 	private int sort;
 	private String description;
+	private Class<?> classCsv;
+	private Class<?> classEntity;
+	private boolean customImport = false;
 	public static final String SPLITTER = ";";
 	public static final String EQUALS = "=";
 	public static final String COLON = ":";
@@ -55,6 +51,30 @@ public abstract class ImportListener {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Class<?> getClassCsv() {
+		return classCsv;
+	}
+
+	public void setClassCsv(Class<?> classCsv) {
+		this.classCsv = classCsv;
+	}
+
+	public Class<?> getClassEntity() {
+		return classEntity;
+	}
+
+	public void setClassEntity(Class<?> classEntity) {
+		this.classEntity = classEntity;
+	}
+
+	public boolean isCustomImport() {
+		return customImport;
+	}
+
+	public void setCustomImport(boolean customImport) {
+		this.customImport = customImport;
 	}
 
 }

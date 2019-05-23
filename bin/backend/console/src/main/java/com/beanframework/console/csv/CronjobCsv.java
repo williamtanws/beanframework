@@ -24,6 +24,7 @@ public class CronjobCsv extends AbstractCsv {
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
+				new Optional(new Trim()), // ModeType
 				new NotNull(new Trim()), // id
 				new NotNull(new Trim()), // jobClass
 				new NotNull(new Trim()), // jobGroup

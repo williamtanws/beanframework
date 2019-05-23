@@ -288,6 +288,7 @@
 					</div>
 					<form id="cronjob-trigger-form" role="form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post" th:object="${cronjobDto}">
 						<input type="hidden" name="trigger">
+						<input type="hidden" name="uuid" th:value="${cronjobDto.uuid}">
 						<div class="modal-body">
 							<div class="container-fluid">
 								<div class="row">

@@ -91,7 +91,9 @@ public class PlatformUpdateController {
 
 		clearAllCaches();
 
-		String[] messages = platformService.update(keysToUpdate);
+		String[] messages = null;
+		if (keysToUpdate.isEmpty() == false)
+			messages = platformService.update(keysToUpdate);
 
 		if (requestParams.get("clearsessions") != null) {
 			model.addAttribute("clearSession", true);
@@ -103,19 +105,19 @@ public class PlatformUpdateController {
 				}
 			}
 
-			if (messages[0].length() != 0)
+			if (messages != null && messages[0].length() != 0)
 				model.addAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
 
-			if (messages[1].length() != 0)
+			if (messages != null && messages[1].length() != 0)
 				model.addAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
 
 			return VIEW_UPDATE;
 		} else {
 
-			if (messages[0].length() != 0)
+			if (messages != null && messages[0].length() != 0)
 				redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
 
-			if (messages[1].length() != 0)
+			if (messages != null && messages[1].length() != 0)
 				redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
 
 			return "redirect:" + PATH_UPDATE;

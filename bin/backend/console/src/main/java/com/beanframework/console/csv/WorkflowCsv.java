@@ -12,6 +12,7 @@ public class WorkflowCsv extends AbstractCsv {
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
+				new Optional(new Trim()), // ModeType
 				new Optional(new Trim()), // id
 				new Optional(new Trim()), // name
 				new NotNull(new Trim()) // classpath
