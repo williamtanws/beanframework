@@ -1,4 +1,4 @@
-INSERT_UPDATE UserAuthority,userGroupId,userPermissionId,create,read,update,delete
+INSERT UserAuthority,userGroupId,userPermissionId,create,read,update,delete
 ,employeegroup,enumeration			,+,+,+,+
 ,employeegroup,dynamicfield			,+,+,+,+
 ,employeegroup,dynamicfieldslot		,+,+,+,+
