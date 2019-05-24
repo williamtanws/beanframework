@@ -7,17 +7,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.CronjobCsv;
-import com.beanframework.console.registry.ImportListener;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
+import com.beanframework.imex.registry.ImportListener;
 
-@Component
 public class EntityCsvCronjobConverter implements EntityCsvConverter<CronjobCsv, Cronjob> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvCronjobConverter.class);

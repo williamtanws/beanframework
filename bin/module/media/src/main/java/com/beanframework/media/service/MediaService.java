@@ -1,5 +1,6 @@
 package com.beanframework.media.service;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -14,5 +15,9 @@ public interface MediaService {
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	Media storeMultipartFile(Media media, MultipartFile file) throws Exception;
+
+	Media storeFile(Media media, File file) throws Exception;
+
+	Media storeData(Media media, String data) throws Exception;
 
 }

@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beanframework.console.ConsoleImportListenerConstants;
-import com.beanframework.console.registry.ImportListener;
+import com.beanframework.imex.registry.ImportListener;
 
 public class DynamicFieldTemplateImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldTemplateImportListener.class);

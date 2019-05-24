@@ -9,8 +9,8 @@ import org.springframework.integration.file.FileHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.console.service.PlatformService;
 import com.beanframework.core.data.FileProcessor;
+import com.beanframework.imex.service.ImexService;
 
 @Component
 public class ImportFileProcessor implements FileProcessor {
@@ -20,7 +20,7 @@ public class ImportFileProcessor implements FileProcessor {
 	private static final String MSG = "%s received. Path: %s";
 
 	@Autowired
-	private PlatformService platformService;
+	private ImexService platformService;
 
 	@Override
 	public void process(Message<String> msg) throws Exception {
@@ -29,6 +29,6 @@ public class ImportFileProcessor implements FileProcessor {
 
 		LOGGER.info(String.format(MSG, fileName, fileOriginalFile.getAbsolutePath()));
 
-		platformService.importFile(fileOriginalFile);
+		platformService.importByFile(fileOriginalFile);
 	}
 }

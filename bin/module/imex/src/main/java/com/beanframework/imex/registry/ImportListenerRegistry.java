@@ -1,4 +1,4 @@
-package com.beanframework.console.registry;
+package com.beanframework.imex.registry;
 
 import java.util.Map;
 import java.util.TreeMap;

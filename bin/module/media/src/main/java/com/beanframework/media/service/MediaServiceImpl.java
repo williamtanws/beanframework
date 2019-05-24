@@ -32,6 +32,9 @@ public class MediaServiceImpl implements MediaService {
 
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
+	
+	@Value(MediaConstants.MEDIA_URL)
+	private String MEDIA_URL;
 
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
@@ -72,6 +75,49 @@ public class MediaServiceImpl implements MediaService {
 		File original = new File(mediaFolder.getAbsolutePath(), media.getFileName());
 		file.transferTo(original);
 
-		return media;
+		media.setFileSize(original.length());
+		media.setUrl(MEDIA_URL + "/" + media.getUuid() + "/" + media.getFileName());
+
+		return modelService.saveEntity(media, Media.class);
+	}
+
+	@Override
+	public Media storeFile(Media media, File srcFile) throws Exception {
+		File mediaFolder;
+		if (StringUtils.isBlank(media.getFolder())) {
+			mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getUuid().toString());
+		} else {
+			mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
+		}
+
+		FileUtils.forceMkdir(mediaFolder);
+
+		File destFile = new File(mediaFolder.getAbsolutePath(), media.getFileName());
+		FileUtils.copyFile(srcFile.getAbsoluteFile(), destFile.getAbsoluteFile());
+
+		media.setFileSize(destFile.length());
+		media.setUrl(MEDIA_URL + "/" + media.getUuid() + "/" + media.getFileName());
+
+		return modelService.saveEntity(media, Media.class);
+	}
+
+	@Override
+	public Media storeData(Media media, String data) throws Exception {
+		File mediaFolder;
+		if (StringUtils.isBlank(media.getFolder())) {
+			mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getUuid().toString());
+		} else {
+			mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
+		}
+
+		FileUtils.forceMkdir(mediaFolder);
+
+		File destFile = new File(mediaFolder.getAbsolutePath(), media.getFileName());
+		FileUtils.write(destFile.getAbsoluteFile(), data, "UTF-8", false);
+
+		media.setFileSize(destFile.length());
+		media.setUrl(MEDIA_URL + "/" + media.getUuid() + "/" + media.getFileName());
+
+		return modelService.saveEntity(media, Media.class);
 	}
 }
