@@ -20,6 +20,7 @@ import com.beanframework.console.listener.DynamicFieldSlotImportListener;
 import com.beanframework.console.listener.DynamicFieldTemplateImportListener;
 import com.beanframework.console.listener.EmployeeImportListener;
 import com.beanframework.console.listener.EnumerationImportListener;
+import com.beanframework.console.listener.ImexImportListener;
 import com.beanframework.console.listener.LanguageImportListener;
 import com.beanframework.console.listener.MediaImportListener;
 import com.beanframework.console.listener.MenuImportListener;
@@ -30,7 +31,7 @@ import com.beanframework.console.listener.UserPermissionImportListener;
 import com.beanframework.console.listener.UserRightImportListener;
 import com.beanframework.console.listener.VendorImportListener;
 import com.beanframework.console.listener.WorkflowImportListener;
-import com.beanframework.console.registry.ImportListenerRegistry;
+import com.beanframework.imex.registry.ImportListenerRegistry;
 
 @Configuration
 public class ConsoleImportListenerConfig implements ApplicationListener<ApplicationReadyEvent> {
@@ -135,6 +136,11 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	public MediaImportListener mediaImportListener() {
 		return new MediaImportListener();
 	}
+	
+	@Bean
+	public ImexImportListener imexImportListener() {
+		return new ImexImportListener();
+	}
 
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent event) {
@@ -195,5 +201,8 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 
 		if (importListenerKeyList.contains(ConsoleImportListenerConstants.MediaImport.KEY))
 			importListenerRegistry.addListener(mediaImportListener());
+
+		if (importListenerKeyList.contains(ConsoleImportListenerConstants.ImexImport.KEY))
+			importListenerRegistry.addListener(imexImportListener());
 	}
 }

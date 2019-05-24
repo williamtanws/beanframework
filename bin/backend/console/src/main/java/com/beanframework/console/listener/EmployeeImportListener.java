@@ -3,7 +3,7 @@ package com.beanframework.console.listener;
 import javax.annotation.PostConstruct;
 
 import com.beanframework.console.ConsoleImportListenerConstants;
-import com.beanframework.console.registry.ImportListener;
+import com.beanframework.imex.registry.ImportListener;
 
 public class EmployeeImportListener extends ImportListener {
 	

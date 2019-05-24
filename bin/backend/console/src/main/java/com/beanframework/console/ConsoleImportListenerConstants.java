@@ -12,6 +12,7 @@ import com.beanframework.console.csv.DynamicFieldSlotCsv;
 import com.beanframework.console.csv.DynamicFieldTemplateCsv;
 import com.beanframework.console.csv.EmployeeCsv;
 import com.beanframework.console.csv.EnumerationCsv;
+import com.beanframework.console.csv.ImexCsv;
 import com.beanframework.console.csv.LanguageCsv;
 import com.beanframework.console.csv.MediaCsv;
 import com.beanframework.console.csv.MenuCsv;
@@ -29,6 +30,7 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.imex.domain.Imex;
 import com.beanframework.language.domain.Language;
 import com.beanframework.media.domain.Media;
 import com.beanframework.menu.domain.Menu;
@@ -210,6 +212,15 @@ public interface ConsoleImportListenerConstants {
 		public static final String DESCRIPTION = "Update/Remove Workflow Data";
 		public static final Class<WorkflowCsv> CLASS_CSV = WorkflowCsv.class;
 		public static final Class<Workflow> CLASS_ENTITY = Workflow.class;
+	}
+
+	public interface ImexImport {
+		public static final String KEY = "imex";
+		public static final String NAME = "ImEx";
+		public static final int SORT = 170;
+		public static final String DESCRIPTION = "Update/Remove ImEx Data";
+		public static final Class<ImexCsv> CLASS_CSV = ImexCsv.class;
+		public static final Class<Imex> CLASS_ENTITY = Imex.class;
 	}
 
 }

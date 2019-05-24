@@ -26,9 +26,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.PlatformUpdateWebConstants;
-import com.beanframework.console.registry.ImportListener;
-import com.beanframework.console.registry.ImportListenerRegistry;
-import com.beanframework.console.service.PlatformService;
+import com.beanframework.imex.registry.ImportListener;
+import com.beanframework.imex.registry.ImportListenerRegistry;
+import com.beanframework.imex.service.ImexService;
 
 import net.sf.ehcache.CacheManager;
 
@@ -53,7 +53,7 @@ public class PlatformUpdateController {
 	private SessionRegistry sessionRegistry;
 
 	@Autowired
-	private PlatformService platformService;
+	private ImexService platformService;
 
 	@GetMapping(value = PlatformUpdateWebConstants.Path.UPDATE)
 	public String list(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
@@ -93,7 +93,7 @@ public class PlatformUpdateController {
 
 		String[] messages = null;
 		if (keysToUpdate.isEmpty() == false)
-			messages = platformService.update(keysToUpdate);
+			messages = platformService.importByListenerKeys(keysToUpdate);
 
 		if (requestParams.get("clearsessions") != null) {
 			model.addAttribute("clearSession", true);

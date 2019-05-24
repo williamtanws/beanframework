@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -15,7 +14,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.console.csv.LanguageCsv;
 import com.beanframework.language.domain.Language;
 
-@Component
+
 public class EntityCsvLanguageConverter implements EntityCsvConverter<LanguageCsv, Language> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(EntityCsvLanguageConverter.class);

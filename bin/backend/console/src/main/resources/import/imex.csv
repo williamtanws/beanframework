@@ -1,0 +1,2 @@
+INSERT Imex,id,type,directory,fileName,query,header,seperator
+,export_language,EXPORT,,language,"SELECT id,name,active,sort FROM Language","id,name,active,sort",","

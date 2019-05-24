@@ -19,5 +19,6 @@ INSERT UserAuthority,userGroupId,userPermissionId,create,read,update,delete
 ,employeegroup,media				,+,+,+,+
 ,employeegroup,site					,+,+,+,+
 ,employeegroup,workflow				,+,+,+,+
+,employeegroup,imex					,+,+,+,+
 ,employeegroup,task					,+,+,+,+
 ,employeegroup,comment				,+,+,+,+

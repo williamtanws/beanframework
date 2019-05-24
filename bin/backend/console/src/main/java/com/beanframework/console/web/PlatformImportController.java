@@ -20,7 +20,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.PlatformImportWebConstants;
-import com.beanframework.console.service.PlatformService;
+import com.beanframework.imex.service.ImexService;
 
 @Controller
 public class PlatformImportController extends AbstractController {
@@ -34,7 +34,7 @@ public class PlatformImportController extends AbstractController {
 	private String VIEW_IMPORT;
 
 	@Autowired
-	private PlatformService platformService;
+	private ImexService platformService;
 
 	@GetMapping(value = PlatformImportWebConstants.Path.IMPORT)
 	public String importView(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
@@ -45,7 +45,7 @@ public class PlatformImportController extends AbstractController {
 	public RedirectView importUpload(@RequestParam("files") MultipartFile[] files, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 
-		String[] messages = platformService.importFiles(files);
+		String[] messages = platformService.importByMultipartFiles(files);
 
 		if (messages[0].length() != 0) {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);

@@ -16,7 +16,7 @@ import org.springframework.data.domain.Sort;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.ConsoleImportListenerConstants;
 import com.beanframework.console.csv.UserAuthorityCsv;
-import com.beanframework.console.registry.ImportListener;
+import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
