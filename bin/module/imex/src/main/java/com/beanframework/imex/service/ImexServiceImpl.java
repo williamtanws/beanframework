@@ -304,27 +304,31 @@ public class ImexServiceImpl implements ImexService {
 						}
 
 						if (mode.equalsIgnoreCase("INSERT")) {
-							if (((GenericEntity) entity).getUuid() == null)
+							if (((GenericEntity) entity).getUuid() == null) {
 								modelService.saveEntity(entity, entry.getValue().getClassEntity());
+								imported = true;
+							}
 
 						} else if (mode.equalsIgnoreCase("UPDATE")) {
-							if (((GenericEntity) entity).getUuid() != null)
+							if (((GenericEntity) entity).getUuid() != null) {
 								modelService.saveEntity(entity, entry.getValue().getClassEntity());
+								imported = true;
+							}
 
 						} else if (mode.equalsIgnoreCase("INSERT_UPDATE")) {
 							modelService.saveEntity(entity, entry.getValue().getClassEntity());
+							imported = true;
 
 						} else if (mode.equalsIgnoreCase("REMOVE")) {
 							GenericEntity genericEntity = (GenericEntity) entity;
 							if (genericEntity.getUuid() != null) {
 								modelService.deleteEntity(genericEntity, entry.getValue().getClassEntity());
+								imported = true;
 							}
 						}
 					}
 
 				}
-				
-				imported = true;
 			}
 		}
 
