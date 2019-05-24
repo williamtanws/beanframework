@@ -256,13 +256,11 @@ public class ImexServiceImpl implements ImexService {
 		String mode = header[0].trim().replace("  ", " ").split(" ")[0];
 		String type = header[0].trim().replace("  ", " ").split(" ")[1];
 
+		StringBuilder message = new StringBuilder();
+		message.append("Import mode=" + mode.toUpperCase() + ", type=" + type.toUpperCase());
+
 		for (Entry<String, ImportListener> entry : sortedImportListeners) {
 			if ((keys == null && entry.getKey().equalsIgnoreCase(type)) || (keys.contains(entry.getKey()) && entry.getKey().equalsIgnoreCase(type))) {
-				
-
-				LOGGER.info("Import mode: " + mode.toUpperCase());
-				LOGGER.info("Import type: " + type.toUpperCase());
-				LOGGER.info("Import name: " + entry.getValue().getName());
 
 				CellProcessor[] processors = null;
 				if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE") || mode.equalsIgnoreCase("INSERT_UPDATE")) {
@@ -273,21 +271,9 @@ public class ImexServiceImpl implements ImexService {
 					Method method = entry.getValue().getClassCsv().getMethod("getRemoveProcessors", new Class[] {});
 					processors = (CellProcessor[]) method.invoke(entry.getValue().getClassCsv(), new Object[] {});
 				}
-				LOGGER.info("Import csv class: " + entry.getValue().getClassCsv().getName());
-				LOGGER.info("Import entity class: " + entry.getValue().getClassEntity().getName());
-
-				for (ConverterMapping converterMapping : converterMappings) {
-					if (converterMapping.getConverter() instanceof EntityCsvConverter) {
-						EntityCsvConverter<?, ?> entityCsvConverter = (EntityCsvConverter<?, ?>) converterMapping.getConverter();
-						if (converterMapping.getTypeCode().equals(entry.getValue().getClassCsv().getSimpleName())) {
-							LOGGER.info("Import entity csv converter class: " + entityCsvConverter.getClass().getName());
-						}
-					}
-				}
 
 				Object csv;
 				while ((csv = beanReader.read(entry.getValue().getClassCsv(), header, processors)) != null) {
-					LOGGER.info("Import line: lineNo={}, rowNo={}, {}", beanReader.getLineNumber(), beanReader.getRowNumber(), csv);
 
 					if (entry.getValue().isCustomImport()) {
 						entry.getValue().customImport(csv);
@@ -328,8 +314,16 @@ public class ImexServiceImpl implements ImexService {
 						}
 					}
 
+					if (imported) {
+						message.append("Imported line: lineNo=" + beanReader.getLineNumber() + ", rowNo=" + beanReader.getRowNumber() + ", " + csv);
+						message.append(System.getProperty("line.separator"));
+					}
 				}
 			}
+		}
+		
+		if(imported) {
+			LOGGER.info(message.toString());
 		}
 
 		return imported;
