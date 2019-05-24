@@ -9,7 +9,7 @@ public class AdminImportListener extends ImportListener {
 	
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.AdminImport.KEY);
+		setType(ConsoleImportListenerConstants.AdminImport.TYPE);
 		setName(ConsoleImportListenerConstants.AdminImport.NAME);
 		setSort(ConsoleImportListenerConstants.AdminImport.SORT);
 		setDescription(ConsoleImportListenerConstants.AdminImport.DESCRIPTION);

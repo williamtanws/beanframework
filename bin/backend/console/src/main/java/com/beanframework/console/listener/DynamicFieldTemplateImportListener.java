@@ -13,7 +13,7 @@ public class DynamicFieldTemplateImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.DynamicFieldTemplateImport.KEY);
+		setType(ConsoleImportListenerConstants.DynamicFieldTemplateImport.TYPE);
 		setName(ConsoleImportListenerConstants.DynamicFieldTemplateImport.NAME);
 		setSort(ConsoleImportListenerConstants.DynamicFieldTemplateImport.SORT);
 		setDescription(ConsoleImportListenerConstants.DynamicFieldTemplateImport.DESCRIPTION);

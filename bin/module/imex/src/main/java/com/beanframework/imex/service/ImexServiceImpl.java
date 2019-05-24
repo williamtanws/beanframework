@@ -161,7 +161,7 @@ public class ImexServiceImpl implements ImexService {
 	}
 
 	@SuppressWarnings({ "unchecked", "resource" })
-	private String[] importByKeysAndReader(Set<String> keys, String path) {
+	private String[] importByKeysAndReader(Set<String> keys, String location) {
 
 		// Messages
 		StringBuilder successMessages = new StringBuilder();
@@ -180,99 +180,116 @@ public class ImexServiceImpl implements ImexService {
 				return sort1.compareTo(sort2);
 			}
 		});
+		
+		Resource[] resources = null;
+		try {
+			PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+			resources = loader.getResources(location);
+		} catch (IOException e) {
+			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
+		}
 
 		for (Entry<String, ImportListener> entry : sortedImportListeners) {
 			if ((keys == null) || (keys != null && keys.contains(entry.getKey()))) {
 
-				PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-				Resource[] resources = null;
-				try {
-					resources = loader.getResources(path);
-				} catch (IOException e) {
-					e.printStackTrace();
-					LOGGER.error(e.getMessage(), e);
-				}
 				for (Resource resource : resources) {
 					try {
 						InputStream in = resource.getInputStream();
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
 						IOUtils.copy(in, baos);
 						BufferedReader reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
-
+						
 						ICsvBeanReader beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
 						final String[] header = beanReader.getHeader(true);
 
 						String mode = header[0].trim().replace("  ", " ").split(" ")[0];
 						String type = header[0].trim().replace("  ", " ").split(" ")[1];
 
-						loggingMessage.append("Import mode=" + mode.toUpperCase() + ", type=" + type.toUpperCase());
+						if (type.equalsIgnoreCase(entry.getValue().getType())) {
 
-						CellProcessor[] processors = null;
-						if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE") || mode.equalsIgnoreCase("INSERT_UPDATE")) {
-							Method method = entry.getValue().getClassCsv().getMethod("getUpdateProcessors", new Class[] {});
-							processors = (CellProcessor[]) method.invoke(entry.getValue().getClassCsv(), new Object[] {});
+							loggingMessage.append("Import mode=" + mode.toUpperCase() + ", type=" + type.toUpperCase());
 
-						} else if (mode.equalsIgnoreCase("REMOVE")) {
-							Method method = entry.getValue().getClassCsv().getMethod("getRemoveProcessors", new Class[] {});
-							processors = (CellProcessor[]) method.invoke(entry.getValue().getClassCsv(), new Object[] {});
-						}
+							CellProcessor[] processors = null;
+							if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE") || mode.equalsIgnoreCase("INSERT_UPDATE")) {
+								Method method = entry.getValue().getClassCsv().getMethod("getUpdateProcessors", new Class[] {});
+								processors = (CellProcessor[]) method.invoke(entry.getValue().getClassCsv(), new Object[] {});
 
-						Object csv;
-						while ((csv = beanReader.read(entry.getValue().getClassCsv(), header, processors)) != null) {
+							} else if (mode.equalsIgnoreCase("REMOVE")) {
+								Method method = entry.getValue().getClassCsv().getMethod("getRemoveProcessors", new Class[] {});
+								processors = (CellProcessor[]) method.invoke(entry.getValue().getClassCsv(), new Object[] {});
+							}
+							
+							if (processors == null) {
+								throw new Exception("Cannot find CellProcessor[] for " + entry.getValue().getClassCsv());
+							}
 
-							if (entry.getValue().isCustomImport()) {
-								imported = entry.getValue().customImport(csv);
-							} else {
+							Object csv;
+							while ((csv = beanReader.read(entry.getValue().getClassCsv(), header, processors)) != null) {
 
-								Object entity = null;
-								for (ConverterMapping converterMapping : converterMappings) {
-									if (converterMapping.getConverter() instanceof EntityCsvConverter) {
-										EntityCsvConverter<Object, ?> entityCsvConverter = (EntityCsvConverter<Object, ?>) converterMapping.getConverter();
-										if (converterMapping.getTypeCode().equals(entry.getValue().getClassCsv().getSimpleName())) {
-											entity = entityCsvConverter.convert(csv);
+								if (entry.getValue().isCustomImport()) {
+									imported = entry.getValue().customImport(csv);
+								} else {
+
+									Object entity = null;
+									for (ConverterMapping converterMapping : converterMappings) {
+										if (converterMapping.getConverter() instanceof EntityCsvConverter) {
+											EntityCsvConverter<Object, ?> entityCsvConverter = (EntityCsvConverter<Object, ?>) converterMapping.getConverter();
+											if (converterMapping.getTypeCode().equals(entry.getValue().getClassCsv().getSimpleName())) {
+												entity = entityCsvConverter.convert(csv);
+											}
+										}
+									}
+
+									if (entity == null) {
+										throw new Exception("Cannot find EntityCsvConverter bean for " + entry.getValue().getClassCsv().getSimpleName());
+									}
+									
+									Class<?> classEntity = entry.getValue().getClassEntity();
+
+									if (mode.equalsIgnoreCase("INSERT")) {
+										if (((GenericEntity) entity).getUuid() == null) {
+											modelService.saveEntity(entity, classEntity);
+											imported = true;
+										}
+
+									} else if (mode.equalsIgnoreCase("UPDATE")) {
+										if (((GenericEntity) entity).getUuid() != null) {
+											modelService.saveEntity(entity, classEntity);
+											imported = true;
+										}
+
+									} else if (mode.equalsIgnoreCase("INSERT_UPDATE")) {
+										modelService.saveEntity(entity, classEntity);
+										imported = true;
+
+									} else if (mode.equalsIgnoreCase("REMOVE")) {
+										GenericEntity genericEntity = (GenericEntity) entity;
+										if (genericEntity.getUuid() != null) {
+											modelService.deleteEntity(genericEntity, classEntity);
+											imported = true;
 										}
 									}
 								}
 
-								if (mode.equalsIgnoreCase("INSERT")) {
-									if (((GenericEntity) entity).getUuid() == null) {
-										modelService.saveEntity(entity, entry.getValue().getClassEntity());
-										imported = true;
-									}
-
-								} else if (mode.equalsIgnoreCase("UPDATE")) {
-									if (((GenericEntity) entity).getUuid() != null) {
-										modelService.saveEntity(entity, entry.getValue().getClassEntity());
-										imported = true;
-									}
-
-								} else if (mode.equalsIgnoreCase("INSERT_UPDATE")) {
-									modelService.saveEntity(entity, entry.getValue().getClassEntity());
-									imported = true;
-
-								} else if (mode.equalsIgnoreCase("REMOVE")) {
-									GenericEntity genericEntity = (GenericEntity) entity;
-									if (genericEntity.getUuid() != null) {
-										modelService.deleteEntity(genericEntity, entry.getValue().getClassEntity());
-										imported = true;
-									}
+								if (imported) {
+									loggingMessage.append("Imported line: lineNo=" + beanReader.getLineNumber() + ", rowNo=" + beanReader.getRowNumber() + ", " + csv);
+									loggingMessage.append(System.getProperty("line.separator"));
 								}
 							}
-
-							if (imported) {
-								loggingMessage.append("Imported line: lineNo=" + beanReader.getLineNumber() + ", rowNo=" + beanReader.getRowNumber() + ", " + csv);
-								loggingMessage.append(System.getProperty("line.separator"));
-							}
+							successMessages.append(localeMessageService.getMessage("module.console.platform.update.success", new Object[] { resource.getFile().getPath() }) + "<br>");
 						}
-						successMessages.append(localeMessageService.getMessage("module.console.platform.update.success", new Object[] { resource.getFile().getAbsolutePath() }) + "<br>");
 					} catch (Exception e) {
+						e.printStackTrace();
+						LOGGER.error(e.getMessage(), e);
 						try {
-							errorMessages
-									.append(localeMessageService.getMessage("module.console.platform.import.fail", new Object[] { resource.getFile().getAbsolutePath(), e.getMessage() }) + "<br><br>");
+							errorMessages.append(localeMessageService.getMessage("module.console.platform.import.fail", new Object[] { resource.getFile().getPath(), e.getMessage() }) + "<br><br>");
 						} catch (IOException e1) {
-							errorMessages.append(localeMessageService.getMessage("module.console.platform.import.fail", new Object[] { "Error opening file", e.getMessage() }) + "<br><br>");
+							e1.printStackTrace();
+							LOGGER.error(e.getMessage(), e);
 						}
 					}
+
 				}
 			}
 		}

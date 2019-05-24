@@ -9,7 +9,7 @@ public class LanguageImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.LanguageImport.KEY);
+		setType(ConsoleImportListenerConstants.LanguageImport.TYPE);
 		setName(ConsoleImportListenerConstants.LanguageImport.NAME);
 		setSort(ConsoleImportListenerConstants.LanguageImport.SORT);
 		setDescription(ConsoleImportListenerConstants.LanguageImport.DESCRIPTION);

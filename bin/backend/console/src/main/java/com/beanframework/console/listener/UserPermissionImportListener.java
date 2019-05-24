@@ -9,7 +9,7 @@ public class UserPermissionImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.UserPermissionImport.KEY);
+		setType(ConsoleImportListenerConstants.UserPermissionImport.TYPE);
 		setName(ConsoleImportListenerConstants.UserPermissionImport.NAME);
 		setSort(ConsoleImportListenerConstants.UserPermissionImport.SORT);
 		setDescription(ConsoleImportListenerConstants.UserPermissionImport.DESCRIPTION);

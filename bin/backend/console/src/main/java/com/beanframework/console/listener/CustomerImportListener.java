@@ -9,7 +9,7 @@ public class CustomerImportListener extends ImportListener {
 	
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.CustomerImport.KEY);
+		setType(ConsoleImportListenerConstants.CustomerImport.TYPE);
 		setName(ConsoleImportListenerConstants.CustomerImport.NAME);
 		setSort(ConsoleImportListenerConstants.CustomerImport.SORT);
 		setDescription(ConsoleImportListenerConstants.CustomerImport.DESCRIPTION);

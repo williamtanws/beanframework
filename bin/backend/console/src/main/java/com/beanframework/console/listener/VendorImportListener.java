@@ -8,7 +8,7 @@ import com.beanframework.imex.registry.ImportListener;
 public class VendorImportListener extends ImportListener {
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.VendorImport.KEY);
+		setType(ConsoleImportListenerConstants.VendorImport.TYPE);
 		setName(ConsoleImportListenerConstants.VendorImport.NAME);
 		setSort(ConsoleImportListenerConstants.VendorImport.SORT);
 		setDescription(ConsoleImportListenerConstants.VendorImport.DESCRIPTION);

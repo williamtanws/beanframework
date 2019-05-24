@@ -9,7 +9,7 @@ public class DynamicFieldImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.DynamicFieldImport.KEY);
+		setType(ConsoleImportListenerConstants.DynamicFieldImport.TYPE);
 		setName(ConsoleImportListenerConstants.DynamicFieldImport.NAME);
 		setSort(ConsoleImportListenerConstants.DynamicFieldImport.SORT);
 		setDescription(ConsoleImportListenerConstants.DynamicFieldImport.DESCRIPTION);

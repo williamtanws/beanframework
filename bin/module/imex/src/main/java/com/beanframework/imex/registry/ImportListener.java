@@ -6,7 +6,7 @@ public abstract class ImportListener {
 		return false;
 	}
 
-	private String key;
+	private String type;
 	private String name;
 	private int sort;
 	private String description;
@@ -20,12 +20,12 @@ public abstract class ImportListener {
 	public static final String NEGATIVE = "-";
 	public static final String UNDERSCORE = "_";
 
-	public String getKey() {
-		return key;
+	public String getType() {
+		return type;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getName() {

@@ -9,7 +9,7 @@ public class MediaImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.MediaImport.KEY);
+		setType(ConsoleImportListenerConstants.MediaImport.TYPE);
 		setName(ConsoleImportListenerConstants.MediaImport.NAME);
 		setSort(ConsoleImportListenerConstants.MediaImport.SORT);
 		setDescription(ConsoleImportListenerConstants.MediaImport.DESCRIPTION);

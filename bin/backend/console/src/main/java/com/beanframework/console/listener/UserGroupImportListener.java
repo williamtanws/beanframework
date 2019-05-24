@@ -9,7 +9,7 @@ public class UserGroupImportListener extends ImportListener {
 	
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.UserGroupImport.KEY);
+		setType(ConsoleImportListenerConstants.UserGroupImport.TYPE);
 		setName(ConsoleImportListenerConstants.UserGroupImport.NAME);
 		setSort(ConsoleImportListenerConstants.UserGroupImport.SORT);
 		setDescription(ConsoleImportListenerConstants.UserGroupImport.DESCRIPTION);

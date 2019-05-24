@@ -9,7 +9,7 @@ public class CronjobImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.CronjobImport.KEY);
+		setType(ConsoleImportListenerConstants.CronjobImport.TYPE);
 		setName(ConsoleImportListenerConstants.CronjobImport.NAME);
 		setSort(ConsoleImportListenerConstants.CronjobImport.SORT);
 		setDescription(ConsoleImportListenerConstants.CronjobImport.DESCRIPTION);
