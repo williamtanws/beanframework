@@ -13,7 +13,7 @@ public class ImexImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.ImexImport.KEY);
+		setType(ConsoleImportListenerConstants.ImexImport.TYPE);
 		setName(ConsoleImportListenerConstants.ImexImport.NAME);
 		setSort(ConsoleImportListenerConstants.ImexImport.SORT);
 		setDescription(ConsoleImportListenerConstants.ImexImport.DESCRIPTION);

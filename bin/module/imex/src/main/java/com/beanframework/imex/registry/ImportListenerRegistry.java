@@ -21,7 +21,7 @@ public class ImportListenerRegistry {
 
 	public void addListener(ImportListener listener) {
 
-		if (StringUtils.isBlank(listener.getKey())) {
+		if (StringUtils.isBlank(listener.getType())) {
 			throw new RuntimeException("Listener Key is missing");
 		}
 		if (StringUtils.isBlank(listener.getName())) {
@@ -32,10 +32,10 @@ public class ImportListenerRegistry {
 		}
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Added '" + listener.getKey() + "' " + listener.getName());
+			LOGGER.debug("Added '" + listener.getType() + "' " + listener.getName());
 		}
 
-		listeners.put(listener.getKey(), listener);
+		listeners.put(listener.getType(), listener);
 	}
 
 	public void removeListener(String key) {

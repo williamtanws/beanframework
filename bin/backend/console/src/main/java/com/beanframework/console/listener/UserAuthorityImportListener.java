@@ -30,7 +30,7 @@ public class UserAuthorityImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.UserAuthorityImport.KEY);
+		setType(ConsoleImportListenerConstants.UserAuthorityImport.TYPE);
 		setName(ConsoleImportListenerConstants.UserAuthorityImport.NAME);
 		setSort(ConsoleImportListenerConstants.UserAuthorityImport.SORT);
 		setDescription(ConsoleImportListenerConstants.UserAuthorityImport.DESCRIPTION);

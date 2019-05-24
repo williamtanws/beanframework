@@ -9,7 +9,7 @@ public class EmployeeImportListener extends ImportListener {
 	
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.EmployeeImport.KEY);
+		setType(ConsoleImportListenerConstants.EmployeeImport.TYPE);
 		setName(ConsoleImportListenerConstants.EmployeeImport.NAME);
 		setSort(ConsoleImportListenerConstants.EmployeeImport.SORT);
 		setDescription(ConsoleImportListenerConstants.EmployeeImport.DESCRIPTION);

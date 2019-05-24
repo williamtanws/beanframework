@@ -9,7 +9,7 @@ public class EnumerationImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.EnumerationImport.KEY);
+		setType(ConsoleImportListenerConstants.EnumerationImport.TYPE);
 		setName(ConsoleImportListenerConstants.EnumerationImport.NAME);
 		setSort(ConsoleImportListenerConstants.EnumerationImport.SORT);
 		setDescription(ConsoleImportListenerConstants.EnumerationImport.DESCRIPTION);

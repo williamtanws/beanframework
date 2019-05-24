@@ -9,7 +9,7 @@ public class UserRightImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.UserRightImport.KEY);
+		setType(ConsoleImportListenerConstants.UserRightImport.TYPE);
 		setName(ConsoleImportListenerConstants.UserRightImport.NAME);
 		setSort(ConsoleImportListenerConstants.UserRightImport.SORT);
 		setDescription(ConsoleImportListenerConstants.UserRightImport.DESCRIPTION);

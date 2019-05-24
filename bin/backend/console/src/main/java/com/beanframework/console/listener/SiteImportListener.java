@@ -9,7 +9,7 @@ public class SiteImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.SiteImport.KEY);
+		setType(ConsoleImportListenerConstants.SiteImport.TYPE);
 		setName(ConsoleImportListenerConstants.SiteImport.NAME);
 		setSort(ConsoleImportListenerConstants.SiteImport.SORT);
 		setDescription(ConsoleImportListenerConstants.SiteImport.DESCRIPTION);

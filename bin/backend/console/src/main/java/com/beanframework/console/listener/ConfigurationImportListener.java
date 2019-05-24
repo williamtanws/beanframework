@@ -9,7 +9,7 @@ public class ConfigurationImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.ConfigurationImport.KEY);
+		setType(ConsoleImportListenerConstants.ConfigurationImport.TYPE);
 		setName(ConsoleImportListenerConstants.ConfigurationImport.NAME);
 		setSort(ConsoleImportListenerConstants.ConfigurationImport.SORT);
 		setDescription(ConsoleImportListenerConstants.ConfigurationImport.DESCRIPTION);

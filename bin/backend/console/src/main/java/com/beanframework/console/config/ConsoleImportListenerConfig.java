@@ -39,8 +39,8 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	@Autowired
 	private ImportListenerRegistry importListenerRegistry;
 
-	@Value("#{'${module.console.import.listener.keys}'.split(',')}")
-	private List<String> importListenerKeyList;
+	@Value("#{'${module.console.import.listener.types}'.split(',')}")
+	private List<String> importListenerTypesList;
 
 	@Bean
 	public AdminImportListener adminImportListener() {
@@ -145,64 +145,64 @@ public class ConsoleImportListenerConfig implements ApplicationListener<Applicat
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent event) {
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.AdminImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.AdminImport.TYPE))
 			importListenerRegistry.addListener(adminImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.ConfigurationImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.ConfigurationImport.TYPE))
 			importListenerRegistry.addListener(configurationImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.CronjobImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.CronjobImport.TYPE))
 			importListenerRegistry.addListener(cronjobImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.CustomerImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.CustomerImport.TYPE))
 			importListenerRegistry.addListener(customerImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.VendorImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.VendorImport.TYPE))
 			importListenerRegistry.addListener(vendorImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.EnumerationImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.EnumerationImport.TYPE))
 			importListenerRegistry.addListener(enumerationImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.DynamicFieldImport.TYPE))
 			importListenerRegistry.addListener(dynamicFieldImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldSlotImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.DynamicFieldSlotImport.TYPE))
 			importListenerRegistry.addListener(dynamicFieldSlotImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.DynamicFieldTemplateImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.DynamicFieldTemplateImport.TYPE))
 			importListenerRegistry.addListener(dynamicFieldTemplateImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.EmployeeImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.EmployeeImport.TYPE))
 			importListenerRegistry.addListener(employeeImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.LanguageImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.LanguageImport.TYPE))
 			importListenerRegistry.addListener(languageImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.MenuImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.MenuImport.TYPE))
 			importListenerRegistry.addListener(menuImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserAuthorityImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.UserAuthorityImport.TYPE))
 			importListenerRegistry.addListener(userAuthorityImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserGroupImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.UserGroupImport.TYPE))
 			importListenerRegistry.addListener(userGroupImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserPermissionImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.UserPermissionImport.TYPE))
 			importListenerRegistry.addListener(userPermissionImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.UserRightImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.UserRightImport.TYPE))
 			importListenerRegistry.addListener(userRightImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.SiteImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.SiteImport.TYPE))
 			importListenerRegistry.addListener(siteImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.WorkflowImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.WorkflowImport.TYPE))
 			importListenerRegistry.addListener(workflowImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.MediaImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.MediaImport.TYPE))
 			importListenerRegistry.addListener(mediaImportListener());
 
-		if (importListenerKeyList.contains(ConsoleImportListenerConstants.ImexImport.KEY))
+		if (importListenerTypesList.contains(ConsoleImportListenerConstants.ImexImport.TYPE))
 			importListenerRegistry.addListener(imexImportListener());
 	}
 }

@@ -9,7 +9,7 @@ public class MenuImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.MenuImport.KEY);
+		setType(ConsoleImportListenerConstants.MenuImport.TYPE);
 		setName(ConsoleImportListenerConstants.MenuImport.NAME);
 		setSort(ConsoleImportListenerConstants.MenuImport.SORT);
 		setDescription(ConsoleImportListenerConstants.MenuImport.DESCRIPTION);

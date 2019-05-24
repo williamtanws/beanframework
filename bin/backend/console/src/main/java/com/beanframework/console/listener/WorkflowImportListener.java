@@ -13,7 +13,7 @@ public class WorkflowImportListener extends ImportListener {
 
 	@PostConstruct
 	public void importer() {
-		setKey(ConsoleImportListenerConstants.WorkflowImport.KEY);
+		setType(ConsoleImportListenerConstants.WorkflowImport.TYPE);
 		setName(ConsoleImportListenerConstants.WorkflowImport.NAME);
 		setSort(ConsoleImportListenerConstants.WorkflowImport.SORT);
 		setDescription(ConsoleImportListenerConstants.WorkflowImport.DESCRIPTION);
