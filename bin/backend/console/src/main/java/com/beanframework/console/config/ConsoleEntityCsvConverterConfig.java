@@ -44,7 +44,7 @@ import com.beanframework.console.csv.VendorCsv;
 import com.beanframework.console.csv.WorkflowCsv;
 
 @Configuration
-public class ConsoleEntityCsvConfig {
+public class ConsoleEntityCsvConverterConfig {
 
 	@Bean
 	public EntityCsvAdminConverter entityCsvAdminConverter() {
