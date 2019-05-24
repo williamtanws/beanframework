@@ -40,12 +40,13 @@ public class UserAuthorityImportListener extends ImportListener {
 	}
 
 	@Override
-	public void customImport(Object objectCsv) throws Exception {
+	public boolean customImport(Object objectCsv) throws Exception {
 		UserAuthorityCsv csv = (UserAuthorityCsv) objectCsv;
-		save(csv);
+		return save(csv);
 	}
 
-	public void save(UserAuthorityCsv csv) throws Exception {
+	public boolean save(UserAuthorityCsv csv) throws Exception {
+		boolean imported = false;
 
 		// Group permissions by userGroupId
 		Map<String, List<UserAuthorityCsv>> userGroupMap = new HashMap<String, List<UserAuthorityCsv>>();
@@ -98,8 +99,11 @@ public class UserAuthorityImportListener extends ImportListener {
 				}
 
 				modelService.saveEntity(userGroup, UserGroup.class);
+				imported = true;
 			}
 		}
+		
+		return imported;
 	}
 
 	private void generateUserAuthority(UserGroup model) throws Exception {

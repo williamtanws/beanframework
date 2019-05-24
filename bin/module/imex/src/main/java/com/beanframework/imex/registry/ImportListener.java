@@ -2,7 +2,7 @@ package com.beanframework.imex.registry;
 
 public abstract class ImportListener {
 	
-	public void customImport(Object objectCsv) throws Exception {
+	public boolean customImport(Object objectCsv) throws Exception {
 	}
 
 	private String key;
