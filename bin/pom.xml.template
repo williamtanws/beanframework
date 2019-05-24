@@ -33,6 +33,7 @@
         <module>module/comment</module>
         <module>module/cms</module>
         <module>module/workflow</module>
+        <module>module/imex</module>
         <module>module/core</module>
 		<module>ui/adminlte</module>
         <module>backend/console</module>
