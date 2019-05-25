@@ -135,7 +135,6 @@ public class ImexServiceImpl implements ImexService {
 	@Transactional(readOnly = false)
 	@Override
 	public String[] importByMultipartFiles(MultipartFile[] files) {
-		String[] messages = new String[2];
 
 		// Sort Import Listener
 		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
@@ -148,6 +147,11 @@ public class ImexServiceImpl implements ImexService {
 				return sort1.compareTo(sort2);
 			}
 		});
+
+		// Messages
+		StringBuilder successMessages = new StringBuilder();
+		StringBuilder errorMessages = new StringBuilder();
+		StringBuilder loggingMessage = new StringBuilder();
 
 		for (MultipartFile multipartFile : files) {
 			if (StringUtils.isNotBlank(multipartFile.getOriginalFilename())) {
@@ -163,15 +167,14 @@ public class ImexServiceImpl implements ImexService {
 					}
 					Reader reader = new StringReader(content);
 
-					// Messages
-					StringBuilder successMessages = new StringBuilder();
-					StringBuilder errorMessages = new StringBuilder();
-					StringBuilder loggingMessage = new StringBuilder();
-
 					importCsv(multipartFile.getOriginalFilename(), reader, entry.getValue(), loggingMessage, successMessages, errorMessages);
 				}
 			}
 		}
+
+		String[] messages = new String[2];
+		messages[0] = successMessages.toString();
+		messages[1] = errorMessages.toString();
 
 		return messages;
 	}
