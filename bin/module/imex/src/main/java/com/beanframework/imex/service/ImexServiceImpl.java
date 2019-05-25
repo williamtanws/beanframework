@@ -123,13 +123,7 @@ public class ImexServiceImpl implements ImexService {
 	@Override
 	public void importByFile(File file) throws Exception {
 
-		String[] message = importByKeysAndReader(null, file.getAbsolutePath());
-
-		if (message[0] != null)
-			LOGGER.info("Success: " + message[0].toString());
-
-		if (message[1] != null)
-			LOGGER.info("Error: " + message[1].toString());
+		importByKeysAndReader(null, file.getAbsolutePath());
 	}
 
 	@Transactional(readOnly = false)
@@ -151,7 +145,6 @@ public class ImexServiceImpl implements ImexService {
 		// Messages
 		StringBuilder successMessages = new StringBuilder();
 		StringBuilder errorMessages = new StringBuilder();
-		StringBuilder loggingMessage = new StringBuilder();
 
 		for (MultipartFile multipartFile : files) {
 			if (StringUtils.isNotBlank(multipartFile.getOriginalFilename())) {
@@ -167,9 +160,42 @@ public class ImexServiceImpl implements ImexService {
 					}
 					Reader reader = new StringReader(content);
 
-					importCsv(multipartFile.getOriginalFilename(), reader, entry.getValue(), loggingMessage, successMessages, errorMessages);
+					importCsv(multipartFile.getOriginalFilename(), reader, entry.getValue(), successMessages, errorMessages);
 				}
 			}
+		}
+
+		String[] messages = new String[2];
+		messages[0] = successMessages.toString();
+		messages[1] = errorMessages.toString();
+
+		return messages;
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public String[] importByQuery(String query) {
+
+		// Sort Import Listener
+		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
+		List<Entry<String, ImportListener>> sortedImportListeners = new LinkedList<Entry<String, ImportListener>>(importListeners);
+		Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
+			@Override
+			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
+				Integer sort1 = ele1.getValue().getSort();
+				Integer sort2 = ele2.getValue().getSort();
+				return sort1.compareTo(sort2);
+			}
+		});
+
+		// Messages
+		StringBuilder successMessages = new StringBuilder();
+		StringBuilder errorMessages = new StringBuilder();
+
+		for (Entry<String, ImportListener> entry : sortedImportListeners) {
+
+			Reader reader = new StringReader(query);
+			importCsv("Query", reader, entry.getValue(), successMessages, errorMessages);
 		}
 
 		String[] messages = new String[2];
@@ -184,7 +210,6 @@ public class ImexServiceImpl implements ImexService {
 		// Messages
 		StringBuilder successMessages = new StringBuilder();
 		StringBuilder errorMessages = new StringBuilder();
-		StringBuilder loggingMessage = new StringBuilder();
 
 		// Sort Import Listener
 		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
@@ -231,13 +256,9 @@ public class ImexServiceImpl implements ImexService {
 						}
 					}
 
-					importCsv(importName, reader, entry.getValue(), loggingMessage, successMessages, errorMessages);
+					importCsv(importName, reader, entry.getValue(), successMessages, errorMessages);
 				}
 			}
-		}
-
-		if (loggingMessage != null) {
-			LOGGER.info(loggingMessage.toString());
 		}
 
 		String[] messages = new String[2];
@@ -248,7 +269,7 @@ public class ImexServiceImpl implements ImexService {
 	}
 
 	@SuppressWarnings({ "resource", "unchecked" })
-	private void importCsv(String importName, Reader reader, ImportListener listener, StringBuilder loggingMessage, StringBuilder successMessages, StringBuilder errorMessages) {
+	private void importCsv(String importName, Reader reader, ImportListener listener, StringBuilder successMessages, StringBuilder errorMessages) {
 		try {
 			ICsvBeanReader beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
 			final String[] header = beanReader.getHeader(true);
@@ -258,7 +279,7 @@ public class ImexServiceImpl implements ImexService {
 
 			if (type.equalsIgnoreCase(listener.getType())) {
 
-				loggingMessage.append("Import mode=" + mode.toUpperCase() + ", type=" + type.toUpperCase());
+				LOGGER.info("Import mode=" + mode.toUpperCase() + ", type=" + type.toUpperCase());
 
 				CellProcessor[] processors = null;
 				if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE") || mode.equalsIgnoreCase("INSERT_UPDATE")) {
@@ -325,8 +346,7 @@ public class ImexServiceImpl implements ImexService {
 					}
 
 					if (imported) {
-						loggingMessage.append("Imported line: lineNo=" + beanReader.getLineNumber() + ", rowNo=" + beanReader.getRowNumber() + ", " + csv);
-						loggingMessage.append(System.getProperty("line.separator"));
+						LOGGER.info("Imported line: lineNo=" + beanReader.getLineNumber() + ", rowNo=" + beanReader.getRowNumber() + ", " + csv);
 					}
 				}
 				successMessages.append(localeMessageService.getMessage("module.console.platform.update.success", new Object[] { importName }) + "<br>");
@@ -334,6 +354,7 @@ public class ImexServiceImpl implements ImexService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			errorMessages.append(localeMessageService.getMessage("module.console.platform.import.fail", new Object[] { importName, e.getMessage() }) + "<br><br>");
 		}
 	}
