@@ -13,18 +13,36 @@
 				</div>
 				<div class="box-body">
 					<div class="col-md-9">
-						<form method="post" id="import-form" th:action="@{${@environment.getProperty('path.console.import')}}" enctype="multipart/form-data">
-							<div class="col-md-12">
-								<div class="form-group">
-									<input class="form-control" type="file" name="files" multiple="multiple">
+						<div class="col-md-12">
+							<form method="post" th:action="@{${@environment.getProperty('path.console.import')}}" enctype="multipart/form-data">
+								<input type="hidden" name="importFile">
+								<div class="col-md-12">
+									<div class="form-group">
+										<input class="form-control" type="file" name="files" multiple="multiple">
+									</div>
 								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="form-group text-right">
-									<button type="submit" class="btn btn-success" th:text="#{module.console.platform.import}" onclick="document.getElementById('import-form').submit();"></button>
+								<div class="col-md-12">
+									<div class="form-group text-right">
+										<button type="submit" class="btn btn-success" th:text="#{module.console.platform.import}"></button>
+									</div>
 								</div>
-							</div>
-						</form>
+							</form>
+						</div>
+						<div class="col-md-12">
+							<form method="post" th:action="@{${@environment.getProperty('path.console.import')}}">
+								<input type="hidden" name="importQuery">
+								<div class="col-md-12">
+									<div class="form-group">
+										<textarea class="form-control" rows="5" name="query"></textarea>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group text-right">
+										<button type="submit" class="btn btn-success" th:text="#{module.console.platform.import}"></button>
+									</div>
+								</div>
+							</form>
+						</div>
 						<th:block layout:insert="~{common/adminlte/common/component/alert :: custom}"></th:block>
 					</div>
 					<div class="col-md-3">

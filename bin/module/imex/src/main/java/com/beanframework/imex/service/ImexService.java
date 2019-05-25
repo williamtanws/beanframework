@@ -11,15 +11,17 @@ import com.beanframework.imex.domain.Imex;
 import com.beanframework.media.domain.Media;
 
 public interface ImexService {
-	
+
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	String[] importByListenerKeys(Set<String> keys);
-	
+
 	String[] importByMultipartFiles(MultipartFile[] files);
-	
+
+	String[] importByQuery(String query);
+
 	void importByFile(File file) throws Exception;
 
 	Media exportToCsv(Imex imex) throws Exception;

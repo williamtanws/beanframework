@@ -41,12 +41,31 @@ public class PlatformImportController extends AbstractController {
 		return VIEW_IMPORT;
 	}
 
-	@PostMapping(value = PlatformImportWebConstants.Path.IMPORT)
-	public RedirectView importUpload(@RequestParam("files") MultipartFile[] files, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
+	@PostMapping(value = PlatformImportWebConstants.Path.IMPORT, params="importFile")
+	public RedirectView importFile(@RequestParam("files") MultipartFile[] files, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 
 		String[] messages = platformService.importByMultipartFiles(files);
+		
+		if (messages[0].length() != 0) {
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
+		}
+		if (messages[1].length() != 0) {
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
+		}
 
+		RedirectView redirectView = new RedirectView();
+		redirectView.setContextRelative(true);
+		redirectView.setUrl(PATH_IMPORT);
+		return redirectView;
+	}
+	
+	@PostMapping(value = PlatformImportWebConstants.Path.IMPORT, params="importQuery")
+	public RedirectView importQuery(@RequestParam("query") String query, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+
+		String[] messages = platformService.importByQuery(query);
+		
 		if (messages[0].length() != 0) {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
 		}
