@@ -1,4 +1,5 @@
 INSERT Imex,id,type,directory,fileName,query,header,seperator
+,import_configuration,IMPORT,,import_configuration,"INSERT_UPDATE Configuration,id,value%n,demo,true",,
 ,export_configuration,EXPORT,,export_configuration,"SELECT id,value FROM Configuration","id,value",","
 ,export_cronjob,EXPORT,,export_cronjob,"SELECT id,jobClass,jobGroup,name,description,cronExpression,startup,jobTrigger,triggerStartDate FROM Cronjob","id,jobClass,jobGroup,name,description,cronExpression,startup,jobTrigger,triggerStartDate",","
 ,export_cronjob_datas,EXPORT,,export_cronjob_datas,"SELECT cronjob.id,name,value FROM CronjobData","id,name,value",","
