@@ -175,7 +175,7 @@ public class ImexServiceImpl implements ImexService {
 
 	@Transactional(readOnly = false)
 	@Override
-	public String[] importByQuery(String query) {
+	public String[] importByQuery(String importName, String query) {
 
 		// Sort Import Listener
 		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
@@ -196,7 +196,7 @@ public class ImexServiceImpl implements ImexService {
 		for (Entry<String, ImportListener> entry : sortedImportListeners) {
 
 			Reader reader = new StringReader(query);
-			importCsv("Query", reader, entry.getValue(), successMessages, errorMessages);
+			importCsv(importName, reader, entry.getValue(), successMessages, errorMessages);
 		}
 
 		String[] messages = new String[2];
@@ -365,7 +365,7 @@ public class ImexServiceImpl implements ImexService {
 
 		String csv = null;
 		if (model.getType() == ImexType.IMPORT) {
-			importByQuery(model.getQuery());
+			importByQuery(model.getId(), model.getQuery());
 			csv = model.getQuery();
 		} else if (model.getType() == ImexType.EXPORT) {
 

@@ -25,8 +25,8 @@ public class ImexCsv extends AbstractCsv {
 				new Optional(new Trim()), // directory
 				new NotNull(new Trim()), // fileName
 				new NotNull(new Trim()), // query
-				new NotNull(new Trim()), // header
-				new NotNull(new Trim()) // seperator
+				new Optional(new Trim()), // header
+				new Optional(new Trim()) // seperator
 		};
 
 		return processors;

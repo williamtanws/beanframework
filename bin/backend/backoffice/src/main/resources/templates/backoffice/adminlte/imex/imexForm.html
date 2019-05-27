@@ -52,7 +52,8 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="type" th:text="#{module.imex.type}"></label>
-												<select name="type" class="form-control">
+												<span>*</span>
+												<select name="type" class="form-control" id="imexType">
 													<option th:each="state: ${T(com.beanframework.imex.ImexType).values()}" th:value="${state.name()}" th:text="${state}" th:selected="${imexDto.type == state}"></option>
 												</select>
 												<span class="help-block"></span>
@@ -63,6 +64,7 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="directory" th:text="#{module.imex.directory}"></label>
+												<span>*</span>
 												<input class="form-control" name="directory" th:value="*{directory}">
 												<span class="help-block"></span>
 											</div>
@@ -70,6 +72,7 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="fileName" th:text="#{module.imex.fileName}"></label>
+												<span>*</span>
 												<input class="form-control" name="fileName" th:value="*{fileName}">
 												<span class="help-block"></span>
 											</div>
@@ -79,6 +82,7 @@
 										<div class="col-md-12">
 											<div class="form-group">
 												<label for="query" th:text="#{module.imex.query}"></label>
+												<span>*</span>
 												<textarea class="form-control" rows="3" name="query" th:text="*{query}"></textarea>
 												<span class="help-block"></span>
 											</div>
@@ -212,10 +216,14 @@
 		                    required: true
 		                },
 		                header: {
-		                    required: true
+		                	required: function() {
+		                        return $('#imexType').val() == "EXPORT";
+		                    }
 		                },
 		                seperator: {
-		                    required: true
+		                	required: function() {
+		                        return $('#imexType').val() == "EXPORT";
+		                    }
 		                }
 		            },
 		            messages: {

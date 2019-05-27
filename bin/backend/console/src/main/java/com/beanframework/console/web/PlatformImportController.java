@@ -64,7 +64,7 @@ public class PlatformImportController extends AbstractController {
 	public RedirectView importQuery(@RequestParam("query") String query, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 
-		String[] messages = platformService.importByQuery(query);
+		String[] messages = platformService.importByQuery("Import Query",query);
 		
 		if (messages[0].length() != 0) {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);

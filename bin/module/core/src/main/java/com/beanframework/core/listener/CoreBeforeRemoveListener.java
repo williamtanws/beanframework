@@ -1,5 +1,6 @@
 package com.beanframework.core.listener;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,9 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.comment.domain.Comment;
@@ -22,7 +25,10 @@ import com.beanframework.common.registry.BeforeRemoveListener;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.imex.domain.Imex;
 import com.beanframework.language.domain.Language;
+import com.beanframework.media.MediaConstants;
+import com.beanframework.media.domain.Media;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
@@ -31,6 +37,9 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Value(MediaConstants.MEDIA_LOCATION)
+	public String MEDIA_LOCATION;
 
 	@Override
 	public void beforeRemove(final Object model, final BeforeRemoveEvent event) throws ListenerException {
@@ -48,6 +57,16 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 			} else if (model instanceof User) {
 				removeCommentUser((User) model);
 
+			} else if (model instanceof Media) {
+				Media media = (Media) model;
+				File mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
+				FileUtils.deleteQuietly(mediaFolder);
+			} else if (model instanceof Imex) {
+				Imex imex = (Imex) model;
+				for (Media media : imex.getMedias()) {
+					File mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
+					FileUtils.deleteQuietly(mediaFolder);
+				}
 			}
 
 		} catch (Exception e) {
