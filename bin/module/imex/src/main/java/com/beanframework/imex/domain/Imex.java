@@ -3,6 +3,7 @@ package com.beanframework.imex.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
@@ -10,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -53,9 +55,13 @@ public class Imex extends GenericEntity {
 	private String fileName;
 
 	@Audited(withModifiedFlag = true)
+	@Lob
+	@Column(length = 10000)
 	private String query;
 
 	@Audited(withModifiedFlag = true)
+	@Lob
+	@Column(length = 10000)
 	private String header;
 
 	@Audited(withModifiedFlag = true)

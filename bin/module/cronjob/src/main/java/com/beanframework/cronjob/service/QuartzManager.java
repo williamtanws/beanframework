@@ -66,10 +66,10 @@ public class QuartzManager {
 			if (job.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)) {
 
 				Trigger runOnceTrigger;
-				if (job.getTriggerStartDate() != null) {
-					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).build();
-				} else {
+				if (job.getTriggerStartDate() == null) {
 					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startNow().build();
+				} else {
+					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).build();
 				}
 				scheduler.scheduleJob(jobDetail, runOnceTrigger);
 			} else if (StringUtils.isNotBlank(job.getCronExpression())) {

@@ -14,7 +14,7 @@ public class CronjobCsv extends AbstractCsv {
 
 	private String jobClass;
 	private String jobGroup;
-	private String jobName;
+	private String name;
 	private String description;
 	private String cronExpression;
 	private Boolean startup;
@@ -30,9 +30,9 @@ public class CronjobCsv extends AbstractCsv {
 				new NotNull(new Trim()), // jobGroup
 				new NotNull(new Trim()), // jobName
 				new Optional(new Trim()), // description
-				new NotNull(new Trim()), // cronExpression
+				new Optional(new Trim()), // cronExpression
 				new Optional(new Trim(new ParseBool())), // startup
-				new NotNull(new Trim()), // jobTrigger
+				new Optional(new Trim()), // jobTrigger
 				new Optional(new Trim(new Token(" ", null, new ParseDate("dd/MM/yyyy h:mm a", true)))), // triggerStartDate
 				new Optional(new Trim()) // cronjobData
 		};
@@ -56,12 +56,12 @@ public class CronjobCsv extends AbstractCsv {
 		this.jobGroup = jobGroup;
 	}
 
-	public String getJobName() {
-		return jobName;
+	public String getName() {
+		return name;
 	}
 
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDescription() {
@@ -114,7 +114,7 @@ public class CronjobCsv extends AbstractCsv {
 
 	@Override
 	public String toString() {
-		return "CronjobCsv [id=" + id + ", jobClass=" + jobClass + ", jobGroup=" + jobGroup + ", jobName=" + jobName + ", description=" + description + ", cronExpression=" + cronExpression + ", startup=" + startup
+		return "CronjobCsv [id=" + id + ", jobClass=" + jobClass + ", jobGroup=" + jobGroup + ", jobName=" + name + ", description=" + description + ", cronExpression=" + cronExpression + ", startup=" + startup
 				+ ", jobTrigger=" + jobTrigger + ", triggerStartDate=" + triggerStartDate + ", cronjobData=" + cronjobData + "]";
 	}
 

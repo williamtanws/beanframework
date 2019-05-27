@@ -83,12 +83,10 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
-									</div>
-									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-6">
+										<div class="col-md-12">
 											<div class="form-group">
 												<label for="header" th:text="#{module.imex.header}"></label>
-												<input class="form-control" name="header" th:value="*{header}">
+												<textarea class="form-control" rows="3" name="header" th:text="*{header}"></textarea>
 												<span class="help-block"></span>
 											</div>
 										</div>

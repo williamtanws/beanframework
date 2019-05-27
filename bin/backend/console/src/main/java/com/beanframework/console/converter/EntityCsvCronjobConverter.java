@@ -58,8 +58,8 @@ public class EntityCsvCronjobConverter implements EntityCsvConverter<CronjobCsv,
 			if (StringUtils.isNotBlank(source.getJobGroup()))
 				prototype.setJobGroup(source.getJobGroup());
 
-			if (StringUtils.isNotBlank(source.getJobName()))
-				prototype.setName(source.getJobName());
+			if (StringUtils.isNotBlank(source.getName()))
+				prototype.setName(source.getName());
 
 			if (StringUtils.isNotBlank(source.getDescription()))
 				prototype.setDescription(source.getDescription());

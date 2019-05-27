@@ -10,10 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.exception.ListenerException;
 import com.beanframework.common.registry.AfterSaveEvent;
 import com.beanframework.common.registry.AfterSaveListener;
+import com.beanframework.imex.domain.Imex;
+import com.beanframework.imex.service.ImexService;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
@@ -30,6 +31,9 @@ public class CoreAfterSaveListener implements AfterSaveListener {
 
 	@Autowired
 	private RepositoryService repositoryService;
+
+	@Autowired
+	private ImexService imexService;
 
 	@Override
 	public void afterSave(final Object model, final AfterSaveEvent event) throws ListenerException {
@@ -55,8 +59,12 @@ public class CoreAfterSaveListener implements AfterSaveListener {
 					Deployment deployment = repositoryService.createDeployment().addClasspathResource(workflow.getClasspath()).deploy();
 					workflow.setDeploymentId(deployment.getId());
 				}
+			} else if (model instanceof Imex) {
+				Imex imex = (Imex) model;
+				imexService.importExportMedia(imex);
 			}
-		} catch (BusinessException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ListenerException(e.getMessage(), e);
 		}
 
