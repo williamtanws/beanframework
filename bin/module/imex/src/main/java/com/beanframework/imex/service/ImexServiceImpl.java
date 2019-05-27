@@ -195,7 +195,7 @@ public class ImexServiceImpl implements ImexService {
 
 		for (Entry<String, ImportListener> entry : sortedImportListeners) {
 
-			Reader reader = new StringReader(query);
+			Reader reader = new StringReader(String.format(query));
 			importCsv(importName, reader, entry.getValue(), successMessages, errorMessages);
 		}
 
@@ -365,7 +365,10 @@ public class ImexServiceImpl implements ImexService {
 
 		String csv = null;
 		if (model.getType() == ImexType.IMPORT) {
-			importByQuery(model.getId(), model.getQuery());
+			String errorMessage = importByQuery(model.getId(), model.getQuery())[1];
+			if(StringUtils.isNotBlank(errorMessage)) {
+				throw new Exception(errorMessage);
+			}
 			csv = model.getQuery();
 		} else if (model.getType() == ImexType.EXPORT) {
 
