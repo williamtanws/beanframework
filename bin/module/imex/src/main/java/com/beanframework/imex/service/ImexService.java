@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.imex.domain.Imex;
-import com.beanframework.media.domain.Media;
 
 public interface ImexService {
 
@@ -24,5 +23,5 @@ public interface ImexService {
 
 	void importByFile(File file) throws Exception;
 
-	Media exportToCsv(Imex imex) throws Exception;
+	void importExportMedia(Imex imex) throws Exception;
 }

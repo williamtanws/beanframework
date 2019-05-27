@@ -49,6 +49,7 @@ import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.imex.ImexConstants;
+import com.beanframework.imex.ImexType;
 import com.beanframework.imex.domain.Imex;
 import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.imex.registry.ImportListenerRegistry;
@@ -360,53 +361,65 @@ public class ImexServiceImpl implements ImexService {
 	}
 
 	@Override
-	public Media exportToCsv(Imex model) throws Exception {
-		List<?> resultList = entityManager.createQuery(model.getQuery()).getResultList();
+	public void importExportMedia(Imex model) throws Exception {
 
-		final StringBuilder csv = new StringBuilder();
-		csv.append(model.getHeader());
-		for (final Object object : resultList) {
-			final Object[] values = (Object[]) object;
+		String csv = null;
+		if (model.getType() == ImexType.IMPORT) {
+			importByQuery(model.getQuery());
+			csv = model.getQuery();
+		} else if (model.getType() == ImexType.EXPORT) {
 
-			csv.append(System.getProperty("line.separator"));
-			for (int i = 0; i < values.length; i++) {
-				if (i != 0) {
-					csv.append(model.getSeperator());
+			List<?> resultList = entityManager.createQuery(model.getQuery()).getResultList();
+
+			final StringBuilder csvBuilder = new StringBuilder();
+			csvBuilder.append(model.getHeader());
+			for (final Object object : resultList) {
+				final Object[] values = (Object[]) object;
+
+				csvBuilder.append(System.getProperty("line.separator"));
+				for (int i = 0; i < values.length; i++) {
+					if (i != 0) {
+						csvBuilder.append(model.getSeperator());
+					}
+
+					if (values[i] != null)
+						csvBuilder.append(values[i].toString());
 				}
+			}
 
-				csv.append(StringUtils.stripToEmpty(values[i].toString()));
+			if (StringUtils.isNotBlank(model.getDirectory())) {
+				File directory = new File(model.getDirectory());
+				FileUtils.forceMkdir(directory);
+
+				File file = new File(directory, model.getFileName());
+				FileUtils.write(file.getAbsoluteFile(), csvBuilder.toString(), "UTF-8", false);
+			}
+
+			csv = csvBuilder.toString();
+		}
+
+		if (csv != null) {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Media.ID, model.getId().toString());
+			Media media = modelService.findOneByProperties(properties, Media.class);
+
+			if (media == null) {
+				media = modelService.create(Media.class);
+				media.setId(model.getId().toString());
+			}
+
+			media.setTitle(model.getFileName());
+			media.setFileName(model.getFileName() + ".csv");
+			media.setFileType("text/csv");
+			media.setFolder(IMEX_MEDIA_LOCATION);
+			media = modelService.saveEntity(media, Media.class);
+			media = mediaService.storeData(media, csv);
+
+			if (model.getMedias().isEmpty()) {
+				model.getMedias().add(media);
+				modelService.saveEntityQuietly(model, Imex.class);
 			}
 		}
 
-		if (StringUtils.isNotBlank(model.getDirectory())) {
-			File directory = new File(model.getDirectory());
-			FileUtils.forceMkdir(directory);
-
-			File file = new File(directory, model.getFileName());
-			FileUtils.write(file.getAbsoluteFile(), csv.toString(), "UTF-8", false);
-		}
-
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Media.ID, model.getId().toString());
-		Media media = modelService.findOneByProperties(properties, Media.class);
-
-		if (media == null) {
-			media = modelService.create(Media.class);
-			media.setId(model.getId().toString());
-		}
-
-		media.setTitle(model.getFileName());
-		media.setFileName(model.getFileName() + ".csv");
-		media.setFileType("text/csv");
-		media.setFolder(IMEX_MEDIA_LOCATION);
-		media = modelService.saveEntity(media, Media.class);
-		media = mediaService.storeData(media, csv.toString());
-
-		if (model.getMedias().isEmpty()) {
-			model.getMedias().add(media);
-			modelService.saveEntityQuietly(model, Imex.class);
-		}
-
-		return media;
 	}
 }

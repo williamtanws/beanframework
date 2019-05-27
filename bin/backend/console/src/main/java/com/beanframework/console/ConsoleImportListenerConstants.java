@@ -217,7 +217,7 @@ public interface ConsoleImportListenerConstants {
 	public interface ImexImport {
 		public static final String TYPE = Imex.class.getSimpleName();
 		public static final String NAME = "Imex";
-		public static final int SORT = 170;
+		public static final int SORT = Integer.MAX_VALUE;
 		public static final String DESCRIPTION = "Update/Remove Import Export Data";
 		public static final Class<ImexCsv> CLASS_CSV = ImexCsv.class;
 		public static final Class<Imex> CLASS_ENTITY = Imex.class;

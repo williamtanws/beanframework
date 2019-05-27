@@ -14,7 +14,7 @@ public class CronjobDto extends GenericDto {
 	 */
 	private static final long serialVersionUID = -6298142854359675081L;
 	public static final String JOB_CLASS = "jobClass";
-	public static final String JOB_NAME = "jobName";
+	public static final String NAME = "name";
 	public static final String JOB_GROUP = "jobGroup";
 	public static final String DESCRIPTION = "description";
 	public static final String CRON_EXPRESSION = "cronExpression";

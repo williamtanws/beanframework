@@ -1,6 +1,5 @@
 package com.beanframework.imex.job;
 
-import java.io.File;
 import java.util.UUID;
 
 import org.quartz.DisallowConcurrentExecution;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.service.ModelService;
-import com.beanframework.imex.ImexType;
 import com.beanframework.imex.domain.Imex;
 import com.beanframework.imex.service.ImexService;
 
@@ -38,11 +36,7 @@ public class ImexJob implements Job {
 		try {
 			model = modelService.findOneByUuid(UUID.fromString(uuid), Imex.class);
 			
-			if (model.getType() == ImexType.EXPORT) {
-				imexService.exportToCsv(model);
-			} else if (model.getType() == ImexType.IMPORT) {
-				imexService.importByFile(new File(model.getDirectory()));
-			}
+			imexService.importExportMedia(model);
 
 			context.setResult("Success");
 		} catch (Exception e) {
