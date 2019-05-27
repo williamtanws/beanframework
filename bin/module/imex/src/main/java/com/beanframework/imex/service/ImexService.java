@@ -19,7 +19,7 @@ public interface ImexService {
 
 	String[] importByMultipartFiles(MultipartFile[] files);
 
-	String[] importByQuery(String query);
+	String[] importByQuery(String importName, String query);
 
 	void importByFile(File file) throws Exception;
 

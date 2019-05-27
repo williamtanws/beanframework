@@ -1,0 +1,2 @@
+INSERT_UPDATE Imex,id,type,directory,fileName,query,header,seperator
+,import_configuration,IMPORT,,import_configuration,"INSERT_UPDATE Configuration,id,value\\r\\n,demo,false",,
