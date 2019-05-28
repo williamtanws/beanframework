@@ -1,7 +1,9 @@
 package com.beanframework.imex.job;
 
+import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -32,11 +34,18 @@ public class ImexJob implements Job {
 
 		String uuid = (String) context.getMergedJobDataMap().get("uuid");
 
-		Imex model;
 		try {
-			model = modelService.findOneByUuid(UUID.fromString(uuid), Imex.class);
-			
-			imexService.importExportMedia(model);
+			if (StringUtils.isNotBlank(uuid)) {
+				Imex model = modelService.findOneByUuid(UUID.fromString(uuid), Imex.class);
+
+				if (model != null)
+					imexService.importExportMedia(model);
+			} else {
+				List<Imex> models = modelService.findAll(Imex.class);
+				for (Imex model : models) {
+					imexService.importExportMedia(model);
+				}
+			}
 
 			context.setResult("Success");
 		} catch (Exception e) {
