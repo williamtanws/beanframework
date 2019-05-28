@@ -245,7 +245,7 @@ public class ImexServiceImpl implements ImexService {
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
 						IOUtils.copy(in, baos);
 						reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
-						importName = resource.getFile().getPath();
+						importName = resource.getFilename();
 					} catch (Exception e) {
 						e.printStackTrace();
 						LOGGER.error(e.getMessage(), e);
