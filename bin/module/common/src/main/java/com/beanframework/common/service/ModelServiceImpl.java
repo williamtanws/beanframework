@@ -3,6 +3,7 @@ package com.beanframework.common.service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,6 +18,8 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,6 +52,8 @@ import com.beanframework.common.repository.ModelRepository;
 @Service
 @Transactional(readOnly = false)
 public class ModelServiceImpl extends AbstractModelServiceImpl {
+	
+	protected static Logger LOGGER = LoggerFactory.getLogger(ModelServiceImpl.class);
 
 	@Autowired
 	private ModelRepository modelRepository;
@@ -104,7 +109,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			initialDefaultsInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -123,7 +128,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return (T) model;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -142,7 +147,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -154,7 +159,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return count.intValue();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -166,7 +171,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return count.intValue();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -178,7 +183,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return count.intValue();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -193,7 +198,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return count.equals(0L) ? false : true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -211,7 +216,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return (T) models;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -228,7 +233,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return (T) models;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -313,7 +318,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return page;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -329,7 +334,9 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			BeforeSaveEvent beforeSaveEvent = new BeforeSaveEvent(BeforeSaveEvent.CREATE);
 			AfterSaveEvent afterSaveEvent = new AfterSaveEvent(BeforeSaveEvent.CREATE);
 			if (((GenericEntity) model).getUuid() != null) {
-				if (modelRepository.existsById(((GenericEntity) model).getUuid())) {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(GenericEntity.UUID, ((GenericEntity) model).getUuid());
+				if (existsByProperties(properties, modelClass)) {
 					beforeSaveEvent = new BeforeSaveEvent(BeforeSaveEvent.UPDATE);
 					afterSaveEvent = new AfterSaveEvent(BeforeSaveEvent.UPDATE);
 				}
@@ -349,10 +356,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			for (Entry<String, AfterSaveListener> entry : afterSaveListeners) {
 				entry.getValue().afterSave(model, afterSaveEvent);
 			}
+			
+			GenericEntity entity = (GenericEntity) model;
+			model = findOneByUuid(entity.getUuid(), modelClass);
 
-			return findOneByUuid(((GenericEntity) model).getUuid(), modelClass);
+			return model;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -371,7 +381,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return model;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -397,7 +407,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -413,7 +423,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -428,10 +438,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				deleteEntity(model, modelClass);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -446,10 +456,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				deleteEntityQuietly(model, modelClass);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -470,7 +480,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			model = entityConverter(model, context, modelClass);
 			return (T) model;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -497,7 +507,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 			return (T) entityObjects;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -516,7 +526,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			model = dtoConverter(model, context, modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
