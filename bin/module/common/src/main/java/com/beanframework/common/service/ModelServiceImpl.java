@@ -326,14 +326,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 
 		try {
-			BeforeSaveEvent beforeSaveEvent;
-			AfterSaveEvent afterSaveEvent;
-			if (((GenericEntity) model).getUuid() == null) {
-				beforeSaveEvent = new BeforeSaveEvent(1);
-				afterSaveEvent = new AfterSaveEvent(1);
-			} else {
-				beforeSaveEvent = new BeforeSaveEvent(2);
-				afterSaveEvent = new AfterSaveEvent(2);
+			BeforeSaveEvent beforeSaveEvent = new BeforeSaveEvent(BeforeSaveEvent.CREATE);
+			AfterSaveEvent afterSaveEvent = new AfterSaveEvent(BeforeSaveEvent.CREATE);
+			if (((GenericEntity) model).getUuid() != null) {
+				if (modelRepository.existsById(((GenericEntity) model).getUuid())) {
+					beforeSaveEvent = new BeforeSaveEvent(BeforeSaveEvent.UPDATE);
+					afterSaveEvent = new AfterSaveEvent(BeforeSaveEvent.UPDATE);
+				}
 			}
 
 			prepareInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
