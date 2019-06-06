@@ -74,7 +74,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	public Page<DynamicFieldDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<DynamicField> page = modelService.findPage(DynamicFieldSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicField.class);
 
-		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), DynamicFieldDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), DynamicFieldDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<DynamicFieldDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

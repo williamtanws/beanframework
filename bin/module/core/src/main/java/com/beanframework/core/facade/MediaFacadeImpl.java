@@ -72,7 +72,7 @@ public class MediaFacadeImpl implements MediaFacade {
 	public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Media> page = modelService.findPage(MediaSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Media.class);
 
-		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<MediaDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

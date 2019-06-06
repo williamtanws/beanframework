@@ -74,7 +74,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Comment> page = modelService.findPage(CommentSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Comment.class);
 
-		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

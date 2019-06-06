@@ -74,7 +74,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 	public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserGroup> page = modelService.findPage(UserGroupSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserGroup.class);
 
-		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<UserGroupDto> dtos = modelService.getDto(page.getContent(), UserGroupDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<UserGroupDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

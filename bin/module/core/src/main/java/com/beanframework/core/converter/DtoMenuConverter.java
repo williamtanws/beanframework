@@ -45,7 +45,7 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 			convertCommonProperties(source, prototype, context);
 
 			prototype.setName(source.getName());
-			prototype.setParent(modelService.getDto(source.getParent(), MenuDto.class, new DtoConverterContext(ConvertRelationType.RELATION)));
+			prototype.setParent(modelService.getDto(source.getParent(), MenuDto.class, new DtoConverterContext(ConvertRelationType.BASIC)));
 			prototype.setIcon(source.getIcon());
 			prototype.setPath(source.getPath());
 			prototype.setSort(source.getSort());

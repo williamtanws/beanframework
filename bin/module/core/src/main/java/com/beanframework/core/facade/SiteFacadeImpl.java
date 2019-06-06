@@ -70,7 +70,7 @@ public class SiteFacadeImpl implements SiteFacade {
 	public Page<SiteDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Site> page = modelService.findPage(SiteSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Site.class);
 
-		List<SiteDto> dtos = modelService.getDto(page.getContent(), SiteDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<SiteDto> dtos = modelService.getDto(page.getContent(), SiteDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<SiteDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

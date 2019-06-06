@@ -70,7 +70,7 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 	public Page<WorkflowDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Workflow> page = modelService.findPage(WorkflowSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Workflow.class);
 
-		List<WorkflowDto> dtos = modelService.getDto(page.getContent(), WorkflowDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<WorkflowDto> dtos = modelService.getDto(page.getContent(), WorkflowDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<WorkflowDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

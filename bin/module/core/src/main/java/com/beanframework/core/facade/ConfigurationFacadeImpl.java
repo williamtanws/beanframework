@@ -73,7 +73,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	public Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Configuration> page = modelService.findPage(ConfigurationSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Configuration.class);
 
-		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<ConfigurationDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

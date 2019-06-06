@@ -92,7 +92,7 @@ public class VendorFacadeImpl implements VendorFacade {
 	public Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Vendor> page = modelService.findPage(VendorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Vendor.class);
 
-		List<VendorDto> dtos = modelService.getDto(page.getContent(), VendorDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<VendorDto> dtos = modelService.getDto(page.getContent(), VendorDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<VendorDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

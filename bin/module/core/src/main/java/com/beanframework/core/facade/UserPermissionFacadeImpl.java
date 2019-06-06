@@ -76,7 +76,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserPermission> page = modelService.findPage(UserPermissionSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserPermission.class);
 
-		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<UserPermissionDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

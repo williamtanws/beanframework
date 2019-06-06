@@ -85,7 +85,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Cronjob> page = modelService.findPage(CronjobSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Cronjob.class);
 
-		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<CronjobDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

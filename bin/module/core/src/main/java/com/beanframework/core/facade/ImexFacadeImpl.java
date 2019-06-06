@@ -70,7 +70,7 @@ public class ImexFacadeImpl implements ImexFacade {
 	public Page<ImexDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Imex> page = modelService.findPage(ImexSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Imex.class);
 
-		List<ImexDto> dtos = modelService.getDto(page.getContent(), ImexDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<ImexDto> dtos = modelService.getDto(page.getContent(), ImexDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<ImexDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
