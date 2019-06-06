@@ -74,7 +74,7 @@ public class DynamicFieldTemplateFacadeImpl implements DynamicFieldTemplateFacad
 	public Page<DynamicFieldTemplateDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<DynamicFieldTemplate> page = modelService.findPage(DynamicFieldTemplateSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicFieldTemplate.class);
 
-		List<DynamicFieldTemplateDto> dtos = modelService.getDto(page.getContent(), DynamicFieldTemplateDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<DynamicFieldTemplateDto> dtos = modelService.getDto(page.getContent(), DynamicFieldTemplateDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<DynamicFieldTemplateDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

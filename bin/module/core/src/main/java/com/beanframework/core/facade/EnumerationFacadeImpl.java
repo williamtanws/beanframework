@@ -72,7 +72,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	public Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Enumeration> page = modelService.findPage(EnumerationSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Enumeration.class);
 
-		List<EnumerationDto> dtos = modelService.getDto(page.getContent(), EnumerationDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<EnumerationDto> dtos = modelService.getDto(page.getContent(), EnumerationDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<EnumerationDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

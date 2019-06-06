@@ -78,7 +78,7 @@ public class EmailFacadeImpl implements EmailFacade {
 	public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Email> page = modelService.findPage(EmailSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Email.class);
 
-		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<EmailDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

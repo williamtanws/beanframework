@@ -76,7 +76,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserRight> page = modelService.findPage(UserRightSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserRight.class);
 
-		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

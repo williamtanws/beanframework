@@ -41,7 +41,7 @@ public class DtoVendorConverter extends AbstractDtoConverter<Vendor, VendorDto> 
 
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
-			} else if (ConvertRelationType.RELATION == context.getConverModelType()) {
+			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
 				convertRelation(source, prototype, context);
 			}
 			prototype.setName(source.getName());

@@ -47,7 +47,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	public Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Auditor> page = modelService.findPage(AuditorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Auditor.class);
 
-		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<AuditorDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

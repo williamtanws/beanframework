@@ -37,7 +37,7 @@ public class DtoCommentConverter extends AbstractDtoConverter<Comment, CommentDt
 
 			prototype.setHtml(source.getHtml());
 			prototype.setVisibled(source.getVisibled());
-			prototype.setUser(modelService.getDto(source.getUser(), UserDto.class, new DtoConverterContext(ConvertRelationType.RELATION)));
+			prototype.setUser(modelService.getDto(source.getUser(), UserDto.class, new DtoConverterContext(ConvertRelationType.BASIC)));
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

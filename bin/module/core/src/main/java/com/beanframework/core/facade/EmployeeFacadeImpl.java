@@ -91,7 +91,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Employee> page = modelService.findPage(EmployeeSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Employee.class);
 
-		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

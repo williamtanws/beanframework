@@ -100,7 +100,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Menu> page = modelService.findPage(MenuSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Menu.class);
 
-		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

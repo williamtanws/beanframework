@@ -92,7 +92,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Customer> page = modelService.findPage(CustomerSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Customer.class);
 
-		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<CustomerDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

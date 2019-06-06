@@ -40,7 +40,7 @@ public class DtoUserPermissionConverter extends AbstractDtoConverter<UserPermiss
 
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
-			} else if (ConvertRelationType.RELATION == context.getConverModelType()) {
+			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
 				convertRelation(source, prototype, context);
 			}
 

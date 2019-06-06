@@ -70,7 +70,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Language> page = modelService.findPage(LanguageSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Language.class);
 
-		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

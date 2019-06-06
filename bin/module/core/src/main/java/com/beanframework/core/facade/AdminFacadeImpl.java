@@ -77,7 +77,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	public Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Admin> page = modelService.findPage(AdminSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Admin.class);
 
-		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class, new DtoConverterContext(ConvertRelationType.RELATION));
+		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
 		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 

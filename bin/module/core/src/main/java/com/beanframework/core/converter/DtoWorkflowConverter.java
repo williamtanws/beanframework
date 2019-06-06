@@ -44,7 +44,7 @@ public class DtoWorkflowConverter extends AbstractDtoConverter<Workflow, Workflo
 
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
-			} else if (ConvertRelationType.RELATION == context.getConverModelType()) {
+			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
 				convertRelation(source, prototype, context);
 			}
 
