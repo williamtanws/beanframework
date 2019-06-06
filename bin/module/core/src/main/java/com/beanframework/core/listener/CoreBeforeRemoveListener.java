@@ -13,6 +13,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.io.FileUtils;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,6 +31,7 @@ import com.beanframework.language.domain.Language;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.media.domain.Media;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.user.UserConstants;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
 
@@ -37,6 +39,9 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 	@Autowired
 	private ModelService modelService;
+
+	@Value(UserConstants.USER_MEDIA_LOCATION)
+	public String PROFILE_PICTURE_LOCATION;
 
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
@@ -55,24 +60,38 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 				removeMenuUserGroup((UserGroup) model);
 
 			} else if (model instanceof User) {
-				removeCommentUser((User) model);
+				User user = (User) model;
+				removeCommentUser(user);
+
+				File mediaFolder = new File(PROFILE_PICTURE_LOCATION + File.separator + user.getUuid().toString());
+				FileUtils.deleteQuietly(mediaFolder);
 
 			} else if (model instanceof Media) {
 				Media media = (Media) model;
-				File mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
-				FileUtils.deleteQuietly(mediaFolder);
+
+				removeMedia(media);
+
 			} else if (model instanceof Imex) {
 				Imex imex = (Imex) model;
-				for (Media media : imex.getMedias()) {
-					File mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
-					FileUtils.deleteQuietly(mediaFolder);
-				}
+
+				Hibernate.initialize(imex.getMedias());
+				removeMedia(imex.getMedias());
 			}
 
 		} catch (Exception e) {
 			throw new ListenerException(e.getMessage(), e);
 		}
+	}
 
+	private void removeMedia(List<Media> medias) {
+		for (Media media : medias) {
+			removeMedia(media);
+		}
+	}
+
+	private void removeMedia(Media media) {
+		File mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
+		FileUtils.deleteQuietly(mediaFolder);
 	}
 
 	private void removeDynamicFieldLanguage(Language model) throws Exception {
