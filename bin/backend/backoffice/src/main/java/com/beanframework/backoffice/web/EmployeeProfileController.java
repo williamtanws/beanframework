@@ -24,8 +24,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.facade.EmployeeFacade;
-import com.beanframework.media.MediaConstants;
-import com.beanframework.user.UserConstants;
 
 @Controller
 public class EmployeeProfileController {
@@ -41,12 +39,6 @@ public class EmployeeProfileController {
 
 	@Value(EmployeeWebConstants.View.PROFILE)
 	private String VIEW_EMPLOYEE_PROFILE;
-	
-	@Value(MediaConstants.MEDIA_LOCATION)
-	public String MEDIA_LOCATION;
-
-	@Value(UserConstants.USER_MEDIA_LOCATION)
-	public String PROFILE_PICTURE_LOCATION;
 
 	@Value(BackofficeWebConstants.Configuration.DEFAULT_AVATAR)
 	public String CONFIGURATION_DEFAULT_AVATAR;

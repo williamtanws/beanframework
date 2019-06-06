@@ -29,10 +29,5 @@
 			<artifactId>common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>user</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
 </project>
