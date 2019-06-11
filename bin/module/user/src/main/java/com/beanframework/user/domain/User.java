@@ -22,11 +22,13 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserConstants;
 
+@Cacheable
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
@@ -141,6 +143,7 @@ public class User extends GenericEntity {
 		this.name = name;
 	}
 
+	@Cacheable
 	public List<UserGroup> getUserGroups() {
 		return userGroups;
 	}
@@ -149,6 +152,7 @@ public class User extends GenericEntity {
 		this.userGroups = userGroups;
 	}
 
+	@Cacheable
 	public List<UserField> getFields() {
 		return fields;
 	}

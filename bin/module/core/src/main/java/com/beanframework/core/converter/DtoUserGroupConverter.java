@@ -61,9 +61,9 @@ public class DtoUserGroupConverter extends AbstractDtoConverter<UserGroup, UserG
 
 	private void convertAll(UserGroup source, UserGroupDto prototype, DtoConverterContext context) throws Exception {
 
-		prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
-		prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
-		prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
+		prototype.setUserAuthorities(modelService.getDto(source.getUserAuthorities(), UserAuthorityDto.class, context));
+		prototype.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, context));
+		prototype.setFields(modelService.getDto(source.getFields(), UserGroupFieldDto.class, context));
 		if (prototype.getFields() != null)
 			Collections.sort(prototype.getFields(), new Comparator<UserGroupFieldDto>() {
 				@Override

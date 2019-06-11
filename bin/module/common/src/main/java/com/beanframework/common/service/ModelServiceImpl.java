@@ -499,6 +499,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			if (models.isEmpty())
 				return (T) new ArrayList<T>();
+			
+			if(context == null) {
+				context = new EntityConverterContext();
+			}
 
 			List<Object> entityObjects = new ArrayList<Object>();
 			for (Object model : models) {
@@ -544,6 +548,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			if (models.isEmpty())
 				return (T) new ArrayList<T>();
+			
+			if(context == null) {
+				context = new DtoConverterContext();
+			}
 
 			return (T) dtoConverter(models, context, modelClass.getSimpleName());
 		} catch (Exception e) {

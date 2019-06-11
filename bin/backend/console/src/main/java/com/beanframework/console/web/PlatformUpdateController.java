@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
@@ -29,8 +30,6 @@ import com.beanframework.console.PlatformUpdateWebConstants;
 import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.imex.registry.ImportListenerRegistry;
 import com.beanframework.imex.service.ImexService;
-
-import net.sf.ehcache.CacheManager;
 
 @Controller
 public class PlatformUpdateController {
@@ -128,7 +127,7 @@ public class PlatformUpdateController {
 	public void clearAllCaches() {
 		if (cacheManager != null)
 			for (String name : cacheManager.getCacheNames()) {
-				cacheManager.getCache(name).removeAll();
+				cacheManager.getCache(name).clear();
 			}
 	}
 

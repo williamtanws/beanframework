@@ -41,6 +41,7 @@ import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
@@ -262,7 +263,12 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			if (interceptorMapping.getConverter() instanceof DtoConverter) {
 				DtoConverter interceptor = (DtoConverter) interceptorMapping.getConverter();
 				if (interceptorMapping.getTypeCode().equals(typeCode)) {
-					return interceptor.convert(model, context);
+					if (context.getConvertedDtos().contains(((GenericEntity) model).getUuid()) == false) {
+						context.getConvertedDtos().add(((GenericEntity) model).getUuid());
+						return interceptor.convert(model, context);
+					} else {
+						return null;
+					}
 				}
 			}
 		}

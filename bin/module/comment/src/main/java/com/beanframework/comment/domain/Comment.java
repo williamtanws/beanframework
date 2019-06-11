@@ -1,5 +1,6 @@
 package com.beanframework.comment.domain;
 
+import org.springframework.cache.annotation.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -16,6 +17,7 @@ import com.beanframework.comment.CommentConstants;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.domain.User;
 
+@Cacheable
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited

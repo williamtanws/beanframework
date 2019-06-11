@@ -15,4 +15,6 @@ public interface MenuService {
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
+	
+	List<Menu> findMenuTreeByCurrentUser() throws Exception;
 }

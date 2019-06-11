@@ -135,4 +135,13 @@ public class MenuFacadeImpl implements MenuFacade {
 		Menu menu = modelService.create(Menu.class);
 		return modelService.getDto(menu, MenuDto.class);
 	}
+	
+	@Override
+	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
+
+		List<Menu> entities = menuService.findMenuTreeByCurrentUser();
+
+		List<MenuDto> menuDtoTree = modelService.getDto(entities, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return menuDtoTree;
+	}
 }

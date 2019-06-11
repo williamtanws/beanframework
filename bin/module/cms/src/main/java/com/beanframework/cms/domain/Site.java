@@ -5,11 +5,13 @@ import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.cms.SiteConstants;
 import com.beanframework.common.domain.GenericEntity;
 
+@Cacheable
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
