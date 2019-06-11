@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.persistence.Cacheable;
+import org.springframework.cache.annotation.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -21,7 +21,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Cacheable(true)
+@Cacheable
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class GenericEntity implements Serializable {

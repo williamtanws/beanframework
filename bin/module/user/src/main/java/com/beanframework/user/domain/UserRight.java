@@ -13,11 +13,13 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserRightConstants;
 
+@Cacheable
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited

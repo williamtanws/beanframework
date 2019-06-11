@@ -3,6 +3,7 @@ package com.beanframework.dynamicfield.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -20,6 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.DynamicFieldTemplateConstants;
 
+@Cacheable
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited

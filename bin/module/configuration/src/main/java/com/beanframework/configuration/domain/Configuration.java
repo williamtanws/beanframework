@@ -1,6 +1,6 @@
 package com.beanframework.configuration.domain;
 
-import javax.persistence.Cacheable;
+import org.springframework.cache.annotation.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.configuration.ConfigurationConstants;
 
-@Cacheable(true)
+@Cacheable
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited

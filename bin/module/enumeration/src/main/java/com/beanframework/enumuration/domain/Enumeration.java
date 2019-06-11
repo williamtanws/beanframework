@@ -1,5 +1,6 @@
 package com.beanframework.enumuration.domain;
 
+import org.springframework.cache.annotation.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.enumuration.EnumerationConstants;
 
+@Cacheable
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited

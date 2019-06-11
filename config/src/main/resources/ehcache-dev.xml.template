@@ -520,13 +520,25 @@ Here is an example of CacheManager level resource tuning, which will use up to 4
     its not present will throw CacheException
     The defaultCache has an implicit name "default" which is a reserved cache name.
     -->
-    <defaultCache
+    <!-- <defaultCache
        maxEntriesLocalHeap="0"
        eternal="false"
        timeToIdleSeconds="1200"
        timeToLiveSeconds="1200">
-      <!--<terracotta/>-->
-    </defaultCache>
+      <terracotta/>
+    </defaultCache> -->
+    
+    <defaultCache 
+    	maxEntriesLocalHeap="10000" 
+	    eternal="false" 
+	    timeToIdleSeconds="21600" 
+	    timeToLiveSeconds="21600" 
+	    memoryStoreEvictionPolicy="LRU"
+		overflowToDisk="true" 
+		diskPersistent="false" 
+		diskExpiryThreadIntervalSeconds="120">
+	</defaultCache>
+	
     
     <cache name="sample"
             maxEntriesLocalHeap="1000"
@@ -541,13 +553,13 @@ Here is an example of CacheManager level resource tuning, which will use up to 4
         <cacheEventListenerFactory class="com.beanframework.platform.cache.PlatformCacheEventListenerFactory" />
     </cache>
 
-    <cache name="org.hibernate.cache.internal.StandardQueryCache"
+    <cache name="default-query-results-region"
            maxEntriesLocalHeap="5" eternal="false" timeToLiveSeconds="120">
         <persistence strategy="localTempSwap" />
         <cacheEventListenerFactory class="com.beanframework.platform.cache.PlatformCacheEventListenerFactory" />
     </cache>
 
-    <cache name="org.hibernate.cache.spi.UpdateTimestampsCache"
+    <cache name="default-update-timestamps-region"
            maxEntriesLocalHeap="5000" eternal="true">
         <persistence strategy="localTempSwap" />
         <cacheEventListenerFactory class="com.beanframework.platform.cache.PlatformCacheEventListenerFactory" />

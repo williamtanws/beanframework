@@ -61,4 +61,6 @@ public interface MenuFacade {
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_CREATE)
 	MenuDto createDto() throws Exception;
 
+	List<MenuDto> findMenuTreeByCurrentUser() throws Exception;
+
 }

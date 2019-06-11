@@ -8,12 +8,14 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionEntity;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.user.listener.EntityRevisionListener;
 
+@Cacheable
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @RevisionEntity(EntityRevisionListener.class)

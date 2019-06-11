@@ -1,5 +1,6 @@
 package com.beanframework.customer.domain;
 
+import org.springframework.cache.annotation.Cacheable;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.beanframework.customer.CustomerConstants;
 import com.beanframework.user.domain.User;
 
+@Cacheable
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited

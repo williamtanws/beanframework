@@ -3,8 +3,11 @@ package com.beanframework.menu.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.Hibernate;
@@ -20,14 +23,18 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.service.UserService;
 
 @Service
+@Transactional
 public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private ModelService modelService;
 
-	@Transactional
+	@Autowired
+	private UserService userService;
+
 	@Override
 	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
 
@@ -82,7 +89,7 @@ public class MenuServiceImpl implements MenuService {
 	private List<Menu> findByParentUuidOrderBySort(UUID toUuid) throws Exception {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Menu.PARENT+"."+Menu.UUID, toUuid);
+		properties.put(Menu.PARENT + "." + Menu.UUID, toUuid);
 
 		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
@@ -133,7 +140,6 @@ public class MenuServiceImpl implements MenuService {
 		return menuList;
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public List<Menu> findMenuTree(boolean enabled) throws Exception {
 
@@ -148,7 +154,7 @@ public class MenuServiceImpl implements MenuService {
 		sorts.put(Menu.SORT, Sort.Direction.ASC);
 
 		List<Menu> menuTree = modelService.findByPropertiesBySortByResult(properties, sorts, null, null, Menu.class);
-		
+
 		for (Menu model : menuTree) {
 			Hibernate.initialize(model.getChilds());
 			for (Menu menu : model.getChilds()) {
@@ -163,7 +169,7 @@ public class MenuServiceImpl implements MenuService {
 
 		return menuTree;
 	}
-	
+
 	private void initializeChilds(Menu model) {
 
 		Hibernate.initialize(model.getChilds());
@@ -200,5 +206,71 @@ public class MenuServiceImpl implements MenuService {
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
 		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
+	}
+
+	@Override
+	public List<Menu> findMenuTreeByCurrentUser() throws Exception {
+
+		List<Menu> entities = findMenuTree(true);
+		List<UserGroup> userGroups = userService.getUserGroupsByCurrentUser();
+
+		filterAuthorizedMenu(entities, userGroups);
+
+		return entities;
+	}
+
+	private void filterAuthorizedMenu(List<Menu> menuRootList, List<UserGroup> userGroups) {
+		Iterator<Menu> parent = menuRootList.iterator();
+		while (parent.hasNext()) {
+			Menu menu = parent.next();
+
+			boolean removed = false;
+
+			if (removed == Boolean.FALSE && menu.getEnabled() == Boolean.FALSE) {
+				parent.remove();
+				removed = true;
+			}
+
+			// If menu groups or authorities is not authorized
+			if (removed == Boolean.FALSE && isUserGroupAuthorized(menu, userGroups) == Boolean.FALSE) {
+				parent.remove();
+				removed = true;
+			}
+
+			// If menu has childs
+			if (menu.getChilds().isEmpty() == Boolean.FALSE) {
+				filterAuthorizedMenu(menu.getChilds(), userGroups);
+			}
+		}
+	}
+
+	private boolean isUserGroupAuthorized(Menu menu, List<UserGroup> userGroups) {
+
+		Set<String> collectionUserGroupUuid = collectUserGroupUuid(userGroups);
+
+		Set<String> menuUserGroupUuidList = collectUserGroupUuid(menu.getUserGroups());
+		for (String menuUserGroupUuid : menuUserGroupUuidList) {
+			for (String authorizedUserGroupUuid : collectionUserGroupUuid) {
+				if (authorizedUserGroupUuid.equals(menuUserGroupUuid)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private Set<String> collectUserGroupUuid(List<UserGroup> userGroups) {
+		return collectUserGroupUuid(userGroups, new HashSet<String>());
+	}
+
+	private Set<String> collectUserGroupUuid(List<UserGroup> userGroups, Set<String> userGroupUuids) {
+		for (UserGroup userGroup : userGroups) {
+			if (userGroupUuids.contains(userGroup.getUuid().toString()) == Boolean.FALSE) {
+				userGroupUuids.add(userGroup.getUuid().toString());
+				userGroupUuids.addAll(collectUserGroupUuid(userGroup.getUserGroups(), userGroupUuids));
+			}
+		}
+		return userGroupUuids;
 	}
 }

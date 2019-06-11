@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +21,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.CacheWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.CacheManager;
 
 @Controller
 public class CacheController {
@@ -61,11 +59,14 @@ public class CacheController {
 	public RedirectView clear(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
 		try {
-			if (cacheManager != null)
-				cacheManager.clearAll();
+			if (cacheManager != null) {
+				for (String name : cacheManager.getCacheNames()) {
+					cacheManager.getCache(name).clear();
+				}
+			}
 
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, localeMessageService.getMessage(CacheWebConstants.Locale.CACHE_CLEARALL_SUCCESS));
-		} catch (CacheException e) {
+		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, e.toString());
 		}
 
