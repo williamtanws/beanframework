@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
@@ -22,6 +24,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class GenericEntity implements Serializable {

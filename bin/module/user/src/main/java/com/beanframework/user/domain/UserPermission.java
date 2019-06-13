@@ -10,6 +10,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
@@ -20,6 +22,7 @@ import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserPermissionConstants;
 
 @Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
@@ -38,6 +41,7 @@ public class UserPermission extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)

@@ -23,7 +23,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.service.UserService;
 
 @Service
 @Transactional
@@ -31,9 +30,6 @@ public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private ModelService modelService;
-
-	@Autowired
-	private UserService userService;
 
 	@Override
 	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
@@ -209,10 +205,7 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public List<Menu> findMenuTreeByCurrentUser() throws Exception {
-
-		List<Menu> entities = findMenuTree(true);
-		List<UserGroup> userGroups = userService.getUserGroupsByCurrentUser();
+	public List<Menu> filterMenuByUserGroups(List<Menu> entities, List<UserGroup> userGroups) throws Exception {
 
 		filterAuthorizedMenu(entities, userGroups);
 

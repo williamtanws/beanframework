@@ -1,10 +1,10 @@
 package com.beanframework.core.facade;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,6 +15,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.configuration.specification.ConfigurationSpecification;
@@ -104,17 +105,28 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	}
 
 	@Override
-	public ConfigurationDto findOneDtoById(String id) throws Exception {
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Configuration.ID, id);
-		
-		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
+	public ConfigurationDto createDto() throws Exception {
+		Configuration configuration = modelService.create(Configuration.class);
 		return modelService.getDto(configuration, ConfigurationDto.class);
 	}
 
 	@Override
-	public ConfigurationDto createDto() throws Exception {
-		Configuration configuration = modelService.create(Configuration.class);
-		return modelService.getDto(configuration, ConfigurationDto.class);
+	public String get(String id, String defaultValue) throws Exception {
+		String value = configurationService.get(id);
+		if (StringUtils.isBlank(value)) {
+			return defaultValue;
+		} else {
+			return value;
+		}
+	}
+
+	@Override
+	public boolean is(String id, boolean defaultValue) throws Exception {
+		String value = configurationService.get(id);
+		if (StringUtils.isBlank(value)) {
+			return defaultValue;
+		} else {
+			return BooleanUtils.parseBoolean(value);
+		}
 	}
 }

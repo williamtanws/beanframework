@@ -8,14 +8,19 @@ import org.flowable.engine.repository.Deployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.core.io.ClassPathResource;
 
 import com.beanframework.common.exception.ListenerException;
 import com.beanframework.common.registry.AfterSaveEvent;
 import com.beanframework.common.registry.AfterSaveListener;
+import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.imex.domain.Imex;
 import com.beanframework.imex.service.ImexService;
+import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.domain.User;
+import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
 import com.beanframework.workflow.domain.Workflow;
@@ -34,6 +39,9 @@ public class CoreAfterSaveListener implements AfterSaveListener {
 
 	@Autowired
 	private ImexService imexService;
+	
+	@Autowired
+	private CacheManager cacheManager;
 
 	@Override
 	public void afterSave(final Object model, final AfterSaveEvent event) throws ListenerException {
@@ -53,15 +61,22 @@ public class CoreAfterSaveListener implements AfterSaveListener {
 						LOGGER.error(e.getMessage(), e);
 					}
 				}
+				
 			} else if (model instanceof Workflow) {
 				Workflow workflow = (Workflow) model;
 				if (StringUtils.isBlank(workflow.getDeploymentId()) && StringUtils.isNotBlank(workflow.getClasspath())) {
 					Deployment deployment = repositoryService.createDeployment().addClasspathResource(workflow.getClasspath()).deploy();
 					workflow.setDeploymentId(deployment.getId());
 				}
+				
 			} else if (model instanceof Imex) {
 				Imex imex = (Imex) model;
 				imexService.importExportMedia(imex);
+				
+			} else if (model instanceof UserGroup) {
+				cacheManager.getCache(MenuService.CACHE_MENU_TREE).clear();
+			} else if (model instanceof Configuration) {
+				cacheManager.getCache(ConfigurationService.CACHE_CONFIGURATION).clear();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

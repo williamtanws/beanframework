@@ -52,7 +52,7 @@ import com.beanframework.common.repository.ModelRepository;
 @Service
 @Transactional(readOnly = false)
 public class ModelServiceImpl extends AbstractModelServiceImpl {
-	
+
 	protected static Logger LOGGER = LoggerFactory.getLogger(ModelServiceImpl.class);
 
 	@Autowired
@@ -356,7 +356,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			for (Entry<String, AfterSaveListener> entry : afterSaveListeners) {
 				entry.getValue().afterSave(model, afterSaveEvent);
 			}
-			
+
 			GenericEntity entity = (GenericEntity) model;
 			model = findOneByUuid(entity.getUuid(), modelClass);
 
@@ -499,8 +499,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			if (models.isEmpty())
 				return (T) new ArrayList<T>();
-			
-			if(context == null) {
+
+			if (context == null) {
 				context = new EntityConverterContext();
 			}
 
@@ -548,8 +548,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			if (models.isEmpty())
 				return (T) new ArrayList<T>();
-			
-			if(context == null) {
+
+			if (context == null) {
 				context = new DtoConverterContext();
 			}
 

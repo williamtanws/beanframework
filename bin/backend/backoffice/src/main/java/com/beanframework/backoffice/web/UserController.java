@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
-import com.beanframework.core.data.ConfigurationDto;
 import com.beanframework.core.facade.ConfigurationFacade;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.user.UserConstants;
@@ -78,13 +77,13 @@ public class UserController {
 			return ResponseEntity.ok().contentType(MediaType.valueOf(mimeType)).body(IOUtils.toByteArray(targetStream));
 		} else {
 
-			ConfigurationDto configuration = configurationFacade.findOneDtoById(CONFIGURATION_DEFAULT_AVATAR);
+			String configurationValue = configurationFacade.get(CONFIGURATION_DEFAULT_AVATAR, null);
 
-			if (configuration == null) {
+			if (configurationValue == null) {
 				return null;
 			} else {
 
-				ClassPathResource resource = new ClassPathResource(configuration.getValue());
+				ClassPathResource resource = new ClassPathResource(configurationValue);
 				targetStream = resource.getInputStream();
 
 				String mimeType = URLConnection.guessContentTypeFromName(picture.getName());

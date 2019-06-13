@@ -14,7 +14,6 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean {
 
 	@Override
 	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
-
 		return menuFacade.findMenuTreeByCurrentUser();
 	}
 

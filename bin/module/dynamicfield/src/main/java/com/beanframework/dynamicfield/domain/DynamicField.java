@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.AuditJoinTable;
@@ -30,6 +32,7 @@ import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.language.domain.Language;
 
 @Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
@@ -75,6 +78,7 @@ public class DynamicField extends GenericEntity {
 	@JoinColumn(name = "language_uuid")
 	private Language language;
 
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "enumeration_uuid"))
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
@@ -82,6 +86,7 @@ public class DynamicField extends GenericEntity {
 	@JoinTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "enumeration_uuid", referencedColumnName = "uuid"))
 	private List<Enumeration> enumerations = new ArrayList<Enumeration>();
 
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
 	@OneToMany(fetch = FetchType.LAZY)
