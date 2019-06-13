@@ -20,6 +20,8 @@ import com.beanframework.core.data.MenuDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
 import com.beanframework.menu.specification.MenuSpecification;
+import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.service.UserService;
 
 @Component
 public class MenuFacadeImpl implements MenuFacade {
@@ -31,6 +33,9 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Autowired
 	private MenuService menuService;
+
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
@@ -61,7 +66,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	public MenuDto save(MenuDto dto) throws BusinessException {
 		try {
 			Menu entity = modelService.getEntity(dto, Menu.class);
-			entity = modelService.saveEntity(entity,Menu.class);
+			entity = modelService.saveEntity(entity, Menu.class);
 
 			return modelService.getDto(entity, MenuDto.class);
 		} catch (Exception e) {
@@ -135,11 +140,12 @@ public class MenuFacadeImpl implements MenuFacade {
 		Menu menu = modelService.create(Menu.class);
 		return modelService.getDto(menu, MenuDto.class);
 	}
-	
+
 	@Override
 	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
-
-		List<Menu> entities = menuService.findMenuTreeByCurrentUser();
+		List<Menu> entities = menuService.findMenuTree(true);
+		List<UserGroup> userGroups = userService.getUserGroupsByCurrentUser();
+		entities = menuService.filterMenuByUserGroups(entities, userGroups);
 
 		List<MenuDto> menuDtoTree = modelService.getDto(entities, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 		return menuDtoTree;

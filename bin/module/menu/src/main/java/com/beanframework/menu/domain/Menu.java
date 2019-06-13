@@ -17,6 +17,8 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.AuditJoinTable;
@@ -29,6 +31,7 @@ import com.beanframework.menu.MenuConstants;
 import com.beanframework.user.domain.UserGroup;
 
 @Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
@@ -79,12 +82,14 @@ public class Menu extends GenericEntity {
 	@JoinColumn(name = "parent_uuid")
 	private Menu parent;
 
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(SORT + " ASC")
 	private List<Menu> childs = new ArrayList<Menu>();
 
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
@@ -92,6 +97,7 @@ public class Menu extends GenericEntity {
 	@JoinTable(name = MenuConstants.Table.MENU_USER_GROUP_REL, joinColumns = @JoinColumn(name = "menu_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)

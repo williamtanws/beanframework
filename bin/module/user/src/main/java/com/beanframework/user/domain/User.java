@@ -18,6 +18,8 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.AuditJoinTable;
@@ -29,6 +31,7 @@ import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserConstants;
 
 @Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
@@ -71,6 +74,7 @@ public class User extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
@@ -78,6 +82,7 @@ public class User extends GenericEntity {
 	@JoinTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
@@ -143,7 +148,6 @@ public class User extends GenericEntity {
 		this.name = name;
 	}
 
-	@Cacheable
 	public List<UserGroup> getUserGroups() {
 		return userGroups;
 	}
@@ -152,7 +156,6 @@ public class User extends GenericEntity {
 		this.userGroups = userGroups;
 	}
 
-	@Cacheable
 	public List<UserField> getFields() {
 		return fields;
 	}

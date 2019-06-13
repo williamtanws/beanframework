@@ -34,7 +34,7 @@ public class CacheController {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-	@Autowired(required = false)
+	@Autowired
 	private CacheManager cacheManager;
 
 	@GetMapping(value = { CacheWebConstants.Path.CACHE })
@@ -43,8 +43,8 @@ public class CacheController {
 		List<Cache> caches = new ArrayList<Cache>();
 
 		if (cacheManager != null) {
-			for (String name : cacheManager.getCacheNames()) {
-				Cache cache = cacheManager.getCache(name);
+			for (String cacheName : cacheManager.getCacheNames()) {
+				Cache cache = cacheManager.getCache(cacheName);
 				caches.add(cache);
 			}
 		}
@@ -60,8 +60,8 @@ public class CacheController {
 
 		try {
 			if (cacheManager != null) {
-				for (String name : cacheManager.getCacheNames()) {
-					cacheManager.getCache(name).clear();
+				for (String cacheName : cacheManager.getCacheNames()) {
+					cacheManager.getCache(cacheName).clear();
 				}
 			}
 

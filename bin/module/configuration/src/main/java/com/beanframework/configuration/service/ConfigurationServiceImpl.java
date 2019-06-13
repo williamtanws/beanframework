@@ -1,7 +1,9 @@
 package com.beanframework.configuration.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.envers.query.AuditEntity;
@@ -43,5 +45,17 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
 		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Configuration.class);
+	}
+
+	@Override
+	public String get(String id) throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, id);
+		Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
+		if (entity == null) {
+			return null;
+		} else {
+			return entity.getValue();
+		}
 	}
 }

@@ -16,7 +16,7 @@ quartz.task.enabled=true
 # ===============================
 # = CACHE
 # ===============================
-spring.cache.ehcache.config=classpath:ehcache-${spring.profiles.active}.xml
+platform.hibernate.javax.cache.uri=classpath:ehcache-${spring.profiles.active}.xml
 
 # ===============================
 # = LOGGING

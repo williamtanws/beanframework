@@ -103,9 +103,15 @@ public class PlatformConfig {
 	@Value("${platform.hibernate.cache.use_second_level_cache:true}")
 	private String PLATFORM_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 
-	@Value("${platform.hibernate.cache.region.factory_class:net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory}")
+	@Value("${platform.hibernate.cache.region.factory_class:jcache}")
 	private String PLATFORM_HIBERNATE_CACHE_REGION_FACTORY_CLASS;
-	
+
+	@Value("${platform.hibernate.javax.cache.provider:org.ehcache.jsr107.EhcacheCachingProvider}")
+	private String PLATFORM_HIBERNATE_JAVAX_CACHE_PROVIDER;
+
+	@Value("${platform.hibernate.javax.cache.uri:ehcache.xml}")
+	private String PLATFORM_HIBERNATE_JAVAX_CACHE_URI;
+
 	@Value("${platform.cache.default_cache_concurrency_strategy:READ_WRITE}")
 	private String PLATFORM_HIBERNATE_DEFAULT_CACHE_CONCURRENCY_STRATEGRY;
 
@@ -235,18 +241,20 @@ public class PlatformConfig {
 		properties.put("hibernate.c3p0.testConnectionOnCheckout", PLATFORM_HIBERNATE_C3P0_TESTCONNECTIONONCHECKOUT);
 
 		properties.put("current_session_context_class", PLATFORM_CURRENT_SESSION_CONTEXT_CLASS);
-		
+
 		properties.put("hibernate.envers.autoRegisterListeners", PLATFORM_HIBERNATE_ENVERS_AUTOREGISTERLISTENERS);
 
 		properties.put("hibernate.cache.use_second_level_cache", PLATFORM_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE);
 		properties.put("hibernate.cache.use_query_cache", PLATFORM_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE);
 		properties.put("hibernate.cache.region.factory_class", PLATFORM_HIBERNATE_CACHE_REGION_FACTORY_CLASS);
 		properties.put("hibernate.cache.default_cache_concurrency_strategy", PLATFORM_HIBERNATE_DEFAULT_CACHE_CONCURRENCY_STRATEGRY);
-		
+
+		properties.put("hibernate.javax.cache.provider", PLATFORM_HIBERNATE_JAVAX_CACHE_PROVIDER);
+		properties.put("hibernate.javax.cache.uri", PLATFORM_HIBERNATE_JAVAX_CACHE_URI);
 		properties.put("hibernate.javax.cache.missing_cache_strategy", PLATFORM_HIBERNATE_JAVAX_CACHCE_MISSING_CACHE_STRATEGY);
-		
+
 		properties.put("javax.persistence.sharedCache.mode", PLATFORM_JAVAX_PERSISTENCE_SHAREDCACHE_MODE);
-		
+
 		properties.put("net.sf.ehcache.configurationResourceName", PLATFORM_EHCACHE_CONFIGURATION);
 
 		return properties;

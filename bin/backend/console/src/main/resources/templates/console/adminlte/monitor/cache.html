@@ -49,24 +49,12 @@
 														<tr>
 															<th th:text="#{module.cache.name}"></th>
 															<th th:text="#{module.cache.entry.total}"></th>
-															<th th:text="#{module.cache.local.heap.entry}"></th>
-															<th th:text="#{module.cache.local.heap.size}"></th>
-															<th th:text="#{module.cache.local.offheap.entry}"></th>
-															<th th:text="#{module.cache.local.offheap.size}"></th>
-															<th th:text="#{module.cache.local.disk.entry}"></th>
-															<th th:text="#{module.cache.local.disk.size}"></th>
 														</tr>
 													</thead>
 													<tbody>
 														<tr th:each="row : ${caches}">
 															<td th:text="${row.name}" style="word-wrap: break-word; max-width: 650px;"></td>
-															<td th:text="${row.getStatistics().getSize()}"></td>
-															<td th:text="${row.getStatistics().getLocalHeapSize()}"></td>
-															<td class="readableBytes" th:text="${row.getStatistics().getLocalHeapSizeInBytes()}"></td>
-															<td th:text="${row.getStatistics().getLocalOffHeapSize()}"></td>
-															<td class="readableBytes" th:text="${row.getStatistics().getLocalOffHeapSizeInBytes()}"></td>
-															<td th:text="${row.getStatistics().getLocalDiskSize()}"></td>
-															<td class="readableBytes" th:text="${row.getStatistics().getLocalDiskSizeInBytes()}"></td>
+															<td th:text="${row.getNativeCache().size()}"></td>
 														</tr>
 													</tbody>
 												</table>

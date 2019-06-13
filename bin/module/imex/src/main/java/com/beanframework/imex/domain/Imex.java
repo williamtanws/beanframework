@@ -15,6 +15,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.AuditJoinTable;
@@ -28,6 +30,7 @@ import com.beanframework.imex.ImexType;
 import com.beanframework.media.domain.Media;
 
 @Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
@@ -69,6 +72,7 @@ public class Imex extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String seperator;
 
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "media_uuid"))
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })

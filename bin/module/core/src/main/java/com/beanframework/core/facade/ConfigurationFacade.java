@@ -54,7 +54,8 @@ public interface ConfigurationFacade {
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_CREATE)
 	ConfigurationDto createDto() throws Exception;
-
-	ConfigurationDto findOneDtoById(String id) throws Exception;
-
+	
+	String get(String id, String defaultValue) throws Exception;
+	
+	boolean is(String id, boolean defaultValue) throws Exception;
 }

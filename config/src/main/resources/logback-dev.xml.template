@@ -156,7 +156,8 @@
 	</appender>
 	
 	<!-- <logger name="org.springframework.integration" level="DEBUG" /> -->
-
+	<!-- <logger name="com.beanframework.platform.cache" level="DEBUG" /> -->
+	
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE-ALL" />
