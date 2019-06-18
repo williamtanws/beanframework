@@ -4,7 +4,6 @@
 spring.profiles.active=dev
 spring.profiles.include=platform,console,backoffice,cockpit
 webroots=console,backoffice
-interceptor.strict.use=true
 favicon=/static/common/favicon.png
 
 # ===============================
@@ -22,7 +21,3 @@ platform.hibernate.javax.cache.uri=classpath:ehcache-${spring.profiles.active}.x
 # = LOGGING
 # ===============================
 logging.config=classpath:logback-${spring.profiles.active}.xml
-
-# ===============================
-# = FLOWABLE
-# ===============================
