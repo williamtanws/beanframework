@@ -122,7 +122,7 @@ public class EmailServiceImpl implements EmailService {
 				helper.setText(text);
 			}
 			if (StringUtils.isNotBlank(html)) {
-				helper.setText(html);
+				helper.setText(html, true);
 			}
 		}
 
