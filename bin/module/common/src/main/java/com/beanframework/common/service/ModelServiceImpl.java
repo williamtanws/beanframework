@@ -393,16 +393,18 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			if (model != null) {
 				removeInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 
+				BeforeRemoveEvent beforeRemoveEvent = new BeforeRemoveEvent();
 				Set<Entry<String, BeforeRemoveListener>> beforeRemoveListeners = beforeRemoveListenerRegistry.getListeners().entrySet();
 				for (Entry<String, BeforeRemoveListener> entry : beforeRemoveListeners) {
-					entry.getValue().beforeRemove(model, new BeforeRemoveEvent());
+					entry.getValue().beforeRemove(model, beforeRemoveEvent);
 				}
 
 				modelRepository.delete(model);
 
+				AfterRemoveEvent afterRemoveEvent = new AfterRemoveEvent(beforeRemoveEvent.getDataMap());
 				Set<Entry<String, AfterRemoveListener>> afterRemoveListeners = afterRemoveListenerRegistry.getListeners().entrySet();
 				for (Entry<String, AfterRemoveListener> entry : afterRemoveListeners) {
-					entry.getValue().afterRemove(model, new AfterRemoveEvent());
+					entry.getValue().afterRemove(model, afterRemoveEvent);
 				}
 			}
 

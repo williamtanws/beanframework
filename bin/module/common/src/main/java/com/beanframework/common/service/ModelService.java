@@ -77,14 +77,38 @@ public interface ModelService {
 
 	<T> T saveEntity(Object model, Class modelClass) throws BusinessException;
 
+	/**
+	 * Quietly means it skip listener events, mostly used by listener itself.
+	 * 
+	 * @param model
+	 * @param modelClass
+	 * @return
+	 * @throws BusinessException
+	 */
 	<T> T saveEntityQuietly(Object model, Class modelClass) throws BusinessException;
 
 	void deleteEntity(Object entityModel, Class modelClass) throws BusinessException;
 
+	/**
+	 * Quietly means it skip listener events, mostly used by listener itself.
+	 * 
+	 * @param model
+	 * @param modelClass
+	 * @return
+	 * @throws BusinessException
+	 */
 	void deleteEntityQuietly(Object entityModel, Class modelClass) throws BusinessException;
 
 	void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
+	/**
+	 * Quietly means it skip listener events, mostly used by listener itself.
+	 * 
+	 * @param model
+	 * @param modelClass
+	 * @return
+	 * @throws BusinessException
+	 */
 	void deleteQuietlyByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
 	<T> T getEntity(Object model, Class modelClass) throws Exception;
