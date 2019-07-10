@@ -2,6 +2,7 @@ package com.beanframework.common.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.data.DataTableColumnSpecs;
 import com.beanframework.common.data.DataTableRequest;
+import com.beanframework.common.domain.GenericEntity;
 
 public class AbstractSpecification {
 
@@ -23,6 +25,15 @@ public class AbstractSpecification {
 		return value;
 	}
 
+	public static boolean isUuid(String uuid) {
+		try {
+			UUID.fromString(uuid);
+			return true;
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
 	public static <T> Specification<T> getSpecification(DataTableRequest dataTableRequest) {
 		return new Specification<T>() {
 			private static final long serialVersionUID = 1L;
@@ -31,7 +42,7 @@ public class AbstractSpecification {
 			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return getPredicate(dataTableRequest, root, query, cb);
 			}
-			
+
 			public String toString() {
 				return dataTableRequest.toString();
 			}
@@ -42,12 +53,19 @@ public class AbstractSpecification {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (dataTableRequest.isGlobalSearch() && StringUtils.isNotEmpty(dataTableRequest.getSearch())) {
+			if (isUuid(dataTableRequest.getSearch())) {
+				predicates.add(cb.or(cb.equal(root.get(GenericEntity.UUID), UUID.fromString(dataTableRequest.getSearch()))));
+			}
+			predicates.add(cb.or(cb.like(root.get(GenericEntity.ID), convertToLikePattern(dataTableRequest.getSearch()))));
+
 			for (DataTableColumnSpecs specs : dataTableRequest.getColumns()) {
-				if (specs.getData().contains(".")) {
-					String[] objectProperty = specs.getData().split("\\.");
-					predicates.add(cb.or(cb.like(root.get(objectProperty[0]).get(objectProperty[1]), convertToLikePattern(dataTableRequest.getSearch()))));
-				} else {
-					predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(dataTableRequest.getSearch()))));
+				if (specs.getData() != GenericEntity.UUID && specs.getData() != GenericEntity.ID) {
+					if (specs.getData().contains(".")) {
+						String[] objectProperty = specs.getData().split("\\.");
+						predicates.add(cb.or(cb.like(root.get(objectProperty[0]).get(objectProperty[1]), convertToLikePattern(dataTableRequest.getSearch()))));
+					} else {
+						predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(dataTableRequest.getSearch()))));
+					}
 				}
 			}
 		} else {
