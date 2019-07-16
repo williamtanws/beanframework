@@ -9,7 +9,6 @@ public class ConfigurationRemoveInterceptor extends AbstractRemoveInterceptor<Co
 
 	@Override
 	public void onRemove(Configuration model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

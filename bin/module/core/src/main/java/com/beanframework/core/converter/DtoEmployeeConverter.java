@@ -42,7 +42,7 @@ public class DtoEmployeeConverter extends AbstractDtoConverter<Employee, Employe
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
 			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
-				convertRelation(source, prototype, context);
+				convertBasic(source, prototype, context);
 			}
 			prototype.setName(source.getName());
 
@@ -80,7 +80,7 @@ public class DtoEmployeeConverter extends AbstractDtoConverter<Employee, Employe
 
 	}
 
-	private void convertRelation(Employee source, EmployeeDto prototype, DtoConverterContext context) throws Exception {
+	private void convertBasic(Employee source, EmployeeDto prototype, DtoConverterContext context) throws Exception {
 	}
 
 }

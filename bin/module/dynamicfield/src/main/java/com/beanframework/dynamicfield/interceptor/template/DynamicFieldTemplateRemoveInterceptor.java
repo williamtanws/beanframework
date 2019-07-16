@@ -9,7 +9,6 @@ public class DynamicFieldTemplateRemoveInterceptor extends AbstractRemoveInterce
 
 	@Override
 	public void onRemove(DynamicFieldTemplate model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

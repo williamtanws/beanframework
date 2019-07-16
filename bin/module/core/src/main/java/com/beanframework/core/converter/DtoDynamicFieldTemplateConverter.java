@@ -41,7 +41,7 @@ public class DtoDynamicFieldTemplateConverter extends AbstractDtoConverter<Dynam
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
 			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
-				convertRelation(source, prototype, context);
+				convertBasic(source, prototype, context);
 			}
 
 		} catch (Exception e) {
@@ -56,7 +56,7 @@ public class DtoDynamicFieldTemplateConverter extends AbstractDtoConverter<Dynam
 		prototype.setDynamicFieldSlots(modelService.getDto(source.getDynamicFieldSlots(), DynamicFieldSlotDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
 	}
 
-	private void convertRelation(DynamicFieldTemplate source, DynamicFieldTemplateDto prototype, DtoConverterContext context) throws Exception {
+	private void convertBasic(DynamicFieldTemplate source, DynamicFieldTemplateDto prototype, DtoConverterContext context) throws Exception {
 
 	}
 

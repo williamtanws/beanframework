@@ -9,7 +9,6 @@ public class EmployeeRemoveInterceptor extends AbstractRemoveInterceptor<Employe
 
 	@Override
 	public void onRemove(Employee model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

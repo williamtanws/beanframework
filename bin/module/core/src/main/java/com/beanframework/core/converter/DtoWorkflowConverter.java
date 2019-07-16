@@ -45,7 +45,7 @@ public class DtoWorkflowConverter extends AbstractDtoConverter<Workflow, Workflo
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
 			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
-				convertRelation(source, prototype, context);
+				convertBasic(source, prototype, context);
 			}
 
 		} catch (Exception e) {
@@ -60,7 +60,7 @@ public class DtoWorkflowConverter extends AbstractDtoConverter<Workflow, Workflo
 
 	}
 
-	private void convertRelation(Workflow source, WorkflowDto prototype, DtoConverterContext context) throws Exception {
+	private void convertBasic(Workflow source, WorkflowDto prototype, DtoConverterContext context) throws Exception {
 	}
 
 }

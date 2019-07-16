@@ -9,7 +9,6 @@ public class DynamicFieldSlotRemoveInterceptor extends AbstractRemoveInterceptor
 
 	@Override
 	public void onRemove(DynamicFieldSlot model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

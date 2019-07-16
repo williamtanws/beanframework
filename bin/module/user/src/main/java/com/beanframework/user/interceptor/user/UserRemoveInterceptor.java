@@ -9,7 +9,6 @@ public class UserRemoveInterceptor extends AbstractRemoveInterceptor<User> {
 
 	@Override
 	public void onRemove(User model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

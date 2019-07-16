@@ -9,7 +9,6 @@ public class AdminRemoveInterceptor extends AbstractRemoveInterceptor<Admin> {
 
 	@Override
 	public void onRemove(Admin model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

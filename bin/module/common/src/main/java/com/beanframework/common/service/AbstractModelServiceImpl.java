@@ -264,7 +264,9 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 				DtoConverter interceptor = (DtoConverter) interceptorMapping.getConverter();
 				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					if (context.getConvertedDtos().contains(((GenericEntity) model).getUuid()) == false) {
-						context.getConvertedDtos().add(((GenericEntity) model).getUuid());
+						if(((GenericEntity) model).getUuid() != null) {
+							context.getConvertedDtos().add(((GenericEntity) model).getUuid());
+						}
 						return interceptor.convert(model, context);
 					} else {
 						return null;

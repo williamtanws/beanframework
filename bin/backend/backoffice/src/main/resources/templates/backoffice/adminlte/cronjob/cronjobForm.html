@@ -126,7 +126,6 @@
 										<div class="col-md-12">
 											<div class="form-group">
 												<label for="startup" th:text="#{module.cronjob.jobdata}"></label>
-												<span>:</span>
 												<table id="jobdatasTable" class="table table-bordered table-hover">
 													<thead>
 														<tr>
@@ -188,6 +187,19 @@
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
+		    	
+		    	$('#jobdatasTable').DataTable({
+				      'paging'      : true,
+				      'lengthChange': true,
+				      'searching'   : true,
+				      'ordering'    : true,
+				      'info'        : true,
+				      'autoWidth'   : true,
+				      'sDom': "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+		    	      "<'row'<'col-sm-12'tr>>" +
+		    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+				});
+		    	
 		        $('#update-form').validate({
 		        	onkeyup: function(element) {
 		                this.element(element);

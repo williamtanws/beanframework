@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="dynamicfieldslot (dynamicFieldSlots)">
-		<table id="dynamicfieldslotTable" class="table table-bordered table-hover" style="width:100%">
+	<th:block layout:fragment="dynamicFieldSlot (dynamicFieldSlots)">
+		<table id="dynamicFieldSlotTable" class="table table-bordered table-hover" style="width:100%">
 			<thead>
 				<tr>
 					<th th:text="#{module.backoffice.id}" class="text-center"></th>
@@ -18,19 +18,24 @@
 				</tr>
 			</thead>
 		</table>
+		<div id="selectedDynamicFieldSlots">
+			<th:block th:each="dynamicFieldSlot : *{__${dynamicFieldSlots}__}">
+				<input type="hidden" name="selectedDynamicFieldSlots" th:value="${dynamicFieldSlot.uuid}" />
+			</th:block>
+		</div>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    	
 		    var locale = /*[[${#locale}]]*/;
 		    
 		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.dynamicfieldslot.page')}}]]*/;
-		    
+
 		    var dynamicFieldSlots = [];
 		    /*[# th:each="object : *{__${dynamicFieldSlots}__}"]*/  	    
 		    dynamicFieldSlots.push(/*[[${object.uuid}]]*/); 	    
 		    /*[/]*/
 		    
-		    var dynamicfieldslotTable = $('#dynamicfieldslotTable').DataTable({
+		    var dynamicFieldSlotTable = $('#dynamicFieldSlotTable').DataTable({
 	    		  'language' : {
 			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
 			      },
@@ -66,15 +71,15 @@
 	    	                {
 	    	                   var selected = dynamicFieldSlots.includes(row.uuid);
 	    	                   if(selected){
-	    	                	   return "<input type='hidden' name='tableDynamicFieldSlots["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedDynamicFieldSlots["+meta.row+"]' checked>"; 
+	    	                	   return "<input type='checkbox' value='"+row.uuid+"' name='tableSelectedDynamicFieldSlots' checked>"; 
 	    	                   }
 	    	                   else{
 	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
 	    	                	   if(preventSelfUuid == row.uuid){
-		    	                	   return "<input type='hidden' name='tableDynamicFieldSlots["+meta.row+"]' value='"+row.uuid+"'/>"; 
+		    	                	   return ""; 
 	    	                	   }
 	    	                	   else{
-		    	                	   return "<input type='hidden' name='tableDynamicFieldSlots["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedDynamicFieldSlots["+meta.row+"]'>"; 
+		    	                	   return "<input type='checkbox' value='"+row.uuid+"' name='tableSelectedDynamicFieldSlots'>"; 
 	    	                	   }
 	    	                   }
 	    	                    
@@ -83,26 +88,37 @@
 		            	{                                 
 		                	"targets": '_all',
 		                	"render": $.fn.dataTable.render.text()
-		                }            
-	    	       ],
-	    	       'fnDrawCallback': function() {
-	    	           icheck();
-	    	       }
+		                }              
+	    	       ]
 	    	});
 		    
-		    function icheck() {
+		    $('#dynamicFieldSlotTable').on('draw.dt', function () {
 		    	$('input').iCheck({
 					checkboxClass : 'icheckbox_square-blue',
 					radioClass : 'iradio_square-blue',
 					increaseArea : '20%' // optional
 				});
-		    }
+		    });
+		    
+		    $('#dynamicFieldSlotTable').on('ifChecked', 'input[name="tableSelectedDynamicFieldSlots"]', function () {
+		    	$('#selectedDynamicFieldSlots').append('<input type="hidden" name="selectedDynamicFieldSlots" value="'+this.value+'"/>');
+		    	dynamicFieldSlots.push(this.value);
+		    });
+		    
+		    $('#dynamicFieldSlotTable').on('ifUnchecked', 'input[name="tableSelectedDynamicFieldSlots"]', function () {
+		    	$('#selectedDynamicFieldSlots input[type="hidden"][name="selectedDynamicFieldSlots"][value="'+this.value+'"]').remove();
+		    	for( var i = 0; i < dynamicFieldSlots.length; i++){ 
+		    		if ( dynamicFieldSlots[i] === this.value) {
+		    			dynamicFieldSlots.splice(i, 1); 
+		    		}
+		    	}
+		    });
 		    
 		    $(document).ready(function ()
 		    {
-		    	$('#dynamicfieldslotTable thead tr:eq(1) th').each(function(index){
+		    	$('#dynamicFieldSlotTable thead tr:eq(1) th').each(function(index){
 		    		if(index < 2){
-		    			var title = $('#dynamicfieldslotTable thead tr:eq(0) th').eq( $(this).index() ).text();
+		    			var title = $('#dynamicFieldSlotTable thead tr:eq(0) th').eq( $(this).index() ).text();
 		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
 		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
 		    		} else{
@@ -110,9 +126,9 @@
 		    		}
 		        });
 		    	
-		    	dynamicfieldslotTable.columns().every(function (index) {
-		    	    $('#dynamicfieldslotTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
-		    	    	dynamicfieldslotTable.column($(this).parent().index() + ':visible')
+		    	dynamicFieldSlotTable.columns().every(function (index) {
+		    	    $('#dynamicFieldSlotTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+		    	    	dynamicFieldSlotTable.column($(this).parent().index() + ':visible')
 		    	            .search(this.value)
 		    	            .draw();
 		    	    });
@@ -123,11 +139,11 @@
 		<th:block sec:authorize="hasAuthority('dynamicfieldslot_read')">
 			<script th:inline="javascript">
 		    	/*<![CDATA[*/
-		    		$('#dynamicfieldslotTable').on('click', 'tbody tr', function() {
+		    		$('#dynamicFieldSlotTable').on('click', 'tbody tr', function() {
 						//console.log('API row values : ', mainTable.row(this).data());
-						var uuid = dynamicfieldslotTable.row(this).data().uuid;
+						var uuid = dynamicFieldSlotTable.row(this).data().uuid;
 						if(uuid){
-							var url = /*[[@{${@environment.getProperty('path.dynamicfieldslot')}}]]*/;
+							var url = /*[[@{${@environment.getProperty('path.dynamicFieldSlot')}}]]*/;
 							url += '?uuid='+uuid+'#tab_general';
 							window.open(url, '_blank');
 						}

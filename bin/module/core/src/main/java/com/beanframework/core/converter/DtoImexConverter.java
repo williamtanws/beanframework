@@ -49,7 +49,7 @@ public class DtoImexConverter extends AbstractDtoConverter<Imex, ImexDto> implem
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
 			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
-				convertRelation(source, prototype, context);
+				convertBasic(source, prototype, context);
 			}
 
 		} catch (Exception e) {
@@ -64,7 +64,7 @@ public class DtoImexConverter extends AbstractDtoConverter<Imex, ImexDto> implem
 		prototype.setMedias(modelService.getDto(source.getMedias(), MediaDto.class));
 	}
 
-	private void convertRelation(Imex source, ImexDto prototype, DtoConverterContext context) throws Exception {
+	private void convertBasic(Imex source, ImexDto prototype, DtoConverterContext context) throws Exception {
 	}
 
 }

@@ -125,7 +125,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public CustomerDto createDto() throws Exception {
 		Customer customer = modelService.create(Customer.class);
-		return modelService.getDto(customer, CustomerDto.class);
+		return modelService.getDto(customer, CustomerDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override

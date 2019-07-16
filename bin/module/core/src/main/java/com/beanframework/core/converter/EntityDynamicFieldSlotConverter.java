@@ -72,11 +72,11 @@ public class EntityDynamicFieldSlotConverter implements EntityConverter<DynamicF
 			}
 
 			// Dynamic Field
-			if (StringUtils.isBlank(source.getTableSelectedDynamicField())) {
+			if (StringUtils.isBlank(source.getSelectedDynamicField())) {
 				prototype.setDynamicField(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				DynamicField entityDynamicField = modelService.findOneByUuid(UUID.fromString(source.getTableSelectedDynamicField()), DynamicField.class);
+				DynamicField entityDynamicField = modelService.findOneByUuid(UUID.fromString(source.getSelectedDynamicField()), DynamicField.class);
 
 				if (entityDynamicField != null) {
 

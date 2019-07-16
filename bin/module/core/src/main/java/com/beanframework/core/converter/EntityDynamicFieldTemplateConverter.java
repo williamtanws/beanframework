@@ -13,7 +13,6 @@ import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
@@ -61,35 +60,41 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			// DynamicFieldSlot
-			if (source.getTableDynamicFieldSlots() != null) {
+			// DynamicFieldSlots
+			if (source.getSelectedDynamicFieldSlots() != null) {
 
-				for (int i = 0; i < source.getTableDynamicFieldSlots().length; i++) {
+				Iterator<DynamicFieldSlot> DynamicFieldSlotsIterator = prototype.getDynamicFieldSlots().iterator();
+				while (DynamicFieldSlotsIterator.hasNext()) {
+					DynamicFieldSlot DynamicFieldSlot = DynamicFieldSlotsIterator.next();
 
 					boolean remove = true;
-					if (source.getTableSelectedDynamicFieldSlots() != null && source.getTableSelectedDynamicFieldSlots().length > i
-							&& BooleanUtils.parseBoolean(source.getTableSelectedDynamicFieldSlots()[i])) {
-						remove = false;
+					for (int i = 0; i < source.getSelectedDynamicFieldSlots().length; i++) {
+						if (DynamicFieldSlot.getUuid().equals(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]))) {
+							remove = false;
+						}
+					}
+					if (remove) {
+						DynamicFieldSlotsIterator.remove();
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				}
+
+				for (int i = 0; i < source.getSelectedDynamicFieldSlots().length; i++) {
+
+					boolean add = true;
+					DynamicFieldSlotsIterator = prototype.getDynamicFieldSlots().iterator();
+					while (DynamicFieldSlotsIterator.hasNext()) {
+						DynamicFieldSlot DynamicFieldSlot = DynamicFieldSlotsIterator.next();
+
+						if (DynamicFieldSlot.getUuid().equals(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]))) {
+							add = false;
+						}
 					}
 
-					if (remove) {
-						for (Iterator<DynamicFieldSlot> dynamicFieldSlot = prototype.getDynamicFieldSlots().listIterator(); dynamicFieldSlot.hasNext();) {
-							if (dynamicFieldSlot.next().getUuid().equals(UUID.fromString(source.getTableDynamicFieldSlots()[i]))) {
-								dynamicFieldSlot.remove();
-								prototype.setLastModifiedDate(lastModifiedDate);
-							}
-						}
-					} else {
-						boolean add = true;
-						for (Iterator<DynamicFieldSlot> dynamicFieldSlot = prototype.getDynamicFieldSlots().listIterator(); dynamicFieldSlot.hasNext();) {
-							if (dynamicFieldSlot.next().getUuid().equals(UUID.fromString(source.getTableDynamicFieldSlots()[i]))) {
-								add = false;
-							}
-						}
-
-						if (add) {
-							DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneByUuid(UUID.fromString(source.getTableDynamicFieldSlots()[i]), DynamicFieldSlot.class);
-							prototype.getDynamicFieldSlots().add(entityDynamicFieldSlot);
+					if (add) {
+						DynamicFieldSlot DynamicFieldSlot = modelService.findOneByUuid(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]), DynamicFieldSlot.class);
+						if (DynamicFieldSlot != null) {
+							prototype.getDynamicFieldSlots().add(DynamicFieldSlot);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}

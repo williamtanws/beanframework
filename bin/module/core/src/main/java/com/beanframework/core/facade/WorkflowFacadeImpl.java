@@ -103,6 +103,6 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 	@Override
 	public WorkflowDto createDto() throws Exception {
 		Workflow Workflow = modelService.create(Workflow.class);
-		return modelService.getDto(Workflow, WorkflowDto.class);
+		return modelService.getDto(Workflow, WorkflowDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 }

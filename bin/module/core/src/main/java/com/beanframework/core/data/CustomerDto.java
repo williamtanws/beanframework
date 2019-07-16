@@ -9,26 +9,16 @@ public class CustomerDto extends UserDto {
 	 */
 	private static final long serialVersionUID = -7514300671142954145L;
 
-	private String[] tableUserGroups;
+	private String[] selectedUserGroups;
 
-	private String[] tableSelectedUserGroups;
-	
 	private MultipartFile profilePicture;
 
-	public String[] getTableUserGroups() {
-		return tableUserGroups;
+	public String[] getSelectedUserGroups() {
+		return selectedUserGroups;
 	}
 
-	public void setTableUserGroups(String[] tableUserGroups) {
-		this.tableUserGroups = tableUserGroups;
-	}
-
-	public String[] getTableSelectedUserGroups() {
-		return tableSelectedUserGroups;
-	}
-
-	public void setTableSelectedUserGroups(String[] tableSelectedUserGroups) {
-		this.tableSelectedUserGroups = tableSelectedUserGroups;
+	public void setSelectedUserGroups(String[] selectedUserGroups) {
+		this.selectedUserGroups = selectedUserGroups;
 	}
 
 	public MultipartFile getProfilePicture() {
@@ -38,5 +28,4 @@ public class CustomerDto extends UserDto {
 	public void setProfilePicture(MultipartFile profilePicture) {
 		this.profilePicture = profilePicture;
 	}
-
 }

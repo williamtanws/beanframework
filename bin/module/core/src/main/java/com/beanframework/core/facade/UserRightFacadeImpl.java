@@ -118,6 +118,6 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	@Override
 	public UserRightDto createDto() throws Exception {
 		UserRight userRight = modelService.create(UserRight.class);
-		return modelService.getDto(userRight, UserRightDto.class);
+		return modelService.getDto(userRight, UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 }

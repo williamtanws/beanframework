@@ -13,7 +13,6 @@ import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.enumuration.domain.Enumeration;
@@ -95,11 +94,11 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 			}
 
 			// Language
-			if (StringUtils.isBlank(source.getTableSelectedLanguage())) {
+			if (StringUtils.isBlank(source.getSelectedLanguage())) {
 				prototype.setLanguage(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				Language entityLanguage = modelService.findOneByUuid(UUID.fromString(source.getTableSelectedLanguage()), Language.class);
+				Language entityLanguage = modelService.findOneByUuid(UUID.fromString(source.getSelectedLanguage()), Language.class);
 
 				if (entityLanguage != null) {
 
@@ -110,34 +109,41 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 				}
 			}
 
-			// Enumeration
-			if (source.getTableEnumerations() != null) {
+			// Enumerations
+			if (source.getSelectedEnumerations() != null) {
 
-				for (int i = 0; i < source.getTableEnumerations().length; i++) {
+				Iterator<Enumeration> enumerationsIterator = prototype.getEnumerations().iterator();
+				while (enumerationsIterator.hasNext()) {
+					Enumeration enumeration = enumerationsIterator.next();
 
 					boolean remove = true;
-					if (source.getTableSelectedEnumerations() != null && source.getTableSelectedEnumerations().length > i && BooleanUtils.parseBoolean(source.getTableSelectedEnumerations()[i])) {
-						remove = false;
+					for (int i = 0; i < source.getSelectedEnumerations().length; i++) {
+						if (enumeration.getUuid().equals(UUID.fromString(source.getSelectedEnumerations()[i]))) {
+							remove = false;
+						}
+					}
+					if (remove) {
+						enumerationsIterator.remove();
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				}
+
+				for (int i = 0; i < source.getSelectedEnumerations().length; i++) {
+
+					boolean add = true;
+					enumerationsIterator = prototype.getEnumerations().iterator();
+					while (enumerationsIterator.hasNext()) {
+						Enumeration enumeration = enumerationsIterator.next();
+
+						if (enumeration.getUuid().equals(UUID.fromString(source.getSelectedEnumerations()[i]))) {
+							add = false;
+						}
 					}
 
-					if (remove) {
-						for (Iterator<Enumeration> enumerationsIterator = prototype.getEnumerations().listIterator(); enumerationsIterator.hasNext();) {
-							if (enumerationsIterator.next().getUuid().equals(UUID.fromString(source.getTableEnumerations()[i]))) {
-								enumerationsIterator.remove();
-								prototype.setLastModifiedDate(lastModifiedDate);
-							}
-						}
-					} else {
-						boolean add = true;
-						for (Iterator<Enumeration> enumerationsIterator = prototype.getEnumerations().listIterator(); enumerationsIterator.hasNext();) {
-							if (enumerationsIterator.next().getUuid().equals(UUID.fromString(source.getTableEnumerations()[i]))) {
-								add = false;
-							}
-						}
-
-						if (add) {
-							Enumeration entityEnumerations = modelService.findOneByUuid(UUID.fromString(source.getTableEnumerations()[i]), Enumeration.class);
-							prototype.getEnumerations().add(entityEnumerations);
+					if (add) {
+						Enumeration enumeration = modelService.findOneByUuid(UUID.fromString(source.getSelectedEnumerations()[i]), Enumeration.class);
+						if (enumeration != null) {
+							prototype.getEnumerations().add(enumeration);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}

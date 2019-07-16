@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
 	<th:block layout:fragment="customer (customers)">
-		<table id="customerTable" class="table table-bordered table-hover" style="width: 100%">
+		<table id="customerTable" class="table table-bordered table-hover" style="width:100%">
 			<thead>
 				<tr>
 					<th th:text="#{module.backoffice.id}" class="text-center"></th>
@@ -18,13 +18,18 @@
 				</tr>
 			</thead>
 		</table>
+		<div id="selectedCustomers">
+			<th:block th:each="customer : *{__${customers}__}">
+				<input type="hidden" name="selectedCustomers" th:value="${customer.uuid}" />
+			</th:block>
+		</div>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    	
 		    var locale = /*[[${#locale}]]*/;
 		    
 		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.customer.page')}}]]*/;
-		    
+
 		    var customers = [];
 		    /*[# th:each="object : *{__${customers}__}"]*/  	    
 		    customers.push(/*[[${object.uuid}]]*/); 	    
@@ -66,15 +71,15 @@
 	    	                {
 	    	                   var selected = customers.includes(row.uuid);
 	    	                   if(selected){
-	    	                	   return "<input type='hidden' name='tableEmployees["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEmployees["+meta.row+"]' checked>"; 
+	    	                	   return "<input type='checkbox' value='"+row.uuid+"' name='tableSelectedCustomers' checked>"; 
 	    	                   }
 	    	                   else{
 	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
 	    	                	   if(preventSelfUuid == row.uuid){
-		    	                	   return "<input type='hidden' name='tableEmployees["+meta.row+"]' value='"+row.uuid+"'/>"; 
+		    	                	   return ""; 
 	    	                	   }
 	    	                	   else{
-		    	                	   return "<input type='hidden' name='tableEmployees["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEmployees["+meta.row+"]'>"; 
+		    	                	   return "<input type='checkbox' value='"+row.uuid+"' name='tableSelectedCustomers'>"; 
 	    	                	   }
 	    	                   }
 	    	                    
@@ -83,20 +88,31 @@
 		            	{                                 
 		                	"targets": '_all',
 		                	"render": $.fn.dataTable.render.text()
-		                }            
-	    	       ],
-	    	       'fnDrawCallback': function() {
-	    	           icheck();
-	    	       }
+		                }              
+	    	       ]
 	    	});
 		    
-		    function icheck() {
+		    $('#customerTable').on('draw.dt', function () {
 		    	$('input').iCheck({
 					checkboxClass : 'icheckbox_square-blue',
 					radioClass : 'iradio_square-blue',
 					increaseArea : '20%' // optional
 				});
-		    }
+		    });
+		    
+		    $('#customerTable').on('ifChecked', 'input[name="tableSelectedCustomers"]', function () {
+		    	$('#selectedCustomers').append('<input type="hidden" name="selectedCustomers" value="'+this.value+'"/>');
+		    	customers.push(this.value);
+		    });
+		    
+		    $('#customerTable').on('ifUnchecked', 'input[name="tableSelectedCustomers"]', function () {
+		    	$('#selectedCustomers input[type="hidden"][name="selectedCustomers"][value="'+this.value+'"]').remove();
+		    	for( var i = 0; i < customers.length; i++){ 
+		    		if ( customers[i] === this.value) {
+		    			customers.splice(i, 1); 
+		    		}
+		    	}
+		    });
 		    
 		    $(document).ready(function ()
 		    {

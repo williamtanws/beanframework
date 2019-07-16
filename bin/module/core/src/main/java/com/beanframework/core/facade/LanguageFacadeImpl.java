@@ -103,6 +103,6 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	@Override
 	public LanguageDto createDto() throws Exception {
 		Language language = modelService.create(Language.class);
-		return modelService.getDto(language, LanguageDto.class);
+		return modelService.getDto(language, LanguageDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 }

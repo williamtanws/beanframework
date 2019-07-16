@@ -103,6 +103,6 @@ public class SiteFacadeImpl implements SiteFacade {
 	@Override
 	public SiteDto createDto() throws Exception {
 		Site site = modelService.create(Site.class);
-		return modelService.getDto(site, SiteDto.class);
+		return modelService.getDto(site, SiteDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 }

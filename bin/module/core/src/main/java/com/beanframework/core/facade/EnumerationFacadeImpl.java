@@ -105,7 +105,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	@Override
 	public EnumerationDto createDto() throws Exception {
 		Enumeration enumeration = modelService.create(Enumeration.class);
-		return modelService.getDto(enumeration, EnumerationDto.class);
+		return modelService.getDto(enumeration, EnumerationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 }

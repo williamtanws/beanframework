@@ -9,7 +9,6 @@ public class MediaRemoveInterceptor extends AbstractRemoveInterceptor<Media> {
 
 	@Override
 	public void onRemove(Media model, InterceptorContext context) throws InterceptorException {
-		
 	}
 
 }
