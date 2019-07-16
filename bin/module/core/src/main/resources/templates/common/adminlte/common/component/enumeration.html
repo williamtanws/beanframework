@@ -139,7 +139,7 @@
 		<th:block sec:authorize="hasAuthority('enumeration_read')">
 			<script th:inline="javascript">
 		    	/*<![CDATA[*/
-		    		$('#enumerationTable').on('click', 'tbody tr', function() {
+		    		$('#enumerationTable').on('click', 'tbody tr td:eq(0)', function() {
 						//console.log('API row values : ', mainTable.row(this).data());
 						var uuid = enumerationTable.row(this).data().uuid;
 						if(uuid){
