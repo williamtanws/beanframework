@@ -29,11 +29,8 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>static/adminlte/bower_components/**/*</include>
-					<include>static/adminlte/dist/**/*</include>
-					<include>static/adminlte/plugins/**/*</include>
+					<include>static/adminlte/**/*</include>
 					<include>static/common/**/*</include>
-					<include>static/custom/**/*</include>
 				</includes>
 			</resource>
 		</resources>
