@@ -42,7 +42,7 @@ public class DtoCustomerConverter extends AbstractDtoConverter<Customer, Custome
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
 			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
-				convertRelation(source, prototype, context);
+				convertBasic(source, prototype, context);
 			}
 			prototype.setName(source.getName());
 
@@ -80,7 +80,7 @@ public class DtoCustomerConverter extends AbstractDtoConverter<Customer, Custome
 
 	}
 
-	private void convertRelation(Customer source, CustomerDto prototype, DtoConverterContext context) throws Exception {
+	private void convertBasic(Customer source, CustomerDto prototype, DtoConverterContext context) throws Exception {
 	}
 
 }

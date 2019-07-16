@@ -41,7 +41,7 @@ public class DtoSiteConverter extends AbstractDtoConverter<Site, SiteDto> implem
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
 			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
-				convertRelation(source, prototype, context);
+				convertBasic(source, prototype, context);
 			}
 
 		} catch (Exception e) {
@@ -58,7 +58,7 @@ public class DtoSiteConverter extends AbstractDtoConverter<Site, SiteDto> implem
 
 	}
 
-	private void convertRelation(Site source, SiteDto prototype, DtoConverterContext context) throws Exception {
+	private void convertBasic(Site source, SiteDto prototype, DtoConverterContext context) throws Exception {
 		prototype.setName(source.getName());
 		prototype.setUrl(source.getUrl());
 

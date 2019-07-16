@@ -41,7 +41,7 @@
 								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.backoffice.attribute}" onclick="changeTab('attribute')"></a>
 							</li>
 							<li>
-								<a href="#tab_usergroup" data-toggle="tab" th:text="#{module.usergroup}" onclick="changeTab('usergroup')"></a>
+								<a href="#tab_usergroupchild" data-toggle="tab" th:text="#{module.usergroup.childs}" onclick="changeTab('usergroupchild')"></a>
 							</li>
 							<li>
 								<a href="#tab_userauthority" data-toggle="tab" th:text="#{module.userauthority}" onclick="changeTab('userauthority')"></a>
@@ -69,19 +69,37 @@
 											</div>
 										</div>
 									</div>
-									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;" th:if="*{uuid != null}">
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_attribute">
+								<div class="box-body">
+									<div class="row">
+										<th:block layout:insert="~{common/adminlte/common/component/attribute :: attribute(fields='fields')}"></th:block>
+									</div>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_usergroupchild">
+								<div class="box-body">
+									<div class="row" style="border-bottom: 5px solid #f4f4f4; margin-bottom: 20px;" th:if="*{uuid != null}">
 										<div class="col-md-12">
 											<div class="form-group">
-												<label th:text="#{module.backoffice.selected}+#{module.usergroup}"></label>
-												<span>:</span>
+												<label th:text="#{module.usergroup.childs.selected}"></label>
 												<table class="table table-bordered" id="usergroups-table">
 													<thead>
 														<tr>
+															<th class="text-center" th:text="#{module.backoffice.id}"></th>
 															<th class="text-center" th:text="#{module.backoffice.name}"></th>
 														</tr>
 													</thead>
 													<tbody>
 														<tr th:each="userGroup : *{userGroups}">
+															<td>
+																<span th:text="${userGroup.id}"></span>
+															</td>
 															<td>
 																<span th:text="${userGroup.name}"></span>
 															</td>
@@ -91,22 +109,14 @@
 											</div>
 										</div>
 									</div>
-								</div>
-								<!-- /.box-body -->
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_attribute">
-								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="~{common/adminlte/common/component/attribute :: attribute}"></th:block>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label th:text="#{module.usergroup.childs.select}"></label>
+												<th:block layout:insert="~{common/adminlte/common/component/usergroup :: usergroup (userGroups='userGroups')}"></th:block>
+											</div>
+										</div>
 									</div>
-								</div>
-								<!-- /.box-body -->
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_usergroup">
-								<div class="box-body">
-									<th:block layout:insert="~{common/adminlte/common/component/usergroup :: usergroup (userGroups='userGroups')}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -142,10 +152,10 @@
 		    	
 		    	$('#usergroups-table').DataTable({
 				      'paging'      : true,
-				      'lengthChange': false,
+				      'lengthChange': true,
 				      'searching'   : true,
 				      'ordering'    : true,
-				      'info'        : false,
+				      'info'        : true,
 				      'autoWidth'   : true,
 				      'sDom': "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 		    	      "<'row'<'col-sm-12'tr>>" +

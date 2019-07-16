@@ -7,6 +7,7 @@ import java.net.URLConnection;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class UserController {
 
 		UUID userUuid;
 
-		if (requestParams.get("uuid") != null) {
+		if (requestParams.get("uuid") != null && StringUtils.isNotBlank(requestParams.get("uuid").toString())) {
 			userUuid = UUID.fromString((String) requestParams.get("uuid"));
 		} else {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -56,7 +57,7 @@ public class UserController {
 				User principal = (User) auth.getPrincipal();
 				userUuid = principal.getUuid();
 			} else {
-				return null;
+				return getDefaultPicture();
 			}
 		}
 
@@ -66,30 +67,32 @@ public class UserController {
 			type = "thumbnail";
 		}
 
-		InputStream targetStream;
 		File picture = new File(MEDIA_LOCATION + File.separator + PROFILE_PICTURE_LOCATION, userUuid.toString() + File.separator + type + ".png");
-
 		if (picture.exists()) {
-			targetStream = new FileInputStream(picture);
-
+			InputStream targetStream = new FileInputStream(picture);
 			String mimeType = URLConnection.guessContentTypeFromName(picture.getName());
 
 			return ResponseEntity.ok().contentType(MediaType.valueOf(mimeType)).body(IOUtils.toByteArray(targetStream));
 		} else {
+			return getDefaultPicture();
+		}
+	}
+	
+	private ResponseEntity<byte[]> getDefaultPicture() throws Exception {
+		InputStream targetStream;
+		
+		String configurationValue = configurationFacade.get(CONFIGURATION_DEFAULT_AVATAR, null);
 
-			String configurationValue = configurationFacade.get(CONFIGURATION_DEFAULT_AVATAR, null);
+		if (configurationValue == null) {
+			return null;
+		} else {
 
-			if (configurationValue == null) {
-				return null;
-			} else {
+			ClassPathResource resource = new ClassPathResource(configurationValue);
+			targetStream = resource.getInputStream();
 
-				ClassPathResource resource = new ClassPathResource(configurationValue);
-				targetStream = resource.getInputStream();
+			String mimeType = URLConnection.guessContentTypeFromName(FilenameUtils.getExtension(configurationValue));
 
-				String mimeType = URLConnection.guessContentTypeFromName(picture.getName());
-
-				return ResponseEntity.ok().contentType(MediaType.valueOf(mimeType)).body(IOUtils.toByteArray(targetStream));
-			}
+			return ResponseEntity.ok().contentType(MediaType.valueOf(mimeType)).body(IOUtils.toByteArray(targetStream));
 		}
 	}
 }

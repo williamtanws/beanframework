@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="attribute">
-		<th:block th:each="field,itrStat : *{fields}">
+	<th:block layout:fragment="attribute (fields)">
+		<th:block th:each="field,itrStat : *{__${fields}__}">
 			<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
 				<div class="form-group">
 					<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" for="name" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>

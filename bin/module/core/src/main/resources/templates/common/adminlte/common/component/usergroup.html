@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
 	<th:block layout:fragment="usergroup (userGroups)">
-		<table id="usergroupTable" class="table table-bordered table-hover" style="width:100%">
+		<table id="userGroupTable" class="table table-bordered table-hover" style="width:100%">
 			<thead>
 				<tr>
 					<th th:text="#{module.backoffice.id}" class="text-center"></th>
@@ -18,6 +18,11 @@
 				</tr>
 			</thead>
 		</table>
+		<div id="selectedUserGroups">
+			<th:block th:each="userGroup : *{__${userGroups}__}">
+				<input type="hidden" name="selectedUserGroups" th:value="${userGroup.uuid}" />
+			</th:block>
+		</div>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    	
@@ -30,7 +35,7 @@
 		    userGroups.push(/*[[${object.uuid}]]*/); 	    
 		    /*[/]*/
 		    
-		    var usergroupTable = $('#usergroupTable').DataTable({
+		    var userGroupTable = $('#userGroupTable').DataTable({
 	    		  'language' : {
 			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
 			      },
@@ -66,15 +71,15 @@
 	    	                {
 	    	                   var selected = userGroups.includes(row.uuid);
 	    	                   if(selected){
-	    	                	   return "<input type='hidden' name='tableUserGroups["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedUserGroups["+meta.row+"]' checked>"; 
+	    	                	   return "<input type='checkbox' value='"+row.uuid+"' name='tableSelectedUserGroups' checked>"; 
 	    	                   }
 	    	                   else{
 	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
 	    	                	   if(preventSelfUuid == row.uuid){
-		    	                	   return "<input type='hidden' name='tableUserGroups["+meta.row+"]' value='"+row.uuid+"'/>"; 
+		    	                	   return ""; 
 	    	                	   }
 	    	                	   else{
-		    	                	   return "<input type='hidden' name='tableUserGroups["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedUserGroups["+meta.row+"]'>"; 
+		    	                	   return "<input type='checkbox' value='"+row.uuid+"' name='tableSelectedUserGroups'>"; 
 	    	                	   }
 	    	                   }
 	    	                    
@@ -84,25 +89,36 @@
 		                	"targets": '_all',
 		                	"render": $.fn.dataTable.render.text()
 		                }              
-	    	       ],
-	    	       'fnDrawCallback': function() {
-	    	           icheck();
-	    	       }
+	    	       ]
 	    	});
 		    
-		    function icheck() {
+		    $('#userGroupTable').on('draw.dt', function () {
 		    	$('input').iCheck({
 					checkboxClass : 'icheckbox_square-blue',
 					radioClass : 'iradio_square-blue',
 					increaseArea : '20%' // optional
 				});
-		    }
+		    });
+		    
+		    $('#userGroupTable').on('ifChecked', 'input[name="tableSelectedUserGroups"]', function () {
+		    	$('#selectedUserGroups').append('<input type="hidden" name="selectedUserGroups" value="'+this.value+'"/>');
+		    	userGroups.push(this.value);
+		    });
+		    
+		    $('#userGroupTable').on('ifUnchecked', 'input[name="tableSelectedUserGroups"]', function () {
+		    	$('#selectedUserGroups input[type="hidden"][name="selectedUserGroups"][value="'+this.value+'"]').remove();
+		    	for( var i = 0; i < userGroups.length; i++){ 
+		    		if ( userGroups[i] === this.value) {
+		    			userGroups.splice(i, 1); 
+		    		}
+		    	}
+		    });
 		    
 		    $(document).ready(function ()
 		    {
-		    	$('#usergroupTable thead tr:eq(1) th').each(function(index){
+		    	$('#userGroupTable thead tr:eq(1) th').each(function(index){
 		    		if(index < 2){
-		    			var title = $('#usergroupTable thead tr:eq(0) th').eq( $(this).index() ).text();
+		    			var title = $('#userGroupTable thead tr:eq(0) th').eq( $(this).index() ).text();
 		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
 		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
 		    		} else{
@@ -110,9 +126,9 @@
 		    		}
 		        });
 		    	
-		    	usergroupTable.columns().every(function (index) {
-		    	    $('#usergroupTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
-		    	    	usergroupTable.column($(this).parent().index() + ':visible')
+		    	userGroupTable.columns().every(function (index) {
+		    	    $('#userGroupTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+		    	    	userGroupTable.column($(this).parent().index() + ':visible')
 		    	            .search(this.value)
 		    	            .draw();
 		    	    });
@@ -120,14 +136,14 @@
 		    });
 		    /*]]>*/
 		</script>
-		<th:block sec:authorize="hasAuthority('employee_read')">
+		<th:block sec:authorize="hasAuthority('usergroup_read')">
 			<script th:inline="javascript">
 		    	/*<![CDATA[*/
-		    		$('#usergroupTable').on('click', 'tbody tr', function() {
+		    		$('#userGroupTable').on('click', 'tbody tr', function() {
 						//console.log('API row values : ', mainTable.row(this).data());
-						var uuid = usergroupTable.row(this).data().uuid;
+						var uuid = userGroupTable.row(this).data().uuid;
 						if(uuid){
-							var url = /*[[@{${@environment.getProperty('path.usergroup')}}]]*/;
+							var url = /*[[@{${@environment.getProperty('path.userGroup')}}]]*/;
 							url += '?uuid='+uuid+'#tab_general';
 							window.open(url, '_blank');
 						}

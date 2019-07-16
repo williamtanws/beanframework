@@ -125,7 +125,7 @@ public class VendorFacadeImpl implements VendorFacade {
 	@Override
 	public VendorDto createDto() throws Exception {
 		Vendor vendor = modelService.create(Vendor.class);
-		return modelService.getDto(vendor, VendorDto.class);
+		return modelService.getDto(vendor, VendorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override

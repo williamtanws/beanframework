@@ -45,7 +45,7 @@ public class DtoUserAuthorityConverter extends AbstractDtoConverter<UserAuthorit
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
 			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
-				convertRelation(source, prototype, context);
+				convertBasic(source, prototype, context);
 			}
 
 		} catch (Exception e) {
@@ -63,7 +63,7 @@ public class DtoUserAuthorityConverter extends AbstractDtoConverter<UserAuthorit
 
 	}
 
-	private void convertRelation(UserAuthority source, UserAuthorityDto prototype, DtoConverterContext context) throws Exception {
+	private void convertBasic(UserAuthority source, UserAuthorityDto prototype, DtoConverterContext context) throws Exception {
 		prototype.setEnabled(source.getEnabled());
 	}
 

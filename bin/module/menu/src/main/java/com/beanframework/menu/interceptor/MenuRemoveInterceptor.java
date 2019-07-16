@@ -9,7 +9,6 @@ public class MenuRemoveInterceptor extends AbstractRemoveInterceptor<Menu> {
 
 	@Override
 	public void onRemove(Menu model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

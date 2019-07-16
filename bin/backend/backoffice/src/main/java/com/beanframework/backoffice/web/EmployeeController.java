@@ -1,9 +1,6 @@
 package com.beanframework.backoffice.web;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,9 +19,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.facade.EmployeeFacade;
 import com.beanframework.core.facade.EmployeeFacade.EmployeePreAuthorizeEnum;
 
@@ -106,43 +101,6 @@ public class EmployeeController extends AbstractController {
 		if (employeeDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
 		} else {
-
-			// UserGroup
-			if (employeeDto.getTableUserGroups() != null) {
-				List<UserGroupDto> userGroups = employeeFacade.findOneByUuid(employeeDto.getUuid()).getUserGroups();
-
-				for (int i = 0; i < employeeDto.getTableUserGroups().length; i++) {
-
-					boolean remove = true;
-					if (employeeDto.getTableSelectedUserGroups() != null && employeeDto.getTableSelectedUserGroups().length > i
-							&& BooleanUtils.parseBoolean(employeeDto.getTableSelectedUserGroups()[i])) {
-						remove = false;
-					}
-
-					if (remove) {
-						for (Iterator<UserGroupDto> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext();) {
-							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(employeeDto.getTableUserGroups()[i]))) {
-								userGroupsIterator.remove();
-							}
-						}
-					} else {
-						boolean add = true;
-						for (Iterator<UserGroupDto> userGroupsIterator = userGroups.listIterator(); userGroupsIterator.hasNext();) {
-							if (userGroupsIterator.next().getUuid().equals(UUID.fromString(employeeDto.getTableUserGroups()[i]))) {
-								add = false;
-							}
-						}
-
-						if (add) {
-							UserGroupDto userGroup = new UserGroupDto();
-							userGroup.setUuid(UUID.fromString(employeeDto.getTableUserGroups()[i]));
-							userGroups.add(userGroup);
-						}
-					}
-				}
-				employeeDto.setUserGroups(userGroups);
-			}
-
 			try {
 				employeeDto = employeeFacade.update(employeeDto);
 

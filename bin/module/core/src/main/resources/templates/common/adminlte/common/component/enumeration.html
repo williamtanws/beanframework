@@ -18,13 +18,18 @@
 				</tr>
 			</thead>
 		</table>
+		<div id="selectedEnumerations">
+			<th:block th:each="enumeration : *{__${enumerations}__}">
+				<input type="hidden" name="selectedEnumerations" th:value="${enumeration.uuid}" />
+			</th:block>
+		</div>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    	
 		    var locale = /*[[${#locale}]]*/;
 		    
 		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.enumeration.page')}}]]*/;
-		    
+
 		    var enumerations = [];
 		    /*[# th:each="object : *{__${enumerations}__}"]*/  	    
 		    enumerations.push(/*[[${object.uuid}]]*/); 	    
@@ -66,15 +71,15 @@
 	    	                {
 	    	                   var selected = enumerations.includes(row.uuid);
 	    	                   if(selected){
-	    	                	   return "<input type='hidden' name='tableEnumerations["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEnumerations["+meta.row+"]' checked>"; 
+	    	                	   return "<input type='checkbox' value='"+row.uuid+"' name='tableSelectedEnumerations' checked>"; 
 	    	                   }
 	    	                   else{
 	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
 	    	                	   if(preventSelfUuid == row.uuid){
-		    	                	   return "<input type='hidden' name='tableEnumerations["+meta.row+"]' value='"+row.uuid+"'/>"; 
+		    	                	   return ""; 
 	    	                	   }
 	    	                	   else{
-		    	                	   return "<input type='hidden' name='tableEnumerations["+meta.row+"]' value='"+row.uuid+"'/><input type='checkbox' name='tableSelectedEnumerations["+meta.row+"]'>"; 
+		    	                	   return "<input type='checkbox' value='"+row.uuid+"' name='tableSelectedEnumerations'>"; 
 	    	                	   }
 	    	                   }
 	    	                    
@@ -83,20 +88,31 @@
 		            	{                                 
 		                	"targets": '_all',
 		                	"render": $.fn.dataTable.render.text()
-		                }            
-	    	       ],
-	    	       'fnDrawCallback': function() {
-	    	           icheck();
-	    	       }
+		                }              
+	    	       ]
 	    	});
 		    
-		    function icheck() {
+		    $('#enumerationTable').on('draw.dt', function () {
 		    	$('input').iCheck({
 					checkboxClass : 'icheckbox_square-blue',
 					radioClass : 'iradio_square-blue',
 					increaseArea : '20%' // optional
 				});
-		    }
+		    });
+		    
+		    $('#enumerationTable').on('ifChecked', 'input[name="tableSelectedEnumerations"]', function () {
+		    	$('#selectedEnumerations').append('<input type="hidden" name="selectedEnumerations" value="'+this.value+'"/>');
+		    	enumerations.push(this.value);
+		    });
+		    
+		    $('#enumerationTable').on('ifUnchecked', 'input[name="tableSelectedEnumerations"]', function () {
+		    	$('#selectedEnumerations input[type="hidden"][name="selectedEnumerations"][value="'+this.value+'"]').remove();
+		    	for( var i = 0; i < enumerations.length; i++){ 
+		    		if ( enumerations[i] === this.value) {
+		    			enumerations.splice(i, 1); 
+		    		}
+		    	}
+		    });
 		    
 		    $(document).ready(function ()
 		    {

@@ -35,11 +35,9 @@ public class DynamicFieldDto extends GenericDto {
 
 	private List<EnumerationDto> enumerations = new ArrayList<EnumerationDto>();
 
-	private String tableSelectedLanguage;
+	private String selectedLanguage;
 
-	private String[] tableEnumerations;
-
-	private String[] tableSelectedEnumerations;
+	private String[] selectedEnumerations;
 
 	public String getName() {
 		return name;
@@ -105,28 +103,20 @@ public class DynamicFieldDto extends GenericDto {
 		this.enumerations = enumerations;
 	}
 
-	public String getTableSelectedLanguage() {
-		return tableSelectedLanguage;
+	public String getSelectedLanguage() {
+		return selectedLanguage;
 	}
 
-	public void setTableSelectedLanguage(String tableSelectedLanguage) {
-		this.tableSelectedLanguage = tableSelectedLanguage;
+	public void setSelectedLanguage(String selectedLanguage) {
+		this.selectedLanguage = selectedLanguage;
 	}
 
-	public String[] getTableEnumerations() {
-		return tableEnumerations;
+	public String[] getSelectedEnumerations() {
+		return selectedEnumerations;
 	}
 
-	public void setTableEnumerations(String[] tableEnumerations) {
-		this.tableEnumerations = tableEnumerations;
-	}
-
-	public String[] getTableSelectedEnumerations() {
-		return tableSelectedEnumerations;
-	}
-
-	public void setTableSelectedEnumerations(String[] tableSelectedEnumerations) {
-		this.tableSelectedEnumerations = tableSelectedEnumerations;
+	public void setSelectedEnumerations(String[] selectedEnumerations) {
+		this.selectedEnumerations = selectedEnumerations;
 	}
 
 }

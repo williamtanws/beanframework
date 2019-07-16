@@ -105,6 +105,6 @@ public class MediaFacadeImpl implements MediaFacade {
 	@Override
 	public MediaDto createDto() throws Exception {
 		Media media= modelService.create(Media.class);
-		return modelService.getDto(media, MediaDto.class);
+		return modelService.getDto(media, MediaDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 }

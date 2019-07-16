@@ -9,7 +9,6 @@ public class UserAuthorityRemoveInterceptor extends AbstractRemoveInterceptor<Us
 
 	@Override
 	public void onRemove(UserAuthority model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

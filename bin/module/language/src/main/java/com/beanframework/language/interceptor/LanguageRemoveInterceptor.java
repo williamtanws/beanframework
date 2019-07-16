@@ -9,7 +9,6 @@ public class LanguageRemoveInterceptor extends AbstractRemoveInterceptor<Languag
 
 	@Override
 	public void onRemove(Language model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

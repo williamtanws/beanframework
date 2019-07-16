@@ -7,6 +7,5 @@ public abstract class AbstractRemoveInterceptor<T> implements RemoveInterceptor<
 	
 	@Override
 	public void onRemove(T model, InterceptorContext context) throws InterceptorException {
-		
 	}
 }

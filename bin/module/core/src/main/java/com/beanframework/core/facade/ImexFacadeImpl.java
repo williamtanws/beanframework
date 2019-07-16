@@ -103,6 +103,6 @@ public class ImexFacadeImpl implements ImexFacade {
 	@Override
 	public ImexDto createDto() throws Exception {
 		Imex Imex = modelService.create(Imex.class);
-		return modelService.getDto(Imex, ImexDto.class);
+		return modelService.getDto(Imex, ImexDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 }

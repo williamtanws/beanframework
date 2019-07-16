@@ -9,7 +9,6 @@ public class EnumerationRemoveInterceptor extends AbstractRemoveInterceptor<Enum
 
 	@Override
 	public void onRemove(Enumeration model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

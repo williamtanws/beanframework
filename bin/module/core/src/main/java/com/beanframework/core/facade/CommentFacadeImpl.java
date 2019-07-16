@@ -116,7 +116,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	@Override
 	public CommentDto createDto() throws Exception {
 		Comment comment = modelService.create(Comment.class);
-		return modelService.getDto(comment, CommentDto.class);
+		return modelService.getDto(comment, CommentDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 }

@@ -107,7 +107,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	@Override
 	public ConfigurationDto createDto() throws Exception {
 		Configuration configuration = modelService.create(Configuration.class);
-		return modelService.getDto(configuration, ConfigurationDto.class);
+		return modelService.getDto(configuration, ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
 	}
 
 	@Override

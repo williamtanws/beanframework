@@ -42,7 +42,7 @@ public class DtoUserRightConverter extends AbstractDtoConverter<UserRight, UserR
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
 			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
-				convertRelation(source, prototype, context);
+				convertBasic(source, prototype, context);
 			}
 
 		} catch (Exception e) {
@@ -73,7 +73,7 @@ public class DtoUserRightConverter extends AbstractDtoConverter<UserRight, UserR
 			});
 	}
 
-	private void convertRelation(UserRight source, UserRightDto prototype, DtoConverterContext context) throws Exception {
+	private void convertBasic(UserRight source, UserRightDto prototype, DtoConverterContext context) throws Exception {
 		prototype.setName(source.getName());
 		prototype.setSort(source.getSort());
 	}

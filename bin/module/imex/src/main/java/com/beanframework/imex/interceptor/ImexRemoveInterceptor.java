@@ -9,7 +9,6 @@ public class ImexRemoveInterceptor extends AbstractRemoveInterceptor<Imex> {
 
 	@Override
 	public void onRemove(Imex model, InterceptorContext context) throws InterceptorException {
-
 	}
 
 }

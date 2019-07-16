@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
 	<th:block layout:fragment="dynamicfieldtemplate (dynamicFieldTemplate)">
-		<table id="dynamicfieldtemplateTable" class="table table-bordered table-hover" style="width:100%">
+		<table id="dynamicFieldTemplateTable" class="table table-bordered table-hover" style="width:100%">
 			<thead>
 				<tr>
 					<th th:text="#{module.backoffice.id}" class="text-center"></th>
@@ -18,18 +18,21 @@
 				</tr>
 			</thead>
 		</table>
+		<div id="selectedDynamicFieldTemplate">
+			<input type="hidden" name="selectedDynamicFieldTemplate" th:value="*{__${dynamicFieldTemplate}__ != null ? __${dynamicFieldTemplate}__.uuid : ''}" />
+		</div>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    	
 		    var locale = /*[[${#locale}]]*/;
 		    
 		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.dynamicfieldtemplate.page')}}]]*/;
+
+		    var dynamicFieldTemplate = /*[[*{__${dynamicFieldTemplate}__ != null ? __${dynamicFieldTemplate}__.uuid : ''}]]*/;
 		    
-		    var dynamicFieldTemplate = /*[[*{__${dynamicFieldTemplate}__}]]*/;
-		    
-		    var dynamicfieldtemplateTable = $('#dynamicfieldtemplateTable').DataTable({
-	    		  'language' : {
-			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+		    var dynamicFieldTemplateTable = $('#dynamicFieldTemplateTable').DataTable({
+	    		  'dynamicFieldTemplate' : {
+			        'url' : '/static/common/plugin/datatables/dynamicFieldTemplate/'+locale+'.json'
 			      },
 	    	      'pageLength'  : 10,
 	    	      'paging'      : true,
@@ -61,41 +64,47 @@
 	    	                'className': 'text-center',
 	    	                render: function(data, type, row, meta)
 	    	                {
-	    	                   if(dynamicFieldTemplate){
-		    	                   if(dynamicFieldTemplate.uuid == row.uuid){
-		    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicFieldTemplate' checked>"; 
-		    	                   }
+	    	                   if(dynamicFieldTemplate == row.uuid){
+	    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicFieldTemplate' checked>"; 
 	    	                   }
-	    	                   
-	    	                   var preventSelfUuid = /*[[*{uuid}]]*/;
-    	                	   if(preventSelfUuid == row.uuid){
-	    	                	   return ""; 
-    	                	   }
-    	                	   else{
-	    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicFieldTemplate'>"; 
-    	                	   }
-	    	                  
+	    	                   else{
+	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
+	    	                	   if(preventSelfUuid == row.uuid){
+		    	                	   return ""; 
+	    	                	   }
+	    	                	   else{
+		    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicFieldTemplate'>"; 
+	    	                	   }
+	    	                   }
+	    	                    
 	    	                }
-	    	            }            
-	    	       ],
-	    	       'fnDrawCallback': function() {
-	    	           icheck();
-	    	       }
+	    	            },
+		            	{                                 
+		                	"targets": '_all',
+		                	"render": $.fn.dataTable.render.text()
+		                }              
+	    	       ]
 	    	});
 		    
-		    function icheck() {
+		    $('#dynamicFieldTemplateTable').on('draw.dt', function () {
 		    	$('input').iCheck({
 					checkboxClass : 'icheckbox_square-blue',
 					radioClass : 'iradio_square-blue',
 					increaseArea : '20%' // optional
 				});
-		    }
+		    });
+		    
+		    $('#dynamicFieldTemplateTable').on('ifChecked', 'input[name="tableSelectedDynamicFieldTemplate"]', function () {
+	    		$('#selectedDynamicFieldTemplate [name="selectedDynamicFieldTemplate"]').remove();
+	    		$('#selectedDynamicFieldTemplate').append('<input type="hidden" name="selectedDynamicFieldTemplate" value="'+this.value+'"/>');
+	    		dynamicFieldTemplate = this.value;
+		    });
 		    
 		    $(document).ready(function ()
 		    {
-		    	$('#dynamicfieldtemplateTable thead tr:eq(1) th').each(function(index){
+		    	$('#dynamicFieldTemplateTable thead tr:eq(1) th').each(function(index){
 		    		if(index < 2){
-		    			var title = $('#dynamicfieldtemplateTable thead tr:eq(0) th').eq( $(this).index() ).text();
+		    			var title = $('#dynamicFieldTemplateTable thead tr:eq(0) th').eq( $(this).index() ).text();
 		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
 		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
 		    		} else{
@@ -103,9 +112,9 @@
 		    		}
 		        });
 		    	
-		    	dynamicfieldtemplateTable.columns().every(function (index) {
-		    	    $('#dynamicfieldtemplateTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
-		    	    	dynamicfieldtemplateTable.column($(this).parent().index() + ':visible')
+		    	dynamicFieldTemplateTable.columns().every(function (index) {
+		    	    $('#dynamicFieldTemplateTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+		    	    	dynamicFieldTemplateTable.column($(this).parent().index() + ':visible')
 		    	            .search(this.value)
 		    	            .draw();
 		    	    });
@@ -113,14 +122,14 @@
 		    });
 		    /*]]>*/
 		</script>
-		<th:block sec:authorize="hasAuthority('ppminstructionTemplate_read')">
+		<th:block sec:authorize="hasAuthority('dynamicfieldtemplate_read')">
 			<script th:inline="javascript">
 		    	/*<![CDATA[*/
-		    		$('#dynamicfieldtemplateTable').on('click', 'tbody tr', function() {
+		    		$('#dynamicFieldTemplateTable').on('click', 'tbody tr', function() {
 						//console.log('API row values : ', mainTable.row(this).data());
-						var uuid = dynamicfieldtemplateTable.row(this).data().uuid;
+						var uuid = dynamicFieldTemplateTable.row(this).data().uuid;
 						if(uuid){
-							var url = /*[[@{${@environment.getProperty('path.dynamicfieldtemplate')}}]]*/;
+							var url = /*[[@{${@environment.getProperty('path.dynamicFieldTemplate')}}]]*/;
 							url += '?uuid='+uuid+'#tab_general';
 							window.open(url, '_blank');
 						}

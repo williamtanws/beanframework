@@ -58,7 +58,7 @@ public class DtoCronjobConverter extends AbstractDtoConverter<Cronjob, CronjobDt
 			if (ConvertRelationType.ALL == context.getConverModelType()) {
 				convertAll(source, prototype, context);
 			} else if (ConvertRelationType.BASIC == context.getConverModelType()) {
-				convertRelation(source, prototype, context);
+				convertBasic(source, prototype, context);
 			}
 
 		} catch (Exception e) {
@@ -86,7 +86,7 @@ public class DtoCronjobConverter extends AbstractDtoConverter<Cronjob, CronjobDt
 			});
 	}
 
-	private void convertRelation(Cronjob source, CronjobDto prototype, DtoConverterContext context) throws Exception {
+	private void convertBasic(Cronjob source, CronjobDto prototype, DtoConverterContext context) throws Exception {
 
 	}
 

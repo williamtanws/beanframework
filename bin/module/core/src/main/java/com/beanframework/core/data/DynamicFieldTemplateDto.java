@@ -16,9 +16,7 @@ public class DynamicFieldTemplateDto extends GenericDto {
 
 	private List<DynamicFieldSlotDto> dynamicFieldSlots = new ArrayList<DynamicFieldSlotDto>();
 
-	private String[] tableDynamicFieldSlots;
-
-	private String[] tableSelectedDynamicFieldSlots;
+	private String[] selectedDynamicFieldSlots;
 
 	public String getName() {
 		return name;
@@ -36,20 +34,12 @@ public class DynamicFieldTemplateDto extends GenericDto {
 		this.dynamicFieldSlots = dynamicFieldSlots;
 	}
 
-	public String[] getTableDynamicFieldSlots() {
-		return tableDynamicFieldSlots;
+	public String[] getSelectedDynamicFieldSlots() {
+		return selectedDynamicFieldSlots;
 	}
 
-	public void setTableDynamicFieldSlots(String[] tableDynamicFieldSlots) {
-		this.tableDynamicFieldSlots = tableDynamicFieldSlots;
-	}
-
-	public String[] getTableSelectedDynamicFieldSlots() {
-		return tableSelectedDynamicFieldSlots;
-	}
-
-	public void setTableSelectedDynamicFieldSlots(String[] tableSelectedDynamicFieldSlots) {
-		this.tableSelectedDynamicFieldSlots = tableSelectedDynamicFieldSlots;
+	public void setSelectedDynamicFieldSlots(String[] selectedDynamicFieldSlots) {
+		this.selectedDynamicFieldSlots = selectedDynamicFieldSlots;
 	}
 
 }

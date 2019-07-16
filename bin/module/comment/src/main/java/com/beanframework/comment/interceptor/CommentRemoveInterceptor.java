@@ -9,7 +9,6 @@ public class CommentRemoveInterceptor extends AbstractRemoveInterceptor<Comment>
 
 	@Override
 	public void onRemove(Comment model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

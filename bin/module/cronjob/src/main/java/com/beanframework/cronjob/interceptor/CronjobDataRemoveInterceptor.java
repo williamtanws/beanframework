@@ -9,7 +9,6 @@ public class CronjobDataRemoveInterceptor extends AbstractRemoveInterceptor<Cron
 
 	@Override
 	public void onRemove(CronjobData model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

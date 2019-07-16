@@ -9,7 +9,6 @@ public class VendorRemoveInterceptor extends AbstractRemoveInterceptor<Vendor> {
 
 	@Override
 	public void onRemove(Vendor model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }

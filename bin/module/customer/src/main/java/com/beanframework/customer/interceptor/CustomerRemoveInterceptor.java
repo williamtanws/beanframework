@@ -9,7 +9,6 @@ public class CustomerRemoveInterceptor extends AbstractRemoveInterceptor<Custome
 
 	@Override
 	public void onRemove(Customer model, InterceptorContext context) throws InterceptorException {
-		super.onRemove(model, context);
 	}
 
 }
