@@ -97,3 +97,8 @@ a.disabled {
   /* And disable the pointer events */
   pointer-events: none;
 }
+
+.nav-tabs-custom>.nav-tabs {
+    border-bottom-color: #3c8dbc;
+    background-color: #f9f9f9;
+}
