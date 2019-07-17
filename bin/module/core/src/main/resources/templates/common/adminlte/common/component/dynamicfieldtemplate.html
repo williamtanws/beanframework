@@ -72,9 +72,13 @@
 	    	                	   if(preventSelfUuid == row.uuid){
 		    	                	   return ""; 
 	    	                	   }
-	    	                	   else{
-		    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicFieldTemplate'>"; 
-	    	                	   }
+	    	                	   
+	    	                	   if(meta.row == 0){
+			    	               		return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicFieldTemplate' required  data-val='true' data-val-required='required'><span class='help-block'></span>"; 
+	 	                		   }
+	 	                		   else{
+	 		    	               		return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicFieldTemplate'>"; 
+	 	                		   }
 	    	                   }
 	    	                    
 	    	                }

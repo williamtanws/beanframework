@@ -72,9 +72,13 @@
 	    	                	   if(preventSelfUuid == row.uuid){
 		    	                	   return ""; 
 	    	                	   }
-	    	                	   else{
-		    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedLanguage'>"; 
-	    	                	   }
+	    	                	   
+	    	                	   if(meta.row == 0){
+			    	               		return "<input type='radio' value='"+row.uuid+"' name='tableSelectedLanguage' required  data-val='true' data-val-required='required'><span class='help-block'></span>"; 
+	 	                		   }
+	 	                		   else{
+	 		    	               		return "<input type='radio' value='"+row.uuid+"' name='tableSelectedLanguage'>"; 
+	 	                		   }
 	    	                   }
 	    	                    
 	    	                }
