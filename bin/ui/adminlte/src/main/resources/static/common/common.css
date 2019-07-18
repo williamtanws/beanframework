@@ -102,3 +102,26 @@ a.disabled {
     border-bottom-color: #3c8dbc;
     background-color: #f9f9f9;
 }
+
+<style>
+.pre-editor {
+	min-height: 100px;
+	height: auto;
+	overflow: auto;
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+.pre-comment {
+	height: auto;
+	overflow: auto;
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+</style>
