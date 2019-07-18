@@ -76,7 +76,7 @@
 							<div class="tab-pane" id="tab_attribute">
 								<div class="box-body">
 									<div class="row">
-										<th:block layout:insert="~{common/adminlte/common/component/attribute :: attribute(fields='fields')}"></th:block>
+										<th:block layout:insert="~{common/adminlte/common/dynamicfield/layout :: input(fields=*{fields})}"></th:block>
 									</div>
 								</div>
 								<!-- /.box-body -->
