@@ -1,7 +1,16 @@
 package com.beanframework.dynamicfield;
 
 public enum DynamicFieldType {
-	INTEGER("Integer"), FLOATING_POINT("Floating Point"), TEXT("Text"), TEXTAREA("Text Area"), EDITOR("Editor"), SELECT("Select"), DATE("Date"), BOOLEAN("Boolean"), FILE("File");
+	INTEGER("Integer"), 
+	FLOATING_POINT("Floating Point"), 
+	TEXT("Text"), 
+	TEXTAREA("Text Area"), 
+	EDITOR("Editor"), 
+	SELECT("Select"), 
+	DATE("Date"), 
+	BOOLEAN("Boolean"), 
+	FILE("File"), 
+	CUSTOM("Custom");
 
 	private String type;
 
