@@ -90,6 +90,12 @@
 
 	<th:block layout:fragment="js">
 	<script th:inline="javascript">
+	
+	if ( self !== top ) {
+		// you're in an iframe
+		window.top.location.href = /*[[@{${@environment.getProperty('path.console.login')}}]]*/; 
+	}
+	
 	/*<![CDATA[*/
 	$(document).ready(function() {
 	  $('#login-form').validate(
