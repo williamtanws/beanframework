@@ -99,6 +99,12 @@
 
 	<th:block layout:fragment="js">
 	<script th:inline="javascript">
+	
+	if ( self !== top ) {
+		// you're in an iframe
+		window.top.location.href = /*[[@{${@environment.getProperty('path.backoffice.login')}}]]*/; 
+	}
+	
 	/*<![CDATA[*/
 	$(document).ready(function() {
 	  $('#login-form').validate(
