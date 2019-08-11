@@ -91,8 +91,13 @@ public class UserController {
 			targetStream = resource.getInputStream();
 
 			String mimeType = URLConnection.guessContentTypeFromName(FilenameUtils.getExtension(configurationValue));
-
-			return ResponseEntity.ok().contentType(MediaType.valueOf(mimeType)).body(IOUtils.toByteArray(targetStream));
+			
+			if(StringUtils.isNotBlank(mimeType)) {
+				return ResponseEntity.ok().contentType(MediaType.valueOf(mimeType)).body(IOUtils.toByteArray(targetStream));
+			}
+			else {
+				return ResponseEntity.ok().body(IOUtils.toByteArray(targetStream));
+			}
 		}
 	}
 }
