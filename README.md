@@ -32,6 +32,11 @@ c. beanframework/config/src/main/resources/*.template
 4. Run server.bat or server.sh
 5. Browse http://localhost:8080/console , navigate to Platform->Update to update all modules' data
 
+* Install Application as Service
+1. Navigate command line to beanframework/bin/install
+2. Run "app install"
+3. To remove, run "app uninstall"
+
 * Console
 http://localhost:8080/console
 
