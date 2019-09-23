@@ -18,9 +18,9 @@ import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.imex.domain.Imex;
 import com.beanframework.imex.service.ImexService;
+import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.domain.User;
-import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
 import com.beanframework.workflow.domain.Workflow;
@@ -73,10 +73,12 @@ public class CoreAfterSaveListener implements AfterSaveListener {
 				Imex imex = (Imex) model;
 				imexService.importExportMedia(imex);
 				
-			} else if (model instanceof UserGroup) {
+			} else if (model instanceof Menu) {
 				cacheManager.getCache(MenuService.CACHE_MENU_TREE).clear();
+				
 			} else if (model instanceof Configuration) {
 				cacheManager.getCache(ConfigurationService.CACHE_CONFIGURATION).clear();
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

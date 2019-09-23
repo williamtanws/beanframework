@@ -16,8 +16,8 @@ import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.Email;
+import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
-import com.beanframework.user.domain.UserGroup;
 import com.beanframework.workflow.domain.Workflow;
 
 public class CoreAfterRemoveListener implements AfterRemoveListener {
@@ -38,7 +38,7 @@ public class CoreAfterRemoveListener implements AfterRemoveListener {
 				Workflow workflow = (Workflow) model;
 				repositoryService.deleteDeployment(workflow.getId());
 
-			} else if (model instanceof UserGroup) {
+			} else if (model instanceof Menu) {
 				cacheManager.getCache(MenuService.CACHE_MENU_TREE).clear();
 
 			} else if (model instanceof Configuration) {
