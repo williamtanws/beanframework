@@ -67,6 +67,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 				UserGroup userGroup = (UserGroup) model;
 				removeMenuUserGroup(userGroup);
 				removeUser(userGroup);
+				removeUserGroup(userGroup);
 
 			} else if (model instanceof User) {
 				User user = (User) model;
@@ -182,6 +183,47 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 			if (removed)
 				modelService.saveEntityQuietly(entities.get(i), User.class);
+		}
+	}
+	
+	private void removeUserGroup(UserGroup model) throws Exception {
+		Specification<User> specification = new Specification<User>() {
+			private static final long serialVersionUID = 1L;
+
+			public String toString() {
+				return model.getUuid().toString();
+			}
+
+			@Override
+			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicates = new ArrayList<Predicate>();
+
+				predicates.add(cb.or(root.join(User.USER_GROUPS, JoinType.LEFT).get(GenericEntity.UUID).in(model.getUuid())));
+
+				if (predicates.isEmpty()) {
+					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+				} else {
+					return cb.or(predicates.toArray(new Predicate[predicates.size()]));
+				}
+
+			}
+		};
+
+		List<UserGroup> entities = modelService.findBySpecificationBySort(specification, null, UserGroup.class);
+
+		for (int i = 0; i < entities.size(); i++) {
+
+			boolean removed = false;
+			for (int j = 0; j < entities.get(i).getUserGroups().size(); j++) {
+				if (entities.get(i).getUserGroups().get(j).getUuid().equals(model.getUuid())) {
+					entities.get(i).getUserGroups().remove(j);
+					removed = true;
+					break;
+				}
+			}
+
+			if (removed)
+				modelService.saveEntityQuietly(entities.get(i), UserGroup.class);
 		}
 	}
 
