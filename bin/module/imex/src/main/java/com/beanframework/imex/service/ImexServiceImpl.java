@@ -195,7 +195,7 @@ public class ImexServiceImpl implements ImexService {
 
 		for (Entry<String, ImportListener> entry : sortedImportListeners) {
 
-			Reader reader = new StringReader(String.format(query));
+			Reader reader = new StringReader(query);
 			importCsv(importName, reader, entry.getValue(), successMessages, errorMessages);
 		}
 
