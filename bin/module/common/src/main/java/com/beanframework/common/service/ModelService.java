@@ -37,6 +37,8 @@ public interface ModelService {
 	<T> T create(Class modelClass) throws Exception;
 
 	<T> T findOneByUuid(UUID uuid, Class modelClass) throws Exception;
+	
+	<T> T findOneByUuid(UUID uuid, Class modelClass, String typeCode) throws Exception;
 
 	<T> T findOneByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
@@ -112,20 +114,30 @@ public interface ModelService {
 	void deleteQuietlyByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
 	<T> T getEntity(Object model, Class modelClass) throws Exception;
+	
+	<T> T getEntity(Object model, String typeCode) throws Exception;
 
 	<T> T getEntity(Object model, Class modelClass, EntityConverterContext context) throws Exception;
+	
+	<T> T getEntity(Object model, String typeCode, EntityConverterContext context) throws Exception;
 
 	<T extends Collection> T getEntity(Collection model, Class modelClass) throws Exception;
 
 	<T extends Collection> T getEntity(Collection model, Class modelClass, EntityConverterContext context) throws Exception;
 
 	<T> T getDto(Object model, Class modelClass) throws Exception;
+	
+	<T> T getDto(Object model, String typeCode) throws Exception;
 
 	<T> T getDto(Object model, Class modelClass, DtoConverterContext context) throws Exception;
+	
+	<T> T getDto(Object model, String typeCode, DtoConverterContext context) throws Exception;
 
 	<T extends Collection> T getDto(Collection models, Class modelClass) throws Exception;
 
 	<T extends Collection> T getDto(Collection models, Class modelClass, DtoConverterContext context) throws Exception;
+	
+	<T extends Collection> T getDto(Collection models, String typeCode, DtoConverterContext context) throws Exception;
 
 	void initDefaults(Object model, Class modelClass) throws Exception;
 
@@ -151,7 +163,7 @@ public interface ModelService {
 
 	void entityConverter(Collection models, EntityConverterContext context, Class modelClass) throws ConverterException;
 
-	<T> T entityConverter(Object model, EntityConverterContext context, Class modelClass) throws ConverterException;
+	<T> T entityConverter(Object model, EntityConverterContext context, String typeCode) throws ConverterException;
 
 	<T> T dtoConverter(Object model, DtoConverterContext context, String typeCode) throws ConverterException;
 

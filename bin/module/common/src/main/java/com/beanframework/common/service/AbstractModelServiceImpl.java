@@ -224,22 +224,22 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			entityConverter(model, context, modelClass);
+			entityConverter(model, context, modelClass.getSimpleName());
 		}
 	}
 
 	@Override
-	public Object entityConverter(Object model, EntityConverterContext context, Class modelClass) throws ConverterException {
+	public Object entityConverter(Object model, EntityConverterContext context, String typeCode) throws ConverterException {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof EntityConverter) {
 				EntityConverter interceptor = (EntityConverter) interceptorMapping.getConverter();
-				if (interceptorMapping.getTypeCode().equals(modelClass.getSimpleName())) {
+				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					return interceptor.convert(model, context);
 				}
 			}
 		}
 
-		throw new ConverterException("Cannot find any entity convert to convert target model: " + modelClass.getSimpleName());
+		throw new ConverterException("Cannot find any entity convert to convert target model: " + typeCode);
 	}
 
 	@Override
