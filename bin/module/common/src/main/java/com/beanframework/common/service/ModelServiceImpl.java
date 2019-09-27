@@ -134,6 +134,25 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
+	public <T> T findOneByUuid(UUID uuid, Class modelClass, String typeCode) throws Exception {
+		Assert.notNull(uuid, "uuid was null");
+		Assert.notNull(typeCode, "typeCode was null");
+
+		try {
+
+			Object model = entityManager.find(modelClass, uuid);
+
+			if (model != null)
+				loadInterceptor(model, new InterceptorContext(), typeCode);
+
+			return (T) model;
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new Exception(e.getMessage(), e);
+		}
+	}
+
+	@Override
 	public <T> T findOneByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
@@ -472,6 +491,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
+	public <T> T getEntity(Object model, String typeCode) throws Exception {
+		return getEntity(model, typeCode, new EntityConverterContext());
+	}
+
+	@Override
 	public <T> T getEntity(Object model, Class modelClass, EntityConverterContext context) throws Exception {
 		try {
 
@@ -479,7 +503,23 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				return null;
 			}
 
-			model = entityConverter(model, context, modelClass);
+			model = entityConverter(model, context, modelClass.getSimpleName());
+			return (T) model;
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new Exception(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public <T> T getEntity(Object model, String typeCode, EntityConverterContext context) throws Exception {
+		try {
+
+			if (model == null) {
+				return null;
+			}
+
+			model = entityConverter(model, context, typeCode);
 			return (T) model;
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -508,7 +548,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			List<Object> entityObjects = new ArrayList<Object>();
 			for (Object model : models) {
-				model = entityConverter(model, context, modelClass);
+				model = entityConverter(model, context, modelClass.getSimpleName());
 				entityObjects.add(model);
 			}
 			return (T) entityObjects;
@@ -524,12 +564,31 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
+	public <T> T getDto(Object model, String typeCode) throws Exception {
+		return getDto(model, typeCode, new DtoConverterContext());
+	}
+
+	@Override
 	public <T> T getDto(Object model, Class modelClass, DtoConverterContext context) throws Exception {
 		try {
 			if (model == null)
 				return null;
 
 			model = dtoConverter(model, context, modelClass.getSimpleName());
+			return (T) model;
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new Exception(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public <T> T getDto(Object model, String typeCode, DtoConverterContext context) throws Exception {
+		try {
+			if (model == null)
+				return null;
+
+			model = dtoConverter(model, context, typeCode);
 			return (T) model;
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -556,6 +615,25 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 
 			return (T) dtoConverter(models, context, modelClass.getSimpleName());
+		} catch (Exception e) {
+			throw new Exception(e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public <T extends Collection> T getDto(Collection models, String typeCode, DtoConverterContext context) throws Exception {
+		try {
+			if (models == null)
+				return null;
+
+			if (models.isEmpty())
+				return (T) new ArrayList<T>();
+
+			if (context == null) {
+				context = new DtoConverterContext();
+			}
+
+			return (T) dtoConverter(models, context, typeCode);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage(), e);
 		}
