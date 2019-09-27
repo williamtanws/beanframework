@@ -118,6 +118,9 @@ public class PlatformConfig {
 	@Value("${platform.hibernate.javax.cache.missing_cache_strategy:false}")
 	private String PLATFORM_HIBERNATE_JAVAX_CACHCE_MISSING_CACHE_STRATEGY;
 
+	@Value("${platform.hibernate.cache.auto_evict_collection_cache:true}")
+	private String PLATFORM_HIBERNATE_CACHE_AUTO_EVICT_COLLECTION_CACHE;
+	
 	@Value("${platform.javax.persistence.sharedCache.mode:ALL}")
 	private String PLATFORM_JAVAX_PERSISTENCE_SHAREDCACHE_MODE;
 
@@ -252,6 +255,7 @@ public class PlatformConfig {
 		properties.put("hibernate.javax.cache.provider", PLATFORM_HIBERNATE_JAVAX_CACHE_PROVIDER);
 		properties.put("hibernate.javax.cache.uri", PLATFORM_HIBERNATE_JAVAX_CACHE_URI);
 		properties.put("hibernate.javax.cache.missing_cache_strategy", PLATFORM_HIBERNATE_JAVAX_CACHCE_MISSING_CACHE_STRATEGY);
+		properties.put("hibernate.cache.auto_evict_collection_cache", PLATFORM_HIBERNATE_CACHE_AUTO_EVICT_COLLECTION_CACHE);
 
 		properties.put("javax.persistence.sharedCache.mode", PLATFORM_JAVAX_PERSISTENCE_SHAREDCACHE_MODE);
 
