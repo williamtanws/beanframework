@@ -71,7 +71,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 			} else if (model instanceof User) {
 				User user = (User) model;
-				removeCommentUser(user);
+				removeComment(user);
 
 				File mediaFolder = new File(PROFILE_PICTURE_LOCATION + File.separator + user.getUuid().toString());
 				FileUtils.deleteQuietly(mediaFolder);
@@ -185,7 +185,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 				modelService.saveEntityQuietly(entities.get(i), User.class);
 		}
 	}
-	
+
 	private void removeUserGroup(UserGroup model) throws Exception {
 		Specification<User> specification = new Specification<User>() {
 			private static final long serialVersionUID = 1L;
@@ -292,7 +292,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 		};
 
 		List<UserGroup> entities = modelService.findBySpecificationBySort(specification, null, UserGroup.class);
-		
+
 		for (int i = 0; i < entities.size(); i++) {
 
 			boolean removed = false;
@@ -421,15 +421,14 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 			}
 	}
 
-	private void removeCommentUser(User model) throws Exception {
+	private void removeComment(User model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Comment.USER + "." + GenericEntity.UUID, model.getUuid());
 		List<Comment> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, Comment.class);
 
 		if (entities != null)
 			for (Comment comment : entities) {
-				modelService.saveEntityQuietly(comment, Comment.class);
+				modelService.deleteEntityQuietly(comment, Comment.class);
 			}
-
 	}
 }
