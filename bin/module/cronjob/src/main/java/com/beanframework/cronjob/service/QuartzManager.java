@@ -26,7 +26,7 @@ public class QuartzManager {
 	@Autowired
 	private SchedulerFactoryBean schedulerFactoryBean;
 
-	public static final String CRONJOB_UUID = "uuid";
+	public static final String CRONJOB_UUID = "cronjobUuid";
 
 	@SuppressWarnings("unchecked")
 	public void startOrUpdateJob(Cronjob job) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SchedulerException {

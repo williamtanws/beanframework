@@ -259,7 +259,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public <T extends Collection> T findAll(Class modelClass) {
-		return (T) getQuery(null, modelClass, Sort.unsorted()).getResultList();
+		return (T) createQuery(null, null, null, null, null, modelClass).getResultList();
 	}
 
 	@Override
