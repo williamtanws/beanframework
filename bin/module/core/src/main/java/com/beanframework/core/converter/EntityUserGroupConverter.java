@@ -1,9 +1,9 @@
 package com.beanframework.core.converter;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,32 +29,21 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 		try {
 
 			if (source.getUuid() != null) {
-
-				UserGroup prototype = modelService.findOneByUuid(source.getUuid(), UserGroup.class);
+				Map<String, Object> properties = new HashMap<String, Object>();
+				properties.put(UserGroup.UUID, source.getUuid());
+				UserGroup prototype = modelService.findOneByProperties(properties, UserGroup.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convert(source, modelService.create(UserGroup.class));
+			return convertToEntity(source, modelService.create(UserGroup.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 
-	}
-
-	public List<UserGroup> convert(List<UserGroupDto> sources, EntityConverterContext context) throws ConverterException {
-		List<UserGroup> convertedList = new ArrayList<UserGroup>();
-		try {
-			for (UserGroupDto source : sources) {
-				convertedList.add(convert(source, context));
-			}
-		} catch (ConverterException e) {
-			throw new ConverterException(e.getMessage(), e);
-		}
-		return convertedList;
 	}
 
 	private UserGroup convertToEntity(UserGroupDto source, UserGroup prototype) throws ConverterException {
