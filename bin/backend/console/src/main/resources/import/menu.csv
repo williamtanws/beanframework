@@ -15,11 +15,13 @@ INSERT Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dynamicFie
 ,workflow			,Workflow				,100,fa fa-briefcase	,/backoffice/workflow				,,true,system		,employeegroup				,menu_0_name_en=Workflow;menu_1_name_cn=工作流程
 ,imex				,Import Export			,110,fa fa-exchange		,/backoffice/imex					,,true,system		,employeegroup				,menu_0_name_en=Import Export;menu_1_name_cn=导入导出
 ,user				,User					,20	,fa fa-user			,									,,true,				,employeegroup				,menu_0_name_en=User;menu_1_name_cn=用户
-,employeesession	,Employee Session		,10	,fa fa-clock-o		,/backoffice/employee/session		,,true,user			,employeegroup				,menu_0_name_en=Employee Session;menu_1_name_cn=雇员会话
+,company			,Company				,10	,fa fa-building		,/backoffice/company				,,true,user			,employeegroup				,menu_0_name_en=Company;menu_1_name_cn=公司
 ,usergroup			,User Group				,20	,fa fa-users		,/backoffice/usergroup				,,true,user			,employeegroup				,menu_0_name_en=User Group;menu_1_name_cn=用户组
 ,employee			,Employee				,30	,fa fa-user			,/backoffice/employee				,,true,user			,employeegroup				,menu_0_name_en=Employee;menu_1_name_cn=雇员
 ,customer			,Customer				,40	,fa fa-user			,/backoffice/customer				,,true,user			,employeegroup				,menu_0_name_en=Customer;menu_1_name_cn=顾客
 ,vendor				,Vendor					,50	,fa fa-user			,/backoffice/vendor					,,true,user			,employeegroup				,menu_0_name_en=Vendor;menu_1_name_cn=供应商
+,address			,Address				,60	,fa fa-home			,/backoffice/address				,,true,user			,employeegroup				,menu_0_name_en=Address;menu_1_name_cn=地址
+,employeesession	,Employee Session		,70	,fa fa-clock-o		,/backoffice/employee/session		,,true,user			,employeegroup				,menu_0_name_en=Employee Session;menu_1_name_cn=雇员会话
 ,multimedia			,Multimedia				,30	,fa fa-file-image-o	,									,,true,				,employeegroup				,menu_0_name_en=Multimedia;menu_1_name_cn=多媒体
 ,filemanager		,File Manager			,10	,fa fa-folder		,/backoffice/filemanager			,,true,multimedia	,employeegroup				,menu_0_name_en=File Manager;menu_1_name_cn=文件管理器
 ,media				,Media					,20	,fa fa-file-image-o	,/backoffice/media					,,true,multimedia	,employeegroup				,menu_0_name_en=Media;menu_1_name_cn=媒体
