@@ -1,4 +1,4 @@
-package com.beanframework.console.csv;
+package com.beanframework.common.data;
 
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.Trim;

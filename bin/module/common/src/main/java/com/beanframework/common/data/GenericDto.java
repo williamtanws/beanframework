@@ -1,4 +1,4 @@
-package com.beanframework.core.data;
+package com.beanframework.common.data;
 
 import java.io.Serializable;
 import java.util.Date;

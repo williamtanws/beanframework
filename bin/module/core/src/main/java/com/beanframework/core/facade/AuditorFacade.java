@@ -7,8 +7,8 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.DataTableRequest;
-import com.beanframework.core.data.AuditorDto;
 
 public interface AuditorFacade {
 

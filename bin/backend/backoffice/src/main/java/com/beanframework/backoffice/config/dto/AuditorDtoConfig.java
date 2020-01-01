@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
+import com.beanframework.common.data.AuditorDto;
 import com.beanframework.core.converter.DtoAuditorConverter;
-import com.beanframework.core.data.AuditorDto;
 
 @Configuration
 public class AuditorDtoConfig {

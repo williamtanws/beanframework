@@ -28,7 +28,7 @@ platform.hibernate.show_sql=true
 # ===============================
 # = DATA SOURCE
 # ===============================
-datasource.platform.url=jdbc:mariadb://localhost:3306/beanframework?useUnicode=yes&characterEncoding=UTF-8
+datasource.platform.url=jdbc:mariadb://localhost:3306/beanframework2?useUnicode=yes&characterEncoding=UTF-8
 datasource.platform.username=root
 datasource.platform.password=
 datasource.platform.driverClassName=org.mariadb.jdbc.Driver

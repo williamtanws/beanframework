@@ -6,6 +6,7 @@ import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
+import com.beanframework.common.data.AbstractCsv;
 import com.beanframework.imex.ImexType;
 
 public class ImexCsv extends AbstractCsv {

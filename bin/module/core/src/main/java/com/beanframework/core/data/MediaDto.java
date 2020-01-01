@@ -2,6 +2,8 @@ package com.beanframework.core.data;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.beanframework.common.data.GenericDto;
+
 public class MediaDto extends GenericDto {
 
 	/**
