@@ -1,5 +1,7 @@
 package com.beanframework.core.data;
 
+import com.beanframework.common.data.AuditorDto;
+
 public class DataTableResponseData {
 
 	private String uuid;

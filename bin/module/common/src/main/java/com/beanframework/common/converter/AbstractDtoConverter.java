@@ -1,13 +1,13 @@
-package com.beanframework.core.converter;
+package com.beanframework.common.converter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.common.context.DtoConverterContext;
+import com.beanframework.common.data.AuditorDto;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.data.AuditorDto;
-import com.beanframework.core.data.GenericDto;
 
 public abstract class AbstractDtoConverter<T extends GenericEntity, E extends GenericDto> {
 

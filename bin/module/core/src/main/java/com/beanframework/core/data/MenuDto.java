@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.menu.domain.MenuTargetTypeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

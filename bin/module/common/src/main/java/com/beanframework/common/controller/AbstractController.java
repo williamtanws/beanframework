@@ -10,6 +10,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.common.service.LocaleMessageService;
 
+import io.micrometer.core.instrument.util.StringUtils;
+
 public class AbstractController {
 
 	public static final String ERROR = "error";
@@ -20,8 +22,6 @@ public class AbstractController {
 
 	@SuppressWarnings("rawtypes")
 	public void addErrorMessage(Class objectClass, String message, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
-		bindingResult.reject(objectClass.getSimpleName(), message);
 
 		StringBuilder errorMessage = new StringBuilder();
 		List<ObjectError> errors = bindingResult.getAllErrors();
@@ -35,6 +35,12 @@ public class AbstractController {
 			else {
 				errorMessage.append(localeMessageService.getMessage(error.getDefaultMessage()));				
 			}
+		}
+		
+		if(StringUtils.isNotBlank(message)) {
+			bindingResult.reject(objectClass.getSimpleName(), message);
+			errorMessage.append("<br>");
+			errorMessage.append(message);
 		}
 
 		redirectAttributes.addFlashAttribute(ERROR, errorMessage.toString());

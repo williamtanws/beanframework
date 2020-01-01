@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.AuditorWebConstants;
 import com.beanframework.backoffice.data.AuditorDataTableResponseData;
+import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.core.data.AuditorDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.AuditorFacade;
 import com.beanframework.core.facade.AuditorFacade.PreAuthorizeEnum;

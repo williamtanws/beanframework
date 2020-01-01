@@ -3,6 +3,8 @@ package com.beanframework.core.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.beanframework.common.data.GenericDto;
+
 public class UserRightDto extends GenericDto {
 	/**
 	 * 

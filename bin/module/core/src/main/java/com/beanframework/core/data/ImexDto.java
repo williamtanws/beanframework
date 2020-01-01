@@ -3,6 +3,7 @@ package com.beanframework.core.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.imex.ImexType;
 
 public class ImexDto extends GenericDto {

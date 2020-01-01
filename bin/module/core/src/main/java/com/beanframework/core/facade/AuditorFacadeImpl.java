@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
+import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.data.AuditorDto;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.specification.AuditorSpecification;
 
