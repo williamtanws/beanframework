@@ -81,6 +81,16 @@
 		</dependency>
 		<dependency>
 			<groupId>com.beanframework</groupId>
+			<artifactId>company</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.beanframework</groupId>
+			<artifactId>address</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.beanframework</groupId>
 			<artifactId>filemanager</artifactId>
 			<version>${project.version}</version>
 		</dependency>
