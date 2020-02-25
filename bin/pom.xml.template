@@ -24,6 +24,7 @@
     	<module>module/customer</module>
     	<module>module/vendor</module>
     	<module>module/company</module>
+    	<module>module/address</module>
     	<module>module/email</module>
     	<module>module/cronjob</module>
     	<module>module/configuration</module>
