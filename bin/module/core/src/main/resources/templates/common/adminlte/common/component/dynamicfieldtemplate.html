@@ -73,7 +73,7 @@
 		    	                	   return ""; 
 	    	                	   }
 	    	                	   
-	    	                	   if(meta.row == 0){
+	    	                	   if($('input[name="selectedDynamicFieldTemplate"]').val() == ""){
 			    	               		return "<input type='radio' value='"+row.uuid+"' name='tableSelectedDynamicFieldTemplate' required  data-val='true' data-val-required='required'><span class='help-block'></span>"; 
 	 	                		   }
 	 	                		   else{
