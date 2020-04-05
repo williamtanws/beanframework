@@ -405,8 +405,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		Query query = entityManager.createQuery(qlString);
 		if (properties != null && properties.isEmpty() == Boolean.FALSE) {
 			for (Map.Entry<String, Object> entry : properties.entrySet()) {
-				if (entry.getValue() != null && entry.getValue() instanceof String == false
-						&& entry.getValue().toString().trim().equalsIgnoreCase("IS EMPTY") == false) {
+				if (entry.getValue() != null && (entry.getValue() instanceof String
+						&& entry.getValue().toString().trim().equalsIgnoreCase(CommonConstants.Query.IS_EMPTY)) == false) {
 					query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());
 				}
 			}
