@@ -405,8 +405,8 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		Query query = entityManager.createQuery(qlString);
 		if (properties != null && properties.isEmpty() == Boolean.FALSE) {
 			for (Map.Entry<String, Object> entry : properties.entrySet()) {
-				if (entry.getValue() != null && (entry.getValue() instanceof String
-						&& entry.getValue().toString().trim().equalsIgnoreCase(CommonConstants.Query.IS_EMPTY)) == false) {
+				if (entry.getValue() != null && (entry.getValue() instanceof String && entry.getValue().toString()
+						.trim().equalsIgnoreCase(CommonConstants.Query.IS_EMPTY)) == false) {
 					query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());
 				}
 			}
@@ -428,17 +428,17 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	protected String sqlProperties(Map<String, Object> properties) {
 		StringBuilder propertiesBuilder = new StringBuilder();
 		for (Map.Entry<String, Object> entry : properties.entrySet()) {
-			if (propertiesBuilder.length() == 0) {
-				if (entry.getValue() == null) {
-					propertiesBuilder.append("o." + entry.getKey() + " "+CommonConstants.Query.IS_NULL);
-				} else if (entry.getValue() instanceof String
-						&& entry.getValue().toString().trim().equalsIgnoreCase(CommonConstants.Query.IS_EMPTY)) {
-					propertiesBuilder.append("o." + entry.getKey() + " "+CommonConstants.Query.IS_EMPTY);
-				} else {
-					propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey().replace(".", "_"));
-				}
+			if (propertiesBuilder.length() != 0) {
+				propertiesBuilder.append(" and ");
+			}
+
+			if (entry.getValue() == null) {
+				propertiesBuilder.append("o." + entry.getKey() + " " + CommonConstants.Query.IS_NULL);
+			} else if (entry.getValue() instanceof String
+					&& entry.getValue().toString().trim().equalsIgnoreCase(CommonConstants.Query.IS_EMPTY)) {
+				propertiesBuilder.append("o." + entry.getKey() + " " + CommonConstants.Query.IS_EMPTY);
 			} else {
-				propertiesBuilder.append(" and o." + entry.getKey() + " = :" + entry.getKey().replace(".", "_"));
+				propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey().replace(".", "_"));
 			}
 		}
 		return propertiesBuilder.toString();
@@ -448,8 +448,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		StringBuilder sortsBuilder = new StringBuilder();
 		for (Entry<String, Direction> entry : sorts.entrySet()) {
 			if (sortsBuilder.length() == 0) {
-				sortsBuilder.append(
-						CommonConstants.Query.ORDER_BY + " o." + entry.getKey() + " " + entry.getValue().toString());
+				sortsBuilder.append(CommonConstants.Query.ORDER_BY + " o." + entry.getKey() + " " + entry.getValue().toString());
 			} else {
 				sortsBuilder.append(", o." + entry.getKey() + " " + entry.getValue().toString());
 			}
