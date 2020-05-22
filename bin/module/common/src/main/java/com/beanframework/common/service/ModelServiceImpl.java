@@ -200,7 +200,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 			Long count = (Long) executeCountQuery(getCountQuery(specification, modelClass));
 
-			return count.intValue();
+			return count.equals(0L) ? 0 : Integer.valueOf(count.intValue());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
