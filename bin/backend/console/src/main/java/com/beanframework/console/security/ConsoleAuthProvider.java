@@ -41,13 +41,18 @@ public class ConsoleAuthProvider implements AuthenticationProvider {
 	private String CONSOLE_ACCESS;
 
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		
 		String id = authentication.getName();
 		String password = (String) authentication.getCredentials();
-
-		if (StringUtils.stripToNull(id) == null) {
+		
+		if (id == null || StringUtils.isBlank(id.trim())) {
 			throw new BadCredentialsException(localeMessageService.getMessage(ConsoleWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		}
-		if (StringUtils.stripToNull(password) == null) {
+		else {
+			id = id.trim();
+		}
+		
+		if (password == null || StringUtils.isBlank(password)) {
 			throw new BadCredentialsException(localeMessageService.getMessage(ConsoleWebConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
 		}
 
