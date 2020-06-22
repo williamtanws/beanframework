@@ -32,6 +32,7 @@ public class UserField extends GenericEntity {
 	private static final long serialVersionUID = -7666190244677961254L;
 	public static final String USER = "user";
 	public static final String DYNAMIC_FIELD_SLOT = "dynamicFieldSlot";
+	public static final String VALUE = "value";
 
 	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
