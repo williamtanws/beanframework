@@ -195,9 +195,21 @@
 				      'ordering'    : true,
 				      'info'        : true,
 				      'autoWidth'   : true,
-				      'dom': "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+				      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
 		    	      "<'row'<'col-sm-12'tr>>" +
-		    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+		    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+		    	      'buttons': [
+		                  {
+		                      text: 'Clear',
+		                      action: function ( e, dt, node, config ) {
+		                    	  dt.search('').columns().search('').draw();
+		                    	  $('#jobdatasTable').find("input:text").val("");
+		                    	  $("#jobdatasTable").find("select").each(function () { // there is no such thing as input[type=select] 
+		                    	        this.selectedIndex = 0; // this is a <select>
+		                    	  });
+		                      }
+		                  }
+		              ]
 				});
 		    	
 		        $('#update-form').validate({
