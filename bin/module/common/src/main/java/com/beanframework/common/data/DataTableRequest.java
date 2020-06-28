@@ -249,9 +249,14 @@ public class DataTableRequest {
 
 		if (parameterNames.hasMoreElements()) {
 
-			this.setStart(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_NO)));
-			this.setLength(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_SIZE)));
-			this.setDraw(request.getParameter(PaginationCriteria.DRAW));
+			if(request.getParameter(PaginationCriteria.PAGE_NO) != null)
+				this.setStart(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_NO)));
+			
+			if(request.getParameter(PaginationCriteria.PAGE_SIZE) != null)
+				this.setLength(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_SIZE)));
+			
+			if(request.getParameter(PaginationCriteria.DRAW) != null)
+				this.setDraw(request.getParameter(PaginationCriteria.DRAW));
 
 			this.setSearch(request.getParameter("search[value]"));
 			this.setRegex(Boolean.valueOf(request.getParameter("search[regex]")));
@@ -324,7 +329,10 @@ public class DataTableRequest {
 			Order order = new Order(Direction.DESC, GenericEntity.CREATED_DATE);
 			sortOrders.add(order);
 		}
-		this.setPageable(PageRequest.of(this.getPaginationRequest().getPageNumber(), this.getPaginationRequest().getPageSize(), Sort.by(sortOrders)));
+		
+		if(this.pageable != Pageable.unpaged()) {
+			this.setPageable(PageRequest.of(this.getPaginationRequest().getPageNumber(), this.getPaginationRequest().getPageSize(), Sort.by(sortOrders)));
+		}
 	}
 
 	private int getNumberOfColumns(HttpServletRequest request) {
