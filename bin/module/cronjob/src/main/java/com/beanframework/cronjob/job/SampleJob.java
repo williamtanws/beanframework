@@ -19,7 +19,7 @@ public class SampleJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		LOGGER.info("Executing com.beanframework.job.SampleJob");
+		LOGGER.info("Executing " + SampleJob.class.getName());
 
 		StringBuilder result = new StringBuilder();
 		result.append("This is sample job result. ");
