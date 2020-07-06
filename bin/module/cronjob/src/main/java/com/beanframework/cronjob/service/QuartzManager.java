@@ -27,6 +27,7 @@ public class QuartzManager {
 	private SchedulerFactoryBean schedulerFactoryBean;
 
 	public static final String CRONJOB_UUID = "cronjobUuid";
+	public static final String CRONJOB_ID = "cronjobId";
 
 	@SuppressWarnings("unchecked")
 	public void startOrUpdateJob(Cronjob job) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SchedulerException {
@@ -56,6 +57,7 @@ public class QuartzManager {
 			// for storing and retrieving data of primitive types.
 
 			jobDetail.getJobDataMap().put(CRONJOB_UUID, job.getUuid());
+			jobDetail.getJobDataMap().put(CRONJOB_ID, job.getId());
 
 			if (job.getCronjobDatas() != null) {
 				for (CronjobData param : job.getCronjobDatas()) {
