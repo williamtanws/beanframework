@@ -94,7 +94,7 @@ public class QuartzManager {
 						
 						Calendar newStartDate = Calendar.getInstance();
 						newStartDate.setTime(new Date());
-						newStartDate.set(Calendar.HOUR, oldStartDate.get(Calendar.HOUR));
+						newStartDate.set(Calendar.HOUR_OF_DAY, oldStartDate.get(Calendar.HOUR_OF_DAY));
 						newStartDate.set(Calendar.MINUTE, oldStartDate.get(Calendar.MINUTE));
 						newStartDate.set(Calendar.SECOND, oldStartDate.get(Calendar.SECOND));
 						newStartDate.set(Calendar.MILLISECOND, oldStartDate.get(Calendar.MILLISECOND));
