@@ -83,14 +83,24 @@ public class QuartzManager {
 
 				// According to the new cronExpression expression to build a new trigger
 				if (job.getTriggerStartDate() != null) {
-					if (job.getTriggerStartDate().compareTo(new Date()) < 0) { // TriggerStartDate in the past
+					
+					// TriggerStartDate in the past
+					if (job.getTriggerStartDate().compareTo(new Date()) < 0) { 
 
 						// Add 1 day to the original start time
-						Calendar calendar = Calendar.getInstance();
-						calendar.setTime(new Date());
-						calendar.add(Calendar.DATE, 1);
 
-						trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(calendar.getTime()).withSchedule(scheduleBuilder).build();
+						Calendar oldStartDate = Calendar.getInstance();
+						oldStartDate.setTime(job.getTriggerStartDate());
+						
+						Calendar newStartDate = Calendar.getInstance();
+						newStartDate.setTime(new Date());
+						newStartDate.set(Calendar.HOUR, oldStartDate.get(Calendar.HOUR));
+						newStartDate.set(Calendar.MINUTE, oldStartDate.get(Calendar.MINUTE));
+						newStartDate.set(Calendar.SECOND, oldStartDate.get(Calendar.SECOND));
+						newStartDate.set(Calendar.MILLISECOND, oldStartDate.get(Calendar.MILLISECOND));
+						newStartDate.add(Calendar.DATE, 1);
+
+						trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(newStartDate.getTime()).withSchedule(scheduleBuilder).build();
 					} else {
 						trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).withSchedule(scheduleBuilder).build();
 					}
