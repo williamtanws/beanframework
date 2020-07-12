@@ -1,5 +1,8 @@
 package com.beanframework.cronjob.service;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -80,7 +83,17 @@ public class QuartzManager {
 
 				// According to the new cronExpression expression to build a new trigger
 				if (job.getTriggerStartDate() != null) {
-					trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).withSchedule(scheduleBuilder).build();
+					if (job.getTriggerStartDate().compareTo(new Date()) < 0) { // TriggerStartDate in the past
+
+						// Add 1 day to the original start time
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTime(new Date());
+						calendar.add(Calendar.DATE, 1);
+
+						trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(calendar.getTime()).withSchedule(scheduleBuilder).build();
+					} else {
+						trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).withSchedule(scheduleBuilder).build();
+					}
 				} else {
 					trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).withSchedule(scheduleBuilder).build();
 				}
@@ -88,8 +101,8 @@ public class QuartzManager {
 				scheduler.scheduleJob(jobDetail, trigger);
 			}
 
-		} else {// Presence task
-
+		} else {
+			// Presence task
 			// Trigger already exists, then update the corresponding timer
 			// setting
 			// Expression Builder Scheduler
