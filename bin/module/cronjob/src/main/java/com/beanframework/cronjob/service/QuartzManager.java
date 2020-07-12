@@ -85,7 +85,7 @@ public class QuartzManager {
 				if (job.getTriggerStartDate() != null) {
 					
 					// TriggerStartDate in the past
-					if (job.getTriggerStartDate().compareTo(new Date()) < 0) { 
+					if (job.getTriggerStartDate().compareTo(new Date()) <= 0) { 
 
 						// Add 1 day to the original start time
 
