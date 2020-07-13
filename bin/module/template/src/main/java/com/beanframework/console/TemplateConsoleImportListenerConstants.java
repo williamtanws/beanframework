@@ -1,7 +1,7 @@
 package com.beanframework.console;
 
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.console.csv.TemplateCsv;
+import com.beanframework.core.csv.TemplateCsv;
 import com.beanframework.template.domain.Template;
 
 public interface TemplateConsoleImportListenerConstants {
