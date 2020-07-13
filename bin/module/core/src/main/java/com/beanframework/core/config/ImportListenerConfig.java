@@ -1,0 +1,208 @@
+
+package com.beanframework.core.config;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.beanframework.core.ImportListenerConstants;
+import com.beanframework.core.listener.AdminImportListener;
+import com.beanframework.core.listener.ConfigurationImportListener;
+import com.beanframework.core.listener.CronjobImportListener;
+import com.beanframework.core.listener.CustomerImportListener;
+import com.beanframework.core.listener.DynamicFieldImportListener;
+import com.beanframework.core.listener.DynamicFieldSlotImportListener;
+import com.beanframework.core.listener.DynamicFieldTemplateImportListener;
+import com.beanframework.core.listener.EmployeeImportListener;
+import com.beanframework.core.listener.EnumerationImportListener;
+import com.beanframework.core.listener.ImexImportListener;
+import com.beanframework.core.listener.LanguageImportListener;
+import com.beanframework.core.listener.MediaImportListener;
+import com.beanframework.core.listener.MenuImportListener;
+import com.beanframework.core.listener.SiteImportListener;
+import com.beanframework.core.listener.UserAuthorityImportListener;
+import com.beanframework.core.listener.UserGroupImportListener;
+import com.beanframework.core.listener.UserPermissionImportListener;
+import com.beanframework.core.listener.UserRightImportListener;
+import com.beanframework.core.listener.VendorImportListener;
+import com.beanframework.core.listener.WorkflowImportListener;
+import com.beanframework.imex.registry.ImportListenerRegistry;
+
+@Configuration
+public class ImportListenerConfig implements ApplicationListener<ApplicationReadyEvent> {
+
+	@Autowired
+	private ImportListenerRegistry importListenerRegistry;
+
+	@Value("#{'${module.core.import.listener.types}'.split(',')}")
+	private List<String> importListenerTypesList;
+
+	@Bean
+	public AdminImportListener adminImportListener() {
+		return new AdminImportListener();
+	}
+
+	@Bean
+	public ConfigurationImportListener configurationImportListener() {
+		return new ConfigurationImportListener();
+	}
+
+	@Bean
+	public EnumerationImportListener enumerationImportListener() {
+		return new EnumerationImportListener();
+	}
+
+	@Bean
+	public DynamicFieldImportListener dynamicFieldImportListener() {
+		return new DynamicFieldImportListener();
+	}
+
+	@Bean
+	public DynamicFieldSlotImportListener dynamicFieldSlotImportListener() {
+		return new DynamicFieldSlotImportListener();
+	}
+
+	@Bean
+	public DynamicFieldTemplateImportListener dynamicFieldTemplateImportListener() {
+		return new DynamicFieldTemplateImportListener();
+	}
+
+	@Bean
+	public EmployeeImportListener employeeImportListener() {
+		return new EmployeeImportListener();
+	}
+
+	@Bean
+	public LanguageImportListener languageImportListener() {
+		return new LanguageImportListener();
+	}
+
+	@Bean
+	public MenuImportListener menuImportListener() {
+		return new MenuImportListener();
+	}
+
+	@Bean
+	public UserPermissionImportListener userPermissionImportListener() {
+		return new UserPermissionImportListener();
+	}
+
+	@Bean
+	public UserGroupImportListener userGroupImportListener() {
+		return new UserGroupImportListener();
+	}
+
+	@Bean
+	public UserRightImportListener userRightImportListener() {
+		return new UserRightImportListener();
+	}
+
+	@Bean
+	public UserAuthorityImportListener userAuthorityImportListener() {
+		return new UserAuthorityImportListener();
+	}
+
+	@Bean
+	public CustomerImportListener customerImportListener() {
+		return new CustomerImportListener();
+	}
+	
+	@Bean
+	public VendorImportListener vendorImportListener() {
+		return new VendorImportListener();
+	}
+
+	@Bean
+	public CronjobImportListener cronjobImportListener() {
+		return new CronjobImportListener();
+	}
+
+	@Bean
+	public SiteImportListener siteImportListener() {
+		return new SiteImportListener();
+	}
+
+	@Bean
+	public WorkflowImportListener workflowImportListener() {
+		return new WorkflowImportListener();
+	}
+
+	@Bean
+	public MediaImportListener mediaImportListener() {
+		return new MediaImportListener();
+	}
+	
+	@Bean
+	public ImexImportListener imexImportListener() {
+		return new ImexImportListener();
+	}
+
+	@Override
+	public void onApplicationEvent(final ApplicationReadyEvent event) {
+
+		if (importListenerTypesList.contains(ImportListenerConstants.AdminImport.TYPE))
+			importListenerRegistry.addListener(adminImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.ConfigurationImport.TYPE))
+			importListenerRegistry.addListener(configurationImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.CronjobImport.TYPE))
+			importListenerRegistry.addListener(cronjobImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.CustomerImport.TYPE))
+			importListenerRegistry.addListener(customerImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.VendorImport.TYPE))
+			importListenerRegistry.addListener(vendorImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.EnumerationImport.TYPE))
+			importListenerRegistry.addListener(enumerationImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.DynamicFieldImport.TYPE))
+			importListenerRegistry.addListener(dynamicFieldImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.DynamicFieldSlotImport.TYPE))
+			importListenerRegistry.addListener(dynamicFieldSlotImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.DynamicFieldTemplateImport.TYPE))
+			importListenerRegistry.addListener(dynamicFieldTemplateImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.EmployeeImport.TYPE))
+			importListenerRegistry.addListener(employeeImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.LanguageImport.TYPE))
+			importListenerRegistry.addListener(languageImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.MenuImport.TYPE))
+			importListenerRegistry.addListener(menuImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.UserAuthorityImport.TYPE))
+			importListenerRegistry.addListener(userAuthorityImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.UserGroupImport.TYPE))
+			importListenerRegistry.addListener(userGroupImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.UserPermissionImport.TYPE))
+			importListenerRegistry.addListener(userPermissionImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.UserRightImport.TYPE))
+			importListenerRegistry.addListener(userRightImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.SiteImport.TYPE))
+			importListenerRegistry.addListener(siteImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.WorkflowImport.TYPE))
+			importListenerRegistry.addListener(workflowImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.MediaImport.TYPE))
+			importListenerRegistry.addListener(mediaImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.ImexImport.TYPE))
+			importListenerRegistry.addListener(imexImportListener());
+	}
+}
