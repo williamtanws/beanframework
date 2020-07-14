@@ -31,6 +31,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.beanframework</groupId>
+			<artifactId>internationalization</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.beanframework</groupId>
 			<artifactId>admin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -92,11 +97,6 @@
 		<dependency>
 			<groupId>com.beanframework</groupId>
 			<artifactId>filemanager</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>language</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

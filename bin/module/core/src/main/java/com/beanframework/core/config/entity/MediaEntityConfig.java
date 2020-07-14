@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.EntityMediaConverter;
+import com.beanframework.core.converter.entity.EntityMediaConverter;
 import com.beanframework.media.domain.Media;
 
 @Configuration

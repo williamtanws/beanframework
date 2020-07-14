@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.EntityAdminConverter;
+import com.beanframework.core.converter.entity.EntityAdminConverter;
 
 @Configuration
 public class AdminEntityConfig {

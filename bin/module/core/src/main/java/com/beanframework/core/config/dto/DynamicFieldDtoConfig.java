@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.DtoDynamicFieldConverter;
-import com.beanframework.core.converter.DtoDynamicFieldSlotConverter;
-import com.beanframework.core.converter.DtoDynamicFieldTemplateConverter;
+import com.beanframework.core.converter.dto.DtoDynamicFieldConverter;
+import com.beanframework.core.converter.dto.DtoDynamicFieldSlotConverter;
+import com.beanframework.core.converter.dto.DtoDynamicFieldTemplateConverter;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.data.DynamicFieldTemplateDto;

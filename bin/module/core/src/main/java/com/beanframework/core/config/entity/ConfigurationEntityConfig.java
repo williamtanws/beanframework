@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.EntityConfigurationConverter;
+import com.beanframework.core.converter.entity.EntityConfigurationConverter;
 
 @Configuration
 public class ConfigurationEntityConfig {

@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.EntityImexConverter;
+import com.beanframework.core.converter.entity.EntityImexConverter;
 import com.beanframework.imex.domain.Imex;
 
 @Configuration

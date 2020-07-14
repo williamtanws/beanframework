@@ -1,11 +1,17 @@
 package com.beanframework.core;
 
+import com.beanframework.address.domain.Address;
 import com.beanframework.admin.domain.Admin;
 import com.beanframework.cms.domain.Site;
+import com.beanframework.company.domain.Company;
 import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.core.csv.AddressCsv;
 import com.beanframework.core.csv.AdminCsv;
+import com.beanframework.core.csv.CompanyCsv;
 import com.beanframework.core.csv.ConfigurationCsv;
+import com.beanframework.core.csv.CountryCsv;
 import com.beanframework.core.csv.CronjobCsv;
+import com.beanframework.core.csv.CurrencyCsv;
 import com.beanframework.core.csv.CustomerCsv;
 import com.beanframework.core.csv.DynamicFieldCsv;
 import com.beanframework.core.csv.DynamicFieldSlotCsv;
@@ -16,6 +22,7 @@ import com.beanframework.core.csv.ImexCsv;
 import com.beanframework.core.csv.LanguageCsv;
 import com.beanframework.core.csv.MediaCsv;
 import com.beanframework.core.csv.MenuCsv;
+import com.beanframework.core.csv.RegionCsv;
 import com.beanframework.core.csv.SiteCsv;
 import com.beanframework.core.csv.UserAuthorityCsv;
 import com.beanframework.core.csv.UserGroupCsv;
@@ -31,7 +38,10 @@ import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.imex.domain.Imex;
-import com.beanframework.language.domain.Language;
+import com.beanframework.internationalization.domain.Country;
+import com.beanframework.internationalization.domain.Currency;
+import com.beanframework.internationalization.domain.Language;
+import com.beanframework.internationalization.domain.Region;
 import com.beanframework.media.domain.Media;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserAuthority;
@@ -59,6 +69,33 @@ public interface ImportListenerConstants {
 		public static final String DESCRIPTION = "Update/Remove Language Data";
 		public static final Class<LanguageCsv> CLASS_CSV = LanguageCsv.class;
 		public static final Class<Language> CLASS_ENTITY = Language.class;
+	}
+	
+	public interface CurrencyImport {
+		public static final String TYPE = Currency.class.getSimpleName();
+		public static final String NAME = "Currency";
+		public static final int SORT = 21;
+		public static final String DESCRIPTION = "Update/Remove Currency Data";
+		public static final Class<CurrencyCsv> CLASS_CSV = CurrencyCsv.class;
+		public static final Class<Currency> CLASS_ENTITY = Currency.class;
+	}
+	
+	public interface CountryImport {
+		public static final String TYPE = Country.class.getSimpleName();
+		public static final String NAME = "Country";
+		public static final int SORT = 22;
+		public static final String DESCRIPTION = "Update/Remove Country Data";
+		public static final Class<CountryCsv> CLASS_CSV = CountryCsv.class;
+		public static final Class<Country> CLASS_ENTITY = Country.class;
+	}
+	
+	public interface RegionImport {
+		public static final String TYPE = Region.class.getSimpleName();
+		public static final String NAME = "Region";
+		public static final int SORT = 23;
+		public static final String DESCRIPTION = "Update/Remove Region Data";
+		public static final Class<RegionCsv> CLASS_CSV = RegionCsv.class;
+		public static final Class<Region> CLASS_ENTITY = Region.class;
 	}
 
 	public interface EnumerationImport {
@@ -149,6 +186,24 @@ public interface ImportListenerConstants {
 		public static final String DESCRIPTION = "Update/Remove Cronjob Data. This would stop and resume all active cronjobs.";
 		public static final Class<CronjobCsv> CLASS_CSV = CronjobCsv.class;
 		public static final Class<Cronjob> CLASS_ENTITY = Cronjob.class;
+	}
+	
+	public interface CompanyImport {
+		public static final String TYPE = Company.class.getSimpleName();
+		public static final String NAME = "Company";
+		public static final int SORT = 111;
+		public static final String DESCRIPTION = "Update/Remove Company Data";
+		public static final Class<CompanyCsv> CLASS_CSV = CompanyCsv.class;
+		public static final Class<Company> CLASS_ENTITY = Company.class;
+	}
+	
+	public interface AddressImport {
+		public static final String TYPE = Address.class.getSimpleName();
+		public static final String NAME = "Address";
+		public static final int SORT = 112;
+		public static final String DESCRIPTION = "Update/Remove Address Data";
+		public static final Class<AddressCsv> CLASS_CSV = AddressCsv.class;
+		public static final Class<Address> CLASS_ENTITY = Address.class;
 	}
 
 	public interface AdminImport {

@@ -25,7 +25,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.beanframework</groupId>
-			<artifactId>language</artifactId>
+			<artifactId>internationalization</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.EntityLanguageConverter;
-import com.beanframework.language.domain.Language;
+import com.beanframework.core.converter.entity.EntityLanguageConverter;
+import com.beanframework.internationalization.domain.Language;
 
 @Configuration
 public class LanguageEntityConfig {
