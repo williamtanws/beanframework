@@ -69,6 +69,8 @@ public interface ModelService {
 	<T extends Collection> T findBySpecificationBySort(Specification specification, Sort sort, Class modelClass) throws Exception;
 
 	<T extends Collection> T findAll(Class modelClass);
+	
+	<T extends Collection> T search(String qlString);
 
 	List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
 			throws Exception;

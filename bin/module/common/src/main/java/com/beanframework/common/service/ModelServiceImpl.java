@@ -261,6 +261,12 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public <T extends Collection> T findAll(Class modelClass) {
 		return (T) createQuery(null, null, null, null, null, modelClass).getResultList();
 	}
+	
+	
+	@Override
+	public <T extends Collection> T search(String qlString) {
+		return (T) entityManager.createQuery(qlString).getResultList();
+	}
 
 	@Override
 	public List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)

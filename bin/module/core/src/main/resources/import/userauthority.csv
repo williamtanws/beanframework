@@ -4,11 +4,16 @@ INSERT UserAuthority,userGroupId,userPermissionId,create,read,update,delete
 ,employeegroup,dynamicfieldslot		,+,+,+,+
 ,employeegroup,dynamicfieldtemplate	,+,+,+,+
 ,employeegroup,language				,+,+,+,+
+,employeegroup,currency				,+,+,+,+
+,employeegroup,country				,+,+,+,+
+,employeegroup,region				,+,+,+,+
 ,employeegroup,userpermission		,+,+,+,+
 ,employeegroup,userright			,+,+,+,+
 ,employeegroup,usergroup			,+,+,+,+
 ,employeegroup,menu					,+,+,+,+
 ,employeegroup,cronjob				,+,+,+,+
+,employeegroup,company				,+,+,+,+
+,employeegroup,address				,+,+,+,+
 ,employeegroup,employeesession		,+,+,+,+
 ,employeegroup,employee				,+,+,+,+
 ,employeegroup,customer				,+,+,+,+
