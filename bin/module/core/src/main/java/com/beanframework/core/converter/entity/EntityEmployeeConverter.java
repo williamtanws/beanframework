@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.beanframework.common.context.EntityConverterContext;
-import com.beanframework.common.converter.AbstractEntityConverter;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -20,7 +19,7 @@ import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserGroup;
 
-public class EntityEmployeeConverter extends AbstractEntityConverter implements EntityConverter<EmployeeDto, Employee> {
+public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Employee> {
 
 	@Autowired
 	private ModelService modelService;
@@ -61,12 +60,10 @@ public class EntityEmployeeConverter extends AbstractEntityConverter implements 
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			setValue(source, prototype, Employee.NAME);
-			
-//			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
-//				prototype.setName(StringUtils.stripToNull(source.getName()));
-//				prototype.setLastModifiedDate(lastModifiedDate);
-//			}
+			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
+				prototype.setName(StringUtils.stripToNull(source.getName()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
 
 			if (source.getAccountNonExpired() == null) {
 				if (prototype.getAccountNonExpired() != null) {
