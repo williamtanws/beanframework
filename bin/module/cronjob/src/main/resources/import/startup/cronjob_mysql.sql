@@ -142,5 +142,12 @@ create table if not exists qrtz_locks
     primary key (sched_name,lock_name)
 );
 
+delete from QRTZ_CRON_TRIGGERS;
+delete from QRTZ_SIMPLE_TRIGGERS;
+delete from QRTZ_TRIGGERS;
+delete from QRTZ_JOB_DETAILS;
+delete from QRTZ_FIRED_TRIGGERS;
+delete from QRTZ_LOCKS;
+delete from QRTZ_SCHEDULER_STATE;
 
 commit;

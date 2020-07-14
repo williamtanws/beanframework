@@ -3,6 +3,8 @@ package com.beanframework.cronjob.service;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.lang.model.SourceVersion;
+
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -15,6 +17,8 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
@@ -25,6 +29,8 @@ import com.beanframework.cronjob.domain.CronjobEnum;
 
 @Component
 public class QuartzManager {
+	
+	protected static final Logger LOGGER = LoggerFactory.getLogger(QuartzManager.class);
 
 	@Autowired
 	private SchedulerFactoryBean schedulerFactoryBean;
@@ -34,99 +40,108 @@ public class QuartzManager {
 
 	@SuppressWarnings("unchecked")
 	public void startOrUpdateJob(Cronjob job) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SchedulerException {
+		if (isValidName(job.getJobClass())) {
+			Class<? extends Job> jobClass = null;
 
-		Class<? extends Job> jobClass = null;
+			String className = job.getJobClass();
+			Object objectClass = Class.forName(className).newInstance();
+			jobClass = (Class<? extends Job>) objectClass.getClass();
 
-		String className = job.getJobClass();
-		Object objectClass = Class.forName(className).newInstance();
-		jobClass = (Class<? extends Job>) objectClass.getClass();
+			Scheduler scheduler = schedulerFactoryBean.getScheduler();
 
-		Scheduler scheduler = schedulerFactoryBean.getScheduler();
+			// Get trigger key
+			TriggerKey triggerKey = TriggerKey.triggerKey(job.getName(), job.getJobGroup());
+			CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
 
-		// Get trigger key
-		TriggerKey triggerKey = TriggerKey.triggerKey(job.getName(), job.getJobGroup());
-		CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
+			if (null == trigger) {// There is no task
 
-		if (null == trigger) {// There is no task
+				// Create a task
+				JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(job.getName(), job.getJobGroup()).build();
 
-			// Create a task
-			JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(job.getName(), job.getJobGroup()).build();
+				// The JobDataMap can be used to hold any number of (serializable)
+				// objects which you wish
+				// to have made available to the job instance when it executes.
+				// JobDataMap is an implementation
+				// of the Java Map interface, and has some added convenience methods
+				// for storing and retrieving data of primitive types.
 
-			// The JobDataMap can be used to hold any number of (serializable)
-			// objects which you wish
-			// to have made available to the job instance when it executes.
-			// JobDataMap is an implementation
-			// of the Java Map interface, and has some added convenience methods
-			// for storing and retrieving data of primitive types.
+				jobDetail.getJobDataMap().put(CRONJOB_UUID, job.getUuid());
+				jobDetail.getJobDataMap().put(CRONJOB_ID, job.getId());
 
-			jobDetail.getJobDataMap().put(CRONJOB_UUID, job.getUuid());
-			jobDetail.getJobDataMap().put(CRONJOB_ID, job.getId());
-
-			if (job.getCronjobDatas() != null) {
-				for (CronjobData param : job.getCronjobDatas()) {
-					jobDetail.getJobDataMap().put(param.getName(), param.getValue());
+				if (job.getCronjobDatas() != null) {
+					for (CronjobData param : job.getCronjobDatas()) {
+						jobDetail.getJobDataMap().put(param.getName(), param.getValue());
+					}
 				}
-			}
 
-			if (job.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)) {
+				if (job.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)) {
 
-				Trigger runOnceTrigger;
-				if (job.getTriggerStartDate() == null) {
-					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startNow().build();
-				} else {
-					runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).build();
+					Trigger runOnceTrigger;
+					if (job.getTriggerStartDate() == null) {
+						runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startNow().build();
+					} else {
+						runOnceTrigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).build();
+					}
+					scheduler.scheduleJob(jobDetail, runOnceTrigger);
+				} else if (StringUtils.isNotBlank(job.getCronExpression())) {
+					// Expression Builder Scheduler
+					CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
+
+					// According to the new cronExpression expression to build a new trigger
+					if (job.getTriggerStartDate() != null) {
+
+						// TriggerStartDate in the past
+						if (job.getTriggerStartDate().compareTo(new Date()) <= 0) {
+
+							// Add 1 day to the original start time
+
+							Calendar oldStartDate = Calendar.getInstance();
+							oldStartDate.setTime(job.getTriggerStartDate());
+
+							Calendar newStartDate = Calendar.getInstance();
+							newStartDate.setTime(new Date());
+							newStartDate.set(Calendar.HOUR_OF_DAY, oldStartDate.get(Calendar.HOUR_OF_DAY));
+							newStartDate.set(Calendar.MINUTE, oldStartDate.get(Calendar.MINUTE));
+							newStartDate.set(Calendar.SECOND, oldStartDate.get(Calendar.SECOND));
+							newStartDate.set(Calendar.MILLISECOND, oldStartDate.get(Calendar.MILLISECOND));
+							newStartDate.add(Calendar.DATE, 1);
+
+							trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(newStartDate.getTime()).withSchedule(scheduleBuilder.withMisfireHandlingInstructionDoNothing()).build();
+						} else {
+							trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).withSchedule(scheduleBuilder.withMisfireHandlingInstructionDoNothing()).build();
+						}
+					} else {
+						trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).withSchedule(scheduleBuilder.withMisfireHandlingInstructionDoNothing()).build();
+					}
+
+					scheduler.scheduleJob(jobDetail, trigger);
 				}
-				scheduler.scheduleJob(jobDetail, runOnceTrigger);
-			} else if (StringUtils.isNotBlank(job.getCronExpression())) {
+
+			} else {
+				// Presence task
+				// Trigger already exists, then update the corresponding timer
+				// setting
 				// Expression Builder Scheduler
 				CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
 
-				// According to the new cronExpression expression to build a new trigger
-				if (job.getTriggerStartDate() != null) {
-					
-					// TriggerStartDate in the past
-					if (job.getTriggerStartDate().compareTo(new Date()) <= 0) { 
+				// According to the new cronExpression expression rebuild trigger
+				trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
 
-						// Add 1 day to the original start time
-
-						Calendar oldStartDate = Calendar.getInstance();
-						oldStartDate.setTime(job.getTriggerStartDate());
-						
-						Calendar newStartDate = Calendar.getInstance();
-						newStartDate.setTime(new Date());
-						newStartDate.set(Calendar.HOUR_OF_DAY, oldStartDate.get(Calendar.HOUR_OF_DAY));
-						newStartDate.set(Calendar.MINUTE, oldStartDate.get(Calendar.MINUTE));
-						newStartDate.set(Calendar.SECOND, oldStartDate.get(Calendar.SECOND));
-						newStartDate.set(Calendar.MILLISECOND, oldStartDate.get(Calendar.MILLISECOND));
-						newStartDate.add(Calendar.DATE, 1);
-
-						trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(newStartDate.getTime()).withSchedule(scheduleBuilder).build();
-					} else {
-						trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).withSchedule(scheduleBuilder).build();
-					}
-				} else {
-					trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).withSchedule(scheduleBuilder).build();
-				}
-
-				scheduler.scheduleJob(jobDetail, trigger);
+				// According to the new trigger re-set job execution
+				scheduler.rescheduleJob(triggerKey, trigger);
 			}
-
-		} else {
-			// Presence task
-			// Trigger already exists, then update the corresponding timer
-			// setting
-			// Expression Builder Scheduler
-			CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
-
-			// According to the new cronExpression expression rebuild trigger
-			trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-
-			// According to the new trigger re-set job execution
-			scheduler.rescheduleJob(triggerKey, trigger);
-		}
 //		Replaced by global listener
 //		//Adding the listener
 //		scheduler.getListenerManager().addJobListener(new QuartJobSchedulingListener());
+		}
+		else {
+			LOGGER.error("Not able to find cronjob class, please check. Cronjob [Id= "+job.getId()+"]");
+			throw new SchedulerException("Not able to find cronjob class");
+		}
+	}
+
+	boolean isValidName(String className) {
+		return SourceVersion.isIdentifier(className) && !SourceVersion.isKeyword(className);
 	}
 
 	public void pauseJob(Cronjob job) throws SchedulerException {
