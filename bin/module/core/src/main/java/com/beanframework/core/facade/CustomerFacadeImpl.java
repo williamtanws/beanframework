@@ -14,7 +14,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.converter.EntityCustomerProfileConverter;
+import com.beanframework.core.converter.entity.EntityCustomerProfileConverter;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerService;

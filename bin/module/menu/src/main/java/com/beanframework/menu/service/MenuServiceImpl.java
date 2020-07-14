@@ -57,6 +57,20 @@ public class MenuServiceImpl implements MenuService {
 
 	private void setParentNullAndSortByUuid(UUID fromUuid, int toIndex) throws Exception {
 		Menu menu = modelService.findOneByUuid(fromUuid, Menu.class);
+		Menu parent = menu.getParent();
+		if (parent != null) {
+			Hibernate.initialize(parent.getChilds());
+			if (parent.getChilds() != null) {
+				for (int i = 0; i < parent.getChilds().size(); i++) {
+					if (parent.getChilds().get(i).getUuid() == menu.getUuid()) {
+						parent.getChilds().remove(i);
+						modelService.saveEntity(parent, Menu.class);
+						break;
+					}
+				}
+			}
+		}
+
 		menu.setParent(null);
 		menu.setSort(toIndex);
 		modelService.saveEntity(menu, Menu.class);

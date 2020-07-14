@@ -15,9 +15,9 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.LanguageDto;
-import com.beanframework.language.domain.Language;
-import com.beanframework.language.service.LanguageService;
-import com.beanframework.language.specification.LanguageSpecification;
+import com.beanframework.internationalization.domain.Language;
+import com.beanframework.internationalization.service.LanguageService;
+import com.beanframework.internationalization.specification.LanguageSpecification;
 
 @Component
 public class LanguageFacadeImpl implements LanguageFacade {

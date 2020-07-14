@@ -4,12 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.interceptor.InterceptorMapping;
-import com.beanframework.core.interceptor.language.LanguageInitialDefaultsInterceptor;
-import com.beanframework.core.interceptor.language.LanguageLoadInterceptor;
-import com.beanframework.core.interceptor.language.LanguagePrepareInterceptor;
-import com.beanframework.core.interceptor.language.LanguageRemoveInterceptor;
-import com.beanframework.core.interceptor.language.LanguageValidateInterceptor;
-import com.beanframework.language.domain.Language;
+import com.beanframework.core.interceptor.internationalization.LanguageInitialDefaultsInterceptor;
+import com.beanframework.core.interceptor.internationalization.LanguageLoadInterceptor;
+import com.beanframework.core.interceptor.internationalization.LanguagePrepareInterceptor;
+import com.beanframework.core.interceptor.internationalization.LanguageRemoveInterceptor;
+import com.beanframework.core.interceptor.internationalization.LanguageValidateInterceptor;
+import com.beanframework.internationalization.domain.Language;
 
 @Configuration
 public class LanguageInterceptorConfig {

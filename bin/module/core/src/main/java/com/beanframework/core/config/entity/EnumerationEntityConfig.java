@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.EntityEnumerationConverter;
+import com.beanframework.core.converter.entity.EntityEnumerationConverter;
 import com.beanframework.enumuration.domain.Enumeration;
 
 @Configuration

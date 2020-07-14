@@ -11,26 +11,31 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.core.ImportListenerConstants;
-import com.beanframework.core.listener.AdminImportListener;
-import com.beanframework.core.listener.ConfigurationImportListener;
-import com.beanframework.core.listener.CronjobImportListener;
-import com.beanframework.core.listener.CustomerImportListener;
-import com.beanframework.core.listener.DynamicFieldImportListener;
-import com.beanframework.core.listener.DynamicFieldSlotImportListener;
-import com.beanframework.core.listener.DynamicFieldTemplateImportListener;
-import com.beanframework.core.listener.EmployeeImportListener;
-import com.beanframework.core.listener.EnumerationImportListener;
-import com.beanframework.core.listener.ImexImportListener;
-import com.beanframework.core.listener.LanguageImportListener;
-import com.beanframework.core.listener.MediaImportListener;
-import com.beanframework.core.listener.MenuImportListener;
-import com.beanframework.core.listener.SiteImportListener;
-import com.beanframework.core.listener.UserAuthorityImportListener;
-import com.beanframework.core.listener.UserGroupImportListener;
-import com.beanframework.core.listener.UserPermissionImportListener;
-import com.beanframework.core.listener.UserRightImportListener;
-import com.beanframework.core.listener.VendorImportListener;
-import com.beanframework.core.listener.WorkflowImportListener;
+import com.beanframework.core.listenerimport.AddressImportListener;
+import com.beanframework.core.listenerimport.AdminImportListener;
+import com.beanframework.core.listenerimport.CompanyImportListener;
+import com.beanframework.core.listenerimport.ConfigurationImportListener;
+import com.beanframework.core.listenerimport.CountryImportListener;
+import com.beanframework.core.listenerimport.CronjobImportListener;
+import com.beanframework.core.listenerimport.CurrencyImportListener;
+import com.beanframework.core.listenerimport.CustomerImportListener;
+import com.beanframework.core.listenerimport.DynamicFieldImportListener;
+import com.beanframework.core.listenerimport.DynamicFieldSlotImportListener;
+import com.beanframework.core.listenerimport.DynamicFieldTemplateImportListener;
+import com.beanframework.core.listenerimport.EmployeeImportListener;
+import com.beanframework.core.listenerimport.EnumerationImportListener;
+import com.beanframework.core.listenerimport.ImexImportListener;
+import com.beanframework.core.listenerimport.LanguageImportListener;
+import com.beanframework.core.listenerimport.MediaImportListener;
+import com.beanframework.core.listenerimport.MenuImportListener;
+import com.beanframework.core.listenerimport.RegionImportListener;
+import com.beanframework.core.listenerimport.SiteImportListener;
+import com.beanframework.core.listenerimport.UserAuthorityImportListener;
+import com.beanframework.core.listenerimport.UserGroupImportListener;
+import com.beanframework.core.listenerimport.UserPermissionImportListener;
+import com.beanframework.core.listenerimport.UserRightImportListener;
+import com.beanframework.core.listenerimport.VendorImportListener;
+import com.beanframework.core.listenerimport.WorkflowImportListener;
 import com.beanframework.imex.registry.ImportListenerRegistry;
 
 @Configuration
@@ -50,6 +55,26 @@ public class ImportListenerConfig implements ApplicationListener<ApplicationRead
 	@Bean
 	public ConfigurationImportListener configurationImportListener() {
 		return new ConfigurationImportListener();
+	}
+	
+	@Bean
+	public LanguageImportListener languageImportListener() {
+		return new LanguageImportListener();
+	}
+	
+	@Bean
+	public CurrencyImportListener currencyImportListener() {
+		return new CurrencyImportListener();
+	}
+	
+	@Bean
+	public CountryImportListener countryImportListener() {
+		return new CountryImportListener();
+	}
+	
+	@Bean
+	public RegionImportListener regionImportListener() {
+		return new RegionImportListener();
 	}
 
 	@Bean
@@ -71,15 +96,20 @@ public class ImportListenerConfig implements ApplicationListener<ApplicationRead
 	public DynamicFieldTemplateImportListener dynamicFieldTemplateImportListener() {
 		return new DynamicFieldTemplateImportListener();
 	}
+	
+	@Bean
+	public CompanyImportListener companyImportListener() {
+		return new CompanyImportListener();
+	}
+	
+	@Bean
+	public AddressImportListener addressImportListener() {
+		return new AddressImportListener();
+	}
 
 	@Bean
 	public EmployeeImportListener employeeImportListener() {
 		return new EmployeeImportListener();
-	}
-
-	@Bean
-	public LanguageImportListener languageImportListener() {
-		return new LanguageImportListener();
 	}
 
 	@Bean
@@ -150,9 +180,27 @@ public class ImportListenerConfig implements ApplicationListener<ApplicationRead
 
 		if (importListenerTypesList.contains(ImportListenerConstants.ConfigurationImport.TYPE))
 			importListenerRegistry.addListener(configurationImportListener());
+		
+		if (importListenerTypesList.contains(ImportListenerConstants.LanguageImport.TYPE))
+			importListenerRegistry.addListener(languageImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.CurrencyImport.TYPE))
+			importListenerRegistry.addListener(currencyImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.CountryImport.TYPE))
+			importListenerRegistry.addListener(countryImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.RegionImport.TYPE))
+			importListenerRegistry.addListener(regionImportListener());
 
 		if (importListenerTypesList.contains(ImportListenerConstants.CronjobImport.TYPE))
 			importListenerRegistry.addListener(cronjobImportListener());
+
+		if (importListenerTypesList.contains(ImportListenerConstants.CompanyImport.TYPE))
+			importListenerRegistry.addListener(companyImportListener());
+		
+		if (importListenerTypesList.contains(ImportListenerConstants.AddressImport.TYPE))
+			importListenerRegistry.addListener(addressImportListener());
 
 		if (importListenerTypesList.contains(ImportListenerConstants.CustomerImport.TYPE))
 			importListenerRegistry.addListener(customerImportListener());
@@ -174,9 +222,6 @@ public class ImportListenerConfig implements ApplicationListener<ApplicationRead
 
 		if (importListenerTypesList.contains(ImportListenerConstants.EmployeeImport.TYPE))
 			importListenerRegistry.addListener(employeeImportListener());
-
-		if (importListenerTypesList.contains(ImportListenerConstants.LanguageImport.TYPE))
-			importListenerRegistry.addListener(languageImportListener());
 
 		if (importListenerTypesList.contains(ImportListenerConstants.MenuImport.TYPE))
 			importListenerRegistry.addListener(menuImportListener());

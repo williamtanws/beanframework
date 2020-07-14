@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.DtoImexConverter;
+import com.beanframework.core.converter.dto.DtoImexConverter;
 import com.beanframework.core.data.ImexDto;
 
 @Configuration

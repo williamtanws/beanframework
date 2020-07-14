@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.EntityCommentConverter;
+import com.beanframework.core.converter.entity.EntityCommentConverter;
 
 @Configuration
 public class CommentEntityConfig {

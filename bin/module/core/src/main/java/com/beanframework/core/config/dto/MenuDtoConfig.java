@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.DtoMenuConverter;
-import com.beanframework.core.converter.DtoMenuFieldConverter;
+import com.beanframework.core.converter.dto.DtoMenuConverter;
+import com.beanframework.core.converter.dto.DtoMenuFieldConverter;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
 

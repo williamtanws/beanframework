@@ -31,7 +31,7 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.core.facade.LanguageFacade;
 import com.beanframework.core.facade.LanguageFacade.LanguagePreAuthorizeEnum;
-import com.beanframework.language.domain.Language;
+import com.beanframework.internationalization.domain.Language;
 import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController

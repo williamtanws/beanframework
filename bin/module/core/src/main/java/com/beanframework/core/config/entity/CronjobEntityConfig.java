@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.EntityCronjobConverter;
-import com.beanframework.core.converter.EntityCronjobDataConverter;
+import com.beanframework.core.converter.entity.EntityCronjobConverter;
+import com.beanframework.core.converter.entity.EntityCronjobDataConverter;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 

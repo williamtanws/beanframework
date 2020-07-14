@@ -4,12 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.EntityCustomerConverter;
-import com.beanframework.core.converter.EntityEmployeeConverter;
-import com.beanframework.core.converter.EntityUserGroupConverter;
-import com.beanframework.core.converter.EntityUserPermissionConverter;
-import com.beanframework.core.converter.EntityUserRightConverter;
-import com.beanframework.core.converter.EntityVendorConverter;
+import com.beanframework.core.converter.entity.EntityCustomerConverter;
+import com.beanframework.core.converter.entity.EntityEmployeeConverter;
+import com.beanframework.core.converter.entity.EntityUserGroupConverter;
+import com.beanframework.core.converter.entity.EntityUserPermissionConverter;
+import com.beanframework.core.converter.entity.EntityUserRightConverter;
+import com.beanframework.core.converter.entity.EntityVendorConverter;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.employee.domain.Employee;
 import com.beanframework.user.domain.UserGroup;

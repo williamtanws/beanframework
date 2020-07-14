@@ -29,7 +29,7 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.imex.domain.Imex;
-import com.beanframework.language.domain.Language;
+import com.beanframework.internationalization.domain.Language;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.media.domain.Media;
 import com.beanframework.menu.domain.Menu;
