@@ -117,7 +117,52 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 				prototype.setFax(StringUtils.stripToNull(source.getFax()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getTitle()), prototype.getTitle()) == Boolean.FALSE) {
+				prototype.setTitle(StringUtils.stripToNull(source.getTitle()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getLastName()), prototype.getLastName()) == Boolean.FALSE) {
+				prototype.setLastName(StringUtils.stripToNull(source.getLastName()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getFirstName()), prototype.getFirstName()) == Boolean.FALSE) {
+				prototype.setFirstName(StringUtils.stripToNull(source.getFirstName()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getMiddleName()), prototype.getMiddleName()) == Boolean.FALSE) {
+				prototype.setMiddleName(StringUtils.stripToNull(source.getMiddleName()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getMiddleName2()), prototype.getMiddleName2()) == Boolean.FALSE) {
+				prototype.setMiddleName2(StringUtils.stripToNull(source.getMiddleName2()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getDepartment()), prototype.getDepartment()) == Boolean.FALSE) {
+				prototype.setDepartment(StringUtils.stripToNull(source.getDepartment()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getBuilding()), prototype.getBuilding()) == Boolean.FALSE) {
+				prototype.setBuilding(StringUtils.stripToNull(source.getBuilding()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getApartment()), prototype.getApartment()) == Boolean.FALSE) {
+				prototype.setApartment(StringUtils.stripToNull(source.getApartment()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+			
+			if (StringUtils.equals(StringUtils.stripToNull(source.getDistrict()), prototype.getDistrict()) == Boolean.FALSE) {
+				prototype.setDistrict(StringUtils.stripToNull(source.getDistrict()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+			
 			// Country
 			if (StringUtils.isBlank(source.getSelectedCountry())) {
 				if (prototype.getCountry() != null) {
