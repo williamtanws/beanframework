@@ -4,14 +4,19 @@ INSERT UserPermission,id,name,sort,dynamicFieldSlotIds
 ,dynamicfieldslot	,Dynamic Field Slot		,12	,userpermission_0_name_en=Dynamic Field Slot;userpermission_1_name_cn=动态场槽
 ,dynamicfieldtemplate,Dynamic Field Template,13	,userpermission_0_name_en=Dynamic Field Template;userpermission_1_name_cn=动态模板
 ,language			,Language				,20	,userpermission_0_name_en=Language;userpermission_1_name_cn=语言
+,currency			,Currency				,21,userpermission_0_name_en=Currency;userpermission_1_name_cn=货币
+,country			,Country				,22,userpermission_0_name_en=Country;userpermission_1_name_cn=国家
+,region				,Region					,23,userpermission_0_name_en=Region;userpermission_1_name_cn=地区
 ,userpermission		,User Permission		,30	,userpermission_0_name_en=User Permission;userpermission_1_name_cn=用户权利
 ,userright			,User Right				,31	,userpermission_0_name_en=User Right;userpermission_1_name_cn=用户权限
 ,usergroup			,User Group				,32	,userpermission_0_name_en=User Group;userpermission_1_name_cn=用户组
 ,menu				,Menu					,40	,userpermission_0_name_en=Menu;userpermission_1_name_cn=菜单
-,employeesession	,Employee Session		,50	,userpermission_0_name_en=Employee Session;userpermission_1_name_cn=员工会话
-,employee			,Employee				,60	,userpermission_0_name_en=Employee;userpermission_1_name_cn=雇员
-,customer			,Customer				,61	,userpermission_0_name_en=Customer;userpermission_1_name_cn=顾客
-,vendor				,Vendor					,62	,userpermission_0_name_en=Vendor;userpermission_1_name_cn=供应商
+,company			,Company				,50,userpermission_0_name_en=Company;userpermission_1_name_cn=公司
+,address			,Address				,51,userpermission_0_name_en=Address;userpermission_1_name_cn=地址
+,employee			,Employee				,52	,userpermission_0_name_en=Employee;userpermission_1_name_cn=雇员
+,employeesession	,Employee Session		,53	,userpermission_0_name_en=Employee Session;userpermission_1_name_cn=员工会话
+,customer			,Customer				,54	,userpermission_0_name_en=Customer;userpermission_1_name_cn=顾客
+,vendor				,Vendor					,55	,userpermission_0_name_en=Vendor;userpermission_1_name_cn=供应商
 ,cronjob			,Cronjob				,70 ,userpermission_0_name_en=Cronjob;userpermission_1_name_cn=定时任务
 ,filemanager		,File Manager			,80 ,userpermission_0_name_en=File Manager;userpermission_1_name_cn=文件管理器
 ,email				,Email					,90 ,userpermission_0_name_en=Email;userpermission_1_name_cn=电子邮件

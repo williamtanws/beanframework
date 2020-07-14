@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<head>
+<title th:utext="#{module.address}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<section class="content" th:with="addressName=#{module.address.name}, addressActive=#{module.address.active}, addressSort=#{module.address.sort}">
+			<!-- List Table-->
+			<th:block
+				layout:insert="~{common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.address.icon')}}, title=#{module.address}, objectDto=${addressDto}, createAuthority='address_create', updateAuthority='address_update', tableName='address', listUrl=@{${@environment.getProperty('path.api.address.page')}}, listFields=${ {{'id', 'ID'},{'name', addressName}, {'active', addressActive}, {'sort', addressSort}} }, editFormAction=@{${@environment.getProperty('path.address')}}, editForm=@{${@environment.getProperty('view.address.form')}}, createButton='1', filterColumnIndex=${ {0, 1} } )}"></th:block>
+		</section>
+	</th:block>
+</body>
+</html>

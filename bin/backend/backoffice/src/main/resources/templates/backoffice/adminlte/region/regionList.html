@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<head>
+<title th:utext="#{module.region}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<section class="content" th:with="regionName=#{module.region.name}, regionActive=#{module.region.active}, regionSort=#{module.region.sort}">
+			<!-- List Table-->
+			<th:block
+				layout:insert="~{common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.region.icon')}}, title=#{module.region}, objectDto=${regionDto}, createAuthority='region_create', updateAuthority='region_update', tableName='region', listUrl=@{${@environment.getProperty('path.api.region.page')}}, listFields=${ {{'id', 'ID'},{'name', regionName}, {'active', regionActive}, {'sort', regionSort}} }, editFormAction=@{${@environment.getProperty('path.region')}}, editForm=@{${@environment.getProperty('view.region.form')}}, createButton='1', filterColumnIndex=${ {0, 1} } )}"></th:block>
+		</section>
+	</th:block>
+</body>
+</html>
