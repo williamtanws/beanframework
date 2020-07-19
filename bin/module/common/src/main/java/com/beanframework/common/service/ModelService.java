@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.Tuple;
+
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.data.domain.Page;
@@ -70,7 +72,7 @@ public interface ModelService {
 
 	<T extends Collection> T findAll(Class modelClass);
 	
-	<T extends Collection> T search(String qlString);
+	List<Tuple> search(String qlString);
 
 	List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
 			throws Exception;

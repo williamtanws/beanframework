@@ -50,6 +50,9 @@
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.import') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.console.platform.import')}}" th:text="#{module.console.platform.import}"></a>
 									</li> 
+									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.export') ? 'active':''}">
+										<a th:href="@{${@environment.getProperty('path.console.platform.export')}}" th:text="#{module.console.platform.export}"></a>
+									</li> 
 									<li th:class="${#httpServletRequest.requestURI == @environment.getProperty('path.console.platform.license') ? 'active':''}">
 										<a th:href="@{${@environment.getProperty('path.console.platform.license')}}" th:text="#{module.console.platform.license}"></a>
 									</li>
