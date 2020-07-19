@@ -62,6 +62,7 @@
 	                    	  $("#userGroupTable").find("select").each(function () { // there is no such thing as input[type=select] 
 	                    	        this.selectedIndex = 0; // this is a <select>
 	                    	  });
+	                    	  $('#userGroupTable .select2').val('').trigger('change');
 	                      }
 	                  }
 	              ],

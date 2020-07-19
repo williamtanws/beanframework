@@ -9,6 +9,7 @@ spring.pid.file=${temp.dir}/pid.txt
 server.tomcat.basedir=${temp.dir}/tomcat
 spring.devtools.add-properties=true
 spring.devtools.restart.enabled=true
+database.backup.dir=${project.dir}/data/db
 
 # ===============================
 # = CACHE
