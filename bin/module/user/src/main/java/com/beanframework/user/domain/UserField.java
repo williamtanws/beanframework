@@ -71,5 +71,4 @@ public class UserField extends GenericEntity {
 	public void setValue(String value) {
 		this.value = value;
 	}
-
 }
