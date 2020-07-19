@@ -3,8 +3,6 @@ package com.beanframework.cronjob.service;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.lang.model.SourceVersion;
-
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -141,7 +139,12 @@ public class QuartzManager {
 	}
 
 	boolean isValidName(String className) {
-		return SourceVersion.isIdentifier(className) && !SourceVersion.isKeyword(className);
+		try {
+			Class.forName(className);
+			return true;
+		} catch (ClassNotFoundException ex) {
+			return false;
+		}
 	}
 
 	public void pauseJob(Cronjob job) throws SchedulerException {
