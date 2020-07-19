@@ -149,6 +149,7 @@
 		                    	  $("#dynamicfieldslots-table").find("select").each(function () { // there is no such thing as input[type=select] 
 		                    	        this.selectedIndex = 0; // this is a <select>
 		                    	  });
+		                    	  $('#dynamicfieldslots-table .select2').val('').trigger('change');
 		                      }
 		                  }
 		              ]
