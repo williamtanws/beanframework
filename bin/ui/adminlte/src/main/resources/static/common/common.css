@@ -103,6 +103,10 @@ a.disabled {
     background-color: #f9f9f9;
 }
 
+.btn-datatable{
+	margin-right:10px;
+}
+
 <style>
 .pre-editor {
 	min-height: 100px;
