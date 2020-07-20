@@ -87,6 +87,7 @@ public class CronjobResource {
 			CronjobDataTableResponseData data = new CronjobDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
+			data.setJobGroup(StringUtils.stripToEmpty(dto.getJobGroup()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			data.setStatus(dto.getStatus() == null ? "" : dto.getStatus().toString());
 			dataTableResponse.getData().add(data);
