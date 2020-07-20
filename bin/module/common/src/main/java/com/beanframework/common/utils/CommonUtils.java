@@ -64,4 +64,8 @@ public abstract class CommonUtils {
 			return false;
 		return pat.matcher(email).matches();
 	}
+	
+	public static String convertToWritableFileName(String fileName) {
+		return fileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+	}
 }
