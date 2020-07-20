@@ -55,7 +55,7 @@
 	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
 	    	      'buttons': [
 	                  {
-	                      text: 'Clear',
+	                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
 	                      action: function ( e, dt, node, config ) {
 	                    	  dt.search('').columns().search('').draw();
 	                    	  $('#customerTable').find("input:text").val("");
