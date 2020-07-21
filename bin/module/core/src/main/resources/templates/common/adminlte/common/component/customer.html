@@ -57,7 +57,7 @@
 	                  {
 	                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
 	                      action: function ( e, dt, node, config ) {
-	                    	  dt.search('').columns().search('').draw();
+	                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
 	                    	  $('#customerTable').find("input:text").val("");
 	                    	  $("#customerTable").find("select").each(function () { // there is no such thing as input[type=select] 
 	                    	        this.selectedIndex = 0; // this is a <select>
