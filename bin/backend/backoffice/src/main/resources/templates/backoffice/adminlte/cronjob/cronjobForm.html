@@ -81,17 +81,13 @@
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="jobClass" th:text="#{module.cronjob.jobclass}"></label>
-												<span>*</span>
-												<input type="text" class="form-control" name="jobClass" th:value="*{jobClass}">
-												<span class="help-block"></span>
-											</div>
-											<div class="form-group">
 												<label for="jobGroup" th:text="#{module.cronjob.jobgroup}"></label>
 												<span>*</span>
 												<input type="text" class="form-control" name="jobGroup" th:value="*{jobGroup}">
 												<span class="help-block"></span>
 											</div>
+										</div>
+										<div class="col-md-6">
 											<div class="form-group">
 												<label for="name" th:text="#{module.cronjob.jobname}"></label>
 												<span>*</span>
@@ -101,11 +97,31 @@
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
+												<label for="jobClass" th:text="#{module.cronjob.jobclass}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="jobClass" th:value="*{jobClass}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="description" th:text="#{module.cronjob.description}"></label>
+												<textarea class="form-control" name="description" th:text="*{description}"></textarea>
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
 												<label for="cronExpression" th:text="#{module.cronjob.cronexpression}"></label>
 												<span>*</span>
 												<input type="text" class="form-control" name="cronExpression" th:value="*{cronExpression}">
+												<span id="cronExpressionDescription" class="help-block"></span>
 												<span class="help-block"></span>
 											</div>
+										</div>
+										<div class="col-md-6">
 											<div class="form-group">
 												<label for="startup" th:text="#{module.cronjob.startup}"></label>
 												<select class="form-control" name="startup">
@@ -113,11 +129,6 @@
 													<option value="1" th:selected="*{startup == true}" th:text="#{module.backoffice.yes}"></option>
 													<option value="0" th:selected="*{startup == false}" th:text="#{module.backoffice.no}"></option>
 												</select>
-												<span class="help-block"></span>
-											</div>
-											<div class="form-group">
-												<label for="description" th:text="#{module.cronjob.description}"></label>
-												<textarea class="form-control" name="description" th:text="*{description}"></textarea>
 												<span class="help-block"></span>
 											</div>
 										</div>
@@ -186,6 +197,18 @@
 		</form>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
+		    
+		    /*[# th:if="${cronjobDto.cronExpression} != null"]*/
+		    var locale = /*[[${#locale.toString()}]]*/;
+		    var cronExpression = /*[[${cronjobDto.cronExpression}]]*/;
+		    
+		    if(locale == "cn"){
+		    	locale = "zh_CN";
+		    }
+		    	
+			$("#cronExpressionDescription").text(cronstrue.toString(cronExpression, { locale: locale }));
+			/*[/]*/
+		    	
 		    $(document).ready(function() {
 		    	
 		    	$('#jobdatasTable').DataTable({
