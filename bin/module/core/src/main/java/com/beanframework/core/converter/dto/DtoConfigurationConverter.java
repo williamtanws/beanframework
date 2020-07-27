@@ -35,7 +35,7 @@ public class DtoConfigurationConverter extends AbstractDtoConverter<Configuratio
 		return convertedList;
 	}
 
-	private ConfigurationDto convert(Configuration source, ConfigurationDto prototype, DtoConverterContext context) throws ConverterException {
+	public ConfigurationDto convert(Configuration source, ConfigurationDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 			convertCommonProperties(source, prototype, context);
 

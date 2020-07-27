@@ -40,7 +40,7 @@ public class DtoUserGroupConverter extends AbstractDtoConverter<UserGroup, UserG
 		return convertedList;
 	}
 
-	private UserGroupDto convert(UserGroup source, UserGroupDto prototype, DtoConverterContext context) throws ConverterException {
+	public UserGroupDto convert(UserGroup source, UserGroupDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 

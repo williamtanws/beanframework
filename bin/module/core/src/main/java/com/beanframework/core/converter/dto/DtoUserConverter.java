@@ -35,7 +35,7 @@ public class DtoUserConverter extends AbstractDtoConverter<User, UserDto> implem
 		return convertedList;
 	}
 
-	private UserDto convert(User source, UserDto prototype, DtoConverterContext context) throws ConverterException {
+	public UserDto convert(User source, UserDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

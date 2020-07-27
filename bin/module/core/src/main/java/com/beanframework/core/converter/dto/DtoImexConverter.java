@@ -36,7 +36,7 @@ public class DtoImexConverter extends AbstractDtoConverter<Imex, ImexDto> implem
 		return convertedList;
 	}
 
-	private ImexDto convert(Imex source, ImexDto prototype, DtoConverterContext context) throws ConverterException {
+	public ImexDto convert(Imex source, ImexDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 			convertCommonProperties(source, prototype, context);
 

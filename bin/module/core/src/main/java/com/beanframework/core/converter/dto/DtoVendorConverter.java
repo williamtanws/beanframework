@@ -35,7 +35,7 @@ public class DtoVendorConverter extends AbstractDtoConverter<Vendor, VendorDto> 
 		return convertedList;
 	}
 
-	private VendorDto convert(Vendor source, VendorDto prototype, DtoConverterContext context) throws ConverterException {
+	public VendorDto convert(Vendor source, VendorDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

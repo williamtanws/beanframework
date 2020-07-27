@@ -36,7 +36,7 @@ public class DtoEmailConverter extends AbstractDtoConverter<Email, EmailDto> imp
 		return convertedList;
 	}
 
-	private EmailDto convert(Email source, EmailDto prototype, DtoConverterContext context) throws ConverterException {
+	public EmailDto convert(Email source, EmailDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

@@ -30,7 +30,7 @@ public class DtoEnumerationConverter extends AbstractDtoConverter<Enumeration, E
 		return convertedList;
 	}
 
-	private EnumerationDto convert(Enumeration source, EnumerationDto prototype, DtoConverterContext context) throws ConverterException {
+	public EnumerationDto convert(Enumeration source, EnumerationDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

@@ -35,7 +35,7 @@ public class DtoEmployeeConverter extends AbstractDtoConverter<Employee, Employe
 		return convertedList;
 	}
 
-	private EmployeeDto convert(Employee source, EmployeeDto prototype, DtoConverterContext context) throws ConverterException {
+	public EmployeeDto convert(Employee source, EmployeeDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

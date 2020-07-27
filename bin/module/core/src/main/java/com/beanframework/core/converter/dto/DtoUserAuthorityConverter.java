@@ -38,7 +38,7 @@ public class DtoUserAuthorityConverter extends AbstractDtoConverter<UserAuthorit
 		return convertedList;
 	}
 
-	private UserAuthorityDto convert(UserAuthority source, UserAuthorityDto prototype, DtoConverterContext context) throws ConverterException {
+	public UserAuthorityDto convert(UserAuthority source, UserAuthorityDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 
 			convertCommonProperties(source, prototype, context);

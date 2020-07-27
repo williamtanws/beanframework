@@ -34,7 +34,7 @@ public class DtoUserRightConverter extends AbstractDtoConverter<UserRight, UserR
 		return convertedList;
 	}
 
-	private UserRightDto convert(UserRight source, UserRightDto prototype, DtoConverterContext context) throws ConverterException {
+	public UserRightDto convert(UserRight source, UserRightDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 

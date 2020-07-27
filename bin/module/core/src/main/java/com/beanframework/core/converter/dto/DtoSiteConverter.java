@@ -35,7 +35,7 @@ public class DtoSiteConverter extends AbstractDtoConverter<Site, SiteDto> implem
 		return convertedList;
 	}
 
-	private SiteDto convert(Site source, SiteDto prototype, DtoConverterContext context) throws ConverterException {
+	public SiteDto convert(Site source, SiteDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 			convertCommonProperties(source, prototype, context);
 

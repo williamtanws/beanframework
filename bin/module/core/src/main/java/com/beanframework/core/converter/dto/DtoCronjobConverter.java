@@ -38,7 +38,7 @@ public class DtoCronjobConverter extends AbstractDtoConverter<Cronjob, CronjobDt
 		return convertedList;
 	}
 
-	private CronjobDto convert(Cronjob source, CronjobDto prototype, DtoConverterContext context) throws ConverterException {
+	public CronjobDto convert(Cronjob source, CronjobDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 			convertCommonProperties(source, prototype, context);
 			prototype.setJobClass(source.getJobClass());

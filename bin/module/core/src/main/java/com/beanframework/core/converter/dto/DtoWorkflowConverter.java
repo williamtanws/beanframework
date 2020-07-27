@@ -35,7 +35,7 @@ public class DtoWorkflowConverter extends AbstractDtoConverter<Workflow, Workflo
 		return convertedList;
 	}
 
-	private WorkflowDto convert(Workflow source, WorkflowDto prototype, DtoConverterContext context) throws ConverterException {
+	public WorkflowDto convert(Workflow source, WorkflowDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 			convertCommonProperties(source, prototype, context);
 
