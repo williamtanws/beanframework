@@ -32,7 +32,7 @@ public class DtoDynamicFieldTemplateConverter extends AbstractDtoConverter<Dynam
 		return convertedList;
 	}
 
-	private DynamicFieldTemplateDto convert(DynamicFieldTemplate source, DynamicFieldTemplateDto prototype, DtoConverterContext context) throws ConverterException {
+	public DynamicFieldTemplateDto convert(DynamicFieldTemplate source, DynamicFieldTemplateDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

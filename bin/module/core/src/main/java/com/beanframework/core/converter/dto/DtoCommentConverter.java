@@ -12,6 +12,8 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.exception.PopulatorException;
+import com.beanframework.core.data.AdminDto;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.data.UserDto;
 
@@ -21,7 +23,15 @@ public class DtoCommentConverter extends AbstractDtoConverter<Comment, CommentDt
 
 	@Override
 	public CommentDto convert(Comment source, DtoConverterContext context) throws ConverterException {
-		return convert(source, new CommentDto(), context);
+		try {
+			AdminDto target = new AdminDto();
+			populate(source, target, context);
+
+			return target;
+		} catch (PopulatorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 	}
 
 	public List<CommentDto> convert(List<Comment> sources, DtoConverterContext context) throws ConverterException {
@@ -32,7 +42,7 @@ public class DtoCommentConverter extends AbstractDtoConverter<Comment, CommentDt
 		return convertedList;
 	}
 
-	private CommentDto convert(Comment source, CommentDto prototype, DtoConverterContext context) throws ConverterException {
+	public CommentDto convert(Comment source, CommentDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 			convertCommonProperties(source, prototype, context);
 

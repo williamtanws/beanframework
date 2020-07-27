@@ -30,7 +30,7 @@ public class DtoLanguageConverter extends AbstractDtoConverter<Language, Languag
 		return convertedList;
 	}
 
-	private LanguageDto convert(Language source, LanguageDto prototype, DtoConverterContext context) throws ConverterException {
+	public LanguageDto convert(Language source, LanguageDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

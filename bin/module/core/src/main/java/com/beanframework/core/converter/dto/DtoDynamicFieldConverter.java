@@ -33,7 +33,7 @@ public class DtoDynamicFieldConverter extends AbstractDtoConverter<DynamicField,
 		return convertedList;
 	}
 
-	private DynamicFieldDto convert(DynamicField source, DynamicFieldDto prototype, DtoConverterContext context) throws ConverterException {
+	public DynamicFieldDto convert(DynamicField source, DynamicFieldDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 
 			convertCommonProperties(source, prototype, context);

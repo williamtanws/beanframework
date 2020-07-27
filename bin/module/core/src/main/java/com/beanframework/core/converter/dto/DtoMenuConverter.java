@@ -40,7 +40,7 @@ public class DtoMenuConverter extends AbstractDtoConverter<Menu, MenuDto> implem
 		return convertedList;
 	}
 
-	private MenuDto convert(Menu source, MenuDto prototype, DtoConverterContext context) throws ConverterException {
+	public MenuDto convert(Menu source, MenuDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

@@ -30,7 +30,7 @@ public class DtoCronjobDataConverter extends AbstractDtoConverter<CronjobData, C
 		return convertedList;
 	}
 
-	private CronjobDataDto convert(CronjobData source, CronjobDataDto prototype, DtoConverterContext context) throws ConverterException {
+	public CronjobDataDto convert(CronjobData source, CronjobDataDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

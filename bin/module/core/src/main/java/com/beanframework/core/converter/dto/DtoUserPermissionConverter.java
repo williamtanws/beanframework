@@ -34,7 +34,7 @@ public class DtoUserPermissionConverter extends AbstractDtoConverter<UserPermiss
 		return convertedList;
 	}
 
-	private UserPermissionDto convert(UserPermission source, UserPermissionDto prototype, DtoConverterContext context) throws ConverterException {
+	public UserPermissionDto convert(UserPermission source, UserPermissionDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

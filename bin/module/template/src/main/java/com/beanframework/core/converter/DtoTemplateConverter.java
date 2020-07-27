@@ -30,7 +30,7 @@ public class DtoTemplateConverter extends AbstractDtoConverter<Template, Templat
 		return convertedList;
 	}
 
-	private TemplateDto convert(Template source, TemplateDto prototype, DtoConverterContext context) throws ConverterException {
+	public TemplateDto convert(Template source, TemplateDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

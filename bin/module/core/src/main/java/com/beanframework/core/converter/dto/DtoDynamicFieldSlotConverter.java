@@ -37,7 +37,7 @@ public class DtoDynamicFieldSlotConverter extends AbstractDtoConverter<DynamicFi
 		return convertedList;
 	}
 
-	private DynamicFieldSlotDto convert(DynamicFieldSlot source, DynamicFieldSlotDto prototype, DtoConverterContext context) throws ConverterException {
+	public DynamicFieldSlotDto convert(DynamicFieldSlot source, DynamicFieldSlotDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

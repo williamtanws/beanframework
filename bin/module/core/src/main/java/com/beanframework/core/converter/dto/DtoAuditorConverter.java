@@ -30,7 +30,7 @@ public class DtoAuditorConverter extends AbstractDtoConverter<Auditor, AuditorDt
 		return convertedList;
 	}
 
-	private AuditorDto convert(Auditor source, AuditorDto prototype, DtoConverterContext context) throws ConverterException {
+	public AuditorDto convert(Auditor source, AuditorDto prototype, DtoConverterContext context) throws ConverterException {
 
 		try {
 			convertCommonProperties(source, prototype, context);

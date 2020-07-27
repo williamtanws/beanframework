@@ -35,7 +35,7 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 		return convertedList;
 	}
 
-	private MediaDto convert(Media source, MediaDto prototype, DtoConverterContext context) throws ConverterException {
+	public MediaDto convert(Media source, MediaDto prototype, DtoConverterContext context) throws ConverterException {
 		try {
 			convertCommonProperties(source, prototype, context);
 
