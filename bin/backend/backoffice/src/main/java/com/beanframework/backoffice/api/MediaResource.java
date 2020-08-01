@@ -87,7 +87,7 @@ public class MediaResource {
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setFileName(dto.getFileName());
 			data.setFileType(dto.getFileType());
-			data.setFileSize(dto.getFileSize().toString());
+			data.setFileSize(dto.getFileSize() == null ? null : dto.getFileSize().toString());
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;

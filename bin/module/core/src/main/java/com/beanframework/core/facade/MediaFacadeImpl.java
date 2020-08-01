@@ -13,7 +13,6 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.converter.populator.MediaBasicPopulator;
 import com.beanframework.core.converter.populator.MediaFullPopulator;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.media.domain.Media;
@@ -31,9 +30,6 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Autowired
 	private MediaFullPopulator mediaFullPopulator;
-
-	@Autowired
-	private MediaBasicPopulator mediaBasicPopulator;
 
 	@Override
 	public MediaDto findOneByUuid(UUID uuid) throws Exception {
@@ -79,7 +75,7 @@ public class MediaFacadeImpl implements MediaFacade {
 	public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Media> page = modelService.findPage(MediaSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Media.class);
 
-		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class, new DtoConverterContext(mediaBasicPopulator));
+		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class, new DtoConverterContext(mediaFullPopulator));
 		return new PageImpl<MediaDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
