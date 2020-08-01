@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.EntityTemplateConverter;
+import com.beanframework.core.converter.entity.EntityTemplateConverter;
 import com.beanframework.template.domain.Template;
 
 @Configuration

@@ -9,11 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.MediaBasicPopulator;
+import com.beanframework.core.converter.populator.MediaFullPopulator;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.media.domain.Media;
 import com.beanframework.media.service.MediaService;
@@ -28,16 +29,22 @@ public class MediaFacadeImpl implements MediaFacade {
 	@Autowired
 	private MediaService mediaService;
 
+	@Autowired
+	private MediaFullPopulator mediaFullPopulator;
+
+	@Autowired
+	private MediaBasicPopulator mediaBasicPopulator;
+
 	@Override
 	public MediaDto findOneByUuid(UUID uuid) throws Exception {
 		Media entity = modelService.findOneByUuid(uuid, Media.class);
-		return modelService.getDto(entity, MediaDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, MediaDto.class, new DtoConverterContext(mediaFullPopulator));
 	}
 
 	@Override
 	public MediaDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Media entity = modelService.findOneByProperties(properties, Media.class);
-		return modelService.getDto(entity, MediaDto.class);
+		return modelService.getDto(entity, MediaDto.class, new DtoConverterContext(mediaFullPopulator));
 	}
 
 	@Override
@@ -57,7 +64,7 @@ public class MediaFacadeImpl implements MediaFacade {
 			
 			mediaService.storeMultipartFile(entity, dto.getFile());
 
-			return modelService.getDto(entity, MediaDto.class);
+			return modelService.getDto(entity, MediaDto.class, new DtoConverterContext(mediaFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -72,7 +79,7 @@ public class MediaFacadeImpl implements MediaFacade {
 	public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Media> page = modelService.findPage(MediaSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Media.class);
 
-		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<MediaDto> dtos = modelService.getDto(page.getContent(), MediaDto.class, new DtoConverterContext(mediaBasicPopulator));
 		return new PageImpl<MediaDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -89,7 +96,7 @@ public class MediaFacadeImpl implements MediaFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Media) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], MediaDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], MediaDto.class, new DtoConverterContext(mediaFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -105,6 +112,6 @@ public class MediaFacadeImpl implements MediaFacade {
 	@Override
 	public MediaDto createDto() throws Exception {
 		Media media= modelService.create(Media.class);
-		return modelService.getDto(media, MediaDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(media, MediaDto.class, new DtoConverterContext(mediaFullPopulator));
 	}
 }

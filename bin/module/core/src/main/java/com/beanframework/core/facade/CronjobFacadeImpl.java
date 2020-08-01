@@ -11,12 +11,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.CronjobBasicPopulator;
+import com.beanframework.core.converter.populator.CronjobFullPopulator;
 import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.cronjob.CronjobConstants;
@@ -41,18 +42,24 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	@Autowired
 	private CronjobService cronjobService;
 
+	@Autowired
+	private CronjobFullPopulator cronjobFullPopulator;
+
+	@Autowired
+	private CronjobBasicPopulator cronjobBasicPopulator;
+
 	@Override
 	public CronjobDto findOneByUuid(UUID uuid) throws Exception {
 		Cronjob entity = modelService.findOneByUuid(uuid, Cronjob.class);
 
-		return modelService.getDto(entity, CronjobDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
 	}
 
 	@Override
 	public CronjobDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Cronjob entity = modelService.findOneByProperties(properties, Cronjob.class);
 
-		return modelService.getDto(entity, CronjobDto.class);
+		return modelService.getDto(entity, CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
 	}
 
 	@Override
@@ -70,7 +77,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 			Cronjob entity = modelService.getEntity(dto, Cronjob.class);
 			entity = modelService.saveEntity(entity, Cronjob.class);
 
-			return modelService.getDto(entity, CronjobDto.class);
+			return modelService.getDto(entity, CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -85,7 +92,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Cronjob> page = modelService.findPage(CronjobSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Cronjob.class);
 
-		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class, new DtoConverterContext(cronjobBasicPopulator));
 		return new PageImpl<CronjobDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -132,7 +139,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 			updateCronjob = modelService.saveEntity(updateCronjob, Cronjob.class);
 
-			return modelService.getDto(updateCronjob, Cronjob.class);
+			return modelService.getDto(updateCronjob, Cronjob.class, new DtoConverterContext(cronjobFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -184,7 +191,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Cronjob) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CronjobDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -200,7 +207,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	@Override
 	public CronjobDto createDto() throws Exception {
 		Cronjob cronjob = modelService.create(Cronjob.class);
-		return modelService.getDto(cronjob, CronjobDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(cronjob, CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
 	}
 
 }

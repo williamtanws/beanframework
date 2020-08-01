@@ -14,11 +14,12 @@ import org.springframework.stereotype.Component;
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.comment.service.CommentService;
 import com.beanframework.comment.specification.CommentSpecification;
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.CommentBasicPopulator;
+import com.beanframework.core.converter.populator.CommentFullPopulator;
 import com.beanframework.core.data.CommentDto;
 
 @Component
@@ -30,18 +31,24 @@ public class CommentFacadeImpl implements CommentFacade {
 	@Autowired
 	private CommentService commentService;
 
+	@Autowired
+	private CommentFullPopulator commentFullPopulator;
+
+	@Autowired
+	private CommentBasicPopulator commentBasicPopulator;
+
 	@Override
 	public CommentDto findOneByUuid(UUID uuid) throws Exception {
 		Comment entity = modelService.findOneByUuid(uuid, Comment.class);
 
-		return modelService.getDto(entity, CommentDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, CommentDto.class, new DtoConverterContext(commentFullPopulator));
 	}
 
 	@Override
 	public CommentDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Comment entity = modelService.findOneByProperties(properties, Comment.class);
 
-		return modelService.getDto(entity, CommentDto.class);
+		return modelService.getDto(entity, CommentDto.class, new DtoConverterContext(commentFullPopulator));
 	}
 
 	@Override
@@ -59,7 +66,7 @@ public class CommentFacadeImpl implements CommentFacade {
 			Comment entity = modelService.getEntity(dto, Comment.class);
 			entity = modelService.saveEntity(entity, Comment.class);
 
-			return modelService.getDto(entity, CommentDto.class);
+			return modelService.getDto(entity, CommentDto.class, new DtoConverterContext(commentFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,7 +81,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Comment> page = modelService.findPage(CommentSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Comment.class);
 
-		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class, new DtoConverterContext(commentBasicPopulator));
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -91,7 +98,7 @@ public class CommentFacadeImpl implements CommentFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Comment) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CommentDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], CommentDto.class, new DtoConverterContext(commentFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,13 +117,13 @@ public class CommentFacadeImpl implements CommentFacade {
 		sorts.put(Comment.CREATED_DATE, Sort.Direction.DESC);
 
 		List<Comment> comments = modelService.findByPropertiesBySortByResult(null, sorts, null, null, Comment.class);
-		return modelService.getDto(comments, CommentDto.class);
+		return modelService.getDto(comments, CommentDto.class, new DtoConverterContext(commentFullPopulator));
 	}
 
 	@Override
 	public CommentDto createDto() throws Exception {
 		Comment comment = modelService.create(Comment.class);
-		return modelService.getDto(comment, CommentDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(comment, CommentDto.class, new DtoConverterContext(commentFullPopulator));
 	}
 
 }

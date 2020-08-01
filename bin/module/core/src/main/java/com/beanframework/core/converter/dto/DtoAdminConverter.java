@@ -20,7 +20,6 @@ public class DtoAdminConverter extends AbstractDtoConverter<Admin, AdminDto> imp
 
 	@Override
 	public AdminDto convert(Admin source, DtoConverterContext context) throws ConverterException {
-
 		try {
 			AdminDto target = new AdminDto();
 			populate(source, target, context);
@@ -30,7 +29,6 @@ public class DtoAdminConverter extends AbstractDtoConverter<Admin, AdminDto> imp
 			LOGGER.error(e.getMessage(), e);
 			throw new ConverterException(e.getMessage(), e);
 		}
-
 	}
 
 	public List<AdminDto> convert(List<Admin> sources, DtoConverterContext context) throws ConverterException {

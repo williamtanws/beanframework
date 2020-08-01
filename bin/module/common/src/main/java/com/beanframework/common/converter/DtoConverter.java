@@ -1,7 +1,5 @@
 package com.beanframework.common.converter;
 
-import java.util.List;
-
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.exception.ConverterException;
 

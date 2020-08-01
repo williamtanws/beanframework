@@ -9,11 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.ImexFullPopulator;
 import com.beanframework.core.data.ImexDto;
 import com.beanframework.imex.domain.Imex;
 import com.beanframework.imex.service.ImexService;
@@ -28,16 +28,19 @@ public class ImexFacadeImpl implements ImexFacade {
 	@Autowired
 	private ImexService imexService;
 
+	@Autowired
+	private ImexFullPopulator imexFullPopulator;
+
 	@Override
 	public ImexDto findOneByUuid(UUID uuid) throws Exception {
 		Imex entity = modelService.findOneByUuid(uuid, Imex.class);
-		return modelService.getDto(entity, ImexDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, ImexDto.class, new DtoConverterContext(imexFullPopulator));
 	}
 
 	@Override
 	public ImexDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Imex entity = modelService.findOneByProperties(properties, Imex.class);
-		return modelService.getDto(entity, ImexDto.class);
+		return modelService.getDto(entity, ImexDto.class, new DtoConverterContext(imexFullPopulator));
 	}
 
 	@Override
@@ -55,7 +58,7 @@ public class ImexFacadeImpl implements ImexFacade {
 			Imex entity = modelService.getEntity(dto, Imex.class);
 			entity = modelService.saveEntity(entity, Imex.class);
 			
-			return modelService.getDto(entity, ImexDto.class);
+			return modelService.getDto(entity, ImexDto.class, new DtoConverterContext(imexFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -70,7 +73,7 @@ public class ImexFacadeImpl implements ImexFacade {
 	public Page<ImexDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Imex> page = modelService.findPage(ImexSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Imex.class);
 
-		List<ImexDto> dtos = modelService.getDto(page.getContent(), ImexDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<ImexDto> dtos = modelService.getDto(page.getContent(), ImexDto.class, new DtoConverterContext(imexFullPopulator));
 		return new PageImpl<ImexDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -87,7 +90,7 @@ public class ImexFacadeImpl implements ImexFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Imex) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], ImexDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], ImexDto.class, new DtoConverterContext(imexFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -103,6 +106,6 @@ public class ImexFacadeImpl implements ImexFacade {
 	@Override
 	public ImexDto createDto() throws Exception {
 		Imex Imex = modelService.create(Imex.class);
-		return modelService.getDto(Imex, ImexDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(Imex, ImexDto.class, new DtoConverterContext(imexFullPopulator));
 	}
 }

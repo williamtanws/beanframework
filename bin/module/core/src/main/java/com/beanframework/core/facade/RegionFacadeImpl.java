@@ -11,11 +11,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.RegionBasicPopulator;
+import com.beanframework.core.converter.populator.RegionFullPopulator;
 import com.beanframework.core.data.RegionDto;
 import com.beanframework.internationalization.domain.Region;
 import com.beanframework.internationalization.service.RegionService;
@@ -30,18 +31,24 @@ public class RegionFacadeImpl implements RegionFacade {
 	@Autowired
 	private RegionService regionService;
 
+	@Autowired
+	private RegionFullPopulator regionFullPopulator;
+
+	@Autowired
+	private RegionBasicPopulator regionBasicPopulator;
+
 	@Override
 	public RegionDto findOneByUuid(UUID uuid) throws Exception {
 		Region entity = modelService.findOneByUuid(uuid, Region.class);
 
-		return modelService.getDto(entity, RegionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, RegionDto.class, new DtoConverterContext(regionFullPopulator));
 	}
 
 	@Override
 	public RegionDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Region entity = modelService.findOneByProperties(properties, Region.class);
 
-		return modelService.getDto(entity, RegionDto.class);
+		return modelService.getDto(entity, RegionDto.class, new DtoConverterContext(regionFullPopulator));
 	}
 
 	@Override
@@ -59,7 +66,7 @@ public class RegionFacadeImpl implements RegionFacade {
 			Region entity = modelService.getEntity(dto, Region.class);
 			entity = modelService.saveEntity(entity, Region.class);
 
-			return modelService.getDto(entity, RegionDto.class);
+			return modelService.getDto(entity, RegionDto.class, new DtoConverterContext(regionFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,7 +81,7 @@ public class RegionFacadeImpl implements RegionFacade {
 	public Page<RegionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Region> page = modelService.findPage(RegionSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Region.class);
 
-		List<RegionDto> dtos = modelService.getDto(page.getContent(), RegionDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<RegionDto> dtos = modelService.getDto(page.getContent(), RegionDto.class, new DtoConverterContext(regionBasicPopulator));
 		return new PageImpl<RegionDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -91,7 +98,7 @@ public class RegionFacadeImpl implements RegionFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Region) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], RegionDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], RegionDto.class, new DtoConverterContext(regionFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,13 +117,13 @@ public class RegionFacadeImpl implements RegionFacade {
 		sorts.put(Region.CREATED_DATE, Sort.Direction.DESC);
 
 		List<Region> regions = modelService.findByPropertiesBySortByResult(null, sorts, null, null, Region.class);
-		return modelService.getDto(regions, RegionDto.class);
+		return modelService.getDto(regions, RegionDto.class, new DtoConverterContext(regionFullPopulator));
 	}
 
 	@Override
 	public RegionDto createDto() throws Exception {
 		Region region = modelService.create(Region.class);
-		return modelService.getDto(region, RegionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(region, RegionDto.class, new DtoConverterContext(regionFullPopulator));
 	}
 
 }

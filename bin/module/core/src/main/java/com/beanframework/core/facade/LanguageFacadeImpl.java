@@ -9,11 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.LanguageFullPopulator;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.internationalization.domain.Language;
 import com.beanframework.internationalization.service.LanguageService;
@@ -28,16 +28,19 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	@Autowired
 	private LanguageService languageService;
 
+	@Autowired
+	private LanguageFullPopulator languageFullPopulator;
+
 	@Override
 	public LanguageDto findOneByUuid(UUID uuid) throws Exception {
 		Language entity = modelService.findOneByUuid(uuid, Language.class);
-		return modelService.getDto(entity, LanguageDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, LanguageDto.class, new DtoConverterContext(languageFullPopulator));
 	}
 
 	@Override
 	public LanguageDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Language entity = modelService.findOneByProperties(properties, Language.class);
-		return modelService.getDto(entity, LanguageDto.class);
+		return modelService.getDto(entity, LanguageDto.class, new DtoConverterContext(languageFullPopulator));
 	}
 
 	@Override
@@ -55,7 +58,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 			Language entity = modelService.getEntity(dto, Language.class);
 			entity = modelService.saveEntity(entity, Language.class);
 
-			return modelService.getDto(entity, LanguageDto.class);
+			return modelService.getDto(entity, LanguageDto.class, new DtoConverterContext(languageFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -70,7 +73,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Language> page = modelService.findPage(LanguageSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Language.class);
 
-		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<LanguageDto> dtos = modelService.getDto(page.getContent(), LanguageDto.class, new DtoConverterContext(languageFullPopulator));
 		return new PageImpl<LanguageDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -87,7 +90,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Language) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], LanguageDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], LanguageDto.class, new DtoConverterContext(languageFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -103,6 +106,6 @@ public class LanguageFacadeImpl implements LanguageFacade {
 	@Override
 	public LanguageDto createDto() throws Exception {
 		Language language = modelService.create(Language.class);
-		return modelService.getDto(language, LanguageDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(language, LanguageDto.class, new DtoConverterContext(languageFullPopulator));
 	}
 }

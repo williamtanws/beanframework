@@ -14,11 +14,12 @@ import org.springframework.stereotype.Component;
 import com.beanframework.address.domain.Address;
 import com.beanframework.address.service.AddressService;
 import com.beanframework.address.specification.AddressSpecification;
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.AddressBasicPopulator;
+import com.beanframework.core.converter.populator.AddressFullPopulator;
 import com.beanframework.core.data.AddressDto;
 
 @Component
@@ -29,19 +30,25 @@ public class AddressFacadeImpl implements AddressFacade {
 
 	@Autowired
 	private AddressService addressService;
+	
+	@Autowired
+	private AddressFullPopulator addressFullPopulator;
+	
+	@Autowired
+	private AddressBasicPopulator addressBasicPopulator;
 
 	@Override
 	public AddressDto findOneByUuid(UUID uuid) throws Exception {
 		Address entity = modelService.findOneByUuid(uuid, Address.class);
 
-		return modelService.getDto(entity, AddressDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, AddressDto.class, new DtoConverterContext(addressFullPopulator));
 	}
 
 	@Override
 	public AddressDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Address entity = modelService.findOneByProperties(properties, Address.class);
 
-		return modelService.getDto(entity, AddressDto.class);
+		return modelService.getDto(entity, AddressDto.class, new DtoConverterContext(addressFullPopulator));
 	}
 
 	@Override
@@ -59,7 +66,7 @@ public class AddressFacadeImpl implements AddressFacade {
 			Address entity = modelService.getEntity(dto, Address.class);
 			entity = modelService.saveEntity(entity, Address.class);
 
-			return modelService.getDto(entity, AddressDto.class);
+			return modelService.getDto(entity, AddressDto.class, new DtoConverterContext(addressFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,7 +81,7 @@ public class AddressFacadeImpl implements AddressFacade {
 	public Page<AddressDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Address> page = modelService.findPage(AddressSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Address.class);
 
-		List<AddressDto> dtos = modelService.getDto(page.getContent(), AddressDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<AddressDto> dtos = modelService.getDto(page.getContent(), AddressDto.class, new DtoConverterContext(addressBasicPopulator));
 		return new PageImpl<AddressDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -91,7 +98,7 @@ public class AddressFacadeImpl implements AddressFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Address) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], AddressDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], AddressDto.class, new DtoConverterContext(addressFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,13 +117,13 @@ public class AddressFacadeImpl implements AddressFacade {
 		sorts.put(Address.CREATED_DATE, Sort.Direction.DESC);
 
 		List<Address> addresss = modelService.findByPropertiesBySortByResult(null, sorts, null, null, Address.class);
-		return modelService.getDto(addresss, AddressDto.class);
+		return modelService.getDto(addresss, AddressDto.class, new DtoConverterContext(addressFullPopulator));
 	}
 
 	@Override
 	public AddressDto createDto() throws Exception {
 		Address address = modelService.create(Address.class);
-		return modelService.getDto(address, AddressDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(address, AddressDto.class, new DtoConverterContext(addressFullPopulator));
 	}
 
 }

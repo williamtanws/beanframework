@@ -11,11 +11,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.UserRightBasicPopulator;
+import com.beanframework.core.converter.populator.UserRightFullPopulator;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserRightService;
@@ -30,10 +31,16 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	@Autowired
 	private UserRightService userRightService;
 
+	@Autowired
+	private UserRightFullPopulator userRightFullPopulator;
+
+	@Autowired
+	private UserRightBasicPopulator userRightBasicPopulator;
+
 	@Override
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
 		UserRight entity = modelService.findOneByUuid(uuid, UserRight.class);
-		UserRightDto dto = modelService.getDto(entity, UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		UserRightDto dto = modelService.getDto(entity, UserRightDto.class, new DtoConverterContext(userRightFullPopulator));
 
 		return dto;
 	}
@@ -41,7 +48,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	@Override
 	public UserRightDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserRight entity = modelService.findOneByProperties(properties, UserRight.class);
-		UserRightDto dto = modelService.getDto(entity, UserRightDto.class);
+		UserRightDto dto = modelService.getDto(entity, UserRightDto.class, new DtoConverterContext(userRightFullPopulator));
 
 		return dto;
 	}
@@ -61,7 +68,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 			UserRight entity = modelService.getEntity(dto, UserRight.class);
 			entity = modelService.saveEntity(entity, UserRight.class);
 
-			return modelService.getDto(entity, UserRightDto.class);
+			return modelService.getDto(entity, UserRightDto.class, new DtoConverterContext(userRightFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -76,7 +83,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 	public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserRight> page = modelService.findPage(UserRightSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserRight.class);
 
-		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<UserRightDto> dtos = modelService.getDto(page.getContent(), UserRightDto.class, new DtoConverterContext(userRightBasicPopulator));
 		return new PageImpl<UserRightDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -93,7 +100,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof UserRight) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], UserRightDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], UserRightDto.class, new DtoConverterContext(userRightFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -112,12 +119,12 @@ public class UserRightFacadeImpl implements UserRightFacade {
 		sorts.put(UserRight.CREATED_DATE, Sort.Direction.DESC);
 
 		List<UserRight> userRights = modelService.findByPropertiesBySortByResult(null, sorts, null, null, UserRight.class);
-		return modelService.getDto(userRights, UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(userRights, UserRightDto.class, new DtoConverterContext(userRightFullPopulator));
 	}
 
 	@Override
 	public UserRightDto createDto() throws Exception {
 		UserRight userRight = modelService.create(UserRight.class);
-		return modelService.getDto(userRight, UserRightDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(userRight, UserRightDto.class, new DtoConverterContext(userRightFullPopulator));
 	}
 }

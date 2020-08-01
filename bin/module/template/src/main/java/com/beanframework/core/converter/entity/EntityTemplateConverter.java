@@ -1,4 +1,4 @@
-package com.beanframework.core.converter;
+package com.beanframework.core.converter.entity;
 
 import java.util.Date;
 import java.util.HashMap;

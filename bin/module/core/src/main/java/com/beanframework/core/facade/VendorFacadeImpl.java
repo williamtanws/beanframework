@@ -9,12 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.entity.EntityVendorProfileConverter;
+import com.beanframework.core.converter.populator.VendorBasicPopulator;
+import com.beanframework.core.converter.populator.VendorFullPopulator;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.user.service.UserService;
 import com.beanframework.vendor.domain.Vendor;
@@ -36,10 +37,16 @@ public class VendorFacadeImpl implements VendorFacade {
 	@Autowired
 	private EntityVendorProfileConverter entityVendorProfileConverter;
 
+	@Autowired
+	private VendorFullPopulator vendorFullPopulator;
+
+	@Autowired
+	private VendorBasicPopulator vendorBasicPopulator;
+
 	@Override
 	public VendorDto findOneByUuid(UUID uuid) throws Exception {
 		Vendor entity = modelService.findOneByUuid(uuid, Vendor.class);
-		VendorDto dto = modelService.getDto(entity, VendorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		VendorDto dto = modelService.getDto(entity, VendorDto.class, new DtoConverterContext(vendorFullPopulator));
 
 		return dto;
 	}
@@ -47,7 +54,7 @@ public class VendorFacadeImpl implements VendorFacade {
 	@Override
 	public VendorDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Vendor entity = modelService.findOneByProperties(properties, Vendor.class);
-		VendorDto dto = modelService.getDto(entity, VendorDto.class);
+		VendorDto dto = modelService.getDto(entity, VendorDto.class, new DtoConverterContext(vendorFullPopulator));
 
 		return dto;
 	}
@@ -77,7 +84,7 @@ public class VendorFacadeImpl implements VendorFacade {
 
 			userService.saveProfilePicture(entity, dto.getProfilePicture());
 
-			return modelService.getDto(entity, VendorDto.class);
+			return modelService.getDto(entity, VendorDto.class, new DtoConverterContext(vendorFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -92,7 +99,7 @@ public class VendorFacadeImpl implements VendorFacade {
 	public Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Vendor> page = modelService.findPage(VendorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Vendor.class);
 
-		List<VendorDto> dtos = modelService.getDto(page.getContent(), VendorDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<VendorDto> dtos = modelService.getDto(page.getContent(), VendorDto.class, new DtoConverterContext(vendorBasicPopulator));
 		return new PageImpl<VendorDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -109,7 +116,7 @@ public class VendorFacadeImpl implements VendorFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Vendor) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], VendorDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], VendorDto.class, new DtoConverterContext(vendorFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -125,7 +132,7 @@ public class VendorFacadeImpl implements VendorFacade {
 	@Override
 	public VendorDto createDto() throws Exception {
 		Vendor vendor = modelService.create(Vendor.class);
-		return modelService.getDto(vendor, VendorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(vendor, VendorDto.class, new DtoConverterContext(vendorFullPopulator));
 	}
 
 	@Override
@@ -145,7 +152,7 @@ public class VendorFacadeImpl implements VendorFacade {
 			vendorService.updatePrincipal(entity);
 			userService.saveProfilePicture(entity, dto.getProfilePicture());
 
-			return modelService.getDto(entity, VendorDto.class);
+			return modelService.getDto(entity, VendorDto.class, new DtoConverterContext(vendorFullPopulator));
 
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -156,7 +163,7 @@ public class VendorFacadeImpl implements VendorFacade {
 	public VendorDto getCurrentUser() throws Exception {
 		Vendor entity = vendorService.getCurrentUser();
 
-		return modelService.getDto(entity, VendorDto.class);
+		return modelService.getDto(entity, VendorDto.class, new DtoConverterContext(vendorFullPopulator));
 	}
 
 }

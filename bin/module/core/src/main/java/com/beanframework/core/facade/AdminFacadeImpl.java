@@ -16,8 +16,8 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.converter.populator.AdminPopulator;
-import com.beanframework.core.converter.populator.AdminTablePopulator;
+import com.beanframework.core.converter.populator.AdminBasicPopulator;
+import com.beanframework.core.converter.populator.AdminFullPopulator;
 import com.beanframework.core.data.AdminDto;
 
 @Component
@@ -30,24 +30,24 @@ public class AdminFacadeImpl implements AdminFacade {
 	private AdminService adminService;
 	
 	@Autowired
-	private AdminPopulator adminPopulator;
+	private AdminFullPopulator adminFullPopulator;
 	
 	@Autowired
-	private AdminTablePopulator adminTablePopulator;
+	private AdminBasicPopulator adminBasicPopulator;
 
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
 
 		Admin entity = modelService.findOneByUuid(uuid, Admin.class);
 
-		return modelService.getDto(entity, AdminDto.class, new DtoConverterContext().populate(adminPopulator));
+		return modelService.getDto(entity, AdminDto.class, new DtoConverterContext(adminFullPopulator));
 	}
 
 	@Override
 	public AdminDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Admin entity = modelService.findOneByProperties(properties, Admin.class);
 
-		return modelService.getDto(entity, AdminDto.class);
+		return modelService.getDto(entity, AdminDto.class, new DtoConverterContext(adminFullPopulator));
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class AdminFacadeImpl implements AdminFacade {
 			Admin entity = modelService.getEntity(dto, Admin.class);
 			entity = (Admin) modelService.saveEntity(entity, Admin.class);
 
-			return modelService.getDto(entity, AdminDto.class);
+			return modelService.getDto(entity, AdminDto.class, new DtoConverterContext(adminFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -84,7 +84,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	public Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Admin> page = modelService.findPage(AdminSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Admin.class);
 
-		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class, new DtoConverterContext().populate(adminTablePopulator));
+		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class, new DtoConverterContext(adminBasicPopulator));
 		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -101,7 +101,7 @@ public class AdminFacadeImpl implements AdminFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Admin) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], AdminDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], AdminDto.class, new DtoConverterContext(adminFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -117,7 +117,7 @@ public class AdminFacadeImpl implements AdminFacade {
 	@Override
 	public AdminDto createDto() throws Exception {
 		Admin admin = modelService.create(Admin.class);
-		return modelService.getDto(admin, AdminDto.class, new DtoConverterContext());
+		return modelService.getDto(admin, AdminDto.class, new DtoConverterContext(adminFullPopulator));
 	}
 
 }

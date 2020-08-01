@@ -10,12 +10,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.entity.EntityEmployeeProfileConverter;
+import com.beanframework.core.converter.populator.EmployeeBasicPopulator;
+import com.beanframework.core.converter.populator.EmployeeFullPopulator;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
@@ -34,10 +35,16 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Autowired
 	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
 
+	@Autowired
+	private EmployeeFullPopulator employeeFullPopulator;
+
+	@Autowired
+	private EmployeeBasicPopulator employeeBasicPopulator;
+
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
 		Employee entity = modelService.findOneByUuid(uuid, Employee.class);
-		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class, new DtoConverterContext(employeeFullPopulator));
 
 		return dto;
 	}
@@ -45,7 +52,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Employee entity = modelService.findOneByProperties(properties, Employee.class);
-		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
+		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class, new DtoConverterContext(employeeFullPopulator));
 
 		return dto;
 	}
@@ -75,7 +82,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
 
-			return modelService.getDto(entity, EmployeeDto.class);
+			return modelService.getDto(entity, EmployeeDto.class, new DtoConverterContext(employeeFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -91,7 +98,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Employee> page = modelService.findPage(EmployeeSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Employee.class);
 
-		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<EmployeeDto> dtos = modelService.getDto(page.getContent(), EmployeeDto.class, new DtoConverterContext(employeeBasicPopulator));
 		return new PageImpl<EmployeeDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -133,7 +140,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			employeeService.updatePrincipal(entity);
 			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
 
-			return modelService.getDto(entity, EmployeeDto.class);
+			return modelService.getDto(entity, EmployeeDto.class, new DtoConverterContext(employeeFullPopulator));
 
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -143,7 +150,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public EmployeeDto getCurrentUser() throws Exception {
 		Employee entity = employeeService.getCurrentUser();
-		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class);
+		EmployeeDto dto = modelService.getDto(entity, EmployeeDto.class, new DtoConverterContext(employeeFullPopulator));
 
 		return dto;
 	}
@@ -156,7 +163,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Employee) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], EmployeeDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], EmployeeDto.class, new DtoConverterContext(employeeFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -172,6 +179,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 	@Override
 	public EmployeeDto createDto() throws Exception {
 		Employee employee = modelService.create(Employee.class);
-		return modelService.getDto(employee, EmployeeDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(employee, EmployeeDto.class, new DtoConverterContext(employeeFullPopulator));
 	}
 }

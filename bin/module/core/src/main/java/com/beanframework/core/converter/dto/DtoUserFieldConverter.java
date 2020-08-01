@@ -6,12 +6,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
-import com.beanframework.core.data.DynamicFieldSlotDto;
+import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.user.domain.UserField;
 
@@ -21,7 +20,15 @@ public class DtoUserFieldConverter extends AbstractDtoConverter<UserField, UserF
 
 	@Override
 	public UserFieldDto convert(UserField source, DtoConverterContext context) throws ConverterException {
-		return convert(source, new UserFieldDto(), context);
+		try {
+			UserFieldDto target = new UserFieldDto();
+			populate(source, target, context);
+
+			return target;
+		} catch (PopulatorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 	}
 
 	public List<UserFieldDto> convert(List<UserField> sources, DtoConverterContext context) throws ConverterException {
@@ -30,22 +37,6 @@ public class DtoUserFieldConverter extends AbstractDtoConverter<UserField, UserF
 			convertedList.add(convert(source, context));
 		}
 		return convertedList;
-	}
-
-	public UserFieldDto convert(UserField source, UserFieldDto prototype, DtoConverterContext context) throws ConverterException {
-
-		try {
-			convertCommonProperties(source, prototype, context);
-
-			prototype.setValue(source.getValue());
-			prototype.setDynamicFieldSlot(modelService.getDto(source.getDynamicFieldSlot(), DynamicFieldSlotDto.class, new DtoConverterContext(ConvertRelationType.ALL)));
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
-		}
-
-		return prototype;
 	}
 
 }

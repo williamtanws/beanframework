@@ -10,6 +10,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.cronjob.domain.CronjobData;
 
@@ -19,7 +20,15 @@ public class DtoCronjobDataConverter extends AbstractDtoConverter<CronjobData, C
 
 	@Override
 	public CronjobDataDto convert(CronjobData source, DtoConverterContext context) throws ConverterException {
-		return convert(source, new CronjobDataDto(), context);
+		try {
+			CronjobDataDto target = new CronjobDataDto();
+			populate(source, target, context);
+
+			return target;
+		} catch (PopulatorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 	}
 
 	public List<CronjobDataDto> convert(List<CronjobData> sources, DtoConverterContext context) throws ConverterException {
@@ -28,22 +37,6 @@ public class DtoCronjobDataConverter extends AbstractDtoConverter<CronjobData, C
 			convertedList.add(convert(source, context));
 		}
 		return convertedList;
-	}
-
-	public CronjobDataDto convert(CronjobData source, CronjobDataDto prototype, DtoConverterContext context) throws ConverterException {
-
-		try {
-			convertCommonProperties(source, prototype, context);
-
-			prototype.setName(source.getName());
-			prototype.setValue(source.getValue());
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
-		}
-
-		return prototype;
 	}
 
 }

@@ -10,6 +10,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.core.data.ConfigurationDto;
 
@@ -19,7 +20,15 @@ public class DtoConfigurationConverter extends AbstractDtoConverter<Configuratio
 
 	@Override
 	public ConfigurationDto convert(Configuration source, DtoConverterContext context) throws ConverterException {
-		return convert(source, new ConfigurationDto(), context);
+		try {
+			ConfigurationDto target = new ConfigurationDto();
+			populate(source, target, context);
+
+			return target;
+		} catch (PopulatorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 	}
 
 	public List<ConfigurationDto> convert(List<Configuration> sources, DtoConverterContext context) throws ConverterException {
@@ -33,20 +42,6 @@ public class DtoConfigurationConverter extends AbstractDtoConverter<Configuratio
 			throw new ConverterException(e.getMessage(), e);
 		}
 		return convertedList;
-	}
-
-	public ConfigurationDto convert(Configuration source, ConfigurationDto prototype, DtoConverterContext context) throws ConverterException {
-		try {
-			convertCommonProperties(source, prototype, context);
-
-			prototype.setValue(source.getValue());
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
-		}
-
-		return prototype;
 	}
 
 }

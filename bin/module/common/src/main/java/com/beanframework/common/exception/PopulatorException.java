@@ -8,30 +8,30 @@ public class PopulatorException extends BusinessException {
 	 * 
 	 */
 	private static final long serialVersionUID = 3284956082085211152L;
-	private Populator populator;
+	private Populator<?, ?> populator;
 
 	public PopulatorException(String message) {
-		this(message, (Throwable) null, (Populator) null);
+		this(message, (Throwable) null, (Populator<?, ?>) null);
 	}
 
 	public PopulatorException(String message, Throwable cause) {
-		this(message, cause, (Populator) null);
+		this(message, cause, (Populator<?, ?>) null);
 	}
 
-	public PopulatorException(String message, Populator populator) {
+	public PopulatorException(String message, Populator<?, ?> populator) {
 		this(message, (Throwable) null, populator);
 	}
 
-	public PopulatorException(String message, Throwable cause, Populator populator) {
+	public PopulatorException(String message, Throwable cause, Populator<?, ?> populator) {
 		super(message, cause);
 		this.setPopulator(populator);
 	}
 
-	public Populator getPopulator() {
+	public Populator<?, ?> getPopulator() {
 		return populator;
 	}
 
-	public void setPopulator(Populator populator) {
+	public void setPopulator(Populator<?, ?> populator) {
 		this.populator = populator;
 	}
 

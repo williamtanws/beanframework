@@ -9,11 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.DynamicFieldBasicPopulator;
+import com.beanframework.core.converter.populator.DynamicFieldFullPopulator;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.service.DynamicFieldService;
@@ -28,10 +29,16 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	@Autowired
 	private DynamicFieldService dynamicFieldService;
 
+	@Autowired
+	private DynamicFieldFullPopulator dynamicFieldFullPopulator;
+
+	@Autowired
+	private DynamicFieldBasicPopulator dynamicFieldBasicPopulator;
+
 	@Override
 	public DynamicFieldDto findOneByUuid(UUID uuid) throws Exception {
 		DynamicField entity = modelService.findOneByUuid(uuid, DynamicField.class);
-		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class, new DtoConverterContext(dynamicFieldFullPopulator));
 
 		return dto;
 	}
@@ -39,7 +46,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	@Override
 	public DynamicFieldDto findOneProperties(Map<String, Object> properties) throws Exception {
 		DynamicField entity = modelService.findOneByProperties(properties, DynamicField.class);
-		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class);
+		DynamicFieldDto dto = modelService.getDto(entity, DynamicFieldDto.class, new DtoConverterContext(dynamicFieldFullPopulator));
 
 		return dto;
 	}
@@ -59,7 +66,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 			DynamicField entity = modelService.getEntity(dto, DynamicField.class);
 			entity = modelService.saveEntity(entity, DynamicField.class);
 
-			return modelService.getDto(entity, DynamicFieldDto.class);
+			return modelService.getDto(entity, DynamicFieldDto.class, new DtoConverterContext(dynamicFieldFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,7 +81,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	public Page<DynamicFieldDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<DynamicField> page = modelService.findPage(DynamicFieldSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), DynamicField.class);
 
-		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), DynamicFieldDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<DynamicFieldDto> dtos = modelService.getDto(page.getContent(), DynamicFieldDto.class, new DtoConverterContext(dynamicFieldBasicPopulator));
 		return new PageImpl<DynamicFieldDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -91,7 +98,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof DynamicField) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldDto.class, new DtoConverterContext(dynamicFieldFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -107,7 +114,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 	@Override
 	public DynamicFieldDto createDto() throws Exception {
 		DynamicField dynamicField = modelService.create(DynamicField.class);
-		return modelService.getDto(dynamicField, DynamicFieldDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(dynamicField, DynamicFieldDto.class, new DtoConverterContext(dynamicFieldFullPopulator));
 	}
 
 }

@@ -40,11 +40,6 @@ public class DtoConverterContext {
 		}
 	}
 
-	public DtoConverterContext populate(Populator<?, ?> populator) {
-		this.populatorMappings.add(populator);
-		return this;
-	}
-
 //	public ConvertRelationType getConverModelType() {
 //		return converModelType;
 //	}

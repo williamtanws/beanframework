@@ -11,11 +11,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.TemplateBasicPopulator;
+import com.beanframework.core.converter.populator.TemplateFullPopulator;
 import com.beanframework.core.data.TemplateDto;
 import com.beanframework.template.domain.Template;
 import com.beanframework.template.service.TemplateService;
@@ -32,18 +33,24 @@ public class TemplateFacadeImpl implements TemplateFacade {
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private TemplateFullPopulator templateFullPopulator;
+
+	@Autowired
+	private TemplateBasicPopulator templateBasicPopulator;
+
 	@Override
 	public TemplateDto findOneByUuid(UUID uuid) throws Exception {
 		Template entity = modelService.findOneByUuid(uuid, Template.class);
 
-		return modelService.getDto(entity, TemplateDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, TemplateDto.class, new DtoConverterContext(templateFullPopulator));
 	}
 
 	@Override
 	public TemplateDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Template entity = modelService.findOneByProperties(properties, Template.class);
 
-		return modelService.getDto(entity, TemplateDto.class);
+		return modelService.getDto(entity, TemplateDto.class, new DtoConverterContext(templateFullPopulator));
 	}
 
 	@Override
@@ -61,7 +68,7 @@ public class TemplateFacadeImpl implements TemplateFacade {
 			Template entity = modelService.getEntity(dto, Template.class);
 			entity = modelService.saveEntity(entity, Template.class);
 
-			return modelService.getDto(entity, TemplateDto.class);
+			return modelService.getDto(entity, TemplateDto.class, new DtoConverterContext(templateFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -76,7 +83,7 @@ public class TemplateFacadeImpl implements TemplateFacade {
 	public Page<TemplateDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Template> page = modelService.findPage(TemplateSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Template.class);
 
-		List<TemplateDto> dtos = modelService.getDto(page.getContent(), TemplateDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<TemplateDto> dtos = modelService.getDto(page.getContent(), TemplateDto.class, new DtoConverterContext(templateBasicPopulator));
 		return new PageImpl<TemplateDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -93,7 +100,7 @@ public class TemplateFacadeImpl implements TemplateFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Template) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], TemplateDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], TemplateDto.class, new DtoConverterContext(templateFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -109,6 +116,6 @@ public class TemplateFacadeImpl implements TemplateFacade {
 	@Override
 	public TemplateDto createDto() throws Exception {
 		Template template = modelService.create(Template.class);
-		return modelService.getDto(template, TemplateDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(template, TemplateDto.class, new DtoConverterContext(templateFullPopulator));
 	}
 }

@@ -9,12 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.entity.EntityCustomerProfileConverter;
+import com.beanframework.core.converter.populator.CustomerBasicPopulator;
+import com.beanframework.core.converter.populator.CustomerFullPopulator;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.customer.domain.Customer;
 import com.beanframework.customer.service.CustomerService;
@@ -34,12 +35,18 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	private CustomerService customerService;
 
 	@Autowired
+	private CustomerFullPopulator customerFullPopulator;
+
+	@Autowired
+	private CustomerBasicPopulator customerBasicPopulator;
+
+	@Autowired
 	private EntityCustomerProfileConverter entityCustomerProfileConverter;
 
 	@Override
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
 		Customer entity = modelService.findOneByUuid(uuid, Customer.class);
-		CustomerDto dto = modelService.getDto(entity, CustomerDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		CustomerDto dto = modelService.getDto(entity, CustomerDto.class, new DtoConverterContext(customerFullPopulator));
 
 		return dto;
 	}
@@ -47,7 +54,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public CustomerDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Customer entity = modelService.findOneByProperties(properties, Customer.class);
-		CustomerDto dto = modelService.getDto(entity, CustomerDto.class);
+		CustomerDto dto = modelService.getDto(entity, CustomerDto.class, new DtoConverterContext(customerFullPopulator));
 
 		return dto;
 	}
@@ -77,7 +84,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
 			userService.saveProfilePicture(entity, dto.getProfilePicture());
 
-			return modelService.getDto(entity, CustomerDto.class);
+			return modelService.getDto(entity, CustomerDto.class, new DtoConverterContext(customerFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -92,7 +99,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Customer> page = modelService.findPage(CustomerSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Customer.class);
 
-		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<CustomerDto> dtos = modelService.getDto(page.getContent(), CustomerDto.class, new DtoConverterContext(customerBasicPopulator));
 		return new PageImpl<CustomerDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -109,7 +116,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Customer) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CustomerDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], CustomerDto.class, new DtoConverterContext(customerFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -125,7 +132,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	@Override
 	public CustomerDto createDto() throws Exception {
 		Customer customer = modelService.create(Customer.class);
-		return modelService.getDto(customer, CustomerDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(customer, CustomerDto.class, new DtoConverterContext(customerFullPopulator));
 	}
 
 	@Override
@@ -145,7 +152,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 			customerService.updatePrincipal(entity);
 			userService.saveProfilePicture(entity, dto.getProfilePicture());
 
-			return modelService.getDto(entity, CustomerDto.class);
+			return modelService.getDto(entity, CustomerDto.class, new DtoConverterContext(customerFullPopulator));
 
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -156,7 +163,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	public CustomerDto getCurrentUser() throws Exception {
 		Customer entity = customerService.getCurrentUser();
 
-		return modelService.getDto(entity, CustomerDto.class);
+		return modelService.getDto(entity, CustomerDto.class, new DtoConverterContext(customerFullPopulator));
 	}
 
 }

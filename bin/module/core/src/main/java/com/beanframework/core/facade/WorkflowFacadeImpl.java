@@ -9,11 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.WorkflowBasicPopulator;
+import com.beanframework.core.converter.populator.WorkflowFullPopulator;
 import com.beanframework.core.data.WorkflowDto;
 import com.beanframework.workflow.domain.Workflow;
 import com.beanframework.workflow.service.WorkflowService;
@@ -28,16 +29,22 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 	@Autowired
 	private WorkflowService workflowService;
 
+	@Autowired
+	private WorkflowFullPopulator workflowFullPopulator;
+
+	@Autowired
+	private WorkflowBasicPopulator workflowBasicPopulator;
+
 	@Override
 	public WorkflowDto findOneByUuid(UUID uuid) throws Exception {
 		Workflow entity = modelService.findOneByUuid(uuid, Workflow.class);
-		return modelService.getDto(entity, WorkflowDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, WorkflowDto.class, new DtoConverterContext(workflowFullPopulator));
 	}
 
 	@Override
 	public WorkflowDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Workflow entity = modelService.findOneByProperties(properties, Workflow.class);
-		return modelService.getDto(entity, WorkflowDto.class);
+		return modelService.getDto(entity, WorkflowDto.class, new DtoConverterContext(workflowFullPopulator));
 	}
 
 	@Override
@@ -54,8 +61,8 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 		try {
 			Workflow entity = modelService.getEntity(dto, Workflow.class);
 			entity = modelService.saveEntity(entity, Workflow.class);
-			
-			return modelService.getDto(entity, WorkflowDto.class);
+
+			return modelService.getDto(entity, WorkflowDto.class, new DtoConverterContext(workflowFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -70,7 +77,7 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 	public Page<WorkflowDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Workflow> page = modelService.findPage(WorkflowSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Workflow.class);
 
-		List<WorkflowDto> dtos = modelService.getDto(page.getContent(), WorkflowDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<WorkflowDto> dtos = modelService.getDto(page.getContent(), WorkflowDto.class, new DtoConverterContext(workflowBasicPopulator));
 		return new PageImpl<WorkflowDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -87,7 +94,7 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Workflow) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], WorkflowDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], WorkflowDto.class, new DtoConverterContext(workflowFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -103,6 +110,6 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 	@Override
 	public WorkflowDto createDto() throws Exception {
 		Workflow Workflow = modelService.create(Workflow.class);
-		return modelService.getDto(Workflow, WorkflowDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(Workflow, WorkflowDto.class, new DtoConverterContext(workflowFullPopulator));
 	}
 }
