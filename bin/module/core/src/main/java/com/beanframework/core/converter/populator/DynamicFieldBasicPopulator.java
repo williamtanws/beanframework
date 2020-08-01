@@ -19,6 +19,7 @@ public class DynamicFieldBasicPopulator extends AbstractPopulator<DynamicField, 
 		try {
 			convertCommonProperties(source, target);
 			target.setName(source.getName());
+			target.setType(source.getType());
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

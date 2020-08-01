@@ -18,7 +18,6 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.converter.populator.CommentBasicPopulator;
 import com.beanframework.core.converter.populator.CommentFullPopulator;
 import com.beanframework.core.data.CommentDto;
 
@@ -33,9 +32,6 @@ public class CommentFacadeImpl implements CommentFacade {
 
 	@Autowired
 	private CommentFullPopulator commentFullPopulator;
-
-	@Autowired
-	private CommentBasicPopulator commentBasicPopulator;
 
 	@Override
 	public CommentDto findOneByUuid(UUID uuid) throws Exception {
@@ -81,7 +77,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Comment> page = modelService.findPage(CommentSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Comment.class);
 
-		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class, new DtoConverterContext(commentBasicPopulator));
+		List<CommentDto> dtos = modelService.getDto(page.getContent(), CommentDto.class, new DtoConverterContext(commentFullPopulator));
 		return new PageImpl<CommentDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
