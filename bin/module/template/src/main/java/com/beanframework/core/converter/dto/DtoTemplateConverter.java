@@ -1,4 +1,4 @@
-package com.beanframework.core.converter;
+package com.beanframework.core.converter.dto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.TemplateDto;
 import com.beanframework.template.domain.Template;
 
@@ -19,7 +20,15 @@ public class DtoTemplateConverter extends AbstractDtoConverter<Template, Templat
 
 	@Override
 	public TemplateDto convert(Template source, DtoConverterContext context) throws ConverterException {
-		return convert(source, new TemplateDto(), context);
+		try {
+			TemplateDto target = new TemplateDto();
+			populate(source, target, context);
+
+			return target;
+		} catch (PopulatorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 	}
 
 	public List<TemplateDto> convert(List<Template> sources, DtoConverterContext context) throws ConverterException {
@@ -28,20 +37,6 @@ public class DtoTemplateConverter extends AbstractDtoConverter<Template, Templat
 			convertedList.add(convert(source, context));
 		}
 		return convertedList;
-	}
-
-	public TemplateDto convert(Template source, TemplateDto prototype, DtoConverterContext context) throws ConverterException {
-
-		try {
-			convertCommonProperties(source, prototype, context);
-			prototype.setName(source.getName());
-		
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
-		}
-
-		return prototype;
 	}
 
 }

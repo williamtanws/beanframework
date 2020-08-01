@@ -10,7 +10,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
-import com.beanframework.common.utils.SizeUtils;
+import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.media.domain.Media;
 
@@ -20,7 +20,15 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 
 	@Override
 	public MediaDto convert(Media source, DtoConverterContext context) throws ConverterException {
-		return convert(source, new MediaDto(), context);
+		try {
+			MediaDto target = new MediaDto();
+			populate(source, target, context);
+
+			return target;
+		} catch (PopulatorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 	}
 
 	public List<MediaDto> convert(List<Media> sources, DtoConverterContext context) throws ConverterException {
@@ -34,27 +42,4 @@ public class DtoMediaConverter extends AbstractDtoConverter<Media, MediaDto> imp
 		}
 		return convertedList;
 	}
-
-	public MediaDto convert(Media source, MediaDto prototype, DtoConverterContext context) throws ConverterException {
-		try {
-			convertCommonProperties(source, prototype, context);
-
-			prototype.setFileName(source.getFileName());
-			prototype.setFileType(source.getFileType());
-			prototype.setFileSize(source.getFileSize() == null ? null : SizeUtils.humanReadableByteCount(source.getFileSize(), true));
-			prototype.setTitle(source.getTitle());
-			prototype.setCaption(source.getCaption());
-			prototype.setAltText(source.getAltText());
-			prototype.setDescription(source.getDescription());
-			prototype.setUrl(source.getUrl());
-			prototype.setFolder(source.getFolder());
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
-		}
-
-		return prototype;
-	}
-
 }

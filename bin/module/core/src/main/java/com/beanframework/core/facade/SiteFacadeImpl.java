@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 import com.beanframework.cms.domain.Site;
 import com.beanframework.cms.service.SiteService;
 import com.beanframework.cms.specification.SiteSpecification;
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.SiteFullPopulator;
 import com.beanframework.core.data.SiteDto;
 
 @Component
@@ -28,16 +28,19 @@ public class SiteFacadeImpl implements SiteFacade {
 	@Autowired
 	private SiteService siteService;
 
+	@Autowired
+	private SiteFullPopulator siteFullPopulator;
+
 	@Override
 	public SiteDto findOneByUuid(UUID uuid) throws Exception {
 		Site entity = modelService.findOneByUuid(uuid, Site.class);
-		return modelService.getDto(entity, SiteDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, SiteDto.class, new DtoConverterContext(siteFullPopulator));
 	}
 
 	@Override
 	public SiteDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Site entity = modelService.findOneByProperties(properties, Site.class);
-		return modelService.getDto(entity, SiteDto.class);
+		return modelService.getDto(entity, SiteDto.class, new DtoConverterContext(siteFullPopulator));
 	}
 
 	@Override
@@ -55,7 +58,7 @@ public class SiteFacadeImpl implements SiteFacade {
 			Site entity = modelService.getEntity(dto, Site.class);
 			entity = modelService.saveEntity(entity, Site.class);
 
-			return modelService.getDto(entity, SiteDto.class);
+			return modelService.getDto(entity, SiteDto.class, new DtoConverterContext(siteFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -70,7 +73,7 @@ public class SiteFacadeImpl implements SiteFacade {
 	public Page<SiteDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Site> page = modelService.findPage(SiteSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Site.class);
 
-		List<SiteDto> dtos = modelService.getDto(page.getContent(), SiteDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<SiteDto> dtos = modelService.getDto(page.getContent(), SiteDto.class, new DtoConverterContext(siteFullPopulator));
 		return new PageImpl<SiteDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -87,7 +90,7 @@ public class SiteFacadeImpl implements SiteFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Site) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], SiteDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], SiteDto.class, new DtoConverterContext(siteFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -103,6 +106,6 @@ public class SiteFacadeImpl implements SiteFacade {
 	@Override
 	public SiteDto createDto() throws Exception {
 		Site site = modelService.create(Site.class);
-		return modelService.getDto(site, SiteDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(site, SiteDto.class, new DtoConverterContext(siteFullPopulator));
 	}
 }

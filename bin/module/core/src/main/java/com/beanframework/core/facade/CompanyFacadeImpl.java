@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -19,6 +18,8 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.company.domain.Company;
 import com.beanframework.company.service.CompanyService;
 import com.beanframework.company.specification.CompanySpecification;
+import com.beanframework.core.converter.populator.CompanyBasicPopulator;
+import com.beanframework.core.converter.populator.CompanyFullPopulator;
 import com.beanframework.core.data.CompanyDto;
 
 @Component
@@ -30,18 +31,24 @@ public class CompanyFacadeImpl implements CompanyFacade {
 	@Autowired
 	private CompanyService companyService;
 
+	@Autowired
+	private CompanyFullPopulator companyFullPopulator;
+
+	@Autowired
+	private CompanyBasicPopulator companyBasicPopulator;
+
 	@Override
 	public CompanyDto findOneByUuid(UUID uuid) throws Exception {
 		Company entity = modelService.findOneByUuid(uuid, Company.class);
 
-		return modelService.getDto(entity, CompanyDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, CompanyDto.class, new DtoConverterContext(companyFullPopulator));
 	}
 
 	@Override
 	public CompanyDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Company entity = modelService.findOneByProperties(properties, Company.class);
 
-		return modelService.getDto(entity, CompanyDto.class);
+		return modelService.getDto(entity, CompanyDto.class, new DtoConverterContext(companyFullPopulator));
 	}
 
 	@Override
@@ -59,7 +66,7 @@ public class CompanyFacadeImpl implements CompanyFacade {
 			Company entity = modelService.getEntity(dto, Company.class);
 			entity = modelService.saveEntity(entity, Company.class);
 
-			return modelService.getDto(entity, CompanyDto.class);
+			return modelService.getDto(entity, CompanyDto.class, new DtoConverterContext(companyFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,7 +81,7 @@ public class CompanyFacadeImpl implements CompanyFacade {
 	public Page<CompanyDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Company> page = modelService.findPage(CompanySpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Company.class);
 
-		List<CompanyDto> dtos = modelService.getDto(page.getContent(), CompanyDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<CompanyDto> dtos = modelService.getDto(page.getContent(), CompanyDto.class, new DtoConverterContext(companyBasicPopulator));
 		return new PageImpl<CompanyDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -91,7 +98,7 @@ public class CompanyFacadeImpl implements CompanyFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Company) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CompanyDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], CompanyDto.class, new DtoConverterContext(companyFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,13 +117,13 @@ public class CompanyFacadeImpl implements CompanyFacade {
 		sorts.put(Company.CREATED_DATE, Sort.Direction.DESC);
 
 		List<Company> companys = modelService.findByPropertiesBySortByResult(null, sorts, null, null, Company.class);
-		return modelService.getDto(companys, CompanyDto.class);
+		return modelService.getDto(companys, CompanyDto.class, new DtoConverterContext(companyFullPopulator));
 	}
 
 	@Override
 	public CompanyDto createDto() throws Exception {
 		Company company = modelService.create(Company.class);
-		return modelService.getDto(company, CompanyDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(company, CompanyDto.class, new DtoConverterContext(companyFullPopulator));
 	}
 
 }

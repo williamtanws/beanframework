@@ -11,12 +11,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.AuditorFullPopulator;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.specification.AuditorSpecification;
 
@@ -29,25 +29,28 @@ public class AuditorFacadeImpl implements AuditorFacade {
 	@Autowired
 	private AuditorService auditorService;
 
+	@Autowired
+	private AuditorFullPopulator auditorFullPopulator;
+
 	@Override
 	public AuditorDto findOneByUuid(UUID uuid) throws Exception {
 		Auditor entity = modelService.findOneByUuid(uuid, Auditor.class);
 
-		return modelService.getDto(entity, AuditorDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, AuditorDto.class, new DtoConverterContext(auditorFullPopulator));
 	}
 
 	@Override
 	public AuditorDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Auditor entity = modelService.findOneByProperties(properties, Auditor.class);
 
-		return modelService.getDto(entity, AuditorDto.class);
+		return modelService.getDto(entity, AuditorDto.class, new DtoConverterContext(auditorFullPopulator));
 	}
 
 	@Override
 	public Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Auditor> page = modelService.findPage(AuditorSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Auditor.class);
 
-		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<AuditorDto> dtos = modelService.getDto(page.getContent(), AuditorDto.class, new DtoConverterContext(auditorFullPopulator));
 		return new PageImpl<AuditorDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -62,7 +65,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 		sorts.put(Auditor.CREATED_DATE, Sort.Direction.DESC);
 
 		List<Auditor> auditor = modelService.findByPropertiesBySortByResult(null, sorts, null, null, Auditor.class);
-		return modelService.getDto(auditor, AuditorDto.class);
+		return modelService.getDto(auditor, AuditorDto.class, new DtoConverterContext(auditorFullPopulator));
 	}
 
 	@Override
@@ -73,7 +76,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Auditor) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], AuditorDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], AuditorDto.class, new DtoConverterContext(auditorFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

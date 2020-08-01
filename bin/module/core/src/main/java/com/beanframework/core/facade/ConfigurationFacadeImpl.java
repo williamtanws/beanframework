@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -19,6 +18,7 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.configuration.specification.ConfigurationSpecification;
+import com.beanframework.core.converter.populator.ConfigurationFullPopulator;
 import com.beanframework.core.data.ConfigurationDto;
 
 @Component
@@ -30,18 +30,21 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	@Autowired
 	private ConfigurationService configurationService;
 
+	@Autowired
+	private ConfigurationFullPopulator configurationFullPopulator;
+
 	@Override
 	public ConfigurationDto findOneByUuid(UUID uuid) throws Exception {
 		Configuration entity = modelService.findOneByUuid(uuid, Configuration.class);
 
-		return modelService.getDto(entity, ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, ConfigurationDto.class, new DtoConverterContext(configurationFullPopulator));
 	}
 
 	@Override
 	public ConfigurationDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
 
-		return modelService.getDto(entity, ConfigurationDto.class);
+		return modelService.getDto(entity, ConfigurationDto.class, new DtoConverterContext(configurationFullPopulator));
 	}
 
 	@Override
@@ -59,7 +62,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 			Configuration entity = modelService.getEntity(dto, Configuration.class);
 			entity = modelService.saveEntity(entity, Configuration.class);
 
-			return modelService.getDto(entity, ConfigurationDto.class);
+			return modelService.getDto(entity, ConfigurationDto.class, new DtoConverterContext(configurationFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,7 +77,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	public Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Configuration> page = modelService.findPage(ConfigurationSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Configuration.class);
 
-		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<ConfigurationDto> dtos = modelService.getDto(page.getContent(), ConfigurationDto.class, new DtoConverterContext(configurationFullPopulator));
 		return new PageImpl<ConfigurationDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -91,7 +94,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Configuration) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], ConfigurationDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], ConfigurationDto.class, new DtoConverterContext(configurationFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -107,7 +110,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 	@Override
 	public ConfigurationDto createDto() throws Exception {
 		Configuration configuration = modelService.create(Configuration.class);
-		return modelService.getDto(configuration, ConfigurationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(configuration, ConfigurationDto.class, new DtoConverterContext(configurationFullPopulator));
 	}
 
 	@Override

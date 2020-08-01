@@ -10,6 +10,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.internationalization.domain.Language;
 
@@ -19,7 +20,15 @@ public class DtoLanguageConverter extends AbstractDtoConverter<Language, Languag
 
 	@Override
 	public LanguageDto convert(Language source, DtoConverterContext context) throws ConverterException {
-		return convert(source, new LanguageDto(), context);
+		try {
+			LanguageDto target = new LanguageDto();
+			populate(source, target, context);
+
+			return target;
+		} catch (PopulatorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 	}
 
 	public List<LanguageDto> convert(List<Language> sources, DtoConverterContext context) throws ConverterException {
@@ -28,22 +37,5 @@ public class DtoLanguageConverter extends AbstractDtoConverter<Language, Languag
 			convertedList.add(convert(source, context));
 		}
 		return convertedList;
-	}
-
-	public LanguageDto convert(Language source, LanguageDto prototype, DtoConverterContext context) throws ConverterException {
-
-		try {
-			convertCommonProperties(source, prototype, context);
-
-			prototype.setName(source.getName());
-			prototype.setSort(source.getSort());
-			prototype.setActive(source.getActive());
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
-		}
-
-		return prototype;
 	}
 }

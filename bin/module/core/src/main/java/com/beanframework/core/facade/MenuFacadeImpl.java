@@ -11,11 +11,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.MenuBasicPopulator;
+import com.beanframework.core.converter.populator.MenuFullPopulator;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
@@ -37,10 +38,16 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private MenuFullPopulator menuFullPopulator;
+
+	@Autowired
+	private MenuBasicPopulator menuBasicPopulator;
+
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
 		Menu entity = modelService.findOneByUuid(uuid, Menu.class);
-		MenuDto dto = modelService.getDto(entity, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		MenuDto dto = modelService.getDto(entity, MenuDto.class, new DtoConverterContext(menuFullPopulator));
 
 		return dto;
 	}
@@ -48,7 +55,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Menu entity = modelService.findOneByProperties(properties, Menu.class);
-		MenuDto dto = modelService.getDto(entity, MenuDto.class);
+		MenuDto dto = modelService.getDto(entity, MenuDto.class, new DtoConverterContext(menuFullPopulator));
 
 		return dto;
 	}
@@ -68,7 +75,7 @@ public class MenuFacadeImpl implements MenuFacade {
 			Menu entity = modelService.getEntity(dto, Menu.class);
 			entity = modelService.saveEntity(entity, Menu.class);
 
-			return modelService.getDto(entity, MenuDto.class);
+			return modelService.getDto(entity, MenuDto.class, new DtoConverterContext(menuFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -93,7 +100,7 @@ public class MenuFacadeImpl implements MenuFacade {
 		try {
 
 			List<Menu> entities = menuService.findMenuTree(false);
-			List<MenuDto> dtos = modelService.getDto(entities, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+			List<MenuDto> dtos = modelService.getDto(entities, MenuDto.class, new DtoConverterContext(menuFullPopulator));
 
 			return dtos;
 		} catch (Exception e) {
@@ -105,7 +112,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Menu> page = modelService.findPage(MenuSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Menu.class);
 
-		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class, new DtoConverterContext(menuBasicPopulator));
 		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -122,7 +129,7 @@ public class MenuFacadeImpl implements MenuFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Menu) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], MenuDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], MenuDto.class, new DtoConverterContext(menuFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -138,7 +145,7 @@ public class MenuFacadeImpl implements MenuFacade {
 	@Override
 	public MenuDto createDto() throws Exception {
 		Menu menu = modelService.create(Menu.class);
-		return modelService.getDto(menu, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(menu, MenuDto.class, new DtoConverterContext(menuFullPopulator));
 	}
 
 	@Override
@@ -147,7 +154,7 @@ public class MenuFacadeImpl implements MenuFacade {
 		List<UserGroup> userGroups = userService.getUserGroupsByCurrentUser();
 		entities = menuService.filterMenuByUserGroups(entities, userGroups);
 
-		List<MenuDto> menuDtoTree = modelService.getDto(entities, MenuDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		List<MenuDto> menuDtoTree = modelService.getDto(entities, MenuDto.class, new DtoConverterContext(menuFullPopulator));
 		return menuDtoTree;
 	}
 }

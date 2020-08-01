@@ -9,11 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.EnumerationBasicPopulator;
+import com.beanframework.core.converter.populator.EnumerationFullPopulator;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.enumuration.service.EnumerationService;
@@ -28,18 +29,24 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	@Autowired
 	private EnumerationService enumerationService;
 
+	@Autowired
+	private EnumerationFullPopulator enumerationFullPopulator;
+
+	@Autowired
+	private EnumerationBasicPopulator enumerationBasicPopulator;
+	
 	@Override
 	public EnumerationDto findOneByUuid(UUID uuid) throws Exception {
 		Enumeration entity = modelService.findOneByUuid(uuid, Enumeration.class);
 
-		return modelService.getDto(entity, EnumerationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, EnumerationDto.class, new DtoConverterContext(enumerationFullPopulator));
 	}
 
 	@Override
 	public EnumerationDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Enumeration entity = modelService.findOneByProperties(properties, Enumeration.class);
 
-		return modelService.getDto(entity, EnumerationDto.class);
+		return modelService.getDto(entity, EnumerationDto.class, new DtoConverterContext(enumerationFullPopulator));
 	}
 
 	@Override
@@ -57,7 +64,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 			Enumeration entity = modelService.getEntity(dto, Enumeration.class);
 			entity = modelService.saveEntity(entity, Enumeration.class);
 
-			return modelService.getDto(entity, EnumerationDto.class);
+			return modelService.getDto(entity, EnumerationDto.class, new DtoConverterContext(enumerationFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -72,7 +79,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	public Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Enumeration> page = modelService.findPage(EnumerationSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Enumeration.class);
 
-		List<EnumerationDto> dtos = modelService.getDto(page.getContent(), EnumerationDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<EnumerationDto> dtos = modelService.getDto(page.getContent(), EnumerationDto.class, new DtoConverterContext(enumerationBasicPopulator));
 		return new PageImpl<EnumerationDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -89,7 +96,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Enumeration) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], EnumerationDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], EnumerationDto.class, new DtoConverterContext(enumerationFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -105,7 +112,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 	@Override
 	public EnumerationDto createDto() throws Exception {
 		Enumeration enumeration = modelService.create(Enumeration.class);
-		return modelService.getDto(enumeration, EnumerationDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(enumeration, EnumerationDto.class, new DtoConverterContext(enumerationFullPopulator));
 	}
 
 }

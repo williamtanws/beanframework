@@ -11,11 +11,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.CountryBasicPopulator;
+import com.beanframework.core.converter.populator.CountryFullPopulator;
 import com.beanframework.core.data.CountryDto;
 import com.beanframework.internationalization.domain.Country;
 import com.beanframework.internationalization.service.CountryService;
@@ -30,18 +31,24 @@ public class CountryFacadeImpl implements CountryFacade {
 	@Autowired
 	private CountryService countryService;
 
+	@Autowired
+	private CountryFullPopulator countryFullPopulator;
+
+	@Autowired
+	private CountryBasicPopulator countryBasicPopulator;
+
 	@Override
 	public CountryDto findOneByUuid(UUID uuid) throws Exception {
 		Country entity = modelService.findOneByUuid(uuid, Country.class);
 
-		return modelService.getDto(entity, CountryDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, CountryDto.class, new DtoConverterContext(countryFullPopulator));
 	}
 
 	@Override
 	public CountryDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Country entity = modelService.findOneByProperties(properties, Country.class);
 
-		return modelService.getDto(entity, CountryDto.class);
+		return modelService.getDto(entity, CountryDto.class, new DtoConverterContext(countryFullPopulator));
 	}
 
 	@Override
@@ -59,7 +66,7 @@ public class CountryFacadeImpl implements CountryFacade {
 			Country entity = modelService.getEntity(dto, Country.class);
 			entity = modelService.saveEntity(entity, Country.class);
 
-			return modelService.getDto(entity, CountryDto.class);
+			return modelService.getDto(entity, CountryDto.class, new DtoConverterContext(countryFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,7 +81,7 @@ public class CountryFacadeImpl implements CountryFacade {
 	public Page<CountryDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Country> page = modelService.findPage(CountrySpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Country.class);
 
-		List<CountryDto> dtos = modelService.getDto(page.getContent(), CountryDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<CountryDto> dtos = modelService.getDto(page.getContent(), CountryDto.class, new DtoConverterContext(countryBasicPopulator));
 		return new PageImpl<CountryDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -91,7 +98,7 @@ public class CountryFacadeImpl implements CountryFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Country) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CountryDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], CountryDto.class, new DtoConverterContext(countryBasicPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,13 +117,13 @@ public class CountryFacadeImpl implements CountryFacade {
 		sorts.put(Country.CREATED_DATE, Sort.Direction.DESC);
 
 		List<Country> countrys = modelService.findByPropertiesBySortByResult(null, sorts, null, null, Country.class);
-		return modelService.getDto(countrys, CountryDto.class);
+		return modelService.getDto(countrys, CountryDto.class, new DtoConverterContext(countryBasicPopulator));
 	}
 
 	@Override
 	public CountryDto createDto() throws Exception {
 		Country country = modelService.create(Country.class);
-		return modelService.getDto(country, CountryDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(country, CountryDto.class, new DtoConverterContext(countryBasicPopulator));
 	}
 
 }

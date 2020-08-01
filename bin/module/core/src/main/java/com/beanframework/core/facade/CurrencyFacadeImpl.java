@@ -11,11 +11,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.CurrencyBasicPopulator;
+import com.beanframework.core.converter.populator.CurrencyFullPopulator;
 import com.beanframework.core.data.CurrencyDto;
 import com.beanframework.internationalization.domain.Currency;
 import com.beanframework.internationalization.service.CurrencyService;
@@ -30,18 +31,24 @@ public class CurrencyFacadeImpl implements CurrencyFacade {
 	@Autowired
 	private CurrencyService currencyService;
 
+	@Autowired
+	private CurrencyFullPopulator currencyFullPopulator;
+
+	@Autowired
+	private CurrencyBasicPopulator currencyBasicPopulator;
+
 	@Override
 	public CurrencyDto findOneByUuid(UUID uuid) throws Exception {
 		Currency entity = modelService.findOneByUuid(uuid, Currency.class);
 
-		return modelService.getDto(entity, CurrencyDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, CurrencyDto.class, new DtoConverterContext(currencyFullPopulator));
 	}
 
 	@Override
 	public CurrencyDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Currency entity = modelService.findOneByProperties(properties, Currency.class);
 
-		return modelService.getDto(entity, CurrencyDto.class);
+		return modelService.getDto(entity, CurrencyDto.class, new DtoConverterContext(currencyFullPopulator));
 	}
 
 	@Override
@@ -59,7 +66,7 @@ public class CurrencyFacadeImpl implements CurrencyFacade {
 			Currency entity = modelService.getEntity(dto, Currency.class);
 			entity = modelService.saveEntity(entity, Currency.class);
 
-			return modelService.getDto(entity, CurrencyDto.class);
+			return modelService.getDto(entity, CurrencyDto.class, new DtoConverterContext(currencyFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -74,7 +81,7 @@ public class CurrencyFacadeImpl implements CurrencyFacade {
 	public Page<CurrencyDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Currency> page = modelService.findPage(CurrencySpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Currency.class);
 
-		List<CurrencyDto> dtos = modelService.getDto(page.getContent(), CurrencyDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<CurrencyDto> dtos = modelService.getDto(page.getContent(), CurrencyDto.class, new DtoConverterContext(currencyBasicPopulator));
 		return new PageImpl<CurrencyDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -91,7 +98,7 @@ public class CurrencyFacadeImpl implements CurrencyFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Currency) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CurrencyDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], CurrencyDto.class, new DtoConverterContext(currencyFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -110,13 +117,13 @@ public class CurrencyFacadeImpl implements CurrencyFacade {
 		sorts.put(Currency.CREATED_DATE, Sort.Direction.DESC);
 
 		List<Currency> currencys = modelService.findByPropertiesBySortByResult(null, sorts, null, null, Currency.class);
-		return modelService.getDto(currencys, CurrencyDto.class);
+		return modelService.getDto(currencys, CurrencyDto.class, new DtoConverterContext(currencyFullPopulator));
 	}
 
 	@Override
 	public CurrencyDto createDto() throws Exception {
 		Currency currency = modelService.create(Currency.class);
-		return modelService.getDto(currency, CurrencyDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(currency, CurrencyDto.class, new DtoConverterContext(currencyFullPopulator));
 	}
 
 }

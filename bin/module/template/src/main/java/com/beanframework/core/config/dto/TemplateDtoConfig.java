@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.DtoTemplateConverter;
+import com.beanframework.core.converter.dto.DtoTemplateConverter;
 import com.beanframework.core.data.TemplateDto;
 
 @Configuration

@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.dto;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.Email;
@@ -25,7 +25,15 @@ public class DtoEmailConverter extends AbstractDtoConverter<Email, EmailDto> imp
 
 	@Override
 	public EmailDto convert(Email source, DtoConverterContext context) throws ConverterException {
-		return convert(source, new EmailDto(), context);
+		try {
+			EmailDto target = new EmailDto();
+			populate(source, target, context);
+
+			return target;
+		} catch (PopulatorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 	}
 
 	public List<EmailDto> convert(List<Email> sources, DtoConverterContext context) throws ConverterException {
@@ -34,35 +42,6 @@ public class DtoEmailConverter extends AbstractDtoConverter<Email, EmailDto> imp
 			convertedList.add(convert(source, context));
 		}
 		return convertedList;
-	}
-
-	public EmailDto convert(Email source, EmailDto prototype, DtoConverterContext context) throws ConverterException {
-
-		try {
-			convertCommonProperties(source, prototype, context);
-
-			prototype.setName(source.getName());
-			prototype.setToRecipients(source.getToRecipients());
-			prototype.setCcRecipients(source.getCcRecipients());
-			prototype.setBccRecipients(source.getBccRecipients());
-			prototype.setSubject(source.getSubject());
-			prototype.setText(source.getText());
-			prototype.setHtml(source.getHtml());
-			prototype.setStatus(source.getStatus());
-			prototype.setResult(source.getResult());
-			prototype.setMessage(source.getMessage());
-
-			String workingDir = System.getProperty("user.dir");
-
-			File emailAttachmentFolder = new File(workingDir, EMAIL_ATTACHMENT_LOCATION + File.separator + prototype.getUuid());
-			prototype.setAttachments(emailAttachmentFolder.listFiles());
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
-		}
-
-		return prototype;
 	}
 
 }

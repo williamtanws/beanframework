@@ -11,11 +11,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.UserPermissionBasicPopulator;
+import com.beanframework.core.converter.populator.UserPermissionFullPopulator;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.service.UserPermissionService;
@@ -30,10 +31,16 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Autowired
 	private UserPermissionService userPermissionService;
 
+	@Autowired
+	private UserPermissionFullPopulator userPermissionFullPopulator;
+
+	@Autowired
+	private UserPermissionBasicPopulator userPermissionBasicPopulator;
+
 	@Override
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
 		UserPermission entity = modelService.findOneByUuid(uuid, UserPermission.class);
-		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class, new DtoConverterContext(userPermissionFullPopulator));
 
 		return dto;
 	}
@@ -41,7 +48,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	@Override
 	public UserPermissionDto findOneProperties(Map<String, Object> properties) throws Exception {
 		UserPermission entity = modelService.findOneByProperties(properties, UserPermission.class);
-		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class);
+		UserPermissionDto dto = modelService.getDto(entity, UserPermissionDto.class, new DtoConverterContext(userPermissionFullPopulator));
 
 		return dto;
 	}
@@ -61,7 +68,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 			UserPermission entity = modelService.getEntity(dto, UserPermission.class);
 			entity = modelService.saveEntity(entity, UserPermission.class);
 
-			return modelService.getDto(entity, UserPermissionDto.class);
+			return modelService.getDto(entity, UserPermissionDto.class, new DtoConverterContext(userPermissionFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -76,7 +83,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 	public Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<UserPermission> page = modelService.findPage(UserPermissionSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), UserPermission.class);
 
-		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<UserPermissionDto> dtos = modelService.getDto(page.getContent(), UserPermissionDto.class, new DtoConverterContext(userPermissionBasicPopulator));
 		return new PageImpl<UserPermissionDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -93,7 +100,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof UserPermission) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], UserPermissionDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], UserPermissionDto.class, new DtoConverterContext(userPermissionFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -112,13 +119,13 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 		sorts.put(UserPermission.CREATED_DATE, Sort.Direction.DESC);
 
 		List<UserPermission> userPermissions = modelService.findByPropertiesBySortByResult(null, sorts, null, null, UserPermission.class);
-		return modelService.getDto(userPermissions, UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(userPermissions, UserPermissionDto.class, new DtoConverterContext(userPermissionFullPopulator));
 	}
 
 	@Override
 	public UserPermissionDto createDto() throws Exception {
 		UserPermission userPermission = modelService.create(UserPermission.class);
-		return modelService.getDto(userPermission, UserPermissionDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(userPermission, UserPermissionDto.class, new DtoConverterContext(userPermissionFullPopulator));
 	}
 
 }

@@ -12,6 +12,7 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.exception.PopulatorException;
 
 public class DtoAuditorConverter extends AbstractDtoConverter<Auditor, AuditorDto> implements DtoConverter<Auditor, AuditorDto> {
 
@@ -19,7 +20,15 @@ public class DtoAuditorConverter extends AbstractDtoConverter<Auditor, AuditorDt
 
 	@Override
 	public AuditorDto convert(Auditor source, DtoConverterContext context) throws ConverterException {
-		return convert(source, new AuditorDto(), context);
+		try {
+			AuditorDto target = new AuditorDto();
+			populate(source, target, context);
+
+			return target;
+		} catch (PopulatorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 	}
 
 	public List<AuditorDto> convert(List<Auditor> sources, DtoConverterContext context) throws ConverterException {
@@ -28,21 +37,6 @@ public class DtoAuditorConverter extends AbstractDtoConverter<Auditor, AuditorDt
 			convertedList.add(convert(source, context));
 		}
 		return convertedList;
-	}
-
-	public AuditorDto convert(Auditor source, AuditorDto prototype, DtoConverterContext context) throws ConverterException {
-
-		try {
-			convertCommonProperties(source, prototype, context);
-
-			prototype.setName(source.getName());
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
-		}
-
-		return prototype;
 	}
 
 }

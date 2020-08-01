@@ -10,6 +10,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.enumuration.domain.Enumeration;
 
@@ -19,7 +20,15 @@ public class DtoEnumerationConverter extends AbstractDtoConverter<Enumeration, E
 
 	@Override
 	public EnumerationDto convert(Enumeration source, DtoConverterContext context) throws ConverterException {
-		return convert(source, new EnumerationDto(), context);
+		try {
+			EnumerationDto target = new EnumerationDto();
+			populate(source, target, context);
+
+			return target;
+		} catch (PopulatorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ConverterException(e.getMessage(), e);
+		}
 	}
 
 	public List<EnumerationDto> convert(List<Enumeration> sources, DtoConverterContext context) throws ConverterException {
@@ -28,21 +37,5 @@ public class DtoEnumerationConverter extends AbstractDtoConverter<Enumeration, E
 			convertedList.add(convert(source, context));
 		}
 		return convertedList;
-	}
-
-	public EnumerationDto convert(Enumeration source, EnumerationDto prototype, DtoConverterContext context) throws ConverterException {
-
-		try {
-			convertCommonProperties(source, prototype, context);
-
-			prototype.setName(source.getName());
-			prototype.setSort(source.getSort());
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ConverterException(e.getMessage(), e);
-		}
-
-		return prototype;
 	}
 }

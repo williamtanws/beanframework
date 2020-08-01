@@ -13,11 +13,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beanframework.common.context.ConvertRelationType;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.populator.EmailBasicPopulator;
+import com.beanframework.core.converter.populator.EmailFullPopulator;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.service.EmailService;
@@ -34,18 +35,24 @@ public class EmailFacadeImpl implements EmailFacade {
 	@Autowired
 	private ModelService modelService;
 
+	@Autowired
+	private EmailFullPopulator emailFullPopulator;
+
+	@Autowired
+	private EmailBasicPopulator emailBasicPopulator;
+
 	@Override
 	public EmailDto findOneByUuid(UUID uuid) throws Exception {
 		Email entity = modelService.findOneByUuid(uuid, Email.class);
 
-		return modelService.getDto(entity, EmailDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(entity, EmailDto.class, new DtoConverterContext(emailFullPopulator));
 	}
 
 	@Override
 	public EmailDto findOneProperties(Map<String, Object> properties) throws Exception {
 		Email entity = modelService.findOneByProperties(properties, Email.class);
 
-		return modelService.getDto(entity, EmailDto.class);
+		return modelService.getDto(entity, EmailDto.class, new DtoConverterContext(emailFullPopulator));
 	}
 
 	@Override
@@ -63,7 +70,7 @@ public class EmailFacadeImpl implements EmailFacade {
 			Email entity = modelService.getEntity(dto, Email.class);
 			entity = modelService.saveEntity(entity, Email.class);
 
-			return modelService.getDto(entity, EmailDto.class);
+			return modelService.getDto(entity, EmailDto.class, new DtoConverterContext(emailFullPopulator));
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -78,7 +85,7 @@ public class EmailFacadeImpl implements EmailFacade {
 	public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		Page<Email> page = modelService.findPage(EmailSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Email.class);
 
-		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class, new DtoConverterContext(ConvertRelationType.BASIC));
+		List<EmailDto> dtos = modelService.getDto(page.getContent(), EmailDto.class, new DtoConverterContext(emailBasicPopulator));
 		return new PageImpl<EmailDto>(dtos, page.getPageable(), page.getTotalElements());
 	}
 
@@ -113,7 +120,7 @@ public class EmailFacadeImpl implements EmailFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Email) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], EmailDto.class);
+				entityObject[0] = modelService.getDto(entityObject[0], EmailDto.class, new DtoConverterContext(emailFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
@@ -129,6 +136,6 @@ public class EmailFacadeImpl implements EmailFacade {
 	@Override
 	public EmailDto createDto() throws Exception {
 		Email email = modelService.create(Email.class);
-		return modelService.getDto(email, EmailDto.class, new DtoConverterContext(ConvertRelationType.ALL));
+		return modelService.getDto(email, EmailDto.class, new DtoConverterContext(emailFullPopulator));
 	}
 }

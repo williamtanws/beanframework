@@ -5,19 +5,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.admin.domain.Admin;
-import com.beanframework.common.converter.AbstractPopulator;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.AdminDto;
 
 @Component
-public class AdminPopulator extends AbstractPopulator<Admin, AdminDto> implements Populator<Admin, AdminDto> {
+public class AdminFullPopulator extends AbstractPopulator<Admin, AdminDto> implements Populator<Admin, AdminDto> {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger(AdminPopulator.class);
+	protected static Logger LOGGER = LoggerFactory.getLogger(AdminFullPopulator.class);
 
 	@Override
 	public void populate(Admin source, AdminDto target) throws PopulatorException {
 		convertCommonProperties(source, target);
+		target.setName(source.getName());
 		target.setAccountNonExpired(source.getAccountNonExpired());
 		target.setAccountNonLocked(source.getAccountNonLocked());
 		target.setCredentialsNonExpired(source.getCredentialsNonExpired());
