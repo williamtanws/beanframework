@@ -1,17 +1,12 @@
 package com.beanframework.console.api;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.DefaultRevisionEntity;
-import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,23 +22,20 @@ import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
-import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.AdminWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.data.AdminDataTableResponseData;
+import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.AdminDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.AdminFacade;
 import com.beanframework.core.facade.AdminFacade.AdminPreAuthorizeEnum;
 
 @RestController
-public class AdminResource {
+public class AdminResource extends AbstractResource {
 
 	@Autowired
 	private AdminFacade adminFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@PreAuthorize(AdminPreAuthorizeEnum.HAS_READ)
 	@GetMapping(AdminWebConstants.Path.Api.CHECKID)
@@ -93,7 +85,6 @@ public class AdminResource {
 	}
 
 	@PreAuthorize(AdminPreAuthorizeEnum.HAS_READ)
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = AdminWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
@@ -102,32 +93,6 @@ public class AdminResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		List<Object[]> history = adminFacade.findHistory(dataTableRequest);
-
-		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
-		dataTableResponse.setDraw(dataTableRequest.getDraw());
-		dataTableResponse.setRecordsTotal(adminFacade.countHistory(dataTableRequest));
-		dataTableResponse.setRecordsFiltered(history.size());
-
-		for (Object[] object : history) {
-
-			AdminDto dto = (AdminDto) object[0];
-			DefaultRevisionEntity revisionEntity = (DefaultRevisionEntity) object[1];
-			RevisionType revisionType = (RevisionType) object[2];
-			Set<String> propertiesChanged = (Set<String>) object[3];
-
-			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
-			data.setEntity(dto);
-			data.setRevisionId(String.valueOf(revisionEntity.getId()));
-			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
-			data.setRevisionType(localeMessageService.getMessage("revision."+revisionType.name()));
-			for (String property : propertiesChanged) {
-				String localized = localeMessageService.getMessage("module.admin." + property);
-				data.getPropertiesChanged().add(property + "=" + localized);
-			}
-
-			dataTableResponse.getData().add(data);
-		}
-		return dataTableResponse;
+		return historyDataTableResponse(dataTableRequest, adminFacade.findHistory(dataTableRequest), adminFacade.countHistory(dataTableRequest), "module.admin");
 	}
 }

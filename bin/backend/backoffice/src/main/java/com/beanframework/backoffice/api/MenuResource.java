@@ -1,18 +1,15 @@
 package com.beanframework.backoffice.api;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -33,23 +30,19 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.core.facade.MenuFacade;
 import com.beanframework.core.facade.MenuFacade.MenuPreAuthorizeEnum;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
-public class MenuResource {
+public class MenuResource extends AbstractResource {
 
 	@Autowired
 	private MenuFacade menuFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(MenuWebConstants.Path.Api.CHECKID)
@@ -175,7 +168,6 @@ public class MenuResource {
 	}
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = MenuWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
@@ -184,33 +176,6 @@ public class MenuResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		List<Object[]> history = menuFacade.findHistory(dataTableRequest);
-
-		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
-		dataTableResponse.setDraw(dataTableRequest.getDraw());
-		dataTableResponse.setRecordsTotal(menuFacade.countHistory(dataTableRequest));
-		dataTableResponse.setRecordsFiltered(history.size());
-
-		for (Object[] object : history) {
-
-			MenuDto dto = (MenuDto) object[0];
-			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
-			RevisionType revisionType = (RevisionType) object[2];
-			Set<String> propertiesChanged = (Set<String>) object[3];
-
-			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
-			data.setEntity(dto);
-			data.setRevisionId(String.valueOf(revisionEntity.getId()));
-			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
-			data.setRevisionType(localeMessageService.getMessage("revision."+revisionType.name()));
-			for (String property : propertiesChanged) {
-				String localized = localeMessageService.getMessage("module.menu." + property);
-				data.getPropertiesChanged().add(property + "=" + localized);
-			}
-
-			dataTableResponse.getData().add(data);
-
-		}
-		return dataTableResponse;
+		return historyDataTableResponse(dataTableRequest, menuFacade.findHistory(dataTableRequest), menuFacade.countHistory(dataTableRequest), "module.menu");
 	}
 }

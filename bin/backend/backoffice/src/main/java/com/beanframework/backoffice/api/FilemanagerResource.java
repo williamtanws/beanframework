@@ -43,9 +43,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.beanframework.backoffice.FilemanagerWebConstants;
 import com.beanframework.backoffice.web.FilemanagerController.FilemanagerPreAuthorizeEnum;
+import com.beanframework.core.api.AbstractResource;
 
 @RestController
-public class FilemanagerResource {
+public class FilemanagerResource extends AbstractResource {
 
 	@Value(FilemanagerWebConstants.FILE_MANAGER_LOCATION)
 	public String STORAGE;

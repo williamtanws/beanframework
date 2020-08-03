@@ -90,7 +90,13 @@
 	                    		  if(index != 0){
 	                    			  message = message + "<br>";
 	                    		  }
-	                    		  message = message + localized + " <span class='fa fa-long-arrow-right'></span> " + value + "\n";	
+	                    		  
+	                    		  if(localized != 'null'){
+		                    		  message = message + localized + " <span class='fa fa-long-arrow-right'></span> " + value + "\n";	
+	                    		  }
+	                    		  else{
+		                    		  message = message + " [" + property + "] <span class='fa fa-long-arrow-right'></span> " + value + "\n";	
+	                    		  }
 	                    	  });
 	                          return message;
 	                      }
