@@ -12,7 +12,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.user.domain.RevisionsEntity;
 
 public class AbstractResource {
@@ -29,14 +28,13 @@ public class AbstractResource {
 
 		for (Object[] object : history) {
 
-			EmployeeDto dto = (EmployeeDto) object[0];
 			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
 			RevisionType revisionType = (RevisionType) object[2];
 			@SuppressWarnings("unchecked")
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
 			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
-			data.setEntity(dto);
+			data.setEntity(object[0]);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
 			data.setRevisionType(localeMessageService.getMessage("revision." + revisionType.name()));
