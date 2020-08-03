@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.beanframework.core.api.AbstractResource;
+
 @RestController
-public class ApplicationResource {
+public class ApplicationResource extends AbstractResource {
 
 	@Autowired
 	private LoggersEndpoint loggersEndpoint;

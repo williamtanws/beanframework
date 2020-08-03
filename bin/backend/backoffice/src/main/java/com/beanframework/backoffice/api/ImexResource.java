@@ -1,16 +1,12 @@
 package com.beanframework.backoffice.api;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,22 +23,18 @@ import com.beanframework.backoffice.data.ImexDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.ImexDto;
 import com.beanframework.core.facade.ImexFacade;
 import com.beanframework.core.facade.ImexFacade.ImexPreAuthorizeEnum;
 import com.beanframework.imex.domain.Imex;
-import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
-public class ImexResource {
-	
-	@Autowired
-	private ImexFacade imexFacade;
+public class ImexResource extends AbstractResource {
 
 	@Autowired
-	private LocaleMessageService localeMessageService;
+	private ImexFacade imexFacade;
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(ImexWebConstants.Path.Api.CHECKID)
@@ -73,7 +65,7 @@ public class ImexResource {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
-		
+
 		Page<ImexDto> pagination = imexFacade.findPage(dataTableRequest);
 
 		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();
@@ -93,7 +85,6 @@ public class ImexResource {
 	}
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_READ)
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = ImexWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
@@ -102,32 +93,6 @@ public class ImexResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		List<Object[]> history = imexFacade.findHistory(dataTableRequest);
-
-		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
-		dataTableResponse.setDraw(dataTableRequest.getDraw());
-		dataTableResponse.setRecordsTotal(imexFacade.countHistory(dataTableRequest));
-		dataTableResponse.setRecordsFiltered(history.size());
-
-		for (Object[] object : history) {
-
-			ImexDto dto = (ImexDto) object[0];
-			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
-			RevisionType revisionType = (RevisionType) object[2];
-			Set<String> propertiesChanged = (Set<String>) object[3];
-
-			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
-			data.setEntity(dto);
-			data.setRevisionId(String.valueOf(revisionEntity.getId()));
-			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
-			data.setRevisionType(localeMessageService.getMessage("revision."+revisionType.name()));
-			for (String property : propertiesChanged) {
-				String localized = localeMessageService.getMessage("module.dynamicfield." + property);
-				data.getPropertiesChanged().add(property + "=" + localized);
-			}
-
-			dataTableResponse.getData().add(data);
-		}
-		return dataTableResponse;
+		return historyDataTableResponse(dataTableRequest, imexFacade.findHistory(dataTableRequest), imexFacade.countHistory(dataTableRequest), "module.imex");
 	}
 }

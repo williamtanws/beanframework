@@ -3,15 +3,12 @@ package com.beanframework.backoffice.api;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,20 +26,16 @@ import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.facade.CommentFacade;
 import com.beanframework.core.facade.CommentFacade.CommentPreAuthorizeEnum;
-import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
-public class CommentResource {
+public class CommentResource extends AbstractResource {
 
 	@Autowired
 	private CommentFacade commentFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(CommentWebConstants.Path.Api.CHECKID)
@@ -75,7 +68,7 @@ public class CommentResource {
 		dataTableRequest.getSkipColumnIndexes().add(2);
 		dataTableRequest.getSkipColumnIndexes().add(3);
 		dataTableRequest.prepareDataTableRequest(request);
-		
+
 		Page<CommentDto> pagination = commentFacade.findPage(dataTableRequest);
 
 		DataTableResponse<CommentDataTableResponseData> dataTableResponse = new DataTableResponse<CommentDataTableResponseData>();
@@ -101,14 +94,13 @@ public class CommentResource {
 
 			if (lastUpdatedDate != null)
 				data.setLastUpdatedDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(lastUpdatedDate));
-			
+
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;
 	}
 
 	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = CommentWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
@@ -117,33 +109,6 @@ public class CommentResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		List<Object[]> history = commentFacade.findHistory(dataTableRequest);
-
-		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
-		dataTableResponse.setDraw(dataTableRequest.getDraw());
-		dataTableResponse.setRecordsTotal(commentFacade.countHistory(dataTableRequest));
-		dataTableResponse.setRecordsFiltered(history.size());
-
-		for (Object[] object : history) {
-
-			CommentDto dto = (CommentDto) object[0];
-			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
-			RevisionType revisionType = (RevisionType) object[2];
-			Set<String> propertiesChanged = (Set<String>) object[3];
-
-			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
-			data.setEntity(dto);
-			data.setRevisionId(String.valueOf(revisionEntity.getId()));
-			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
-			data.setRevisionType(localeMessageService.getMessage("revision."+revisionType.name()));
-			for (String property : propertiesChanged) {
-				String localized = localeMessageService.getMessage("module.comment." + property);
-				data.getPropertiesChanged().add(property + "=" + localized);
-			}
-
-			dataTableResponse.getData().add(data);
-
-		}
-		return dataTableResponse;
+		return historyDataTableResponse(dataTableRequest, commentFacade.findHistory(dataTableRequest), commentFacade.countHistory(dataTableRequest), "module.comment");
 	}
 }

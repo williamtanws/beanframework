@@ -5,8 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.beanframework.core.api.AbstractResource;
+
 @RestController
-public class BackofficeResource {
+public class BackofficeResource extends AbstractResource {
 
 	@GetMapping("${path.backoffice.checktimeout}")
 	public ResponseEntity<Void> checktimeout(Model model) {

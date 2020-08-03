@@ -15,12 +15,13 @@ import com.beanframework.backoffice.TaskWebConstants;
 import com.beanframework.backoffice.data.TaskDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
+import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.TaskFacade;
 import com.beanframework.core.facade.TaskFacade.TaskPreAuthorizeEnum;
 
 @RestController
-public class TaskResource {
+public class TaskResource extends AbstractResource {
 	
 	@Autowired
 	private TaskFacade taskFacade;

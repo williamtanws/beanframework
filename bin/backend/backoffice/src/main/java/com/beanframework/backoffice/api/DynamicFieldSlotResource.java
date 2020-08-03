@@ -1,16 +1,12 @@
 package com.beanframework.backoffice.api;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,20 +23,16 @@ import com.beanframework.backoffice.data.DynamicFieldSlotDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
-import com.beanframework.common.service.LocaleMessageService;
+import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.facade.DynamicFieldSlotFacade;
 import com.beanframework.core.facade.DynamicFieldSlotFacade.DynamicFieldSlotPreAuthorizeEnum;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
-import com.beanframework.user.domain.RevisionsEntity;
 
 @RestController
-public class DynamicFieldSlotResource {
+public class DynamicFieldSlotResource extends AbstractResource {
 	@Autowired
 	private DynamicFieldSlotFacade dynamicFieldSlotFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(DynamicFieldSlotWebConstants.Path.Api.CHECKID)
@@ -72,7 +64,7 @@ public class DynamicFieldSlotResource {
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.getSkipColumnIndexes().add(2);
 		dataTableRequest.prepareDataTableRequest(request);
-		
+
 		Page<DynamicFieldSlotDto> pagination = dynamicFieldSlotFacade.findPage(dataTableRequest);
 
 		DataTableResponse<DynamicFieldSlotDataTableResponseData> dataTableResponse = new DataTableResponse<DynamicFieldSlotDataTableResponseData>();
@@ -93,7 +85,6 @@ public class DynamicFieldSlotResource {
 	}
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = DynamicFieldSlotWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
@@ -102,32 +93,6 @@ public class DynamicFieldSlotResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		List<Object[]> history = dynamicFieldSlotFacade.findHistory(dataTableRequest);
-
-		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
-		dataTableResponse.setDraw(dataTableRequest.getDraw());
-		dataTableResponse.setRecordsTotal(dynamicFieldSlotFacade.countHistory(dataTableRequest));
-		dataTableResponse.setRecordsFiltered(history.size());
-
-		for (Object[] object : history) {
-
-			DynamicFieldSlotDto dto = (DynamicFieldSlotDto) object[0];
-			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
-			RevisionType revisionType = (RevisionType) object[2];
-			Set<String> propertiesChanged = (Set<String>) object[3];
-
-			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
-			data.setEntity(dto);
-			data.setRevisionId(String.valueOf(revisionEntity.getId()));
-			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
-			data.setRevisionType(localeMessageService.getMessage("revision."+revisionType.name()));
-			for (String property : propertiesChanged) {
-				String localized = localeMessageService.getMessage("module.dynamicfieldslot." + property);
-				data.getPropertiesChanged().add(property + "=" + localized);
-			}
-
-			dataTableResponse.getData().add(data);
-		}
-		return dataTableResponse;
+		return historyDataTableResponse(dataTableRequest, dynamicFieldSlotFacade.findHistory(dataTableRequest), dynamicFieldSlotFacade.countHistory(dataTableRequest), "module.dynamicfieldslot");
 	}
 }
