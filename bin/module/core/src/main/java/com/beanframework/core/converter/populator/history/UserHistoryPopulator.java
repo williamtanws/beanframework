@@ -12,6 +12,8 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.UserFieldFullPopulator;
+import com.beanframework.core.converter.populator.UserGroupFullPopulator;
 import com.beanframework.core.data.UserDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.core.data.UserGroupDto;
@@ -21,26 +23,29 @@ import com.beanframework.user.domain.User;
 public class UserHistoryPopulator extends AbstractPopulator<User, UserDto> implements Populator<User, UserDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserHistoryPopulator.class);
-	
+
 	@Autowired
-	private UserGroupHistoryPopulator userGroupHistoryPopulator;
-	
+	private UserGroupFullPopulator userGroupFullPopulator;
+
 	@Autowired
-	private UserFieldHistoryPopulator userFieldHistoryPopulator;
+	private UserFieldFullPopulator userFieldFullPopulator;
 
 	@Override
 	public void populate(User source, UserDto target) throws PopulatorException {
 		try {
 			convertCommonProperties(source, target);
 			target.setName(source.getName());
-			target.setPassword("******");
+			target.setType(source.getType());
+			target.setPassword(source.getPassword());
 			target.setAccountNonExpired(source.getAccountNonExpired());
 			target.setAccountNonLocked(source.getAccountNonLocked());
 			target.setCredentialsNonExpired(source.getCredentialsNonExpired());
 			target.setEnabled(source.getEnabled());
-			target.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(userGroupHistoryPopulator)));
+			target.setName(source.getName());
 
-			target.setFields(modelService.getDto(source.getFields(), UserFieldDto.class, new DtoConverterContext(userFieldHistoryPopulator)));
+			target.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(userGroupFullPopulator)));
+
+			target.setFields(modelService.getDto(source.getFields(), UserFieldDto.class, new DtoConverterContext(userFieldFullPopulator)));
 			if (target.getFields() != null)
 				Collections.sort(target.getFields(), new Comparator<UserFieldDto>() {
 					@Override

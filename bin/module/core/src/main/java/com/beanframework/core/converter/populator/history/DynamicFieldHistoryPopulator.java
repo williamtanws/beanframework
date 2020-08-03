@@ -9,6 +9,8 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.EnumerationFullPopulator;
+import com.beanframework.core.converter.populator.LanguageFullPopulator;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.data.LanguageDto;
@@ -20,10 +22,10 @@ public class DynamicFieldHistoryPopulator extends AbstractPopulator<DynamicField
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldHistoryPopulator.class);
 	
 	@Autowired
-	private LanguageHistoryPopulator languageHistoryPopulator;
+	private LanguageFullPopulator languageFullPopulator;
 	
 	@Autowired
-	private EnumerationHistoryPopulator enumerationHistoryPopulator;
+	private EnumerationFullPopulator enumerationFullPopulator;
 
 	@Override
 	public void populate(DynamicField source, DynamicFieldDto target) throws PopulatorException {
@@ -35,8 +37,8 @@ public class DynamicFieldHistoryPopulator extends AbstractPopulator<DynamicField
 			target.setType(source.getType());
 			target.setLabel(source.getLabel());
 			target.setGrid(source.getGrid());
-			target.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class, new DtoConverterContext(languageHistoryPopulator)));
-			target.setEnumerations(modelService.getDto(source.getEnumerations(), EnumerationDto.class, new DtoConverterContext(enumerationHistoryPopulator)));
+			target.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class, new DtoConverterContext(languageFullPopulator)));
+			target.setEnumerations(modelService.getDto(source.getEnumerations(), EnumerationDto.class, new DtoConverterContext(enumerationFullPopulator)));
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

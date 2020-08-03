@@ -9,6 +9,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.MediaFullPopulator;
 import com.beanframework.core.data.ImexDto;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.imex.domain.Imex;
@@ -19,7 +20,7 @@ public class ImexHistoryPopulator extends AbstractPopulator<Imex, ImexDto> imple
 	protected static Logger LOGGER = LoggerFactory.getLogger(ImexHistoryPopulator.class);
 
 	@Autowired
-	private MediaHistoryPopulator mediaHistoryPopulator;
+	private MediaFullPopulator mediaFullPopulator;
 
 	@Override
 	public void populate(Imex source, ImexDto target) throws PopulatorException {
@@ -31,7 +32,7 @@ public class ImexHistoryPopulator extends AbstractPopulator<Imex, ImexDto> imple
 			target.setQuery(source.getQuery());
 			target.setHeader(source.getHeader());
 			target.setSeperator(source.getSeperator());
-			target.setMedias(modelService.getDto(source.getMedias(), MediaDto.class, new DtoConverterContext(mediaHistoryPopulator)));
+			target.setMedias(modelService.getDto(source.getMedias(), MediaDto.class, new DtoConverterContext(mediaFullPopulator)));
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

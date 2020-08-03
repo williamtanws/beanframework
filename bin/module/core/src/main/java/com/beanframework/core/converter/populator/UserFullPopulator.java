@@ -22,10 +22,10 @@ public class UserFullPopulator extends AbstractPopulator<User, UserDto> implemen
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserFullPopulator.class);
 	
 	@Autowired
-	UserGroupFullPopulator userGroupFullPopulator;
+	private UserGroupFullPopulator userGroupFullPopulator;
 	
 	@Autowired
-	UserFieldFullPopulator userFieldFullPopulator;
+	private UserFieldFullPopulator userFieldFullPopulator;
 
 	@Override
 	public void populate(User source, UserDto target) throws PopulatorException {

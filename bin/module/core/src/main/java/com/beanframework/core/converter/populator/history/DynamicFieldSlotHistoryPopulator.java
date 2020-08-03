@@ -9,6 +9,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.DynamicFieldFullPopulator;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
@@ -19,7 +20,7 @@ public class DynamicFieldSlotHistoryPopulator extends AbstractPopulator<DynamicF
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldSlotHistoryPopulator.class);
 	
 	@Autowired
-	private DynamicFieldHistoryPopulator dynamicFieldHistoryPopulator;
+	private DynamicFieldFullPopulator dynamicFieldFullPopulator;
 
 	@Override
 	public void populate(DynamicFieldSlot source, DynamicFieldSlotDto target) throws PopulatorException {
@@ -28,7 +29,7 @@ public class DynamicFieldSlotHistoryPopulator extends AbstractPopulator<DynamicF
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 
-			target.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class, new DtoConverterContext(dynamicFieldHistoryPopulator)));
+			target.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class, new DtoConverterContext(dynamicFieldFullPopulator)));
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

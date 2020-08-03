@@ -12,6 +12,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.CronjobDataFullPopulator;
 import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.cronjob.domain.Cronjob;
@@ -22,7 +23,7 @@ public class CronjobHistoryPopulator extends AbstractPopulator<Cronjob, CronjobD
 	protected static Logger LOGGER = LoggerFactory.getLogger(CronjobHistoryPopulator.class);
 
 	@Autowired
-	private CronjobDataHistoryPopulator cronjobDataHistoryPopulator;
+	private CronjobDataFullPopulator cronjobDataFullPopulator;
 
 	@Override
 	public void populate(Cronjob source, CronjobDto target) throws PopulatorException {
@@ -42,7 +43,7 @@ public class CronjobHistoryPopulator extends AbstractPopulator<Cronjob, CronjobD
 			target.setLastTriggeredDate(source.getLastTriggeredDate());
 			target.setLastStartExecutedDate(source.getLastStartExecutedDate());
 			target.setLastFinishExecutedDate(source.getLastFinishExecutedDate());
-			target.setCronjobDatas(modelService.getDto(source.getCronjobDatas(), CronjobDataDto.class, new DtoConverterContext(cronjobDataHistoryPopulator)));
+			target.setCronjobDatas(modelService.getDto(source.getCronjobDatas(), CronjobDataDto.class, new DtoConverterContext(cronjobDataFullPopulator)));
 			if (target.getCronjobDatas() != null)
 				Collections.sort(target.getCronjobDatas(), new Comparator<CronjobDataDto>() {
 					@Override
