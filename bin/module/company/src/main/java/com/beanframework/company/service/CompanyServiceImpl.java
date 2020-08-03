@@ -10,7 +10,6 @@ import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.beanframework.company.service.CompanyService;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.company.domain.Company;

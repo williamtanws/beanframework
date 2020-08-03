@@ -10,8 +10,8 @@ import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.vendor.VendorConstants;
 import com.beanframework.user.domain.User;
+import com.beanframework.vendor.VendorConstants;
 
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

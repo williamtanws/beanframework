@@ -24,9 +24,9 @@ import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.facade.UserGroupFacade;
+import com.beanframework.core.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
 import com.beanframework.core.facade.UserPermissionFacade;
 import com.beanframework.core.facade.UserRightFacade;
-import com.beanframework.core.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
 
 @Controller
 public class UserGroupController extends AbstractController {

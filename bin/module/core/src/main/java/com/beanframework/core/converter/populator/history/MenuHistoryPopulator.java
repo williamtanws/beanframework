@@ -12,6 +12,10 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.MenuBasicPopulator;
+import com.beanframework.core.converter.populator.MenuFieldFullPopulator;
+import com.beanframework.core.converter.populator.MenuFullPopulator;
+import com.beanframework.core.converter.populator.UserGroupFullPopulator;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.core.data.UserGroupDto;
@@ -23,29 +27,32 @@ public class MenuHistoryPopulator extends AbstractPopulator<Menu, MenuDto> imple
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuHistoryPopulator.class);
 
 	@Autowired
-	private MenuHistoryPopulator menuHistoryPopulator;
+	private MenuBasicPopulator menuBasicPopulator;
 
 	@Autowired
-	private UserGroupHistoryPopulator userGroupHistoryPopulator;
+	private MenuFullPopulator menuFullPopulator;
 
 	@Autowired
-	private MenuFieldHistoryPopulator menuFieldHistoryPopulator;
+	private UserGroupFullPopulator userGroupFullPopulator;
+
+	@Autowired
+	private MenuFieldFullPopulator menuFieldFullPopulator;
 
 	@Override
 	public void populate(Menu source, MenuDto target) throws PopulatorException {
 		try {
 			convertCommonProperties(source, target);
 			target.setName(source.getName());
-			target.setParent(modelService.getDto(source.getParent(), MenuDto.class, new DtoConverterContext(menuHistoryPopulator)));
+			target.setParent(modelService.getDto(source.getParent(), MenuDto.class, new DtoConverterContext(menuBasicPopulator)));
 			target.setIcon(source.getIcon());
 			target.setPath(source.getPath());
 			target.setSort(source.getSort());
 			target.setTarget(source.getTarget());
 			target.setEnabled(source.getEnabled());
-			target.setChilds(modelService.getDto(source.getChilds(), MenuDto.class, new DtoConverterContext(menuHistoryPopulator)));
-			target.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(userGroupHistoryPopulator)));
+			target.setChilds(modelService.getDto(source.getChilds(), MenuDto.class, new DtoConverterContext(menuFullPopulator)));
+			target.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(userGroupFullPopulator)));
 
-			target.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class, new DtoConverterContext(menuFieldHistoryPopulator)));
+			target.setFields(modelService.getDto(source.getFields(), MenuFieldDto.class, new DtoConverterContext(menuFieldFullPopulator)));
 			Collections.sort(target.getFields(), new Comparator<MenuFieldDto>() {
 				@Override
 				public int compare(MenuFieldDto o1, MenuFieldDto o2) {

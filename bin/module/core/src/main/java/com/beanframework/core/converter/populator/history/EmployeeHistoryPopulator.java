@@ -12,6 +12,8 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.UserFieldFullPopulator;
+import com.beanframework.core.converter.populator.UserGroupBasicPopulator;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.core.data.UserGroupDto;
@@ -23,10 +25,10 @@ public class EmployeeHistoryPopulator extends AbstractPopulator<Employee, Employ
 	protected static Logger LOGGER = LoggerFactory.getLogger(EmployeeHistoryPopulator.class);
 
 	@Autowired
-	private UserFieldHistoryPopulator userFieldHistoryPopulator;
+	private UserFieldFullPopulator userFieldFullPopulator;
 	
 	@Autowired
-	private UserGroupHistoryPopulator userGroupHistoryPopulator;
+	private UserGroupBasicPopulator userGroupBasicPopulator;
 
 	@Override
 	public void populate(Employee source, EmployeeDto target) throws PopulatorException {
@@ -38,9 +40,9 @@ public class EmployeeHistoryPopulator extends AbstractPopulator<Employee, Employ
 			target.setAccountNonLocked(source.getAccountNonLocked());
 			target.setCredentialsNonExpired(source.getCredentialsNonExpired());
 			target.setEnabled(source.getEnabled());
-			target.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(userGroupHistoryPopulator)));
+			target.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(userGroupBasicPopulator)));
 
-			target.setFields(modelService.getDto(source.getFields(), UserFieldDto.class, new DtoConverterContext(userFieldHistoryPopulator)));
+			target.setFields(modelService.getDto(source.getFields(), UserFieldDto.class, new DtoConverterContext(userFieldFullPopulator)));
 			if (target.getFields() != null)
 				Collections.sort(target.getFields(), new Comparator<UserFieldDto>() {
 					@Override

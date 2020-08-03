@@ -12,6 +12,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.UserRightFieldFullPopulator;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.data.UserRightFieldDto;
 import com.beanframework.user.domain.UserRight;
@@ -22,7 +23,7 @@ public class UserRightHistoryPopulator extends AbstractPopulator<UserRight, User
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserRightHistoryPopulator.class);
 
 	@Autowired
-	private UserRightFieldHistoryPopulator userRightFieldHistoryPopulator;
+	private UserRightFieldFullPopulator userRightFieldFullPopulator;
 
 	@Override
 	public void populate(UserRight source, UserRightDto target) throws PopulatorException {
@@ -31,7 +32,7 @@ public class UserRightHistoryPopulator extends AbstractPopulator<UserRight, User
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 
-			target.setFields(modelService.getDto(source.getFields(), UserRightFieldDto.class, new DtoConverterContext(userRightFieldHistoryPopulator)));
+			target.setFields(modelService.getDto(source.getFields(), UserRightFieldDto.class, new DtoConverterContext(userRightFieldFullPopulator)));
 			if (target.getFields() != null)
 				Collections.sort(target.getFields(), new Comparator<UserRightFieldDto>() {
 					@Override

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-import org.springframework.cache.annotation.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -18,6 +17,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;

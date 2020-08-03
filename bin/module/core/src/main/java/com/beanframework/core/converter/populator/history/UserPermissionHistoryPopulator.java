@@ -12,6 +12,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.UserPermissionFieldFullPopulator;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserPermissionFieldDto;
 import com.beanframework.user.domain.UserPermission;
@@ -22,7 +23,7 @@ public class UserPermissionHistoryPopulator extends AbstractPopulator<UserPermis
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserPermissionHistoryPopulator.class);
 
 	@Autowired
-	private UserPermissionFieldHistoryPopulator userPermissionFieldHistoryPopulator;
+	private UserPermissionFieldFullPopulator userPermissionFieldFullPopulator;
 
 	@Override
 	public void populate(UserPermission source, UserPermissionDto target) throws PopulatorException {
@@ -31,7 +32,7 @@ public class UserPermissionHistoryPopulator extends AbstractPopulator<UserPermis
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 
-			target.setFields(modelService.getDto(source.getFields(), UserPermissionFieldDto.class, new DtoConverterContext(userPermissionFieldHistoryPopulator)));
+			target.setFields(modelService.getDto(source.getFields(), UserPermissionFieldDto.class, new DtoConverterContext(userPermissionFieldFullPopulator)));
 			if (target.getFields() != null)
 				Collections.sort(target.getFields(), new Comparator<UserPermissionFieldDto>() {
 					@Override

@@ -10,6 +10,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.UserBasicPopulator;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.data.UserDto;
 
@@ -19,7 +20,7 @@ public class CommentHistoryPopulator extends AbstractPopulator<Comment, CommentD
 	protected static Logger LOGGER = LoggerFactory.getLogger(CommentHistoryPopulator.class);
 
 	@Autowired
-	private UserHistoryPopulator userHistoryPopulator;
+	private UserBasicPopulator userBasicPopulator;
 
 	@Override
 	public void populate(Comment source, CommentDto target) throws PopulatorException {
@@ -27,7 +28,7 @@ public class CommentHistoryPopulator extends AbstractPopulator<Comment, CommentD
 			convertCommonProperties(source, target);
 			target.setHtml(source.getHtml());
 			target.setVisibled(source.getVisibled());
-			target.setUser(modelService.getDto(source.getUser(), UserDto.class, new DtoConverterContext(userHistoryPopulator)));
+			target.setUser(modelService.getDto(source.getUser(), UserDto.class, new DtoConverterContext(userBasicPopulator)));
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}
