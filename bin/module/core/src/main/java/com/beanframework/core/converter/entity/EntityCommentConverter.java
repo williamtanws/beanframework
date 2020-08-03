@@ -14,11 +14,15 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.user.domain.User;
+import com.beanframework.user.service.UserService;
 
 public class EntityCommentConverter implements EntityConverter<CommentDto, Comment> {
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public Comment convert(CommentDto source, EntityConverterContext context) throws ConverterException {
@@ -62,8 +66,8 @@ public class EntityCommentConverter implements EntityConverter<CommentDto, Comme
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (prototype.getUser() != null && source.getUser() == null) {
-				prototype.setUser(null);
+			if (prototype.getUser() == null && source.getUser() == null) {
+				prototype.setUser(userService.getCurrentUser());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			} else if (prototype.getUser().getUuid().equals(source.getUser().getUuid()) == Boolean.FALSE) {
 				User entityUser = modelService.findOneByUuid(source.getUser().getUuid(), User.class);
