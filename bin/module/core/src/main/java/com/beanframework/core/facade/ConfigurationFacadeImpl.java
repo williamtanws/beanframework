@@ -19,6 +19,7 @@ import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
 import com.beanframework.configuration.specification.ConfigurationSpecification;
 import com.beanframework.core.converter.populator.ConfigurationFullPopulator;
+import com.beanframework.core.converter.populator.history.ConfigurationHistoryPopulator;
 import com.beanframework.core.data.ConfigurationDto;
 
 @Component
@@ -32,6 +33,9 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 
 	@Autowired
 	private ConfigurationFullPopulator configurationFullPopulator;
+
+	@Autowired
+	private ConfigurationHistoryPopulator configurationHistoryPopulator;
 
 	@Override
 	public ConfigurationDto findOneByUuid(UUID uuid) throws Exception {
@@ -94,7 +98,7 @@ public class ConfigurationFacadeImpl implements ConfigurationFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Configuration) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], ConfigurationDto.class, new DtoConverterContext(configurationFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], ConfigurationDto.class, new DtoConverterContext(configurationHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

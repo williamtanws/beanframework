@@ -14,6 +14,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.LanguageFullPopulator;
+import com.beanframework.core.converter.populator.history.LanguageHistoryPopulator;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.internationalization.domain.Language;
 import com.beanframework.internationalization.service.LanguageService;
@@ -30,6 +31,9 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
 	@Autowired
 	private LanguageFullPopulator languageFullPopulator;
+
+	@Autowired
+	private LanguageHistoryPopulator languageHistoryPopulator;
 
 	@Override
 	public LanguageDto findOneByUuid(UUID uuid) throws Exception {
@@ -90,7 +94,7 @@ public class LanguageFacadeImpl implements LanguageFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Language) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], LanguageDto.class, new DtoConverterContext(languageFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], LanguageDto.class, new DtoConverterContext(languageHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

@@ -17,6 +17,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.RegionBasicPopulator;
 import com.beanframework.core.converter.populator.RegionFullPopulator;
+import com.beanframework.core.converter.populator.history.RegionHistoryPopulator;
 import com.beanframework.core.data.RegionDto;
 import com.beanframework.internationalization.domain.Region;
 import com.beanframework.internationalization.service.RegionService;
@@ -36,6 +37,9 @@ public class RegionFacadeImpl implements RegionFacade {
 
 	@Autowired
 	private RegionBasicPopulator regionBasicPopulator;
+
+	@Autowired
+	private RegionHistoryPopulator regionHistoryPopulator;
 
 	@Override
 	public RegionDto findOneByUuid(UUID uuid) throws Exception {
@@ -98,7 +102,7 @@ public class RegionFacadeImpl implements RegionFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Region) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], RegionDto.class, new DtoConverterContext(regionFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], RegionDto.class, new DtoConverterContext(regionHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

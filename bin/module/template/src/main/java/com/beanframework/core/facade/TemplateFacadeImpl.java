@@ -17,6 +17,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.TemplateBasicPopulator;
 import com.beanframework.core.converter.populator.TemplateFullPopulator;
+import com.beanframework.core.converter.populator.history.TemplateHistoryPopulator;
 import com.beanframework.core.data.TemplateDto;
 import com.beanframework.template.domain.Template;
 import com.beanframework.template.service.TemplateService;
@@ -38,6 +39,9 @@ public class TemplateFacadeImpl implements TemplateFacade {
 
 	@Autowired
 	private TemplateBasicPopulator templateBasicPopulator;
+
+	@Autowired
+	private TemplateHistoryPopulator templateHistoryPopulator;
 
 	@Override
 	public TemplateDto findOneByUuid(UUID uuid) throws Exception {
@@ -100,7 +104,7 @@ public class TemplateFacadeImpl implements TemplateFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Template) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], TemplateDto.class, new DtoConverterContext(templateFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], TemplateDto.class, new DtoConverterContext(templateHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

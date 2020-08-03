@@ -20,6 +20,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.AddressBasicPopulator;
 import com.beanframework.core.converter.populator.AddressFullPopulator;
+import com.beanframework.core.converter.populator.history.AddressHistoryPopulator;
 import com.beanframework.core.data.AddressDto;
 
 @Component
@@ -36,6 +37,9 @@ public class AddressFacadeImpl implements AddressFacade {
 	
 	@Autowired
 	private AddressBasicPopulator addressBasicPopulator;
+	
+	@Autowired
+	private AddressHistoryPopulator addressHistoryPopulator;
 
 	@Override
 	public AddressDto findOneByUuid(UUID uuid) throws Exception {
@@ -98,7 +102,7 @@ public class AddressFacadeImpl implements AddressFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Address) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], AddressDto.class, new DtoConverterContext(addressFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], AddressDto.class, new DtoConverterContext(addressHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

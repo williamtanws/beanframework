@@ -15,6 +15,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.WorkflowBasicPopulator;
 import com.beanframework.core.converter.populator.WorkflowFullPopulator;
+import com.beanframework.core.converter.populator.history.WorkflowHistoryPopulator;
 import com.beanframework.core.data.WorkflowDto;
 import com.beanframework.workflow.domain.Workflow;
 import com.beanframework.workflow.service.WorkflowService;
@@ -34,6 +35,9 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 
 	@Autowired
 	private WorkflowBasicPopulator workflowBasicPopulator;
+
+	@Autowired
+	private WorkflowHistoryPopulator workflowHistoryPopulator;
 
 	@Override
 	public WorkflowDto findOneByUuid(UUID uuid) throws Exception {
@@ -94,7 +98,7 @@ public class WorkflowFacadeImpl implements WorkflowFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Workflow) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], WorkflowDto.class, new DtoConverterContext(workflowFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], WorkflowDto.class, new DtoConverterContext(workflowHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
