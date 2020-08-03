@@ -17,6 +17,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.CountryBasicPopulator;
 import com.beanframework.core.converter.populator.CountryFullPopulator;
+import com.beanframework.core.converter.populator.history.CountryHistoryPopulator;
 import com.beanframework.core.data.CountryDto;
 import com.beanframework.internationalization.domain.Country;
 import com.beanframework.internationalization.service.CountryService;
@@ -36,6 +37,9 @@ public class CountryFacadeImpl implements CountryFacade {
 
 	@Autowired
 	private CountryBasicPopulator countryBasicPopulator;
+
+	@Autowired
+	private CountryHistoryPopulator countryHistoryPopulator;
 
 	@Override
 	public CountryDto findOneByUuid(UUID uuid) throws Exception {
@@ -98,7 +102,7 @@ public class CountryFacadeImpl implements CountryFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Country) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CountryDto.class, new DtoConverterContext(countryBasicPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], CountryDto.class, new DtoConverterContext(countryHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

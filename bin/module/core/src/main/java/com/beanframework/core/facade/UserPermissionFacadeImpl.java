@@ -17,6 +17,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.UserPermissionBasicPopulator;
 import com.beanframework.core.converter.populator.UserPermissionFullPopulator;
+import com.beanframework.core.converter.populator.history.UserPermissionHistoryPopulator;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.service.UserPermissionService;
@@ -36,6 +37,9 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
 	@Autowired
 	private UserPermissionBasicPopulator userPermissionBasicPopulator;
+
+	@Autowired
+	private UserPermissionHistoryPopulator userPermissionHistoryPopulator;
 
 	@Override
 	public UserPermissionDto findOneByUuid(UUID uuid) throws Exception {
@@ -100,7 +104,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof UserPermission) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], UserPermissionDto.class, new DtoConverterContext(userPermissionFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], UserPermissionDto.class, new DtoConverterContext(userPermissionHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

@@ -17,6 +17,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.SiteFullPopulator;
+import com.beanframework.core.converter.populator.history.SiteHistoryPopulator;
 import com.beanframework.core.data.SiteDto;
 
 @Component
@@ -30,6 +31,9 @@ public class SiteFacadeImpl implements SiteFacade {
 
 	@Autowired
 	private SiteFullPopulator siteFullPopulator;
+
+	@Autowired
+	private SiteHistoryPopulator siteHistoryPopulator;
 
 	@Override
 	public SiteDto findOneByUuid(UUID uuid) throws Exception {
@@ -90,7 +94,7 @@ public class SiteFacadeImpl implements SiteFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Site) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], SiteDto.class, new DtoConverterContext(siteFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], SiteDto.class, new DtoConverterContext(siteHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

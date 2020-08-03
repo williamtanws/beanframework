@@ -30,7 +30,6 @@ public class AbstractResource {
 		for (Object[] object : history) {
 
 			EmployeeDto dto = (EmployeeDto) object[0];
-			dto.setPassword("(Changed)");
 			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
 			RevisionType revisionType = (RevisionType) object[2];
 			@SuppressWarnings("unchecked")

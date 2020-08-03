@@ -15,6 +15,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.DynamicFieldSlotBasicPopulator;
 import com.beanframework.core.converter.populator.DynamicFieldSlotFullPopulator;
+import com.beanframework.core.converter.populator.history.DynamicFieldSlotHistoryPopulator;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.service.DynamicFieldSlotService;
@@ -34,6 +35,9 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 
 	@Autowired
 	private DynamicFieldSlotBasicPopulator dynamicFieldSlotBasicPopulator;
+
+	@Autowired
+	private DynamicFieldSlotHistoryPopulator dynamicFieldSlotHistoryPopulator;
 
 	@Override
 	public DynamicFieldSlotDto findOneByUuid(UUID uuid) throws Exception {
@@ -98,7 +102,7 @@ public class DynamicFieldSlotFacadeImpl implements DynamicFieldSlotFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof DynamicFieldSlot) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldSlotDto.class, new DtoConverterContext(dynamicFieldSlotFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldSlotDto.class, new DtoConverterContext(dynamicFieldSlotHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

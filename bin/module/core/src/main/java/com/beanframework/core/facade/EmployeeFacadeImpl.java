@@ -17,6 +17,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.entity.EntityEmployeeProfileConverter;
 import com.beanframework.core.converter.populator.EmployeeBasicPopulator;
 import com.beanframework.core.converter.populator.EmployeeFullPopulator;
+import com.beanframework.core.converter.populator.history.EmployeeHistoryPopulator;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.employee.EmployeeSession;
 import com.beanframework.employee.domain.Employee;
@@ -40,6 +41,9 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 
 	@Autowired
 	private EmployeeBasicPopulator employeeBasicPopulator;
+
+	@Autowired
+	private EmployeeHistoryPopulator employeeHistoryPopulator;
 
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
@@ -163,7 +167,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Employee) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], EmployeeDto.class, new DtoConverterContext(employeeFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], EmployeeDto.class, new DtoConverterContext(employeeHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

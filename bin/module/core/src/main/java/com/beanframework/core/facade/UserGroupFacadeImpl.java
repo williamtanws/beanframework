@@ -15,6 +15,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.UserGroupBasicPopulator;
 import com.beanframework.core.converter.populator.UserGroupFullPopulator;
+import com.beanframework.core.converter.populator.history.UserGroupHistoryPopulator;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserGroupService;
@@ -34,6 +35,9 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 
 	@Autowired
 	private UserGroupBasicPopulator userGroupBasicPopulator;
+
+	@Autowired
+	private UserGroupHistoryPopulator userGroupHistoryPopulator;
 
 	@Override
 	public UserGroupDto findOneByUuid(UUID uuid) throws Exception {
@@ -98,7 +102,7 @@ public class UserGroupFacadeImpl implements UserGroupFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof UserGroup) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], UserGroupDto.class, new DtoConverterContext(userGroupFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], UserGroupDto.class, new DtoConverterContext(userGroupHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

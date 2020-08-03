@@ -14,6 +14,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.ImexFullPopulator;
+import com.beanframework.core.converter.populator.history.ImexHistoryPopulator;
 import com.beanframework.core.data.ImexDto;
 import com.beanframework.imex.domain.Imex;
 import com.beanframework.imex.service.ImexService;
@@ -30,6 +31,9 @@ public class ImexFacadeImpl implements ImexFacade {
 
 	@Autowired
 	private ImexFullPopulator imexFullPopulator;
+
+	@Autowired
+	private ImexHistoryPopulator imexHistoryPopulator;
 
 	@Override
 	public ImexDto findOneByUuid(UUID uuid) throws Exception {
@@ -90,7 +94,7 @@ public class ImexFacadeImpl implements ImexFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Imex) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], ImexDto.class, new DtoConverterContext(imexFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], ImexDto.class, new DtoConverterContext(imexHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

@@ -19,6 +19,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.CommentFullPopulator;
+import com.beanframework.core.converter.populator.history.CommentHistoryPopulator;
 import com.beanframework.core.data.CommentDto;
 
 @Component
@@ -32,6 +33,9 @@ public class CommentFacadeImpl implements CommentFacade {
 
 	@Autowired
 	private CommentFullPopulator commentFullPopulator;
+
+	@Autowired
+	private CommentHistoryPopulator commentHistoryPopulator;
 
 	@Override
 	public CommentDto findOneByUuid(UUID uuid) throws Exception {
@@ -94,7 +98,7 @@ public class CommentFacadeImpl implements CommentFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Comment) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CommentDto.class, new DtoConverterContext(commentFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], CommentDto.class, new DtoConverterContext(commentHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

@@ -20,6 +20,7 @@ import com.beanframework.company.service.CompanyService;
 import com.beanframework.company.specification.CompanySpecification;
 import com.beanframework.core.converter.populator.CompanyBasicPopulator;
 import com.beanframework.core.converter.populator.CompanyFullPopulator;
+import com.beanframework.core.converter.populator.history.CompanyHistoryPopulator;
 import com.beanframework.core.data.CompanyDto;
 
 @Component
@@ -36,6 +37,9 @@ public class CompanyFacadeImpl implements CompanyFacade {
 
 	@Autowired
 	private CompanyBasicPopulator companyBasicPopulator;
+
+	@Autowired
+	private CompanyHistoryPopulator companyHistoryPopulator;
 
 	@Override
 	public CompanyDto findOneByUuid(UUID uuid) throws Exception {
@@ -98,7 +102,7 @@ public class CompanyFacadeImpl implements CompanyFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Company) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CompanyDto.class, new DtoConverterContext(companyFullPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], CompanyDto.class, new DtoConverterContext(companyHistoryPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
