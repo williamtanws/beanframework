@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.beanframework.common.data.GenericDto;
-import com.beanframework.company.BusinessLineType;
+import com.beanframework.user.BusinessLineType;
 
 public class CompanyDto extends GenericDto {
 
@@ -16,7 +16,7 @@ public class CompanyDto extends GenericDto {
 	private String description;
 	private UserDto contactPerson;
 	private CompanyDto responsibleCompany;
-	private CountryDto countryDto;
+	private CountryDto country;
 	private BusinessLineType lineOfBusiness;
 	private Boolean buyer;
 	private Boolean manufacturer;
@@ -73,12 +73,12 @@ public class CompanyDto extends GenericDto {
 		this.responsibleCompany = responsibleCompany;
 	}
 
-	public CountryDto getCountryDto() {
-		return countryDto;
+	public CountryDto getCountry() {
+		return country;
 	}
 
-	public void setCountryDto(CountryDto countryDto) {
-		this.countryDto = countryDto;
+	public void setCountry(CountryDto country) {
+		this.country = country;
 	}
 
 	public BusinessLineType getLineOfBusiness() {

@@ -17,6 +17,8 @@ public class RegionBasicPopulator extends AbstractPopulator<Region, RegionDto> i
 	@Override
 	public void populate(Region source, RegionDto target) throws PopulatorException {
 		convertCommonProperties(source, target);
+		target.setName(source.getName());
+		target.setActive(source.getActive());
 	}
 
 }

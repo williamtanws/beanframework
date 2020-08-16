@@ -7,11 +7,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.csv.AdminCsv;
+import com.beanframework.user.domain.Admin;
 
 public class EntityCsvAdminConverter implements EntityCsvConverter<AdminCsv, Admin> {
 

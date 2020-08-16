@@ -3,9 +3,9 @@ package com.beanframework.core.config.entity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.beanframework.address.domain.Address;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.core.converter.entity.EntityAddressConverter;
+import com.beanframework.user.domain.Address;
 
 @Configuration
 public class AddressEntityConfig {

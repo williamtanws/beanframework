@@ -3,9 +3,9 @@ package com.beanframework.core.config.entity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.core.converter.entity.EntityAdminConverter;
+import com.beanframework.user.domain.Admin;
 
 @Configuration
 public class AdminEntityConfig {

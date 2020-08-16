@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.address.domain.Address;
 import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -16,6 +15,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.AddressDto;
 import com.beanframework.internationalization.domain.Country;
 import com.beanframework.internationalization.domain.Region;
+import com.beanframework.user.domain.Address;
 import com.beanframework.user.domain.User;
 
 public class EntityAddressConverter implements EntityConverter<AddressDto, Address> {
@@ -100,16 +100,6 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 			
 			if (StringUtils.equals(StringUtils.stripToNull(source.getPoBox()), prototype.getPoBox()) == Boolean.FALSE) {
 				prototype.setPoBox(StringUtils.stripToNull(source.getPoBox()));
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
-			
-			if (StringUtils.equals(StringUtils.stripToNull(source.getPoBox()), prototype.getPoBox()) == Boolean.FALSE) {
-				prototype.setPoBox(StringUtils.stripToNull(source.getPoBox()));
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
-			
-			if (StringUtils.equals(StringUtils.stripToNull(source.getFax()), prototype.getFax()) == Boolean.FALSE) {
-				prototype.setFax(StringUtils.stripToNull(source.getFax()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 			

@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractPrepareInterceptor;
-import com.beanframework.employee.domain.Employee;
+import com.beanframework.user.domain.Employee;
 
 public class EmployeePrepareInterceptor extends AbstractPrepareInterceptor<Employee> {
 

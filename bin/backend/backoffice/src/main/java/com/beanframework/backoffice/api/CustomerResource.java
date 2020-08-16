@@ -28,7 +28,7 @@ import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.CustomerFacade;
 import com.beanframework.core.facade.CustomerFacade.CustomerPreAuthorizeEnum;
-import com.beanframework.customer.domain.Customer;
+import com.beanframework.user.domain.Customer;
 
 @RestController
 public class CustomerResource extends AbstractResource {

@@ -6,13 +6,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.AdminDto;
+import com.beanframework.user.domain.Admin;
 
 public class DtoAdminConverter extends AbstractDtoConverter<Admin, AdminDto> implements DtoConverter<Admin, AdminDto> {
 

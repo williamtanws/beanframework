@@ -9,7 +9,7 @@ import com.beanframework.core.interceptor.employee.EmployeeLoadInterceptor;
 import com.beanframework.core.interceptor.employee.EmployeePrepareInterceptor;
 import com.beanframework.core.interceptor.employee.EmployeeRemoveInterceptor;
 import com.beanframework.core.interceptor.employee.EmployeeValidateInterceptor;
-import com.beanframework.employee.domain.Employee;
+import com.beanframework.user.domain.Employee;
 
 @Configuration
 public class EmployeeInterceptorConfig {

@@ -16,7 +16,7 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.UserFieldDto;
-import com.beanframework.customer.domain.Customer;
+import com.beanframework.user.domain.Customer;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityCustomerConverter implements EntityConverter<CustomerDto, Customer> {

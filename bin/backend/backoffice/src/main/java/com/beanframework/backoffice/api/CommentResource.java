@@ -65,8 +65,6 @@ public class CommentResource extends AbstractResource {
 	public DataTableResponse<CommentDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
-		dataTableRequest.getSkipColumnIndexes().add(2);
-		dataTableRequest.getSkipColumnIndexes().add(3);
 		dataTableRequest.prepareDataTableRequest(request);
 
 		Page<CommentDto> pagination = commentFacade.findPage(dataTableRequest);

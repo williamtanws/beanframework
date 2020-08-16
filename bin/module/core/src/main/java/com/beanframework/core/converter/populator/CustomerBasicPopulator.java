@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.CustomerDto;
-import com.beanframework.customer.domain.Customer;
+import com.beanframework.user.domain.Customer;
 
 @Component
 public class CustomerBasicPopulator extends AbstractPopulator<Customer, CustomerDto> implements Populator<Customer, CustomerDto> {

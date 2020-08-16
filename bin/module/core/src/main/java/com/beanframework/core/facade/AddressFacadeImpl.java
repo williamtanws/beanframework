@@ -11,9 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.address.domain.Address;
-import com.beanframework.address.service.AddressService;
-import com.beanframework.address.specification.AddressSpecification;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -22,6 +19,9 @@ import com.beanframework.core.converter.populator.AddressBasicPopulator;
 import com.beanframework.core.converter.populator.AddressFullPopulator;
 import com.beanframework.core.converter.populator.history.AddressHistoryPopulator;
 import com.beanframework.core.data.AddressDto;
+import com.beanframework.user.domain.Address;
+import com.beanframework.user.service.AddressService;
+import com.beanframework.user.specification.AddressSpecification;
 
 @Component
 public class AddressFacadeImpl implements AddressFacade {

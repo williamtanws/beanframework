@@ -12,7 +12,7 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.employee.domain.Employee;
+import com.beanframework.user.domain.Employee;
 
 public class DtoEmployeeConverter extends AbstractDtoConverter<Employee, EmployeeDto> implements DtoConverter<Employee, EmployeeDto> {
 

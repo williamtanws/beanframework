@@ -32,6 +32,8 @@ public class Region extends GenericEntity {
 	private static final long serialVersionUID = 7791727441562748178L;
 
 	public static final String NAME = "name";
+	public static final String ACTIVE = "active";
+	public static final String COUNTRY = "country";
 
 	@Audited(withModifiedFlag = true)
 	private String name;

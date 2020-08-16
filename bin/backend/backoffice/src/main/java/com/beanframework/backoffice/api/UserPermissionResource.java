@@ -91,7 +91,6 @@ public class UserPermissionResource extends AbstractResource {
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
-		dataTableRequest.getSkipColumnIndexes().add(2);
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 

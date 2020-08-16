@@ -11,8 +11,8 @@ import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.PopulatorException;
-import com.beanframework.company.domain.Company;
 import com.beanframework.core.data.CompanyDto;
+import com.beanframework.user.domain.Company;
 
 public class DtoCompanyConverter extends AbstractDtoConverter<Company, CompanyDto> implements DtoConverter<Company, CompanyDto> {
 

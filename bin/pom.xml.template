@@ -18,13 +18,7 @@
     	<module>module/common</module>
     	<module>module/enumeration</module>
     	<module>module/internationalization</module>
-    	<module>module/company</module>
-    	<module>module/address</module>
     	<module>module/user</module>
-    	<module>module/employee</module>
-    	<module>module/admin</module>
-    	<module>module/customer</module>
-    	<module>module/vendor</module>
     	<module>module/email</module>
     	<module>module/cronjob</module>
     	<module>module/configuration</module>

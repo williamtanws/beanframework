@@ -62,7 +62,6 @@ public class DynamicFieldSlotResource extends AbstractResource {
 	public DataTableResponse<DynamicFieldSlotDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
-		dataTableRequest.getSkipColumnIndexes().add(2);
 		dataTableRequest.prepareDataTableRequest(request);
 
 		Page<DynamicFieldSlotDto> pagination = dynamicFieldSlotFacade.findPage(dataTableRequest);

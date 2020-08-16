@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
@@ -30,6 +29,7 @@ import com.beanframework.core.data.AdminDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.AdminFacade;
 import com.beanframework.core.facade.AdminFacade.AdminPreAuthorizeEnum;
+import com.beanframework.user.domain.Admin;
 
 @RestController
 public class AdminResource extends AbstractResource {

@@ -17,6 +17,8 @@ public class CountryBasicPopulator extends AbstractPopulator<Country, CountryDto
 	@Override
 	public void populate(Country source, CountryDto target) throws PopulatorException {
 		convertCommonProperties(source, target);
+		target.setName(source.getName());
+		target.setActive(source.getActive());
 	}
 
 }

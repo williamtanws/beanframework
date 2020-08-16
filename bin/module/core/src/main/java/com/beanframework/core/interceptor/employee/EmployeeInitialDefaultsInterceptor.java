@@ -16,8 +16,8 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
-import com.beanframework.employee.EmployeeConstants;
-import com.beanframework.employee.domain.Employee;
+import com.beanframework.user.EmployeeConstants;
+import com.beanframework.user.domain.Employee;
 import com.beanframework.user.domain.UserField;
 
 public class EmployeeInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Employee> {

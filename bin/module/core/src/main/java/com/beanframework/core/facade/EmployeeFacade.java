@@ -11,7 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.employee.EmployeeSession;
+import com.beanframework.user.EmployeeSession;
 
 public interface EmployeeFacade {
 

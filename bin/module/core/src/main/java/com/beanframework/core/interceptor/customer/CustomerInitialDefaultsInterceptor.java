@@ -14,10 +14,10 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.customer.CustomerConstants;
-import com.beanframework.customer.domain.Customer;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
+import com.beanframework.user.CustomerConstants;
+import com.beanframework.user.domain.Customer;
 import com.beanframework.user.domain.UserField;
 
 public class CustomerInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Customer> {

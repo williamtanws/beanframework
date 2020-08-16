@@ -20,8 +20,8 @@ import org.springframework.web.util.UrlPathHelper;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.employee.domain.Employee;
 import com.beanframework.internationalization.domain.Language;
+import com.beanframework.user.domain.Employee;
 
 public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 

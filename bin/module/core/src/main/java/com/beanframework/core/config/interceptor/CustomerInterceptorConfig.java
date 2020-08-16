@@ -9,7 +9,7 @@ import com.beanframework.core.interceptor.customer.CustomerLoadInterceptor;
 import com.beanframework.core.interceptor.customer.CustomerPrepareInterceptor;
 import com.beanframework.core.interceptor.customer.CustomerRemoveInterceptor;
 import com.beanframework.core.interceptor.customer.CustomerValidateInterceptor;
-import com.beanframework.customer.domain.Customer;
+import com.beanframework.user.domain.Customer;
 
 @Configuration
 public class CustomerInterceptorConfig {

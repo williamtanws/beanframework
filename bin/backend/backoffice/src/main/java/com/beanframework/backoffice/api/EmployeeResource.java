@@ -28,7 +28,7 @@ import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.facade.EmployeeFacade;
 import com.beanframework.core.facade.EmployeeFacade.EmployeePreAuthorizeEnum;
-import com.beanframework.employee.domain.Employee;
+import com.beanframework.user.domain.Employee;
 
 @RestController
 public class EmployeeResource extends AbstractResource {

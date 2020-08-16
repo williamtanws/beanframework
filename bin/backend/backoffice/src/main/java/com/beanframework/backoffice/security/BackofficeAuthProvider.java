@@ -30,8 +30,8 @@ import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeService;
+import com.beanframework.user.domain.Employee;
+import com.beanframework.user.service.EmployeeService;
 import com.beanframework.user.service.UserService;
 
 @Component

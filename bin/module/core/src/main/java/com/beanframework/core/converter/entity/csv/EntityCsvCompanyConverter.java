@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.company.domain.Company;
 import com.beanframework.core.csv.CompanyCsv;
+import com.beanframework.user.domain.Company;
 
 public class EntityCsvCompanyConverter implements EntityCsvConverter<CompanyCsv, Company> {
 

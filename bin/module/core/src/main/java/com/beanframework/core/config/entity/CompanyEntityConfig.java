@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.company.domain.Company;
 import com.beanframework.core.converter.entity.EntityCompanyConverter;
+import com.beanframework.user.domain.Company;
 
 @Configuration
 public class CompanyEntityConfig {

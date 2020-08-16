@@ -125,7 +125,7 @@
 											<div class="form-group">
 												<label for="startup" th:text="#{module.cronjob.startup}"></label>
 												<select class="form-control" name="startup">
-													<option th:text="'&nbsp'"></option>
+													<option value="" th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{startup == true}" th:text="#{module.backoffice.yes}"></option>
 													<option value="0" th:selected="*{startup == false}" th:text="#{module.backoffice.no}"></option>
 												</select>

@@ -20,13 +20,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminService;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.AdminWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.core.facade.AdminFacade.AdminPreAuthorizeEnum;
 import com.beanframework.core.facade.ConfigurationFacade.ConfigurationPreAuthorizeEnum;
+import com.beanframework.user.domain.Admin;
+import com.beanframework.user.service.AdminService;
 
 @Component
 public class ConsoleAuthProvider implements AuthenticationProvider {

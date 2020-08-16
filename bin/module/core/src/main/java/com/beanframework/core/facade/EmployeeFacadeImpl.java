@@ -19,10 +19,10 @@ import com.beanframework.core.converter.populator.EmployeeBasicPopulator;
 import com.beanframework.core.converter.populator.EmployeeFullPopulator;
 import com.beanframework.core.converter.populator.history.EmployeeHistoryPopulator;
 import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.employee.EmployeeSession;
-import com.beanframework.employee.domain.Employee;
-import com.beanframework.employee.service.EmployeeService;
-import com.beanframework.employee.specification.EmployeeSpecification;
+import com.beanframework.user.EmployeeSession;
+import com.beanframework.user.domain.Employee;
+import com.beanframework.user.service.EmployeeService;
+import com.beanframework.user.specification.EmployeeSpecification;
 
 @Component
 public class EmployeeFacadeImpl implements EmployeeFacade {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.employee.domain.Employee;
+import com.beanframework.user.domain.Employee;
 
 @Component
 public class EmployeeBasicPopulator extends AbstractPopulator<Employee, EmployeeDto> implements Populator<Employee, EmployeeDto> {

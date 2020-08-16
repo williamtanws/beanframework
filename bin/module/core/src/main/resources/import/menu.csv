@@ -15,9 +15,9 @@ INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dyn
 ,imex					,Import Export			,110,fa fa-exchange		,/backoffice/imex					,,true,system		,employeegroup				,menu_0_name_en=Import Export;menu_1_name_cn=导入导出
 ,internationalization	,Internationalization	,20	,fa fa-language		,									,,true,				,employeegroup				,menu_0_name_en=Internationalization;menu_1_name_cn=国际化
 ,language				,Language				,10	,fa fa-language		,/backoffice/language				,,true,internationalization		,employeegroup				,menu_0_name_en=Language;menu_1_name_cn=语言
-,currency				,Currency				,20	,fa fa-language		,/backoffice/currency				,,true,internationalization		,employeegroup				,menu_0_name_en=Currency;menu_1_name_cn=货币
-,country				,Country				,30	,fa fa-language		,/backoffice/country				,,true,internationalization		,employeegroup				,menu_0_name_en=Country;menu_1_name_cn=国家
-,region					,Region					,40	,fa fa-language		,/backoffice/region					,,true,internationalization		,employeegroup				,menu_0_name_en=Region;menu_1_name_cn=地区
+,currency				,Currency				,20	,fa fa-money		,/backoffice/currency				,,true,internationalization		,employeegroup				,menu_0_name_en=Currency;menu_1_name_cn=货币
+,country				,Country				,30	,fa fa-map			,/backoffice/country				,,true,internationalization		,employeegroup				,menu_0_name_en=Country;menu_1_name_cn=国家
+,region					,Region					,40	,fa fa-map-signs	,/backoffice/region					,,true,internationalization		,employeegroup				,menu_0_name_en=Region;menu_1_name_cn=地区
 ,user					,User					,30	,fa fa-user			,									,,true,				,employeegroup				,menu_0_name_en=User;menu_1_name_cn=用户
 ,company				,Company				,10	,fa fa-building		,/backoffice/company				,,true,user			,employeegroup				,menu_0_name_en=Company;menu_1_name_cn=公司
 ,address				,Address				,20	,fa fa-home			,/backoffice/address				,,true,user			,employeegroup				,menu_0_name_en=Address;menu_1_name_cn=地址
