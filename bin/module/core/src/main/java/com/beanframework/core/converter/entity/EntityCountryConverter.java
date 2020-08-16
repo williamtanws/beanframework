@@ -67,15 +67,18 @@ public class EntityCountryConverter implements EntityConverter<CountryDto, Count
 
 				Iterator<Region> it = prototype.getRegions().iterator();
 				while (it.hasNext()) {
-					Region entity = it.next();
+					Region o = it.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedRegions().length; i++) {
-						if (entity.getUuid().equals(UUID.fromString(source.getSelectedRegions()[i]))) {
+						if (o.getUuid().equals(UUID.fromString(source.getSelectedRegions()[i]))) {
 							remove = false;
 						}
 					}
 					if (remove) {
+						Region entity = modelService.findOneByUuid(o.getUuid(), Region.class);
+						entity.setCountry(null);
+						modelService.saveEntity(entity, Region.class);
 						it.remove();
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
@@ -96,10 +99,23 @@ public class EntityCountryConverter implements EntityConverter<CountryDto, Count
 					if (add) {
 						Region entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedRegions()[i]), Region.class);
 						if (entity != null) {
+							entity.setCountry(prototype);
 							prototype.getRegions().add(entity);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
+				}
+			}
+			else if(prototype.getRegions() != null && prototype.getRegions().isEmpty() == false){
+				Iterator<Region> it = prototype.getRegions().iterator();
+				while (it.hasNext()) {
+					Region o = it.next();
+
+					Region entity = modelService.findOneByUuid(o.getUuid(), Region.class);
+					entity.setCountry(null);
+					modelService.saveEntity(entity, Region.class);
+					it.remove();
+					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
 		} catch (Exception e) {
