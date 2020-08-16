@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.address.domain.Address;
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.csv.AddressCsv;
+import com.beanframework.user.domain.Address;
 
 public class EntityCsvAddressConverter implements EntityCsvConverter<AddressCsv, Address> {
 

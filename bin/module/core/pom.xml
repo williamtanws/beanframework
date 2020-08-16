@@ -36,7 +36,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.beanframework</groupId>
-			<artifactId>admin</artifactId>
+			<artifactId>user</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -71,31 +71,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.beanframework</groupId>
-			<artifactId>employee</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>customer</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>vendor</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>company</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>address</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
 			<artifactId>filemanager</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -107,11 +82,6 @@
 		<dependency>
 			<groupId>com.beanframework</groupId>
 			<artifactId>menu</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>user</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

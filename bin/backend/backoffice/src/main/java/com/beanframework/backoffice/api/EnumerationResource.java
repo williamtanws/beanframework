@@ -63,7 +63,6 @@ public class EnumerationResource extends AbstractResource {
 	public DataTableResponse<EnumerationDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
-		dataTableRequest.getSkipColumnIndexes().add(2);
 		dataTableRequest.prepareDataTableRequest(request);
 
 		Page<EnumerationDto> pagination = enumerationFacade.findPage(dataTableRequest);

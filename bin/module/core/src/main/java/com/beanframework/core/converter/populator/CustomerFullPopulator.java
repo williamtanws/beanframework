@@ -14,7 +14,7 @@ import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.core.data.UserGroupDto;
-import com.beanframework.customer.domain.Customer;
+import com.beanframework.user.domain.Customer;
 
 @Component
 public class CustomerFullPopulator extends AbstractPopulator<Customer, CustomerDto> implements Populator<Customer, CustomerDto> {

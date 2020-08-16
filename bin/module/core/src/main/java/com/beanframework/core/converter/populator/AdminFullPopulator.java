@@ -4,10 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.AdminDto;
+import com.beanframework.user.domain.Admin;
 
 @Component
 public class AdminFullPopulator extends AbstractPopulator<Admin, AdminDto> implements Populator<Admin, AdminDto> {

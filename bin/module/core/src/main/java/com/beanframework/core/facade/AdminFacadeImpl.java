@@ -9,9 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.admin.domain.Admin;
-import com.beanframework.admin.service.AdminService;
-import com.beanframework.admin.specification.AdminSpecification;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -20,6 +17,9 @@ import com.beanframework.core.converter.populator.AdminBasicPopulator;
 import com.beanframework.core.converter.populator.AdminFullPopulator;
 import com.beanframework.core.converter.populator.history.AdminHistoryPopulator;
 import com.beanframework.core.data.AdminDto;
+import com.beanframework.user.domain.Admin;
+import com.beanframework.user.service.AdminService;
+import com.beanframework.user.specification.AdminSpecification;
 
 @Component
 public class AdminFacadeImpl implements AdminFacade {

@@ -15,11 +15,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
-import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.LicenseWebConstants;
+import com.beanframework.user.domain.Admin;
 import com.mchange.v1.lang.BooleanUtils;
 
 public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {

@@ -16,6 +16,8 @@ public class UserDto extends GenericDto {
 	public static final String CREDENTIALS_NON_EXPIRED = "credentialsNonExpired";
 	public static final String ENABLED = "enabled";
 	public static final String USER_GROUPS = "userGroups";
+	public static final String COMPANIES = "companies";
+	public static final String ADDRESSES = "addresses";
 	public static final String USER_ROLES = "userRoles";
 	public static final String FIELDS = "fields";
 	public static final String NAME = "name";
@@ -28,6 +30,8 @@ public class UserDto extends GenericDto {
 	private Boolean enabled;
 	private String name;
 	private List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
+	private List<CompanyDto> companies = new ArrayList<CompanyDto>();
+	private List<AddressDto> addresses = new ArrayList<AddressDto>();
 	private List<UserFieldDto> fields = new ArrayList<UserFieldDto>();
 
 	public String getType() {
@@ -100,6 +104,22 @@ public class UserDto extends GenericDto {
 
 	public void setFields(List<UserFieldDto> fields) {
 		this.fields = fields;
+	}
+
+	public List<CompanyDto> getCompanies() {
+		return companies;
+	}
+
+	public void setCompanies(List<CompanyDto> companies) {
+		this.companies = companies;
+	}
+
+	public List<AddressDto> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<AddressDto> addresses) {
+		this.addresses = addresses;
 	}
 
 }

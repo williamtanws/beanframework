@@ -78,7 +78,7 @@
 												<label for="enabled" th:text="#{module.admin.enabled}"></label>
 												<small th:text="#{module.admin.enabled.indicate}"></small>
 												<select class="form-control" name="enabled">
-													<option th:text="'&nbsp'"></option>
+													<option value="" th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{enabled == true} " th:text="#{module.backoffice.yes}"></option>
 													<option value="0" th:selected="*{enabled == false}" th:text="#{module.backoffice.no}"></option>
 												</select>
@@ -90,7 +90,7 @@
 												<label for="accountNonLocked" th:text="#{module.admin.locked}"></label>
 												<small th:text="#{module.admin.locked.indicate}"></small>
 												<select class="form-control" name="accountNonLocked">
-													<option th:text="'&nbsp'"></option>
+													<option value="" th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{accountNonLocked == true} " th:text="#{module.backoffice.no}"></option>
 													<option value="0" th:selected="*{accountNonLocked == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
@@ -102,7 +102,7 @@
 												<label for="accountNonExpired" th:text="#{module.admin.expired}"></label>
 												<small th:text="#{module.admin.expired.indicate}"></small>
 												<select class="form-control" name="accountNonExpired">
-													<option th:text="'&nbsp'"></option>
+													<option value="" th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{accountNonExpired == true} " th:text="#{module.backoffice.no}"></option>
 													<option value="0" th:selected="*{accountNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>
@@ -114,7 +114,7 @@
 												<label for="credentialsNonExpired" th:text="#{module.admin.credentials.expired}"></label>
 												<small th:text="#{module.admin.credentials.expired.indicate}"></small>
 												<select class="form-control" name="credentialsNonExpired">
-													<option th:text="'&nbsp'"></option>
+													<option value="" th:text="'&nbsp'"></option>
 													<option value="1" th:selected="*{credentialsNonExpired == true}" th:text="#{module.backoffice.no}"></option>
 													<option value="0" th:selected="*{credentialsNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
 												</select>

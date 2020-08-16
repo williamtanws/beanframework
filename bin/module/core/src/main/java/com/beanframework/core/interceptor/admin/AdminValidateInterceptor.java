@@ -1,9 +1,9 @@
 package com.beanframework.core.interceptor.admin;
 
-import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractValidateInterceptor;
+import com.beanframework.user.domain.Admin;
 
 public class AdminValidateInterceptor extends AbstractValidateInterceptor<Admin> {
 

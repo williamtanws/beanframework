@@ -64,7 +64,6 @@ public class UserRightResource extends AbstractResource {
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
-		dataTableRequest.getSkipColumnIndexes().add(2);
 		dataTableRequest.prepareDataTableRequest(request);
 
 		Page<UserRightDto> pagination = userRightFacade.findPage(dataTableRequest);

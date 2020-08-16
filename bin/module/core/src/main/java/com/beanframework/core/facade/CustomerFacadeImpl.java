@@ -18,10 +18,10 @@ import com.beanframework.core.converter.populator.CustomerBasicPopulator;
 import com.beanframework.core.converter.populator.CustomerFullPopulator;
 import com.beanframework.core.converter.populator.history.CustomerHistoryPopulator;
 import com.beanframework.core.data.CustomerDto;
-import com.beanframework.customer.domain.Customer;
-import com.beanframework.customer.service.CustomerService;
-import com.beanframework.customer.specification.CustomerSpecification;
+import com.beanframework.user.domain.Customer;
+import com.beanframework.user.service.CustomerService;
 import com.beanframework.user.service.UserService;
+import com.beanframework.user.specification.CustomerSpecification;
 
 @Component
 public class CustomerFacadeImpl implements CustomerFacade {

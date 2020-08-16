@@ -12,7 +12,7 @@ import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.CustomerDto;
-import com.beanframework.customer.domain.Customer;
+import com.beanframework.user.domain.Customer;
 
 public class DtoCustomerConverter extends AbstractDtoConverter<Customer, CustomerDto> implements DtoConverter<Customer, CustomerDto> {
 

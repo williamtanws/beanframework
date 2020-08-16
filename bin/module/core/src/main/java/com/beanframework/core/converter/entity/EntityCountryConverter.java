@@ -67,11 +67,11 @@ public class EntityCountryConverter implements EntityConverter<CountryDto, Count
 
 				Iterator<Region> it = prototype.getRegions().iterator();
 				while (it.hasNext()) {
-					Region userGroup = it.next();
+					Region entity = it.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedRegions().length; i++) {
-						if (userGroup.getUuid().equals(UUID.fromString(source.getSelectedRegions()[i]))) {
+						if (entity.getUuid().equals(UUID.fromString(source.getSelectedRegions()[i]))) {
 							remove = false;
 						}
 					}
@@ -86,9 +86,9 @@ public class EntityCountryConverter implements EntityConverter<CountryDto, Count
 					boolean add = true;
 					it = prototype.getRegions().iterator();
 					while (it.hasNext()) {
-						Region userGroup = it.next();
+						Region entity = it.next();
 
-						if (userGroup.getUuid().equals(UUID.fromString(source.getSelectedRegions()[i]))) {
+						if (entity.getUuid().equals(UUID.fromString(source.getSelectedRegions()[i]))) {
 							add = false;
 						}
 					}

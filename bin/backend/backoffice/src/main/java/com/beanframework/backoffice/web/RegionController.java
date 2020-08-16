@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -65,7 +67,7 @@ public class RegionController extends AbstractController {
 
 	@PreAuthorize(RegionPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = RegionWebConstants.Path.COMMENT, params = "create")
-	public RedirectView create(@ModelAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView create(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (regionDto.getUuid() != null) {
@@ -90,8 +92,7 @@ public class RegionController extends AbstractController {
 	}
 
 	@PostMapping(value = RegionWebConstants.Path.COMMENT, params = "update")
-	public RedirectView update(@ModelAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
-			throws Exception {
+	public RedirectView update(@ModelAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (regionDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");

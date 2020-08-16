@@ -14,7 +14,7 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CustomerDto;
-import com.beanframework.customer.domain.Customer;
+import com.beanframework.user.domain.Customer;
 
 @Component
 public class EntityCustomerProfileConverter implements EntityConverter<CustomerDto, Customer> {

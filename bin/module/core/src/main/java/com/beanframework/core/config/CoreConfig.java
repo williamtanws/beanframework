@@ -8,5 +8,4 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @Order
 public class CoreConfig {
-
 }

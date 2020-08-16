@@ -48,6 +48,8 @@ public class User extends GenericEntity {
 	public static final String CREDENTIALS_NON_EXPIRED = "credentialsNonExpired";
 	public static final String ENABLED = "enabled";
 	public static final String USER_GROUPS = "userGroups";
+	public static final String COMPANIES = "companies";
+	public static final String ADDRESSES = "addresses";
 	public static final String USER_ROLES = "userRoles";
 	public static final String FIELDS = "fields";
 	public static final String NAME = "name";
@@ -83,6 +85,21 @@ public class User extends GenericEntity {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
 	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
+
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "company_uuid"))
+	@Audited(withModifiedFlag = true)
+	@Cascade({ CascadeType.REFRESH })
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = UserConstants.Table.USER_COMPANY_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "company_uuid", referencedColumnName = "uuid"))
+	private List<Company> companies = new ArrayList<Company>();
+
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	@Audited(withModifiedFlag = true)
+	@Cascade({ CascadeType.ALL })
+	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<Address> addresses = new ArrayList<Address>();
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
@@ -173,6 +190,22 @@ public class User extends GenericEntity {
 
 	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = profilePicture;
+	}
+
+	public List<Company> getCompanies() {
+		return companies;
+	}
+
+	public void setCompanies(List<Company> companies) {
+		this.companies = companies;
+	}
+
+	public List<Address> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
 	}
 
 }

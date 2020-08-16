@@ -3,13 +3,13 @@ package com.beanframework.core.config.interceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.beanframework.admin.domain.Admin;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.core.interceptor.admin.AdminInitialDefaultsInterceptor;
 import com.beanframework.core.interceptor.admin.AdminLoadInterceptor;
 import com.beanframework.core.interceptor.admin.AdminPrepareInterceptor;
 import com.beanframework.core.interceptor.admin.AdminRemoveInterceptor;
 import com.beanframework.core.interceptor.admin.AdminValidateInterceptor;
+import com.beanframework.user.domain.Admin;
 
 @Configuration
 public class AdminInterceptorConfig {

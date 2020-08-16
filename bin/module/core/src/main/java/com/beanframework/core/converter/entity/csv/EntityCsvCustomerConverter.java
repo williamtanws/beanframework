@@ -13,10 +13,10 @@ import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.csv.CustomerCsv;
-import com.beanframework.customer.domain.Customer;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.imex.registry.ImportListener;
+import com.beanframework.user.domain.Customer;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 

@@ -15,8 +15,8 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.csv.EmployeeCsv;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
-import com.beanframework.employee.domain.Employee;
 import com.beanframework.imex.registry.ImportListener;
+import com.beanframework.user.domain.Employee;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 

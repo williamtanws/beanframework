@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="country (country)">
+		<table id="countryTable" class="table table-bordered table-hover" style="width:100%">
+			<thead>
+				<tr>
+					<th th:text="#{module.backoffice.id}" class="text-center"></th>
+					<th th:text="#{module.backoffice.name}" class="text-center"></th>
+					<th th:text="#{module.backoffice.select}" class="text-center"></th>
+				</tr>
+			</thead>
+			<thead>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+		</table>
+		<div id="selectedCountry">
+			<input type="hidden" name="selectedCountry" th:value="*{__${country}__ != null ? __${country}__.uuid : ''}" />
+		</div>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    var locale = /*[[${#locale}]]*/;
+		    
+		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.country.page')}}]]*/;
+
+		    var country = /*[[*{__${country}__ != null ? __${country}__.uuid : ''}]]*/;
+		    
+		    var countryTable = $('#countryTable').DataTable({
+	    		  'country' : {
+			        'url' : '/static/common/plugin/datatables/country/'+locale+'.json'
+			      },
+	    	      'pageLength'  : 10,
+	    	      'paging'      : true,
+	    	      'lengthChange': true,
+	    	      'searching'   : true,
+	    	      'ordering'    : true,
+	    	      'info'        : true,
+	    	      'autoWidth'   : true,
+	    	      'processing': true,
+	    	      'serverSide': true,
+	    	      'searchDelay': 1000,
+		    	  'bStateSave': true,
+	    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+	    	      "<'row'<'col-sm-12'tr>>" +
+	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+	    	      'buttons': [
+	                  {
+	                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+	                      action: function ( e, dt, node, config ) {
+	                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+	                    	  $('#countryTable').find("input:text").val("");
+	                    	  $("#countryTable").find("select").each(function () { // there is no such thing as input[type=select] 
+	                    	        this.selectedIndex = 0; // this is a <select>
+	                    	  });
+	                    	  $('#countryTable .select2').val('').trigger('change');
+	                      }
+	                  }
+	              ],
+	    	      'ajax': {
+	                    'url': ajaxUrl
+	              },
+	              'columns': [
+	                    { "data": "id" },
+	                    { "data": "name" },
+	                    { "data": "" }
+	              ],
+	    	      'columnDefs': [
+	    	            { 
+	    	                targets: 2,
+	    	                'searchable': false,
+	    	                'orderable': false,
+	    	                'className': 'text-center',
+	    	                render: function(data, type, row, meta)
+	    	                {
+	    	                   if(country == row.uuid){
+	    	                	   return "<input type='radio' value='"+row.uuid+"' name='tableSelectedCountry' checked>"; 
+	    	                   }
+	    	                   else{
+	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
+	    	                	   if(preventSelfUuid == row.uuid){
+		    	                	   return ""; 
+	    	                	   }
+	    	                	   
+	    	                	   if($('input[name="selectedCountry"]').val() == ""){
+			    	               		return "<input type='radio' value='"+row.uuid+"' name='tableSelectedCountry' required  data-val='true' data-val-required='required'><span class='help-block'></span>"; 
+	 	                		   }
+	 	                		   else{
+	 		    	               		return "<input type='radio' value='"+row.uuid+"' name='tableSelectedCountry'>"; 
+	 	                		   }
+	    	                   }
+	    	                    
+	    	                }
+	    	            },
+		            	{                                 
+		                	"targets": '_all',
+		                	"render": $.fn.dataTable.render.text()
+		                }              
+	    	       ]
+	    	});
+		    
+		    $('#countryTable').on('draw.dt', function () {
+		    	$('input').iCheck({
+					checkboxClass : 'icheckbox_square-blue',
+					radioClass : 'iradio_square-blue',
+					increaseArea : '20%' // optional
+				});
+		    });
+		    
+		    $('#countryTable').on('ifChecked', 'input[name="tableSelectedCountry"]', function () {
+	    		$('#selectedCountry [name="selectedCountry"]').remove();
+	    		$('#selectedCountry').append('<input type="hidden" name="selectedCountry" value="'+this.value+'"/>');
+	    		country = this.value;
+		    });
+		    
+		    $(document).ready(function ()
+		    {
+		    	$('#countryTable thead tr:eq(1) th').each(function(index){
+		    		if(index < 2){
+		    			var title = $('#countryTable thead tr:eq(0) th').eq( $(this).index() ).text();
+		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+		    		} else{
+			            $(this).html('');
+		    		}
+		        });
+		    	
+		    	countryTable.columns().every(function (index) {
+		    	    $('#countryTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+		    	    	countryTable.column($(this).parent().index() + ':visible')
+		    	            .search(this.value)
+		    	            .draw();
+		    	    });
+		    	});
+		    });
+		    /*]]>*/
+		</script>
+		<th:block sec:authorize="hasAuthority('country_read')">
+			<script th:inline="javascript">
+		    	/*<![CDATA[*/
+		    		$('#countryTable').on('click', 'tbody tr', function() {
+						//console.log('API row values : ', mainTable.row(this).data());
+						var uuid = countryTable.row(this).data().uuid;
+						if(uuid){
+							var url = /*[[@{${@environment.getProperty('path.country')}}]]*/;
+							url += '?uuid='+uuid+'#tab_general';
+							window.open(url, '_blank');
+						}
+					});
+		    	/*]]>*/
+			</script>
+		</th:block>
+	</th:block>
+</body>
+</html>

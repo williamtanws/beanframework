@@ -1,5 +1,6 @@
 package com.beanframework.common.utils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -64,7 +65,23 @@ public class AbstractSpecification {
 						String[] objectProperty = specs.getData().split("\\.");
 						predicates.add(cb.or(cb.like(root.get(objectProperty[0]).get(objectProperty[1]), convertToLikePattern(dataTableRequest.getSearch()))));
 					} else {
-						predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(dataTableRequest.getSearch()))));
+						try {
+							Field field = root.getJavaType().getDeclaredField(specs.getData());
+							field.setAccessible(true);
+							if (field.getType().isAssignableFrom(String.class)) {
+								predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(dataTableRequest.getSearch()))));
+							} else if (field.getType().isAssignableFrom(Integer.class)) {
+								predicates.add(cb.or(cb.equal(root.get(specs.getData()), dataTableRequest.getSearch())));
+							} else if (field.getType().isAssignableFrom(Boolean.class)) {
+								if (BooleanUtils.parseBoolean(dataTableRequest.getSearch())) {
+									predicates.add(cb.or(cb.isTrue(root.get(specs.getData()))));
+								} else {
+									predicates.add(cb.or(cb.isFalse(root.get(specs.getData()))));
+								}
+							}
+						} catch (Exception e) {
+							predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(dataTableRequest.getSearch()))));
+						}
 					}
 				}
 			}
@@ -75,7 +92,23 @@ public class AbstractSpecification {
 						String[] objectProperty = specs.getData().split("\\.");
 						predicates.add(cb.or(cb.like(root.get(objectProperty[0]).get(objectProperty[1]), convertToLikePattern(specs.getSearch()))));
 					} else {
-						predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(specs.getSearch()))));
+						try {
+							Field field = root.getJavaType().getDeclaredField(specs.getData());
+							field.setAccessible(true);
+							if (field.getType().isAssignableFrom(String.class)) {
+								predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(specs.getSearch()))));
+							} else if (field.getType().isAssignableFrom(Integer.class)) {
+								predicates.add(cb.or(cb.equal(root.get(specs.getData()), specs.getSearch())));
+							} else if (field.getType().isAssignableFrom(Boolean.class)) {
+								if (BooleanUtils.parseBoolean(specs.getSearch())) {
+									predicates.add(cb.or(cb.isTrue(root.get(specs.getData()))));
+								} else {
+									predicates.add(cb.or(cb.isFalse(root.get(specs.getData()))));
+								}
+							}
+						} catch (Exception e) {
+							predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(specs.getSearch()))));
+						}
 					}
 				}
 			}

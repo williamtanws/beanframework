@@ -15,13 +15,13 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.company.domain.Company;
-import com.beanframework.company.service.CompanyService;
-import com.beanframework.company.specification.CompanySpecification;
 import com.beanframework.core.converter.populator.CompanyBasicPopulator;
 import com.beanframework.core.converter.populator.CompanyFullPopulator;
 import com.beanframework.core.converter.populator.history.CompanyHistoryPopulator;
 import com.beanframework.core.data.CompanyDto;
+import com.beanframework.user.domain.Company;
+import com.beanframework.user.service.CompanyService;
+import com.beanframework.user.specification.CompanySpecification;
 
 @Component
 public class CompanyFacadeImpl implements CompanyFacade {

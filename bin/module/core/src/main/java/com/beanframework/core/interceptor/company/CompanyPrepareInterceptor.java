@@ -3,7 +3,7 @@ package com.beanframework.core.interceptor.company;
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractPrepareInterceptor;
-import com.beanframework.company.domain.Company;
+import com.beanframework.user.domain.Company;
 
 public class CompanyPrepareInterceptor extends AbstractPrepareInterceptor<Company> {
 

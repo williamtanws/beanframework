@@ -16,7 +16,7 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.data.UserFieldDto;
-import com.beanframework.employee.domain.Employee;
+import com.beanframework.user.domain.Employee;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Employee> {

@@ -9,14 +9,14 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.address.domain.Address;
 import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.company.domain.Company;
 import com.beanframework.core.data.CompanyDto;
 import com.beanframework.internationalization.domain.Country;
+import com.beanframework.user.domain.Address;
+import com.beanframework.user.domain.Company;
 
 public class EntityCompanyConverter implements EntityConverter<CompanyDto, Company> {
 
