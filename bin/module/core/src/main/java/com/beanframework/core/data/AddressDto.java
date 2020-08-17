@@ -37,9 +37,20 @@ public class AddressDto extends GenericDto {
 	private String district;
 	private UserDto owner;
 
+	private AddressDto shippingAddress;
+	private AddressDto billingAddress;
+	private AddressDto contactAddress;
+	private AddressDto defaultPaymentAddress;
+	private AddressDto defaultShipmentAddress;
+
 	private String selectedCountry;
 	private String selectedRegion;
 	private String selectedOwner;
+	private String selectedShippingAddress;
+	private String selectedBillingAddress;
+	private String selectedContactAddress;
+	private String selectedDefaultPaymentAddress;
+	private String selectedDefaultShipmentAddress;
 
 	public String getStreetName() {
 		return streetName;
@@ -247,6 +258,86 @@ public class AddressDto extends GenericDto {
 
 	public void setSelectedOwner(String selectedOwner) {
 		this.selectedOwner = selectedOwner;
+	}
+
+	public AddressDto getShippingAddress() {
+		return shippingAddress;
+	}
+
+	public void setShippingAddress(AddressDto shippingAddress) {
+		this.shippingAddress = shippingAddress;
+	}
+
+	public AddressDto getBillingAddress() {
+		return billingAddress;
+	}
+
+	public void setBillingAddress(AddressDto billingAddress) {
+		this.billingAddress = billingAddress;
+	}
+
+	public AddressDto getContactAddress() {
+		return contactAddress;
+	}
+
+	public void setContactAddress(AddressDto contactAddress) {
+		this.contactAddress = contactAddress;
+	}
+
+	public AddressDto getDefaultPaymentAddress() {
+		return defaultPaymentAddress;
+	}
+
+	public void setDefaultPaymentAddress(AddressDto defaultPaymentAddress) {
+		this.defaultPaymentAddress = defaultPaymentAddress;
+	}
+
+	public AddressDto getDefaultShipmentAddress() {
+		return defaultShipmentAddress;
+	}
+
+	public void setDefaultShipmentAddress(AddressDto defaultShipmentAddress) {
+		this.defaultShipmentAddress = defaultShipmentAddress;
+	}
+
+	public String getSelectedShippingAddress() {
+		return selectedShippingAddress;
+	}
+
+	public void setSelectedShippingAddress(String selectedShippingAddress) {
+		this.selectedShippingAddress = selectedShippingAddress;
+	}
+
+	public String getSelectedBillingAddress() {
+		return selectedBillingAddress;
+	}
+
+	public void setSelectedBillingAddress(String selectedBillingAddress) {
+		this.selectedBillingAddress = selectedBillingAddress;
+	}
+
+	public String getSelectedContactAddress() {
+		return selectedContactAddress;
+	}
+
+	public void setSelectedContactAddress(String selectedContactAddress) {
+		this.selectedContactAddress = selectedContactAddress;
+	}
+
+	public String getSelectedDefaultPaymentAddress() {
+		return selectedDefaultPaymentAddress;
+	}
+
+	public void setSelectedDefaultPaymentAddress(String selectedDefaultPaymentAddress) {
+		this.selectedDefaultPaymentAddress = selectedDefaultPaymentAddress;
+	}
+
+	public String getSelectedDefaultShipmentAddress() {
+		return selectedDefaultShipmentAddress;
+	}
+
+	public void setSelectedDefaultShipmentAddress(String selectedDefaultShipmentAddress) {
+		this.selectedDefaultShipmentAddress = selectedDefaultShipmentAddress;
 	}
 
 }

@@ -180,7 +180,6 @@
 					    	      'serverSide': true,
 					    	      'searchDelay': 1000,
 						    	  'bStateSave': false,
-						    	  'select' : true,
 					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
 					    	      "<'row'<'col-sm-12'tr>>" +
 					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
@@ -256,7 +255,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
-						<button type="button" th:onclick="addSelect('selectedRegions','regionTable','selectedRegionTable')" class="btn btn-primary" data-dismiss="modal" th:text="'  '+#{module.backoffice.select}+'  '"></button>
+						<button type="button" th:onclick="addSelects('selectedRegions','regionTable','selectedRegionTable')" class="btn btn-primary" data-dismiss="modal" th:text="'  '+#{module.backoffice.select}+'  '"></button>
 					</div>
 				</div>
 				<!-- /.modal-content -->

@@ -37,12 +37,6 @@
 							<li class="active">
 								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
 							</li>
-							<li sec:authorize="hasAuthority('language_read')">
-								<a href="#tab_language" data-toggle="tab" th:text="#{module.language}" onclick="changeTab('language')"></a>
-							</li>
-							<li sec:authorize="hasAuthority('enumeration_read')">
-								<a href="#tab_enumeration" data-toggle="tab" th:text="#{module.enumeration}" onclick="changeTab('enumeration')"></a>
-							</li>
 							<li th:if="*{uuid != null}">
 								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
 							</li>
@@ -113,72 +107,79 @@
 											</div>
 										</div>
 									</div>
-								</div>
-								<!-- /.box-body -->
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_language" sec:authorize="hasAuthority('language_read')">
-								<div class="box-body">
-									<div class="row" style="border-bottom: 5px solid #f4f4f4; margin-bottom: 20px;" th:if="*{uuid != null}">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label th:text="#{module.dynamicfield.language.selected}"></label>
-												<span>:</span>
-												<span class="text-block" th:text="*{language != null} ? *{language.name}"></span>
-												<span>[</span>
-												<span class="text-block" th:text="*{language != null} ? *{language.id}"></span>
-												<span>]</span>
-											</div>
-										</div>
-									</div>
 									<div class="row">
-										<div class="col-md-12">
+										<div class="col-md-6">
 											<div class="form-group">
-												<label th:text="#{module.dynamicfield.language.select}"></label>
-											</div>	
-											<th:block layout:insert="~{common/adminlte/common/component/language :: language (language='language')}"></th:block>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_enumeration" sec:authorize="hasAuthority('enumeration_read')">
-								<div class="box-body">
-									<div class="row" style="border-bottom: 1px solid #f4f4f4; margin-bottom: 20px;" th:if="*{uuid != null}">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label th:text="#{module.dynamicfield.enumeration.selected}"></label>
-												<span>:</span>
-												<table class="table table-bordered" id="enumerations-table">
+												<label for="language" th:text="#{module.dynamicfield.language}"></label>
+												&nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-language"><i class="fa fa-edit color"></i></button>
+												<table class="table table-bordered table-hover" id="selectedLanguageTable">
 													<thead>
 														<tr>
-															<th class="text-center" th:text="#{module.backoffice.id}"></th>
-															<th class="text-center" th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
 														</tr>
 													</thead>
 													<tbody>
-														<tr th:each="enum : *{enumerations}">
+														<tr th:id="'row'+*{language.uuid}" th:if="*{language != null}">
 															<td>
-																<span th:text="${enum.id}"></span>
+																<span th:text="*{language.id}"></span>
 															</td>
 															<td>
-																<span th:text="${enum.name}"></span>
+																<span th:text="*{language.name}"></span>
+															</td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedLanguage', [[*{language.uuid}]]);"><i class="fa fa-minus color"></i></button>
 															</td>
 														</tr>
 													</tbody>
 												</table>
+												<span class="help-block"></span>
+												<div id="selectedLanguage">
+													<input type="hidden" name="selectedLanguage" th:value="*{language == null ? '':language.uuid}" />
+												</div>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="active" th:text="#{module.dynamicfield.enumerations}"></label>
+												&nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-enumeration"><i class="fa fa-plus color"></i></button>
+												<table class="table table-bordered table-hover" id="selectedEnumerationTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="enumeration : *{enumerations}" th:id="'row'+${enumeration.uuid}">
+															<td>
+																<span th:text="${enumeration.id}"></span>
+															</td>
+															<td>
+																<span th:text="${enumeration.name}"></span>
+															</td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedEnumerations', [[${enumeration.uuid}]]);"><i class="fa fa-minus color"></i></button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedEnumerations">
+													<th:block th:each="enumeration : *{enumerations}">
+														<input type="hidden" name="selectedEnumerations" th:value="${enumeration.uuid}" />
+													</th:block>
+												</div>
 											</div>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label th:text="#{module.dynamicfield.enumeration.select}"></label>
-											</div>	
-											<th:block layout:insert="~{common/adminlte/common/component/enumeration :: enumeration (enumerations='enumerations')}"></th:block>
-										</div>
-									</div>
 								</div>
+								<!-- /.box-body -->
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
@@ -201,35 +202,269 @@
 				<!-- /.col -->
 			</div>
 		</form>
+		<div class="modal fade" id="modal-language">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.region.language}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="languageTable" class="table table-bordered table-hover" style="width:100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.language.page')}}]]*/;
+						    
+						    var languageTable = $('#languageTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#languageTable').find("input:text").val("");
+					                    	  $("#languageTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#languageTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedLanguage'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#languageTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#languageTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	languageTable.columns().every(function (index) {
+						    	    $('#languageTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	languageTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelect('selectedLanguage','languageTable','selectedLanguageTable')" class="btn btn-primary" data-dismiss="modal" th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal fade" id="modal-enumeration">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.dynamicfield.enumerations}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="enumerationTable" class="table table-bordered table-hover" style="width:100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.enumeration.page')}}]]*/;
+						    
+						    var enumerationTable = $('#enumerationTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#enumerationTable').find("input:text").val("");
+					                    	  $("#enumerationTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#enumerationTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedEnumerations'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#enumerationTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#enumerationTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	enumerationTable.columns().every(function (index) {
+						    	    $('#enumerationTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	enumerationTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelects('selectedEnumerations','enumerationTable','selectedEnumerationTable')" class="btn btn-primary" data-dismiss="modal" th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
-		    $(document).ready(function() {
-		    	
-		    	$('#enumerations-table').DataTable({
-				      'paging'      : true,
-				      'lengthChange': true,
-				      'searching'   : true,
-				      'ordering'    : true,
-				      'info'        : true,
-				      'autoWidth'   : true,
-				      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
-		    	      "<'row'<'col-sm-12'tr>>" +
-		    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-		    	      'buttons': [
-		                  {
-		                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
-		                      action: function ( e, dt, node, config ) {
-		                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
-		                    	  $('#enumerations-table').find("input:text").val("");
-		                    	  $("#enumerations-table").find("select").each(function () { // there is no such thing as input[type=select] 
-		                    	        this.selectedIndex = 0; // this is a <select>
-		                    	  });
-		                    	  $('#enumerations-table .select2').val('').trigger('change');
-		                      }
-		                  }
-		              ]
-				});
-		    	
+		   $(document).ready(function() { 	
 		        $('#update-form').validate({
 		        	onkeyup: function(element) {
 		                this.element(element);

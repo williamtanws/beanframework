@@ -33,6 +33,10 @@ public class Address extends GenericEntity {
 	 */
 	private static final long serialVersionUID = 7791727441562748178L;
 
+	//
+	public static final String OWNER = "owner";
+
+	//
 	public static final String STREET_NAME = "streetName";
 	public static final String STREET_NUMBER = "streetNumber";
 	public static final String POSTAL_CODE = "postalCode";
@@ -60,13 +64,18 @@ public class Address extends GenericEntity {
 	public static final String REGION = "region";
 	public static final String DISTRICT = "district";
 
+	//
 	public static final String SHIPPING_ADDRESS = "shippingAddress";
 	public static final String BILLING_ADDRESS = "billingAddress";
 	public static final String CONTACT_ADDRESS = "contactAddress";
 	public static final String DEFAULT_PAYMENT_ADDRESS = "defaultPaymentAddress";
 	public static final String DEFAULT_SHIPMENT_ADDRESS = "defaultShipmentAddress";
 
-	public static final String OWNER = "owner";
+	@Audited(withModifiedFlag = true)
+	@Cascade({ CascadeType.REFRESH })
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_uuid")
+	private User owner;
 
 	// General
 	@Audited(withModifiedFlag = true)
@@ -127,11 +136,39 @@ public class Address extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String district;
 
+	//
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_uuid")
-	private User owner;
+	@JoinColumn(name = "shippingAddress_uuid")
+	private Address shippingAddress;
+
+	@Audited(withModifiedFlag = true)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "billingAddress_uuid")
+	private Address billingAddress;
+
+	@Audited(withModifiedFlag = true)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "contactAddress_uuid")
+	private Address contactAddress;
+
+	@Audited(withModifiedFlag = true)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "defaultPaymentAddress_uuid")
+	private Address defaultPaymentAddress;
+
+	@Audited(withModifiedFlag = true)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "defaultShipmentAddress_uuid")
+	private Address defaultShipmentAddress;
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
 
 	public String getStreetName() {
 		return streetName;
@@ -309,12 +346,44 @@ public class Address extends GenericEntity {
 		this.district = district;
 	}
 
-	public User getOwner() {
-		return owner;
+	public Address getShippingAddress() {
+		return shippingAddress;
 	}
 
-	public void setOwner(User owner) {
-		this.owner = owner;
+	public void setShippingAddress(Address shippingAddress) {
+		this.shippingAddress = shippingAddress;
+	}
+
+	public Address getBillingAddress() {
+		return billingAddress;
+	}
+
+	public void setBillingAddress(Address billingAddress) {
+		this.billingAddress = billingAddress;
+	}
+
+	public Address getContactAddress() {
+		return contactAddress;
+	}
+
+	public void setContactAddress(Address contactAddress) {
+		this.contactAddress = contactAddress;
+	}
+
+	public Address getDefaultPaymentAddress() {
+		return defaultPaymentAddress;
+	}
+
+	public void setDefaultPaymentAddress(Address defaultPaymentAddress) {
+		this.defaultPaymentAddress = defaultPaymentAddress;
+	}
+
+	public Address getDefaultShipmentAddress() {
+		return defaultShipmentAddress;
+	}
+
+	public void setDefaultShipmentAddress(Address defaultShipmentAddress) {
+		this.defaultShipmentAddress = defaultShipmentAddress;
 	}
 
 }
