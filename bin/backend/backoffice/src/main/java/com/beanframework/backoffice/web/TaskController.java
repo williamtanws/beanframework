@@ -2,6 +2,8 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.flowable.task.api.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +39,7 @@ public class TaskController extends AbstractController {
 
 	@PreAuthorize(TaskPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = TaskWebConstants.Path.TASK)
-	public String list(@ModelAttribute(TaskWebConstants.ModelAttribute.TASK_DTO) Task task, @RequestParam Map<String, Object> requestParams, Model model) throws Exception {
+	public String list(@Valid @ModelAttribute(TaskWebConstants.ModelAttribute.TASK_DTO) Task task, @RequestParam Map<String, Object> requestParams, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (requestParams.get("id") != null) {
@@ -56,7 +58,7 @@ public class TaskController extends AbstractController {
 
 	@PreAuthorize(TaskPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = TaskWebConstants.Path.TASK, params = "update")
-	public RedirectView update(@ModelAttribute(TaskWebConstants.ModelAttribute.TASK_DTO) Task task, @RequestParam Map<String, Object> requestParams, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView update(@Valid @ModelAttribute(TaskWebConstants.ModelAttribute.TASK_DTO) Task task, @RequestParam Map<String, Object> requestParams, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (task.getId() == null) {

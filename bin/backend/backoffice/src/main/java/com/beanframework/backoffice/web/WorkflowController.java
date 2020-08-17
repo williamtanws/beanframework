@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class WorkflowController extends AbstractController {
 
 	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = WorkflowWebConstants.Path.WORKFLOW)
-	public String list(@ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model) throws Exception {
+	public String list(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (workflowDto.getUuid() != null) {
@@ -53,7 +55,7 @@ public class WorkflowController extends AbstractController {
 
 	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = WorkflowWebConstants.Path.WORKFLOW, params = "create")
-	public String createView(@ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model) throws Exception {
 
 		workflowDto = workflowFacade.createDto();
 		model.addAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO, workflowDto);
@@ -64,7 +66,7 @@ public class WorkflowController extends AbstractController {
 
 	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = WorkflowWebConstants.Path.WORKFLOW, params = "create")
-	public RedirectView create(@ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView create(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (workflowDto.getUuid() != null) {
@@ -90,7 +92,7 @@ public class WorkflowController extends AbstractController {
 
 	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = WorkflowWebConstants.Path.WORKFLOW, params = "update")
-	public RedirectView update(@ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView update(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (workflowDto.getUuid() == null) {
@@ -116,7 +118,7 @@ public class WorkflowController extends AbstractController {
 
 	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = WorkflowWebConstants.Path.WORKFLOW, params = "delete")
-	public RedirectView delete(@ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			workflowFacade.delete(workflowDto.getUuid());

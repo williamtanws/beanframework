@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +50,7 @@ public class CronjobController extends AbstractController {
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB)
-	public String list(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 
 		if (cronjobDto.getUuid() != null) {
@@ -69,7 +71,7 @@ public class CronjobController extends AbstractController {
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB, params = "create")
-	public String createView(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model) throws Exception {
 
 		cronjobDto = cronjobFacade.createDto();
 		model.addAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO, cronjobDto);
@@ -80,7 +82,7 @@ public class CronjobController extends AbstractController {
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "create")
-	public RedirectView create(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (cronjobDto.getUuid() != null) {
@@ -105,7 +107,7 @@ public class CronjobController extends AbstractController {
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "update")
-	public RedirectView update(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (cronjobDto.getUuid() == null) {
@@ -131,7 +133,7 @@ public class CronjobController extends AbstractController {
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "delete")
-	public RedirectView delete(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {
@@ -152,7 +154,7 @@ public class CronjobController extends AbstractController {
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "trigger")
-	public RedirectView trigger(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
+	public RedirectView trigger(@Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws ParseException {
 
 		if (cronjobDto.getUuid() == null) {
@@ -184,7 +186,7 @@ public class CronjobController extends AbstractController {
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "createjobdata")
-	public RedirectView createjobdata(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
+	public RedirectView createjobdata(@Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (cronjobDto.getUuid() == null) {
@@ -217,7 +219,7 @@ public class CronjobController extends AbstractController {
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = CronjobWebConstants.Path.CRONJOB, params = "deletejobdata")
-	public RedirectView deletejobdata(@ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CustomerDto cronjobDto, Model model, BindingResult bindingResult,
+	public RedirectView deletejobdata(@Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CustomerDto cronjobDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (cronjobDto.getUuid() == null) {

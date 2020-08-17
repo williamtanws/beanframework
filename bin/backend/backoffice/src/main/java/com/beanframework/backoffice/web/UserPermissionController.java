@@ -2,6 +2,8 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +39,7 @@ public class UserPermissionController extends AbstractController {
 
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION)
-	public String list(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, @RequestParam Map<String, Object> requestParams)
+	public String list(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		model.addAttribute("create", false);
 
@@ -58,7 +60,7 @@ public class UserPermissionController extends AbstractController {
 
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "create")
-	public String createView(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model) throws Exception {
 
 		userpermissionDto = userPermissionFacade.createDto();
 		model.addAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO, userpermissionDto);
@@ -69,7 +71,7 @@ public class UserPermissionController extends AbstractController {
 
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "create")
-	public RedirectView create(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (userpermissionDto.getUuid() != null) {
@@ -95,7 +97,7 @@ public class UserPermissionController extends AbstractController {
 
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "update")
-	public RedirectView update(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (userpermissionDto.getUuid() == null) {
@@ -120,7 +122,7 @@ public class UserPermissionController extends AbstractController {
 
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION, params = "delete")
-	public RedirectView delete(@ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userpermissionDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {

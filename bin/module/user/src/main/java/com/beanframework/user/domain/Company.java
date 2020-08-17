@@ -25,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.internationalization.domain.Country;
-import com.beanframework.user.BusinessLineType;
+import com.beanframework.user.LineOfBusinessType;
 import com.beanframework.user.CompanyConstants;
 
 @Cacheable
@@ -87,7 +87,7 @@ public class Company extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
-	private BusinessLineType lineOfBusiness;
+	private LineOfBusinessType lineOfBusiness;
 
 	@Audited(withModifiedFlag = true)
 	private Boolean buyer;
@@ -188,11 +188,11 @@ public class Company extends GenericEntity {
 		this.country = country;
 	}
 
-	public BusinessLineType getLineOfBusiness() {
+	public LineOfBusinessType getLineOfBusiness() {
 		return lineOfBusiness;
 	}
 
-	public void setLineOfBusiness(BusinessLineType lineOfBusiness) {
+	public void setLineOfBusiness(LineOfBusinessType lineOfBusiness) {
 		this.lineOfBusiness = lineOfBusiness;
 	}
 

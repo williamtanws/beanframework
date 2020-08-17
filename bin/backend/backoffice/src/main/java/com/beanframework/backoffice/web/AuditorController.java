@@ -2,6 +2,8 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +34,7 @@ public class AuditorController extends AbstractController {
 
 	@PreAuthorize(PreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = AuditorWebConstants.Path.AUDITOR)
-	public String list(@ModelAttribute(AuditorWebConstants.ModelAttribute.AUDITOR_DTO) AuditorDto auditorDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@Valid @ModelAttribute(AuditorWebConstants.ModelAttribute.AUDITOR_DTO) AuditorDto auditorDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 
 		if (auditorDto.getUuid() != null) {

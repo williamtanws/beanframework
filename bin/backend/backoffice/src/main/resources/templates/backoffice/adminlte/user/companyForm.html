@@ -59,6 +59,70 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="description" th:text="#{module.company.description}"></label>
+												<textarea class="form-control" name="description" th:text="*{description}"></textarea>
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="vendorDocumentType" th:text="#{module.company.lineOfBusiness}"></label>
+												<select name="lineOfBusiness" class="form-control">
+													<option value="" th:text="'&nbsp'"></option>
+													<option th:each="state: ${T(com.beanframework.user.LineOfBusinessType).values()}" th:value="${state.name()}" th:text="${state}"
+														th:selected="*{LineOfBusiness == state}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="active" th:text="#{module.region.buyer}"></label>
+												<select class="form-control" name="buyer">
+													<option value="" th:text="'&nbsp'"></option>
+													<option value="1" th:selected="*{active == true}" th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="*{active == false}" th:text="#{module.backoffice.no}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="active" th:text="#{module.region.manufacturer}"></label>
+												<select class="form-control" name="manufacturer">
+													<option value="" th:text="'&nbsp'"></option>
+													<option value="1" th:selected="*{active == true}" th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="*{active == false}" th:text="#{module.backoffice.no}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="active" th:text="#{module.region.supplier}"></label>
+												<select class="form-control" name="supplier">
+													<option value="" th:text="'&nbsp'"></option>
+													<option value="1" th:selected="*{active == true}" th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="*{active == false}" th:text="#{module.backoffice.no}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="active" th:text="#{module.region.carrier}"></label>
+												<select class="form-control" name="carrier">
+													<option value="" th:text="'&nbsp'"></option>
+													<option value="1" th:selected="*{active == true}" th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="*{active == false}" th:text="#{module.backoffice.no}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
 									</div>
 								</div>
 								<!-- /.box-body -->

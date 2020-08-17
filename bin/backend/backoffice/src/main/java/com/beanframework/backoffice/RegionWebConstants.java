@@ -10,7 +10,7 @@ public interface RegionWebConstants {
 			public static final String HISTORY = "${path.api.region.history}";
 		}
 
-		public static final String COMMENT = "${path.region}";
+		public static final String REGION = "${path.region}";
 	}
 
 	public interface View {
@@ -19,6 +19,6 @@ public interface RegionWebConstants {
 
 	public interface ModelAttribute {
 
-		public static final String COMMENT_DTO = "regionDto";
+		public static final String REGION_DTO = "regionDto";
 	}
 }

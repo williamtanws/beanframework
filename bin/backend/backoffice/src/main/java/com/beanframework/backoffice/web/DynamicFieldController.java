@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class DynamicFieldController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD)
-	public String list(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, Model model) throws Exception {
+	public String list(@Valid @ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (dynamicFieldDto.getUuid() != null) {
@@ -55,7 +57,7 @@ public class DynamicFieldController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "create")
-	public String createView(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, Model model) throws Exception {
 
 		dynamicFieldDto = dynamicFieldFacade.createDto();
 		model.addAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO, dynamicFieldDto);
@@ -66,7 +68,7 @@ public class DynamicFieldController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "create")
-	public RedirectView create(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@Valid @ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (dynamicFieldDto.getUuid() != null) {
@@ -92,7 +94,7 @@ public class DynamicFieldController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "update")
-	public RedirectView update(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (dynamicFieldDto.getUuid() == null) {
@@ -117,7 +119,7 @@ public class DynamicFieldController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD, params = "delete")
-	public RedirectView delete(@ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
 
 		try {

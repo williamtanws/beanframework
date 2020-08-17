@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class SiteController extends AbstractController {
 
 	@PreAuthorize(SitePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = SiteWebConstants.Path.SITE)
-	public String list(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model) throws Exception {
+	public String list(@Valid @ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (siteDto.getUuid() != null) {
@@ -53,7 +55,7 @@ public class SiteController extends AbstractController {
 
 	@PreAuthorize(SitePreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = SiteWebConstants.Path.SITE, params = "create")
-	public String createView(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model) throws Exception {
 
 		siteDto = siteFacade.createDto();
 		model.addAttribute(SiteWebConstants.ModelAttribute.SITE_DTO, siteDto);
@@ -64,7 +66,7 @@ public class SiteController extends AbstractController {
 
 	@PreAuthorize(SitePreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = SiteWebConstants.Path.SITE, params = "create")
-	public RedirectView create(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView create(@Valid @ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (siteDto.getUuid() != null) {
@@ -90,7 +92,7 @@ public class SiteController extends AbstractController {
 
 	@PreAuthorize(SitePreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = SiteWebConstants.Path.SITE, params = "update")
-	public RedirectView update(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView update(@Valid @ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (siteDto.getUuid() == null) {
@@ -116,7 +118,7 @@ public class SiteController extends AbstractController {
 
 	@PreAuthorize(SitePreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = SiteWebConstants.Path.SITE, params = "delete")
-	public RedirectView delete(@ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@Valid @ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			siteFacade.delete(siteDto.getUuid());

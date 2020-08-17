@@ -50,6 +50,10 @@
 	color: #e6cd69;
 }
 
+.fa-minus.color {
+	color: #ffa500;
+}
+
 .select2 {
 	width: 100%;
 }

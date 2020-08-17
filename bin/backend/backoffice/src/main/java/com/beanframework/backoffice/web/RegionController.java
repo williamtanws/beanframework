@@ -28,15 +28,15 @@ public class RegionController extends AbstractController {
 	@Autowired
 	private RegionFacade regionFacade;
 
-	@Value(RegionWebConstants.Path.COMMENT)
+	@Value(RegionWebConstants.Path.REGION)
 	private String PATH_COMMENT;
 
 	@Value(RegionWebConstants.View.LIST)
 	private String VIEW_COMMENT_LIST;
 
 	@PreAuthorize(RegionPreAuthorizeEnum.HAS_READ)
-	@GetMapping(value = RegionWebConstants.Path.COMMENT)
-	public String list(@ModelAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO) RegionDto regionDto, Model model) throws Exception {
+	@GetMapping(value = RegionWebConstants.Path.REGION)
+	public String list(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto regionDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (regionDto.getUuid() != null) {
@@ -44,7 +44,7 @@ public class RegionController extends AbstractController {
 			RegionDto existsDto = regionFacade.findOneByUuid(regionDto.getUuid());
 
 			if (existsDto != null) {
-				model.addAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO, existsDto);
+				model.addAttribute(RegionWebConstants.ModelAttribute.REGION_DTO, existsDto);
 			} else {
 				regionDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
@@ -55,19 +55,19 @@ public class RegionController extends AbstractController {
 	}
 
 	@PreAuthorize(RegionPreAuthorizeEnum.HAS_CREATE)
-	@GetMapping(value = RegionWebConstants.Path.COMMENT, params = "create")
-	public String createView(@ModelAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO) RegionDto regionDto, Model model) throws Exception {
+	@GetMapping(value = RegionWebConstants.Path.REGION, params = "create")
+	public String createView(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto regionDto, Model model) throws Exception {
 
 		regionDto = regionFacade.createDto();
-		model.addAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO, regionDto);
+		model.addAttribute(RegionWebConstants.ModelAttribute.REGION_DTO, regionDto);
 		model.addAttribute("create", true);
 
 		return VIEW_COMMENT_LIST;
 	}
 
 	@PreAuthorize(RegionPreAuthorizeEnum.HAS_CREATE)
-	@PostMapping(value = RegionWebConstants.Path.COMMENT, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	@PostMapping(value = RegionWebConstants.Path.REGION, params = "create")
+	public RedirectView create(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (regionDto.getUuid() != null) {
@@ -91,8 +91,8 @@ public class RegionController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = RegionWebConstants.Path.COMMENT, params = "update")
-	public RedirectView update(@ModelAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
+	@PostMapping(value = RegionWebConstants.Path.REGION, params = "update")
+	public RedirectView update(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (regionDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
@@ -116,8 +116,8 @@ public class RegionController extends AbstractController {
 	}
 
 	@PreAuthorize(RegionPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = RegionWebConstants.Path.COMMENT, params = "delete")
-	public RedirectView delete(@ModelAttribute(RegionWebConstants.ModelAttribute.COMMENT_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	@PostMapping(value = RegionWebConstants.Path.REGION, params = "delete")
+	public RedirectView delete(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			regionFacade.delete(regionDto.getUuid());
