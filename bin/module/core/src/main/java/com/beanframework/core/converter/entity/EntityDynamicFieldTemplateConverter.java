@@ -100,6 +100,13 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 					}
 				}
 			}
+			else if(prototype.getDynamicFieldSlots() != null && prototype.getDynamicFieldSlots().isEmpty() == false){
+				for (final Iterator<DynamicFieldSlot> itr = prototype.getDynamicFieldSlots().iterator(); itr.hasNext();) {
+					itr.next();
+				    itr.remove(); 
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			}
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

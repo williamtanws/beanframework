@@ -77,82 +77,82 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 				prototype.setCompany(StringUtils.stripToNull(source.getCompany()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getPhone1()), prototype.getPhone1()) == Boolean.FALSE) {
 				prototype.setPhone1(StringUtils.stripToNull(source.getPhone1()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getPhone2()), prototype.getPhone2()) == Boolean.FALSE) {
 				prototype.setPhone2(StringUtils.stripToNull(source.getPhone2()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getMobilePhone()), prototype.getMobilePhone()) == Boolean.FALSE) {
 				prototype.setMobilePhone(StringUtils.stripToNull(source.getMobilePhone()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getEmail()), prototype.getEmail()) == Boolean.FALSE) {
 				prototype.setEmail(StringUtils.stripToNull(source.getEmail()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getPoBox()), prototype.getPoBox()) == Boolean.FALSE) {
 				prototype.setPoBox(StringUtils.stripToNull(source.getPoBox()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getFax()), prototype.getFax()) == Boolean.FALSE) {
 				prototype.setFax(StringUtils.stripToNull(source.getFax()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getTitle()), prototype.getTitle()) == Boolean.FALSE) {
 				prototype.setTitle(StringUtils.stripToNull(source.getTitle()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getLastName()), prototype.getLastName()) == Boolean.FALSE) {
 				prototype.setLastName(StringUtils.stripToNull(source.getLastName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getFirstName()), prototype.getFirstName()) == Boolean.FALSE) {
 				prototype.setFirstName(StringUtils.stripToNull(source.getFirstName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getMiddleName()), prototype.getMiddleName()) == Boolean.FALSE) {
 				prototype.setMiddleName(StringUtils.stripToNull(source.getMiddleName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getMiddleName2()), prototype.getMiddleName2()) == Boolean.FALSE) {
 				prototype.setMiddleName2(StringUtils.stripToNull(source.getMiddleName2()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getDepartment()), prototype.getDepartment()) == Boolean.FALSE) {
 				prototype.setDepartment(StringUtils.stripToNull(source.getDepartment()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getBuilding()), prototype.getBuilding()) == Boolean.FALSE) {
 				prototype.setBuilding(StringUtils.stripToNull(source.getBuilding()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getApartment()), prototype.getApartment()) == Boolean.FALSE) {
 				prototype.setApartment(StringUtils.stripToNull(source.getApartment()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			if (StringUtils.equals(StringUtils.stripToNull(source.getDistrict()), prototype.getDistrict()) == Boolean.FALSE) {
 				prototype.setDistrict(StringUtils.stripToNull(source.getDistrict()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
-			
+
 			// Country
 			if (StringUtils.isBlank(source.getSelectedCountry())) {
 				if (prototype.getCountry() != null) {
@@ -210,6 +210,106 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 					}
 				} else {
 					throw new ConverterException("Owner UUID not found: " + source.getSelectedOwner());
+				}
+			}
+
+			// ShippingAddress
+			if (StringUtils.isBlank(source.getSelectedShippingAddress())) {
+				if (prototype.getShippingAddress() != null) {
+					prototype.setShippingAddress(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedShippingAddress()), Address.class);
+
+				if (entity != null) {
+
+					if (prototype.getShippingAddress() == null || prototype.getShippingAddress().getUuid().equals(entity.getUuid()) == false) {
+						prototype.setShippingAddress(entity);
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				} else {
+					throw new ConverterException("ShippingAddress UUID not found: " + source.getSelectedShippingAddress());
+				}
+			}
+
+			// BillingAddress
+			if (StringUtils.isBlank(source.getSelectedBillingAddress())) {
+				if (prototype.getBillingAddress() != null) {
+					prototype.setBillingAddress(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedBillingAddress()), Address.class);
+
+				if (entity != null) {
+
+					if (prototype.getBillingAddress() == null || prototype.getBillingAddress().getUuid().equals(entity.getUuid()) == false) {
+						prototype.setBillingAddress(entity);
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				} else {
+					throw new ConverterException("BillingAddress UUID not found: " + source.getSelectedBillingAddress());
+				}
+			}
+
+			// ContactAddress
+			if (StringUtils.isBlank(source.getSelectedContactAddress())) {
+				if (prototype.getContactAddress() != null) {
+					prototype.setContactAddress(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedContactAddress()), Address.class);
+
+				if (entity != null) {
+
+					if (prototype.getContactAddress() == null || prototype.getContactAddress().getUuid().equals(entity.getUuid()) == false) {
+						prototype.setContactAddress(entity);
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				} else {
+					throw new ConverterException("ContactAddress UUID not found: " + source.getSelectedContactAddress());
+				}
+			}
+
+			// DefaultPaymentAddress
+			if (StringUtils.isBlank(source.getSelectedDefaultPaymentAddress())) {
+				if (prototype.getDefaultPaymentAddress() != null) {
+					prototype.setDefaultPaymentAddress(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedDefaultPaymentAddress()), Address.class);
+
+				if (entity != null) {
+
+					if (prototype.getDefaultPaymentAddress() == null || prototype.getDefaultPaymentAddress().getUuid().equals(entity.getUuid()) == false) {
+						prototype.setDefaultPaymentAddress(entity);
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				} else {
+					throw new ConverterException("DefaultPaymentAddress UUID not found: " + source.getSelectedDefaultPaymentAddress());
+				}
+			}
+
+			// DefaultShipmentAddress
+			if (StringUtils.isBlank(source.getSelectedDefaultShipmentAddress())) {
+				if (prototype.getDefaultShipmentAddress() != null) {
+					prototype.setDefaultShipmentAddress(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedDefaultShipmentAddress()), Address.class);
+
+				if (entity != null) {
+
+					if (prototype.getDefaultShipmentAddress() == null || prototype.getDefaultShipmentAddress().getUuid().equals(entity.getUuid()) == false) {
+						prototype.setDefaultShipmentAddress(entity);
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				} else {
+					throw new ConverterException("DefaultShipmentAddress UUID not found: " + source.getSelectedDefaultShipmentAddress());
 				}
 			}
 

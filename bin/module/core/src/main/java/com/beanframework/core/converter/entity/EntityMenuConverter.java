@@ -168,6 +168,13 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 					}
 				}
 			}
+			else if(prototype.getUserGroups() != null && prototype.getUserGroups().isEmpty() == false){
+				for (final Iterator<UserGroup> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
+					itr.next();
+				    itr.remove(); 
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			}
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

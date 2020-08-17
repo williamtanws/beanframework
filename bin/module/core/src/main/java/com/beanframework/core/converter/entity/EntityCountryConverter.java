@@ -107,14 +107,9 @@ public class EntityCountryConverter implements EntityConverter<CountryDto, Count
 				}
 			}
 			else if(prototype.getRegions() != null && prototype.getRegions().isEmpty() == false){
-				Iterator<Region> it = prototype.getRegions().iterator();
-				while (it.hasNext()) {
-					Region o = it.next();
-
-					Region entity = modelService.findOneByUuid(o.getUuid(), Region.class);
-					entity.setCountry(null);
-					modelService.saveEntity(entity, Region.class);
-					it.remove();
+				for (final Iterator<Region> itr = prototype.getRegions().iterator(); itr.hasNext();) {
+					itr.next();
+				    itr.remove(); 
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}

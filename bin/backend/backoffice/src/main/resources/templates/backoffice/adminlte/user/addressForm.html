@@ -6,11 +6,11 @@
 </head>
 <body>
 	<th:block layout:fragment="update">
-		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.address')}}, deleteUuid=${addressDto.uuid})}"></th:block>
+		<th:block
+			layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.address')}}, deleteUuid=${addressDto.uuid})}"></th:block>
 		<form id="update-form" role="form" th:action="${@environment.getProperty('path.address')}" method="post" th:object="${addressDto}">
-			<input type="hidden" name="create" th:if="*{uuid == null}"/>
-			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${addressDto.uuid}" />
+			<input type="hidden" name="create" th:if="*{uuid == null}" /> <input type="hidden" name="update" th:if="*{uuid != null}" /> <input type="hidden" name="uuid"
+				th:value="${addressDto.uuid}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box box-solid">
@@ -34,14 +34,9 @@
 					<!-- Custom Tabs -->
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
-							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
-							</li>
-							<li th:if="*{uuid != null}">
-								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
-							</li>
-							<li th:if="*{uuid != null}">
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
+							<li class="active"><a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a></li>
+							<li th:if="*{uuid != null}"><a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a></li>
+							<li th:if="*{uuid != null}"><a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content">
@@ -49,24 +44,421 @@
 								<div class="box-body">
 									<div class="row">
 										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="owner" th:text="#{module.address.owner}"></label>
+												&nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-owner"><i class="fa fa-edit color"></i></button>
+												<table class="table table-bordered table-hover" id="selectedOwnerTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:id="'row'+*{owner.uuid}" th:if="*{owner != null}">
+															<td>
+																<span th:text="*{owner.id}"></span>
+															</td>
+															<td>
+																<span th:text="*{owner.name}"></span>
+															</td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedOwner', [[*{owner.uuid}]]);"><i class="fa fa-minus color"></i></button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedOwner">
+													<input type="hidden" name="selectedOwner" th:value="*{owner == null ? '':owner.uuid}" />
+												</div>
+												<span class="help-block"></span>
+											</div>
+										</div>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="name" th:text="#{module.address.name}"></label>
-												<span>*</span>
-												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<label for="streetName" th:text="#{module.address.streetName}"></label> <span>*</span> <input type="text" class="form-control" name="streetName"
+													th:value="*{streetName}"> <span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="streetNumber" th:text="#{module.address.streetNumber}"></label> <input type="text" class="form-control" name="streetNumber"
+													th:value="*{streetNumber}"> <span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="postalCode" th:text="#{module.address.postalCode}"></label> <input type="text" class="form-control" name="postalCode" th:value="*{postalCode}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="town" th:text="#{module.address.town}"></label> <input type="text" class="form-control" name="town" th:value="*{town}"> <span
+													class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="country" th:text="#{module.region.country}"></label> &nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-country">
+													<i class="fa fa-edit color"></i>
+												</button>
+												<table class="table table-bordered table-hover" id="selectedCountryTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:id="'row'+*{country.uuid}" th:if="*{country != null}">
+															<td><span th:text="*{country.id}"></span></td>
+															<td><span th:text="*{country.name}"></span></td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedCountry', [[*{country.uuid}]]);">
+																	<i class="fa fa-minus color"></i>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedCountry">
+													<input type="hidden" name="selectedCountry" th:value="*{country == null ? '':country.uuid}" />
+												</div>
 												<span class="help-block"></span>
 											</div>
 										</div>
 									</div>
 								</div>
 								<!-- /.box-body -->
+								<div class="box-header with-border">
+									<h3 class="box-title" th:text="#{module.address.additionalAddressInformation}"></h3>
+								</div>
+								<div class="box-body">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="company" th:text="#{module.address.company}"></label> <input type="text" class="form-control" name="company" th:value="*{company}"> <span
+													class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="phone1" th:text="#{module.address.phone1}"></label> <input type="text" class="form-control" name="phone1" th:value="*{phone1}"> <span
+													class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="phone2" th:text="#{module.address.phone2}"></label> <input type="text" class="form-control" name="phone2" th:value="*{phone2}"> <span
+													class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="mobilePhone" th:text="#{module.address.mobilePhone}"></label> <input type="text" class="form-control" name="mobilePhone" th:value="*{mobilePhone}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="email" th:text="#{module.address.email}"></label> <input type="text" class="form-control" name="email" th:value="*{email}"> <span
+													class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="poBox" th:text="#{module.address.poBox}"></label> <input type="text" class="form-control" name="poBox" th:value="*{poBox}"> <span
+													class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="fax" th:text="#{module.address.fax}"></label> <input type="text" class="form-control" name="fax" th:value="*{fax}"> <span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- /.box-body -->
+								<div class="box-header with-border">
+									<h3 class="box-title" th:text="#{module.address.additionalContactInformation}"></h3>
+								</div>
+								<div class="box-body">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="title" th:text="#{module.address.title}"></label> <input type="text" class="form-control" name="title" th:value="*{title}"> <span
+													class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="lastName" th:text="#{module.address.lastName}"></label> <input type="text" class="form-control" name="lastName" th:value="*{lastName}"> <span
+													class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="firstName" th:text="#{module.address.firstName}"></label> <input type="text" class="form-control" name="firstName" th:value="*{firstName}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="middleName" th:text="#{module.address.middleName}"></label> <input type="text" class="form-control" name="middleName" th:value="*{middleName}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="middleName2" th:text="#{module.address.middleName2}"></label> <input type="text" class="form-control" name="middleName2" th:value="*{middleName2}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="department" th:text="#{module.address.department}"></label> <input type="text" class="form-control" name="department" th:value="*{department}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="building" th:text="#{module.address.building}"></label> <input type="text" class="form-control" name="building" th:value="*{building}"> <span
+													class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="apartment" th:text="#{module.address.apartment}"></label> <input type="text" class="form-control" name="apartment" th:value="*{apartment}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="region" th:text="#{module.address.region}"></label> &nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-region">
+													<i class="fa fa-edit color"></i>
+												</button>
+												<table class="table table-bordered table-hover" id="selectedRegionTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:id="'row'+*{region.uuid}" th:if="*{region != null}">
+															<td><span th:text="*{region.id}"></span></td>
+															<td><span th:text="*{region.name}"></span></td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedRegion', [[*{region.uuid}]]);">
+																	<i class="fa fa-minus color"></i>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedRegion">
+													<input type="hidden" name="selectedRegion" th:value="*{region == null ? '':region.uuid}" />
+												</div>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="district" th:text="#{module.address.district}"></label> <input type="text" class="form-control" name="district" th:value="*{district}"> <span
+													class="help-block"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="box-header with-border"></div>
+								<div class="box-body">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="shippingAddress" th:text="#{module.address.shippingAddress}"></label> &nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-shippingAddress">
+													<i class="fa fa-edit color"></i>
+												</button>
+												<table class="table table-bordered table-hover" id="selectedShippingAddressTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:id="'row'+*{shippingAddress.uuid}" th:if="*{shippingAddress != null}">
+															<td><span th:text="*{shippingAddress.id}"></span></td>
+															<td><span th:text="*{shippingAddress.name}"></span></td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedShippingAddress', [[*{shippingAddress.uuid}]]);">
+																	<i class="fa fa-minus color"></i>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedShippingAddress">
+													<input type="hidden" name="selectedShippingAddress" th:value="*{shippingAddress == null ? '':shippingAddress.uuid}" />
+												</div>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="billingAddress" th:text="#{module.address.billingAddress}"></label> &nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-billingAddress">
+													<i class="fa fa-edit color"></i>
+												</button>
+												<table class="table table-bordered table-hover" id="selectedBillingAddressTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:id="'row'+*{billingAddress.uuid}" th:if="*{billingAddress != null}">
+															<td><span th:text="*{billingAddress.id}"></span></td>
+															<td><span th:text="*{billingAddress.name}"></span></td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedBillingAddress', [[*{billingAddress.uuid}]]);">
+																	<i class="fa fa-minus color"></i>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedBillingAddress">
+													<input type="hidden" name="selectedBillingAddress" th:value="*{billingAddress == null ? '':billingAddress.uuid}" />
+												</div>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="contactAddress" th:text="#{module.address.contactAddress}"></label> &nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-contactAddress">
+													<i class="fa fa-edit color"></i>
+												</button>
+												<table class="table table-bordered table-hover" id="selectedContactAddressTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:id="'row'+*{contactAddress.uuid}" th:if="*{contactAddress != null}">
+															<td><span th:text="*{contactAddress.id}"></span></td>
+															<td><span th:text="*{contactAddress.name}"></span></td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedContactAddress', [[*{contactAddress.uuid}]]);">
+																	<i class="fa fa-minus color"></i>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedContactAddress">
+													<input type="hidden" name="selectedContactAddress" th:value="*{contactAddress == null ? '':contactAddress.uuid}" />
+												</div>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="defaultPaymentAddress" th:text="#{module.address.defaultPaymentAddress}"></label> &nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-defaultPaymentAddress">
+													<i class="fa fa-edit color"></i>
+												</button>
+												<table class="table table-bordered table-hover" id="selectedDefaultPaymentAddressTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:id="'row'+*{defaultPaymentAddress.uuid}" th:if="*{defaultPaymentAddress != null}">
+															<td><span th:text="*{defaultPaymentAddress.id}"></span></td>
+															<td><span th:text="*{defaultPaymentAddress.name}"></span></td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedDefaultPaymentAddress', [[*{defaultPaymentAddress.uuid}]]);">
+																	<i class="fa fa-minus color"></i>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedDefaultPaymentAddress">
+													<input type="hidden" name="selectedDefaultPaymentAddress" th:value="*{defaultPaymentAddress == null ? '':defaultPaymentAddress.uuid}" />
+												</div>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="defaultShipmentAddress" th:text="#{module.address.defaultShipmentAddress}"></label> &nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-defaultShipmentAddress">
+													<i class="fa fa-edit color"></i>
+												</button>
+												<table class="table table-bordered table-hover" id="selectedDefaultShipmentAddressTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:id="'row'+*{defaultShipmentAddress.uuid}" th:if="*{defaultShipmentAddress != null}">
+															<td><span th:text="*{defaultShipmentAddress.id}"></span></td>
+															<td><span th:text="*{defaultShipmentAddress.name}"></span></td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedDefaultShipmentAddress', [[*{defaultShipmentAddress.uuid}]]);">
+																	<i class="fa fa-minus color"></i>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedDefaultShipmentAddress">
+													<input type="hidden" name="selectedDefaultShipmentAddress" th:value="*{defaultShipmentAddress == null ? '':defaultShipmentAddress.uuid}" />
+												</div>
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 							<!-- /.tab-pane -->
 							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
 								<div class="box-body">
-									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.address.history')}(uuid=*{uuid})} )}"></th:block>
+									<th:block
+										layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.address.history')}(uuid=*{uuid})} )}"></th:block>
 								</div>
 							</div>
 							<!-- /.tab-pane -->
@@ -84,6 +476,268 @@
 				<!-- /.col -->
 			</div>
 		</form>
+		<div class="modal fade" id="modal-country">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.region.country}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="countryTable" class="table table-bordered table-hover" style="width: 100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.country.page')}}]]*/;
+						    
+						    var countryTable = $('#countryTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#countryTable').find("input:text").val("");
+					                    	  $("#countryTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#countryTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedCountry'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#countryTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#countryTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	countryTable.columns().every(function (index) {
+						    	    $('#countryTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	countryTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelect('selectedCountry','countryTable','selectedCountryTable')" class="btn btn-primary" data-dismiss="modal"
+							th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal fade" id="modal-region">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.address.region}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="regionTable" class="table table-bordered table-hover" style="width: 100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.region.page')}}]]*/;
+						    
+						    var regionTable = $('#regionTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#regionTable').find("input:text").val("");
+					                    	  $("#regionTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#regionTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedRegion'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#regionTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#regionTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	regionTable.columns().every(function (index) {
+						    	    $('#regionTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	regionTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelect('selectedRegion','regionTable','selectedRegionTable')" class="btn btn-primary" data-dismiss="modal"
+							th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
@@ -112,7 +766,7 @@
 		                        }
 		                    }
 		                },
-		                name: {
+		                streetName: {
 		                    required: true
 		                }
 		            },

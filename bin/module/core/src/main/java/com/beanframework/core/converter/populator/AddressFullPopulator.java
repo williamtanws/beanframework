@@ -26,6 +26,9 @@ public class AddressFullPopulator extends AbstractPopulator<Address, AddressDto>
 	
 	@Autowired
 	private UserBasicPopulator userBasicPopulator;
+	
+	@Autowired
+	private AddressBasicPopulator addressBasicPopulator;
 
 	@Override
 	public void populate(Address source, AddressDto target) throws PopulatorException {
@@ -54,6 +57,11 @@ public class AddressFullPopulator extends AbstractPopulator<Address, AddressDto>
 			target.setCountry(modelService.getDto(source.getCountry(), CompanyDto.class, new DtoConverterContext(countryBasicPopulator)));
 			target.setRegion(modelService.getDto(source.getRegion(), CompanyDto.class, new DtoConverterContext(regionBasicPopulator)));
 			target.setOwner(modelService.getDto(source.getOwner(), UserDto.class, new DtoConverterContext(userBasicPopulator)));
+			target.setShippingAddress(modelService.getDto(source.getShippingAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			target.setBillingAddress(modelService.getDto(source.getBillingAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			target.setContactAddress(modelService.getDto(source.getContactAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			target.setDefaultPaymentAddress(modelService.getDto(source.getDefaultPaymentAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			target.setDefaultShipmentAddress(modelService.getDto(source.getDefaultShipmentAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

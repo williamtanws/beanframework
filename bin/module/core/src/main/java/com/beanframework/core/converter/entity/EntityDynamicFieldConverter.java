@@ -149,6 +149,13 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 					}
 				}
 			}
+			else if(prototype.getEnumerations() != null && prototype.getEnumerations().isEmpty() == false){
+				for (final Iterator<Enumeration> itr = prototype.getEnumerations().iterator(); itr.hasNext();) {
+					itr.next();
+				    itr.remove(); 
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			}
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
