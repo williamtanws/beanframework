@@ -2,6 +2,8 @@ package com.beanframework.console.web;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +39,7 @@ public class ConfigurationController extends AbstractController {
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION)
-	public String list(@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, @RequestParam Map<String, Object> requestParams)
+	public String list(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		model.addAttribute("create", false);
 
@@ -59,7 +61,7 @@ public class ConfigurationController extends AbstractController {
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "create")
-	public String createView(@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model) throws Exception {
 
 		configurationDto = configurationFacade.createDto();
 		model.addAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO, configurationDto);
@@ -70,7 +72,7 @@ public class ConfigurationController extends AbstractController {
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "create")
-	public RedirectView create(@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (configurationDto.getUuid() != null) {
@@ -95,7 +97,7 @@ public class ConfigurationController extends AbstractController {
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "update")
-	public RedirectView update(@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (configurationDto.getUuid() == null) {
@@ -120,7 +122,7 @@ public class ConfigurationController extends AbstractController {
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "delete")
-	public RedirectView delete(@ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {

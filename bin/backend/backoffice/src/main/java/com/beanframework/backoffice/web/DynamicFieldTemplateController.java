@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE)
-	public String list(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model) throws Exception {
+	public String list(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (dynamicfieldtemplateDto.getUuid() != null) {
@@ -53,7 +55,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "create")
-	public String createView(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model) throws Exception {
 
 		dynamicfieldtemplateDto = dynamicFieldTemplateFacade.createDto();
 		model.addAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO, dynamicfieldtemplateDto);
@@ -64,7 +66,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "create")
-	public RedirectView create(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
+	public RedirectView create(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (dynamicfieldtemplateDto.getUuid() != null) {
@@ -90,7 +92,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "update")
-	public RedirectView update(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
+	public RedirectView update(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (dynamicfieldtemplateDto.getUuid() == null) {
@@ -116,7 +118,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "delete")
-	public RedirectView delete(@ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
+	public RedirectView delete(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {

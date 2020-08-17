@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +43,7 @@ public class MenuController extends AbstractController {
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = MenuWebConstants.Path.MENU)
-	public String list(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@Valid @ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 
 		if (menuDto.getUuid() != null) {
@@ -63,7 +65,7 @@ public class MenuController extends AbstractController {
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = MenuWebConstants.Path.MENU, params = "create")
-	public String createView(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model) throws Exception {
 
 		menuDto = menuFacade.createDto();
 		model.addAttribute(MenuWebConstants.ModelAttribute.MENU_DTO, menuDto);
@@ -74,7 +76,7 @@ public class MenuController extends AbstractController {
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "create")
-	public RedirectView create(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView create(@Valid @ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (menuDto.getUuid() != null) {
@@ -100,7 +102,7 @@ public class MenuController extends AbstractController {
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "update")
-	public RedirectView update(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView update(@Valid @ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (menuDto.getUuid() == null) {
@@ -126,7 +128,7 @@ public class MenuController extends AbstractController {
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = MenuWebConstants.Path.MENU, params = "delete")
-	public RedirectView delete(@ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView delete(@Valid @ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto menuDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {

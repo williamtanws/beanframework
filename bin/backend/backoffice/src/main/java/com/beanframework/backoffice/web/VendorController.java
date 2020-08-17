@@ -2,6 +2,8 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +39,7 @@ public class VendorController extends AbstractController {
 
 	@PreAuthorize(VendorPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = VendorWebConstants.Path.VENDOR)
-	public String list(@ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 
 		if (vendorDto.getUuid() != null) {
@@ -58,7 +60,7 @@ public class VendorController extends AbstractController {
 
 	@PreAuthorize(VendorPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = VendorWebConstants.Path.VENDOR, params = "create")
-	public String createView(@ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model) throws Exception {
 
 		vendorDto = vendorFacade.createDto();
 		model.addAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO, vendorDto);
@@ -69,7 +71,7 @@ public class VendorController extends AbstractController {
 
 	@PreAuthorize(VendorPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = VendorWebConstants.Path.VENDOR, params = "create")
-	public RedirectView create(@ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (vendorDto.getUuid() != null) {
@@ -95,7 +97,7 @@ public class VendorController extends AbstractController {
 
 	@PreAuthorize(VendorPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = VendorWebConstants.Path.VENDOR, params = "update")
-	public RedirectView update(@ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (vendorDto.getUuid() == null) {
@@ -121,7 +123,7 @@ public class VendorController extends AbstractController {
 
 	@PreAuthorize(VendorPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = VendorWebConstants.Path.VENDOR, params = "delete")
-	public RedirectView delete(@ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {

@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class CountryController extends AbstractController {
 
 	@PreAuthorize(CountryPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = CountryWebConstants.Path.COMMENT)
-	public String list(@ModelAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO) CountryDto countryDto, Model model) throws Exception {
+	public String list(@Valid @ModelAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO) CountryDto countryDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (countryDto.getUuid() != null) {
@@ -54,7 +56,7 @@ public class CountryController extends AbstractController {
 
 	@PreAuthorize(CountryPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = CountryWebConstants.Path.COMMENT, params = "create")
-	public String createView(@ModelAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO) CountryDto countryDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO) CountryDto countryDto, Model model) throws Exception {
 
 		countryDto = countryFacade.createDto();
 		model.addAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO, countryDto);
@@ -65,7 +67,7 @@ public class CountryController extends AbstractController {
 
 	@PreAuthorize(CountryPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = CountryWebConstants.Path.COMMENT, params = "create")
-	public RedirectView create(@ModelAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO) CountryDto countryDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView create(@Valid @ModelAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO) CountryDto countryDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (countryDto.getUuid() != null) {
@@ -90,7 +92,7 @@ public class CountryController extends AbstractController {
 	}
 
 	@PostMapping(value = CountryWebConstants.Path.COMMENT, params = "update")
-	public RedirectView update(@ModelAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO) CountryDto countryDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView update(@Valid @ModelAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO) CountryDto countryDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (countryDto.getUuid() == null) {
@@ -116,7 +118,7 @@ public class CountryController extends AbstractController {
 
 	@PreAuthorize(CountryPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = CountryWebConstants.Path.COMMENT, params = "delete")
-	public RedirectView delete(@ModelAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO) CountryDto countryDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@Valid @ModelAttribute(CountryWebConstants.ModelAttribute.COMMENT_DTO) CountryDto countryDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			countryFacade.delete(countryDto.getUuid());

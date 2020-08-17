@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,13 +44,13 @@ public class EmployeeProfileController {
 	@Value(BackofficeWebConstants.Configuration.DEFAULT_AVATAR)
 	public String CONFIGURATION_DEFAULT_AVATAR;
 
-	@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE)
+	@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE)
 	public EmployeeDto populateEmployeeForm(HttpServletRequest request) throws Exception {
 		return new EmployeeDto();
 	}
 
 	@GetMapping(value = EmployeeWebConstants.Path.PROFILE)
-	public String profile(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) EmployeeDto employeeProfile, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String profile(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) EmployeeDto employeeProfile, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		employeeProfile = employeeFacade.getCurrentUser();
 
@@ -59,7 +60,7 @@ public class EmployeeProfileController {
 	}
 
 	@PostMapping(value = EmployeeWebConstants.Path.PROFILE, params = "update")
-	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) EmployeeDto employeeProfile, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) EmployeeDto employeeProfile, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		try {

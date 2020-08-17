@@ -2,6 +2,8 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +39,7 @@ public class CustomerController extends AbstractController {
 
 	@PreAuthorize(CustomerPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER)
-	public String list(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@Valid @ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 
 		if (customerDto.getUuid() != null) {
@@ -58,7 +60,7 @@ public class CustomerController extends AbstractController {
 
 	@PreAuthorize(CustomerPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "create")
-	public String createView(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model) throws Exception {
 
 		customerDto = customerFacade.createDto();
 		model.addAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO, customerDto);
@@ -69,7 +71,7 @@ public class CustomerController extends AbstractController {
 
 	@PreAuthorize(CustomerPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "create")
-	public RedirectView create(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@Valid @ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (customerDto.getUuid() != null) {
@@ -95,7 +97,7 @@ public class CustomerController extends AbstractController {
 
 	@PreAuthorize(CustomerPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "update")
-	public RedirectView update(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (customerDto.getUuid() == null) {
@@ -121,7 +123,7 @@ public class CustomerController extends AbstractController {
 
 	@PreAuthorize(CustomerPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = CustomerWebConstants.Path.CUSTOMER, params = "delete")
-	public RedirectView delete(@ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto customerDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {

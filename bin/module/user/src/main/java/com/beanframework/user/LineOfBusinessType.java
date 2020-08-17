@@ -1,6 +1,6 @@
 package com.beanframework.user;
 
-public enum BusinessLineType {
+public enum LineOfBusinessType {
 	TRADE("Trade"), 
 	BANK("Bank"), 
 	INDUSTRY("Industry"), 
@@ -10,7 +10,7 @@ public enum BusinessLineType {
 	
 	private String type;
 
-	BusinessLineType(String type) {
+	LineOfBusinessType(String type) {
 		this.type = type;
 	}
 

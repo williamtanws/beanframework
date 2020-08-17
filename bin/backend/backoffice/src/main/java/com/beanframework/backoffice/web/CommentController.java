@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class CommentController extends AbstractController {
 
 	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = CommentWebConstants.Path.COMMENT)
-	public String list(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model) throws Exception {
+	public String list(@Valid @ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (commentDto.getUuid() != null) {
@@ -54,7 +56,7 @@ public class CommentController extends AbstractController {
 
 	@PreAuthorize(CommentPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = CommentWebConstants.Path.COMMENT, params = "create")
-	public String createView(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model) throws Exception {
 
 		commentDto = commentFacade.createDto();
 		model.addAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO, commentDto);
@@ -65,7 +67,7 @@ public class CommentController extends AbstractController {
 
 	@PreAuthorize(CommentPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = CommentWebConstants.Path.COMMENT, params = "create")
-	public RedirectView create(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView create(@Valid @ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (commentDto.getUuid() != null) {
@@ -90,7 +92,7 @@ public class CommentController extends AbstractController {
 	}
 
 	@PostMapping(value = CommentWebConstants.Path.COMMENT, params = "update")
-	public RedirectView update(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView update(@Valid @ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (commentDto.getUuid() == null) {
@@ -116,7 +118,7 @@ public class CommentController extends AbstractController {
 
 	@PreAuthorize(CommentPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = CommentWebConstants.Path.COMMENT, params = "delete")
-	public RedirectView delete(@ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@Valid @ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			commentFacade.delete(commentDto.getUuid());

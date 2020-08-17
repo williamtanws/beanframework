@@ -17,6 +17,12 @@ public class CurrencyFullPopulator extends AbstractPopulator<Currency, CurrencyD
 	@Override
 	public void populate(Currency source, CurrencyDto target) throws PopulatorException {
 		convertCommonProperties(source, target);
+		target.setName(source.getName());
+		target.setActive(source.getActive());
+		target.setBase(source.getBase());
+		target.setConvertion(source.getConvertion());
+		target.setDigit(source.getDigit());
+		target.setSymbol(source.getSymbol());
 	}
 
 }

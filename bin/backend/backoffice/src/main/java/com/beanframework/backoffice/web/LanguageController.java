@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class LanguageController extends AbstractController {
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = LanguageWebConstants.Path.LANGUAGE)
-	public String list(@ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model) throws Exception {
+	public String list(@Valid @ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (languageDto.getUuid() != null) {
@@ -53,7 +55,7 @@ public class LanguageController extends AbstractController {
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "create")
-	public String createView(@ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model) throws Exception {
 
 		languageDto = languageFacade.createDto();
 		model.addAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO, languageDto);
@@ -64,7 +66,7 @@ public class LanguageController extends AbstractController {
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "create")
-	public RedirectView create(@ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@Valid @ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (languageDto.getUuid() != null) {
@@ -90,7 +92,7 @@ public class LanguageController extends AbstractController {
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "update")
-	public RedirectView update(@ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (languageDto.getUuid() == null) {
@@ -116,7 +118,7 @@ public class LanguageController extends AbstractController {
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE, params = "delete")
-	public RedirectView delete(@ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
 
 		try {

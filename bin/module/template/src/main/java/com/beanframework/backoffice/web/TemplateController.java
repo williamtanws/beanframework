@@ -2,6 +2,8 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,7 +38,7 @@ public class TemplateController extends AbstractController {
 
 	@PreAuthorize(TemplatePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = TemplateWebConstants.Path.TEMPLATE)
-	public String list(@ModelAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO) TemplateDto templateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@Valid @ModelAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO) TemplateDto templateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 
 		if (templateDto.getUuid() != null) {
@@ -57,7 +59,7 @@ public class TemplateController extends AbstractController {
 
 	@PreAuthorize(TemplatePreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = TemplateWebConstants.Path.TEMPLATE, params = "create")
-	public String createView(@ModelAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO) TemplateDto templateDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO) TemplateDto templateDto, Model model) throws Exception {
 
 		templateDto = templateFacade.createDto();
 		model.addAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO, templateDto);
@@ -68,7 +70,7 @@ public class TemplateController extends AbstractController {
 
 	@PreAuthorize(TemplatePreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = TemplateWebConstants.Path.TEMPLATE, params = "create")
-	public RedirectView create(@ModelAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO) TemplateDto templateDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView create(@Valid @ModelAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO) TemplateDto templateDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (templateDto.getUuid() != null) {
@@ -93,7 +95,7 @@ public class TemplateController extends AbstractController {
 
 	@PreAuthorize(TemplatePreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = TemplateWebConstants.Path.TEMPLATE, params = "update")
-	public RedirectView update(@ModelAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO) TemplateDto templateDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView update(@Valid @ModelAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO) TemplateDto templateDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (templateDto.getUuid() == null) {
@@ -118,7 +120,7 @@ public class TemplateController extends AbstractController {
 
 	@PreAuthorize(TemplatePreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = TemplateWebConstants.Path.TEMPLATE, params = "delete")
-	public RedirectView delete(@ModelAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO) TemplateDto templateDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView delete(@Valid @ModelAttribute(TemplateWebConstants.ModelAttribute.TEMPLATE_DTO) TemplateDto templateDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {

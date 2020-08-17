@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class ImexController extends AbstractController {
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = ImexWebConstants.Path.IMEX)
-	public String list(@ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model) throws Exception {
+	public String list(@Valid @ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (imexDto.getUuid() != null) {
@@ -53,7 +55,7 @@ public class ImexController extends AbstractController {
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = ImexWebConstants.Path.IMEX, params = "create")
-	public String createView(@ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model) throws Exception {
 
 		imexDto = imexFacade.createDto();
 		model.addAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO, imexDto);
@@ -64,7 +66,7 @@ public class ImexController extends AbstractController {
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = ImexWebConstants.Path.IMEX, params = "create")
-	public RedirectView create(@ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView create(@Valid @ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (imexDto.getUuid() != null) {
@@ -90,7 +92,7 @@ public class ImexController extends AbstractController {
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = ImexWebConstants.Path.IMEX, params = "update")
-	public RedirectView update(@ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView update(@Valid @ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (imexDto.getUuid() == null) {
@@ -116,7 +118,7 @@ public class ImexController extends AbstractController {
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = ImexWebConstants.Path.IMEX, params = "delete")
-	public RedirectView delete(@ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@Valid @ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			imexFacade.delete(imexDto.getUuid());

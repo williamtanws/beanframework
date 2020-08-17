@@ -2,6 +2,8 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +39,7 @@ public class EmployeeController extends AbstractController {
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
-	public String list(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 
 		if (employeeDto.getUuid() != null) {
@@ -58,7 +60,7 @@ public class EmployeeController extends AbstractController {
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
-	public String createView(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model) throws Exception {
 
 		employeeDto = employeeFacade.createDto();
 		model.addAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO, employeeDto);
@@ -69,7 +71,7 @@ public class EmployeeController extends AbstractController {
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
-	public RedirectView create(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (employeeDto.getUuid() != null) {
@@ -95,7 +97,7 @@ public class EmployeeController extends AbstractController {
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "update")
-	public RedirectView update(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (employeeDto.getUuid() == null) {
@@ -121,7 +123,7 @@ public class EmployeeController extends AbstractController {
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "delete")
-	public RedirectView delete(@ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		try {

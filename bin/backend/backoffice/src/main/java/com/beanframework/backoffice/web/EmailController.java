@@ -2,6 +2,8 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,7 +40,7 @@ public class EmailController extends AbstractController {
 
 	@PreAuthorize(EmailPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = EmailWebConstants.Path.EMAIL)
-	public String list(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@Valid @ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 
 		if (emailDto.getUuid() != null) {
@@ -59,7 +61,7 @@ public class EmailController extends AbstractController {
 
 	@PreAuthorize(EmailPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
-	public String createView(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model) throws Exception {
 
 		emailDto = emailFacade.createDto();
 		model.addAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO, emailDto);
@@ -70,7 +72,7 @@ public class EmailController extends AbstractController {
 
 	@PreAuthorize(EmailPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "create")
-	public RedirectView create(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView create(@Valid @ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (emailDto.getUuid() != null) {
@@ -95,7 +97,7 @@ public class EmailController extends AbstractController {
 
 	@PreAuthorize(EmailPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "update")
-	public RedirectView update(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView update(@Valid @ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) throws Exception {
 
 		if (emailDto.getUuid() == null) {
@@ -120,7 +122,7 @@ public class EmailController extends AbstractController {
 
 	@PreAuthorize(EmailPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "delete")
-	public RedirectView delete(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView delete(@Valid @ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
@@ -141,7 +143,7 @@ public class EmailController extends AbstractController {
 
 	@PreAuthorize(EmailPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "createattachment")
-	public RedirectView createAttachment(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult,
+	public RedirectView createAttachment(@Valid @ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("uploadAttachments") MultipartFile[] uploadAttachments) {
 
 		if (emailDto.getUuid() == null) {
@@ -166,7 +168,7 @@ public class EmailController extends AbstractController {
 
 	@PreAuthorize(EmailPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = EmailWebConstants.Path.EMAIL, params = "deleteattachment")
-	public RedirectView deleteAttachment(@ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult,
+	public RedirectView deleteAttachment(@Valid @ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, @RequestParam("filename") String filename) {
 
 		if (emailDto.getUuid() == null) {

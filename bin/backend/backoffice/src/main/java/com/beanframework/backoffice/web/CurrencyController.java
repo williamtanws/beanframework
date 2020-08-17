@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class CurrencyController extends AbstractController {
 
 	@PreAuthorize(CurrencyPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = CurrencyWebConstants.Path.COMMENT)
-	public String list(@ModelAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO) CurrencyDto currencyDto, Model model) throws Exception {
+	public String list(@Valid @ModelAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO) CurrencyDto currencyDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (currencyDto.getUuid() != null) {
@@ -54,7 +56,7 @@ public class CurrencyController extends AbstractController {
 
 	@PreAuthorize(CurrencyPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = CurrencyWebConstants.Path.COMMENT, params = "create")
-	public String createView(@ModelAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO) CurrencyDto currencyDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO) CurrencyDto currencyDto, Model model) throws Exception {
 
 		currencyDto = currencyFacade.createDto();
 		model.addAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO, currencyDto);
@@ -65,7 +67,7 @@ public class CurrencyController extends AbstractController {
 
 	@PreAuthorize(CurrencyPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = CurrencyWebConstants.Path.COMMENT, params = "create")
-	public RedirectView create(@ModelAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO) CurrencyDto currencyDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView create(@Valid @ModelAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO) CurrencyDto currencyDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (currencyDto.getUuid() != null) {
@@ -90,7 +92,7 @@ public class CurrencyController extends AbstractController {
 	}
 
 	@PostMapping(value = CurrencyWebConstants.Path.COMMENT, params = "update")
-	public RedirectView update(@ModelAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO) CurrencyDto currencyDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+	public RedirectView update(@Valid @ModelAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO) CurrencyDto currencyDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
 			throws Exception {
 
 		if (currencyDto.getUuid() == null) {
@@ -116,7 +118,7 @@ public class CurrencyController extends AbstractController {
 
 	@PreAuthorize(CurrencyPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = CurrencyWebConstants.Path.COMMENT, params = "delete")
-	public RedirectView delete(@ModelAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO) CurrencyDto currencyDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public RedirectView delete(@Valid @ModelAttribute(CurrencyWebConstants.ModelAttribute.COMMENT_DTO) CurrencyDto currencyDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			currencyFacade.delete(currencyDto.getUuid());

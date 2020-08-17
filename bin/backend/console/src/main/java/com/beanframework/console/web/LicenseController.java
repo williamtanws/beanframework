@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +54,7 @@ public class LicenseController extends AbstractController {
 	}
 
 	@GetMapping(value = LicenseWebConstants.Path.LICENSE)
-	public String view(@ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) ConfigurationDto configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
+	public String view(@Valid @ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) ConfigurationDto configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 		try {
 
@@ -73,7 +74,7 @@ public class LicenseController extends AbstractController {
 	}
 
 	@PostMapping(value = LicenseWebConstants.Path.LICENSE)
-	public RedirectView accept(@ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) ConfigurationDto configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
+	public RedirectView accept(@Valid @ModelAttribute(LicenseWebConstants.ModelAttribute.LICENSE) ConfigurationDto configuration, Model model, @RequestParam Map<String, Object> allRequestParams,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, BindingResult bindingResult) {
 
 		try {

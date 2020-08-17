@@ -2,6 +2,8 @@ package com.beanframework.console.web;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +39,7 @@ public class AdminController extends AbstractController {
 
 	@PreAuthorize(AdminPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = AdminWebConstants.Path.ADMIN)
-	public String list(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String list(@Valid @ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		model.addAttribute("create", false);
 
 		if (adminDto.getUuid() != null) {
@@ -57,7 +59,7 @@ public class AdminController extends AbstractController {
 
 	@PreAuthorize(AdminPreAuthorizeEnum.HAS_CREATE)
 	@GetMapping(value = AdminWebConstants.Path.ADMIN, params = "create")
-	public String createView(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model) throws Exception {
+	public String createView(@Valid @ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model) throws Exception {
 
 		adminDto = adminFacade.createDto();
 		model.addAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO, adminDto);
@@ -68,7 +70,7 @@ public class AdminController extends AbstractController {
 
 	@PreAuthorize(AdminPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = AdminWebConstants.Path.ADMIN, params = "create")
-	public RedirectView create(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView create(@Valid @ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (adminDto.getUuid() != null) {
@@ -93,7 +95,7 @@ public class AdminController extends AbstractController {
 
 	@PreAuthorize(AdminPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = AdminWebConstants.Path.ADMIN, params = "update")
-	public RedirectView update(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView update(@Valid @ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		if (adminDto.getUuid() == null) {
@@ -118,7 +120,7 @@ public class AdminController extends AbstractController {
 
 	@PreAuthorize(AdminPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = AdminWebConstants.Path.ADMIN, params = "delete")
-	public RedirectView delete(@ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
+	public RedirectView delete(@Valid @ModelAttribute(AdminWebConstants.ModelAttribute.ADMIN_DTO) AdminDto adminDto, Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
 			RedirectAttributes redirectAttributes) {
 
 		try {
