@@ -96,9 +96,8 @@ public class User extends GenericEntity {
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.ALL })
-	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
+	@Cascade({ CascadeType.REFRESH })
+	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "owner")
 	private List<Address> addresses = new ArrayList<Address>();
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

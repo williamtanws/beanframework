@@ -13,7 +13,8 @@ import com.beanframework.core.converter.populator.CountryBasicPopulator;
 import com.beanframework.core.converter.populator.RegionBasicPopulator;
 import com.beanframework.core.converter.populator.UserBasicPopulator;
 import com.beanframework.core.data.AddressDto;
-import com.beanframework.core.data.CompanyDto;
+import com.beanframework.core.data.CountryDto;
+import com.beanframework.core.data.RegionDto;
 import com.beanframework.core.data.UserDto;
 import com.beanframework.user.domain.Address;
 
@@ -35,28 +36,29 @@ public class AddressHistoryPopulator extends AbstractPopulator<Address, AddressD
 	public void populate(Address source, AddressDto target) throws PopulatorException {
 		try {
 			convertCommonProperties(source, target);
-			target.setStreetName(target.getStreetName());
-			target.setStreetNumber(target.getStreetNumber());
-			target.setPostalCode(target.getPostalCode());
-			target.setTown(target.getTown());
-			target.setCompany(target.getCompany());
-			target.setPhone1(target.getPhone1());
-			target.setPhone2(target.getPhone2());
-			target.setEmail(target.getEmail());
-			target.setPoBox(target.getPoBox());
-			target.setFax(target.getFax());
-			target.setTitle(target.getTitle());
-			target.setLastName(target.getLastName());
-			target.setFirstName(target.getFirstName());
-			target.setMiddleName(target.getMiddleName());
-			target.setMiddleName2(target.getMiddleName2());
-			target.setDepartment(target.getDepartment());
-			target.setBuilding(target.getBuilding());
-			target.setApartment(target.getApartment());
-			target.setDistrict(target.getDistrict());
+			target.setName(source.getStreetName());
+			target.setStreetNumber(source.getStreetNumber());
+			target.setPostalCode(source.getPostalCode());
+			target.setTown(source.getTown());
+			target.setCompany(source.getCompany());
+			target.setPhone1(source.getPhone1());
+			target.setPhone2(source.getPhone2());
+			target.setMobilePhone(source.getMobilePhone());
+			target.setEmail(source.getEmail());
+			target.setPoBox(source.getPoBox());
+			target.setFax(source.getFax());
+			target.setTitle(source.getTitle());
+			target.setLastName(source.getLastName());
+			target.setFirstName(source.getFirstName());
+			target.setMiddleName(source.getMiddleName());
+			target.setMiddleName2(source.getMiddleName2());
+			target.setDepartment(source.getDepartment());
+			target.setBuilding(source.getBuilding());
+			target.setApartment(source.getApartment());
+			target.setDistrict(source.getDistrict());
 			
-			target.setCountry(modelService.getDto(source.getCountry(), CompanyDto.class, new DtoConverterContext(countryBasicPopulator)));
-			target.setRegion(modelService.getDto(source.getRegion(), CompanyDto.class, new DtoConverterContext(regionBasicPopulator)));
+			target.setCountry(modelService.getDto(source.getCountry(), CountryDto.class, new DtoConverterContext(countryBasicPopulator)));
+			target.setRegion(modelService.getDto(source.getRegion(), RegionDto.class, new DtoConverterContext(regionBasicPopulator)));
 			target.setOwner(modelService.getDto(source.getOwner(), UserDto.class, new DtoConverterContext(userBasicPopulator)));
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);

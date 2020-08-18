@@ -20,6 +20,7 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.AuditJoinTable;
+import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -48,10 +49,10 @@ public class UserGroup extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	@AuditMappedBy(mappedBy = "userGroups")
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "userGroups", fetch = FetchType.LAZY)
 	private List<User> users = new ArrayList<User>();
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

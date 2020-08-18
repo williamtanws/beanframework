@@ -44,11 +44,14 @@
 								<div class="box-body">
 									<div class="row">
 										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="owner" th:text="#{module.address.owner}"></label>
-												&nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-owner"><i class="fa fa-edit color"></i></button>
+												<label for="owner" th:text="#{module.address.owner}"></label> &nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-owner">
+													<i class="fa fa-edit"></i>
+												</button>
 												<table class="table table-bordered table-hover" id="selectedOwnerTable">
 													<thead>
 														<tr>
@@ -59,14 +62,12 @@
 													</thead>
 													<tbody>
 														<tr th:id="'row'+*{owner.uuid}" th:if="*{owner != null}">
+															<td><span th:text="*{owner.id}"></span></td>
+															<td><span th:text="*{owner.name}"></span></td>
 															<td>
-																<span th:text="*{owner.id}"></span>
-															</td>
-															<td>
-																<span th:text="*{owner.name}"></span>
-															</td>
-															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedOwner', [[*{owner.uuid}]]);"><i class="fa fa-minus color"></i></button>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedOwner', [[*{owner.uuid}]]);">
+																	<i class="fa fa-minus"></i>
+																</button>
 															</td>
 														</tr>
 													</tbody>
@@ -82,8 +83,8 @@
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="streetName" th:text="#{module.address.streetName}"></label> <span>*</span> <input type="text" class="form-control" name="streetName"
-													th:value="*{streetName}"> <span class="help-block"></span>
+												<label for="name" th:text="#{module.address.streetName}"></label> <span>*</span> <input type="text" class="form-control" name="name"
+													th:value="*{name}"> <span class="help-block"></span>
 											</div>
 										</div>
 										<div class="col-md-6">
@@ -92,6 +93,8 @@
 													th:value="*{streetNumber}"> <span class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="postalCode" th:text="#{module.address.postalCode}"></label> <input type="text" class="form-control" name="postalCode" th:value="*{postalCode}">
@@ -104,11 +107,13 @@
 													class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="country" th:text="#{module.region.country}"></label> &nbsp;
 												<button type="button" data-toggle="modal" data-target="#modal-country">
-													<i class="fa fa-edit color"></i>
+													<i class="fa fa-edit"></i>
 												</button>
 												<table class="table table-bordered table-hover" id="selectedCountryTable">
 													<thead>
@@ -124,7 +129,7 @@
 															<td><span th:text="*{country.name}"></span></td>
 															<td>
 																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedCountry', [[*{country.uuid}]]);">
-																	<i class="fa fa-minus color"></i>
+																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
 														</tr>
@@ -157,6 +162,8 @@
 													class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="phone2" th:text="#{module.address.phone2}"></label> <input type="text" class="form-control" name="phone2" th:value="*{phone2}"> <span
@@ -169,6 +176,8 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="email" th:text="#{module.address.email}"></label> <input type="text" class="form-control" name="email" th:value="*{email}"> <span
@@ -181,6 +190,8 @@
 													class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="fax" th:text="#{module.address.fax}"></label> <input type="text" class="form-control" name="fax" th:value="*{fax}"> <span class="help-block"></span>
@@ -206,6 +217,8 @@
 													class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="firstName" th:text="#{module.address.firstName}"></label> <input type="text" class="form-control" name="firstName" th:value="*{firstName}">
@@ -218,6 +231,8 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="middleName2" th:text="#{module.address.middleName2}"></label> <input type="text" class="form-control" name="middleName2" th:value="*{middleName2}">
@@ -230,6 +245,8 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="building" th:text="#{module.address.building}"></label> <input type="text" class="form-control" name="building" th:value="*{building}"> <span
@@ -242,11 +259,13 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+									</div>
+									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="region" th:text="#{module.address.region}"></label> &nbsp;
 												<button type="button" data-toggle="modal" data-target="#modal-region">
-													<i class="fa fa-edit color"></i>
+													<i class="fa fa-edit"></i>
 												</button>
 												<table class="table table-bordered table-hover" id="selectedRegionTable">
 													<thead>
@@ -262,7 +281,7 @@
 															<td><span th:text="*{region.name}"></span></td>
 															<td>
 																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedRegion', [[*{region.uuid}]]);">
-																	<i class="fa fa-minus color"></i>
+																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
 														</tr>
@@ -290,7 +309,7 @@
 											<div class="form-group">
 												<label for="shippingAddress" th:text="#{module.address.shippingAddress}"></label> &nbsp;
 												<button type="button" data-toggle="modal" data-target="#modal-shippingAddress">
-													<i class="fa fa-edit color"></i>
+													<i class="fa fa-edit"></i>
 												</button>
 												<table class="table table-bordered table-hover" id="selectedShippingAddressTable">
 													<thead>
@@ -306,7 +325,7 @@
 															<td><span th:text="*{shippingAddress.name}"></span></td>
 															<td>
 																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedShippingAddress', [[*{shippingAddress.uuid}]]);">
-																	<i class="fa fa-minus color"></i>
+																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
 														</tr>
@@ -323,7 +342,7 @@
 											<div class="form-group">
 												<label for="billingAddress" th:text="#{module.address.billingAddress}"></label> &nbsp;
 												<button type="button" data-toggle="modal" data-target="#modal-billingAddress">
-													<i class="fa fa-edit color"></i>
+													<i class="fa fa-edit"></i>
 												</button>
 												<table class="table table-bordered table-hover" id="selectedBillingAddressTable">
 													<thead>
@@ -339,7 +358,7 @@
 															<td><span th:text="*{billingAddress.name}"></span></td>
 															<td>
 																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedBillingAddress', [[*{billingAddress.uuid}]]);">
-																	<i class="fa fa-minus color"></i>
+																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
 														</tr>
@@ -352,11 +371,13 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+										</div>
+										<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="contactAddress" th:text="#{module.address.contactAddress}"></label> &nbsp;
 												<button type="button" data-toggle="modal" data-target="#modal-contactAddress">
-													<i class="fa fa-edit color"></i>
+													<i class="fa fa-edit"></i>
 												</button>
 												<table class="table table-bordered table-hover" id="selectedContactAddressTable">
 													<thead>
@@ -372,7 +393,7 @@
 															<td><span th:text="*{contactAddress.name}"></span></td>
 															<td>
 																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedContactAddress', [[*{contactAddress.uuid}]]);">
-																	<i class="fa fa-minus color"></i>
+																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
 														</tr>
@@ -389,7 +410,7 @@
 											<div class="form-group">
 												<label for="defaultPaymentAddress" th:text="#{module.address.defaultPaymentAddress}"></label> &nbsp;
 												<button type="button" data-toggle="modal" data-target="#modal-defaultPaymentAddress">
-													<i class="fa fa-edit color"></i>
+													<i class="fa fa-edit"></i>
 												</button>
 												<table class="table table-bordered table-hover" id="selectedDefaultPaymentAddressTable">
 													<thead>
@@ -405,7 +426,7 @@
 															<td><span th:text="*{defaultPaymentAddress.name}"></span></td>
 															<td>
 																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedDefaultPaymentAddress', [[*{defaultPaymentAddress.uuid}]]);">
-																	<i class="fa fa-minus color"></i>
+																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
 														</tr>
@@ -418,11 +439,13 @@
 												<span class="help-block"></span>
 											</div>
 										</div>
+										</div>
+										<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="defaultShipmentAddress" th:text="#{module.address.defaultShipmentAddress}"></label> &nbsp;
 												<button type="button" data-toggle="modal" data-target="#modal-defaultShipmentAddress">
-													<i class="fa fa-edit color"></i>
+													<i class="fa fa-edit"></i>
 												</button>
 												<table class="table table-bordered table-hover" id="selectedDefaultShipmentAddressTable">
 													<thead>
@@ -438,7 +461,7 @@
 															<td><span th:text="*{defaultShipmentAddress.name}"></span></td>
 															<td>
 																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedDefaultShipmentAddress', [[*{defaultShipmentAddress.uuid}]]);">
-																	<i class="fa fa-minus color"></i>
+																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
 														</tr>
@@ -476,6 +499,137 @@
 				<!-- /.col -->
 			</div>
 		</form>
+		<div class="modal fade" id="modal-owner">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.address.owner}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="ownerTable" class="table table-bordered table-hover" style="width: 100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.user.page')}}]]*/;
+						    
+						    var ownerTable = $('#ownerTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#ownerTable').find("input:text").val("");
+					                    	  $("#ownerTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#ownerTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedOwner'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#ownerTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#ownerTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	ownerTable.columns().every(function (index) {
+						    	    $('#ownerTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	ownerTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelect('selectedOwner','ownerTable','selectedOwnerTable')" class="btn btn-primary" data-dismiss="modal"
+							th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
 		<div class="modal fade" id="modal-country">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -738,6 +892,661 @@
 			</div>
 			<!-- /.modal-dialog -->
 		</div>
+		<div class="modal fade" id="modal-shippingAddress">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.address.shippingAddress}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="shippingAddressTable" class="table table-bordered table-hover" style="width: 100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.address.page')}}]]*/;
+						    
+						    var shippingAddressTable = $('#shippingAddressTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#shippingAddressTable').find("input:text").val("");
+					                    	  $("#shippingAddressTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#shippingAddressTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedShippingAddress'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#shippingAddressTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#shippingAddressTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	shippingAddressTable.columns().every(function (index) {
+						    	    $('#shippingAddressTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	shippingAddressTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelect('selectedShippingAddress','shippingAddressTable','selectedShippingAddressTable')" class="btn btn-primary" data-dismiss="modal"
+							th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal fade" id="modal-billingAddress">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.address.billingAddress}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="billingAddressTable" class="table table-bordered table-hover" style="width: 100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.address.page')}}]]*/;
+						    
+						    var billingAddressTable = $('#billingAddressTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#billingAddressTable').find("input:text").val("");
+					                    	  $("#billingAddressTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#billingAddressTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedBillingAddress'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#billingAddressTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#billingAddressTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	billingAddressTable.columns().every(function (index) {
+						    	    $('#billingAddressTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	billingAddressTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelect('selectedBillingAddress','billingAddressTable','selectedBillingAddressTable')" class="btn btn-primary" data-dismiss="modal"
+							th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal fade" id="modal-contactAddress">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.address.contactAddress}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="contactAddressTable" class="table table-bordered table-hover" style="width: 100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.address.page')}}]]*/;
+						    
+						    var contactAddressTable = $('#contactAddressTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#contactAddressTable').find("input:text").val("");
+					                    	  $("#contactAddressTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#contactAddressTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedContactAddress'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#contactAddressTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#contactAddressTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	contactAddressTable.columns().every(function (index) {
+						    	    $('#contactAddressTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	contactAddressTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelect('selectedContactAddress','contactAddressTable','selectedContactAddressTable')" class="btn btn-primary" data-dismiss="modal"
+							th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal fade" id="modal-defaultPaymentAddress">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.address.defaultPaymentAddress}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="defaultPaymentAddressTable" class="table table-bordered table-hover" style="width: 100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.address.page')}}]]*/;
+						    
+						    var defaultPaymentAddressTable = $('#defaultPaymentAddressTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#defaultPaymentAddressTable').find("input:text").val("");
+					                    	  $("#defaultPaymentAddressTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#defaultPaymentAddressTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedDefaultPaymentAddress'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#defaultPaymentAddressTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#defaultPaymentAddressTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	defaultPaymentAddressTable.columns().every(function (index) {
+						    	    $('#defaultPaymentAddressTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	defaultPaymentAddressTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelect('selectedDefaultPaymentAddress','defaultPaymentAddressTable','selectedDefaultPaymentAddressTable')" class="btn btn-primary" data-dismiss="modal"
+							th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal fade" id="modal-defaultShipmentAddress">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.address.defaultShipmentAddress}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="defaultShipmentAddressTable" class="table table-bordered table-hover" style="width: 100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.address.page')}}]]*/;
+						    
+						    var defaultShipmentAddressTable = $('#defaultShipmentAddressTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#defaultShipmentAddressTable').find("input:text").val("");
+					                    	  $("#defaultShipmentAddressTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#defaultShipmentAddressTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedDefaultShipmentAddress'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#defaultShipmentAddressTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#defaultShipmentAddressTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	defaultShipmentAddressTable.columns().every(function (index) {
+						    	    $('#defaultShipmentAddressTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	defaultShipmentAddressTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelect('selectedDefaultShipmentAddress','defaultShipmentAddressTable','selectedDefaultShipmentAddressTable')" class="btn btn-primary" data-dismiss="modal"
+							th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
@@ -766,7 +1575,7 @@
 		                        }
 		                    }
 		                },
-		                streetName: {
+		                name: {
 		                    required: true
 		                }
 		            },

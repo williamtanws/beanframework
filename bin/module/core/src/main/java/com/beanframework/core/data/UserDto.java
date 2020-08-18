@@ -3,6 +3,8 @@ package com.beanframework.core.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.beanframework.common.data.GenericDto;
 
 public class UserDto extends GenericDto {
@@ -33,6 +35,11 @@ public class UserDto extends GenericDto {
 	private List<CompanyDto> companies = new ArrayList<CompanyDto>();
 	private List<AddressDto> addresses = new ArrayList<AddressDto>();
 	private List<UserFieldDto> fields = new ArrayList<UserFieldDto>();
+	private MultipartFile profilePicture;
+
+	private String[] selectedUserGroups;
+	private String[] selectedCompanies;
+	private String[] selectedAddresses;
 
 	public String getType() {
 		return type;
@@ -98,14 +105,6 @@ public class UserDto extends GenericDto {
 		this.userGroups = userGroups;
 	}
 
-	public List<UserFieldDto> getFields() {
-		return fields;
-	}
-
-	public void setFields(List<UserFieldDto> fields) {
-		this.fields = fields;
-	}
-
 	public List<CompanyDto> getCompanies() {
 		return companies;
 	}
@@ -120,6 +119,46 @@ public class UserDto extends GenericDto {
 
 	public void setAddresses(List<AddressDto> addresses) {
 		this.addresses = addresses;
+	}
+
+	public List<UserFieldDto> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<UserFieldDto> fields) {
+		this.fields = fields;
+	}
+
+	public MultipartFile getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(MultipartFile profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
+	public String[] getSelectedUserGroups() {
+		return selectedUserGroups;
+	}
+
+	public void setSelectedUserGroups(String[] selectedUserGroups) {
+		this.selectedUserGroups = selectedUserGroups;
+	}
+
+	public String[] getSelectedCompanies() {
+		return selectedCompanies;
+	}
+
+	public void setSelectedCompanies(String[] selectedCompanies) {
+		this.selectedCompanies = selectedCompanies;
+	}
+
+	public String[] getSelectedAddresses() {
+		return selectedAddresses;
+	}
+
+	public void setSelectedAddresses(String[] selectedAddresses) {
+		this.selectedAddresses = selectedAddresses;
 	}
 
 }

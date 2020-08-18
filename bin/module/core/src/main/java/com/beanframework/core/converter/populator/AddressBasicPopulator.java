@@ -17,25 +17,26 @@ public class AddressBasicPopulator extends AbstractPopulator<Address, AddressDto
 	@Override
 	public void populate(Address source, AddressDto target) throws PopulatorException {
 		convertCommonProperties(source, target);
-		target.setStreetName(target.getStreetName());
-		target.setStreetNumber(target.getStreetNumber());
-		target.setPostalCode(target.getPostalCode());
-		target.setTown(target.getTown());
-		target.setCompany(target.getCompany());
-		target.setPhone1(target.getPhone1());
-		target.setPhone2(target.getPhone2());
-		target.setEmail(target.getEmail());
-		target.setPoBox(target.getPoBox());
-		target.setFax(target.getFax());
-		target.setTitle(target.getTitle());
-		target.setLastName(target.getLastName());
-		target.setFirstName(target.getFirstName());
-		target.setMiddleName(target.getMiddleName());
-		target.setMiddleName2(target.getMiddleName2());
-		target.setDepartment(target.getDepartment());
-		target.setBuilding(target.getBuilding());
-		target.setApartment(target.getApartment());
-		target.setDistrict(target.getDistrict());
+		target.setName(source.getStreetName());
+		target.setStreetNumber(source.getStreetNumber());
+		target.setPostalCode(source.getPostalCode());
+		target.setTown(source.getTown());
+		target.setCompany(source.getCompany());
+		target.setPhone1(source.getPhone1());
+		target.setPhone2(source.getPhone2());
+		target.setMobilePhone(source.getMobilePhone());
+		target.setEmail(source.getEmail());
+		target.setPoBox(source.getPoBox());
+		target.setFax(source.getFax());
+		target.setTitle(source.getTitle());
+		target.setLastName(source.getLastName());
+		target.setFirstName(source.getFirstName());
+		target.setMiddleName(source.getMiddleName());
+		target.setMiddleName2(source.getMiddleName2());
+		target.setDepartment(source.getDepartment());
+		target.setBuilding(source.getBuilding());
+		target.setApartment(source.getApartment());
+		target.setDistrict(source.getDistrict());
 	}
 
 }

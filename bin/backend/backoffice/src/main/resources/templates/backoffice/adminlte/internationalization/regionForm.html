@@ -76,7 +76,7 @@
 											<div class="form-group">
 												<label for="country" th:text="#{module.region.country}"></label>
 												&nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-country"><i class="fa fa-edit color"></i></button>
+												<button type="button" data-toggle="modal" data-target="#modal-country"><i class="fa fa-edit"></i></button>
 												<table class="table table-bordered table-hover" id="selectedCountryTable">
 													<thead>
 														<tr>
@@ -94,7 +94,7 @@
 																<span th:text="*{country.name}"></span>
 															</td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedCountry', [[*{country.uuid}]]);"><i class="fa fa-minus color"></i></button>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedCountry', [[*{country.uuid}]]);"><i class="fa fa-minus"></i></button>
 															</td>
 														</tr>
 													</tbody>

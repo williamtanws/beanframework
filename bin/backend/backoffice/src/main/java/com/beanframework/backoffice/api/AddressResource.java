@@ -77,7 +77,7 @@ public class AddressResource extends AbstractResource {
 			AddressDataTableResponseData data = new AddressDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
-			data.setName(StringUtils.stripToEmpty(dto.getStreetName()));
+			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;

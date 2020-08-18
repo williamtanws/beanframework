@@ -1,13 +1,9 @@
 package com.beanframework.dynamicfield.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -51,12 +47,6 @@ public class DynamicFieldSlot extends GenericEntity {
 	@JoinColumn(name = "dynamicfield_uuid")
 	private DynamicField dynamicField;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.LAZY)
-	private List<DynamicFieldTemplate> dynamicFieldTemplates = new ArrayList<DynamicFieldTemplate>();
-
 	public String getName() {
 		return name;
 	}
@@ -80,13 +70,4 @@ public class DynamicFieldSlot extends GenericEntity {
 	public void setDynamicField(DynamicField dynamicField) {
 		this.dynamicField = dynamicField;
 	}
-
-	public List<DynamicFieldTemplate> getDynamicFieldTemplates() {
-		return dynamicFieldTemplates;
-	}
-
-	public void setDynamicFieldTemplates(List<DynamicFieldTemplate> dynamicFieldTemplates) {
-		this.dynamicFieldTemplates = dynamicFieldTemplates;
-	}
-
 }

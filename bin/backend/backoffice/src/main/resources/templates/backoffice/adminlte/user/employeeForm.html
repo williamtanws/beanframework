@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<head>
+<title th:utext="#{module.employee}"></title>
+</head>
+<body>
+	<th:block layout:fragment="update">
+		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.employee')}}, deleteUuid=${employeeDto.uuid})}"></th:block>
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.employee')}" enctype="multipart/form-data" method="post" th:object="${employeeDto}">
+			<input type="hidden" name="create" th:if="*{uuid == null}" />
+			<input type="hidden" name="update" th:if="*{uuid != null}" />
+			<input type="hidden" name="uuid" th:value="${employeeDto.uuid}" />
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box box-solid">
+						<div class="box-body bg-gray">
+							<div class="row">
+								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
+									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='employee_delete')}"></th:block>
+								</div>
+								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
+									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='employee_delete')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='employee_update')}"></th:block>
+								</div>
+							</div>
+						</div>
+						<!-- /.box-header -->
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<!-- Custom Tabs -->
+					<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+							<li class="active">
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
+							</li>
+							<li>
+								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.backoffice.attribute}" onclick="changeTab('attribute')"></a>
+							</li>
+							<li th:if="*{uuid != null}">
+								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
+							</li>
+							<li th:if="*{uuid != null}">
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
+							</li>
+						</ul>
+						<div class="tab-content tab-validate">
+							<div class="tab-pane active" id="tab_general">
+								<div class="box-body">
+									<div class="row">
+										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="name" th:text="#{module.employee.name}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="password" th:text="#{module.employee.password}"></label>
+												<input type="password" class="form-control" name="password">
+												<span class="help-block"></span>
+											</div>
+											<div class="form-group">
+												<label for="confirmPassword" th:text="#{module.employee.password.confirm}"></label>
+												<input name="confirmPassword" type="password" class="form-control">
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="enabled" th:text="#{module.employee.enabled}"></label>
+												<small th:text="#{module.employee.enabled.indicate}"></small>
+												<select class="form-control" name="enabled">
+													<option value="1" th:selected="*{enabled == true} " th:text="#{module.backoffice.yes}"></option>
+													<option value="0" th:selected="*{enabled == false}" th:text="#{module.backoffice.no}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="accountNonLocked" th:text="#{module.employee.locked}"></label>
+												<small th:text="#{module.employee.locked.indicate}"></small>
+												<select class="form-control" name="accountNonLocked">
+													<option value="1" th:selected="*{accountNonLocked == true} " th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="*{accountNonLocked == false}" th:text="#{module.backoffice.yes}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="accountNonExpired" th:text="#{module.employee.expired}"></label>
+												<small th:text="#{module.employee.expired.indicate}"></small>
+												<select class="form-control" name="accountNonExpired">
+													<option value="1" th:selected="*{accountNonExpired == true} " th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="*{accountNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="credentialsNonExpired" th:text="#{module.employee.credentials.expired}"></label>
+												<small th:text="#{module.employee.credentials.expired.indicate}"></small>
+												<select class="form-control" name="credentialsNonExpired">
+													<option value="1" th:selected="*{credentialsNonExpired == true}" th:text="#{module.backoffice.no}"></option>
+													<option value="0" th:selected="*{credentialsNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="active" th:text="#{module.employee.userGroups}"></label>
+												&nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-userGroup"><i class="fa fa-plus"></i></button>
+												<table class="table table-bordered table-hover" id="selectedUserGroupTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="userGroup : *{userGroups}" th:id="'row'+${userGroup.uuid}">
+															<td>
+																<span th:text="${userGroup.id}"></span>
+															</td>
+															<td>
+																<span th:text="${userGroup.name}"></span>
+															</td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedUserGroups', [[${userGroup.uuid}]]);"><i class="fa fa-minus"></i></button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedUserGroups">
+													<th:block th:each="userGroup : *{userGroups}">
+														<input type="hidden" name="selectedUserGroups" th:value="${userGroup.uuid}" />
+													</th:block>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="active" th:text="#{module.employee.companies}"></label>
+												&nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-company"><i class="fa fa-plus"></i></button>
+												<table class="table table-bordered table-hover" id="selectedCompanyTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="company : *{companies}" th:id="'row'+${company.uuid}">
+															<td>
+																<span th:text="${company.id}"></span>
+															</td>
+															<td>
+																<span th:text="${company.name}"></span>
+															</td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedCompanies', [[${company.uuid}]]);"><i class="fa fa-minus"></i></button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedCompanies">
+													<th:block th:each="company : *{companies}">
+														<input type="hidden" name="selectedCompanies" th:value="${company.uuid}" />
+													</th:block>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="active" th:text="#{module.employee.addresses}"></label>
+												&nbsp;
+												<button type="button" data-toggle="modal" data-target="#modal-address"><i class="fa fa-plus"></i></button>
+												<table class="table table-bordered table-hover" id="selectedAddressTable">
+													<thead>
+														<tr>
+															<th th:text="#{module.backoffice.id}"></th>
+															<th th:text="#{module.backoffice.name}"></th>
+															<th th:text="#{module.backoffice.remove}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="address : *{addresses}" th:id="'row'+${address.uuid}">
+															<td>
+																<span th:text="${address.id}"></span>
+															</td>
+															<td>
+																<span th:text="${address.name}"></span>
+															</td>
+															<td>
+																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedAddresses', [[${address.uuid}]]);"><i class="fa fa-minus"></i></button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<span class="help-block"></span>
+												<div id="selectedAddresses">
+													<th:block th:each="address : *{addresses}">
+														<input type="hidden" name="selectedAddresses" th:value="${address.uuid}" />
+													</th:block>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="picture" th:text="#{module.employee.picture}"></label>
+												<input type="file" class="form-control" name="profilePicture" accept="image/*">
+												<span class="help-block"></span>
+											</div>
+											<div class="form-group" style="text-align: center;">
+												<img style="max-width: 100%" th:src="@{${@environment.getProperty('path.user.profile.picture')}(type='original',uuid=*{uuid})}" class="img-circle" alt="User Image">
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_attribute">
+								<div class="box-body">
+									<div class="row">
+										<th:block layout:insert="~{common/adminlte/common/dynamicfield/layout :: input(fields=*{fields})}"></th:block>
+									</div>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
+								<div class="box-body">
+									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.employee.history')}(uuid=*{uuid})} )}"></th:block>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
+								<div class="box-body">
+									<th:block layout:insert="~{common/adminlte/common/component/administration :: administration}"></th:block>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
+						</div>
+						<!-- /.tab-content -->
+					</div>
+					<!-- nav-tabs-custom -->
+				</div>
+				<!-- /.col -->
+			</div>
+		</form>
+		<div class="modal fade" id="modal-userGroup">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.country.userGroups}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="userGroupTable" class="table table-bordered table-hover" style="width:100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.usergroup.page')}}]]*/;
+						    
+						    var userGroupTable = $('#userGroupTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#userGroupTable').find("input:text").val("");
+					                    	  $("#userGroupTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#userGroupTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedUserGroups'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#userGroupTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#userGroupTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	userGroupTable.columns().every(function (index) {
+						    	    $('#userGroupTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	userGroupTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelects('selectedUserGroups','userGroupTable','selectedUserGroupTable')" class="btn btn-primary" data-dismiss="modal" th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal fade" id="modal-company">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.country.companies}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="companyTable" class="table table-bordered table-hover" style="width:100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.company.page')}}]]*/;
+						    
+						    var companyTable = $('#companyTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#companyTable').find("input:text").val("");
+					                    	  $("#companyTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#companyTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedCompanies'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#companyTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#companyTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	companyTable.columns().every(function (index) {
+						    	    $('#companyTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	companyTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelects('selectedCompanies','companyTable','selectedCompanyTable')" class="btn btn-primary" data-dismiss="modal" th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		
+		<div class="modal fade" id="modal-address">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.country.addresses}"></h4>
+					</div>
+					<div class="modal-body">
+						<table id="addressTable" class="table table-bordered table-hover" style="width:100%">
+							<thead>
+								<tr>
+									<th th:text="#{module.backoffice.id}" class="text-center"></th>
+									<th th:text="#{module.backoffice.name}" class="text-center"></th>
+									<th th:text="#{module.backoffice.select}" class="text-center"></th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<script th:inline="javascript">
+						    /*<![CDATA[*/
+						    	
+						    var locale = /*[[${#locale}]]*/;
+						    
+						    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.address.page')}}]]*/;
+						    
+						    var addressTable = $('#addressTable').DataTable({
+					    		  'language' : {
+							        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+							      },
+					    	      'pageLength'  : 10,
+					    	      'paging'      : true,
+					    	      'lengthChange': true,
+					    	      'searching'   : true,
+					    	      'ordering'    : true,
+					    	      'info'        : true,
+					    	      'autoWidth'   : true,
+					    	      'processing': true,
+					    	      'serverSide': true,
+					    	      'searchDelay': 1000,
+						    	  'bStateSave': false,
+					    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+					    	      "<'row'<'col-sm-12'tr>>" +
+					    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+					    	      'buttons': [
+					                  {
+					                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+					                      action: function ( e, dt, node, config ) {
+					                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+					                    	  $('#addressTable').find("input:text").val("");
+					                    	  $("#addressTable").find("select").each(function () { // there is no such thing as input[type=select] 
+					                    	        this.selectedIndex = 0; // this is a <select>
+					                    	  });
+					                    	  $('#addressTable .select2').val('').trigger('change');
+					                      }
+					                  }
+					              ],
+					    	      'ajax': {
+					                    'url': ajaxUrl
+					              },
+					              'columns': [
+					                    { "data": "id" },
+					                    { "data": "name" },
+					                    { "data": "" }
+					              ],
+					    	      'columnDefs': [
+					    	            { 
+					    	                targets: 2,
+					    	                'searchable': false,
+					    	                'orderable': false,
+					    	                'className': 'text-center',
+					    	                render: function(data, type, row, meta)
+					    	                {
+					    	                	return "<input type='radio' value='"+JSON.stringify(row)+"' name='tableSelectedAddresses'>"; 
+					    	                }
+					    	            },
+						            	{                                 
+						                	"targets": '_all',
+						                	"render": $.fn.dataTable.render.text()
+						                }              
+					    	       ]
+					    	});
+						    
+						    $('.table').on('draw.dt', function () {
+						    	$('input').iCheck({
+									checkboxClass : 'icheckbox_square-blue',
+									radioClass : 'iradio_square-blue',
+									increaseArea : '20%' // optional
+								});
+						    });
+						    
+						    $(document).ready(function ()
+						    {
+						    	$('#addressTable thead tr:eq(1) th').each(function(index){
+						    		if(index < 2){
+						    			var title = $('#addressTable thead tr:eq(0) th').eq( $(this).index() ).text();
+						    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+						            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+						    		} else{
+							            $(this).html('');
+						    		}
+						        });
+						    	
+						    	addressTable.columns().every(function (index) {
+						    	    $('#addressTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+						    	    	addressTable.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+						    	    });
+						    	});
+						    });
+						    /*]]>*/
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+						<button type="button" th:onclick="addSelects('selectedAddresses','addressTable','selectedAddressTable')" class="btn btn-primary" data-dismiss="modal" th:text="'  '+#{module.backoffice.select}+'  '"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    $(document).ready(function() {
+		    	
+		        $('#update-form').validate({
+		        	onkeyup: function(element) {
+		                this.element(element);
+		            },
+		        	onfocusout: false,
+		        	ignore: [],
+		            
+		            invalidHandler: function(form, validator) {
+		                var errors = validator.numberOfInvalids();
+		                if (errors) {                    
+		                    validator.errorList[0].element.focus();
+		                }
+		            },
+		            rules: {
+		            	id: {
+		                    required: true,
+		                    remote: {
+		                        url: /*[[${@environment.getProperty('path.api.employee.checkid')}]]*/ ,
+		                        type: "get",
+		                        data: {
+		                            uuid: /*[[${employeeDto.uuid}]]*/ ,
+		                            id: function() {
+		                                return $("#update-form input[name='id']").val();
+		                            }
+		                        }
+		                    }
+		                },
+		                name: {
+		                    required: true
+		                },
+		                password: {
+		                    required: false,
+		                    minlength: /*[[${@environment.getProperty('module.employee.password.min')}]]*/,
+		                    maxlength: /*[[${@environment.getProperty('module.employee.password.max')}]]*/
+		                },
+		                confirmPassword: {
+		                    equalTo: "#update-form input[name='password']"
+		                }
+		            },
+		            messages: {
+		                id: {
+		                    required: /*[[#{module.backoffice.id.required}]]*/ ,
+		                    remote: /*[[#{module.backoffice.id.exists}]]*/
+		                },
+		                name: {
+		                    required: /*[[#{module.employee.name.required}]]*/
+		                },
+		                password: {
+		                    required: /*[[#{module.employee.password.required}]]*/
+		                },
+		                confirmPassword: {
+		                    required: /*[[#{module.employee.password.confirm.required}]]*/ ,
+		                    equalTo: /*[[#{module.employee.password.confirm.notmatch}]]*/
+		                }
+		            },
+		            highlight: function(element) {
+		                $(element).closest('.form-group').addClass('has-error');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
+		                });
+		            },
+		            unhighlight: function(element) {
+		                $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').find('.help-block').html('');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+		                var noError = true;
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    noError = false;
+		                });
+		                if(noError){
+			                $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','black');
+		                }
+		            },
+		            errorPlacement: function(error, element) {
+		                element.closest('.form-group').find('.help-block').html(error.text());
+		            }
+		        });
+		
+		    });
+		    /*]]>*/
+		</script>
+
+	</th:block>
+</body>
+</html>

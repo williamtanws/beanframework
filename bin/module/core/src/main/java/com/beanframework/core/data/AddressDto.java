@@ -9,7 +9,7 @@ public class AddressDto extends GenericDto {
 	 */
 	private static final long serialVersionUID = -5023918004039728891L;
 	// General
-	private String streetName;
+	private String name;
 	private String streetNumber;
 	private String postalCode;
 	private String town;
@@ -52,12 +52,12 @@ public class AddressDto extends GenericDto {
 	private String selectedDefaultPaymentAddress;
 	private String selectedDefaultShipmentAddress;
 
-	public String getStreetName() {
-		return streetName;
+	public String getName() {
+		return name;
 	}
 
-	public void setStreetName(String streetName) {
-		this.streetName = streetName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getStreetNumber() {
