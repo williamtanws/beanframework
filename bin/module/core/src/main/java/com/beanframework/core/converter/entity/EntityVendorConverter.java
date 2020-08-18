@@ -16,6 +16,8 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.core.data.VendorDto;
+import com.beanframework.user.domain.Address;
+import com.beanframework.user.domain.Company;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.vendor.domain.Vendor;
 
@@ -143,18 +145,18 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 			// User Groups
 			if (source.getSelectedUserGroups() != null) {
 
-				Iterator<UserGroup> userGroupsIterator = prototype.getUserGroups().iterator();
-				while (userGroupsIterator.hasNext()) {
-					UserGroup userGroup = userGroupsIterator.next();
+				Iterator<UserGroup> itr = prototype.getUserGroups().iterator();
+				while (itr.hasNext()) {
+					UserGroup model = itr.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedUserGroups().length; i++) {
-						if (userGroup.getUuid().equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
+						if (model.getUuid().equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
 							remove = false;
 						}
 					}
 					if (remove) {
-						userGroupsIterator.remove();
+						itr.remove();
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				}
@@ -162,22 +164,128 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 				for (int i = 0; i < source.getSelectedUserGroups().length; i++) {
 
 					boolean add = true;
-					userGroupsIterator = prototype.getUserGroups().iterator();
-					while (userGroupsIterator.hasNext()) {
-						UserGroup userGroup = userGroupsIterator.next();
+					itr = prototype.getUserGroups().iterator();
+					while (itr.hasNext()) {
+						UserGroup model = itr.next();
 
-						if (userGroup.getUuid().equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
+						if (model.getUuid().equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
 							add = false;
 						}
 					}
 
 					if (add) {
-						UserGroup userGroup = modelService.findOneByUuid(UUID.fromString(source.getSelectedUserGroups()[i]), UserGroup.class);
-						if (userGroup != null) {
-							prototype.getUserGroups().add(userGroup);
+						UserGroup entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedUserGroups()[i]), UserGroup.class);
+						if (entity != null) {
+							prototype.getUserGroups().add(entity);
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
+				}
+			} else if (prototype.getUserGroups() != null && prototype.getUserGroups().isEmpty() == false) {
+				for (final Iterator<UserGroup> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
+					itr.next();
+					itr.remove();
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			}
+
+			// Companies
+			if (source.getSelectedCompanies() != null) {
+
+				Iterator<Company> itr = prototype.getCompanies().iterator();
+				while (itr.hasNext()) {
+					Company model = itr.next();
+
+					boolean remove = true;
+					for (int i = 0; i < source.getSelectedCompanies().length; i++) {
+						if (model.getUuid().equals(UUID.fromString(source.getSelectedCompanies()[i]))) {
+							remove = false;
+						}
+					}
+					if (remove) {
+						itr.remove();
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				}
+
+				for (int i = 0; i < source.getSelectedCompanies().length; i++) {
+
+					boolean add = true;
+					itr = prototype.getCompanies().iterator();
+					while (itr.hasNext()) {
+						Company model = itr.next();
+
+						if (model.getUuid().equals(UUID.fromString(source.getSelectedCompanies()[i]))) {
+							add = false;
+						}
+					}
+
+					if (add) {
+						Company entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedCompanies()[i]), Company.class);
+						if (entity != null) {
+							prototype.getCompanies().add(entity);
+							prototype.setLastModifiedDate(lastModifiedDate);
+						}
+					}
+				}
+			} else if (prototype.getCompanies() != null && prototype.getCompanies().isEmpty() == false) {
+				for (final Iterator<Company> itr = prototype.getCompanies().iterator(); itr.hasNext();) {
+					itr.next();
+					itr.remove();
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			}
+
+			// Addresses
+			if (source.getSelectedAddresses() != null) {
+
+				Iterator<Address> it = prototype.getAddresses().iterator();
+				while (it.hasNext()) {
+					Address o = it.next();
+
+					boolean remove = true;
+					for (int i = 0; i < source.getSelectedAddresses().length; i++) {
+						if (o.getUuid().equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
+							remove = false;
+						}
+					}
+					if (remove) {
+						Address entity = modelService.findOneByUuid(o.getUuid(), Address.class);
+						entity.setOwner(null);
+						modelService.saveEntity(entity, Address.class);
+						it.remove();
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				}
+
+				for (int i = 0; i < source.getSelectedAddresses().length; i++) {
+
+					boolean add = true;
+					it = prototype.getAddresses().iterator();
+					while (it.hasNext()) {
+						Address entity = it.next();
+
+						if (entity.getUuid().equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
+							add = false;
+						}
+					}
+
+					if (add) {
+						Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedAddresses()[i]), Address.class);
+						if (entity != null) {
+							entity.setOwner(prototype);
+							prototype.getAddresses().add(entity);
+							prototype.setLastModifiedDate(lastModifiedDate);
+						}
+					}
+				}
+			} else if (prototype.getAddresses() != null && prototype.getAddresses().isEmpty() == false) {
+				for (final Iterator<Address> itr = prototype.getAddresses().iterator(); itr.hasNext();) {
+					Address entity = modelService.findOneByUuid(itr.next().getUuid(), Address.class);
+					entity.setOwner(null);
+					modelService.saveEntity(entity, Address.class);
+					itr.remove();
+					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}
 

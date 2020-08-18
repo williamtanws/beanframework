@@ -32,7 +32,7 @@ function addSelects(selectedContainer, table, selectedTable){
 	    	var jsonObj = JSON.parse($(this).val());
 	    	if($('#'+selectedTable).find('tr#row'+jsonObj.uuid).length == 0){
 		    	$('#'+selectedContainer).append('<input type="hidden" name="'+selectedContainer+'" value="'+jsonObj.uuid+'"/>');
-		    	$('#'+selectedTable).append('<tr id="row'+jsonObj.uuid+'"><td><span>'+jsonObj.id+'</span></td><td><span>'+jsonObj.name+'</span></td><td><button class="btn btn-default btn-xs" onclick="removeSelected(\''+selectedContainer+'\', \''+jsonObj.uuid+'\');"><i class="fa fa-minus color"></i></button></td></tr>');
+		    	$('#'+selectedTable).append('<tr id="row'+jsonObj.uuid+'"><td><span>'+jsonObj.id+'</span></td><td><span>'+jsonObj.name+'</span></td><td><button class="btn btn-default btn-xs" onclick="removeSelected(\''+selectedContainer+'\', \''+jsonObj.uuid+'\');"><i class="fa fa-minus"></i></button></td></tr>');
 	    	}
 	    	$(this).iCheck('uncheck');
 	    }
@@ -47,7 +47,7 @@ function addSelect(selectedContainer, table, selectedTable){
 	    		$('#'+selectedTable+' > tbody').html("");
 	    		$('#'+selectedContainer).html("");
 		    	$('#'+selectedContainer).append('<input type="hidden" name="'+selectedContainer+'" value="'+jsonObj.uuid+'"/>');
-		    	$('#'+selectedTable).append('<tr id="row'+jsonObj.uuid+'"><td><span>'+jsonObj.id+'</span></td><td><span>'+jsonObj.name+'</span></td><td><button class="btn btn-default btn-xs" onclick="removeSelected(\''+selectedContainer+'\', \''+jsonObj.uuid+'\');"><i class="fa fa-minus color"></i></button></td></tr>');
+		    	$('#'+selectedTable).append('<tr id="row'+jsonObj.uuid+'"><td><span>'+jsonObj.id+'</span></td><td><span>'+jsonObj.name+'</span></td><td><button class="btn btn-default btn-xs" onclick="removeSelected(\''+selectedContainer+'\', \''+jsonObj.uuid+'\');"><i class="fa fa-minus"></i></button></td></tr>');
 	    	}
 	    	$(this).iCheck('uncheck');
 	    }

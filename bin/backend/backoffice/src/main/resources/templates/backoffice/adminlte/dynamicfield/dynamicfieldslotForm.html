@@ -73,7 +73,7 @@
 										<div class="form-group">
 											<label for="dynamicField" th:text="#{module.dynamicfieldslot.dynamicField}"></label> &nbsp;
 											<button type="button" data-toggle="modal" data-target="#modal-dynamicField">
-												<i class="fa fa-edit color"></i>
+												<i class="fa fa-edit"></i>
 											</button>
 											<table class="table table-bordered table-hover" id="selectedDynamicFieldTable">
 												<thead>
@@ -89,7 +89,7 @@
 														<td><span th:text="*{dynamicField.name}"></span></td>
 														<td>
 															<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedDynamicField', [[*{dynamicField.uuid}]]);">
-																<i class="fa fa-minus color"></i>
+																<i class="fa fa-minus"></i>
 															</button>
 														</td>
 													</tr>

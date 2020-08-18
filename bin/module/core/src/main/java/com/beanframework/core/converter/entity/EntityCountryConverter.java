@@ -108,7 +108,9 @@ public class EntityCountryConverter implements EntityConverter<CountryDto, Count
 			}
 			else if(prototype.getRegions() != null && prototype.getRegions().isEmpty() == false){
 				for (final Iterator<Region> itr = prototype.getRegions().iterator(); itr.hasNext();) {
-					itr.next();
+					Region entity = modelService.findOneByUuid(itr.next().getUuid(), Region.class);
+					entity.setCountry(null);
+					modelService.saveEntity(entity, Region.class);
 				    itr.remove(); 
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}

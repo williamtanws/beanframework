@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
+import com.beanframework.core.data.AddressDto;
+import com.beanframework.core.data.CompanyDto;
 import com.beanframework.core.data.UserDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.core.data.UserGroupDto;
@@ -22,10 +24,16 @@ public class UserFullPopulator extends AbstractPopulator<User, UserDto> implemen
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserFullPopulator.class);
 	
 	@Autowired
-	private UserGroupFullPopulator userGroupFullPopulator;
+	private UserFieldFullPopulator userFieldFullPopulator;
 	
 	@Autowired
-	private UserFieldFullPopulator userFieldFullPopulator;
+	private UserGroupBasicPopulator userGroupBasicPopulator;
+	
+	@Autowired
+	private CompanyBasicPopulator companyBasicPopulator;
+	
+	@Autowired
+	private AddressBasicPopulator addressBasicPopulator;
 
 	@Override
 	public void populate(User source, UserDto target) throws PopulatorException {
@@ -33,14 +41,14 @@ public class UserFullPopulator extends AbstractPopulator<User, UserDto> implemen
 			convertCommonProperties(source, target);
 			target.setName(source.getName());
 			target.setType(source.getType());
-			target.setPassword(source.getPassword());
 			target.setAccountNonExpired(source.getAccountNonExpired());
 			target.setAccountNonLocked(source.getAccountNonLocked());
 			target.setCredentialsNonExpired(source.getCredentialsNonExpired());
 			target.setEnabled(source.getEnabled());
-			target.setName(source.getName());
-
-			target.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(userGroupFullPopulator)));
+			
+			target.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(userGroupBasicPopulator)));
+			target.setCompanies(modelService.getDto(source.getCompanies(), CompanyDto.class, new DtoConverterContext(companyBasicPopulator)));
+			target.setAddresses(modelService.getDto(source.getAddresses(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
 
 			target.setFields(modelService.getDto(source.getFields(), UserFieldDto.class, new DtoConverterContext(userFieldFullPopulator)));
 			if (target.getFields() != null)

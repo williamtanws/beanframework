@@ -32,7 +32,9 @@ public class CompanyDto extends GenericDto {
 	private AddressDto unloadingAddress;
 	private AddressDto billingAddress;
 	private AddressDto contactAddress;
+	private List<UserDto> users = new ArrayList<UserDto>();
 
+	private String selectedContactPerson;
 	private String selectedResponsibleCompany;
 	private String selectedCountry;
 	private String[] selectedAddresses;
@@ -40,6 +42,7 @@ public class CompanyDto extends GenericDto {
 	private String selectedUnloadingAddress;
 	private String selectedBillingAddress;
 	private String selectedContactAddress;
+	private String[] selectedUsers;
 
 	public String getName() {
 		return name;
@@ -255,6 +258,30 @@ public class CompanyDto extends GenericDto {
 
 	public void setSelectedContactAddress(String selectedContactAddress) {
 		this.selectedContactAddress = selectedContactAddress;
+	}
+
+	public String getSelectedContactPerson() {
+		return selectedContactPerson;
+	}
+
+	public void setSelectedContactPerson(String selectedContactPerson) {
+		this.selectedContactPerson = selectedContactPerson;
+	}
+
+	public List<UserDto> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserDto> users) {
+		this.users = users;
+	}
+
+	public String[] getSelectedUsers() {
+		return selectedUsers;
+	}
+
+	public void setSelectedUsers(String[] selectedUsers) {
+		this.selectedUsers = selectedUsers;
 	}
 
 }

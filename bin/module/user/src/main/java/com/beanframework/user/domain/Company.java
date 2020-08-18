@@ -19,14 +19,15 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.AuditJoinTable;
+import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.internationalization.domain.Country;
-import com.beanframework.user.LineOfBusinessType;
 import com.beanframework.user.CompanyConstants;
+import com.beanframework.user.LineOfBusinessType;
 
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -57,6 +58,7 @@ public class Company extends GenericEntity {
 	public static final String BUYER_SPECIFIC_ID = "buyerSpecificId";
 	public static final String SUPPLIER_SPECIFIC_ID = "supplierSpecificId";
 	public static final String ADDRESS = "addresses";
+	public static final String SHIPPING_ADDRESS = "shippingAddress";
 	public static final String UNLOADING_ADDRESS = "unloadingAddress";
 	public static final String BILLING_ADDRESS = "billingAddress";
 	public static final String CONTACT_ADDRESS = "contactAddress";
@@ -147,6 +149,12 @@ public class Company extends GenericEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "contact_address_uuid")
 	private Address contactAddress;
+
+	@AuditMappedBy(mappedBy = "companies")
+	@Audited(withModifiedFlag = true)
+	@Cascade({ CascadeType.REFRESH })
+	@ManyToMany(mappedBy = "companies", fetch = FetchType.LAZY)
+	private List<User> users = new ArrayList<User>();
 
 	public String getName() {
 		return name;
@@ -306,6 +314,14 @@ public class Company extends GenericEntity {
 
 	public void setContactAddress(Address contactAddress) {
 		this.contactAddress = contactAddress;
+	}
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 }

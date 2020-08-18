@@ -23,7 +23,6 @@ public class UserBasicPopulator extends AbstractPopulator<User, UserDto> impleme
 		target.setAccountNonLocked(source.getAccountNonLocked());
 		target.setCredentialsNonExpired(source.getCredentialsNonExpired());
 		target.setEnabled(source.getEnabled());
-		target.setName(source.getName());
 	}
 
 }

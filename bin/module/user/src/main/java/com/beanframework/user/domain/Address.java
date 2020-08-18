@@ -74,7 +74,7 @@ public class Address extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_uuid")
+	@JoinColumn(name = "owner_uuid")
 	private User owner;
 
 	// General

@@ -17,18 +17,18 @@ public class CompanyBasicPopulator extends AbstractPopulator<Company, CompanyDto
 	@Override
 	public void populate(Company source, CompanyDto target) throws PopulatorException {
 		convertCommonProperties(source, target);
-		target.setName(target.getName());
-		target.setDescription(target.getDescription());
-		target.setLineOfBusiness(target.getLineOfBusiness());
-		target.setBuyer(target.getBuyer());
-		target.setManufacturer(target.getManufacturer());
-		target.setSupplier(target.getSupplier());
-		target.setCarrier(target.getCarrier());
-		target.setVatId(target.getVatId());
-		target.setDunsId(target.getDunsId());
-		target.setIlnId(target.getIlnId());
-		target.setBuyerSpecificId(target.getBuyerSpecificId());
-		target.setSupplierSpecificId(target.getSupplierSpecificId());
+		target.setName(source.getName());
+		target.setDescription(source.getDescription());
+		target.setLineOfBusiness(source.getLineOfBusiness());
+		target.setBuyer(source.getBuyer());
+		target.setManufacturer(source.getManufacturer());
+		target.setSupplier(source.getSupplier());
+		target.setCarrier(source.getCarrier());
+		target.setVatId(source.getVatId());
+		target.setDunsId(source.getDunsId());
+		target.setIlnId(source.getIlnId());
+		target.setBuyerSpecificId(source.getBuyerSpecificId());
+		target.setSupplierSpecificId(source.getSupplierSpecificId());
 	}
 
 }

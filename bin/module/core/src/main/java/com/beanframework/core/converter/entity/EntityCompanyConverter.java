@@ -17,6 +17,7 @@ import com.beanframework.core.data.CompanyDto;
 import com.beanframework.internationalization.domain.Country;
 import com.beanframework.user.domain.Address;
 import com.beanframework.user.domain.Company;
+import com.beanframework.user.domain.User;
 
 public class EntityCompanyConverter implements EntityConverter<CompanyDto, Company> {
 
@@ -130,6 +131,26 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 					}
 				} else {
 					throw new ConverterException("Company UUID not found: " + source.getSelectedResponsibleCompany());
+				}
+			}
+
+			// ContactPerson
+			if (StringUtils.isBlank(source.getSelectedContactPerson())) {
+				if (prototype.getContactPerson() != null) {
+					prototype.setContactPerson(null);
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			} else {
+				User entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedContactPerson()), User.class);
+
+				if (entity != null) {
+
+					if (prototype.getContactPerson() == null || prototype.getContactPerson().getUuid().equals(entity.getUuid()) == false) {
+						prototype.setContactPerson(entity);
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				} else {
+					throw new ConverterException("ContactPerson UUID not found: " + source.getSelectedContactPerson());
 				}
 			}
 
@@ -274,6 +295,58 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 				}
 			}
 
+			// Users
+			if (source.getSelectedUsers() != null) {
+
+				Iterator<User> it = prototype.getUsers().iterator();
+				while (it.hasNext()) {
+					User o = it.next();
+
+					boolean remove = true;
+					for (int i = 0; i < source.getSelectedUsers().length; i++) {
+						if (o.getUuid().equals(UUID.fromString(source.getSelectedUsers()[i]))) {
+							remove = false;
+						}
+					}
+					if (remove) {
+						User entity = modelService.findOneByUuid(o.getUuid(), User.class);
+						entity.getCompanies().remove(prototype);
+						modelService.saveEntity(entity, User.class);
+						it.remove();
+						prototype.setLastModifiedDate(lastModifiedDate);
+					}
+				}
+
+				for (int i = 0; i < source.getSelectedUsers().length; i++) {
+
+					boolean add = true;
+					it = prototype.getUsers().iterator();
+					while (it.hasNext()) {
+						User entity = it.next();
+
+						if (entity.getUuid().equals(UUID.fromString(source.getSelectedUsers()[i]))) {
+							add = false;
+						}
+					}
+
+					if (add) {
+						User entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedUsers()[i]), User.class);
+						if (entity != null) {
+							entity.getCompanies().add(prototype);
+							prototype.getUsers().add(entity);
+							prototype.setLastModifiedDate(lastModifiedDate);
+						}
+					}
+				}
+			} else if (prototype.getUsers() != null && prototype.getUsers().isEmpty() == false) {
+				for (final Iterator<User> itr = prototype.getUsers().iterator(); itr.hasNext();) {
+					User entity = modelService.findOneByUuid(itr.next().getUuid(), User.class);
+					entity.getCompanies().remove(prototype);
+					modelService.saveEntity(entity, User.class);
+					itr.remove();
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			}
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
