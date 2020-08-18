@@ -64,14 +64,12 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="active" th:text="#{module.dynamicfieldtemplate.dynamicFieldSlots}"></label>
-												&nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-dynamicFieldSlot"><i class="fa fa-plus"></i></button>
 												<table class="table table-bordered table-hover" id="selectedDynamicFieldSlotTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-dynamicFieldSlot"><i class="fa fa-plus"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -83,7 +81,7 @@
 																<span th:text="${dynamicFieldSlot.name}"></span>
 															</td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedDynamicFieldSlots', [[${dynamicFieldSlot.uuid}]]);"><i class="fa fa-minus"></i></button>
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedDynamicFieldSlots', [[${dynamicFieldSlot.uuid}]]);"><i class="fa fa-minus"></i></button>
 															</td>
 														</tr>
 													</tbody>

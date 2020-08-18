@@ -111,14 +111,12 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="language" th:text="#{module.dynamicfield.language}"></label>
-												&nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-language"><i class="fa fa-edit"></i></button>
 												<table class="table table-bordered table-hover" id="selectedLanguageTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-language"><i class="fa fa-edit"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -130,7 +128,7 @@
 																<span th:text="*{language.name}"></span>
 															</td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedLanguage', [[*{language.uuid}]]);"><i class="fa fa-minus"></i></button>
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedLanguage', [[*{language.uuid}]]);"><i class="fa fa-minus"></i></button>
 															</td>
 														</tr>
 													</tbody>
@@ -145,14 +143,12 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="active" th:text="#{module.dynamicfield.enumerations}"></label>
-												&nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-enumeration"><i class="fa fa-plus"></i></button>
 												<table class="table table-bordered table-hover" id="selectedEnumerationTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-enumeration"><i class="fa fa-plus"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -164,7 +160,7 @@
 																<span th:text="${enumeration.name}"></span>
 															</td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedEnumerations', [[${enumeration.uuid}]]);"><i class="fa fa-minus"></i></button>
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedEnumerations', [[${enumeration.uuid}]]);"><i class="fa fa-minus"></i></button>
 															</td>
 														</tr>
 													</tbody>
