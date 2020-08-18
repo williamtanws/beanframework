@@ -70,16 +70,13 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="contactPerson" th:text="#{module.company.contactPerson}"></label> &nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-contactPerson">
-													<i class="fa fa-edit"></i>
-												</button>
+												<label for="contactPerson" th:text="#{module.company.contactPerson}"></label>
 												<table class="table table-bordered table-hover" id="selectedContactPersonTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-contactPerson"><i class="fa fa-edit"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -87,7 +84,7 @@
 															<td><span th:text="*{contactPerson.id}"></span></td>
 															<td><span th:text="*{contactPerson.name}"></span></td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedContactPerson', [[*{contactPerson.uuid}]]);">
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedContactPerson', [[*{contactPerson.uuid}]]);">
 																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
@@ -103,16 +100,13 @@
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="responsibleCompany" th:text="#{module.company.responsibleCompany}"></label> &nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-responsibleCompany">
-													<i class="fa fa-edit"></i>
-												</button>
+												<label for="responsibleCompany" th:text="#{module.company.responsibleCompany}"></label>
 												<table class="table table-bordered table-hover" id="selectedResponsibleCompanyTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-responsibleCompany"><i class="fa fa-edit"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -120,7 +114,7 @@
 															<td><span th:text="*{responsibleCompany.id}"></span></td>
 															<td><span th:text="*{responsibleCompany.name}"></span></td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedResponsibleCompany', [[*{responsibleCompany.uuid}]]);">
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedResponsibleCompany', [[*{responsibleCompany.uuid}]]);">
 																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
@@ -138,16 +132,13 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="country" th:text="#{module.company.country}"></label> &nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-country">
-													<i class="fa fa-edit"></i>
-												</button>
+												<label for="country" th:text="#{module.company.country}"></label>
 												<table class="table table-bordered table-hover" id="selectedCountryTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-country"><i class="fa fa-edit"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -155,7 +146,7 @@
 															<td><span th:text="*{country.id}"></span></td>
 															<td><span th:text="*{country.name}"></span></td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedCountry', [[*{country.uuid}]]);">
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedCountry', [[*{country.uuid}]]);">
 																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
@@ -274,14 +265,12 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="active" th:text="#{module.company.addresses}"></label>
-												&nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-address"><i class="fa fa-plus"></i></button>
 												<table class="table table-bordered table-hover" id="selectedAddressTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-address"><i class="fa fa-plus"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -293,7 +282,7 @@
 																<span th:text="${address.name}"></span>
 															</td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedAddresses', [[${address.uuid}]]);"><i class="fa fa-minus"></i></button>
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedAddresses', [[${address.uuid}]]);"><i class="fa fa-minus"></i></button>
 															</td>
 														</tr>
 													</tbody>
@@ -308,16 +297,13 @@
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="shippingAddress" th:text="#{module.company.shippingAddress}"></label> &nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-shippingAddress">
-													<i class="fa fa-edit"></i>
-												</button>
+												<label for="shippingAddress" th:text="#{module.company.shippingAddress}"></label>
 												<table class="table table-bordered table-hover" id="selectedShippingAddressTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-shippingAddress"><i class="fa fa-edit"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -325,7 +311,7 @@
 															<td><span th:text="*{shippingAddress.id}"></span></td>
 															<td><span th:text="*{shippingAddress.name}"></span></td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedShippingAddress', [[*{shippingAddress.uuid}]]);">
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedShippingAddress', [[*{shippingAddress.uuid}]]);">
 																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
@@ -343,16 +329,13 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="unloadingAddress" th:text="#{module.company.unloadingAddress}"></label> &nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-unloadingAddress">
-													<i class="fa fa-edit"></i>
-												</button>
+												<label for="unloadingAddress" th:text="#{module.company.unloadingAddress}"></label>
 												<table class="table table-bordered table-hover" id="selectedUnloadingAddressTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-unloadingAddress"><i class="fa fa-edit"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -360,7 +343,7 @@
 															<td><span th:text="*{unloadingAddress.id}"></span></td>
 															<td><span th:text="*{unloadingAddress.name}"></span></td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedUnloadingAddress', [[*{unloadingAddress.uuid}]]);">
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedUnloadingAddress', [[*{unloadingAddress.uuid}]]);">
 																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
@@ -376,16 +359,13 @@
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="billingAddress" th:text="#{module.company.billingAddress}"></label> &nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-billingAddress">
-													<i class="fa fa-edit"></i>
-												</button>
+												<label for="billingAddress" th:text="#{module.company.billingAddress}"></label>
 												<table class="table table-bordered table-hover" id="selectedBillingAddressTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-billingAddress"><i class="fa fa-edit"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -393,7 +373,7 @@
 															<td><span th:text="*{billingAddress.id}"></span></td>
 															<td><span th:text="*{billingAddress.name}"></span></td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedBillingAddress', [[*{billingAddress.uuid}]]);">
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedBillingAddress', [[*{billingAddress.uuid}]]);">
 																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
@@ -411,16 +391,13 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="contactAddress" th:text="#{module.company.contactAddress}"></label> &nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-contactAddress">
-													<i class="fa fa-edit"></i>
-												</button>
+												<label for="contactAddress" th:text="#{module.company.contactAddress}"></label>
 												<table class="table table-bordered table-hover" id="selectedContactAddressTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-contactAddress"><i class="fa fa-edit"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -428,7 +405,7 @@
 															<td><span th:text="*{contactAddress.id}"></span></td>
 															<td><span th:text="*{contactAddress.name}"></span></td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedContactAddress', [[*{contactAddress.uuid}]]);">
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedContactAddress', [[*{contactAddress.uuid}]]);">
 																	<i class="fa fa-minus"></i>
 																</button>
 															</td>
@@ -445,14 +422,12 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="active" th:text="#{module.company.users}"></label>
-												&nbsp;
-												<button type="button" data-toggle="modal" data-target="#modal-user"><i class="fa fa-plus"></i></button>
 												<table class="table table-bordered table-hover" id="selectedUserTable">
 													<thead>
 														<tr>
-															<th th:text="#{module.backoffice.id}"></th>
+															<th style="width:30%" th:text="#{module.backoffice.id}"></th>
 															<th th:text="#{module.backoffice.name}"></th>
-															<th th:text="#{module.backoffice.remove}"></th>
+															<th style="width:1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#modal-user"><i class="fa fa-plus"></i></button></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -464,7 +439,7 @@
 																<span th:text="${user.name}"></span>
 															</td>
 															<td>
-																<button type="button" class="btn btn-default btn-xs" th:onclick="removeSelected('selectedUsers', [[${user.uuid}]]);"><i class="fa fa-minus"></i></button>
+																<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected('selectedUsers', [[${user.uuid}]]);"><i class="fa fa-minus"></i></button>
 															</td>
 														</tr>
 													</tbody>
