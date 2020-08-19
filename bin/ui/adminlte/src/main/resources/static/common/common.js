@@ -21,33 +21,33 @@ function addCommas(x) {
 	}
 }
 
-function removeSelected(selectedContainer, uuid){
-	$('#row'+uuid).remove();
+function removeSelected(selectedTableId, selectedContainer, uuid){
+	$('#'+selectedTableId+uuid).remove();
 	$('#'+selectedContainer+' input[type="hidden"][name="'+selectedContainer+'"][value="'+uuid+'"]').remove();
 }
 
-function addSelects(selectedContainer, table, selectedTable){
+function addSelects(selectedContainer, table, selectedTableId){
 	$('#'+table+' tbody input').each(function(){
 	    if($(this).is(":checked")){
 	    	var jsonObj = JSON.parse($(this).val());
-	    	if($('#'+selectedTable).find('tr#row'+jsonObj.uuid).length == 0){
+	    	if($('#'+selectedTableId).find('tr#'+selectedTableId+jsonObj.uuid).length == 0){
 		    	$('#'+selectedContainer).append('<input type="hidden" name="'+selectedContainer+'" value="'+jsonObj.uuid+'"/>');
-		    	$('#'+selectedTable).append('<tr id="row'+jsonObj.uuid+'"><td><span>'+jsonObj.id+'</span></td><td><span>'+jsonObj.name+'</span></td><td><button class="btn btn-default btn-sm" onclick="removeSelected(\''+selectedContainer+'\', \''+jsonObj.uuid+'\');"><i class="fa fa-minus"></i></button></td></tr>');
+		    	$('#'+selectedTableId).append('<tr id="'+selectedTableId+jsonObj.uuid+'"><td><span>'+jsonObj.id+'</span></td><td><span>'+jsonObj.name+'</span></td><td><button type="button" class="btn btn-default btn-sm" onclick="removeSelected(\''+selectedTableId+'\', \''+selectedContainer+'\', \''+jsonObj.uuid+'\');"><i class="fa fa-minus"></i></button></td></tr>');
 	    	}
 	    	$(this).iCheck('uncheck');
 	    }
 	});
 }
 
-function addSelect(selectedContainer, table, selectedTable){
+function addSelect(selectedContainer, table, selectedTableId){
 	$('#'+table+' tbody input').each(function(){
 	    if($(this).is(":checked")){
 	    	var jsonObj = JSON.parse($(this).val());
-	    	if($('#'+selectedTable).find('tr#row'+jsonObj.uuid).length == 0){
-	    		$('#'+selectedTable+' > tbody').html("");
+	    	if($('#'+selectedTableId).find('tr#'+selectedTableId+jsonObj.uuid).length == 0){
+	    		$('#'+selectedTableId+' > tbody').html("");
 	    		$('#'+selectedContainer).html("");
 		    	$('#'+selectedContainer).append('<input type="hidden" name="'+selectedContainer+'" value="'+jsonObj.uuid+'"/>');
-		    	$('#'+selectedTable).append('<tr id="row'+jsonObj.uuid+'"><td><span>'+jsonObj.id+'</span></td><td><span>'+jsonObj.name+'</span></td><td><button class="btn btn-default btn-sm" onclick="removeSelected(\''+selectedContainer+'\', \''+jsonObj.uuid+'\');"><i class="fa fa-minus"></i></button></td></tr>');
+		    	$('#'+selectedTableId).append('<tr id="'+selectedTableId+jsonObj.uuid+'"><td><span>'+jsonObj.id+'</span></td><td><span>'+jsonObj.name+'</span></td><td><button type="button" class="btn btn-default btn-sm" onclick="removeSelected(\''+selectedTableId+'\', \''+selectedContainer+'\', \''+jsonObj.uuid+'\');"><i class="fa fa-minus"></i></button></td></tr>');
 	    	}
 	    	$(this).iCheck('uncheck');
 	    }

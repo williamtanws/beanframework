@@ -9,16 +9,15 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
@@ -118,12 +117,9 @@ public class Company extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String supplierSpecificId;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "address_uuid"))
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = CompanyConstants.Table.COMPANY_ADDRESS_REL, joinColumns = @JoinColumn(name = "company_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "address_uuid", referencedColumnName = "uuid"))
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<Address> addresses = new ArrayList<Address>();
 
 	@Audited(withModifiedFlag = true)

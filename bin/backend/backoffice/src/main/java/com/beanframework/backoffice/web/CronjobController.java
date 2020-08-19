@@ -201,7 +201,7 @@ public class CronjobController extends AbstractController {
 			cronjobData.setValue(cronjobDataValue);
 
 			try {
-				cronjobFacade.updateCronjobData(cronjobDto.getUuid(), cronjobData);
+				cronjobFacade.createCronjobData(cronjobDto.getUuid(), cronjobData);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

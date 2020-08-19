@@ -9,6 +9,7 @@ import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.converter.populator.AbstractPopulator;
+import com.beanframework.core.converter.populator.AddressBasicPopulator;
 import com.beanframework.core.converter.populator.CountryBasicPopulator;
 import com.beanframework.core.converter.populator.RegionBasicPopulator;
 import com.beanframework.core.converter.populator.UserBasicPopulator;
@@ -31,6 +32,9 @@ public class AddressHistoryPopulator extends AbstractPopulator<Address, AddressD
 	
 	@Autowired
 	private UserBasicPopulator userBasicPopulator;
+	
+	@Autowired
+	private AddressBasicPopulator addressBasicPopulator;
 
 	@Override
 	public void populate(Address source, AddressDto target) throws PopulatorException {
@@ -60,6 +64,11 @@ public class AddressHistoryPopulator extends AbstractPopulator<Address, AddressD
 			target.setCountry(modelService.getDto(source.getCountry(), CountryDto.class, new DtoConverterContext(countryBasicPopulator)));
 			target.setRegion(modelService.getDto(source.getRegion(), RegionDto.class, new DtoConverterContext(regionBasicPopulator)));
 			target.setOwner(modelService.getDto(source.getOwner(), UserDto.class, new DtoConverterContext(userBasicPopulator)));
+			target.setShippingAddress(modelService.getDto(source.getShippingAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			target.setBillingAddress(modelService.getDto(source.getBillingAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			target.setContactAddress(modelService.getDto(source.getContactAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			target.setDefaultPaymentAddress(modelService.getDto(source.getDefaultPaymentAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			target.setDefaultShipmentAddress(modelService.getDto(source.getDefaultShipmentAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}
