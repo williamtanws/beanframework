@@ -54,7 +54,7 @@ public interface CronjobFacade {
 	CronjobDto addCronjobData(UUID uuid, String name, String value) throws BusinessException;
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_UPDATE)
-	void updateCronjobData(UUID cronjobUuid, CronjobDataDto cronjobData) throws BusinessException;
+	void createCronjobData(UUID cronjobUuid, CronjobDataDto cronjobData) throws BusinessException;
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_UPDATE)
 	void removeCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException;

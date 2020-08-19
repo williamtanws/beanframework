@@ -213,6 +213,8 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 						}
 					}
 				}
+			} else if (prototype.getAddresses() != null && prototype.getAddresses().isEmpty() == false) {
+				prototype.setAddresses(null);
 			}
 
 			// ShippingAddress

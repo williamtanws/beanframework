@@ -150,7 +150,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	}
 
 	@Override
-	public void updateCronjobData(UUID cronjobUuid, CronjobDataDto dto) throws BusinessException {
+	public void createCronjobData(UUID cronjobUuid, CronjobDataDto dto) throws BusinessException {
 
 		try {
 
