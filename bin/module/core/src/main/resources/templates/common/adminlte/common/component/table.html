@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="select (label,selectedTableId,selectedAttribute,attributeName,attributeObject,ajaxUrl,tableId,list)">
+	<th:block layout:fragment="select (label,selectedTableId,selectedAttribute,attributeName,attributeObject,ajaxUrl,tableId,list,fields)">
 		<div class="form-group">
 			<label th:text="${label}"></label>
 			<table class="table table-bordered table-hover" th:id="${selectedTableId}">
 				<thead>
 					<tr>
-						<th style="width: 30%" th:text="#{module.backoffice.id}"></th>
-						<th th:text="#{module.backoffice.name}"></th>
+						<th:block th:if="${fields != null}">
+							<th th:each="field : ${fields}" th:text="${field}"></th>
+						</th:block>
+						<th:block th:if="${fields == null}">
+							<th style="width: 30%" th:text="#{module.backoffice.id}"></th>
+							<th th:text="#{module.backoffice.name}"></th>
+						</th:block>
 						<th style="width: 1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" th:data-target="'#modal'+${attributeName}">
-								<i th:class="${list == null} ? 'fa fa-edit' : 'fa fa-plus'"></i>
+								<i th:class="${list == false} ? 'fa fa-edit' : 'fa fa-plus'"></i>
 							</button></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="state : ${attributeObject}" th:id="${selectedTableId}+${state.uuid}">
-						<td><span th:text="${state.id}"></span></td>
-						<td><span th:text="${state.name}"></span></td>
+						<th:block th:if="${fields != null}">
+							<td th:each="field : ${fields}"><span th:text="${fields}"></span></td>
+						</th:block>
+						<th:block th:if="${fields == null}">
+							<td><span th:text="${state.id}"></span></td>
+							<td><span th:text="${state.name}"></span></td>
+						</th:block>
 						<td>
 							<button type="button" class="btn btn-default btn-sm" th:onclick="removeSelected([[${selectedTableId}]], [[${selectedAttribute}]], [[${state.uuid}]]);">
 								<i class="fa fa-minus"></i>
@@ -46,8 +56,13 @@
 							<table th:id="${tableId}" class="table table-bordered table-hover" style="width: 100%">
 								<thead>
 									<tr>
-										<th th:text="#{module.backoffice.id}" class="text-center"></th>
-										<th th:text="#{module.backoffice.name}" class="text-center"></th>
+										<th:block th:if="${fields != null}">
+											<th th:each="field : ${fields}" th:text="${field}"></th>
+										</th:block>
+										<th:block th:if="${fields == null}">
+											<th th:text="#{module.backoffice.id}" class="text-center"></th>
+											<th th:text="#{module.backoffice.name}" class="text-center"></th>
+										</th:block>
 										<th th:text="#{module.backoffice.select}" class="text-center"></th>
 									</tr>
 								</thead>
@@ -98,13 +113,28 @@
 						                    'url': ajaxUrl
 						              },
 						              'columns': [
+						            	    /*[# th:if="${fields != null}"]*/
+						            	    /*[# th:each="field : ${fields}"]*/
+						            	    { "data": /*[[${field}]]*/ },
+						                    /*[/]*/
+						                    /*[/]*/
+						                    
+						                    /*[# th:if="${fields == null}"]*/
 						                    { "data": "id" },
 						                    { "data": "name" },
+						                    /*[/]*/
+						                    
 						                    { "data": "" }
 						              ],
 						    	      'columnDefs': [
 						    	            { 
+						    	            	/*[# th:if="${fields != null}"]*/
+						    	            	targets: /*[[${#lists.size(fields)}]]*/,
+						    	            	/*[/]*/
+						    	            	
+						    	            	/*[# th:if="${fields == null}"]*/
 						    	                targets: 2,
+						    	                /*[/]*/
 						    	                'searchable': false,
 						    	                'orderable': false,
 						    	                'className': 'text-center',
@@ -154,11 +184,11 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
-							<th:block th:if="${list == null}">
+							<th:block th:if="${list == false}">
 								<button type="button" th:onclick="addSelect([[${selectedAttribute}]],[[${tableId}]],[[${selectedTableId}]])" class="btn btn-primary" data-dismiss="modal"
 									th:text="'  '+#{module.backoffice.select}+'  '"></button>
 							</th:block>
-							<th:block th:if="${list != null}">
+							<th:block th:if="${list == true}">
 								<button type="button" th:onclick="addSelects([[${selectedAttribute}]],[[${tableId}]],[[${selectedTableId}]])" class="btn btn-primary" data-dismiss="modal"
 									th:text="'  '+#{module.backoffice.select}+'  '"></button>
 							</th:block>
