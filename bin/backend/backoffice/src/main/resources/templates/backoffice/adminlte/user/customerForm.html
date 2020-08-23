@@ -130,8 +130,8 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.customer.addresses},'selectedAddressesTable','selectedAddresses','addresses',*{addresses},@{${@environment.getProperty('path.api.address.page')}},'addressesTable',true)}"></th:block>
+										<div class="col-md-6" th:with="id=#{module.address.id},streetName=#{module.address.streetName}">
+											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.customer.addresses},'selectedAddressesTable','selectedAddresses','addresses',*{addresses},@{${@environment.getProperty('path.api.address.page')}},'addressesTable',true,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
 										</div>
 									</div>
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
