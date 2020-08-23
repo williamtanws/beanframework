@@ -25,7 +25,7 @@
 				<tbody>
 					<tr th:each="state : ${attributeObject}" th:id="${selectedTableId}+${state.uuid}">
 						<th:block th:if="${fields != null}">
-							<td th:each="field : ${fields}"><span th:text="${state[__field__]}"></span></td>
+							<td th:each="field : ${fields}"><span th:text="${state.__${field}__}"></span></td>
 						</th:block>
 						<th:block th:if="${fields == null}">
 							<td><span th:text="${state.id}"></span></td>
