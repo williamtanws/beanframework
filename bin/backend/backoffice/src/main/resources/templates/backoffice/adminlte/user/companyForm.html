@@ -181,24 +181,24 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.addresses},'selectedAddressesTable','selectedAddresses','addresses',*{addresses},@{${@environment.getProperty('path.api.address.page')}},'addressesTable',true)}"></th:block>
+										<div class="col-md-6" th:with="id=#{module.address.id},streetName=#{module.address.streetName}">
+											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.addresses},'selectedAddressesTable','selectedAddresses','addresses',*{addresses},@{${@environment.getProperty('path.api.address.page')}},'addressesTable',true,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
 										</div>
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.shippingAddress},'selectedShippingAddressTable','selectedShippingAddress','shippingAddress',*{shippingAddress},@{${@environment.getProperty('path.api.address.page')}},'shippingAddressTable')}"></th:block>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.unloadingAddress},'selectedUnloadingAddressTable','selectedUnloadingAddress','unloadingAddress',*{unloadingAddress},@{${@environment.getProperty('path.api.address.page')}},'unloadingAddressTable')}"></th:block>
-										</div>
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.billingAddress},'selectedBillingAddressTable','selectedBillingAddress','billingAddress',*{billingAddress},@{${@environment.getProperty('path.api.address.page')}},'billingAddressTable')}"></th:block>
+										<div class="col-md-6" th:with="id=#{module.address.id},streetName=#{module.address.streetName}">
+											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.shippingAddress},'selectedShippingAddressTable','selectedShippingAddress','shippingAddress',*{shippingAddress},@{${@environment.getProperty('path.api.address.page')}},'shippingAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.contactAddress},'selectedContactAddressTable','selectedContactAddress','contactAddress',*{contactAddress},@{${@environment.getProperty('path.api.address.page')}},'contactAddressTable')}"></th:block>
+										<div class="col-md-6" th:with="id=#{module.address.id},streetName=#{module.address.streetName}">
+											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.unloadingAddress},'selectedUnloadingAddressTable','selectedUnloadingAddress','unloadingAddress',*{unloadingAddress},@{${@environment.getProperty('path.api.address.page')}},'unloadingAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
+										</div>
+										<div class="col-md-6" th:with="id=#{module.address.id},streetName=#{module.address.streetName}">
+											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.billingAddress},'selectedBillingAddressTable','selectedBillingAddress','billingAddress',*{billingAddress},@{${@environment.getProperty('path.api.address.page')}},'billingAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6" th:with="id=#{module.address.id},streetName=#{module.address.streetName}">
+											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.contactAddress},'selectedContactAddressTable','selectedContactAddress','contactAddress',*{contactAddress},@{${@environment.getProperty('path.api.address.page')}},'contactAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
 										</div>
 										<div class="col-md-6">
 											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.users},'selectedUsersTable','selectedUsers','users',*{users},@{${@environment.getProperty('path.api.user.page')}},'usersTable',true)}"></th:block>

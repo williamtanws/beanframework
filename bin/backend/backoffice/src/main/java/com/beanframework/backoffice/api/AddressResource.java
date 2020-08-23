@@ -64,7 +64,7 @@ public class AddressResource extends AbstractResource {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
-
+		
 		Page<AddressDto> pagination = addressFacade.findPage(dataTableRequest);
 
 		DataTableResponse<AddressDataTableResponseData> dataTableResponse = new DataTableResponse<AddressDataTableResponseData>();
@@ -77,7 +77,7 @@ public class AddressResource extends AbstractResource {
 			AddressDataTableResponseData data = new AddressDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
-			data.setName(StringUtils.stripToEmpty(dto.getName()));
+			data.setStreetName(StringUtils.stripToEmpty(dto.getStreetName()));
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;

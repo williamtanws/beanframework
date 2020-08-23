@@ -53,8 +53,8 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getStreetName()) == Boolean.FALSE) {
-				prototype.setStreetName(StringUtils.stripToNull(source.getName()));
+			if (StringUtils.equals(StringUtils.stripToNull(source.getStreetName()), prototype.getStreetName()) == Boolean.FALSE) {
+				prototype.setStreetName(StringUtils.stripToNull(source.getStreetName()));
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 

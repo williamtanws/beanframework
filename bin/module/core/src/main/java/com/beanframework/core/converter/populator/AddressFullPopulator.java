@@ -35,7 +35,7 @@ public class AddressFullPopulator extends AbstractPopulator<Address, AddressDto>
 	public void populate(Address source, AddressDto target) throws PopulatorException {
 		try {
 			convertCommonProperties(source, target);
-			target.setName(source.getStreetName());
+			target.setStreetName(source.getStreetName());
 			target.setStreetNumber(source.getStreetNumber());
 			target.setPostalCode(source.getPostalCode());
 			target.setTown(source.getTown());

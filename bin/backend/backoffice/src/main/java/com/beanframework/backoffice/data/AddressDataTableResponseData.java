@@ -4,13 +4,13 @@ import com.beanframework.core.data.DataTableResponseData;
 
 public class AddressDataTableResponseData extends DataTableResponseData {
 
-	private String name;
+	private String streetName;
 
-	public String getName() {
-		return name;
+	public String getStreetName() {
+		return streetName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
 	}
 }

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
-	<th:block layout:fragment="select (label,selectedTableId,selectedAttribute,attributeName,attributeObject,ajaxUrl,tableId,list,fields)">
+	<th:block layout:fragment="select (label,selectedTableId,selectedAttribute,attributeName,attributeObject,ajaxUrl,tableId,list,fields,localizedFields)">
 		<div class="form-group">
 			<label th:text="${label}"></label>
 			<table class="table table-bordered table-hover" th:id="${selectedTableId}">
 				<thead>
 					<tr>
-						<th:block th:if="${fields != null}">
+						<th:block th:if="${fields != null && localizedFields != null}">
+							<th th:each="localizedField : ${localizedFields}" th:text="${localizedField}"></th>
+						</th:block>
+						<th:block th:if="${fields != null && localizedFields == null}">
 							<th th:each="field : ${fields}" th:text="${field}"></th>
 						</th:block>
 						<th:block th:if="${fields == null}">
@@ -15,14 +18,14 @@
 							<th th:text="#{module.backoffice.name}"></th>
 						</th:block>
 						<th style="width: 1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" th:data-target="'#modal'+${attributeName}">
-								<i th:class="${list == false} ? 'fa fa-edit' : 'fa fa-plus'"></i>
+								<i th:class="${list == true} ? 'fa fa-plus' : 'fa fa-edit'"></i>
 							</button></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="state : ${attributeObject}" th:id="${selectedTableId}+${state.uuid}">
 						<th:block th:if="${fields != null}">
-							<td th:each="field : ${fields}"><span th:text="${fields}"></span></td>
+							<td th:each="field : ${fields}"><span th:text="${state[__field__]}"></span></td>
 						</th:block>
 						<th:block th:if="${fields == null}">
 							<td><span th:text="${state.id}"></span></td>
@@ -56,7 +59,10 @@
 							<table th:id="${tableId}" class="table table-bordered table-hover" style="width: 100%">
 								<thead>
 									<tr>
-										<th:block th:if="${fields != null}">
+										<th:block th:if="${fields != null && localizedFields != null}">
+											<th th:each="localizedField : ${localizedFields}" th:text="${localizedField}"></th>
+										</th:block>
+										<th:block th:if="${fields != null && localizedFields == null}">
 											<th th:each="field : ${fields}" th:text="${field}"></th>
 										</th:block>
 										<th:block th:if="${fields == null}">
@@ -64,6 +70,18 @@
 											<th th:text="#{module.backoffice.name}" class="text-center"></th>
 										</th:block>
 										<th th:text="#{module.backoffice.select}" class="text-center"></th>
+									</tr>
+								</thead>
+								<thead>
+									<tr>
+										<th:block th:if="${fields != null}">
+											<th th:each="field : ${fields}"><input type="text" class="form-control" style="width: 100%;" /></th>
+										</th:block>
+										<th:block th:if="${fields == null}">
+											<th><input type="text" class="form-control" style="width: 100%;" /></th>
+											<th><input type="text" class="form-control" style="width: 100%;" /></th>
+										</th:block>
+										<th></th>
 									</tr>
 								</thead>
 							</table>
@@ -145,32 +163,40 @@
 						    	            },
 							            	{                                 
 							                	"targets": '_all',
+							                	"className": 'select-filter',
 							                	"render": $.fn.dataTable.render.text()
 							                }              
 						    	       ],
-						    	       "initComplete": function () {
+						    	       "drawCallback": function( settings ) {		    	            
 						    	            // Apply the search
-						    	            this.api().columns().every( function (index) {
-						    	                var that = this;
-						    	 
+						    	           // this.api().columns('.select-filter').every( function (index) {
+						    	                /* var that = this;
+							    	            console.log(tableId);
+						    	 					
 						    	                $('#'+tableId+' thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
 						    	                	that.column($(this).parent().index() + ':visible')
 									    	            .search(this.value)
 									    	            .draw();
-						    	                });
-						    	            });
-						    	            
-						    	            $('#'+tableId+' thead tr:eq(1) th').each(function(index){
-									    		if(index < 2){
-									    			var title = $('#'+tableId+' thead tr:eq(0) th').eq( $(this).index() ).text();
-									    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
-									            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
-									    		} else{
-										            $(this).html('');
-									    		}
-									        });
+						    	                }); */
+						    	            //});
 						    	        }
 						    	});
+							    
+							    $('#'+tableId).DataTable().columns('.select-filter').every( function (index) {
+							        var that = this;
+							        
+							        $('#'+tableId+' thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+			    	                	that.column($(this).parent().index() + ':visible')
+						    	            .search(this.value)
+						    	            .draw();
+			    	                });
+							     
+							        /* $( 'input', this.footer() ).on( 'keyup change', function () {
+							        	column($(this).parent().index() + ':visible')
+					    	            .search(this.value)
+					    	            .draw();
+							        } ); */
+							    } );
 							    
 							    $('.table').on('draw.dt', function () {
 							    	$('input').iCheck({
@@ -184,12 +210,12 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
-							<th:block th:if="${list == false}">
-								<button type="button" th:onclick="addSelect([[${selectedAttribute}]],[[${tableId}]],[[${selectedTableId}]])" class="btn btn-primary" data-dismiss="modal"
+							<th:block th:if="${list == null || list == false}">
+								<button type="button" th:onclick="addSelect([[${selectedAttribute}]],[[${tableId}]],[[${selectedTableId}]],[[${fields}]])" class="btn btn-primary" data-dismiss="modal"
 									th:text="'  '+#{module.backoffice.select}+'  '"></button>
 							</th:block>
 							<th:block th:if="${list == true}">
-								<button type="button" th:onclick="addSelects([[${selectedAttribute}]],[[${tableId}]],[[${selectedTableId}]])" class="btn btn-primary" data-dismiss="modal"
+								<button type="button" th:onclick="addSelects([[${selectedAttribute}]],[[${tableId}]],[[${selectedTableId}]],[[${fields}]])" class="btn btn-primary" data-dismiss="modal"
 									th:text="'  '+#{module.backoffice.select}+'  '"></button>
 							</th:block>
 						</div>
