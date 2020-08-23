@@ -17,7 +17,7 @@ public class AddressBasicPopulator extends AbstractPopulator<Address, AddressDto
 	@Override
 	public void populate(Address source, AddressDto target) throws PopulatorException {
 		convertCommonProperties(source, target);
-		target.setName(source.getStreetName());
+		target.setStreetName(source.getStreetName());
 		target.setStreetNumber(source.getStreetNumber());
 		target.setPostalCode(source.getPostalCode());
 		target.setTown(source.getTown());
