@@ -434,9 +434,10 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 			if (entry.getValue() == null) {
 				propertiesBuilder.append("o." + entry.getKey() + " " + CommonConstants.Query.IS_NULL);
-			} else if (entry.getValue() instanceof String
-					&& entry.getValue().toString().trim().equalsIgnoreCase(CommonConstants.Query.IS_EMPTY)) {
+			} else if (entry.getValue() instanceof String && entry.getValue().toString().trim().equalsIgnoreCase(CommonConstants.Query.IS_EMPTY)) {
 				propertiesBuilder.append("o." + entry.getKey() + " " + CommonConstants.Query.IS_EMPTY);
+			} else if (entry.getValue() instanceof String && entry.getValue().toString().trim().contains(CommonConstants.Query.LIKE)) {
+				propertiesBuilder.append("o." + entry.getKey() + " LIKE " + CommonConstants.Query.IS_EMPTY);
 			} else {
 				propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey().replace(".", "_"));
 			}
