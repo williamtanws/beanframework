@@ -79,12 +79,22 @@
 	                    				  if(i > 0){
 	                    					  newValue += ', ';
 	                    				  }
-	                    				  newValue += value[i].id;
+	                    				  if(value[i].id == null){
+		                    				  newValue += value[i].uuid;
+	                    				  }
+	                    				  else{
+		                    				  newValue += value[i].id;
+	                    				  }
 	                    			  }
 	                    			  value = newValue;
 	                    		  }
-	                    		  if(Object.prototype.toString.call(value) === '[object Object]'){
-	                    			  value = value.id;
+	                    		  else if(Object.prototype.toString.call(value) === '[object Object]'){
+	                    			  if(value.id == null){
+		                    			  value = value.uuid;
+	                    			  }
+	                    			  else{
+		                    			  value = value.id;
+	                    			  }
 	                    		  }
 	                    		  
 	                    		  if(index != 0){

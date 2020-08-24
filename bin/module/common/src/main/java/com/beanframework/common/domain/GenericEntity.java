@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
@@ -118,7 +119,7 @@ public abstract class GenericEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ID: " + id;
+		return StringUtils.isBlank(id) ? "UUID: " + uuid : "ID: " + id;
 	}
 
 	/*

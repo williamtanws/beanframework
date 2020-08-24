@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class GenericDto implements Serializable {
 	/**
 	 * 
@@ -73,7 +75,7 @@ public class GenericDto implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ID: " + id;
+		return StringUtils.isBlank(id) ? "UUID: " + uuid : "ID: " + id;
 	}
 
 	@Override
