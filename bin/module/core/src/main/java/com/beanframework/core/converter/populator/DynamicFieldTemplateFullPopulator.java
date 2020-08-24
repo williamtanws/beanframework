@@ -1,5 +1,7 @@
 package com.beanframework.core.converter.populator;
 
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 
 @Component
@@ -25,7 +28,12 @@ public class DynamicFieldTemplateFullPopulator extends AbstractPopulator<Dynamic
 		try {
 			convertCommonProperties(source, target);
 			target.setName(source.getName());
-			target.setDynamicFieldSlots(modelService.getDto(source.getDynamicFieldSlots(), DynamicFieldSlotDto.class, new DtoConverterContext(dynamicFieldSlotFullPopulator)));
+			if (source.getDynamicFieldSlots() != null && source.getDynamicFieldSlots().isEmpty() == false) {
+				for (UUID uuid : source.getDynamicFieldSlots()) {
+					DynamicFieldSlot entity = modelService.findOneByUuid(uuid, DynamicFieldSlot.class);
+					target.getDynamicFieldSlots().add(modelService.getDto(entity, DynamicFieldSlotDto.class, new DtoConverterContext(dynamicFieldSlotFullPopulator)));
+				}
+			}
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

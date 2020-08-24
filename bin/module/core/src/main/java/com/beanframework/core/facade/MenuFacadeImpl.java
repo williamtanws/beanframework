@@ -17,7 +17,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.MenuBasicPopulator;
 import com.beanframework.core.converter.populator.MenuFullPopulator;
-import com.beanframework.core.converter.populator.history.MenuHistoryPopulator;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
@@ -44,9 +43,6 @@ public class MenuFacadeImpl implements MenuFacade {
 
 	@Autowired
 	private MenuBasicPopulator menuBasicPopulator;
-
-	@Autowired
-	private MenuHistoryPopulator menuHistoryPopulator;
 
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
@@ -133,7 +129,7 @@ public class MenuFacadeImpl implements MenuFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Menu) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], MenuDto.class, new DtoConverterContext(menuHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], MenuDto.class, new DtoConverterContext(menuFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

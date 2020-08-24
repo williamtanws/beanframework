@@ -10,6 +10,7 @@ import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.CountryDto;
 import com.beanframework.core.data.RegionDto;
+import com.beanframework.internationalization.domain.Country;
 import com.beanframework.internationalization.domain.Region;
 
 @Component
@@ -27,7 +28,10 @@ public class RegionBasicPopulator extends AbstractPopulator<Region, RegionDto> i
 			target.setName(source.getName());
 			target.setActive(source.getActive());
 			
-			target.setCountry(modelService.getDto(source.getCountry(), CountryDto.class, new DtoConverterContext(countryBasicPopulator)));
+			if (source.getCountry() != null) {
+				Country entity = modelService.findOneByUuid(source.getCountry(), Country.class);
+				target.setCountry(modelService.getDto(entity, CountryDto.class, new DtoConverterContext(countryBasicPopulator)));
+			}
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

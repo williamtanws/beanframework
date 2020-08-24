@@ -80,8 +80,8 @@ public class EntityDynamicFieldSlotConverter implements EntityConverter<DynamicF
 
 				if (entityDynamicField != null) {
 
-					if (prototype.getDynamicField() == null || prototype.getDynamicField().getUuid().equals(entityDynamicField.getUuid()) == Boolean.FALSE) {
-						prototype.setDynamicField(entityDynamicField);
+					if (prototype.getDynamicField() == null || prototype.getDynamicField().equals(entityDynamicField.getUuid()) == Boolean.FALSE) {
+						prototype.setDynamicField(entityDynamicField.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				}

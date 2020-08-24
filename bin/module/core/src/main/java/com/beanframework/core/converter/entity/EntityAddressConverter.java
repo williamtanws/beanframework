@@ -164,8 +164,8 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 
 				if (entity != null) {
 
-					if (prototype.getCountry() == null || prototype.getCountry().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setCountry(entity);
+					if (prototype.getCountry() == null || prototype.getCountry().equals(entity.getUuid()) == false) {
+						prototype.setCountry(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -184,8 +184,8 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 
 				if (entity != null) {
 
-					if (prototype.getRegion() == null || prototype.getRegion().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setRegion(entity);
+					if (prototype.getRegion() == null || prototype.getRegion().equals(entity.getUuid()) == false) {
+						prototype.setRegion(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -204,8 +204,8 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 
 				if (entity != null) {
 
-					if (prototype.getOwner() == null || prototype.getOwner().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setOwner(entity);
+					if (prototype.getOwner() == null || prototype.getOwner().equals(entity.getUuid()) == false) {
+						prototype.setOwner(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -224,8 +224,8 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 
 				if (entity != null) {
 
-					if (prototype.getShippingAddress() == null || prototype.getShippingAddress().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setShippingAddress(entity);
+					if (prototype.getShippingAddress() == null || prototype.getShippingAddress().equals(entity.getUuid()) == false) {
+						prototype.setShippingAddress(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -244,8 +244,8 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 
 				if (entity != null) {
 
-					if (prototype.getBillingAddress() == null || prototype.getBillingAddress().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setBillingAddress(entity);
+					if (prototype.getBillingAddress() == null || prototype.getBillingAddress().equals(entity.getUuid()) == false) {
+						prototype.setBillingAddress(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -264,8 +264,8 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 
 				if (entity != null) {
 
-					if (prototype.getContactAddress() == null || prototype.getContactAddress().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setContactAddress(entity);
+					if (prototype.getContactAddress() == null || prototype.getContactAddress().equals(entity.getUuid()) == false) {
+						prototype.setContactAddress(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -284,8 +284,8 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 
 				if (entity != null) {
 
-					if (prototype.getDefaultPaymentAddress() == null || prototype.getDefaultPaymentAddress().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setDefaultPaymentAddress(entity);
+					if (prototype.getDefaultPaymentAddress() == null || prototype.getDefaultPaymentAddress().equals(entity.getUuid()) == false) {
+						prototype.setDefaultPaymentAddress(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -304,8 +304,8 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 
 				if (entity != null) {
 
-					if (prototype.getDefaultShipmentAddress() == null || prototype.getDefaultShipmentAddress().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setDefaultShipmentAddress(entity);
+					if (prototype.getDefaultShipmentAddress() == null || prototype.getDefaultShipmentAddress().equals(entity.getUuid()) == false) {
+						prototype.setDefaultShipmentAddress(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {

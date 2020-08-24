@@ -18,7 +18,6 @@ import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.CronjobBasicPopulator;
 import com.beanframework.core.converter.populator.CronjobFullPopulator;
-import com.beanframework.core.converter.populator.history.CronjobHistoryPopulator;
 import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.cronjob.CronjobConstants;
@@ -44,13 +43,10 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	private CronjobService cronjobService;
 
 	@Autowired
-	private CronjobFullPopulator cronjobFullPopulator;
-
-	@Autowired
 	private CronjobBasicPopulator cronjobBasicPopulator;
 
 	@Autowired
-	private CronjobHistoryPopulator cronjobHistoryPopulator;
+	private CronjobFullPopulator cronjobFullPopulator;
 
 	@Override
 	public CronjobDto findOneByUuid(UUID uuid) throws Exception {
@@ -195,7 +191,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Cronjob) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CronjobDto.class, new DtoConverterContext(cronjobHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

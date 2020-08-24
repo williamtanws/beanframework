@@ -2,6 +2,7 @@ package com.beanframework.core.interceptor.employee;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.user.EmployeeConstants;
 import com.beanframework.user.domain.Employee;
@@ -51,7 +51,7 @@ public class EmployeeInitialDefaultsInterceptor extends AbstractInitialDefaultsI
 
 				if (dynamicFieldTemplate != null) {
 
-					for (DynamicFieldSlot dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
+					for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 						UserField field = new UserField();
 						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUser(model);

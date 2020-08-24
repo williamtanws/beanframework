@@ -1,16 +1,14 @@
 package com.beanframework.internationalization.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,10 +40,8 @@ public class Region extends GenericEntity {
 	private Boolean active;
 	
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "country_uuid")
-	private Country country;
+	@Column(name="country_uuid")
+	private UUID country;
 
 	public String getName() {
 		return name;
@@ -63,11 +59,11 @@ public class Region extends GenericEntity {
 		this.active = active;
 	}
 
-	public Country getCountry() {
+	public UUID getCountry() {
 		return country;
 	}
 
-	public void setCountry(Country country) {
+	public void setCountry(UUID country) {
 		this.country = country;
 	}
 }

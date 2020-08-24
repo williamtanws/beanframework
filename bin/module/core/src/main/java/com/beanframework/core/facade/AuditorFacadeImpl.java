@@ -17,7 +17,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.AuditorFullPopulator;
-import com.beanframework.core.converter.populator.history.AuditorHistoryPopulator;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.specification.AuditorSpecification;
 
@@ -32,9 +31,6 @@ public class AuditorFacadeImpl implements AuditorFacade {
 
 	@Autowired
 	private AuditorFullPopulator auditorFullPopulator;
-
-	@Autowired
-	private AuditorHistoryPopulator auditorHistoryPopulator;
 
 	@Override
 	public AuditorDto findOneByUuid(UUID uuid) throws Exception {
@@ -80,7 +76,7 @@ public class AuditorFacadeImpl implements AuditorFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Auditor) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], AuditorDto.class, new DtoConverterContext(auditorHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], AuditorDto.class, new DtoConverterContext(auditorFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

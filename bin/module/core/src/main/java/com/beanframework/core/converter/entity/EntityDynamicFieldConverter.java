@@ -102,8 +102,8 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 
 				if (entityLanguage != null) {
 
-					if (prototype.getLanguage() == null || prototype.getLanguage().getUuid().equals(entityLanguage.getUuid()) == Boolean.FALSE) {
-						prototype.setLanguage(entityLanguage);
+					if (prototype.getLanguage() == null || prototype.getLanguage().equals(entityLanguage.getUuid()) == Boolean.FALSE) {
+						prototype.setLanguage(entityLanguage.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				}
@@ -112,13 +112,13 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 			// Enumerations
 			if (source.getSelectedEnumerations() != null) {
 
-				Iterator<Enumeration> enumerationsIterator = prototype.getEnumerations().iterator();
+				Iterator<UUID> enumerationsIterator = prototype.getEnumerations().iterator();
 				while (enumerationsIterator.hasNext()) {
-					Enumeration enumeration = enumerationsIterator.next();
+					UUID enumeration = enumerationsIterator.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedEnumerations().length; i++) {
-						if (enumeration.getUuid().equals(UUID.fromString(source.getSelectedEnumerations()[i]))) {
+						if (enumeration.equals(UUID.fromString(source.getSelectedEnumerations()[i]))) {
 							remove = false;
 						}
 					}
@@ -133,9 +133,9 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 					boolean add = true;
 					enumerationsIterator = prototype.getEnumerations().iterator();
 					while (enumerationsIterator.hasNext()) {
-						Enumeration enumeration = enumerationsIterator.next();
+						UUID enumeration = enumerationsIterator.next();
 
-						if (enumeration.getUuid().equals(UUID.fromString(source.getSelectedEnumerations()[i]))) {
+						if (enumeration.equals(UUID.fromString(source.getSelectedEnumerations()[i]))) {
 							add = false;
 						}
 					}
@@ -143,14 +143,14 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 					if (add) {
 						Enumeration enumeration = modelService.findOneByUuid(UUID.fromString(source.getSelectedEnumerations()[i]), Enumeration.class);
 						if (enumeration != null) {
-							prototype.getEnumerations().add(enumeration);
+							prototype.getEnumerations().add(enumeration.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}
 			}
 			else if(prototype.getEnumerations() != null && prototype.getEnumerations().isEmpty() == false){
-				for (final Iterator<Enumeration> itr = prototype.getEnumerations().iterator(); itr.hasNext();) {
+				for (final Iterator<UUID> itr = prototype.getEnumerations().iterator(); itr.hasNext();) {
 					itr.next();
 				    itr.remove(); 
 					prototype.setLastModifiedDate(lastModifiedDate);

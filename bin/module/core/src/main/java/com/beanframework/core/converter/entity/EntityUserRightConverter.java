@@ -84,7 +84,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				// Update
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserRightFieldDto sourceField : source.getFields()) {
-						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
+						if (prototype.getFields().get(i).getDynamicFieldSlot().equals(sourceField.getDynamicFieldSlot().getUuid())) {
 							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == Boolean.FALSE) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
@@ -104,7 +104,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 
 						UserRightField field = new UserRightField();
 						field.setUserRight(prototype);
-						field.setDynamicFieldSlot(entityDynamicFieldSlot);
+						field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
 						field.setValue(StringUtils.stripToNull(sourceField.getValue()));
 
 						prototype.getFields().add(field);

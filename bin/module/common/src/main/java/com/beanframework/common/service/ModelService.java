@@ -129,15 +129,15 @@ public interface ModelService {
 
 	<T extends Collection> T getEntity(Collection model, Class modelClass, EntityConverterContext context) throws Exception;
 
-//	<T> T getDto(Object model, Class modelClass) throws Exception;
-//	
-//	<T> T getDto(Object model, String typeCode) throws Exception;
+	<T> T getDto(Object model, Class modelClass) throws Exception;
+	
+	<T> T getDto(Object model, String typeCode) throws Exception;
 
 	<T> T getDto(Object model, Class modelClass, DtoConverterContext context) throws Exception;
 	
 	<T> T getDto(Object model, String typeCode, DtoConverterContext context) throws Exception;
 
-//	<T extends Collection> T getDto(Collection models, Class modelClass) throws Exception;
+	<T extends Collection> T getDto(Collection models, Class modelClass) throws Exception;
 
 	<T extends Collection> T getDto(Collection models, Class modelClass, DtoConverterContext context) throws Exception;
 	

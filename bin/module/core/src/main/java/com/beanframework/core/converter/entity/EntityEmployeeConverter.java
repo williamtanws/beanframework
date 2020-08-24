@@ -130,7 +130,7 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserFieldDto sourceField : source.getFields()) {
 
-						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
+						if (prototype.getFields().get(i).getDynamicFieldSlot().equals(sourceField.getDynamicFieldSlot().getUuid())) {
 							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == Boolean.FALSE) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
@@ -145,13 +145,13 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 			// User Groups
 			if (source.getSelectedUserGroups() != null) {
 
-				Iterator<UserGroup> itr = prototype.getUserGroups().iterator();
+				Iterator<UUID> itr = prototype.getUserGroups().iterator();
 				while (itr.hasNext()) {
-					UserGroup model = itr.next();
+					UUID model = itr.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedUserGroups().length; i++) {
-						if (model.getUuid().equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
+						if (model.equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
 							remove = false;
 						}
 					}
@@ -166,9 +166,9 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 					boolean add = true;
 					itr = prototype.getUserGroups().iterator();
 					while (itr.hasNext()) {
-						UserGroup model = itr.next();
+						UUID model = itr.next();
 
-						if (model.getUuid().equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
+						if (model.equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
 							add = false;
 						}
 					}
@@ -176,13 +176,13 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 					if (add) {
 						UserGroup entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedUserGroups()[i]), UserGroup.class);
 						if (entity != null) {
-							prototype.getUserGroups().add(entity);
+							prototype.getUserGroups().add(entity.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}
 			} else if (prototype.getUserGroups() != null && prototype.getUserGroups().isEmpty() == false) {
-				for (final Iterator<UserGroup> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
+				for (final Iterator<UUID> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
 					itr.next();
 					itr.remove();
 					prototype.setLastModifiedDate(lastModifiedDate);
@@ -192,13 +192,13 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 			// Companies
 			if (source.getSelectedCompanies() != null) {
 
-				Iterator<Company> itr = prototype.getCompanies().iterator();
+				Iterator<UUID> itr = prototype.getCompanies().iterator();
 				while (itr.hasNext()) {
-					Company model = itr.next();
+					UUID model = itr.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedCompanies().length; i++) {
-						if (model.getUuid().equals(UUID.fromString(source.getSelectedCompanies()[i]))) {
+						if (model.equals(UUID.fromString(source.getSelectedCompanies()[i]))) {
 							remove = false;
 						}
 					}
@@ -213,9 +213,9 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 					boolean add = true;
 					itr = prototype.getCompanies().iterator();
 					while (itr.hasNext()) {
-						Company model = itr.next();
+						UUID model = itr.next();
 
-						if (model.getUuid().equals(UUID.fromString(source.getSelectedCompanies()[i]))) {
+						if (model.equals(UUID.fromString(source.getSelectedCompanies()[i]))) {
 							add = false;
 						}
 					}
@@ -223,13 +223,13 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 					if (add) {
 						Company entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedCompanies()[i]), Company.class);
 						if (entity != null) {
-							prototype.getCompanies().add(entity);
+							prototype.getCompanies().add(entity.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}
 			} else if (prototype.getCompanies() != null && prototype.getCompanies().isEmpty() == false) {
-				for (final Iterator<Company> itr = prototype.getCompanies().iterator(); itr.hasNext();) {
+				for (final Iterator<UUID> itr = prototype.getCompanies().iterator(); itr.hasNext();) {
 					itr.next();
 					itr.remove();
 					prototype.setLastModifiedDate(lastModifiedDate);
@@ -239,18 +239,18 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 			// Addresses
 			if (source.getSelectedAddresses() != null) {
 
-				Iterator<Address> it = prototype.getAddresses().iterator();
+				Iterator<UUID> it = prototype.getAddresses().iterator();
 				while (it.hasNext()) {
-					Address o = it.next();
+					UUID o = it.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedAddresses().length; i++) {
-						if (o.getUuid().equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
+						if (o.equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
 							remove = false;
 						}
 					}
 					if (remove) {
-						Address entity = modelService.findOneByUuid(o.getUuid(), Address.class);
+						Address entity = modelService.findOneByUuid(o, Address.class);
 						entity.setOwner(null);
 						modelService.saveEntity(entity, Address.class);
 						it.remove();
@@ -263,9 +263,9 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 					boolean add = true;
 					it = prototype.getAddresses().iterator();
 					while (it.hasNext()) {
-						Address entity = it.next();
+						UUID entity = it.next();
 
-						if (entity.getUuid().equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
+						if (entity.equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
 							add = false;
 						}
 					}
@@ -273,15 +273,15 @@ public class EntityEmployeeConverter implements EntityConverter<EmployeeDto, Emp
 					if (add) {
 						Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedAddresses()[i]), Address.class);
 						if (entity != null) {
-							entity.setOwner(prototype);
-							prototype.getAddresses().add(entity);
+							entity.setOwner(prototype.getUuid());
+							prototype.getAddresses().add(entity.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}
 			} else if (prototype.getAddresses() != null && prototype.getAddresses().isEmpty() == false) {
-				for (final Iterator<Address> itr = prototype.getAddresses().iterator(); itr.hasNext();) {
-					Address entity = modelService.findOneByUuid(itr.next().getUuid(), Address.class);
+				for (final Iterator<UUID> itr = prototype.getAddresses().iterator(); itr.hasNext();) {
+					Address entity = modelService.findOneByUuid(itr.next(), Address.class);
 					entity.setOwner(null);
 					modelService.saveEntity(entity, Address.class);
 					itr.remove();

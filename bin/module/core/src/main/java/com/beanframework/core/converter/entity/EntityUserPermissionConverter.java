@@ -77,7 +77,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 				for (int i = 0; i < prototype.getFields().size(); i++) {
 					for (UserPermissionFieldDto sourceField : source.getFields()) {
 
-						if (prototype.getFields().get(i).getDynamicFieldSlot().getUuid().equals(sourceField.getDynamicFieldSlot().getUuid())) {
+						if (prototype.getFields().get(i).getDynamicFieldSlot().equals(sourceField.getDynamicFieldSlot().getUuid())) {
 							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == Boolean.FALSE) {
 								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 

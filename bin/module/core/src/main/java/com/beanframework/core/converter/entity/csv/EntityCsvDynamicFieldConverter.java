@@ -2,6 +2,7 @@ package com.beanframework.core.converter.entity.csv;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -80,7 +81,7 @@ public class EntityCsvDynamicFieldConverter implements EntityCsvConverter<Dynami
 				if (entityLanguage == null) {
 					LOGGER.error("Enum ID not exists: " + source.getLanguage());
 				} else {
-					prototype.setLanguage(entityLanguage);
+					prototype.setLanguage(entityLanguage.getUuid());
 				}
 			}
 
@@ -90,8 +91,9 @@ public class EntityCsvDynamicFieldConverter implements EntityCsvConverter<Dynami
 				for (int i = 0; i < values.length; i++) {
 
 					boolean add = true;
-					for (Enumeration prototypeValue : prototype.getEnumerations()) {
-						if (prototypeValue.getId().equals(values[i])) {
+					for (UUID prototypeValue : prototype.getEnumerations()) {
+						Enumeration enumeration = modelService.findOneByUuid(prototypeValue, Enumeration.class);
+						if (enumeration.getId().equals(values[i])) {
 							add = false;
 						}
 					}
@@ -104,7 +106,7 @@ public class EntityCsvDynamicFieldConverter implements EntityCsvConverter<Dynami
 						if (entityEnum == null) {
 							LOGGER.error("Enum ID not exists: " + values[i]);
 						} else {
-							prototype.getEnumerations().add(entityEnum);
+							prototype.getEnumerations().add(entityEnum.getUuid());
 						}
 					}
 				}

@@ -2,17 +2,18 @@ package com.beanframework.internationalization.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -43,11 +44,11 @@ public class Country extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private Boolean active;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "country")
-	private List<Region> regions = new ArrayList<Region>();
+	@ElementCollection
+	@CollectionTable(name = CountryConstants.Table.COUNTRY_REGION_REL, joinColumns = @JoinColumn(name = "country_uuid"))
+	@Column(name="region_uuid")
+	private List<UUID> regions = new ArrayList<UUID>();
 
 	public String getName() {
 		return name;
@@ -65,11 +66,11 @@ public class Country extends GenericEntity {
 		this.active = active;
 	}
 
-	public List<Region> getRegions() {
+	public List<UUID> getRegions() {
 		return regions;
 	}
 
-	public void setRegions(List<Region> regions) {
+	public void setRegions(List<UUID> regions) {
 		this.regions = regions;
 	}
 

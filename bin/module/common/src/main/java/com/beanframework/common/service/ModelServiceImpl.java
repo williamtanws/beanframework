@@ -565,15 +565,15 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-//	@Override
-//	public <T> T getDto(Object model, Class modelClass) throws Exception {
-//		return getDto(model, modelClass, new DtoConverterContext());
-//	}
-//
-//	@Override
-//	public <T> T getDto(Object model, String typeCode) throws Exception {
-//		return getDto(model, typeCode, new DtoConverterContext());
-//	}
+	@Override
+	public <T> T getDto(Object model, Class modelClass) throws Exception {
+		return getDto(model, modelClass, new DtoConverterContext());
+	}
+
+	@Override
+	public <T> T getDto(Object model, String typeCode) throws Exception {
+		return getDto(model, typeCode, new DtoConverterContext());
+	}
 
 	@Override
 	public <T> T getDto(Object model, Class modelClass, DtoConverterContext context) throws Exception {
@@ -603,10 +603,10 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 	}
 
-//	@Override
-//	public <T extends Collection> T getDto(Collection models, Class modelClass) throws Exception {
-//		return getDto(models, modelClass, new DtoConverterContext());
-//	}
+	@Override
+	public <T extends Collection> T getDto(Collection models, Class modelClass) throws Exception {
+		return getDto(models, modelClass, new DtoConverterContext());
+	}
 
 	@Override
 	public <T extends Collection> T getDto(Collection models, Class modelClass, DtoConverterContext context) throws Exception {

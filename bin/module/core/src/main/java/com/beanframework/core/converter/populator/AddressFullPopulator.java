@@ -12,22 +12,25 @@ import com.beanframework.core.data.AddressDto;
 import com.beanframework.core.data.CountryDto;
 import com.beanframework.core.data.RegionDto;
 import com.beanframework.core.data.UserDto;
+import com.beanframework.internationalization.domain.Country;
+import com.beanframework.internationalization.domain.Region;
 import com.beanframework.user.domain.Address;
+import com.beanframework.user.domain.User;
 
 @Component
 public class AddressFullPopulator extends AbstractPopulator<Address, AddressDto> implements Populator<Address, AddressDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(AddressFullPopulator.class);
-	
+
 	@Autowired
 	private CountryBasicPopulator countryBasicPopulator;
-	
+
 	@Autowired
 	private RegionBasicPopulator regionBasicPopulator;
-	
+
 	@Autowired
 	private UserBasicPopulator userBasicPopulator;
-	
+
 	@Autowired
 	private AddressBasicPopulator addressBasicPopulator;
 
@@ -55,15 +58,39 @@ public class AddressFullPopulator extends AbstractPopulator<Address, AddressDto>
 			target.setBuilding(source.getBuilding());
 			target.setApartment(source.getApartment());
 			target.setDistrict(source.getDistrict());
-			
-			target.setCountry(modelService.getDto(source.getCountry(), CountryDto.class, new DtoConverterContext(countryBasicPopulator)));
-			target.setRegion(modelService.getDto(source.getRegion(), RegionDto.class, new DtoConverterContext(regionBasicPopulator)));
-			target.setOwner(modelService.getDto(source.getOwner(), UserDto.class, new DtoConverterContext(userBasicPopulator)));
-			target.setShippingAddress(modelService.getDto(source.getShippingAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
-			target.setBillingAddress(modelService.getDto(source.getBillingAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
-			target.setContactAddress(modelService.getDto(source.getContactAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
-			target.setDefaultPaymentAddress(modelService.getDto(source.getDefaultPaymentAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
-			target.setDefaultShipmentAddress(modelService.getDto(source.getDefaultShipmentAddress(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+
+			if (source.getCountry() != null) {
+				Country entity = modelService.findOneByUuid(source.getCountry(), Country.class);
+				target.setCountry(modelService.getDto(entity, CountryDto.class, new DtoConverterContext(countryBasicPopulator)));
+			}
+			if (source.getRegion() != null) {
+				Region entity = modelService.findOneByUuid(source.getRegion(), Region.class);
+				target.setRegion(modelService.getDto(entity, RegionDto.class, new DtoConverterContext(regionBasicPopulator)));
+			}
+			if (source.getOwner() != null) {
+				User entity = modelService.findOneByUuid(source.getOwner(), User.class);
+				target.setOwner(modelService.getDto(entity, UserDto.class, new DtoConverterContext(userBasicPopulator)));
+			}
+			if (source.getShippingAddress() != null) {
+				Address entity = modelService.findOneByUuid(source.getShippingAddress(), Address.class);
+				target.setShippingAddress(modelService.getDto(entity, AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			}
+			if (source.getBillingAddress() != null) {
+				Address entity = modelService.findOneByUuid(source.getBillingAddress(), Address.class);
+				target.setBillingAddress(modelService.getDto(entity, AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			}
+			if (source.getContactAddress() != null) {
+				Address entity = modelService.findOneByUuid(source.getContactAddress(), Address.class);
+				target.setContactAddress(modelService.getDto(entity, AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			}
+			if (source.getDefaultPaymentAddress() != null) {
+				Address entity = modelService.findOneByUuid(source.getDefaultPaymentAddress(), Address.class);
+				target.setDefaultPaymentAddress(modelService.getDto(entity, AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			}
+			if (source.getDefaultShipmentAddress() != null) {
+				Address entity = modelService.findOneByUuid(source.getDefaultShipmentAddress(), Address.class);
+				target.setDefaultShipmentAddress(modelService.getDto(entity, AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			}
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

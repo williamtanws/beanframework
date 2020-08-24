@@ -11,6 +11,7 @@ import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.data.UserDto;
+import com.beanframework.user.domain.User;
 
 @Component
 public class CommentFullPopulator extends AbstractPopulator<Comment, CommentDto> implements Populator<Comment, CommentDto> {
@@ -26,7 +27,10 @@ public class CommentFullPopulator extends AbstractPopulator<Comment, CommentDto>
 			convertCommonProperties(source, target);
 			target.setHtml(source.getHtml());
 			target.setVisibled(source.getVisibled());
-			target.setUser(modelService.getDto(source.getUser(), UserDto.class, new DtoConverterContext(userBasicPopulator)));
+			if (source.getUser() != null) {
+				User entity = modelService.findOneByUuid(source.getUser(), User.class);
+				target.setUser(modelService.getDto(entity, UserDto.class, new DtoConverterContext(userBasicPopulator)));
+			}
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

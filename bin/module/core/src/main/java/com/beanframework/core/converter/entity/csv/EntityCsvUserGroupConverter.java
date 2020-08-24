@@ -66,7 +66,10 @@ public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroup
 
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
-						if (StringUtils.equals(prototype.getFields().get(i).getDynamicFieldSlot().getId(), dynamicFieldSlotId)) {
+						Map<String, Object> properties = new HashMap<String, Object>();
+						properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
+						DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
+						if (prototype.getFields().get(i).getDynamicFieldSlot() == slot.getUuid()) {
 							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
@@ -80,7 +83,7 @@ public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroup
 						if (entityDynamicFieldSlot != null) {
 							UserGroupField field = new UserGroupField();
 							field.setValue(value);
-							field.setDynamicFieldSlot(entityDynamicFieldSlot);
+							field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
 							field.setUserGroup(prototype);
 							prototype.getFields().add(field);
 						}
@@ -95,7 +98,7 @@ public class EntityCsvUserGroupConverter implements EntityCsvConverter<UserGroup
 				boolean add = true;
 				for (UserGroup userGroup : prototype.getUserGroups()) {
 					for (int i = 0; i < userGroupIds.length; i++) {
-						if (userGroupIds[i].equals(userGroup.getId())) {
+						if (StringUtils.equals(userGroup.getId(), userGroupIds[i])) {
 							add = false;
 						}
 					}

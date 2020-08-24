@@ -133,7 +133,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 			boolean removed = false;
 			for (int j = 0; j < entities.get(i).getDynamicFieldSlots().size(); j++) {
-				if (entities.get(i).getDynamicFieldSlots().get(j).getUuid().equals(model.getUuid())) {
+				if (entities.get(i).getDynamicFieldSlots().get(j).equals(model.getUuid())) {
 					entities.get(i).getDynamicFieldSlots().remove(j);
 					removed = true;
 					break;
@@ -174,7 +174,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 			boolean removed = false;
 			for (int j = 0; j < entities.get(i).getUserGroups().size(); j++) {
-				if (entities.get(i).getUserGroups().get(j).getUuid().equals(model.getUuid())) {
+				if (entities.get(i).getUserGroups().get(j).equals(model.getUuid())) {
 					entities.get(i).getUserGroups().remove(j);
 					removed = true;
 					break;
@@ -330,7 +330,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 			for (int i = 0; i < entities.size(); i++) {
 
 				if (entities.get(i).getLanguage() != null)
-					if (entities.get(i).getLanguage().getUuid().equals(model.getUuid())) {
+					if (entities.get(i).getLanguage().equals(model.getUuid())) {
 						entities.get(i).setLanguage(null);
 						modelService.saveEntityQuietly(entities.get(i), DynamicField.class);
 					}
@@ -367,7 +367,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 				boolean removed = false;
 				for (int j = 0; j < entities.get(i).getEnumerations().size(); j++) {
-					if (entities.get(i).getEnumerations().get(j).getUuid().equals(model.getUuid())) {
+					if (entities.get(i).getEnumerations().get(j).equals(model.getUuid())) {
 						entities.get(i).getEnumerations().remove(j);
 						removed = true;
 						break;

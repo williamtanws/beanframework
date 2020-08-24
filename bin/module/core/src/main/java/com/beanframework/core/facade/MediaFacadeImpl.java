@@ -14,7 +14,6 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.MediaFullPopulator;
-import com.beanframework.core.converter.populator.history.MediaHistoryPopulator;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.media.domain.Media;
 import com.beanframework.media.service.MediaService;
@@ -31,9 +30,6 @@ public class MediaFacadeImpl implements MediaFacade {
 
 	@Autowired
 	private MediaFullPopulator mediaFullPopulator;
-
-	@Autowired
-	private MediaHistoryPopulator mediaHistoryPopulator;
 
 	@Override
 	public MediaDto findOneByUuid(UUID uuid) throws Exception {
@@ -96,7 +92,7 @@ public class MediaFacadeImpl implements MediaFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Media) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], MediaDto.class, new DtoConverterContext(mediaHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], MediaDto.class, new DtoConverterContext(mediaFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}
