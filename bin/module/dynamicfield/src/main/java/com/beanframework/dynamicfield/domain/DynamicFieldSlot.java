@@ -1,16 +1,14 @@
 package com.beanframework.dynamicfield.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,10 +40,8 @@ public class DynamicFieldSlot extends GenericEntity {
 	private Integer sort;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "dynamicfield_uuid")
-	private DynamicField dynamicField;
+	@Column(name="dynamicfield_uuid")
+	private UUID dynamicField;
 
 	public String getName() {
 		return name;
@@ -63,11 +59,11 @@ public class DynamicFieldSlot extends GenericEntity {
 		this.sort = sort;
 	}
 
-	public DynamicField getDynamicField() {
+	public UUID getDynamicField() {
 		return dynamicField;
 	}
 
-	public void setDynamicField(DynamicField dynamicField) {
+	public void setDynamicField(UUID dynamicField) {
 		this.dynamicField = dynamicField;
 	}
 }

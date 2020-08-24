@@ -2,6 +2,7 @@ package com.beanframework.core.converter.populator;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,9 @@ import com.beanframework.core.data.CompanyDto;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.VendorDto;
+import com.beanframework.user.domain.Address;
+import com.beanframework.user.domain.Company;
+import com.beanframework.user.domain.UserGroup;
 import com.beanframework.vendor.domain.Vendor;
 
 @Component
@@ -45,9 +49,24 @@ public class VendorFullPopulator extends AbstractPopulator<Vendor, VendorDto> im
 			target.setAccountNonLocked(source.getAccountNonLocked());
 			target.setCredentialsNonExpired(source.getCredentialsNonExpired());
 			target.setEnabled(source.getEnabled());
-			target.setUserGroups(modelService.getDto(source.getUserGroups(), UserGroupDto.class, new DtoConverterContext(userGroupBasicPopulator)));
-			target.setCompanies(modelService.getDto(source.getCompanies(), CompanyDto.class, new DtoConverterContext(companyBasicPopulator)));
-			target.setAddresses(modelService.getDto(source.getAddresses(), AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+			if (source.getUserGroups() != null && source.getUserGroups().isEmpty() == false) {
+				for (UUID uuid : source.getUserGroups()) {
+					UserGroup entity = modelService.findOneByUuid(uuid, UserGroup.class);
+					target.getUserGroups().add(modelService.getDto(entity, UserGroupDto.class, new DtoConverterContext(userGroupBasicPopulator)));
+				}
+			}
+			if (source.getCompanies() != null && source.getCompanies().isEmpty() == false) {
+				for (UUID uuid : source.getCompanies()) {
+					Company entity = modelService.findOneByUuid(uuid, Company.class);
+					target.getCompanies().add(modelService.getDto(entity, CompanyDto.class, new DtoConverterContext(companyBasicPopulator)));
+				}
+			}
+			if (source.getAddresses() != null && source.getAddresses().isEmpty() == false) {
+				for (UUID uuid : source.getAddresses()) {
+					Address entity = modelService.findOneByUuid(uuid, Address.class);
+					target.getAddresses().add(modelService.getDto(entity, AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
+				}
+			}
 
 			target.setFields(modelService.getDto(source.getFields(), UserFieldDto.class, new DtoConverterContext(userFieldFullPopulator)));
 			if (target.getFields() != null)

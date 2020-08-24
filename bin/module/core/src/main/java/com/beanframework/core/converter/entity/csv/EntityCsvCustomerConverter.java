@@ -2,6 +2,7 @@ package com.beanframework.core.converter.entity.csv;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -89,7 +90,10 @@ public class EntityCsvCustomerConverter implements EntityCsvConverter<CustomerCs
 
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
-						if (StringUtils.equals(prototype.getFields().get(i).getDynamicFieldSlot().getId(), dynamicFieldSlotId)) {
+						Map<String, Object> properties = new HashMap<String, Object>();
+						properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
+						DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
+						if (prototype.getFields().get(i).getDynamicFieldSlot() == slot.getUuid()) {
 							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
@@ -103,7 +107,7 @@ public class EntityCsvCustomerConverter implements EntityCsvConverter<CustomerCs
 						if (entityDynamicFieldSlot != null) {
 							UserField field = new UserField();
 							field.setValue(value);
-							field.setDynamicFieldSlot(entityDynamicFieldSlot);
+							field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
 							field.setUser(prototype);
 							prototype.getFields().add(field);
 						}
@@ -116,8 +120,9 @@ public class EntityCsvCustomerConverter implements EntityCsvConverter<CustomerCs
 				String[] userGroupIds = source.getUserGroupIds().split(ImportListener.SPLITTER);
 				for (int i = 0; i < userGroupIds.length; i++) {
 					boolean add = true;
-					for (UserGroup userGroup : prototype.getUserGroups()) {
-						if (StringUtils.equals(userGroup.getId(), userGroupIds[i]))
+					for (UUID userGroup : prototype.getUserGroups()) {
+						UserGroup entity = modelService.findOneByUuid(userGroup, UserGroup.class);
+						if (StringUtils.equals(entity.getId(), userGroupIds[i]))
 							add = false;
 					}
 
@@ -129,7 +134,7 @@ public class EntityCsvCustomerConverter implements EntityCsvConverter<CustomerCs
 						if (userGroup == null) {
 							LOGGER.error("UserGroup ID not exists: " + userGroupIds[i]);
 						} else {
-							prototype.getUserGroups().add(userGroup);
+							prototype.getUserGroups().add(userGroup.getUuid());
 						}
 					}
 				}

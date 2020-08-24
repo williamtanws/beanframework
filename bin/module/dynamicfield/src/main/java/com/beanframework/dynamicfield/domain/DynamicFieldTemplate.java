@@ -2,20 +2,18 @@ package com.beanframework.dynamicfield.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,13 +40,11 @@ public class DynamicFieldTemplate extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "dynamicfieldslot_uuid"))
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = DynamicFieldTemplateConstants.Table.DYNAMIC_FIELD_TEMPLATE_FIELDSLOT_REL, joinColumns = @JoinColumn(name = "template_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "dynamicfieldslot_uuid", referencedColumnName = "uuid"))
-	private List<DynamicFieldSlot> dynamicFieldSlots = new ArrayList<DynamicFieldSlot>();
+	@ElementCollection
+	@CollectionTable(name = DynamicFieldTemplateConstants.Table.DYNAMIC_FIELD_TEMPLATE_FIELDSLOT_REL, joinColumns = @JoinColumn(name = "template_uuid"))
+	@Column(name="dynamicfieldslot_uuid")
+	private List<UUID> dynamicFieldSlots = new ArrayList<UUID>();
 
 	public String getName() {
 		return name;
@@ -58,11 +54,11 @@ public class DynamicFieldTemplate extends GenericEntity {
 		this.name = name;
 	}
 
-	public List<DynamicFieldSlot> getDynamicFieldSlots() {
+	public List<UUID> getDynamicFieldSlots() {
 		return dynamicFieldSlots;
 	}
 
-	public void setDynamicFieldSlots(List<DynamicFieldSlot> dynamicFieldSlots) {
+	public void setDynamicFieldSlots(List<UUID> dynamicFieldSlots) {
 		this.dynamicFieldSlots = dynamicFieldSlots;
 	}
 

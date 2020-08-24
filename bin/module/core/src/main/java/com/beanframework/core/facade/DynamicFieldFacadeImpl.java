@@ -15,7 +15,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.DynamicFieldBasicPopulator;
 import com.beanframework.core.converter.populator.DynamicFieldFullPopulator;
-import com.beanframework.core.converter.populator.history.DynamicFieldHistoryPopulator;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.service.DynamicFieldService;
@@ -35,10 +34,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 
 	@Autowired
 	private DynamicFieldBasicPopulator dynamicFieldBasicPopulator;
-
-	@Autowired
-	private DynamicFieldHistoryPopulator dynamicFieldHistoryPopulator;
-
+	
 	@Override
 	public DynamicFieldDto findOneByUuid(UUID uuid) throws Exception {
 		DynamicField entity = modelService.findOneByUuid(uuid, DynamicField.class);
@@ -102,7 +98,7 @@ public class DynamicFieldFacadeImpl implements DynamicFieldFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof DynamicField) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldDto.class, new DtoConverterContext(dynamicFieldHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], DynamicFieldDto.class, new DtoConverterContext(dynamicFieldFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

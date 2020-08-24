@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -168,22 +169,26 @@ public class UserServiceImpl implements UserService {
 	public Set<GrantedAuthority> getAuthorities(UUID userUuid, String userGroupId) throws Exception {
 
 		User user = modelService.findOneByUuid(userUuid, User.class);
-
-		Hibernate.initialize(user.getUserGroups());
-
-		Set<String> checkedUserGroupUuid = new HashSet<String>();
-		for (UserGroup userGroup : user.getUserGroups()) {
-			checkedUserGroupUuid.add(userGroup.getUuid().toString());
-
-			Hibernate.initialize(userGroup.getUserAuthorities());
+		List<UserGroup> userGroups = new ArrayList<UserGroup>();
+		for (UUID uuid : user.getUserGroups()) {
+			UserGroup entity = modelService.findOneByUuid(uuid, UserGroup.class);
+			Hibernate.initialize(entity.getUserAuthorities());
+			if(entity != null) {
+				userGroups.add(entity);
+			}
 		}
 
-		for (UserGroup userGroup : user.getUserGroups()) {
+		Set<String> checkedUserGroupUuid = new HashSet<String>();
+		for (UserGroup userGroup : userGroups) {
+			checkedUserGroupUuid.add(userGroup.getUuid().toString());
+		}
+
+		for (UserGroup userGroup : userGroups) {
 			initializeUserGroupUuids(userGroup, checkedUserGroupUuid);
 		}
 		boolean isAuthorized = false;
 
-		for (UserGroup userGroup : user.getUserGroups()) {
+		for (UserGroup userGroup : userGroups) {
 			if (isAuthorized == Boolean.FALSE) {
 				isAuthorized = isAuthorized(userGroup, userGroupId);
 			} else {
@@ -192,7 +197,7 @@ public class UserServiceImpl implements UserService {
 		}
 
 		if (isAuthorized) {
-			return getAuthorities(user.getUserGroups(), new HashSet<String>());
+			return getAuthorities(userGroups, new HashSet<String>());
 		} else {
 			return new HashSet<GrantedAuthority>();
 		}
@@ -208,21 +213,25 @@ public class UserServiceImpl implements UserService {
 			User principal = (User) auth.getPrincipal();
 
 			User user = modelService.findOneByUuid(principal.getUuid(), User.class);
-
-			Hibernate.initialize(user.getUserGroups());
-
-			Set<String> checkedUserGroupUuid = new HashSet<String>();
-			for (UserGroup userGroup : user.getUserGroups()) {
-				checkedUserGroupUuid.add(userGroup.getUuid().toString());
-
-				Hibernate.initialize(userGroup.getUserAuthorities());
+			List<UserGroup> userGroups = new ArrayList<UserGroup>();
+			for (UUID uuid : user.getUserGroups()) {
+				UserGroup entity = modelService.findOneByUuid(uuid, UserGroup.class);
+				Hibernate.initialize(entity.getUserAuthorities());
+				if(entity != null) {
+					userGroups.add(entity);
+				}
 			}
 
-			for (UserGroup userGroup : user.getUserGroups()) {
+			Set<String> checkedUserGroupUuid = new HashSet<String>();
+			for (UserGroup userGroup : userGroups) {
+				checkedUserGroupUuid.add(userGroup.getUuid().toString());
+			}
+
+			for (UserGroup userGroup : userGroups) {
 				initializeUserGroupUuids(userGroup, checkedUserGroupUuid);
 			}
 
-			return user.getUserGroups();
+			return userGroups;
 
 		} else {
 			return null;
@@ -240,18 +249,24 @@ public class UserServiceImpl implements UserService {
 	
 	@Transactional(readOnly = true)
 	@Override
-	public Set<String> getAllUserGroupUuidsByUserUuid(UUID uuid) throws Exception {
+	public Set<String> getAllUserGroupUuidsByUserUuid(UUID userUuid) throws Exception {
 	
-		User user = modelService.findOneByUuid(uuid, User.class);
-
-		Hibernate.initialize(user.getUserGroups());
+		User user = modelService.findOneByUuid(userUuid, User.class);
+		List<UserGroup> userGroups = new ArrayList<UserGroup>();
+		for (UUID uuid : user.getUserGroups()) {
+			UserGroup entity = modelService.findOneByUuid(uuid, UserGroup.class);
+			Hibernate.initialize(entity.getUserAuthorities());
+			if(entity != null) {
+				userGroups.add(entity);
+			}
+		}
 
 		Set<String> checkedUserGroupUuid = new HashSet<String>();
-		for (UserGroup userGroup : user.getUserGroups()) {
+		for (UserGroup userGroup : userGroups) {
 			checkedUserGroupUuid.add(userGroup.getUuid().toString());
 		}
 
-		for (UserGroup userGroup : user.getUserGroups()) {
+		for (UserGroup userGroup : userGroups) {
 			initializeUserGroupUuids(userGroup, checkedUserGroupUuid);
 		}
 
@@ -279,18 +294,25 @@ public class UserServiceImpl implements UserService {
 	
 	@Transactional(readOnly = true)
 	@Override
-	public Set<String> getAllUserGroupIdsByUserUuid(UUID uuid) throws Exception {
+	public Set<String> getAllUserGroupIdsByUserUuid(UUID userUuid) throws Exception {
 	
-		User user = modelService.findOneByUuid(uuid, User.class);
-
-		Hibernate.initialize(user.getUserGroups());
+		User user = modelService.findOneByUuid(userUuid, User.class);
+		List<UserGroup> userGroups = new ArrayList<UserGroup>();
+		for (UUID uuid : user.getUserGroups()) {
+			UserGroup entity = modelService.findOneByUuid(uuid, UserGroup.class);
+			Hibernate.initialize(entity.getUserAuthorities());
+			if(entity != null) {
+				userGroups.add(entity);
+			}
+		}
+		
 
 		Set<String> checkedUserGroupId = new HashSet<String>();
-		for (UserGroup userGroup : user.getUserGroups()) {
+		for (UserGroup userGroup : userGroups) {
 			checkedUserGroupId.add(userGroup.getId());
 		}
 
-		for (UserGroup userGroup : user.getUserGroups()) {
+		for (UserGroup userGroup : userGroups) {
 			initializeUserGroupIds(userGroup, checkedUserGroupId);
 		}
 

@@ -70,7 +70,10 @@ public class EntityCsvUserPermissionConverter implements EntityCsvConverter<User
 
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
-						if (StringUtils.equals(prototype.getFields().get(i).getDynamicFieldSlot().getId(), dynamicFieldSlotId)) {
+						Map<String, Object> properties = new HashMap<String, Object>();
+						properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
+						DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
+						if (prototype.getFields().get(i).getDynamicFieldSlot() == slot.getUuid()) {
 							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
@@ -84,7 +87,7 @@ public class EntityCsvUserPermissionConverter implements EntityCsvConverter<User
 						if (entityDynamicFieldSlot != null) {
 							UserPermissionField field = new UserPermissionField();
 							field.setValue(value);
-							field.setDynamicFieldSlot(entityDynamicFieldSlot);
+							field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
 							field.setUserPermission(prototype);
 							prototype.getFields().add(field);
 						}

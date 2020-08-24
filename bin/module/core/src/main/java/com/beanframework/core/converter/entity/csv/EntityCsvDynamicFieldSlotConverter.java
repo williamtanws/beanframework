@@ -66,7 +66,7 @@ public class EntityCsvDynamicFieldSlotConverter implements EntityCsvConverter<Dy
 				if (entityDynamicField == null) {
 					LOGGER.error("DynamicField ID not exists: " + source.getDynamicFieldId());
 				} else {
-					prototype.setDynamicField(entityDynamicField);
+					prototype.setDynamicField(entityDynamicField.getUuid());
 				}
 			}
 

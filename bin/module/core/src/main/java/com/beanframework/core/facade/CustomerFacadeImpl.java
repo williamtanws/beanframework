@@ -16,7 +16,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.entity.EntityCustomerProfileConverter;
 import com.beanframework.core.converter.populator.CustomerBasicPopulator;
 import com.beanframework.core.converter.populator.CustomerFullPopulator;
-import com.beanframework.core.converter.populator.history.CustomerHistoryPopulator;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.user.domain.Customer;
 import com.beanframework.user.service.CustomerService;
@@ -36,13 +35,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
 	private CustomerService customerService;
 
 	@Autowired
-	private CustomerFullPopulator customerFullPopulator;
-
-	@Autowired
 	private CustomerBasicPopulator customerBasicPopulator;
 
 	@Autowired
-	private CustomerHistoryPopulator customerHistoryPopulator;
+	private CustomerFullPopulator customerFullPopulator;
 
 	@Autowired
 	private EntityCustomerProfileConverter entityCustomerProfileConverter;
@@ -120,7 +116,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Customer) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CustomerDto.class, new DtoConverterContext(customerHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], CustomerDto.class, new DtoConverterContext(customerFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

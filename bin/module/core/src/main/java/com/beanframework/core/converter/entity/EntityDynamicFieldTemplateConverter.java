@@ -63,18 +63,18 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 			// DynamicFieldSlots
 			if (source.getSelectedDynamicFieldSlots() != null) {
 
-				Iterator<DynamicFieldSlot> DynamicFieldSlotsIterator = prototype.getDynamicFieldSlots().iterator();
-				while (DynamicFieldSlotsIterator.hasNext()) {
-					DynamicFieldSlot DynamicFieldSlot = DynamicFieldSlotsIterator.next();
+				Iterator<UUID> itr = prototype.getDynamicFieldSlots().iterator();
+				while (itr.hasNext()) {
+					UUID enitity = itr.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedDynamicFieldSlots().length; i++) {
-						if (DynamicFieldSlot.getUuid().equals(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]))) {
+						if (enitity.equals(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]))) {
 							remove = false;
 						}
 					}
 					if (remove) {
-						DynamicFieldSlotsIterator.remove();
+						itr.remove();
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				}
@@ -82,11 +82,11 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 				for (int i = 0; i < source.getSelectedDynamicFieldSlots().length; i++) {
 
 					boolean add = true;
-					DynamicFieldSlotsIterator = prototype.getDynamicFieldSlots().iterator();
-					while (DynamicFieldSlotsIterator.hasNext()) {
-						DynamicFieldSlot DynamicFieldSlot = DynamicFieldSlotsIterator.next();
+					itr = prototype.getDynamicFieldSlots().iterator();
+					while (itr.hasNext()) {
+						UUID entity = itr.next();
 
-						if (DynamicFieldSlot.getUuid().equals(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]))) {
+						if (entity.equals(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]))) {
 							add = false;
 						}
 					}
@@ -94,14 +94,14 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 					if (add) {
 						DynamicFieldSlot DynamicFieldSlot = modelService.findOneByUuid(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]), DynamicFieldSlot.class);
 						if (DynamicFieldSlot != null) {
-							prototype.getDynamicFieldSlots().add(DynamicFieldSlot);
+							prototype.getDynamicFieldSlots().add(DynamicFieldSlot.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}
 			}
 			else if(prototype.getDynamicFieldSlots() != null && prototype.getDynamicFieldSlots().isEmpty() == false){
-				for (final Iterator<DynamicFieldSlot> itr = prototype.getDynamicFieldSlots().iterator(); itr.hasNext();) {
+				for (final Iterator<UUID> itr = prototype.getDynamicFieldSlots().iterator(); itr.hasNext();) {
 					itr.next();
 				    itr.remove(); 
 					prototype.setLastModifiedDate(lastModifiedDate);

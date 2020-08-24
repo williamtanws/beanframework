@@ -1,25 +1,21 @@
 package com.beanframework.comment.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.comment.CommentConstants;
 import com.beanframework.common.domain.GenericEntity;
-import com.beanframework.user.domain.User;
 
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -47,10 +43,8 @@ public class Comment extends GenericEntity {
 	private Boolean visibled;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_uuid")
-	private User user;
+	@Column(name="user_uuid")
+	private UUID user;
 
 	public String getHtml() {
 		return html;
@@ -68,11 +62,11 @@ public class Comment extends GenericEntity {
 		this.visibled = visibled;
 	}
 
-	public User getUser() {
+	public UUID getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UUID user) {
 		this.user = user;
 	}
 }

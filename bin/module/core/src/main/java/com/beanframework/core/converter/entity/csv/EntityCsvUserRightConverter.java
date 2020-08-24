@@ -70,7 +70,10 @@ public class EntityCsvUserRightConverter implements EntityCsvConverter<UserRight
 
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
-						if (StringUtils.equals(prototype.getFields().get(i).getDynamicFieldSlot().getId(), dynamicFieldSlotId)) {
+						Map<String, Object> properties = new HashMap<String, Object>();
+						properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
+						DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
+						if (prototype.getFields().get(i).getDynamicFieldSlot() == slot.getUuid()) {
 							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
@@ -84,7 +87,7 @@ public class EntityCsvUserRightConverter implements EntityCsvConverter<UserRight
 						if (entityDynamicFieldSlot != null) {
 							UserRightField field = new UserRightField();
 							field.setValue(value);
-							field.setDynamicFieldSlot(entityDynamicFieldSlot);
+							field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
 							field.setUserRight(prototype);
 							prototype.getFields().add(field);
 						}

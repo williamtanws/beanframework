@@ -2,17 +2,18 @@ package com.beanframework.user.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -24,7 +25,6 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -78,27 +78,23 @@ public class User extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
-	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
+	@ElementCollection
+	@CollectionTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid"))
+	@Column(name="usergroup_uuid")
+	private List<UUID> userGroups = new ArrayList<UUID>();
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "company_uuid"))
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = UserConstants.Table.USER_COMPANY_REL, joinColumns = @JoinColumn(name = "user_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "company_uuid", referencedColumnName = "uuid"))
-	private List<Company> companies = new ArrayList<Company>();
+	@ElementCollection
+	@CollectionTable(name = UserConstants.Table.USER_COMPANY_REL, joinColumns = @JoinColumn(name = "user_uuid"))
+	@Column(name="company_uuid")
+	private List<UUID> companies = new ArrayList<UUID>();
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "owner")
-	private List<Address> addresses = new ArrayList<Address>();
+	@ElementCollection
+	@CollectionTable(name = UserConstants.Table.USER_ADDRESS_REL, joinColumns = @JoinColumn(name = "user_uuid"))
+	@Column(name="address_uuid")
+	private List<UUID> addresses = new ArrayList<UUID>();
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
@@ -167,11 +163,11 @@ public class User extends GenericEntity {
 		this.name = name;
 	}
 
-	public List<UserGroup> getUserGroups() {
+	public List<UUID> getUserGroups() {
 		return userGroups;
 	}
 
-	public void setUserGroups(List<UserGroup> userGroups) {
+	public void setUserGroups(List<UUID> userGroups) {
 		this.userGroups = userGroups;
 	}
 
@@ -191,19 +187,19 @@ public class User extends GenericEntity {
 		this.profilePicture = profilePicture;
 	}
 
-	public List<Company> getCompanies() {
+	public List<UUID> getCompanies() {
 		return companies;
 	}
 
-	public void setCompanies(List<Company> companies) {
+	public void setCompanies(List<UUID> companies) {
 		this.companies = companies;
 	}
 
-	public List<Address> getAddresses() {
+	public List<UUID> getAddresses() {
 		return addresses;
 	}
 
-	public void setAddresses(List<Address> addresses) {
+	public void setAddresses(List<UUID> addresses) {
 		this.addresses = addresses;
 	}
 

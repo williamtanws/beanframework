@@ -2,25 +2,21 @@ package com.beanframework.dynamicfield.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -28,8 +24,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.DynamicFieldConstants;
 import com.beanframework.dynamicfield.DynamicFieldType;
-import com.beanframework.enumuration.domain.Enumeration;
-import com.beanframework.internationalization.domain.Language;
 
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -74,23 +68,14 @@ public class DynamicField extends GenericEntity {
 	private String grid;
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "language_uuid")
-	private Language language;
+	@Column(name="language_uuid")
+	private UUID language;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "enumeration_uuid"))
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "enumeration_uuid", referencedColumnName = "uuid"))
-	private List<Enumeration> enumerations = new ArrayList<Enumeration>();
-
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@OneToMany(fetch = FetchType.LAZY)
-	private List<DynamicFieldSlot> dynamicFieldSlots = new ArrayList<DynamicFieldSlot>(0);
+	@ElementCollection
+	@CollectionTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid"))
+	@Column(name="enumeration_uuid")
+	private List<UUID> enumerations = new ArrayList<UUID>();
 
 	public String getName() {
 		return name;
@@ -140,28 +125,19 @@ public class DynamicField extends GenericEntity {
 		this.grid = grid;
 	}
 
-	public Language getLanguage() {
+	public UUID getLanguage() {
 		return language;
 	}
 
-	public void setLanguage(Language language) {
+	public void setLanguage(UUID language) {
 		this.language = language;
 	}
 
-	public List<Enumeration> getEnumerations() {
+	public List<UUID> getEnumerations() {
 		return enumerations;
 	}
 
-	public void setEnumerations(List<Enumeration> enumerations) {
+	public void setEnumerations(List<UUID> enumerations) {
 		this.enumerations = enumerations;
 	}
-
-	public List<DynamicFieldSlot> getDynamicFieldSlots() {
-		return dynamicFieldSlots;
-	}
-
-	public void setDynamicFieldSlots(List<DynamicFieldSlot> dynamicFieldSlots) {
-		this.dynamicFieldSlots = dynamicFieldSlots;
-	}
-
 }

@@ -1,23 +1,19 @@
 package com.beanframework.user.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
-import com.beanframework.internationalization.domain.Country;
-import com.beanframework.internationalization.domain.Region;
 import com.beanframework.user.AddressConstants;
 
 @Cacheable
@@ -72,10 +68,8 @@ public class Address extends GenericEntity {
 	public static final String DEFAULT_SHIPMENT_ADDRESS = "defaultShipmentAddress";
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "owner_uuid")
-	private User owner;
+	@Column(name="owner_uuid")
+	private UUID owner;
 
 	// General
 	@Audited(withModifiedFlag = true)
@@ -88,10 +82,8 @@ public class Address extends GenericEntity {
 	private String town;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "country_uuid")
-	private Country country;
+	@Column(name="country_uuid")
+	private UUID country;
 
 	// Additional Address Information
 	@Audited(withModifiedFlag = true)
@@ -128,45 +120,37 @@ public class Address extends GenericEntity {
 	private String apartment;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "region_uuid")
-	private Region region;
+	@Column(name="region_uuid")
+	private UUID region;
 
 	@Audited(withModifiedFlag = true)
 	private String district;
 
-	//
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "shippingAddress_uuid")
-	private Address shippingAddress;
+	@Column(name="shippingAddress_uuid")
+	private UUID shippingAddress;
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "billingAddress_uuid")
-	private Address billingAddress;
+	@Column(name="billingAddress_uuid")
+	private UUID billingAddress;
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "contactAddress_uuid")
-	private Address contactAddress;
+	@Column(name="contactAddress_uuid")
+	private UUID contactAddress;
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "defaultPaymentAddress_uuid")
-	private Address defaultPaymentAddress;
+	@Column(name="defaultPaymentAddress_uuid")
+	private UUID defaultPaymentAddress;
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "defaultShipmentAddress_uuid")
-	private Address defaultShipmentAddress;
+	@Column(name="defaultShipmentAddress_uuid")
+	private UUID defaultShipmentAddress;
 
-	public User getOwner() {
+	public UUID getOwner() {
 		return owner;
 	}
 
-	public void setOwner(User owner) {
+	public void setOwner(UUID owner) {
 		this.owner = owner;
 	}
 
@@ -202,11 +186,11 @@ public class Address extends GenericEntity {
 		this.town = town;
 	}
 
-	public Country getCountry() {
+	public UUID getCountry() {
 		return country;
 	}
 
-	public void setCountry(Country country) {
+	public void setCountry(UUID country) {
 		this.country = country;
 	}
 
@@ -330,11 +314,11 @@ public class Address extends GenericEntity {
 		this.apartment = apartment;
 	}
 
-	public Region getRegion() {
+	public UUID getRegion() {
 		return region;
 	}
 
-	public void setRegion(Region region) {
+	public void setRegion(UUID region) {
 		this.region = region;
 	}
 
@@ -346,43 +330,43 @@ public class Address extends GenericEntity {
 		this.district = district;
 	}
 
-	public Address getShippingAddress() {
+	public UUID getShippingAddress() {
 		return shippingAddress;
 	}
 
-	public void setShippingAddress(Address shippingAddress) {
+	public void setShippingAddress(UUID shippingAddress) {
 		this.shippingAddress = shippingAddress;
 	}
 
-	public Address getBillingAddress() {
+	public UUID getBillingAddress() {
 		return billingAddress;
 	}
 
-	public void setBillingAddress(Address billingAddress) {
+	public void setBillingAddress(UUID billingAddress) {
 		this.billingAddress = billingAddress;
 	}
 
-	public Address getContactAddress() {
+	public UUID getContactAddress() {
 		return contactAddress;
 	}
 
-	public void setContactAddress(Address contactAddress) {
+	public void setContactAddress(UUID contactAddress) {
 		this.contactAddress = contactAddress;
 	}
 
-	public Address getDefaultPaymentAddress() {
+	public UUID getDefaultPaymentAddress() {
 		return defaultPaymentAddress;
 	}
 
-	public void setDefaultPaymentAddress(Address defaultPaymentAddress) {
+	public void setDefaultPaymentAddress(UUID defaultPaymentAddress) {
 		this.defaultPaymentAddress = defaultPaymentAddress;
 	}
 
-	public Address getDefaultShipmentAddress() {
+	public UUID getDefaultShipmentAddress() {
 		return defaultShipmentAddress;
 	}
 
-	public void setDefaultShipmentAddress(Address defaultShipmentAddress) {
+	public void setDefaultShipmentAddress(UUID defaultShipmentAddress) {
 		this.defaultShipmentAddress = defaultShipmentAddress;
 	}
 

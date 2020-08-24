@@ -15,7 +15,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.AdminBasicPopulator;
 import com.beanframework.core.converter.populator.AdminFullPopulator;
-import com.beanframework.core.converter.populator.history.AdminHistoryPopulator;
 import com.beanframework.core.data.AdminDto;
 import com.beanframework.user.domain.Admin;
 import com.beanframework.user.service.AdminService;
@@ -35,9 +34,6 @@ public class AdminFacadeImpl implements AdminFacade {
 	
 	@Autowired
 	private AdminBasicPopulator adminBasicPopulator;
-	
-	@Autowired
-	private AdminHistoryPopulator adminHistoryPopulator;
 
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
@@ -105,7 +101,7 @@ public class AdminFacadeImpl implements AdminFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Admin) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], AdminDto.class, new DtoConverterContext(adminHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], AdminDto.class, new DtoConverterContext(adminFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

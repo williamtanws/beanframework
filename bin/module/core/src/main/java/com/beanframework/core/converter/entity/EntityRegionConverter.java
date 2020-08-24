@@ -72,8 +72,8 @@ public class EntityRegionConverter implements EntityConverter<RegionDto, Region>
 
 				if (entity != null) {
 
-					if (prototype.getCountry() == null || prototype.getCountry().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setCountry(entity);
+					if (prototype.getCountry() == null || prototype.getCountry().equals(entity.getUuid()) == false) {
+						prototype.setCountry(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {

@@ -2,29 +2,25 @@ package com.beanframework.user.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
-import com.beanframework.internationalization.domain.Country;
 import com.beanframework.user.CompanyConstants;
 import com.beanframework.user.LineOfBusinessType;
 
@@ -69,22 +65,16 @@ public class Company extends GenericEntity {
 	private String description;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_uuid")
-	private User contactPerson;
+	@Column(name="contactperson_uuid")
+	private UUID contactPerson;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "company_uuid")
-	private Company responsibleCompany;
+	@Column(name="company_uuid")
+	private UUID responsibleCompany;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "country_uuid")
-	private Country country;
+	@Column(name="country_uuid")
+	private UUID country;
 
 	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
@@ -118,39 +108,32 @@ public class Company extends GenericEntity {
 	private String supplierSpecificId;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@OneToMany(fetch = FetchType.EAGER)
-	private List<Address> addresses = new ArrayList<Address>();
+	@ElementCollection
+	@CollectionTable(name = CompanyConstants.Table.COMPANY_ADDRESS_REL, joinColumns = @JoinColumn(name = "company_uuid"))
+	@Column(name="address_uuid")
+	private List<UUID> addresses = new ArrayList<UUID>();
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "shipping_address_uuid")
-	private Address shippingAddress;
+	@Column(name="shipping_address_uuid")
+	private UUID shippingAddress;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "unloading_address_uuid")
-	private Address unloadingAddress;
+	@Column(name="unloading_address_uuid")
+	private UUID unloadingAddress;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "billing_address_uuid")
-	private Address billingAddress;
+	@Column(name="billing_address_uuid")
+	private UUID billingAddress;
 
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "contact_address_uuid")
-	private Address contactAddress;
+	@Column(name="contact_address_uuid")
+	private UUID contactAddress;
 
-	@AuditMappedBy(mappedBy = "companies")
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(mappedBy = "companies", fetch = FetchType.LAZY)
-	private List<User> users = new ArrayList<User>();
+	@ElementCollection
+	@CollectionTable(name = CompanyConstants.Table.COMPANY_ADDRESS_REL, joinColumns = @JoinColumn(name = "company_uuid"))
+	@Column(name="user_uuid")
+	private List<UUID> users = new ArrayList<UUID>();
 
 	public String getName() {
 		return name;
@@ -168,27 +151,27 @@ public class Company extends GenericEntity {
 		this.description = description;
 	}
 
-	public User getContactPerson() {
+	public UUID getContactPerson() {
 		return contactPerson;
 	}
 
-	public void setContactPerson(User contactPerson) {
+	public void setContactPerson(UUID contactPerson) {
 		this.contactPerson = contactPerson;
 	}
 
-	public Company getResponsibleCompany() {
+	public UUID getResponsibleCompany() {
 		return responsibleCompany;
 	}
 
-	public void setResponsibleCompany(Company responsibleCompany) {
+	public void setResponsibleCompany(UUID responsibleCompany) {
 		this.responsibleCompany = responsibleCompany;
 	}
 
-	public Country getCountry() {
+	public UUID getCountry() {
 		return country;
 	}
 
-	public void setCountry(Country country) {
+	public void setCountry(UUID country) {
 		this.country = country;
 	}
 
@@ -272,51 +255,51 @@ public class Company extends GenericEntity {
 		this.supplierSpecificId = supplierSpecificId;
 	}
 
-	public List<Address> getAddresses() {
+	public List<UUID> getAddresses() {
 		return addresses;
 	}
 
-	public void setAddresses(List<Address> addresses) {
+	public void setAddresses(List<UUID> addresses) {
 		this.addresses = addresses;
 	}
 
-	public Address getShippingAddress() {
+	public UUID getShippingAddress() {
 		return shippingAddress;
 	}
 
-	public void setShippingAddress(Address shippingAddress) {
+	public void setShippingAddress(UUID shippingAddress) {
 		this.shippingAddress = shippingAddress;
 	}
 
-	public Address getUnloadingAddress() {
+	public UUID getUnloadingAddress() {
 		return unloadingAddress;
 	}
 
-	public void setUnloadingAddress(Address unloadingAddress) {
+	public void setUnloadingAddress(UUID unloadingAddress) {
 		this.unloadingAddress = unloadingAddress;
 	}
 
-	public Address getBillingAddress() {
+	public UUID getBillingAddress() {
 		return billingAddress;
 	}
 
-	public void setBillingAddress(Address billingAddress) {
+	public void setBillingAddress(UUID billingAddress) {
 		this.billingAddress = billingAddress;
 	}
 
-	public Address getContactAddress() {
+	public UUID getContactAddress() {
 		return contactAddress;
 	}
 
-	public void setContactAddress(Address contactAddress) {
+	public void setContactAddress(UUID contactAddress) {
 		this.contactAddress = contactAddress;
 	}
 
-	public List<User> getUsers() {
+	public List<UUID> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<User> users) {
+	public void setUsers(List<UUID> users) {
 		this.users = users;
 	}
 

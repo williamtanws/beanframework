@@ -15,7 +15,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.EnumerationBasicPopulator;
 import com.beanframework.core.converter.populator.EnumerationFullPopulator;
-import com.beanframework.core.converter.populator.history.EnumerationHistoryPopulator;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.enumuration.service.EnumerationService;
@@ -35,9 +34,6 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 
 	@Autowired
 	private EnumerationBasicPopulator enumerationBasicPopulator;
-
-	@Autowired
-	private EnumerationHistoryPopulator enumerationHistoryPopulator;
 	
 	@Override
 	public EnumerationDto findOneByUuid(UUID uuid) throws Exception {
@@ -100,7 +96,7 @@ public class EnumerationFacadeImpl implements EnumerationFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Enumeration) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], EnumerationDto.class, new DtoConverterContext(enumerationHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], EnumerationDto.class, new DtoConverterContext(enumerationFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

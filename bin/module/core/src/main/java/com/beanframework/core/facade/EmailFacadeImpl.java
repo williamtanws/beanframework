@@ -19,7 +19,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.EmailBasicPopulator;
 import com.beanframework.core.converter.populator.EmailFullPopulator;
-import com.beanframework.core.converter.populator.history.EmailHistoryPopulator;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.service.EmailService;
@@ -41,10 +40,6 @@ public class EmailFacadeImpl implements EmailFacade {
 
 	@Autowired
 	private EmailBasicPopulator emailBasicPopulator;
-
-	@Autowired
-	private EmailHistoryPopulator emailHistoryPopulator;
-
 	@Override
 	public EmailDto findOneByUuid(UUID uuid) throws Exception {
 		Email entity = modelService.findOneByUuid(uuid, Email.class);
@@ -124,7 +119,7 @@ public class EmailFacadeImpl implements EmailFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Email) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], EmailDto.class, new DtoConverterContext(emailHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], EmailDto.class, new DtoConverterContext(emailFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

@@ -1,5 +1,7 @@
 package com.beanframework.core.converter.populator;
 
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
+import com.beanframework.enumuration.domain.Enumeration;
+import com.beanframework.internationalization.domain.Language;
 
 @Component
 public class DynamicFieldFullPopulator extends AbstractPopulator<DynamicField, DynamicFieldDto> implements Populator<DynamicField, DynamicFieldDto> {
@@ -34,8 +38,16 @@ public class DynamicFieldFullPopulator extends AbstractPopulator<DynamicField, D
 			target.setType(source.getType());
 			target.setLabel(source.getLabel());
 			target.setGrid(source.getGrid());
-			target.setLanguage(modelService.getDto(source.getLanguage(), LanguageDto.class, new DtoConverterContext(languageFullPopulator)));
-			target.setEnumerations(modelService.getDto(source.getEnumerations(), EnumerationDto.class, new DtoConverterContext(enumerationFullPopulator)));
+			if (source.getLanguage() != null) {
+				Language entity = modelService.findOneByUuid(source.getLanguage(), Language.class);
+				target.setLanguage(modelService.getDto(entity, LanguageDto.class, new DtoConverterContext(languageFullPopulator)));
+			}
+			if (source.getEnumerations() != null && source.getEnumerations().isEmpty() == false) {
+				for (UUID uuid : source.getEnumerations()) {
+					Enumeration entity = modelService.findOneByUuid(uuid, Enumeration.class);
+					target.getEnumerations().add(modelService.getDto(entity, EnumerationDto.class, new DtoConverterContext(enumerationFullPopulator)));
+				}
+			}
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

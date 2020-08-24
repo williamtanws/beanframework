@@ -125,8 +125,8 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 
 				if (entity != null) {
 
-					if (prototype.getResponsibleCompany() == null || prototype.getResponsibleCompany().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setResponsibleCompany(entity);
+					if (prototype.getResponsibleCompany() == null || prototype.getResponsibleCompany().equals(entity.getUuid()) == false) {
+						prototype.setResponsibleCompany(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -145,8 +145,8 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 
 				if (entity != null) {
 
-					if (prototype.getContactPerson() == null || prototype.getContactPerson().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setContactPerson(entity);
+					if (prototype.getContactPerson() == null || prototype.getContactPerson().equals(entity.getUuid()) == false) {
+						prototype.setContactPerson(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -165,8 +165,8 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 
 				if (entity != null) {
 
-					if (prototype.getCountry() == null || prototype.getCountry().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setCountry(entity);
+					if (prototype.getCountry() == null || prototype.getCountry().equals(entity.getUuid()) == false) {
+						prototype.setCountry(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -177,13 +177,13 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 			// Addresses
 			if (source.getSelectedAddresses() != null) {
 
-				Iterator<Address> it = prototype.getAddresses().iterator();
+				Iterator<UUID> it = prototype.getAddresses().iterator();
 				while (it.hasNext()) {
-					Address userGroup = it.next();
+					UUID o = it.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedAddresses().length; i++) {
-						if (userGroup.getUuid().equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
+						if (o.equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
 							remove = false;
 						}
 					}
@@ -198,9 +198,9 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 					boolean add = true;
 					it = prototype.getAddresses().iterator();
 					while (it.hasNext()) {
-						Address userGroup = it.next();
+						UUID o = it.next();
 
-						if (userGroup.getUuid().equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
+						if (o.equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
 							add = false;
 						}
 					}
@@ -208,7 +208,7 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 					if (add) {
 						Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedAddresses()[i]), Address.class);
 						if (entity != null) {
-							prototype.getAddresses().add(entity);
+							prototype.getAddresses().add(entity.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
@@ -228,8 +228,8 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 
 				if (entity != null) {
 
-					if (prototype.getShippingAddress() == null || prototype.getShippingAddress().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setShippingAddress(entity);
+					if (prototype.getShippingAddress() == null || prototype.getShippingAddress().equals(entity.getUuid()) == false) {
+						prototype.setShippingAddress(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -248,8 +248,8 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 
 				if (entity != null) {
 
-					if (prototype.getUnloadingAddress() == null || prototype.getUnloadingAddress().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setUnloadingAddress(entity);
+					if (prototype.getUnloadingAddress() == null || prototype.getUnloadingAddress().equals(entity.getUuid()) == false) {
+						prototype.setUnloadingAddress(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -268,8 +268,8 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 
 				if (entity != null) {
 
-					if (prototype.getBillingAddress() == null || prototype.getBillingAddress().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setBillingAddress(entity);
+					if (prototype.getBillingAddress() == null || prototype.getBillingAddress().equals(entity.getUuid()) == false) {
+						prototype.setBillingAddress(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -288,8 +288,8 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 
 				if (entity != null) {
 
-					if (prototype.getContactAddress() == null || prototype.getContactAddress().getUuid().equals(entity.getUuid()) == false) {
-						prototype.setContactAddress(entity);
+					if (prototype.getContactAddress() == null || prototype.getContactAddress().equals(entity.getUuid()) == false) {
+						prototype.setContactAddress(entity.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
@@ -300,20 +300,17 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 			// Users
 			if (source.getSelectedUsers() != null) {
 
-				Iterator<User> it = prototype.getUsers().iterator();
+				Iterator<UUID> it = prototype.getUsers().iterator();
 				while (it.hasNext()) {
-					User o = it.next();
+					UUID o = it.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedUsers().length; i++) {
-						if (o.getUuid().equals(UUID.fromString(source.getSelectedUsers()[i]))) {
+						if (o.equals(UUID.fromString(source.getSelectedUsers()[i]))) {
 							remove = false;
 						}
 					}
 					if (remove) {
-						User entity = modelService.findOneByUuid(o.getUuid(), User.class);
-						entity.getCompanies().remove(prototype);
-						modelService.saveEntity(entity, User.class);
 						it.remove();
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
@@ -324,9 +321,9 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 					boolean add = true;
 					it = prototype.getUsers().iterator();
 					while (it.hasNext()) {
-						User entity = it.next();
+						UUID entity = it.next();
 
-						if (entity.getUuid().equals(UUID.fromString(source.getSelectedUsers()[i]))) {
+						if (entity.equals(UUID.fromString(source.getSelectedUsers()[i]))) {
 							add = false;
 						}
 					}
@@ -334,17 +331,14 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 					if (add) {
 						User entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedUsers()[i]), User.class);
 						if (entity != null) {
-							entity.getCompanies().add(prototype);
-							prototype.getUsers().add(entity);
+							entity.getCompanies().add(prototype.getUuid());
+							prototype.getUsers().add(entity.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}
 			} else if (prototype.getUsers() != null && prototype.getUsers().isEmpty() == false) {
-				for (final Iterator<User> itr = prototype.getUsers().iterator(); itr.hasNext();) {
-					User entity = modelService.findOneByUuid(itr.next().getUuid(), User.class);
-					entity.getCompanies().remove(prototype);
-					modelService.saveEntity(entity, User.class);
+				for (final Iterator<UUID> itr = prototype.getUsers().iterator(); itr.hasNext();) {
 					itr.remove();
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}

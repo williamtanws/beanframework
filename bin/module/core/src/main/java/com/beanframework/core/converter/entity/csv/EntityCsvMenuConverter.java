@@ -106,7 +106,10 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 
 					boolean add = true;
 					for (int i = 0; i < prototype.getFields().size(); i++) {
-						if (StringUtils.equals(prototype.getFields().get(i).getDynamicFieldSlot().getId(), dynamicFieldSlotId)) {
+						Map<String, Object> properties = new HashMap<String, Object>();
+						properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
+						DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
+						if (prototype.getFields().get(i).getDynamicFieldSlot() == slot.getUuid()) {
 							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
@@ -120,7 +123,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 						if (entityDynamicFieldSlot != null) {
 							MenuField field = new MenuField();
 							field.setValue(value);
-							field.setDynamicFieldSlot(entityDynamicFieldSlot);
+							field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
 							field.setMenu(prototype);
 							prototype.getFields().add(field);
 						}

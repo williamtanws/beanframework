@@ -17,7 +17,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.UserRightBasicPopulator;
 import com.beanframework.core.converter.populator.UserRightFullPopulator;
-import com.beanframework.core.converter.populator.history.UserRightHistoryPopulator;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.service.UserRightService;
@@ -37,9 +36,6 @@ public class UserRightFacadeImpl implements UserRightFacade {
 
 	@Autowired
 	private UserRightBasicPopulator userRightBasicPopulator;
-
-	@Autowired
-	private UserRightHistoryPopulator userRightHistoryPopulator;
 
 	@Override
 	public UserRightDto findOneByUuid(UUID uuid) throws Exception {
@@ -104,7 +100,7 @@ public class UserRightFacadeImpl implements UserRightFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof UserRight) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], UserRightDto.class, new DtoConverterContext(userRightHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], UserRightDto.class, new DtoConverterContext(userRightFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

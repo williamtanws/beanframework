@@ -53,8 +53,8 @@
 									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="name" th:text="#{module.address.streetName}"></label> <span>*</span> <input type="text" class="form-control" name="name"
-													th:value="*{name}"> <span class="help-block"></span>
+												<label for="streetName" th:text="#{module.address.streetName}"></label> <span>*</span> <input type="text" class="form-control" name="streetName"
+													th:value="*{streetName}"> <span class="help-block"></span>
 											</div>
 										</div>
 										<div class="col-md-6">
@@ -213,26 +213,31 @@
 									</div>
 								</div>
 								<div class="box-header with-border"></div>
-								<div class="box-body">
+								<div class="box-body" th:with="id=#{module.address.id},streetName=#{module.address.streetName}">
 									<div class="row">
 										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.shippingAddress},'selectedShippingAddressTable','selectedShippingAddress','shippingAddress',*{shippingAddress},@{${@environment.getProperty('path.api.address.page')}},'shippingAddressTable')}"></th:block>
+											<th:block
+												layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.shippingAddress},'selectedShippingAddressTable','selectedShippingAddress','shippingAddress',*{shippingAddress},@{${@environment.getProperty('path.api.address.page')}},'shippingAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
 										</div>
 										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.billingAddress},'selectedBillingAddressTable','selectedBillingAddress','billingAddress',*{billingAddress},@{${@environment.getProperty('path.api.address.page')}},'billingAddressTable')}"></th:block>
+											<th:block
+												layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.billingAddress},'selectedBillingAddressTable','selectedBillingAddress','billingAddress',*{billingAddress},@{${@environment.getProperty('path.api.address.page')}},'billingAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
 										</div>
-										</div>
-										<div class="row">
+									</div>
+									<div class="row">
 										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.contactAddress},'selectedContactAddressTable','selectedContactAddress','contactAddress',*{contactAddress},@{${@environment.getProperty('path.api.address.page')}},'contactAddressTable')}"></th:block>
+											<th:block
+												layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.contactAddress},'selectedContactAddressTable','selectedContactAddress','contactAddress',*{contactAddress},@{${@environment.getProperty('path.api.address.page')}},'contactAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
 										</div>
 										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.defaultPaymentAddress},'selectedDefaultPaymentAddressTable','selectedDefaultPaymentAddress','defaultPaymentAddress',*{defaultPaymentAddress},@{${@environment.getProperty('path.api.address.page')}},'defaultPaymentAddressTable')}"></th:block>
+											<th:block
+												layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.defaultPaymentAddress},'selectedDefaultPaymentAddressTable','selectedDefaultPaymentAddress','defaultPaymentAddress',*{defaultPaymentAddress},@{${@environment.getProperty('path.api.address.page')}},'defaultPaymentAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
 										</div>
-										</div>
-										<div class="row">
+									</div>
+									<div class="row">
 										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.defaultShipmentAddress},'selectedDefaultShipmentAddressTable','selectedDefaultShipmentAddress','defaultShipmentAddress',*{defaultShipmentAddress},@{${@environment.getProperty('path.api.address.page')}},'defaultShipmentAddressTable')}"></th:block>
+											<th:block
+												layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.defaultShipmentAddress},'selectedDefaultShipmentAddressTable','selectedDefaultShipmentAddress','defaultShipmentAddress',*{defaultShipmentAddress},@{${@environment.getProperty('path.api.address.page')}},'defaultShipmentAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
 										</div>
 									</div>
 								</div>
@@ -287,7 +292,7 @@
 		                        }
 		                    }
 		                },
-		                name: {
+		                streetName: {
 		                    required: true
 		                }
 		            },

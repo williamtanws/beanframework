@@ -10,6 +10,7 @@ import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.data.DynamicFieldSlotDto;
+import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 
 @Component
@@ -27,7 +28,10 @@ public class DynamicFieldSlotFullPopulator extends AbstractPopulator<DynamicFiel
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 
-			target.setDynamicField(modelService.getDto(source.getDynamicField(), DynamicFieldDto.class, new DtoConverterContext(dynamicFieldFullPopulator)));
+			if (source.getDynamicField() != null) {
+				DynamicField entity = modelService.findOneByUuid(source.getDynamicField(), DynamicField.class);
+				target.setDynamicField(modelService.getDto(entity, DynamicFieldDto.class, new DtoConverterContext(dynamicFieldFullPopulator)));
+			}
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

@@ -1,11 +1,13 @@
 package com.beanframework.user.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -15,7 +17,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
-import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.UserGroupConstants;
 
 @Cacheable
@@ -39,10 +40,8 @@ public class UserGroupField extends GenericEntity {
 	private UserGroup userGroup;
 
 	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "dynamicfieldslot_uuid")
-	@OrderBy(DynamicFieldSlot.SORT + " ASC")
-	private DynamicFieldSlot dynamicFieldSlot;
+	@Column(name="dynamicfieldslot_uuid")
+	private UUID dynamicFieldSlot;
 
 	@Audited(withModifiedFlag = true)
 	private String value;
@@ -55,11 +54,11 @@ public class UserGroupField extends GenericEntity {
 		this.userGroup = userGroup;
 	}
 
-	public DynamicFieldSlot getDynamicFieldSlot() {
+	public UUID getDynamicFieldSlot() {
 		return dynamicFieldSlot;
 	}
 
-	public void setDynamicFieldSlot(DynamicFieldSlot dynamicFieldSlot) {
+	public void setDynamicFieldSlot(UUID dynamicFieldSlot) {
 		this.dynamicFieldSlot = dynamicFieldSlot;
 	}
 

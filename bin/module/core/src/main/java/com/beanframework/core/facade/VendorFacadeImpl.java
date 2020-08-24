@@ -16,7 +16,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.entity.EntityVendorProfileConverter;
 import com.beanframework.core.converter.populator.VendorBasicPopulator;
 import com.beanframework.core.converter.populator.VendorFullPopulator;
-import com.beanframework.core.converter.populator.history.VendorHistoryPopulator;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.user.service.UserService;
 import com.beanframework.vendor.domain.Vendor;
@@ -43,9 +42,6 @@ public class VendorFacadeImpl implements VendorFacade {
 
 	@Autowired
 	private VendorBasicPopulator vendorBasicPopulator;
-
-	@Autowired
-	private VendorHistoryPopulator vendorHistoryPopulator;
 
 	@Override
 	public VendorDto findOneByUuid(UUID uuid) throws Exception {
@@ -120,7 +116,7 @@ public class VendorFacadeImpl implements VendorFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Vendor) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], VendorDto.class, new DtoConverterContext(vendorHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], VendorDto.class, new DtoConverterContext(vendorFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

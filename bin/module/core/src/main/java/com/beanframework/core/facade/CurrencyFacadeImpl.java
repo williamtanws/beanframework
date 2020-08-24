@@ -17,7 +17,6 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.converter.populator.CurrencyBasicPopulator;
 import com.beanframework.core.converter.populator.CurrencyFullPopulator;
-import com.beanframework.core.converter.populator.history.CurrencyHistoryPopulator;
 import com.beanframework.core.data.CurrencyDto;
 import com.beanframework.internationalization.domain.Currency;
 import com.beanframework.internationalization.service.CurrencyService;
@@ -37,9 +36,6 @@ public class CurrencyFacadeImpl implements CurrencyFacade {
 
 	@Autowired
 	private CurrencyBasicPopulator currencyBasicPopulator;
-
-	@Autowired
-	private CurrencyHistoryPopulator currencyHistoryPopulator;
 
 	@Override
 	public CurrencyDto findOneByUuid(UUID uuid) throws Exception {
@@ -102,7 +98,7 @@ public class CurrencyFacadeImpl implements CurrencyFacade {
 			Object[] entityObject = revisions.get(i);
 			if (entityObject[0] instanceof Currency) {
 
-				entityObject[0] = modelService.getDto(entityObject[0], CurrencyDto.class, new DtoConverterContext(currencyHistoryPopulator));
+				entityObject[0] = modelService.getDto(entityObject[0], CurrencyDto.class, new DtoConverterContext(currencyFullPopulator));
 			}
 			revisions.set(i, entityObject);
 		}

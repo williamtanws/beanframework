@@ -2,6 +2,7 @@ package com.beanframework.core.converter.entity.csv;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -61,8 +62,9 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityCsvConverte
 				for (String dynamicFieldSlotId : dynamicFieldSlotIds) {
 
 					boolean add = true;
-					for (DynamicFieldSlot dynamicFieldSlot : prototype.getDynamicFieldSlots()) {
-						if (StringUtils.equals(dynamicFieldSlot.getId(), dynamicFieldSlotId))
+					for (UUID dynamicFieldSlot : prototype.getDynamicFieldSlots()) {
+						DynamicFieldSlot entity = modelService.findOneByUuid(dynamicFieldSlot, DynamicFieldSlot.class);
+						if (StringUtils.equals(entity.getId(), dynamicFieldSlotId))
 							add = false;
 					}
 
@@ -74,7 +76,7 @@ public class EntityCsvDynamicFieldTemplateConverter implements EntityCsvConverte
 						if (entityDynamicFieldSlot == null) {
 							LOGGER.error("DynamicFieldSlot ID not exists: " + dynamicFieldSlotId);
 						} else {
-							prototype.getDynamicFieldSlots().add(entityDynamicFieldSlot);
+							prototype.getDynamicFieldSlots().add(entityDynamicFieldSlot.getUuid());
 						}
 					}
 				}

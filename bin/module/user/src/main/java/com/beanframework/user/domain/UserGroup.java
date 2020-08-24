@@ -2,7 +2,11 @@ package com.beanframework.user.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -20,12 +24,12 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.AuditJoinTable;
-import org.hibernate.envers.AuditMappedBy;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
+import com.beanframework.user.UserConstants;
 import com.beanframework.user.UserGroupConstants;
 
 @Cacheable
@@ -49,11 +53,11 @@ public class UserGroup extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@AuditMappedBy(mappedBy = "userGroups")
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(mappedBy = "userGroups", fetch = FetchType.LAZY)
-	private List<User> users = new ArrayList<User>();
+	@ElementCollection
+	@CollectionTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "usergroup_uuid"))
+	@Column(name="user_uuid")
+	private List<UUID> users = new ArrayList<UUID>();
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
@@ -85,11 +89,11 @@ public class UserGroup extends GenericEntity {
 		this.name = name;
 	}
 
-	public List<User> getUsers() {
+	public List<UUID> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<User> users) {
+	public void setUsers(List<UUID> users) {
 		this.users = users;
 	}
 

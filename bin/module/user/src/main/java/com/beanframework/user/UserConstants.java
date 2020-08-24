@@ -12,6 +12,7 @@ public final class UserConstants {
 		public static final String USER_AUTHORITY = "user_authority";
 		public static final String USER_USER_GROUP_REL = "user_usergrouprel";
 		public static final String USER_COMPANY_REL = "user_companyrel";
+		public static final String USER_ADDRESS_REL = "user_addressrel";
 	}
 
 	public interface Locale {

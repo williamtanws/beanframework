@@ -65,18 +65,18 @@ public class EntityCountryConverter implements EntityConverter<CountryDto, Count
 			// Regions
 			if (source.getSelectedRegions() != null) {
 
-				Iterator<Region> it = prototype.getRegions().iterator();
+				Iterator<UUID> it = prototype.getRegions().iterator();
 				while (it.hasNext()) {
-					Region o = it.next();
+					UUID o = it.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedRegions().length; i++) {
-						if (o.getUuid().equals(UUID.fromString(source.getSelectedRegions()[i]))) {
+						if (o.equals(UUID.fromString(source.getSelectedRegions()[i]))) {
 							remove = false;
 						}
 					}
 					if (remove) {
-						Region entity = modelService.findOneByUuid(o.getUuid(), Region.class);
+						Region entity = modelService.findOneByUuid(o, Region.class);
 						entity.setCountry(null);
 						modelService.saveEntity(entity, Region.class);
 						it.remove();
@@ -89,9 +89,9 @@ public class EntityCountryConverter implements EntityConverter<CountryDto, Count
 					boolean add = true;
 					it = prototype.getRegions().iterator();
 					while (it.hasNext()) {
-						Region entity = it.next();
+						UUID entity = it.next();
 
-						if (entity.getUuid().equals(UUID.fromString(source.getSelectedRegions()[i]))) {
+						if (entity.equals(UUID.fromString(source.getSelectedRegions()[i]))) {
 							add = false;
 						}
 					}
@@ -99,16 +99,16 @@ public class EntityCountryConverter implements EntityConverter<CountryDto, Count
 					if (add) {
 						Region entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedRegions()[i]), Region.class);
 						if (entity != null) {
-							entity.setCountry(prototype);
-							prototype.getRegions().add(entity);
+							entity.setCountry(prototype.getUuid());
+							prototype.getRegions().add(entity.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}
 			}
 			else if(prototype.getRegions() != null && prototype.getRegions().isEmpty() == false){
-				for (final Iterator<Region> itr = prototype.getRegions().iterator(); itr.hasNext();) {
-					Region entity = modelService.findOneByUuid(itr.next().getUuid(), Region.class);
+				for (final Iterator<UUID> itr = prototype.getRegions().iterator(); itr.hasNext();) {
+					Region entity = modelService.findOneByUuid(itr.next(), Region.class);
 					entity.setCountry(null);
 					modelService.saveEntity(entity, Region.class);
 				    itr.remove(); 

@@ -10,6 +10,7 @@ import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.data.MenuFieldDto;
+import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.menu.domain.MenuField;
 
 @Component
@@ -25,7 +26,10 @@ public class MenuFieldFullPopulator extends AbstractPopulator<MenuField, MenuFie
 		try {
 			convertCommonProperties(source, target);
 			target.setValue(source.getValue());
-			target.setDynamicFieldSlot(modelService.getDto(source.getDynamicFieldSlot(), DynamicFieldSlotDto.class, new DtoConverterContext(dynamicFieldSlotFullPopulator)));
+			if (source.getDynamicFieldSlot() != null) {
+				DynamicFieldSlot entity = modelService.findOneByUuid(source.getDynamicFieldSlot(), DynamicFieldSlot.class);
+				target.setDynamicFieldSlot(modelService.getDto(entity, DynamicFieldSlotDto.class, new DtoConverterContext(dynamicFieldSlotFullPopulator)));
+			}
 
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
