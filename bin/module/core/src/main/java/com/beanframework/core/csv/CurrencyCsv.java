@@ -1,10 +1,9 @@
 package com.beanframework.core.csv;
 
-import java.math.BigDecimal;
-
 import org.supercsv.cellprocessor.Optional;
-import org.supercsv.cellprocessor.ParseBigDecimal;
 import org.supercsv.cellprocessor.ParseBool;
+import org.supercsv.cellprocessor.ParseDouble;
+import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -15,9 +14,9 @@ public class CurrencyCsv extends AbstractCsv {
 
 	private String name;
 	private Boolean active;
-	private String base;
-	private BigDecimal convertion;
-	private BigDecimal digit;
+	private Boolean base;
+	private Double conversion;
+	private Integer digit;
 	private String symbol;
 
 	public static CellProcessor[] getUpdateProcessors() {
@@ -26,9 +25,9 @@ public class CurrencyCsv extends AbstractCsv {
 				new NotNull(new Trim()), // id
 				new Optional(new Trim()), // name
 				new Optional(new Trim(new ParseBool())), // active
-				new Optional(new Trim()), // base
-				new Optional(new Trim(new ParseBigDecimal())), // convertion
-				new Optional(new Trim(new ParseBigDecimal())), // digit
+				new Optional(new Trim(new ParseBool())), // base
+				new Optional(new Trim(new ParseDouble())), // conversion
+				new Optional(new Trim(new ParseInt())), // digit
 				new Optional(new Trim()) // symbol
 		};
 
@@ -51,27 +50,27 @@ public class CurrencyCsv extends AbstractCsv {
 		this.active = active;
 	}
 
-	public String getBase() {
+	public Boolean getBase() {
 		return base;
 	}
 
-	public void setBase(String base) {
+	public void setBase(Boolean base) {
 		this.base = base;
 	}
 
-	public BigDecimal getConvertion() {
-		return convertion;
+	public Double getConversion() {
+		return conversion;
 	}
 
-	public void setConvertion(BigDecimal convertion) {
-		this.convertion = convertion;
+	public void setConversion(Double conversion) {
+		this.conversion = conversion;
 	}
 
-	public BigDecimal getDigit() {
+	public Integer getDigit() {
 		return digit;
 	}
 
-	public void setDigit(BigDecimal digit) {
+	public void setDigit(Integer digit) {
 		this.digit = digit;
 	}
 
@@ -85,7 +84,7 @@ public class CurrencyCsv extends AbstractCsv {
 
 	@Override
 	public String toString() {
-		return "CurrencyCsv [name=" + name + ", active=" + active + ", base=" + base + ", convertion=" + convertion + ", digit=" + digit + ", symbol=" + symbol + "]";
+		return "CurrencyCsv [name=" + name + ", active=" + active + ", base=" + base + ", conversion=" + conversion + ", digit=" + digit + ", symbol=" + symbol + "]";
 	}
 
 }

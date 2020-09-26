@@ -1,2 +1,2 @@
-INSERT Country,id,name,active,regions
+INSERT Country,id,name,active,regionIds
 ,MY,Malaysia,true,MY-KL

@@ -1,5 +1,6 @@
 package com.beanframework.core.converter.entity.csv;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.csv.RegionCsv;
+import com.beanframework.internationalization.domain.Country;
 import com.beanframework.internationalization.domain.Region;
 
 public class EntityCsvRegionConverter implements EntityCsvConverter<RegionCsv, Region> {
@@ -47,8 +49,36 @@ public class EntityCsvRegionConverter implements EntityCsvConverter<RegionCsv, R
 	private Region convertToEntity(RegionCsv source, Region prototype) throws ConverterException {
 
 		try {
-			if (StringUtils.isNotBlank(source.getId()))
+			Date lastModifiedDate = new Date();
+
+			if (StringUtils.isNotBlank(source.getId())) {
 				prototype.setId(source.getId());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+
+			if (StringUtils.isNotBlank(source.getName())) {
+				prototype.setName(source.getName());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+
+			if (source.getActive() != null) {
+				prototype.setActive(source.getActive());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+
+			// Country
+			if (StringUtils.isNotBlank(source.getCountryId())) {
+				Map<String, Object> parentProperties = new HashMap<String, Object>();
+				parentProperties.put(Country.ID, source.getCountryId());
+				Country entity = modelService.findOneByProperties(parentProperties, Country.class);
+
+				if (entity == null) {
+					LOGGER.error("Country ID not exists: " + source.getCountryId());
+				} else {
+					prototype.setCountry(entity.getUuid());
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

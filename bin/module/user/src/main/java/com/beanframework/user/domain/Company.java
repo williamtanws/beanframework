@@ -65,15 +65,15 @@ public class Company extends GenericEntity {
 	private String description;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="contactperson_uuid")
+	@Column(name = "contactperson_uuid", columnDefinition = "BINARY(16)")
 	private UUID contactPerson;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="company_uuid")
+	@Column(name = "company_uuid", columnDefinition = "BINARY(16)")
 	private UUID responsibleCompany;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="country_uuid")
+	@Column(name = "country_uuid", columnDefinition = "BINARY(16)")
 	private UUID country;
 
 	@Audited(withModifiedFlag = true)
@@ -110,29 +110,29 @@ public class Company extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	@ElementCollection
 	@CollectionTable(name = CompanyConstants.Table.COMPANY_ADDRESS_REL, joinColumns = @JoinColumn(name = "company_uuid"))
-	@Column(name="address_uuid")
+	@Column(name = "address_uuid", columnDefinition = "BINARY(16)", nullable = false)
 	private List<UUID> addresses = new ArrayList<UUID>();
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="shipping_address_uuid")
+	@Column(name = "shipping_address_uuid", columnDefinition = "BINARY(16)")
 	private UUID shippingAddress;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="unloading_address_uuid")
+	@Column(name = "unloading_address_uuid", columnDefinition = "BINARY(16)")
 	private UUID unloadingAddress;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="billing_address_uuid")
+	@Column(name = "billing_address_uuid", columnDefinition = "BINARY(16)")
 	private UUID billingAddress;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="contact_address_uuid")
+	@Column(name = "contact_address_uuid", columnDefinition = "BINARY(16)")
 	private UUID contactAddress;
 
 	@Audited(withModifiedFlag = true)
 	@ElementCollection
-	@CollectionTable(name = CompanyConstants.Table.COMPANY_ADDRESS_REL, joinColumns = @JoinColumn(name = "company_uuid"))
-	@Column(name="user_uuid")
+	@CollectionTable(name = CompanyConstants.Table.COMPANY_USER_REL, joinColumns = @JoinColumn(name = "company_uuid"))
+	@Column(name = "user_uuid", columnDefinition = "BINARY(16)", nullable = false)
 	private List<UUID> users = new ArrayList<UUID>();
 
 	public String getName() {

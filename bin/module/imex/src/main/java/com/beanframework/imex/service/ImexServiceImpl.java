@@ -343,7 +343,7 @@ public class ImexServiceImpl implements ImexService {
 								modelService.deleteEntity(genericEntity, classEntity);
 								imported = true;
 							}
-						}
+						}						
 					}
 
 					if (imported) {

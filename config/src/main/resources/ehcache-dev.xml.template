@@ -25,7 +25,7 @@
 			</listener>
 		</listeners>
 		<resources>
-			<heap unit="entries">1000</heap>
+			<heap unit="entries">100000</heap>
 			<offheap unit="MB">1</offheap>
 		</resources>
 		<jsr107:mbeans enable-statistics="true" />

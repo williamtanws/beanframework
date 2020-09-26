@@ -13,6 +13,9 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,6 +57,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@PersistenceContext
+	protected EntityManager entityManager;
 
 	@Value(UserConstants.USER_MEDIA_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
@@ -382,5 +388,14 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return authorities;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> getAllUsersByUserGroupUuid(UUID uuid) throws Exception {
+		Query query = entityManager.createQuery(UserConstants.Query.SELECT_USER_BY_USER_GROUP);
+		query.setParameter("uuid", uuid);
+		
+		return query.getResultList();
 	}
 }

@@ -1,7 +1,9 @@
 package com.beanframework.core.converter.entity.csv;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -12,7 +14,9 @@ import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.csv.CountryCsv;
+import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.internationalization.domain.Country;
+import com.beanframework.internationalization.domain.Region;
 
 public class EntityCsvCountryConverter implements EntityCsvConverter<CountryCsv, Country> {
 
@@ -47,8 +51,48 @@ public class EntityCsvCountryConverter implements EntityCsvConverter<CountryCsv,
 	private Country convertToEntity(CountryCsv source, Country prototype) throws ConverterException {
 
 		try {
-			if (StringUtils.isNotBlank(source.getId()))
+			Date lastModifiedDate = new Date();
+			
+			if (StringUtils.isNotBlank(source.getId())) {
 				prototype.setId(source.getId());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+			
+			if (StringUtils.isNotBlank(source.getName())) {
+				prototype.setName(source.getName());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+
+			if (source.getActive() != null) {
+				prototype.setActive(source.getActive());
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+
+			// Region
+			if (StringUtils.isNotBlank(source.getRegionIds())) {
+				String[] RegionIds = source.getRegionIds().split(ImportListener.SPLITTER);
+				for (int i = 0; i < RegionIds.length; i++) {
+					boolean add = true;
+					for (UUID Region : prototype.getRegions()) {
+						Region entity = modelService.findOneByUuid(Region, Region.class);
+						if (StringUtils.equals(entity.getId(), RegionIds[i]))
+							add = false;
+					}
+
+					if (add) {
+						Map<String, Object> RegionProperties = new HashMap<String, Object>();
+						RegionProperties.put(Region.ID, RegionIds[i]);
+						Region Region = modelService.findOneByProperties(RegionProperties, Region.class);
+
+						if (Region == null) {
+							LOGGER.error("Region ID not exists: " + RegionIds[i]);
+						} else {
+							prototype.getRegions().add(Region.getUuid());
+							prototype.setLastModifiedDate(lastModifiedDate);
+						}
+					}
+				}
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -40,7 +40,7 @@ public class MenuField extends GenericEntity {
 	private Menu menu;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="dynamicfieldslot_uuid")
+	@Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)")
 	private UUID dynamicFieldSlot;
 
 	@Audited(withModifiedFlag = true)

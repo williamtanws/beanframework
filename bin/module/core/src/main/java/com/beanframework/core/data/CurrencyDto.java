@@ -1,7 +1,5 @@
 package com.beanframework.core.data;
 
-import java.math.BigDecimal;
-
 import com.beanframework.common.data.GenericDto;
 
 public class CurrencyDto extends GenericDto {
@@ -11,10 +9,10 @@ public class CurrencyDto extends GenericDto {
 	 */
 	private static final long serialVersionUID = 6539563538992591700L;
 	private String name;
-	private String active;
-	private String base;
-	private BigDecimal convertion;
-	private BigDecimal digit;
+	private Boolean active;
+	private Boolean base;
+	private Double conversion;
+	private Integer digit;
 	private String symbol;
 
 	public String getName() {
@@ -25,35 +23,35 @@ public class CurrencyDto extends GenericDto {
 		this.name = name;
 	}
 
-	public String getActive() {
+	public Boolean getActive() {
 		return active;
 	}
 
-	public void setActive(String active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 
-	public String getBase() {
+	public Boolean getBase() {
 		return base;
 	}
 
-	public void setBase(String base) {
+	public void setBase(Boolean base) {
 		this.base = base;
 	}
 
-	public BigDecimal getConvertion() {
-		return convertion;
+	public Double getConversion() {
+		return conversion;
 	}
 
-	public void setConvertion(BigDecimal convertion) {
-		this.convertion = convertion;
+	public void setConversion(Double conversion) {
+		this.conversion = conversion;
 	}
 
-	public BigDecimal getDigit() {
+	public Integer getDigit() {
 		return digit;
 	}
 
-	public void setDigit(BigDecimal digit) {
+	public void setDigit(Integer digit) {
 		this.digit = digit;
 	}
 
