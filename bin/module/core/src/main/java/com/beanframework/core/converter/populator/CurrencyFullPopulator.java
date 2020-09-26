@@ -20,7 +20,7 @@ public class CurrencyFullPopulator extends AbstractPopulator<Currency, CurrencyD
 		target.setName(source.getName());
 		target.setActive(source.getActive());
 		target.setBase(source.getBase());
-		target.setConvertion(source.getConvertion());
+		target.setConversion(source.getConversion());
 		target.setDigit(source.getDigit());
 		target.setSymbol(source.getSymbol());
 	}

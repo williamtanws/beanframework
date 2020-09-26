@@ -40,7 +40,7 @@ public class DynamicFieldSlot extends GenericEntity {
 	private Integer sort;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="dynamicfield_uuid")
+	@Column(name = "dynamicfield_uuid", columnDefinition = "BINARY(16)")
 	private UUID dynamicField;
 
 	public String getName() {

@@ -35,12 +35,12 @@ public class Region extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	private String name;
-	
+
 	@Audited(withModifiedFlag = true)
 	private Boolean active;
-	
+
 	@Audited(withModifiedFlag = true)
-	@Column(name="country_uuid")
+	@Column(name = "country_uuid", columnDefinition = "BINARY(16)")
 	private UUID country;
 
 	public String getName() {

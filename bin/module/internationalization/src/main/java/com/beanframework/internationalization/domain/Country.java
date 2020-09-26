@@ -47,7 +47,7 @@ public class Country extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	@ElementCollection
 	@CollectionTable(name = CountryConstants.Table.COUNTRY_REGION_REL, joinColumns = @JoinColumn(name = "country_uuid"))
-	@Column(name="region_uuid")
+	@Column(name = "region_uuid", columnDefinition = "BINARY(16)", nullable = false)
 	private List<UUID> regions = new ArrayList<UUID>();
 
 	public String getName() {

@@ -2,11 +2,7 @@ package com.beanframework.user.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -29,7 +25,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
-import com.beanframework.user.UserConstants;
 import com.beanframework.user.UserGroupConstants;
 
 @Cacheable
@@ -52,12 +47,6 @@ public class UserGroup extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	private String name;
-
-	@Audited(withModifiedFlag = true)
-	@ElementCollection
-	@CollectionTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "usergroup_uuid"))
-	@Column(name="user_uuid")
-	private List<UUID> users = new ArrayList<UUID>();
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
@@ -87,14 +76,6 @@ public class UserGroup extends GenericEntity {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<UUID> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<UUID> users) {
-		this.users = users;
 	}
 
 	public List<UserGroup> getUserGroups() {

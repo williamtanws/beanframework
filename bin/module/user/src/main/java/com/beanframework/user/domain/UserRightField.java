@@ -41,7 +41,7 @@ public class UserRightField extends GenericEntity {
 	private UserRight userRight;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="dynamicfieldslot_uuid")
+	@Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)")
 	private UUID dynamicFieldSlot;
 
 	@Audited(withModifiedFlag = true)

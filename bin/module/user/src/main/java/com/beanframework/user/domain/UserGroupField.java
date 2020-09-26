@@ -40,7 +40,7 @@ public class UserGroupField extends GenericEntity {
 	private UserGroup userGroup;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="dynamicfieldslot_uuid")
+	@Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)")
 	private UUID dynamicFieldSlot;
 
 	@Audited(withModifiedFlag = true)

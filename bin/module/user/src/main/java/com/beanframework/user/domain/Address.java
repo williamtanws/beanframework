@@ -68,7 +68,7 @@ public class Address extends GenericEntity {
 	public static final String DEFAULT_SHIPMENT_ADDRESS = "defaultShipmentAddress";
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="owner_uuid")
+	@Column(name = "owner_uuid", columnDefinition = "BINARY(16)")
 	private UUID owner;
 
 	// General
@@ -82,7 +82,7 @@ public class Address extends GenericEntity {
 	private String town;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="country_uuid")
+	@Column(name = "country_uuid", columnDefinition = "BINARY(16)")
 	private UUID country;
 
 	// Additional Address Information
@@ -120,30 +120,30 @@ public class Address extends GenericEntity {
 	private String apartment;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="region_uuid")
+	@Column(name = "region_uuid", columnDefinition = "BINARY(16)")
 	private UUID region;
 
 	@Audited(withModifiedFlag = true)
 	private String district;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="shippingAddress_uuid")
+	@Column(name = "shippingAddress_uuid", columnDefinition = "BINARY(16)")
 	private UUID shippingAddress;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="billingAddress_uuid")
+	@Column(name = "billingAddress_uuid", columnDefinition = "BINARY(16)")
 	private UUID billingAddress;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="contactAddress_uuid")
+	@Column(name = "contactAddress_uuid", columnDefinition = "BINARY(16)")
 	private UUID contactAddress;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="defaultPaymentAddress_uuid")
+	@Column(name = "defaultPaymentAddress_uuid", columnDefinition = "BINARY(16)")
 	private UUID defaultPaymentAddress;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="defaultShipmentAddress_uuid")
+	@Column(name = "defaultShipmentAddress_uuid", columnDefinition = "BINARY(16)")
 	private UUID defaultShipmentAddress;
 
 	public UUID getOwner() {

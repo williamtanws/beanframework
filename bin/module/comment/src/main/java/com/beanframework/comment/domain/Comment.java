@@ -43,7 +43,7 @@ public class Comment extends GenericEntity {
 	private Boolean visibled;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="user_uuid")
+	@Column(name = "user_uuid", columnDefinition = "BINARY(16)")
 	private UUID user;
 
 	public String getHtml() {

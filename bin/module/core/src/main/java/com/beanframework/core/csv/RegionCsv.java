@@ -12,7 +12,7 @@ public class RegionCsv extends AbstractCsv {
 
 	private String name;
 	private Boolean active;
-	private String country;
+	private String countryId;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
@@ -42,17 +42,17 @@ public class RegionCsv extends AbstractCsv {
 		this.active = active;
 	}
 
-	public String getCountry() {
-		return country;
+	public String getCountryId() {
+		return countryId;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setCountryId(String countryId) {
+		this.countryId = countryId;
 	}
 
 	@Override
 	public String toString() {
-		return "CountryCsv [name=" + name + ", active=" + active + ", country=" + country + "]";
+		return "CountryCsv [name=" + name + ", active=" + active + ", countryId=" + countryId + "]";
 	}
 
 }

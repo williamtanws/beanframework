@@ -1,7 +1,5 @@
 package com.beanframework.internationalization.domain;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -31,7 +29,7 @@ public class Currency extends GenericEntity {
 	public static final String NAME = "name";
 	public static final String ACTIVE = "active";
 	public static final String BASE = "base";
-	public static final String CONVERTION = "convertion";
+	public static final String CONVERTION = "conversion";
 	public static final String DIGIT = "digit";
 	public static final String SYMBOL = "symbol";
 
@@ -39,16 +37,16 @@ public class Currency extends GenericEntity {
 	private String name;
 	
 	@Audited(withModifiedFlag = true)
-	private String active;
+	private Boolean active;
 	
 	@Audited(withModifiedFlag = true)
-	private String base;
+	private Boolean base;
 	
 	@Audited(withModifiedFlag = true)
-	private BigDecimal convertion;
+	private Double conversion;
 	
 	@Audited(withModifiedFlag = true)
-	private BigDecimal digit;
+	private Integer digit;
 	
 	@Audited(withModifiedFlag = true)
 	private String symbol;
@@ -61,35 +59,35 @@ public class Currency extends GenericEntity {
 		this.name = name;
 	}
 
-	public String getActive() {
+	public Boolean getActive() {
 		return active;
 	}
 
-	public void setActive(String active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 
-	public String getBase() {
+	public Boolean getBase() {
 		return base;
 	}
 
-	public void setBase(String base) {
+	public void setBase(Boolean base) {
 		this.base = base;
 	}
 
-	public BigDecimal getConvertion() {
-		return convertion;
+	public Double getConversion() {
+		return conversion;
 	}
 
-	public void setConvertion(BigDecimal convertion) {
-		this.convertion = convertion;
+	public void setConversion(Double conversion) {
+		this.conversion = conversion;
 	}
 
-	public BigDecimal getDigit() {
+	public Integer getDigit() {
 		return digit;
 	}
 
-	public void setDigit(BigDecimal digit) {
+	public void setDigit(Integer digit) {
 		this.digit = digit;
 	}
 

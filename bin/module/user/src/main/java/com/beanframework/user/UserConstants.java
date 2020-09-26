@@ -5,6 +5,10 @@ public final class UserConstants {
 	private UserConstants() {
 		throw new AssertionError();
 	}
+	
+	public interface Query {
+		public static final String SELECT_USER_BY_USER_GROUP = "SELECT u FROM User u LEFT JOIN u.userGroups g WHERE g = :uuid";
+	}
 
 	public interface Table {
 		public static final String USER = "user";

@@ -8,11 +8,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.domain.Cronjob;
 
 @Repository
 public interface CronjobRepository extends JpaRepository<Cronjob, UUID>, JpaSpecificationExecutor<Cronjob> {
 
-	@Query("select c from Cronjob c where c.startup = 0 and (c.status = 'Continued' or c.status = 'RUNNING' or c.status = 'PAUSED')")
+	@Query(CronjobConstants.Query.SELECT_CRONJOB_BY_STARTUP_BY_STATUS)
 	List<Cronjob> findStartupJobIsFalseWithQueueJob();
 }

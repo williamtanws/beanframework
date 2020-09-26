@@ -68,13 +68,13 @@ public class DynamicField extends GenericEntity {
 	private String grid;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="language_uuid")
+	@Column(name = "language_uuid", columnDefinition = "BINARY(16)")
 	private UUID language;
 
 	@Audited(withModifiedFlag = true)
 	@ElementCollection
 	@CollectionTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid"))
-	@Column(name="enumeration_uuid")
+	@Column(name = "enumeration_uuid", columnDefinition = "BINARY(16)", nullable = false)
 	private List<UUID> enumerations = new ArrayList<UUID>();
 
 	public String getName() {

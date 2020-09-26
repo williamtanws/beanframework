@@ -1,2 +1,2 @@
-INSERT Address,id,streetName,streetNumber,postalCode,town,country
+INSERT Address,id,streetName,streetNumber,postalCode,town,countryId
 ,ocn_address,"D-02-03, The Z Residence, Jalan Jalil Perwira 2, Bukit Jalil",,58200,Kuala Lumpur,MY

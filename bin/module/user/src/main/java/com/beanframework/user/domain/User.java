@@ -81,19 +81,19 @@ public class User extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	@ElementCollection
 	@CollectionTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid"))
-	@Column(name="usergroup_uuid")
+	@Column(name = "usergroup_uuid", columnDefinition = "BINARY(16)", nullable = false)
 	private List<UUID> userGroups = new ArrayList<UUID>();
 
 	@Audited(withModifiedFlag = true)
 	@ElementCollection
 	@CollectionTable(name = UserConstants.Table.USER_COMPANY_REL, joinColumns = @JoinColumn(name = "user_uuid"))
-	@Column(name="company_uuid")
+	@Column(name = "company_uuid", columnDefinition = "BINARY(16)", nullable = false)
 	private List<UUID> companies = new ArrayList<UUID>();
 
 	@Audited(withModifiedFlag = true)
 	@ElementCollection
 	@CollectionTable(name = UserConstants.Table.USER_ADDRESS_REL, joinColumns = @JoinColumn(name = "user_uuid"))
-	@Column(name="address_uuid")
+	@Column(name = "address_uuid", columnDefinition = "BINARY(16)", nullable = false)
 	private List<UUID> addresses = new ArrayList<UUID>();
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

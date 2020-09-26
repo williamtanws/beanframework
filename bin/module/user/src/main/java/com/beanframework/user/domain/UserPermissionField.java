@@ -41,7 +41,7 @@ public class UserPermissionField extends GenericEntity {
 	private UserPermission userPermission;
 
 	@Audited(withModifiedFlag = true)
-	@Column(name="dynamicfieldslot_uuid")
+	@Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)")
 	private UUID dynamicFieldSlot;
 
 	@Audited(withModifiedFlag = true)

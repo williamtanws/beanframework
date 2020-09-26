@@ -43,7 +43,7 @@ public class DynamicFieldTemplate extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	@ElementCollection
 	@CollectionTable(name = DynamicFieldTemplateConstants.Table.DYNAMIC_FIELD_TEMPLATE_FIELDSLOT_REL, joinColumns = @JoinColumn(name = "template_uuid"))
-	@Column(name="dynamicfieldslot_uuid")
+	@Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)", nullable = false)
 	private List<UUID> dynamicFieldSlots = new ArrayList<UUID>();
 
 	public String getName() {

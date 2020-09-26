@@ -59,13 +59,13 @@ public class EntityCurrencyConverter implements EntityConverter<CurrencyDto, Cur
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getBase()), prototype.getBase()) == Boolean.FALSE) {
-				prototype.setBase(StringUtils.stripToNull(source.getBase()));
+			if (prototype.getBase() == source.getBase() == Boolean.FALSE) {
+				prototype.setBase(source.getBase());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			if (prototype.getConvertion() == source.getConvertion() == Boolean.FALSE) {
-				prototype.setConvertion(source.getConvertion());
+			if (prototype.getConversion() == source.getConversion() == Boolean.FALSE) {
+				prototype.setConversion(source.getConversion());
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
