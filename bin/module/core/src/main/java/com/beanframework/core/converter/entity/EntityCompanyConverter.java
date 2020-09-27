@@ -296,53 +296,6 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 					throw new ConverterException("ContactAddress UUID not found: " + source.getSelectedContactAddress());
 				}
 			}
-
-			// Users
-			if (source.getSelectedUsers() != null) {
-
-				Iterator<UUID> it = prototype.getUsers().iterator();
-				while (it.hasNext()) {
-					UUID o = it.next();
-
-					boolean remove = true;
-					for (int i = 0; i < source.getSelectedUsers().length; i++) {
-						if (o.equals(UUID.fromString(source.getSelectedUsers()[i]))) {
-							remove = false;
-						}
-					}
-					if (remove) {
-						it.remove();
-						prototype.setLastModifiedDate(lastModifiedDate);
-					}
-				}
-
-				for (int i = 0; i < source.getSelectedUsers().length; i++) {
-
-					boolean add = true;
-					it = prototype.getUsers().iterator();
-					while (it.hasNext()) {
-						UUID entity = it.next();
-
-						if (entity.equals(UUID.fromString(source.getSelectedUsers()[i]))) {
-							add = false;
-						}
-					}
-
-					if (add) {
-						User entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedUsers()[i]), User.class);
-						if (entity != null) {
-							entity.getCompanies().add(prototype.getUuid());
-							prototype.getUsers().add(entity.getUuid());
-							prototype.setLastModifiedDate(lastModifiedDate);
-						}
-					}
-				}
-			} else if (prototype.getUsers() != null && prototype.getUsers().isEmpty() == false) {
-				for (final Iterator<UUID> itr = prototype.getUsers().iterator(); itr.hasNext();) {
-					itr.remove();
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			}
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}

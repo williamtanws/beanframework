@@ -87,12 +87,6 @@ public class CompanyFullPopulator extends AbstractPopulator<Company, CompanyDto>
 				Address entity = modelService.findOneByUuid(source.getContactAddress(), Address.class);
 				target.setContactAddress(modelService.getDto(entity, AddressDto.class, new DtoConverterContext(addressBasicPopulator)));
 			}
-			if (source.getUsers() != null && source.getUsers().isEmpty() == false) {
-				for (UUID uuid : source.getUsers()) {
-					User entity = modelService.findOneByUuid(uuid, User.class);
-					target.getUsers().add(modelService.getDto(entity, UserDto.class, new DtoConverterContext(userBasicPopulator)));
-				}
-			}
 
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);

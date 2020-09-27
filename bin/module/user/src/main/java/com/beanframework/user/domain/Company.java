@@ -129,12 +129,6 @@ public class Company extends GenericEntity {
 	@Column(name = "contact_address_uuid", columnDefinition = "BINARY(16)")
 	private UUID contactAddress;
 
-	@Audited(withModifiedFlag = true)
-	@ElementCollection
-	@CollectionTable(name = CompanyConstants.Table.COMPANY_USER_REL, joinColumns = @JoinColumn(name = "company_uuid"))
-	@Column(name = "user_uuid", columnDefinition = "BINARY(16)", nullable = false)
-	private List<UUID> users = new ArrayList<UUID>();
-
 	public String getName() {
 		return name;
 	}
@@ -294,13 +288,4 @@ public class Company extends GenericEntity {
 	public void setContactAddress(UUID contactAddress) {
 		this.contactAddress = contactAddress;
 	}
-
-	public List<UUID> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<UUID> users) {
-		this.users = users;
-	}
-
 }
