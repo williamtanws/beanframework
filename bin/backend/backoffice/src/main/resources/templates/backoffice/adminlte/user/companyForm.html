@@ -200,9 +200,6 @@
 										<div class="col-md-6" th:with="id=#{module.address.id},streetName=#{module.address.streetName}">
 											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.contactAddress},'selectedContactAddressTable','selectedContactAddress','contactAddress',*{contactAddress},@{${@environment.getProperty('path.api.address.page')}},'contactAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
 										</div>
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.company.users},'selectedUsersTable','selectedUsers','users',*{users},@{${@environment.getProperty('path.api.user.page')}},'usersTable',true)}"></th:block>
-										</div>
 									</div>
 								</div>
 								<!-- /.box-body -->

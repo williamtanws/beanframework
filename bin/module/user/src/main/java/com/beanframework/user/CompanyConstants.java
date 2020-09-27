@@ -5,7 +5,6 @@ public class CompanyConstants {
 	public static interface Table {
 		public static final String COMPANY = "company";
 		public static final String COMPANY_ADDRESS_REL = "company_addressrel";
-		public static final String COMPANY_USER_REL = "company_userrel";
 	}
 
 	public static interface Locale {

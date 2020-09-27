@@ -4,7 +4,6 @@ public class CountryConstants {
 
 	public static interface Table {
 		public static final String COUNTRY = "country";
-		public static final String COUNTRY_REGION_REL = "country_regionrel";
 	}
 
 	public static interface Locale {
