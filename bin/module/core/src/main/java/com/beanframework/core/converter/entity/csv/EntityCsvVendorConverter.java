@@ -17,10 +17,11 @@ import com.beanframework.core.csv.VendorCsv;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.imex.registry.ImportListener;
+import com.beanframework.user.domain.Address;
+import com.beanframework.user.domain.Company;
 import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.vendor.domain.Vendor;
-
 
 public class EntityCsvVendorConverter implements EntityCsvConverter<VendorCsv, Vendor> {
 
@@ -28,6 +29,7 @@ public class EntityCsvVendorConverter implements EntityCsvConverter<VendorCsv, V
 
 	@Autowired
 	private ModelService modelService;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -43,24 +45,22 @@ public class EntityCsvVendorConverter implements EntityCsvConverter<VendorCsv, V
 				Vendor prototype = modelService.findOneByProperties(properties, Vendor.class);
 
 				if (prototype != null) {
-
-					return convert(source, prototype);
+					return convertToEntity(source, prototype);
 				}
 			}
-			return convert(source, modelService.create(Vendor.class));
+			return convertToEntity(source, modelService.create(Vendor.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
 		}
 	}
 
-	private Vendor convert(VendorCsv source, Vendor prototype) throws ConverterException {
+	private Vendor convertToEntity(VendorCsv source, Vendor prototype) throws ConverterException {
 
 		try {
-
 			if (StringUtils.isNotBlank(source.getId()))
 				prototype.setId(source.getId());
-			
+
 			if (StringUtils.isNotBlank(source.getProfilePicture()))
 				prototype.setProfilePicture(source.getProfilePicture());
 
@@ -136,6 +136,56 @@ public class EntityCsvVendorConverter implements EntityCsvConverter<VendorCsv, V
 							LOGGER.error("UserGroup ID not exists: " + userGroupIds[i]);
 						} else {
 							prototype.getUserGroups().add(userGroup.getUuid());
+						}
+					}
+				}
+			}
+
+			// Company
+			if (StringUtils.isNotBlank(source.getCompanyIds())) {
+				String[] companyIds = source.getCompanyIds().split(ImportListener.SPLITTER);
+				for (int i = 0; i < companyIds.length; i++) {
+					boolean add = true;
+					for (UUID company : prototype.getCompanies()) {
+						Company entity = modelService.findOneByUuid(company, Company.class);
+						if (StringUtils.equals(entity.getId(), companyIds[i]))
+							add = false;
+					}
+
+					if (add) {
+						Map<String, Object> companyProperties = new HashMap<String, Object>();
+						companyProperties.put(Company.ID, companyIds[i]);
+						Company company = modelService.findOneByProperties(companyProperties, Company.class);
+
+						if (company == null) {
+							LOGGER.error("Company ID not exists: " + companyIds[i]);
+						} else {
+							prototype.getCompanies().add(company.getUuid());
+						}
+					}
+				}
+			}
+
+			// Address
+			if (StringUtils.isNotBlank(source.getAddressIds())) {
+				String[] addressIds = source.getAddressIds().split(ImportListener.SPLITTER);
+				for (int i = 0; i < addressIds.length; i++) {
+					boolean add = true;
+					for (UUID address : prototype.getAddresses()) {
+						Address entity = modelService.findOneByUuid(address, Address.class);
+						if (StringUtils.equals(entity.getId(), addressIds[i]))
+							add = false;
+					}
+
+					if (add) {
+						Map<String, Object> addressProperties = new HashMap<String, Object>();
+						addressProperties.put(Address.ID, addressIds[i]);
+						Address address = modelService.findOneByProperties(addressProperties, Address.class);
+
+						if (address == null) {
+							LOGGER.error("Address ID not exists: " + addressIds[i]);
+						} else {
+							prototype.getAddresses().add(address.getUuid());
 						}
 					}
 				}

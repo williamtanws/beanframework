@@ -1,2 +1,2 @@
-INSERT Template,id,name
+INSERT_UPDATE Template,id,name
 ,sample,Sample

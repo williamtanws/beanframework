@@ -1,6 +1,4 @@
-INSERT UserGroup,id,name,userGroupIds,dynamicFieldSlotIds
-,generalcustomer		,General Customer		,																		,usergroup_0_name_en=General Customer;usergroup_1_name_cn=一般客户
-,vipcustomer			,VIP Customer			,																		,usergroup_0_name_en=VIP Customer;usergroup_1_name_cn=VIP客户
-,customergroup			,Customer Group			,generalcustomer;vipcustomer											,usergroup_0_name_en=Customer Group;usergroup_1_name_cn=客户组
+INSERT_UPDATE UserGroup,id,name,userGroupIds,dynamicFieldSlotIds
+,customergroup			,Customer Group			,																		,usergroup_0_name_en=Customer Group;usergroup_1_name_cn=客户组
 ,vendorgroup			,Vendor Group			,																		,usergroup_0_name_en=Vendor Group;usergroup_1_name_cn=供应商
 ,employeegroup			,Employee Group			,																		,usergroup_0_name_en=Employee Group;usergroup_1_name_cn=雇员组

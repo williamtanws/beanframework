@@ -17,6 +17,8 @@ public class EmployeeCsv extends AbstractCsv {
 	private Boolean credentialsNonExpired;
 	private Boolean enabled;
 	private String userGroupIds;
+	private String companyIds;
+	private String addressIds;
 	private String dynamicFieldSlotIds;
 	private String profilePicture;
 
@@ -31,6 +33,8 @@ public class EmployeeCsv extends AbstractCsv {
 				new Optional(new Trim(new ParseBool())), // credentialsNonExpired
 				new Optional(new Trim(new ParseBool())), // enabled
 				new Optional(new Trim()), // userGroupIds
+				new Optional(new Trim()), // companyIds
+				new Optional(new Trim()), // addressIds
 				new Optional(new Trim()), // dynamicFieldSlotIds
 				new Optional(new Trim()) // profilePicture
 		};
@@ -94,6 +98,22 @@ public class EmployeeCsv extends AbstractCsv {
 		this.userGroupIds = userGroupIds;
 	}
 
+	public String getCompanyIds() {
+		return companyIds;
+	}
+
+	public void setCompanyIds(String companyIds) {
+		this.companyIds = companyIds;
+	}
+
+	public String getAddressIds() {
+		return addressIds;
+	}
+
+	public void setAddressIds(String addressIds) {
+		this.addressIds = addressIds;
+	}
+
 	public String getDynamicFieldSlotIds() {
 		return dynamicFieldSlotIds;
 	}
@@ -112,10 +132,9 @@ public class EmployeeCsv extends AbstractCsv {
 
 	@Override
 	public String toString() {
-		return "EmployeeCsv [id=" + id + ", name=" + name + ", password=" + password + ", accountNonExpired=" + accountNonExpired + ", accountNonLocked=" + accountNonLocked + ", credentialsNonExpired="
-				+ credentialsNonExpired + ", enabled=" + enabled + ", userGroupIds=" + userGroupIds + ", dynamicFieldSlotIds=" + dynamicFieldSlotIds + ", profilePicture=" + profilePicture + "]";
+		return "EmployeeCsv [name=" + name + ", password=" + password + ", accountNonExpired=" + accountNonExpired + ", accountNonLocked=" + accountNonLocked + ", credentialsNonExpired=" + credentialsNonExpired
+				+ ", enabled=" + enabled + ", userGroupIds=" + userGroupIds + ", companyIds=" + companyIds + ", addressIds=" + addressIds + ", dynamicFieldSlotIds=" + dynamicFieldSlotIds + ", profilePicture="
+				+ profilePicture + "]";
 	}
-	
-	
 
 }

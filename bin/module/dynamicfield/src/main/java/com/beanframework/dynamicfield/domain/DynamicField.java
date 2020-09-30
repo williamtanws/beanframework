@@ -1,7 +1,7 @@
 package com.beanframework.dynamicfield.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CollectionTable;
@@ -75,7 +75,7 @@ public class DynamicField extends GenericEntity {
 	@ElementCollection
 	@CollectionTable(name = DynamicFieldConstants.Table.DYNAMIC_FIELD_ENUMERATION_REL, joinColumns = @JoinColumn(name = "dynamicfield_uuid"))
 	@Column(name = "enumeration_uuid", columnDefinition = "BINARY(16)", nullable = false)
-	private List<UUID> enumerations = new ArrayList<UUID>();
+	private Set<UUID> enumerations = new HashSet<UUID>();
 
 	public String getName() {
 		return name;
@@ -133,11 +133,11 @@ public class DynamicField extends GenericEntity {
 		this.language = language;
 	}
 
-	public List<UUID> getEnumerations() {
+	public Set<UUID> getEnumerations() {
 		return enumerations;
 	}
 
-	public void setEnumerations(List<UUID> enumerations) {
+	public void setEnumerations(Set<UUID> enumerations) {
 		this.enumerations = enumerations;
 	}
 }
