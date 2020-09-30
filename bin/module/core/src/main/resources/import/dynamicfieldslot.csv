@@ -1,4 +1,4 @@
-INSERT DynamicFieldSlot,id,name,sort,dynamicFieldId
+INSERT_UPDATE DynamicFieldSlot,id,name,sort,dynamicFieldId
 ,menu_0_name_en				,Menu Name(en) Slot				,0,name_en
 ,menu_1_name_cn				,Menu Name(cn) Slot				,1,name_cn
 ,userright_0_name_en		,User Right Name(en) Slot		,0,name_en

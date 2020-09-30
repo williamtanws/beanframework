@@ -1,2 +1,2 @@
-INSERT Currency,id,name,active,base,conversion,digit,symbol
+INSERT_UPDATE Currency,id,name,active,base,conversion,digit,symbol
 ,MYR,MY Ringgit,true,true,1.0,1,RM

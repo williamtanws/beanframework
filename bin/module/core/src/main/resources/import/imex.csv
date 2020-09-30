@@ -1,5 +1,5 @@
-INSERT Imex,id,type,directory,fileName,query,header,seperator
-,import_configuration,IMPORT,,import_configuration,"INSERT Configuration,id,value%n,dummyConfigurationToProveImexImport,true",,
+INSERT_UPDATE Imex,id,type,directory,fileName,query,header,seperator
+,import_configuration,IMPORT,,import_configuration,"INSERT_UPDATE Configuration,id,value%n,dummyConfigurationToProveImexImport,true",,
 ,export_configuration,EXPORT,,export_configuration,"SELECT id,value FROM Configuration","id,value",","
 ,export_language,EXPORT,,export_language,"SELECT id,name,active,sort FROM Language","id,name,active,sort",","
 ,export_enumeration,EXPORT,,export_enumeration,"SELECT id,name,sort FROM Enumeration","id,name,sort",","

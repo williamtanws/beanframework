@@ -133,11 +133,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 			boolean removed = false;
 			for (int j = 0; j < entities.get(i).getDynamicFieldSlots().size(); j++) {
-				if (entities.get(i).getDynamicFieldSlots().get(j).equals(model.getUuid())) {
-					entities.get(i).getDynamicFieldSlots().remove(j);
-					removed = true;
-					break;
-				}
+				entities.get(i).getDynamicFieldSlots().remove(model.getUuid());
 			}
 
 			if (removed)
@@ -174,11 +170,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 			boolean removed = false;
 			for (int j = 0; j < entities.get(i).getUserGroups().size(); j++) {
-				if (entities.get(i).getUserGroups().get(j).equals(model.getUuid())) {
-					entities.get(i).getUserGroups().remove(j);
-					removed = true;
-					break;
-				}
+				entities.get(i).getUserGroups().remove(model.getUuid());
 			}
 
 			if (removed)
@@ -367,11 +359,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 				boolean removed = false;
 				for (int j = 0; j < entities.get(i).getEnumerations().size(); j++) {
-					if (entities.get(i).getEnumerations().get(j).equals(model.getUuid())) {
-						entities.get(i).getEnumerations().remove(j);
-						removed = true;
-						break;
-					}
+					entities.get(i).getEnumerations().remove(model.getUuid());
 				}
 
 				if (removed)

@@ -1,7 +1,7 @@
 package com.beanframework.dynamicfield.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CollectionTable;
@@ -44,7 +44,7 @@ public class DynamicFieldTemplate extends GenericEntity {
 	@ElementCollection
 	@CollectionTable(name = DynamicFieldTemplateConstants.Table.DYNAMIC_FIELD_TEMPLATE_FIELDSLOT_REL, joinColumns = @JoinColumn(name = "template_uuid"))
 	@Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)", nullable = false)
-	private List<UUID> dynamicFieldSlots = new ArrayList<UUID>();
+	private Set<UUID> dynamicFieldSlots = new HashSet<UUID>();
 
 	public String getName() {
 		return name;
@@ -54,11 +54,11 @@ public class DynamicFieldTemplate extends GenericEntity {
 		this.name = name;
 	}
 
-	public List<UUID> getDynamicFieldSlots() {
+	public Set<UUID> getDynamicFieldSlots() {
 		return dynamicFieldSlots;
 	}
 
-	public void setDynamicFieldSlots(List<UUID> dynamicFieldSlots) {
+	public void setDynamicFieldSlots(Set<UUID> dynamicFieldSlots) {
 		this.dynamicFieldSlots = dynamicFieldSlots;
 	}
 

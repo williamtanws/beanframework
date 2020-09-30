@@ -1,7 +1,9 @@
 package com.beanframework.user.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CollectionTable;
@@ -82,19 +84,19 @@ public class User extends GenericEntity {
 	@ElementCollection
 	@CollectionTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid"))
 	@Column(name = "usergroup_uuid", columnDefinition = "BINARY(16)", nullable = false)
-	private List<UUID> userGroups = new ArrayList<UUID>();
+	private Set<UUID> userGroups = new HashSet<UUID>();
 
 	@Audited(withModifiedFlag = true)
 	@ElementCollection
 	@CollectionTable(name = UserConstants.Table.USER_COMPANY_REL, joinColumns = @JoinColumn(name = "user_uuid"))
 	@Column(name = "company_uuid", columnDefinition = "BINARY(16)", nullable = false)
-	private List<UUID> companies = new ArrayList<UUID>();
+	private Set<UUID> companies = new HashSet<UUID>();
 
 	@Audited(withModifiedFlag = true)
 	@ElementCollection
 	@CollectionTable(name = UserConstants.Table.USER_ADDRESS_REL, joinColumns = @JoinColumn(name = "user_uuid"))
 	@Column(name = "address_uuid", columnDefinition = "BINARY(16)", nullable = false)
-	private List<UUID> addresses = new ArrayList<UUID>();
+	private Set<UUID> addresses = new HashSet<UUID>();
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
@@ -163,11 +165,11 @@ public class User extends GenericEntity {
 		this.name = name;
 	}
 
-	public List<UUID> getUserGroups() {
+	public Set<UUID> getUserGroups() {
 		return userGroups;
 	}
 
-	public void setUserGroups(List<UUID> userGroups) {
+	public void setUserGroups(Set<UUID> userGroups) {
 		this.userGroups = userGroups;
 	}
 
@@ -187,19 +189,19 @@ public class User extends GenericEntity {
 		this.profilePicture = profilePicture;
 	}
 
-	public List<UUID> getCompanies() {
+	public Set<UUID> getCompanies() {
 		return companies;
 	}
 
-	public void setCompanies(List<UUID> companies) {
+	public void setCompanies(Set<UUID> companies) {
 		this.companies = companies;
 	}
 
-	public List<UUID> getAddresses() {
+	public Set<UUID> getAddresses() {
 		return addresses;
 	}
 
-	public void setAddresses(List<UUID> addresses) {
+	public void setAddresses(Set<UUID> addresses) {
 		this.addresses = addresses;
 	}
 

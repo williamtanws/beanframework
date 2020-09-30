@@ -1,4 +1,4 @@
-INSERT DynamicField,id,name,type,required,rule,label,grid,language,enumIds
+INSERT_UPDATE DynamicField,id,name,type,required,rule,label,grid,language,enumIds
 ,name_en		,Name			,TEXT,false		,,Name			,col-md-6	,en,
 ,name_cn		,Name			,TEXT,false		,,名称			,col-md-6	,cn,
 ,description_en	,Description	,EDITOR,false	,,Description	,col-md-12	,en,

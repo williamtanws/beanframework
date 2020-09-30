@@ -1,7 +1,7 @@
 package com.beanframework.user.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CollectionTable;
@@ -111,7 +111,7 @@ public class Company extends GenericEntity {
 	@ElementCollection
 	@CollectionTable(name = CompanyConstants.Table.COMPANY_ADDRESS_REL, joinColumns = @JoinColumn(name = "company_uuid"))
 	@Column(name = "address_uuid", columnDefinition = "BINARY(16)", nullable = false)
-	private List<UUID> addresses = new ArrayList<UUID>();
+	private Set<UUID> addresses = new HashSet<UUID>();
 
 	@Audited(withModifiedFlag = true)
 	@Column(name = "shipping_address_uuid", columnDefinition = "BINARY(16)")
@@ -249,11 +249,11 @@ public class Company extends GenericEntity {
 		this.supplierSpecificId = supplierSpecificId;
 	}
 
-	public List<UUID> getAddresses() {
+	public Set<UUID> getAddresses() {
 		return addresses;
 	}
 
-	public void setAddresses(List<UUID> addresses) {
+	public void setAddresses(Set<UUID> addresses) {
 		this.addresses = addresses;
 	}
 
