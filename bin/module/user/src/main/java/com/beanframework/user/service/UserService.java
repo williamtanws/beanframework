@@ -22,7 +22,7 @@ public interface UserService {
 
 	void saveProfilePicture(User model, InputStream inputStream) throws IOException;
 
-	void deleteProfilePictureByUuid(UUID uuid);
+	void deleteProfilePictureFileByUuid(UUID uuid);
 	
 	Set<GrantedAuthority> getAuthorities(UUID userUuid, String userGroupId) throws Exception;
 
@@ -35,4 +35,6 @@ public interface UserService {
 	Set<String> getAllUserGroupIdsByUserUuid(UUID uuid) throws Exception;
 	
 	List<User> getAllUsersByUserGroupUuid(UUID uuid) throws Exception;
+
+	void removeUserGroupsRel(UserGroup userGroup) throws Exception;
 }

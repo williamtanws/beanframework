@@ -52,7 +52,7 @@ public class Company extends GenericEntity {
 	public static final String ILNID = "ilnId";
 	public static final String BUYER_SPECIFIC_ID = "buyerSpecificId";
 	public static final String SUPPLIER_SPECIFIC_ID = "supplierSpecificId";
-	public static final String ADDRESS = "addresses";
+	public static final String ADDRESSES = "addresses";
 	public static final String SHIPPING_ADDRESS = "shippingAddress";
 	public static final String UNLOADING_ADDRESS = "unloadingAddress";
 	public static final String BILLING_ADDRESS = "billingAddress";

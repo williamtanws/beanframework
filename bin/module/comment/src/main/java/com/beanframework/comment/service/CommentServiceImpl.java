@@ -1,7 +1,9 @@
 package com.beanframework.comment.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.envers.query.AuditEntity;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.user.domain.User;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -43,5 +46,17 @@ public class CommentServiceImpl implements CommentService {
 			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
 		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Comment.class);
+	}
+
+	@Override
+	public void removeUserRel(User model) throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Comment.USER, model.getUuid());
+		List<Comment> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, Comment.class);
+
+		if (entities != null)
+			for (Comment comment : entities) {
+				modelService.deleteEntityQuietly(comment, Comment.class);
+			}
 	}
 }

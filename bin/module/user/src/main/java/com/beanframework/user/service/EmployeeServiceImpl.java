@@ -66,7 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public void deleteEmployeeProfilePictureByUuid(UUID uuid) {
-		userService.deleteProfilePictureByUuid(uuid);
+		userService.deleteProfilePictureFileByUuid(uuid);
 	}
 
 	@Transactional(readOnly = true)
