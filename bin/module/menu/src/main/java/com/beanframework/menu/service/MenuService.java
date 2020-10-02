@@ -23,4 +23,6 @@ public interface MenuService {
 	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	List<Menu> filterMenuByUserGroups(List<Menu> entities, List<UserGroup> userGroups) throws Exception;
+
+	void removeUserGroupsRel(UserGroup userGroup) throws Exception;
 }

@@ -19,5 +19,7 @@ public interface MediaService {
 	Media storeFile(Media media, File file) throws Exception;
 
 	Media storeData(Media media, String data) throws Exception;
+	
+	void removeFile(Media media);
 
 }

@@ -76,7 +76,7 @@ public class Imex extends GenericEntity {
 	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "media_uuid"))
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = ImexConstants.Table.IMEX_MEDIA_REL, joinColumns = @JoinColumn(name = "imex_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "media_uuid", referencedColumnName = "uuid"))
 	private List<Media> medias = new ArrayList<Media>();
 

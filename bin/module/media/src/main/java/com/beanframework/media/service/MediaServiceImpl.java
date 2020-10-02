@@ -1,6 +1,7 @@
 package com.beanframework.media.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +33,7 @@ public class MediaServiceImpl implements MediaService {
 
 	@Value(MediaConstants.MEDIA_LOCATION)
 	public String MEDIA_LOCATION;
-	
+
 	@Value(MediaConstants.MEDIA_URL)
 	private String MEDIA_URL;
 
@@ -119,5 +120,17 @@ public class MediaServiceImpl implements MediaService {
 		media.setUrl(MEDIA_URL + "/" + media.getUuid() + "/" + media.getFileName());
 
 		return modelService.saveEntity(media, Media.class);
+	}
+
+	@Override
+	public void removeFile(Media media) {
+		File mediaFolder = new File(MEDIA_LOCATION + File.separator + media.getFolder() + File.separator + media.getUuid().toString());
+		try {
+			if (mediaFolder.exists()) {
+				FileUtils.deleteDirectory(mediaFolder);
+			}
+		} catch (IOException e) {
+			LOGGER.error(e.toString(), e);
+		}
 	}
 }

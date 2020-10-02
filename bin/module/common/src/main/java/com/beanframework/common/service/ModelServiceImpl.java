@@ -224,8 +224,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T extends Collection> T findByPropertiesBySortByResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
-			throws Exception {
+	public <T extends Collection> T findByPropertiesBySortByResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
@@ -262,16 +261,14 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	public <T extends Collection> T findAll(Class modelClass) {
 		return (T) createQuery(null, null, null, null, null, modelClass).getResultList();
 	}
-	
-	
+
 	@Override
 	public List<Tuple> search(String qlString) {
 		return entityManager.createQuery(qlString).getResultList();
 	}
 
 	@Override
-	public List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
-			throws Exception {
+	public List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass) throws Exception {
 
 		// Create the Audit Reader. It uses the EntityManager, which will be opened when
 		// starting the new Transation and closed when the Transaction finishes.
@@ -303,8 +300,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public int countHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
-			throws Exception {
+	public int countHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass) throws Exception {
 
 		// Create the Audit Reader. It uses the EntityManager, which will be opened when
 		// starting the new Transation and closed when the Transaction finishes.
@@ -401,10 +397,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		}
 
 		try {
-			prepareInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
-			validateInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
 			model = modelRepository.save(model);
-
 			return model;
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -626,7 +619,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public <T extends Collection> T getDto(Collection models, String typeCode, DtoConverterContext context) throws Exception {
 		try {
