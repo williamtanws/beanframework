@@ -15,28 +15,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.AddressWebConstants;
+import com.beanframework.backoffice.AddressWebConstants.AddressPreAuthorizeEnum;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.AddressDto;
 import com.beanframework.core.facade.AddressFacade;
-import com.beanframework.core.facade.AddressFacade.AddressPreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class AddressController extends AbstractController {
 
 	@Autowired
 	private AddressFacade addressFacade;
 
-	@Value(AddressWebConstants.Path.COMMENT)
+	@Value(AddressWebConstants.Path.PATH)
 	private String PATH_COMMENT;
 
 	@Value(AddressWebConstants.View.LIST)
 	private String VIEW_COMMENT_LIST;
 
 	@PreAuthorize(AddressPreAuthorizeEnum.HAS_READ)
-	@GetMapping(value = AddressWebConstants.Path.COMMENT)
-	public String list(@Valid @ModelAttribute(AddressWebConstants.ModelAttribute.COMMENT_DTO) AddressDto addressDto, Model model) throws Exception {
+	@GetMapping(value = AddressWebConstants.Path.PATH)
+	public String list(@Valid @ModelAttribute(AddressWebConstants.ModelAttribute.DTO) AddressDto addressDto, Model model) throws Exception {
 		model.addAttribute("create", false);
 
 		if (addressDto.getUuid() != null) {
@@ -44,7 +45,7 @@ public class AddressController extends AbstractController {
 			AddressDto existsDto = addressFacade.findOneByUuid(addressDto.getUuid());
 
 			if (existsDto != null) {
-				model.addAttribute(AddressWebConstants.ModelAttribute.COMMENT_DTO, existsDto);
+				model.addAttribute(AddressWebConstants.ModelAttribute.DTO, existsDto);
 			} else {
 				addressDto.setUuid(null);
 				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
@@ -55,20 +56,19 @@ public class AddressController extends AbstractController {
 	}
 
 	@PreAuthorize(AddressPreAuthorizeEnum.HAS_CREATE)
-	@GetMapping(value = AddressWebConstants.Path.COMMENT, params = "create")
-	public String createView(@Valid @ModelAttribute(AddressWebConstants.ModelAttribute.COMMENT_DTO) AddressDto addressDto, Model model) throws Exception {
+	@GetMapping(value = AddressWebConstants.Path.PATH, params = "create")
+	public String createView(@Valid @ModelAttribute(AddressWebConstants.ModelAttribute.DTO) AddressDto addressDto, Model model) throws Exception {
 
 		addressDto = addressFacade.createDto();
-		model.addAttribute(AddressWebConstants.ModelAttribute.COMMENT_DTO, addressDto);
+		model.addAttribute(AddressWebConstants.ModelAttribute.DTO, addressDto);
 		model.addAttribute("create", true);
 
 		return VIEW_COMMENT_LIST;
 	}
 
 	@PreAuthorize(AddressPreAuthorizeEnum.HAS_CREATE)
-	@PostMapping(value = AddressWebConstants.Path.COMMENT, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(AddressWebConstants.ModelAttribute.COMMENT_DTO) AddressDto addressDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
-			throws Exception {
+	@PostMapping(value = AddressWebConstants.Path.PATH, params = "create")
+	public RedirectView create(@Valid @ModelAttribute(AddressWebConstants.ModelAttribute.DTO) AddressDto addressDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (addressDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
@@ -91,9 +91,9 @@ public class AddressController extends AbstractController {
 		return redirectView;
 	}
 
-	@PostMapping(value = AddressWebConstants.Path.COMMENT, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(AddressWebConstants.ModelAttribute.COMMENT_DTO) AddressDto addressDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
-			throws Exception {
+	@PreAuthorize(AddressPreAuthorizeEnum.HAS_UPDATE)
+	@PostMapping(value = AddressWebConstants.Path.PATH, params = "update")
+	public RedirectView update(@Valid @ModelAttribute(AddressWebConstants.ModelAttribute.DTO) AddressDto addressDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
 		if (addressDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
@@ -117,8 +117,8 @@ public class AddressController extends AbstractController {
 	}
 
 	@PreAuthorize(AddressPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = AddressWebConstants.Path.COMMENT, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(AddressWebConstants.ModelAttribute.COMMENT_DTO) AddressDto addressDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	@PostMapping(value = AddressWebConstants.Path.PATH, params = "delete")
+	public RedirectView delete(@Valid @ModelAttribute(AddressWebConstants.ModelAttribute.DTO) AddressDto addressDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		try {
 			addressFacade.delete(addressDto.getUuid());

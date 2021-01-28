@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MenuWebConstants;
+import com.beanframework.backoffice.MenuWebConstants.MenuPreAuthorizeEnum;
 import com.beanframework.backoffice.data.MenuDataTableResponseData;
 import com.beanframework.backoffice.data.TreeJson;
 import com.beanframework.backoffice.data.TreeJsonState;
@@ -35,7 +36,6 @@ import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.core.facade.MenuFacade;
-import com.beanframework.core.facade.MenuFacade.MenuPreAuthorizeEnum;
 import com.beanframework.menu.domain.Menu;
 
 @RestController
@@ -176,6 +176,6 @@ public class MenuResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, menuFacade.findHistory(dataTableRequest), menuFacade.countHistory(dataTableRequest), "module.menu");
+		return historyDataTableResponse(dataTableRequest, menuFacade.findHistory(dataTableRequest), menuFacade.countHistory(dataTableRequest));
 	}
 }

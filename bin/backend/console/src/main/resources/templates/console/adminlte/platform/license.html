@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="~{${@environment.getProperty('layout.console')}}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{${@environment.getProperty('layout.console')}}">
 <head>
 <title th:utext="#{module.console.platform.license}"></title>
 <style>
@@ -18,32 +17,26 @@
 ​
 </style>
 </head>
-<body>
+<body class="layout-top-nav" data-panel-auto-height-mode="height">
 	<th:block layout:fragment="content">
+	
+		<!-- Footer -->
+		<th:block th:insert="${@environment.getProperty('fragement.console.main.footer')} :: footer"></th:block>
+	
+		<!-- Main content -->
 		<section class="content">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="box box-primary">
-						<div class="box-header with-border">
-							<h3 class="box-title">
-								<span class="fa fa-certificate"></span>
-								<span th:text="#{module.console.platform.license.agreements}"></span>
-							</h3>
-						</div>
-						<div class="box-body">
-							<div class="col-md-12">
-								<div class="col-md-12" th:if="${error}">
-									<div class="alert alert-danger">
-										<i class="icon fa fa-ban"></i>
-										<span th:text=${error}></span>
-									</div>
-								</div>
-								<div class="col-md-12" th:if="${message}">
-									<div class="alert alert-success">
-										<i class="icon fa fa-info"></i>
-										<span th:text=${message}></span>
-									</div>
-								</div>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-8 offset-sm-2">
+						<div class="card card-default">
+							<div class="card-header">
+								<h3 class="card-title">
+									<i class="fas fa-certificate"></i>
+									<b th:utext="#{module.console.platform.license.agreements}"></b>
+								</h3>
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
 								<form method="post" id="license-form" th:action="@{${@environment.getProperty('path.console.platform.license')}}" th:object="${license}">
 									<input type="hidden" name="uuid" th:value="*{uuid}">
 									<input type="hidden" name="id" th:value="*{id}">
@@ -71,7 +64,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 									</pre>
 									</div>
-									<div class="col-xs-12" th:if="${license.value == 'false' || license.uuid == null}">
+									<div class="col-xs-12">
 										<div class="form-group has-feedback checkbox icheck">
 											<label>
 												<input id="agreeCheckBox" type="checkbox" name="value" th:checked="${license.value == true}">
@@ -81,7 +74,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 											<span class="help-block"></span>
 										</div>
 									</div>
-									<div class="col-xs-4 col-md-offset-8" th:if="${license.value == 'false' || license.uuid == null}">
+									<div class="col-xs-4 col-md-offset-8">
 										<button type="submit" class="btn btn-block btn-success" th:text="#{module.console.submit}"></button>
 									</div>
 									<div class="col-xs-12 text-center" th:if="${license.value == 'true'}" style="font-size: 16px">
@@ -91,23 +84,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 									</div>
 								</form>
 							</div>
+							<!-- /.card-body -->
 						</div>
-						<!-- /.box-body -->
+						<!-- /.card -->
 					</div>
 				</div>
 			</div>
 		</section>
-
 	</th:block>
 	<th:block layout:fragment="js">
-		<script>
-			$(function() {
-				$('#agreeCheckBox').iCheck({
-					checkboxClass : 'icheckbox_square-blue',
-					radioClass : 'iradio_square-blue',
-					increaseArea : '20%' // optional
-				});
-			});
+		<script th:inline="javascript">
+		
+		if ( self !== top ) {
+			// you're in an iframe
+			window.top.location.href = /*[[@{${@environment.getProperty('path.console.platform.license')}}]]*/; 
+		}
 		</script>
 		<script th:inline="javascript">
 			/*<![CDATA[*/

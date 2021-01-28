@@ -9,7 +9,6 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -23,7 +22,7 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 	private ModelService modelService;
 
 	@Override
-	public DynamicFieldTemplate convert(DynamicFieldTemplateDto source, EntityConverterContext context) throws ConverterException {
+	public DynamicFieldTemplate convert(DynamicFieldTemplateDto source) throws ConverterException {
 
 		try {
 

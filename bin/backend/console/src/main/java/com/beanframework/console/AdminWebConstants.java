@@ -31,4 +31,16 @@ public interface AdminWebConstants {
 		public static final String ACCOUNT_LOCKED = "module.admin.account.locked";
 		public static final String ACCOUNT_PASSWORD_EXPIRED = "module.admin.account.password.expired";
 	}
+	
+	public interface AdminPreAuthorizeEnum {
+		public static final String AUTHORITY_READ = "admin_read";
+		public static final String AUTHORITY_CREATE = "admin_create";
+		public static final String AUTHORITY_UPDATE = "admin_update";
+		public static final String AUTHORITY_DELETE = "admin_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
+	}
 }

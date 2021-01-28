@@ -16,12 +16,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants;
+import com.beanframework.backoffice.LanguageWebConstants.LanguagePreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.core.facade.LanguageFacade;
-import com.beanframework.core.facade.LanguageFacade.LanguagePreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class LanguageController extends AbstractController {
 

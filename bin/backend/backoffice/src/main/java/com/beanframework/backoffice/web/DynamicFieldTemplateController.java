@@ -16,12 +16,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldTemplateWebConstants;
+import com.beanframework.backoffice.DynamicFieldTemplateWebConstants.DynamicFieldTemplatePreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
 import com.beanframework.core.facade.DynamicFieldTemplateFacade;
-import com.beanframework.core.facade.DynamicFieldTemplateFacade.DynamicFieldTemplatePreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class DynamicFieldTemplateController extends AbstractController {
 

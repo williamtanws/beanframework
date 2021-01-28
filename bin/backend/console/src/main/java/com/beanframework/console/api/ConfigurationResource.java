@@ -23,13 +23,13 @@ import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.console.ConfigurationWebConstants;
+import com.beanframework.console.ConfigurationWebConstants.ConfigurationPreAuthorizeEnum;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.data.ConfigurationDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.ConfigurationDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.ConfigurationFacade;
-import com.beanframework.core.facade.ConfigurationFacade.ConfigurationPreAuthorizeEnum;
 
 @RestController
 public class ConfigurationResource extends AbstractResource {
@@ -88,12 +88,12 @@ public class ConfigurationResource extends AbstractResource {
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = ConfigurationWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
+	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
-		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
+		dataTableRequest.setUniqueId(requestParams.get(ConsoleWebConstants.Param.UUID).toString());
 
-		return historyDataTableResponse(dataTableRequest, configurationFacade.findHistory(dataTableRequest), configurationFacade.countHistory(dataTableRequest), "module.configuration");
+		return historyDataTableResponse(dataTableRequest, configurationFacade.findHistory(dataTableRequest), configurationFacade.countHistory(dataTableRequest));
 	}
 }

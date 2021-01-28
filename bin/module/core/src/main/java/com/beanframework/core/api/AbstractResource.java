@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,12 +18,12 @@ public class AbstractResource {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-	public DataTableResponse<HistoryDataTableResponseData> historyDataTableResponse(DataTableRequest dataTableRequest, List<Object[]> history, int recordsTotal, String localizedProperty) throws Exception {
+	public DataTableResponse<HistoryDataTableResponseData> historyDataTableResponse(DataTableRequest dataTableRequest, List<Object[]> history, int recordsTotal) throws Exception {
 
 		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
 		dataTableResponse.setDraw(dataTableRequest.getDraw());
 		dataTableResponse.setRecordsTotal(recordsTotal);
-		dataTableResponse.setRecordsFiltered(history.size());
+		dataTableResponse.setRecordsFiltered(recordsTotal);
 
 		for (Object[] object : history) {
 
@@ -36,23 +35,9 @@ public class AbstractResource {
 			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
 			data.setEntity(object[0]);
 			data.setRevisionId(String.valueOf(revisionEntity.getId()));
-			data.setRevisionDate(new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(revisionEntity.getRevisionDate()));
+			data.setRevisionDate(new SimpleDateFormat("dd MMM yy, HH:mm:ss").format(revisionEntity.getRevisionDate()));
 			data.setRevisionType(localeMessageService.getMessage("revision." + revisionType.name()));
-			for (String property : propertiesChanged) {
-
-				String localized = null;
-				if (StringUtils.isNotBlank(localizedProperty)) {
-					localized = localeMessageService.getMessage(localizedProperty + "." + property);
-				}
-				if (StringUtils.isBlank(localized)) {
-					localized = localeMessageService.getMessage("module.backoffice." + property);
-				}
-				if (StringUtils.isBlank(localized)) {
-					localized = localeMessageService.getMessage(property);
-				}
-
-				data.getPropertiesChanged().add(property + "=" + localized);
-			}
+			data.setPropertiesChanged(propertiesChanged);
 
 			dataTableResponse.getData().add(data);
 		}

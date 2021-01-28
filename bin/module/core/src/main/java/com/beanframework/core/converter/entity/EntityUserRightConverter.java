@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -25,7 +24,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 	private ModelService modelService;
 
 	@Override
-	public UserRight convert(UserRightDto source, EntityConverterContext context) throws ConverterException {
+	public UserRight convert(UserRightDto source) throws ConverterException {
 
 		try {
 
@@ -41,7 +40,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				}
 			}
 
-			return convert(source, modelService.create(UserRight.class));
+			return convertToEntity(source, modelService.create(UserRight.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);

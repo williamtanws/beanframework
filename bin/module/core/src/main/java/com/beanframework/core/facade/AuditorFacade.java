@@ -31,9 +31,6 @@ public interface AuditorFacade {
 	int count() throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.HAS_READ)
-	List<AuditorDto> findAllDtoAuditors() throws Exception;
-
-	@PreAuthorize(PreAuthorizeEnum.HAS_READ)
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	@PreAuthorize(PreAuthorizeEnum.HAS_READ)

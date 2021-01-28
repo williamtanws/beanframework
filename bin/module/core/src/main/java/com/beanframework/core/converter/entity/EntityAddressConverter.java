@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -24,7 +23,7 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 	private ModelService modelService;
 
 	@Override
-	public Address convert(AddressDto source, EntityConverterContext context) throws ConverterException {
+	public Address convert(AddressDto source) throws ConverterException {
 
 		try {
 			if (source.getUuid() != null) {

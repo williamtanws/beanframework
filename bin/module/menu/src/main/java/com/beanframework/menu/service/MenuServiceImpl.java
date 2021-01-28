@@ -17,16 +17,12 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Hibernate;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.criteria.AuditCriterion;
-import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
@@ -48,7 +44,7 @@ public class MenuServiceImpl implements MenuService {
 
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
 			for (Menu menu : menus) {
-				modelService.saveEntity(menu, Menu.class);
+				modelService.saveEntity(menu);
 			}
 		} else {
 			updateParentByUuid(fromUuid, toUuid, toIndex);
@@ -57,7 +53,7 @@ public class MenuServiceImpl implements MenuService {
 
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
 			for (Menu menu : menus) {
-				modelService.saveEntity(menu, Menu.class);
+				modelService.saveEntity(menu);
 			}
 		}
 	}
@@ -71,7 +67,7 @@ public class MenuServiceImpl implements MenuService {
 				for (int i = 0; i < parent.getChilds().size(); i++) {
 					if (parent.getChilds().get(i).getUuid() == menu.getUuid()) {
 						parent.getChilds().remove(i);
-						modelService.saveEntity(parent, Menu.class);
+						modelService.saveEntity(parent);
 						break;
 					}
 				}
@@ -80,7 +76,7 @@ public class MenuServiceImpl implements MenuService {
 
 		menu.setParent(null);
 		menu.setSort(toIndex);
-		modelService.saveEntity(menu, Menu.class);
+		modelService.saveEntity(menu);
 	}
 
 	private List<Menu> findByParentNullOrderBySort() throws Exception {
@@ -100,7 +96,7 @@ public class MenuServiceImpl implements MenuService {
 		parent.getChilds().add(menu);
 		menu.setParent(parent);
 		menu.setSort(toIndex);
-		modelService.saveEntity(menu, Menu.class);
+		modelService.saveEntity(menu);
 	}
 
 	private List<Menu> findByParentUuidOrderBySort(UUID toUuid) throws Exception {
@@ -201,31 +197,6 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
-		if (dataTableRequest.getAuditCriterion() != null)
-			auditCriterions.add(dataTableRequest.getAuditCriterion());
-
-		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
-		if (dataTableRequest.getAuditOrder() != null)
-			auditOrders.add(dataTableRequest.getAuditOrder());
-
-		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
-
-	}
-
-	@Override
-	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
-		if (dataTableRequest.getAuditCriterion() != null)
-			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
-
-		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Menu.class);
-	}
-
-	@Override
 	public List<Menu> filterMenuByUserGroups(List<Menu> entities, List<UserGroup> userGroups) throws Exception {
 
 		filterAuthorizedMenu(entities, userGroups);
@@ -312,7 +283,7 @@ public class MenuServiceImpl implements MenuService {
 			}
 		};
 
-		List<Menu> entities = modelService.findBySpecificationBySort(specification, null, Menu.class);
+		List<Menu> entities = modelService.findBySpecificationBySort(specification, Menu.class);
 
 		if (entities != null)
 			for (int i = 0; i < entities.size(); i++) {

@@ -5,14 +5,22 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.core.converter.dto.DtoRegionConverter;
+import com.beanframework.core.converter.populator.RegionPopulator;
 import com.beanframework.core.data.RegionDto;
 
 @Configuration
 public class RegionDtoConfig {
 
 	@Bean
+	public RegionPopulator regionPopulator() {
+		return new RegionPopulator();
+	}
+
+	@Bean
 	public DtoRegionConverter dtoRegionConverter() {
-		return new DtoRegionConverter();
+		DtoRegionConverter converter = new DtoRegionConverter();
+		converter.addPopulator(regionPopulator());
+		return converter;
 	}
 
 	@Bean

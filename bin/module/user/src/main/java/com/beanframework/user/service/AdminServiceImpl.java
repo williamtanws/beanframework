@@ -1,15 +1,9 @@
 package com.beanframework.user.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.criteria.AuditCriterion;
-import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -22,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.AdminConstants;
 import com.beanframework.user.domain.Admin;
@@ -54,11 +47,12 @@ public class AdminServiceImpl implements AdminService {
 		Admin entity = modelService.findOneByProperties(properties, Admin.class);
 
 		if (entity == null) {
-			if (StringUtils.compare(password, defaultAdminPassword) != 0) {
-				throw new BadCredentialsException("Bad Credentials");
-			} else {
+			if(id.equals(defaultAdminId) && password.equals(defaultAdminPassword)) {
 				entity = modelService.create(Admin.class);
 				entity.setId(defaultAdminId);
+			}
+			else {
+				throw new BadCredentialsException("Bad Credentials");
 			}
 		} else {
 			if (passwordEncoder.matches(password, entity.getPassword()) == Boolean.FALSE) {
@@ -96,31 +90,6 @@ public class AdminServiceImpl implements AdminService {
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
-		if (dataTableRequest.getAuditCriterion() != null)
-			auditCriterions.add(dataTableRequest.getAuditCriterion());
-
-		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
-		if (dataTableRequest.getAuditOrder() != null)
-			auditOrders.add(dataTableRequest.getAuditOrder());
-
-		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Admin.class);
-
-	}
-
-	@Override
-	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
-		if (dataTableRequest.getAuditCriterion() != null)
-			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
-
-		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Admin.class);
 	}
 
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.SiteWebConstants;
+import com.beanframework.backoffice.SiteWebConstants.SitePreAuthorizeEnum;
 import com.beanframework.backoffice.data.SiteDataTableResponseData;
 import com.beanframework.cms.domain.Site;
 import com.beanframework.common.data.DataTableRequest;
@@ -28,7 +29,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.SiteDto;
 import com.beanframework.core.facade.SiteFacade;
-import com.beanframework.core.facade.SiteFacade.SitePreAuthorizeEnum;
 
 @RestController
 public class SiteResource extends AbstractResource {
@@ -94,6 +94,6 @@ public class SiteResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, siteFacade.findHistory(dataTableRequest), siteFacade.countHistory(dataTableRequest), "module.site");
+		return historyDataTableResponse(dataTableRequest, siteFacade.findHistory(dataTableRequest), siteFacade.countHistory(dataTableRequest));
 	}
 }

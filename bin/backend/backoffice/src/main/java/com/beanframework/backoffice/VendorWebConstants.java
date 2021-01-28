@@ -23,4 +23,16 @@ public interface VendorWebConstants {
 		public static final String VENDOR_DTO = "vendorDto";
 		public static final String PROFILE = "vendorProfile";
 	}
+	
+	public static interface VendorPreAuthorizeEnum {
+		public static final String AUTHORITY_READ = "vendor_read";
+		public static final String AUTHORITY_CREATE = "vendor_create";
+		public static final String AUTHORITY_UPDATE = "vendor_update";
+		public static final String AUTHORITY_DELETE = "vendor_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
+	}
 }

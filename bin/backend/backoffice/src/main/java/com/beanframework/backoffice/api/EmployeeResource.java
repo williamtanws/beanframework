@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
+import com.beanframework.backoffice.EmployeeWebConstants.EmployeePreAuthorizeEnum;
 import com.beanframework.backoffice.data.EmployeeDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -27,7 +28,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.facade.EmployeeFacade;
-import com.beanframework.core.facade.EmployeeFacade.EmployeePreAuthorizeEnum;
 import com.beanframework.user.domain.Employee;
 
 @RestController
@@ -92,6 +92,6 @@ public class EmployeeResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, employeeFacade.findHistory(dataTableRequest), employeeFacade.countHistory(dataTableRequest), "module.employee");
+		return historyDataTableResponse(dataTableRequest, employeeFacade.findHistory(dataTableRequest), employeeFacade.countHistory(dataTableRequest));
 	}
 }

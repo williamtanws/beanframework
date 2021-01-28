@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -26,28 +25,6 @@ public class EntityEmployeeProfileConverter implements EntityConverter<EmployeeD
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public Employee convert(EmployeeDto source, EntityConverterContext context) throws ConverterException {
-
-		try {
-
-			if (source.getUuid() != null) {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Employee.UUID, source.getUuid());
-				Employee prototype = modelService.findOneByProperties(properties, Employee.class);
-
-				if (prototype != null) {
-					return convertToEntity(source, prototype);
-				}
-			}
-
-			return convertToEntity(source, modelService.create(Employee.class));
-
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), e);
-		}
-
-	}
-
 	public Employee convert(EmployeeDto source) throws ConverterException {
 
 		try {

@@ -31,7 +31,7 @@
         <module>module/workflow</module>
         <module>module/imex</module>
         <module>module/core</module>
-		<module>ui/adminlte</module>
+		<module>ui/AdminLTE-3.1.0-rc</module>
         <module>backend/console</module>
         <module>backend/backoffice</module>
         <module>backend/cockpit</module>

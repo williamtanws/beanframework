@@ -20,10 +20,10 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.console.ConfigurationWebConstants;
+import com.beanframework.console.ConfigurationWebConstants.ConfigurationPreAuthorizeEnum;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.core.data.ConfigurationDto;
 import com.beanframework.core.facade.ConfigurationFacade;
-import com.beanframework.core.facade.ConfigurationFacade.ConfigurationPreAuthorizeEnum;
 
 @Controller
 public class ConfigurationController extends AbstractController {
@@ -36,6 +36,9 @@ public class ConfigurationController extends AbstractController {
 
 	@Value(ConfigurationWebConstants.View.LIST)
 	private String VIEW_CONFIGURATION_LIST;
+
+	@Value(ConfigurationWebConstants.View.FORM)
+	private String VIEW_CONFIGURATION_FORM;
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION)
@@ -50,6 +53,7 @@ public class ConfigurationController extends AbstractController {
 			if (existsDto != null) {
 
 				model.addAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO, existsDto);
+				return VIEW_CONFIGURATION_FORM;
 			} else {
 				configurationDto.setUuid(null);
 				addErrorMessage(model, ConsoleWebConstants.Locale.RECORD_UUID_NOT_FOUND);
@@ -67,7 +71,7 @@ public class ConfigurationController extends AbstractController {
 		model.addAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO, configurationDto);
 		model.addAttribute("create", true);
 
-		return VIEW_CONFIGURATION_LIST;
+		return VIEW_CONFIGURATION_FORM;
 	}
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_CREATE)

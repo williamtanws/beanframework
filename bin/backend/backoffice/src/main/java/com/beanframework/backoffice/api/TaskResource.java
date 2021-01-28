@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.TaskWebConstants;
+import com.beanframework.backoffice.TaskWebConstants.TaskPreAuthorizeEnum;
 import com.beanframework.backoffice.data.TaskDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.TaskFacade;
-import com.beanframework.core.facade.TaskFacade.TaskPreAuthorizeEnum;
 
 @RestController
 public class TaskResource extends AbstractResource {

@@ -5,14 +5,22 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.core.converter.dto.DtoImexConverter;
+import com.beanframework.core.converter.populator.ImexPopulator;
 import com.beanframework.core.data.ImexDto;
 
 @Configuration
 public class ImexDtoConfig {
 
 	@Bean
+	public ImexPopulator imexPopulator() {
+		return new ImexPopulator();
+	}
+
+	@Bean
 	public DtoImexConverter dtoImexConverter() {
-		return new DtoImexConverter();
+		DtoImexConverter converter = new DtoImexConverter();
+		converter.addPopulator(imexPopulator());
+		return converter;
 	}
 
 	@Bean

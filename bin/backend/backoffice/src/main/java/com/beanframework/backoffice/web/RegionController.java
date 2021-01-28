@@ -16,12 +16,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.RegionWebConstants;
+import com.beanframework.backoffice.RegionWebConstants.RegionPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.RegionDto;
 import com.beanframework.core.facade.RegionFacade;
-import com.beanframework.core.facade.RegionFacade.RegionPreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class RegionController extends AbstractController {
 

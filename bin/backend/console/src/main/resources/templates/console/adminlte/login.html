@@ -1,148 +1,146 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{${@environment.getProperty('layout.console.login')}}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{${@environment.getProperty('layout.console')}}">
 <head>
 <title th:utext="#{module.console.login}"></title>
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<div class="login-box">
-			<div class="login-logo">
-				<a th:href="@{${@environment.getProperty('console.webroot')}}">
-					<b th:utext="#{module.console}"></b>
-				</a>
-			</div>
-			<!-- /.login-logo -->
-			<div class="login-box-body">
-				<p class="login-box-msg" th:utext="#{module.console.login.box.msg}"></p>
-
-				<div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null}">
-					<div class="alert alert-danger">
-						<i class="icon fa fa-lock"></i>
-						<span th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}" th:switch="${errorMsg}">
-							<span th:case="'Wrong username or password'" th:utext="#{module.console.login.error.wrongusernameorpassword}"></span>
-							<span th:case="'Your account has been disabled'" th:utext="#{module.console.login.error.accountdisabled}"></span>
-							<span th:case="'Maximum sessions of 1 for this principal exceeded'" th:utext="#{module.console.login.error.exceeded}"></span>
-							<span th:case="*" th:text="${errorMsg}" th:utext="#{module.console.login.error.unknown}"></span>
-						</span>
-
-					</div>
+		<script th:inline="javascript">
+		if ( self !== top ) {
+			// you're in an iframe
+			window.top.location.href = /*[[@{${@environment.getProperty('path.console.login')}}]]*/; 
+		}
+		</script>
+		<div class="login-page" style="min-height: 466px;">
+			<div class="login-box">
+				<div class="login-logo">
+					<a th:href="@{${@environment.getProperty('console.webroot')}}"> <b th:utext="#{module.console}"></b>
+					</a>
 				</div>
-				<div th:if="${param.denied}">
-					<div class="alert alert-danger">
-						<i class="icon fa fa-lock"></i>
-						<span th:utext="#{module.console.login.error.accessdenied}"></span>
-					</div>
-				</div>
-				<div th:if="${param.expired}">
-					<div class="alert alert-danger">
-						<i class="icon fa fa-lock"></i>
-						<span th:utext="#{module.console.login.error.sessionexpired}"></span>
-					</div>
-				</div>
-				<div th:if="${param.timeout}">
-					<div class="alert alert-danger">
-						<i class="icon fa fa-lock"></i>
-						<span th:utext="#{module.console.login.error.sessiontimeout}"></span>
-					</div>
-				</div>
-				<div th:if="${param.logout}">
-					<div class="alert alert-success">
-						<i class="icon fa fa-unlock"></i>
-						<span th:utext="#{module.console.login.loggedout}"></span>
-					</div>
-				</div>
-
-				<form id="login-form" th:action="@{${@environment.getProperty('path.console.login')}}" method="post">
-					<sec:csrfInput />
-					<div class="form-group has-feedback">
-						<input type="text" class="form-control" th:placeholder="#{module.admin.id}" name="username" th:value="${@Config.is('demo')} ? 'admin':''">
-						<span class="glyphicon glyphicon-user form-control-feedback"></span>
-						<span class="help-block"></span>
-					</div>
-					<div class="form-group has-feedback">
-						<input type="password" class="form-control" th:placeholder="#{module.admin.password}" name="password" th:value="${@Config.is('demo')} ? 'admin':''">
-						<span class="glyphicon glyphicon-lock form-control-feedback"></span>
-						<span class="help-block"></span>
-					</div>
-					<div class="form-group input-group">
-						<select class="form-control" id="changeLanguage">
-							<option th:value="${#strings.arraySplit(locale,';')[0]}" th:text="${#strings.arraySplit(locale,';')[1]}" th:selected="(${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()})" th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}"></option>
-						</select>
-						<span class="input-group-addon">
-							<i class="fa fa-language"></i>
-						</span>
-					</div>
-					<div class="row">
-						<div class="col-xs-8"></div>
-						<!-- /.col -->
-						<div class="col-xs-4">
-							<button type="submit" class="btn btn-primary btn-block btn-flat" th:utext="#{module.console.login}"></button>
+				<!-- /.login-logo -->
+				<div class="card">
+					<div class="card-body login-card-body">
+						<p class="login-box-msg" th:utext="#{module.console.login.box.msg}"></p>
+	
+						<div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null}">
+							<div class="alert alert-danger">
+								<i class="icon fa fa-lock"></i> <span th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}" th:switch="${errorMsg}"> <span
+									th:case="'Wrong username or password'" th:utext="#{module.console.login.error.wrongusernameorpassword}"></span> <span th:case="'Your account has been disabled'"
+									th:utext="#{module.console.login.error.accountdisabled}"></span> <span th:case="'Maximum sessions of 1 for this principal exceeded'"
+									th:utext="#{module.console.login.error.exceeded}"></span> <span th:case="*" th:text="${errorMsg}" th:utext="#{module.console.login.error.unknown}"></span>
+								</span>
+	
+							</div>
 						</div>
-						<!-- /.col -->
+						<div th:if="${param.denied}">
+							<div class="alert alert-danger">
+								<i class="icon fa fa-lock"></i> <span th:utext="#{module.console.login.error.accessdenied}"></span>
+							</div>
+						</div>
+						<div th:if="${param.expired}">
+							<div class="alert alert-danger">
+								<i class="icon fa fa-lock"></i> <span th:utext="#{module.console.login.error.sessionexpired}"></span>
+							</div>
+						</div>
+						<div th:if="${param.timeout}">
+							<div class="alert alert-danger">
+								<i class="icon fa fa-lock"></i> <span th:utext="#{module.console.login.error.sessiontimeout}"></span>
+							</div>
+						</div>
+						<div th:if="${param.logout}">
+							<div class="alert alert-success">
+								<i class="icon fa fa-unlock"></i> <span th:utext="#{module.console.login.loggedout}"></span>
+							</div>
+						</div>
+	
+						<form id="login-form" th:action="@{${@environment.getProperty('path.console.login')}}" method="post">
+							<sec:csrfInput />
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" th:placeholder="#{module.admin.id}" name="username" th:value="${@Config.is('demo')} ? 'admin':''">
+								<div class="input-group-append">
+									<div class="input-group-text">
+										<span class="fas fa-user"></span>
+									</div>
+								</div>
+							</div>
+							<div class="input-group mb-3">
+								<input type="password" class="form-control" th:placeholder="#{module.admin.password}" name="password" th:value="${@Config.is('demo')} ? 'admin':''">
+								<div class="input-group-append">
+									<div class="input-group-text">
+										<span class="fas fa-lock"></span>
+									</div>
+								</div>
+							</div>
+							<div class="input-group mb-3">
+								<select class="form-control select2" id="changeLanguage">
+									<option th:value="${#strings.arraySplit(locale,';')[0]}" th:text="${#strings.arraySplit(locale,';')[1]}"
+										th:selected="(${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()})"
+										th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}"></option>
+								</select>
+								<div class="input-group-append">
+									<div class="input-group-text">
+										<span class="input-group-addon"> <i class="fa fa-globe"></i></span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-8">
+									<div class="icheck-primary">
+										<input type="checkbox" id="remember" name="rememberme"> <label for="remember" th:text="#{module.console.login.rememberme}"></label>
+									</div>
+								</div>
+								<!-- /.col -->
+								<div class="col-4">
+									<button type="submit" class="btn btn-primary btn-block" th:utext="#{module.console.login}"></button>
+								</div>
+								<!-- /.col -->
+							</div>
+						</form>
 					</div>
-				</form>
+					<!-- /.login-card-body -->
+				</div>
 			</div>
-			<!-- /.login-box-body -->
+			<!-- /.login-box -->
 		</div>
-		<!-- /.login-box -->
 	</th:block>
-
 	<th:block layout:fragment="js">
-	<script th:inline="javascript">
-	
-	if ( self !== top ) {
-		// you're in an iframe
-		window.top.location.href = /*[[@{${@environment.getProperty('path.console.login')}}]]*/; 
-	}
-	
-	/*<![CDATA[*/
-	$(document).ready(function() {
-	  $('#login-form').validate(
-	  {
-	    rules: {
-	      username: {
-	        required: true
-	      },
-	      password: {
-		    required: true
-		  }
-	    },
-	    messages: {
-	      username: {
-		      required: /*[[#{module.console.login.username.required}]]*/
-		  },
-		  password: {
-	          required: /*[[#{module.console.login.password.required}]]*/
-	      }
-	    },
-	    highlight: function(element) {
-            $(element).closest('.form-group').addClass('has-error');
-        },
-        unhighlight: function(element) {
-            $(element).closest('.form-group').removeClass('has-error');
-            $(element).closest('.form-group').find('.help-block').html('');
-        },
-        errorPlacement: function(error, element) {
-        	element.closest('.form-group').find('.help-block').html(error.text());
-        }
-	  });
-	  $('#changeLanguage').on("change", function() {
-          var locale = $('#changeLanguage option:selected').val();
-          
-          var url = String(window.location.href.replace(/&?locale=([^&]$|[^&]*)/i, ""));
-		  if(window.location.href.indexOf('?') > -1){
-			  url = url + '&locale=' + locale;
-		  }
-		  else{
-			  url = url + '?locale=' + locale;
-		  }
-		  
-		  window.location.href = url;
-   	  });
-	});
-	/*]]>*/
-	</script>
+		<script th:inline="javascript">
+		
+		/*<![CDATA[*/
+		$(document).ready(function() {
+		  $('#login-form').validate(
+		  {
+		    rules: {
+		      username: {
+		        required: true
+		      },
+		      password: {
+			    required: true
+			  }
+		    },
+		    messages: {
+		      username: {
+			      required: /*[[#{module.console.login.username.required}]]*/
+			  },
+			  password: {
+		          required: /*[[#{module.console.login.password.required}]]*/
+		      }
+		    },
+		    highlight: function(element) {
+	            $(element).closest('.form-group').addClass('has-error');
+	        },
+	        unhighlight: function(element) {
+	            $(element).closest('.form-group').removeClass('has-error');
+	            $(element).closest('.form-group').find('.help-block').html('');
+	        },
+	        errorPlacement: function(error, element) {
+	        	element.closest('.form-group').find('.help-block').html(error.text());
+	        }
+		  });
+		});
+		/*]]>*/
+		</script>
 	</th:block>
 </body>
 </html>

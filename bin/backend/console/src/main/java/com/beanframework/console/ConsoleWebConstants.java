@@ -34,6 +34,7 @@ public interface ConsoleWebConstants {
 
 	public interface View {
 		public static final String LOGIN = "${view.console.login}";
+		public static final String CONSOLE = "${view.console}";
 	}
 
 	public interface Authority {

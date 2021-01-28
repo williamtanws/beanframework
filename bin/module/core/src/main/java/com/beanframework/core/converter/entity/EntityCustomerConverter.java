@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -30,7 +29,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public Customer convert(CustomerDto source, EntityConverterContext context) throws ConverterException {
+	public Customer convert(CustomerDto source) throws ConverterException {
 
 		try {
 
@@ -252,7 +251,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 					if (remove) {
 						Address entity = modelService.findOneByUuid(o, Address.class);
 						entity.setOwner(null);
-						modelService.saveEntity(entity, Address.class);
+						modelService.saveEntity(entity);
 						it.remove();
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
@@ -283,7 +282,7 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 				for (final Iterator<UUID> itr = prototype.getAddresses().iterator(); itr.hasNext();) {
 					Address entity = modelService.findOneByUuid(itr.next(), Address.class);
 					entity.setOwner(null);
-					modelService.saveEntity(entity, Address.class);
+					modelService.saveEntity(entity);
 					itr.remove();
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}

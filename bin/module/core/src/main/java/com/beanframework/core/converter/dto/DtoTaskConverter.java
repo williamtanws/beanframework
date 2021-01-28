@@ -18,15 +18,15 @@ package com.beanframework.core.converter.dto;
 //	protected static Logger LOGGER = LoggerFactory.getLogger(DtoTaskConverter.class);
 //
 //	@Override
-//	public TaskDto convert(Task source, DtoConverterContext context) throws ConverterException {
+//	public TaskDto convert(Task source) throws ConverterException {
 //		return convert(source, new TaskDto(), context);
 //	}
 //
-//	public List<TaskDto> convert(List<Task> sources, DtoConverterContext context) throws ConverterException {
+//	public List<TaskDto> convert(List<Task> sources) throws ConverterException {
 //		List<TaskDto> convertedList = new ArrayList<TaskDto>();
 //		try {
 //			for (Task source : sources) {
-//				convertedList.add(convert(source, context));
+//				convertedList.add(convert(source));
 //			}
 //		} catch (ConverterException e) {
 //			throw new ConverterException(e.getMessage(), e);
@@ -34,7 +34,7 @@ package com.beanframework.core.converter.dto;
 //		return convertedList;
 //	}
 //
-//	private TaskDto convert(Task source, TaskDto prototype, DtoConverterContext context) throws ConverterException {
+//	private TaskDto convert(Task source, TaskDto prototype) throws ConverterException {
 //		try {
 //			prototype.setId(source.getId());
 //			prototype.setId(source.getId());

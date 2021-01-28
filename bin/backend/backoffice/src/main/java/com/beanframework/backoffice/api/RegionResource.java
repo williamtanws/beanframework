@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.RegionWebConstants;
+import com.beanframework.backoffice.RegionWebConstants.RegionPreAuthorizeEnum;
 import com.beanframework.backoffice.data.RegionDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -26,7 +27,6 @@ import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.RegionDto;
 import com.beanframework.core.facade.RegionFacade;
-import com.beanframework.core.facade.RegionFacade.RegionPreAuthorizeEnum;
 import com.beanframework.internationalization.domain.Region;
 
 @RestController
@@ -93,6 +93,6 @@ public class RegionResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, regionFacade.findHistory(dataTableRequest), regionFacade.countHistory(dataTableRequest), "module.region");
+		return historyDataTableResponse(dataTableRequest, regionFacade.findHistory(dataTableRequest), regionFacade.countHistory(dataTableRequest));
 	}
 }

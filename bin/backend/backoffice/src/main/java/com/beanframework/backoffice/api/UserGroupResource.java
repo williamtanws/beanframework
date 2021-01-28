@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserGroupWebConstants;
+import com.beanframework.backoffice.UserGroupWebConstants.UserGroupPreAuthorizeEnum;
 import com.beanframework.backoffice.data.UserGroupDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -27,7 +28,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.facade.UserGroupFacade;
-import com.beanframework.core.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
 import com.beanframework.user.domain.UserGroup;
 
 @RestController
@@ -93,6 +93,6 @@ public class UserGroupResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, userGroupFacade.findHistory(dataTableRequest), userGroupFacade.countHistory(dataTableRequest), "module.usergroup");
+		return historyDataTableResponse(dataTableRequest, userGroupFacade.findHistory(dataTableRequest), userGroupFacade.countHistory(dataTableRequest));
 	}
 }

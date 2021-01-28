@@ -29,11 +29,6 @@
             <artifactId>core</artifactId>
             <version>${project.version}</version>
         </dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>adminlte</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		
         <dependency>
 			<groupId>org.springframework.boot</groupId>

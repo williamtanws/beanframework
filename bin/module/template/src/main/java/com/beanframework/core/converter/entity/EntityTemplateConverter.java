@@ -20,7 +20,7 @@ public class EntityTemplateConverter implements EntityConverter<TemplateDto, Tem
 	private ModelService modelService;
 
 	@Override
-	public Template convert(TemplateDto source, EntityConverterContext context) throws ConverterException {
+	public Template convert(TemplateDto source) throws ConverterException {
 
 		try {
 			if (source.getUuid() != null) {

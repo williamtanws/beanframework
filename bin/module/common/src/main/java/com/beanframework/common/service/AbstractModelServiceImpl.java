@@ -36,13 +36,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.beanframework.common.CommonConstants;
-import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.converter.EntityConverter;
-import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
@@ -54,7 +51,7 @@ import com.beanframework.common.interceptor.ValidateInterceptor;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @Service
-@Transactional(readOnly = false)
+@Transactional
 public abstract class AbstractModelServiceImpl implements ModelService {
 
 	@PersistenceContext
@@ -237,24 +234,24 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public void entityConverter(Collection models, EntityConverterContext context, Class modelClass)
+	public void entityConverter(Collection models, Class modelClass)
 			throws ConverterException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			entityConverter(model, context, modelClass.getSimpleName());
+			entityConverter(model, modelClass.getSimpleName());
 		}
 	}
 
 	@Override
-	public Object entityConverter(Object model, EntityConverterContext context, String typeCode)
+	public Object entityConverter(Object model, String typeCode)
 			throws ConverterException {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof EntityConverter) {
 				EntityConverter interceptor = (EntityConverter) interceptorMapping.getConverter();
 				if (interceptorMapping.getTypeCode().equals(typeCode)) {
-					return interceptor.convert(model, context);
+					return interceptor.convert(model);
 				}
 			}
 		}
@@ -263,14 +260,14 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public <T extends Collection> T dtoConverter(Collection models, DtoConverterContext context, String typeCode)
+	public <T extends Collection> T dtoConverter(Collection models, String typeCode)
 			throws ConverterException, InterceptorException {
 		if (models instanceof List<?>) {
 			List<Object> listModels = new ArrayList<Object>();
 			Iterator iterator = models.iterator();
 			while (iterator.hasNext()) {
 				Object model = iterator.next();
-				listModels.add(dtoConverter(model, context, typeCode));
+				listModels.add(dtoConverter(model, typeCode));
 			}
 			return (T) listModels;
 		}
@@ -278,20 +275,13 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public Object dtoConverter(Object model, DtoConverterContext context, String typeCode) throws ConverterException {
+	public Object dtoConverter(Object model, String typeCode) throws ConverterException {
 
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof DtoConverter) {
 				DtoConverter interceptor = (DtoConverter) interceptorMapping.getConverter();
 				if (interceptorMapping.getTypeCode().equals(typeCode)) {
-					if (context.getConvertedDtos().contains(((GenericEntity) model).getUuid()) == false) {
-						if (((GenericEntity) model).getUuid() != null) {
-							context.getConvertedDtos().add(((GenericEntity) model).getUuid());
-						}
-						return interceptor.convert(model, context);
-					} else {
-						return null;
-					}
+					return interceptor.convert(model);
 				}
 			}
 		}

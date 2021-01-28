@@ -20,6 +20,7 @@ import com.beanframework.common.data.AuditorDto;
 import com.beanframework.core.facade.AuditorFacade;
 import com.beanframework.core.facade.AuditorFacade.PreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class AuditorController extends AbstractController {
 

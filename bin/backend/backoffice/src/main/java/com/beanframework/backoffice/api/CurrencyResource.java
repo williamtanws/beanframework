@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CurrencyWebConstants;
+import com.beanframework.backoffice.CurrencyWebConstants.CurrencyPreAuthorizeEnum;
 import com.beanframework.backoffice.data.CurrencyDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -26,7 +27,6 @@ import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.CurrencyDto;
 import com.beanframework.core.facade.CurrencyFacade;
-import com.beanframework.core.facade.CurrencyFacade.CurrencyPreAuthorizeEnum;
 import com.beanframework.internationalization.domain.Currency;
 
 @RestController
@@ -92,6 +92,6 @@ public class CurrencyResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, currencyFacade.findHistory(dataTableRequest), currencyFacade.countHistory(dataTableRequest), "module.currency");
+		return historyDataTableResponse(dataTableRequest, currencyFacade.findHistory(dataTableRequest), currencyFacade.countHistory(dataTableRequest));
 	}
 }

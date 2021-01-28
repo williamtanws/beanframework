@@ -4,120 +4,69 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
-import com.beanframework.core.converter.populator.AdminBasicPopulator;
-import com.beanframework.core.converter.populator.AdminFullPopulator;
 import com.beanframework.core.data.AdminDto;
 import com.beanframework.user.domain.Admin;
-import com.beanframework.user.service.AdminService;
 import com.beanframework.user.specification.AdminSpecification;
 
 @Component
-public class AdminFacadeImpl implements AdminFacade {
-
-	@Autowired
-	private ModelService modelService;
-
-	@Autowired
-	private AdminService adminService;
+public class AdminFacadeImpl extends AbstractFacade<Admin, AdminDto> implements AdminFacade {
 	
-	@Autowired
-	private AdminFullPopulator adminFullPopulator;
-	
-	@Autowired
-	private AdminBasicPopulator adminBasicPopulator;
+	private static final Class<Admin> entityClass = Admin.class;
+	private static final Class<AdminDto> dtoClass = AdminDto.class;
 
 	@Override
 	public AdminDto findOneByUuid(UUID uuid) throws Exception {
-
-		Admin entity = modelService.findOneByUuid(uuid, Admin.class);
-
-		return modelService.getDto(entity, AdminDto.class, new DtoConverterContext(adminFullPopulator));
+		return findOneByUuid(uuid, entityClass, dtoClass);
 	}
 
 	@Override
 	public AdminDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Admin entity = modelService.findOneByProperties(properties, Admin.class);
-
-		return modelService.getDto(entity, AdminDto.class, new DtoConverterContext(adminFullPopulator));
+		return findOneProperties(properties, entityClass, dtoClass);
 	}
 
 	@Override
 	public AdminDto create(AdminDto model) throws BusinessException {
-		return save(model);
+		return save(model, entityClass, dtoClass);
 	}
 
 	@Override
 	public AdminDto update(AdminDto model) throws BusinessException {
-		return save(model);
-	}
-
-	public AdminDto save(AdminDto dto) throws BusinessException {
-		try {
-			Admin entity = modelService.getEntity(dto, Admin.class);
-			entity = (Admin) modelService.saveEntity(entity, Admin.class);
-
-			return modelService.getDto(entity, AdminDto.class, new DtoConverterContext(adminFullPopulator));
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
+		return save(model, entityClass, dtoClass);
 	}
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		try {
-			modelService.findOneByUuid(uuid, Admin.class);
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
+		delete(uuid, entityClass);
 	}
 
 	@Override
 	public Page<AdminDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Admin> page = modelService.findPage(AdminSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Admin.class);
-
-		List<AdminDto> dtos = modelService.getDto(page.getContent(), AdminDto.class, new DtoConverterContext(adminBasicPopulator));
-		return new PageImpl<AdminDto>(dtos, page.getPageable(), page.getTotalElements());
+		return findPage(dataTableRequest, AdminSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override
 	public int count() throws Exception {
-		return modelService.countAll(Admin.class);
+		return count(entityClass);
 	}
 
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<Object[]> revisions = adminService.findHistory(dataTableRequest);
-		for (int i = 0; i < revisions.size(); i++) {
-			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof Admin) {
-
-				entityObject[0] = modelService.getDto(entityObject[0], AdminDto.class, new DtoConverterContext(adminFullPopulator));
-			}
-			revisions.set(i, entityObject);
-		}
-
-		return revisions;
+		return findHistory(dataTableRequest, entityClass);
 	}
 
 	@Override
 	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
-		return adminService.findCountHistory(dataTableRequest);
+		return findCountHistory(dataTableRequest, entityClass);
 	}
 
 	@Override
 	public AdminDto createDto() throws Exception {
-		Admin admin = modelService.create(Admin.class);
-		return modelService.getDto(admin, AdminDto.class, new DtoConverterContext(adminFullPopulator));
+		return createDto(entityClass, dtoClass);
 	}
 
 }

@@ -2,7 +2,7 @@ package com.beanframework.common.converter;
 
 import com.beanframework.common.exception.PopulatorException;
 
-public interface Populator<S, T> {
+public interface Populator<SOURCE, TARGET> {
 
-	void populate(S source, T target) throws PopulatorException;
+	void populate(SOURCE source, TARGET target) throws PopulatorException;
 }

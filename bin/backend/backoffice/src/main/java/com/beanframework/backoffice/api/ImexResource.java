@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.ImexWebConstants;
+import com.beanframework.backoffice.ImexWebConstants.ImexPreAuthorizeEnum;
 import com.beanframework.backoffice.data.ImexDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -27,7 +28,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.ImexDto;
 import com.beanframework.core.facade.ImexFacade;
-import com.beanframework.core.facade.ImexFacade.ImexPreAuthorizeEnum;
 import com.beanframework.imex.domain.Imex;
 
 @RestController
@@ -93,6 +93,6 @@ public class ImexResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, imexFacade.findHistory(dataTableRequest), imexFacade.countHistory(dataTableRequest), "module.imex");
+		return historyDataTableResponse(dataTableRequest, imexFacade.findHistory(dataTableRequest), imexFacade.countHistory(dataTableRequest));
 	}
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CustomerWebConstants;
+import com.beanframework.backoffice.CustomerWebConstants.CustomerPreAuthorizeEnum;
 import com.beanframework.backoffice.data.CustomerDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -27,7 +28,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.CustomerFacade;
-import com.beanframework.core.facade.CustomerFacade.CustomerPreAuthorizeEnum;
 import com.beanframework.user.domain.Customer;
 
 @RestController
@@ -92,6 +92,6 @@ public class CustomerResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, customerFacade.findHistory(dataTableRequest), customerFacade.countHistory(dataTableRequest), "module.customer");
+		return historyDataTableResponse(dataTableRequest, customerFacade.findHistory(dataTableRequest), customerFacade.countHistory(dataTableRequest));
 	}
 }

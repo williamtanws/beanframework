@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldSlotWebConstants;
+import com.beanframework.backoffice.DynamicFieldSlotWebConstants.DynamicFieldSlotPreAuthorizeEnum;
 import com.beanframework.backoffice.data.DynamicFieldSlotDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -26,7 +27,6 @@ import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.facade.DynamicFieldSlotFacade;
-import com.beanframework.core.facade.DynamicFieldSlotFacade.DynamicFieldSlotPreAuthorizeEnum;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 
 @RestController
@@ -92,6 +92,6 @@ public class DynamicFieldSlotResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, dynamicFieldSlotFacade.findHistory(dataTableRequest), dynamicFieldSlotFacade.countHistory(dataTableRequest), "module.dynamicfieldslot");
+		return historyDataTableResponse(dataTableRequest, dynamicFieldSlotFacade.findHistory(dataTableRequest), dynamicFieldSlotFacade.countHistory(dataTableRequest));
 	}
 }

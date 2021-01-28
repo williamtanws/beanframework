@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MediaWebConstants;
+import com.beanframework.backoffice.MediaWebConstants.MediaPreAuthorizeEnum;
 import com.beanframework.backoffice.data.MediaDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -27,7 +28,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.core.facade.MediaFacade;
-import com.beanframework.core.facade.MediaFacade.MediaPreAuthorizeEnum;
 import com.beanframework.media.domain.Media;
 
 @RestController
@@ -94,6 +94,6 @@ public class MediaResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, mediaFacade.findHistory(dataTableRequest), mediaFacade.countHistory(dataTableRequest), "module.media");
+		return historyDataTableResponse(dataTableRequest, mediaFacade.findHistory(dataTableRequest), mediaFacade.countHistory(dataTableRequest));
 	}
 }

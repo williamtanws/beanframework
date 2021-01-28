@@ -61,7 +61,7 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
 				cronjob.setLastStartExecutedDate(new Date());
 				cronjob.setLastModifiedBy(null);
 
-				modelService.saveEntity(cronjob, Cronjob.class);
+				modelService.saveEntity(cronjob);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,7 +82,7 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
 			cronjob.setLastFinishExecutedDate(new Date());
 			cronjob.setLastModifiedBy(null);
 
-			modelService.saveEntity(cronjob, Cronjob.class);
+			modelService.saveEntity(cronjob);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error(e.getMessage(), e);
@@ -135,7 +135,7 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
 				cronjob.setLastFinishExecutedDate(new Date());
 				cronjob.setLastModifiedBy(null);
 
-				modelService.saveEntity(cronjob, Cronjob.class);
+				modelService.saveEntity(cronjob);
 			}
 
 		} catch (Exception e) {

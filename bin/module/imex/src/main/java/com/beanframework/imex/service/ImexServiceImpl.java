@@ -9,7 +9,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -18,16 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.EntityManager;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.criteria.AuditCriterion;
-import org.hibernate.envers.query.order.AuditOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +39,6 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.converter.EntityCsvConverter;
-import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
@@ -89,45 +83,20 @@ public class ImexServiceImpl implements ImexService {
 	@Value(MediaConstants.MEDIA_URL)
 	private String MEDIA_URL;
 
-	@Override
-	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
-		if (dataTableRequest.getAuditCriterion() != null)
-			auditCriterions.add(dataTableRequest.getAuditCriterion());
-
-		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
-		if (dataTableRequest.getAuditOrder() != null)
-			auditOrders.add(dataTableRequest.getAuditOrder());
-
-		List<Object[]> histories = modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), Imex.class);
-		return histories;
-	}
-
-	@Override
-	public int findCountHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
-		if (dataTableRequest.getAuditCriterion() != null)
-			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
-
-		return modelService.countHistory(false, auditCriterions, null, dataTableRequest.getStart(), dataTableRequest.getLength(), Imex.class);
-	}
-
-	@Transactional(readOnly = false)
+	@Transactional
 	@Override
 	public String[] importByListenerKeys(Set<String> keys) {
 		return importByKeysAndReader(keys, "classpath*:import/**/*.csv");
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	@Override
 	public void importByFile(File file) throws Exception {
 
 		importByKeysAndReader(null, file.getAbsolutePath());
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	@Override
 	public String[] importByMultipartFiles(MultipartFile[] files) {
 
@@ -173,7 +142,7 @@ public class ImexServiceImpl implements ImexService {
 		return messages;
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	@Override
 	public String[] importByQuery(String importName, String query) {
 
@@ -323,18 +292,18 @@ public class ImexServiceImpl implements ImexService {
 
 						if (mode.equalsIgnoreCase("INSERT")) {
 							if (((GenericEntity) entity).getUuid() == null) {
-								modelService.saveEntity(entity, classEntity);
+								modelService.saveEntity(entity);
 								imported = true;
 							}
 
 						} else if (mode.equalsIgnoreCase("UPDATE")) {
 							if (((GenericEntity) entity).getUuid() != null) {
-								modelService.saveEntity(entity, classEntity);
+								modelService.saveEntity(entity);
 								imported = true;
 							}
 
 						} else if (mode.equalsIgnoreCase("INSERT_UPDATE")) {
-							modelService.saveEntity(entity, classEntity);
+							modelService.saveEntity(entity);
 							imported = true;
 
 						} else if (mode.equalsIgnoreCase("REMOVE")) {
@@ -415,7 +384,7 @@ public class ImexServiceImpl implements ImexService {
 			media.setFileName(model.getFileName() + ".csv");
 			media.setFileType("text/csv");
 			media.setFolder(IMEX_MEDIA_LOCATION);
-			media = modelService.saveEntity(media, Media.class);
+			media = modelService.saveEntity(media);
 			media = mediaService.storeData(media, csv);
 
 			if (model.getMedias().isEmpty()) {

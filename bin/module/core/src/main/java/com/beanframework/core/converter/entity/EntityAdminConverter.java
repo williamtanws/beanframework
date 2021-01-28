@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -24,7 +23,7 @@ public class EntityAdminConverter implements EntityConverter<AdminDto, Admin> {
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public Admin convert(AdminDto source, EntityConverterContext context) throws ConverterException {
+	public Admin convert(AdminDto source) throws ConverterException {
 
 		try {
 			if (source.getUuid() != null) {

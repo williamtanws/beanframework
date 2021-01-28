@@ -26,6 +26,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.beanframework</groupId>
+			<artifactId>adminlte</artifactId>
+			<version>3.1.0-rc</version>
+		</dependency>
+		<dependency>
+			<groupId>com.beanframework</groupId>
 			<artifactId>console</artifactId>
 			<version>${project.version}</version>
 		</dependency>

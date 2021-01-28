@@ -41,4 +41,26 @@ public interface EmployeeWebConstants {
 		public static final String ACCOUNT_LOCKED = "module.employee.account.locked";
 		public static final String ACCOUNT_PASSWORD_EXPIRED = "module.employee.account.password.expired";
 	}
+	
+	public static interface EmployeePreAuthorizeEnum {
+
+		public static final String AUTHORITY_READ = "employee_read";
+		public static final String AUTHORITY_CREATE = "employee_create";
+		public static final String AUTHORITY_UPDATE = "employee_update";
+		public static final String AUTHORITY_DELETE = "employee_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
+	}
+
+	public static interface EmployeeSessionPreAuthorizeEnum {
+
+		public static final String AUTHORITY_READ = "employeesession_read";
+		public static final String AUTHORITY_DELETE = "employeesession_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
+	}
 }

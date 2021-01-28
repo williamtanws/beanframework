@@ -190,9 +190,9 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 
-		Set<String> checkedUserGroupUuid = new HashSet<String>();
+		Set<UUID> checkedUserGroupUuid = new HashSet<UUID>();
 		for (UserGroup userGroup : userGroups) {
-			checkedUserGroupUuid.add(userGroup.getUuid().toString());
+			checkedUserGroupUuid.add(userGroup.getUuid());
 		}
 
 		for (UserGroup userGroup : userGroups) {
@@ -234,9 +234,9 @@ public class UserServiceImpl implements UserService {
 				}
 			}
 
-			Set<String> checkedUserGroupUuid = new HashSet<String>();
+			Set<UUID> checkedUserGroupUuid = new HashSet<UUID>();
 			for (UserGroup userGroup : userGroups) {
-				checkedUserGroupUuid.add(userGroup.getUuid().toString());
+				checkedUserGroupUuid.add(userGroup.getUuid());
 			}
 
 			for (UserGroup userGroup : userGroups) {
@@ -252,7 +252,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Transactional(readOnly = true)
 	@Override
-	public Set<String> getAllUserGroupUuidsByCurrentUser() throws Exception {
+	public Set<UUID> getAllUserGroupUuidsByCurrentUser() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User principal = (User) auth.getPrincipal();
 		
@@ -261,7 +261,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Transactional(readOnly = true)
 	@Override
-	public Set<String> getAllUserGroupUuidsByUserUuid(UUID userUuid) throws Exception {
+	public Set<UUID> getAllUserGroupUuidsByUserUuid(UUID userUuid) throws Exception {
 	
 		User user = modelService.findOneByUuid(userUuid, User.class);
 		List<UserGroup> userGroups = new ArrayList<UserGroup>();
@@ -273,9 +273,9 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 
-		Set<String> checkedUserGroupUuid = new HashSet<String>();
+		Set<UUID> checkedUserGroupUuid = new HashSet<UUID>();
 		for (UserGroup userGroup : userGroups) {
-			checkedUserGroupUuid.add(userGroup.getUuid().toString());
+			checkedUserGroupUuid.add(userGroup.getUuid());
 		}
 
 		for (UserGroup userGroup : userGroups) {
@@ -286,13 +286,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Transactional(readOnly = true)
-	private void initializeUserGroupUuids(UserGroup userGroup, Set<String> checkedUserGroupUuids) {
+	private void initializeUserGroupUuids(UserGroup userGroup, Set<UUID> checkedUserGroupUuids) {
 
 		Hibernate.initialize(userGroup.getUserGroups());
 
 		for (UserGroup child : userGroup.getUserGroups()) {
-			if (checkedUserGroupUuids.contains(child.getUuid().toString()) == Boolean.FALSE) {
-				checkedUserGroupUuids.add(child.getUuid().toString());
+			if (checkedUserGroupUuids.contains(child.getUuid()) == Boolean.FALSE) {
+				checkedUserGroupUuids.add(child.getUuid());
 
 				if (child.getUserGroups() != null && child.getUserGroups().isEmpty() == Boolean.FALSE) {
 					initializeUserGroupUuids(child, checkedUserGroupUuids);
@@ -429,7 +429,7 @@ public class UserServiceImpl implements UserService {
 			}
 		};
 
-		List<User> entities = modelService.findBySpecificationBySort(specification, null, User.class);
+		List<User> entities = modelService.findBySpecificationBySort(specification, User.class);
 
 		for (int i = 0; i < entities.size(); i++) {
 

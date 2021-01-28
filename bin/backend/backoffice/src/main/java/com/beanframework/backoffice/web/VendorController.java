@@ -19,12 +19,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.VendorWebConstants;
+import com.beanframework.backoffice.VendorWebConstants.VendorPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.core.facade.VendorFacade;
-import com.beanframework.core.facade.VendorFacade.VendorPreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class VendorController extends AbstractController {
 
