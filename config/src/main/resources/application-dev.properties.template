@@ -25,6 +25,8 @@ spring.thymeleaf.cache=false
 # = PLATFORM
 # ===============================
 platform.hibernate.show_sql=true
+platform.import.startup.enabled=true
+platform.import.startup=classpath*:import/*-dev.sql
 
 # ===============================
 # = DATA SOURCE
@@ -71,7 +73,7 @@ spring.quartz.properties.org.quartz.jobStore.misfireThreshold=60000
 spring.quartz.properties.org.quartz.jobStore.class=org.quartz.impl.jdbcjobstore.JobStoreTX
 spring.quartz.properties.org.quartz.jobStore.driverDelegateClass=org.quartz.impl.jdbcjobstore.StdJDBCDelegate
 spring.quartz.properties.org.quartz.jobStore.dataSource=quartzDataSource
-spring.quartz.properties.org.quartz.jobStore.tablePrefix=qrtz_
+spring.quartz.properties.org.quartz.jobStore.tablePrefix=QRTZ_
 
 #============================================================================
 # Configure Quartz ThreadPool  

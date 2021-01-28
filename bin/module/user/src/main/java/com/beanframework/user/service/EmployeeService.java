@@ -2,13 +2,11 @@ package com.beanframework.user.service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.user.EmployeeSession;
 import com.beanframework.user.domain.Employee;
 
@@ -31,8 +29,4 @@ public interface EmployeeService {
 	void expireAllSessionsByUuid(UUID uuid);
 
 	void expireAllSessions();
-
-	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
-
-	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 }

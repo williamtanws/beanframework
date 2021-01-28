@@ -19,10 +19,10 @@ public class DtoTemplateConverter extends AbstractDtoConverter<Template, Templat
 	protected static Logger LOGGER = LoggerFactory.getLogger(DtoTemplateConverter.class);
 
 	@Override
-	public TemplateDto convert(Template source, DtoConverterContext context) throws ConverterException {
+	public TemplateDto convert(Template source) throws ConverterException {
 		try {
 			TemplateDto target = new TemplateDto();
-			populate(source, target, context);
+			populate(source);
 
 			return target;
 		} catch (PopulatorException e) {
@@ -31,10 +31,10 @@ public class DtoTemplateConverter extends AbstractDtoConverter<Template, Templat
 		}
 	}
 
-	public List<TemplateDto> convert(List<Template> sources, DtoConverterContext context) throws ConverterException {
+	public List<TemplateDto> convert(List<Template> sources) throws ConverterException {
 		List<TemplateDto> convertedList = new ArrayList<TemplateDto>();
 		for (Template source : sources) {
-			convertedList.add(convert(source, context));
+			convertedList.add(convert(source));
 		}
 		return convertedList;
 	}

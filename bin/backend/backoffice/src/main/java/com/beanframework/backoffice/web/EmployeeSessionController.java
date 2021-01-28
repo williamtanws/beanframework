@@ -16,10 +16,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
+import com.beanframework.backoffice.EmployeeWebConstants.EmployeeSessionPreAuthorizeEnum;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.facade.EmployeeFacade;
-import com.beanframework.core.facade.EmployeeFacade.EmployeeSessionPreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class EmployeeSessionController {
 

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EnumerationWebConstants;
+import com.beanframework.backoffice.EnumerationWebConstants.EnumPreAuthorizeEnum;
 import com.beanframework.backoffice.data.EnumerationDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -26,7 +27,6 @@ import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.facade.EnumerationFacade;
-import com.beanframework.core.facade.EnumerationFacade.EnumPreAuthorizeEnum;
 import com.beanframework.enumuration.domain.Enumeration;
 
 @RestController
@@ -93,6 +93,6 @@ public class EnumerationResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, enumerationFacade.findHistory(dataTableRequest), enumerationFacade.countHistory(dataTableRequest), "module.enumeration");
+		return historyDataTableResponse(dataTableRequest, enumerationFacade.findHistory(dataTableRequest), enumerationFacade.countHistory(dataTableRequest));
 	}
 }

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -28,7 +27,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 	private ModelService modelService;
 
 	@Override
-	public Menu convert(MenuDto source, EntityConverterContext context) throws ConverterException {
+	public Menu convert(MenuDto source) throws ConverterException {
 
 		try {
 
@@ -49,10 +48,10 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 
 	}
 
-	public List<Menu> convertToEntity(List<MenuDto> sources, EntityConverterContext context) throws ConverterException {
+	public List<Menu> convertToEntity(List<MenuDto> sources) throws ConverterException {
 		List<Menu> convertedList = new ArrayList<Menu>();
 		for (MenuDto source : sources) {
-			convertedList.add(convert(source, context));
+			convertedList.add(convert(source));
 		}
 		return convertedList;
 	}

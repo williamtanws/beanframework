@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmailWebConstants;
+import com.beanframework.backoffice.EmailWebConstants.EmailPreAuthorizeEnum;
 import com.beanframework.backoffice.data.EmailDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -27,7 +28,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.core.facade.EmailFacade;
-import com.beanframework.core.facade.EmailFacade.EmailPreAuthorizeEnum;
 import com.beanframework.email.domain.Email;
 
 @RestController
@@ -91,6 +91,6 @@ public class EmailResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, emailFacade.findHistory(dataTableRequest), emailFacade.countHistory(dataTableRequest), "module.email");
+		return historyDataTableResponse(dataTableRequest, emailFacade.findHistory(dataTableRequest), emailFacade.countHistory(dataTableRequest));
 	}
 }

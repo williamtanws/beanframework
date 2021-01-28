@@ -5,14 +5,22 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.core.converter.dto.DtoEmailConverter;
+import com.beanframework.core.converter.populator.EmailPopulator;
 import com.beanframework.core.data.EmailDto;
 
 @Configuration
 public class EmailDtoConfig {
 
 	@Bean
+	public EmailPopulator emailPopulator() {
+		return new EmailPopulator();
+	}
+
+	@Bean
 	public DtoEmailConverter dtoEmailConverter() {
-		return new DtoEmailConverter();
+		DtoEmailConverter converter = new DtoEmailConverter();
+		converter.addPopulator(emailPopulator());
+		return converter;
 	}
 
 	@Bean

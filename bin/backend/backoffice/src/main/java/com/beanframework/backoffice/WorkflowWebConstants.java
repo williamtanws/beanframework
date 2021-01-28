@@ -20,4 +20,16 @@ public interface WorkflowWebConstants {
 	public interface ModelAttribute {
 		public static final String WORKFLOW_DTO = "workflowDto";
 	}
+	
+	public interface WorkflowPreAuthorizeEnum {
+		public static final String AUTHORITY_READ = "workflow_read";
+		public static final String AUTHORITY_CREATE = "workflow_create";
+		public static final String AUTHORITY_UPDATE = "workflow_update";
+		public static final String AUTHORITY_DELETE = "workflow_delete";
+		
+		public static final String HAS_READ = "hasAuthority('"+AUTHORITY_READ+"')";
+		public static final String HAS_CREATE = "hasAuthority('"+AUTHORITY_CREATE+"')";
+		public static final String HAS_UPDATE = "hasAuthority('"+AUTHORITY_UPDATE+"')";
+		public static final String HAS_DELETE = "hasAuthority('"+AUTHORITY_DELETE+"')";
+	}
 }

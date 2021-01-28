@@ -1,86 +1,92 @@
 package com.beanframework.core.facade;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.ModelService;
-import com.beanframework.core.converter.populator.MenuBasicPopulator;
-import com.beanframework.core.converter.populator.MenuFullPopulator;
+import com.beanframework.core.converter.dto.DtoMenuTreeByCurrentUserConverter;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
 import com.beanframework.menu.specification.MenuSpecification;
-import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserService;
 
 @Component
-public class MenuFacadeImpl implements MenuFacade {
-
-	protected static final Logger LOGGER = LoggerFactory.getLogger(MenuFacadeImpl.class.getName());
-
+public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements MenuFacade {
+	
+	private static final Class<Menu> entityClass = Menu.class;
+	private static final Class<MenuDto> dtoClass = MenuDto.class;
+	
 	@Autowired
-	private ModelService modelService;
-
+	private DtoMenuTreeByCurrentUserConverter dtoMenuTreeByCurrentUserConverter;
+	
 	@Autowired
 	private MenuService menuService;
-
+	
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private MenuFullPopulator menuFullPopulator;
-
-	@Autowired
-	private MenuBasicPopulator menuBasicPopulator;
-
 	@Override
 	public MenuDto findOneByUuid(UUID uuid) throws Exception {
-		Menu entity = modelService.findOneByUuid(uuid, Menu.class);
-		MenuDto dto = modelService.getDto(entity, MenuDto.class, new DtoConverterContext(menuFullPopulator));
-
-		return dto;
+		return findOneByUuid(uuid, entityClass, dtoClass);
 	}
 
 	@Override
 	public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Menu entity = modelService.findOneByProperties(properties, Menu.class);
-		MenuDto dto = modelService.getDto(entity, MenuDto.class, new DtoConverterContext(menuFullPopulator));
-
-		return dto;
+		return findOneProperties(properties, entityClass, dtoClass);
 	}
 
 	@Override
 	public MenuDto create(MenuDto model) throws BusinessException {
-		return save(model);
+		return save(model, entityClass, dtoClass);
 	}
 
 	@Override
 	public MenuDto update(MenuDto model) throws BusinessException {
-		return save(model);
+		return save(model, entityClass, dtoClass);
 	}
 
-	public MenuDto save(MenuDto dto) throws BusinessException {
-		try {
-			Menu entity = modelService.getEntity(dto, Menu.class);
-			entity = modelService.saveEntity(entity, Menu.class);
-
-			return modelService.getDto(entity, MenuDto.class, new DtoConverterContext(menuFullPopulator));
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
+	@Override
+	public void delete(UUID uuid) throws BusinessException {
+		delete(uuid, entityClass);
 	}
 
+	@Override
+	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+		return findPage(dataTableRequest, MenuSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+	}
+
+	@Override
+	public int count() throws Exception {
+		return count(entityClass);
+	}
+
+	@Override
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+		return findHistory(dataTableRequest, entityClass);
+	}
+
+	@Override
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+		return findCountHistory(dataTableRequest, entityClass);
+	}
+
+	@Override
+	public MenuDto createDto() throws Exception {
+		return createDto(entityClass, dtoClass);
+	}
+	
 	@Override
 	public void changePosition(UUID fromUuid, UUID toUuid, int toIndex) throws BusinessException {
 		try {
@@ -91,16 +97,11 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 
 	@Override
-	public void delete(UUID uuid) throws BusinessException {
-		modelService.deleteByUuid(uuid, Menu.class);
-	}
-
-	@Override
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
 
 			List<Menu> entities = menuService.findMenuTree(false);
-			List<MenuDto> dtos = modelService.getDto(entities, MenuDto.class, new DtoConverterContext(menuFullPopulator));
+			List<MenuDto> dtos = modelService.getDtoList(entities, dtoClass);
 
 			return dtos;
 		} catch (Exception e) {
@@ -109,52 +110,21 @@ public class MenuFacadeImpl implements MenuFacade {
 	}
 
 	@Override
-	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Menu> page = modelService.findPage(MenuSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Menu.class);
-
-		List<MenuDto> dtos = modelService.getDto(page.getContent(), MenuDto.class, new DtoConverterContext(menuBasicPopulator));
-		return new PageImpl<MenuDto>(dtos, page.getPageable(), page.getTotalElements());
-	}
-
-	@Override
-	public int count() throws Exception {
-		return modelService.countAll(Menu.class);
-	}
-
-	@Override
-	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<Object[]> revisions = menuService.findHistory(dataTableRequest);
-		for (int i = 0; i < revisions.size(); i++) {
-			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof Menu) {
-
-				entityObject[0] = modelService.getDto(entityObject[0], MenuDto.class, new DtoConverterContext(menuFullPopulator));
-			}
-			revisions.set(i, entityObject);
+	@Transactional(readOnly = true)
+	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
+		
+		Set<UUID> userGroupUuids = userService.getAllUserGroupUuidsByCurrentUser();
+		
+		if(userGroupUuids == null || userGroupUuids.isEmpty()) {
+			return new ArrayList<MenuDto>();
 		}
 
-		return revisions;
-	}
-
-	@Override
-	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
-		return menuService.findCountHistory(dataTableRequest);
-	}
-
-	@Override
-	public MenuDto createDto() throws Exception {
-		Menu menu = modelService.create(Menu.class);
-		return modelService.getDto(menu, MenuDto.class, new DtoConverterContext(menuFullPopulator));
-	}
-
-	@Override
-	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
-		List<Menu> entities = menuService.findMenuTree(true);
-		List<UserGroup> userGroups = userService.getUserGroupsByCurrentUser();
-		entities = menuService.filterMenuByUserGroups(entities, userGroups);
-
-		List<MenuDto> menuDtoTree = modelService.getDto(entities, MenuDto.class, new DtoConverterContext(menuFullPopulator));
-		return menuDtoTree;
+		List<Menu> rootEntity = modelService.findBySpecificationBySort(MenuSpecification.getMenuByUserGroup(null, userGroupUuids), Sort.by(Direction.ASC, Menu.SORT), Menu.class);
+		List<MenuDto> rootDto = new ArrayList<MenuDto>();
+		for (Menu menu : rootEntity) {
+			rootDto.add(dtoMenuTreeByCurrentUserConverter.convert(menu, new MenuDto()));
+		}
+		return rootDto;
+		
 	}
 }

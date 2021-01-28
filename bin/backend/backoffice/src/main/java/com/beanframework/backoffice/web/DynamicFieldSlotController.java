@@ -16,12 +16,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldSlotWebConstants;
+import com.beanframework.backoffice.DynamicFieldSlotWebConstants.DynamicFieldSlotPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.facade.DynamicFieldSlotFacade;
-import com.beanframework.core.facade.DynamicFieldSlotFacade.DynamicFieldSlotPreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class DynamicFieldSlotController extends AbstractController {
 

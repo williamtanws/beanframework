@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldTemplateWebConstants;
+import com.beanframework.backoffice.DynamicFieldTemplateWebConstants.DynamicFieldTemplatePreAuthorizeEnum;
 import com.beanframework.backoffice.data.DynamicFieldDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -27,7 +28,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
 import com.beanframework.core.facade.DynamicFieldTemplateFacade;
-import com.beanframework.core.facade.DynamicFieldTemplateFacade.DynamicFieldTemplatePreAuthorizeEnum;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 
 @RestController
@@ -92,6 +92,6 @@ public class DynamicFieldTemplateResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, dynamicFieldTemplateFacade.findHistory(dataTableRequest), dynamicFieldTemplateFacade.countHistory(dataTableRequest), "module.dynamicfieldtemplate");
+		return historyDataTableResponse(dataTableRequest, dynamicFieldTemplateFacade.findHistory(dataTableRequest), dynamicFieldTemplateFacade.countHistory(dataTableRequest));
 	}
 }

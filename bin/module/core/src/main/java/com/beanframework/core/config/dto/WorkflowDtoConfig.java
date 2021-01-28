@@ -5,14 +5,22 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.core.converter.dto.DtoWorkflowConverter;
+import com.beanframework.core.converter.populator.WorkflowPopulator;
 import com.beanframework.core.data.WorkflowDto;
 
 @Configuration
 public class WorkflowDtoConfig {
 
 	@Bean
+	public WorkflowPopulator workflowPopulator() {
+		return new WorkflowPopulator();
+	}
+
+	@Bean
 	public DtoWorkflowConverter dtoWorkflowConverter() {
-		return new DtoWorkflowConverter();
+		DtoWorkflowConverter converter = new DtoWorkflowConverter();
+		converter.addPopulator(workflowPopulator());
+		return converter;
 	}
 
 	@Bean

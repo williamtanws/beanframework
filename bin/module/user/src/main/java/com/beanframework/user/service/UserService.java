@@ -28,9 +28,9 @@ public interface UserService {
 
 	List<UserGroup> getUserGroupsByCurrentUser() throws Exception;
 
-	Set<String> getAllUserGroupUuidsByCurrentUser() throws Exception;
+	Set<UUID> getAllUserGroupUuidsByCurrentUser() throws Exception;
 
-	Set<String> getAllUserGroupUuidsByUserUuid(UUID uuid) throws Exception;
+	Set<UUID> getAllUserGroupUuidsByUserUuid(UUID uuid) throws Exception;
 
 	Set<String> getAllUserGroupIdsByUserUuid(UUID uuid) throws Exception;
 	

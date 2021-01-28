@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants;
+import com.beanframework.backoffice.LanguageWebConstants.LanguagePreAuthorizeEnum;
 import com.beanframework.backoffice.data.LanguageDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -26,7 +27,6 @@ import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.core.facade.LanguageFacade;
-import com.beanframework.core.facade.LanguageFacade.LanguagePreAuthorizeEnum;
 import com.beanframework.internationalization.domain.Language;
 
 @RestController
@@ -94,6 +94,6 @@ public class LanguageResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, languageFacade.findHistory(dataTableRequest), languageFacade.countHistory(dataTableRequest), "module.language");
+		return historyDataTableResponse(dataTableRequest, languageFacade.findHistory(dataTableRequest), languageFacade.countHistory(dataTableRequest));
 	}
 }

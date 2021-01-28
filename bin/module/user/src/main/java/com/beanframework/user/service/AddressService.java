@@ -1,18 +1,11 @@
 package com.beanframework.user.service;
 
-import java.util.List;
-
-import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.internationalization.domain.Country;
 import com.beanframework.internationalization.domain.Region;
 import com.beanframework.user.domain.Address;
 import com.beanframework.user.domain.User;
 
 public interface AddressService {
-
-	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
-
-	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	void removeOwnerRel(User user) throws Exception;
 

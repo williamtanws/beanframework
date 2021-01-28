@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CronjobWebConstants;
+import com.beanframework.backoffice.CronjobWebConstants.CronjobPreAuthorizeEnum;
 import com.beanframework.backoffice.data.CronjobDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -28,7 +29,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.CronjobFacade;
-import com.beanframework.core.facade.CronjobFacade.CronjobPreAuthorizeEnum;
 import com.beanframework.cronjob.domain.Cronjob;
 
 @RestController
@@ -96,7 +96,7 @@ public class CronjobResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, cronjobFacade.findHistory(dataTableRequest), cronjobFacade.countHistory(dataTableRequest), "module.cronjob");
+		return historyDataTableResponse(dataTableRequest, cronjobFacade.findHistory(dataTableRequest), cronjobFacade.countHistory(dataTableRequest));
 	}
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)

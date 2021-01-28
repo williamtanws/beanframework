@@ -32,14 +32,15 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MediaWebConstants;
+import com.beanframework.backoffice.MediaWebConstants.MediaPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.core.facade.MediaFacade;
-import com.beanframework.core.facade.MediaFacade.MediaPreAuthorizeEnum;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.media.domain.Media;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class MediaController extends AbstractController {
 

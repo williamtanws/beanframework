@@ -252,8 +252,14 @@ public class DataTableRequest {
 			if(request.getParameter(PaginationCriteria.PAGE_NO) != null)
 				this.setStart(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_NO)));
 			
-			if(request.getParameter(PaginationCriteria.PAGE_SIZE) != null)
-				this.setLength(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_SIZE)));
+			if(request.getParameter(PaginationCriteria.PAGE_SIZE) != null) {
+				if(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_SIZE)) > 0) {
+					this.setLength(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_SIZE)));
+				}
+				else {
+					this.setLength(Integer.MAX_VALUE);
+				}
+			}
 			
 			if(request.getParameter(PaginationCriteria.DRAW) != null)
 				this.setDraw(request.getParameter(PaginationCriteria.DRAW));

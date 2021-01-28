@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CompanyWebConstants;
+import com.beanframework.backoffice.CompanyWebConstants.CompanyPreAuthorizeEnum;
 import com.beanframework.backoffice.data.CompanyDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -26,7 +27,6 @@ import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.CompanyDto;
 import com.beanframework.core.facade.CompanyFacade;
-import com.beanframework.core.facade.CompanyFacade.CompanyPreAuthorizeEnum;
 import com.beanframework.user.domain.Company;
 
 @RestController
@@ -92,6 +92,6 @@ public class CompanyResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, companyFacade.findHistory(dataTableRequest), companyFacade.countHistory(dataTableRequest), "module.company");
+		return historyDataTableResponse(dataTableRequest, companyFacade.findHistory(dataTableRequest), companyFacade.countHistory(dataTableRequest));
 	}
 }

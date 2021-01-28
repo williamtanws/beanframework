@@ -63,6 +63,6 @@ public class AuditorResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, auditorFacade.findHistory(dataTableRequest), auditorFacade.countHistory(dataTableRequest), "module.auditor");
+		return historyDataTableResponse(dataTableRequest, auditorFacade.findHistory(dataTableRequest), auditorFacade.countHistory(dataTableRequest));
 	}
 }

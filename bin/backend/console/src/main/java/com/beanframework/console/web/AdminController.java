@@ -20,11 +20,12 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.console.AdminWebConstants;
+import com.beanframework.console.AdminWebConstants.AdminPreAuthorizeEnum;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.core.data.AdminDto;
 import com.beanframework.core.facade.AdminFacade;
-import com.beanframework.core.facade.AdminFacade.AdminPreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class AdminController extends AbstractController {
 

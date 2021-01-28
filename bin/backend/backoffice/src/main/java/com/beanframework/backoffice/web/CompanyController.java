@@ -16,12 +16,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CompanyWebConstants;
+import com.beanframework.backoffice.CompanyWebConstants.CompanyPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CompanyDto;
 import com.beanframework.core.facade.CompanyFacade;
-import com.beanframework.core.facade.CompanyFacade.CompanyPreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class CompanyController extends AbstractController {
 

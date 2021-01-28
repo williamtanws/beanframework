@@ -14,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.beanframework.common.context.DtoConverterContext;
-import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.exception.ConverterException;
@@ -70,6 +68,8 @@ public interface ModelService {
 
 	<T extends Collection> T findBySpecificationBySort(Specification specification, Sort sort, Class modelClass) throws Exception;
 
+	<T extends Collection> T findBySpecificationBySort(Specification specification, Class modelClass) throws Exception;
+
 	<T extends Collection> T findAll(Class modelClass);
 	
 	List<Tuple> search(String qlString);
@@ -77,11 +77,11 @@ public interface ModelService {
 	List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
 			throws Exception;
 
-	int countHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
+	int countHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Class modelClass) throws Exception;
 
 	<T> Page<T> findPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
 
-	<T> T saveEntity(Object model, Class modelClass) throws BusinessException;
+	<T> T saveEntity(Object model) throws BusinessException;
 
 	/**
 	 * Quietly means it skip listener events, mostly used by listener itself.
@@ -117,31 +117,21 @@ public interface ModelService {
 	 */
 	void deleteQuietlyByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
-	<T> T getEntity(Object model, Class modelClass) throws Exception;
+	<T> T getEntity(Object model, Class modelClas) throws Exception;
 	
 	<T> T getEntity(Object model, String typeCode) throws Exception;
 
-	<T> T getEntity(Object model, Class modelClass, EntityConverterContext context) throws Exception;
-	
-	<T> T getEntity(Object model, String typeCode, EntityConverterContext context) throws Exception;
+	<T extends Collection> T getEntityList(Collection model, Class modelClass) throws Exception;
 
-	<T extends Collection> T getEntity(Collection model, Class modelClass) throws Exception;
-
-	<T extends Collection> T getEntity(Collection model, Class modelClass, EntityConverterContext context) throws Exception;
+	<T extends Collection> T getEntityList(Collection model, String typeCode) throws Exception;
 
 	<T> T getDto(Object model, Class modelClass) throws Exception;
 	
 	<T> T getDto(Object model, String typeCode) throws Exception;
 
-	<T> T getDto(Object model, Class modelClass, DtoConverterContext context) throws Exception;
+	<T extends Collection> T getDtoList(Collection models, Class modelClass) throws Exception;
 	
-	<T> T getDto(Object model, String typeCode, DtoConverterContext context) throws Exception;
-
-	<T extends Collection> T getDto(Collection models, Class modelClass) throws Exception;
-
-	<T extends Collection> T getDto(Collection models, Class modelClass, DtoConverterContext context) throws Exception;
-	
-	<T extends Collection> T getDto(Collection models, String typeCode, DtoConverterContext context) throws Exception;
+	<T extends Collection> T getDtoList(Collection models, String typeCode) throws Exception;
 
 	void initDefaults(Object model, Class modelClass) throws Exception;
 
@@ -165,12 +155,12 @@ public interface ModelService {
 
 	void validateInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException;
 
-	void entityConverter(Collection models, EntityConverterContext context, Class modelClass) throws ConverterException;
+	void entityConverter(Collection models, Class modelClass) throws ConverterException;
 
-	<T> T entityConverter(Object model, EntityConverterContext context, String typeCode) throws ConverterException;
+	<T> T entityConverter(Object model, String typeCode) throws ConverterException;
 
-	<T> T dtoConverter(Object model, DtoConverterContext context, String typeCode) throws ConverterException;
+	<T> T dtoConverter(Object model, String typeCode) throws ConverterException;
 
-	<T extends Collection> T dtoConverter(Collection models, DtoConverterContext context, String typeCode) throws ConverterException, InterceptorException;
+	<T extends Collection> T dtoConverter(Collection models, String typeCode) throws ConverterException, InterceptorException;
 
 }

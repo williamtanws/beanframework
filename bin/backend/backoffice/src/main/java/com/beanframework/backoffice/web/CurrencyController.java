@@ -16,12 +16,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CurrencyWebConstants;
+import com.beanframework.backoffice.CurrencyWebConstants.CurrencyPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CurrencyDto;
 import com.beanframework.core.facade.CurrencyFacade;
-import com.beanframework.core.facade.CurrencyFacade.CurrencyPreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class CurrencyController extends AbstractController {
 

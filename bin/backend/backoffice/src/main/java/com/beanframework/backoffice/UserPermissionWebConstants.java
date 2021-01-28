@@ -20,4 +20,16 @@ public interface UserPermissionWebConstants {
 	public interface ModelAttribute {
 		public static final String USERPERMISSION_DTO = "userpermissionDto";
 	}
+	
+	public interface UserPermissionPreAuthorizeEnum {
+		public static final String AUTHORITY_READ = "userpermission_read";
+		public static final String AUTHORITY_CREATE = "userpermission_create";
+		public static final String AUTHORITY_UPDATE = "userpermission_update";
+		public static final String AUTHORITY_DELETE = "userpermission_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
+	}
 }

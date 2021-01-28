@@ -20,12 +20,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmailWebConstants;
+import com.beanframework.backoffice.EmailWebConstants.EmailPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.core.facade.EmailFacade;
-import com.beanframework.core.facade.EmailFacade.EmailPreAuthorizeEnum;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class EmailController extends AbstractController {
 

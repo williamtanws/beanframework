@@ -22,13 +22,13 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.console.AdminWebConstants;
+import com.beanframework.console.AdminWebConstants.AdminPreAuthorizeEnum;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.data.AdminDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.AdminDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.AdminFacade;
-import com.beanframework.core.facade.AdminFacade.AdminPreAuthorizeEnum;
 import com.beanframework.user.domain.Admin;
 
 @RestController
@@ -93,6 +93,6 @@ public class AdminResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, adminFacade.findHistory(dataTableRequest), adminFacade.countHistory(dataTableRequest), "module.admin");
+		return historyDataTableResponse(dataTableRequest, adminFacade.findHistory(dataTableRequest), adminFacade.countHistory(dataTableRequest));
 	}
 }

@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.springframework.cache.annotation.Cacheable;
 
-import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
 
@@ -17,10 +16,6 @@ public interface MenuService {
 
 	@Cacheable(value = CACHE_MENU_TREE, key = "#enabled")
 	List<Menu> findMenuTree(boolean enabled) throws Exception;
-
-	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
-
-	int findCountHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	List<Menu> filterMenuByUserGroups(List<Menu> entities, List<UserGroup> userGroups) throws Exception;
 

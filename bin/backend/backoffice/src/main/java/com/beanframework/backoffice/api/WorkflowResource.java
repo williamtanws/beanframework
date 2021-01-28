@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.WorkflowWebConstants;
+import com.beanframework.backoffice.WorkflowWebConstants.WorkflowPreAuthorizeEnum;
 import com.beanframework.backoffice.data.WorkflowDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -27,7 +28,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.WorkflowDto;
 import com.beanframework.core.facade.WorkflowFacade;
-import com.beanframework.core.facade.WorkflowFacade.WorkflowPreAuthorizeEnum;
 import com.beanframework.workflow.domain.Workflow;
 
 @RestController
@@ -93,6 +93,6 @@ public class WorkflowResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, workflowFacade.findHistory(dataTableRequest), workflowFacade.countHistory(dataTableRequest), "module.workflow");
+		return historyDataTableResponse(dataTableRequest, workflowFacade.findHistory(dataTableRequest), workflowFacade.countHistory(dataTableRequest));
 	}
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.AddressWebConstants;
+import com.beanframework.backoffice.AddressWebConstants.AddressPreAuthorizeEnum;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.data.AddressDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
@@ -26,7 +27,6 @@ import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.AddressDto;
 import com.beanframework.core.facade.AddressFacade;
-import com.beanframework.core.facade.AddressFacade.AddressPreAuthorizeEnum;
 import com.beanframework.user.domain.Address;
 
 @RestController
@@ -92,6 +92,6 @@ public class AddressResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, addressFacade.findHistory(dataTableRequest), addressFacade.countHistory(dataTableRequest), "module.address");
+		return historyDataTableResponse(dataTableRequest, addressFacade.findHistory(dataTableRequest), addressFacade.countHistory(dataTableRequest));
 	}
 }

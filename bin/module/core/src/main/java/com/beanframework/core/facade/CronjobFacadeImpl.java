@@ -8,27 +8,25 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.common.context.DtoConverterContext;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.converter.populator.CronjobBasicPopulator;
-import com.beanframework.core.converter.populator.CronjobFullPopulator;
 import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.cronjob.CronjobConstants;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.cronjob.service.CronjobManagerService;
-import com.beanframework.cronjob.service.CronjobService;
 import com.beanframework.cronjob.specification.CronjobSpecification;
 
 @Component
-public class CronjobFacadeImpl implements CronjobFacade {
+public class CronjobFacadeImpl extends AbstractFacade<Cronjob, CronjobDto> implements CronjobFacade {
+
+	private static final Class<Cronjob> entityClass = Cronjob.class;
+	private static final Class<CronjobDto> dtoClass = CronjobDto.class;
 
 	@Autowired
 	private ModelService modelService;
@@ -39,72 +37,60 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-	@Autowired
-	private CronjobService cronjobService;
-
-	@Autowired
-	private CronjobBasicPopulator cronjobBasicPopulator;
-
-	@Autowired
-	private CronjobFullPopulator cronjobFullPopulator;
-
 	@Override
 	public CronjobDto findOneByUuid(UUID uuid) throws Exception {
-		Cronjob entity = modelService.findOneByUuid(uuid, Cronjob.class);
-
-		return modelService.getDto(entity, CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
+		return findOneByUuid(uuid, entityClass, dtoClass);
 	}
-
+	
 	@Override
 	public CronjobDto findOneProperties(Map<String, Object> properties) throws Exception {
-		Cronjob entity = modelService.findOneByProperties(properties, Cronjob.class);
-
-		return modelService.getDto(entity, CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
+		return findOneProperties(properties, entityClass, dtoClass);
 	}
 
 	@Override
 	public CronjobDto create(CronjobDto model) throws BusinessException {
-		return save(model);
+		return save(model, entityClass, dtoClass);
 	}
 
 	@Override
 	public CronjobDto update(CronjobDto model) throws BusinessException {
-		return save(model);
-	}
-
-	public CronjobDto save(CronjobDto dto) throws BusinessException {
-		try {
-			Cronjob entity = modelService.getEntity(dto, Cronjob.class);
-			entity = modelService.saveEntity(entity, Cronjob.class);
-
-			return modelService.getDto(entity, CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
+		return save(model, entityClass, dtoClass);
 	}
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		modelService.deleteByUuid(uuid, Cronjob.class);
+		delete(uuid, entityClass);
 	}
 
 	@Override
 	public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		Page<Cronjob> page = modelService.findPage(CronjobSpecification.getSpecification(dataTableRequest), dataTableRequest.getPageable(), Cronjob.class);
-
-		List<CronjobDto> dtos = modelService.getDto(page.getContent(), CronjobDto.class, new DtoConverterContext(cronjobBasicPopulator));
-		return new PageImpl<CronjobDto>(dtos, page.getPageable(), page.getTotalElements());
+		return findPage(dataTableRequest, CronjobSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override
 	public int count() throws Exception {
-		return modelService.countAll(Cronjob.class);
+		return count(entityClass);
+	}
+
+	@Override
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+		return findHistory(dataTableRequest, entityClass);
+	}
+
+	@Override
+	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+		return findCountHistory(dataTableRequest, entityClass);
+	}
+	
+	@Override
+	public CronjobDto createDto() throws Exception {
+		return createDto(entityClass, dtoClass);
 	}
 
 	@Override
 	public void trigger(CronjobDto cronjob) throws BusinessException {
 		try {
-			Cronjob updateCronjob = modelService.findOneByUuid(cronjob.getUuid(), Cronjob.class);
+			Cronjob updateCronjob = modelService.findOneByUuid(cronjob.getUuid(), entityClass);
 
 			updateCronjob.setJobTrigger(cronjob.getJobTrigger());
 			updateCronjob.setTriggerStartDate(cronjob.getTriggerStartDate());
@@ -120,7 +106,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 	public CronjobDto addCronjobData(UUID uuid, String name, String value) throws BusinessException {
 
 		try {
-			Cronjob updateCronjob = modelService.findOneByUuid(uuid, Cronjob.class);
+			Cronjob updateCronjob = modelService.findOneByUuid(uuid, entityClass);
 
 			List<CronjobData> datas = updateCronjob.getCronjobDatas();
 
@@ -137,9 +123,9 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 			updateCronjob.getCronjobDatas().add(data);
 
-			updateCronjob = modelService.saveEntity(updateCronjob, Cronjob.class);
+			updateCronjob = modelService.saveEntity(updateCronjob);
 
-			return modelService.getDto(updateCronjob, Cronjob.class, new DtoConverterContext(cronjobFullPopulator));
+			return modelService.getDto(updateCronjob, dtoClass);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -150,14 +136,14 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 		try {
 
-			Cronjob entityCronjob = modelService.findOneByUuid(cronjobUuid, Cronjob.class);
+			Cronjob entityCronjob = modelService.findOneByUuid(cronjobUuid, entityClass);
 
-			CronjobData entityCronjobData = modelService.getEntity(dto, CronjobData.class);
+			CronjobData entityCronjobData = modelService.getEntity(dto, CronjobDataDto.class);
 			entityCronjobData.setCronjob(entityCronjob);
 
 			entityCronjob.getCronjobDatas().add(entityCronjobData);
 
-			modelService.saveEntity(entityCronjobData, CronjobData.class);
+			modelService.saveEntity(entityCronjobData);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -168,7 +154,7 @@ public class CronjobFacadeImpl implements CronjobFacade {
 
 		try {
 
-			Cronjob entityCronjob = modelService.findOneByUuid(cronjobUuid, Cronjob.class);
+			Cronjob entityCronjob = modelService.findOneByUuid(cronjobUuid, entityClass);
 
 			Iterator<CronjobData> cronjobDatas = entityCronjob.getCronjobDatas().iterator();
 			while (cronjobDatas.hasNext()) {
@@ -177,37 +163,10 @@ public class CronjobFacadeImpl implements CronjobFacade {
 				}
 			}
 
-			modelService.saveEntity(entityCronjob, Cronjob.class);
+			modelService.saveEntity(entityCronjob);
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
-	}
-
-	@Override
-	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
-
-		List<Object[]> revisions = cronjobService.findHistory(dataTableRequest);
-		for (int i = 0; i < revisions.size(); i++) {
-			Object[] entityObject = revisions.get(i);
-			if (entityObject[0] instanceof Cronjob) {
-
-				entityObject[0] = modelService.getDto(entityObject[0], CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
-			}
-			revisions.set(i, entityObject);
-		}
-
-		return revisions;
-	}
-
-	@Override
-	public int countHistory(DataTableRequest dataTableRequest) throws Exception {
-		return cronjobService.findCountHistory(dataTableRequest);
-	}
-
-	@Override
-	public CronjobDto createDto() throws Exception {
-		Cronjob cronjob = modelService.create(Cronjob.class);
-		return modelService.getDto(cronjob, CronjobDto.class, new DtoConverterContext(cronjobFullPopulator));
 	}
 
 }

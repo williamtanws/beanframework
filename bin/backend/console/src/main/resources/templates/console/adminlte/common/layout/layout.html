@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE" th:utext="#{module.console}"></title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700}" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" th:href="@{/static/adminlte/plugins/fontawesome-free/css/all.min.css}">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" th:href="@{/static/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css}">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" th:href="@{/static/adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css}">
+  <!-- Toastr -->
+  <link rel="stylesheet" th:href="@{/static/adminlte/plugins/toastr/toastr.min.css}">
+  <!-- Theme style -->
+  <link rel="stylesheet" th:href="@{/static/adminlte/dist/css/adminlte.min.css}">
+</head>
+<body>
+	<div class="wrapper">
+		<div layout:fragment="content"></div>
+	</div>
+	<!-- jQuery -->
+	<script th:src="@{/static/adminlte/plugins/jquery/jquery.min.js}"></script>
+	<!-- Bootstrap 4 -->
+	<script th:src="@{/static/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<!-- SweetAlert2 -->
+	<script th:src="@{/static/adminlte/plugins/sweetalert2/sweetalert2.min.js}"></script>
+	<!-- Toastr -->
+	<script th:src="@{/static/adminlte/plugins/toastr/toastr.min.js}"></script>
+	<!-- AdminLTE App -->
+	<script th:src="@{/static/adminlte/dist/js/adminlte.min.js}"></script>
+	<!-- Bootstrap Validator -->
+	<script th:src="@{/static/adminlte/plugins/jquery-validation/jquery.validate.min.js}"></script>
+	
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+	  $('#changeLanguage').on("change", function() {
+          var locale = $('#changeLanguage option:selected').val();
+          
+          var url = String(window.location.href.replace(/&?locale=([^&]$|[^&]*)/i, ""));
+		  if(window.location.href.indexOf('?') > -1){
+			  url = url + '&locale=' + locale;
+		  }
+		  else{
+			  url = url + '?locale=' + locale;
+		  }
+		  
+		  window.location.href = url;
+   	  });
+	  
+	/*]]>*/
+	</script>
+	<script th:inline="javascript" th:if="${success}">
+		toastr.success(/*[[${success}]]*/);
+	</script>
+	<script th:inline="javascript" th:if="${info}">
+		toastr.info(/*[[${info}]]*/);
+	</script>
+	<script th:inline="javascript" th:if="${error}">
+		toastr.error(/*[[${error}]]*/);
+	</script>
+	<script th:inline="javascript" th:if="${#fields.hasErrors('*')}" th:each="err : ${#fields.errors('*')}" th:utext="${err}+' '">
+		toastr.error(/*[[${err}+' ']]*/);
+	</script>
+	<script th:inline="javascript" th:if="${#fields.hasErrors('global')}" th:each="err : ${#fields.errors('global')}" th:utext="${err}+' '">
+		toastr.error(/*[[${err}+' ']]*/);
+	</script>
+
+	<th:block layout:fragment="js"></th:block>
+</body>
+</html>

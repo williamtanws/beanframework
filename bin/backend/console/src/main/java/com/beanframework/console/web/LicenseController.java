@@ -38,6 +38,9 @@ public class LicenseController extends AbstractController {
 	@Value(LicenseWebConstants.View.LICENSE)
 	private String VIEW_LICENSE;
 
+	@Value(ConsoleWebConstants.Path.CONSOLE)
+	private String PATH_CONSOLE;
+
 	public boolean isLicenseAccepted() throws Exception {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
@@ -105,7 +108,7 @@ public class LicenseController extends AbstractController {
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_LICENSE);
+		redirectView.setUrl(PATH_CONSOLE);
 		return redirectView;
 	}
 }

@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beanframework.cms.domain.Site;
-import com.beanframework.common.context.EntityConverterContext;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -20,7 +19,7 @@ public class EntitySiteConverter implements EntityConverter<SiteDto, Site> {
 	private ModelService modelService;
 
 	@Override
-	public Site convert(SiteDto source, EntityConverterContext context) throws ConverterException {
+	public Site convert(SiteDto source) throws ConverterException {
 
 		try {
 

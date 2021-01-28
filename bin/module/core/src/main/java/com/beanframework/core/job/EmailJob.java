@@ -95,7 +95,7 @@ public class EmailJob implements Job {
 				// Change pending email to processing email
 				for (int i = 0; i < pendingEmails.size(); i++) {
 					pendingEmails.get(i).setStatus(Status.PROCESSING);
-					modelService.saveEntity(pendingEmails.get(i), Email.class);
+					modelService.saveEntity(pendingEmails.get(i));
 				}
 				modelService.flush();
 			}
@@ -142,14 +142,14 @@ public class EmailJob implements Job {
 						email.setStatus(Status.SENT);
 						email.setResult(Result.SUCCESS);
 						email.setMessage(null);
-						modelService.saveEntity(email, Email.class);
+						modelService.saveEntity(email);
 
 						sentEmail++;
 					} catch (Exception e) {
 						email.setStatus(Status.FAILED);
 						email.setResult(Result.ERROR);
 						email.setMessage(e.toString());
-						modelService.saveEntity(email, Email.class);
+						modelService.saveEntity(email);
 
 						e.printStackTrace();
 						LOGGER.error(e.toString(), e);

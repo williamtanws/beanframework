@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.backoffice.FilemanagerWebConstants;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class FilemanagerController {
 

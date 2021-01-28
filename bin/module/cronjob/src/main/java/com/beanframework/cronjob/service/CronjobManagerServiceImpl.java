@@ -64,7 +64,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 			cronjob.setStatus(CronjobEnum.Status.ABORTED);
 			cronjob.setResult(null);
 
-			modelService.saveEntity(cronjob, Cronjob.class);
+			modelService.saveEntity(cronjob);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		updateCronjob.setLastStartExecutedDate(null);
 		updateCronjob.setLastFinishExecutedDate(null);
 
-		modelService.saveEntity(updateCronjob, Cronjob.class);
+		modelService.saveEntity(updateCronjob);
 	}
 
 	@Override

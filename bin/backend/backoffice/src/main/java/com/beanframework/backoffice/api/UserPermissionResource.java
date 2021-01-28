@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants;
+import com.beanframework.backoffice.UserPermissionWebConstants.UserPermissionPreAuthorizeEnum;
 import com.beanframework.backoffice.data.UserPermissionDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -27,7 +28,6 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.facade.UserPermissionFacade;
-import com.beanframework.core.facade.UserPermissionFacade.UserPermissionPreAuthorizeEnum;
 import com.beanframework.user.domain.UserPermission;
 
 @RestController
@@ -94,6 +94,6 @@ public class UserPermissionResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, userPermissionFacade.findHistory(dataTableRequest), userPermissionFacade.countHistory(dataTableRequest), "module.userpermission");
+		return historyDataTableResponse(dataTableRequest, userPermissionFacade.findHistory(dataTableRequest), userPermissionFacade.countHistory(dataTableRequest));
 	}
 }

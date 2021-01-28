@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CommentWebConstants;
+import com.beanframework.backoffice.CommentWebConstants.CommentPreAuthorizeEnum;
 import com.beanframework.backoffice.data.CommentDataTableResponseData;
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.data.DataTableRequest;
@@ -29,7 +30,6 @@ import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.facade.CommentFacade;
-import com.beanframework.core.facade.CommentFacade.CommentPreAuthorizeEnum;
 
 @RestController
 public class CommentResource extends AbstractResource {
@@ -107,6 +107,6 @@ public class CommentResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, commentFacade.findHistory(dataTableRequest), commentFacade.countHistory(dataTableRequest), "module.comment");
+		return historyDataTableResponse(dataTableRequest, commentFacade.findHistory(dataTableRequest), commentFacade.countHistory(dataTableRequest));
 	}
 }

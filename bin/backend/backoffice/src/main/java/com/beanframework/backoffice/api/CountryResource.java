@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CountryWebConstants;
+import com.beanframework.backoffice.CountryWebConstants.CountryPreAuthorizeEnum;
 import com.beanframework.backoffice.data.CountryDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -26,7 +27,6 @@ import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.CountryDto;
 import com.beanframework.core.facade.CountryFacade;
-import com.beanframework.core.facade.CountryFacade.CountryPreAuthorizeEnum;
 import com.beanframework.internationalization.domain.Country;
 
 @RestController
@@ -93,6 +93,6 @@ public class CountryResource extends AbstractResource {
 		dataTableRequest.prepareDataTableRequest(request);
 		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, countryFacade.findHistory(dataTableRequest), countryFacade.countHistory(dataTableRequest), "module.country");
+		return historyDataTableResponse(dataTableRequest, countryFacade.findHistory(dataTableRequest), countryFacade.countHistory(dataTableRequest));
 	}
 }

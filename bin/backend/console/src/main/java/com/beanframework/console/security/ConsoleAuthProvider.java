@@ -22,9 +22,9 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.AdminWebConstants;
+import com.beanframework.console.AdminWebConstants.AdminPreAuthorizeEnum;
+import com.beanframework.console.ConfigurationWebConstants.ConfigurationPreAuthorizeEnum;
 import com.beanframework.console.ConsoleWebConstants;
-import com.beanframework.core.facade.AdminFacade.AdminPreAuthorizeEnum;
-import com.beanframework.core.facade.ConfigurationFacade.ConfigurationPreAuthorizeEnum;
 import com.beanframework.user.domain.Admin;
 import com.beanframework.user.service.AdminService;
 

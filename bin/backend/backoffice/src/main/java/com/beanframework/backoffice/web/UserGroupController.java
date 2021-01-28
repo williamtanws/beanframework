@@ -20,16 +20,17 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserGroupWebConstants;
+import com.beanframework.backoffice.UserGroupWebConstants.UserGroupPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.core.facade.UserGroupFacade;
-import com.beanframework.core.facade.UserGroupFacade.UserGroupPreAuthorizeEnum;
 import com.beanframework.core.facade.UserPermissionFacade;
 import com.beanframework.core.facade.UserRightFacade;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class UserGroupController extends AbstractController {
 

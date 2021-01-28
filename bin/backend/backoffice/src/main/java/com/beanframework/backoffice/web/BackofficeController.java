@@ -1,6 +1,7 @@
 package com.beanframework.backoffice.web;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class BackofficeController {
 		return VIEW_BACKOFFICE_LOGIN;
 	}
 
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping(BackofficeWebConstants.Path.DASHBOARD)
 	public String dashboard() {
 		return VIEW_BACKOFFICE_DASHBOARD;
