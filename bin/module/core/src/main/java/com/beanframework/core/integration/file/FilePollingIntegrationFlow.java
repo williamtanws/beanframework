@@ -86,7 +86,7 @@ public class FilePollingIntegrationFlow {
 	}
 
 	@Bean
-	public TaskExecutor taskExecutor(@Value("${inbound.file.poller.thread.pool.size}") int poolSize) {
+	public TaskExecutor defaultTaskExecutor(@Value("${inbound.file.poller.thread.pool.size}") int poolSize) {
 		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
 		taskExecutor.setCorePoolSize(poolSize);
 		return taskExecutor;

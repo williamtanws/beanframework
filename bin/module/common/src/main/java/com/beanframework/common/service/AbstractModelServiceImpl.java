@@ -49,7 +49,7 @@ import com.beanframework.common.interceptor.PrepareInterceptor;
 import com.beanframework.common.interceptor.RemoveInterceptor;
 import com.beanframework.common.interceptor.ValidateInterceptor;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
 @Service
 @Transactional
 public abstract class AbstractModelServiceImpl implements ModelService {

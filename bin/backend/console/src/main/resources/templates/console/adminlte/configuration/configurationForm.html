@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{${@environment.getProperty('layout.console')}}">
+
 <head>
 <title th:utext="#{module.configuration}"></title>
-
-<!-- DataTables -->
-<link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
-<link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
-<link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
 </head>
+
 <body>
 	<th:block layout:fragment="content">
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.configuration')}" method="post" th:object="${configurationDto}">
+		<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.configuration')}}" method="post" th:object="${configurationDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}" />
 			<input type="hidden" name="update" th:if="*{uuid != null}" />
 			<input type="hidden" name="uuid" th:value="*{uuid}" th:if="*{uuid != null}" />
+
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-form-delete" th:if="*{uuid != null}">
+							<i class="fas fa-trash-alt"></i>
+						</button>
+					</div>
+					<!-- /.col -->
+					<div class="col-sm-6">
+						<div class="float-sm-right">
+							<button type="submit" class="btn btn-primary" th:text="#{module.common.save}"></button>
+						</div>
+					</div>
+					<!-- /.col -->
+				</div>
+			</div>
 			<div class="card card-primary card-outline card-outline-tabs">
 				<div class="card-header p-0 border-bottom-0">
 					<ul class="nav nav-tabs" id="custom-tabs-tab" role="tablist">
@@ -52,195 +66,91 @@
 
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
-							<div class="card-body">
-								<table id="historyDataTable" class="table table-bordered table-striped">
-									<thead>
-										<tr>
-											<th th:text="#{module.history.revisionDate}" class="text-center" style="width: 108px;"></th>
-											<th th:text="#{module.history.revisionType}" class="text-center" style="width: 100px;"></th>
-											<th th:text="#{module.history.propertiesChanged}" class="text-center"></th>
-											<th th:text="#{module.history.user}" class="text-center"></th>
-										</tr>
-									</thead>
-								</table>
-							</div>
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label th:text="#{module.backoffice.uuid}"></label>
-										<span>:</span>
-										<span class="text-block" th:text="*{uuid}"></span>
-									</div>
-								</div>
-							</div>
-							<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label th:text="#{module.backoffice.lastModifiedDate}"></label>
-										<span>:</span>
-										<span class="text-block" th:text="*{lastModifiedDate != null} ? *{#dates.format(lastModifiedDate, ' dd MMMM yyyy, hh:mma')}"></span>
-									</div>
-									<div class="form-group">
-										<label th:text="#{module.backoffice.lastModifiedBy}"></label>
-										<span>:</span>
-										<th:block th:if="*{lastModifiedBy == null}">
-											<span class="text-block" th:text="#{module.backoffice.system}"></span>
-										</th:block>
-										<th:block th:if="*{lastModifiedBy != null}">
-											<span sec:authorize="!hasAuthority('employee_read')" class="text-block" th:text="*{lastModifiedBy.name}"></span>
-											<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=*{lastModifiedBy.uuid})}+'#tab_general'" th:text="*{lastModifiedBy.name}" target="_blank"></a>
-										</th:block>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label th:text="#{module.backoffice.createdDate}"></label>
-										<span>:</span>
-										<span class="text-block" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy, hh:mma')}"></span>
-									</div>
-									<div class="form-group">
-										<label th:text="#{module.backoffice.createdBy}"></label>
-										<span>:</span>
-										<th:block th:if="*{createdBy == null}">
-											<span class="text-block" th:text="#{module.backoffice.system}"></span>
-										</th:block>
-										<th:block th:if="*{createdBy != null}">
-											<span sec:authorize="!hasAuthority('employee_read')" class="text-block" th:text="*{createdBy.name}"></span>
-											<a sec:authorize="hasAuthority('employee_read')" th:href="@{${@environment.getProperty('path.employee')}(uuid=*{createdBy.uuid})}+'#tab_general'" th:text="*{createdBy.name}" target="_blank"></a>
-										</th:block>
-									</div>
-								</div>
-							</div>
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
 						</div>
 					</div>
 				</div>
 				<!-- /.card -->
 			</div>
 		</form>
+
+		<div class="modal fade" th:id="'modal-form-delete'">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" th:text="#{module.backoffice.delete.confirm}"></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p th:utext="#{module.backoffice.delete.confirm.info}"></p>
+					</div>
+					<form th:action="@{${@environment.getProperty('path.configuration.form')}}" method="post">
+						<div class="modal-footer justify-content-between">
+							<input type="hidden" name="delete" />
+							<input type="hidden" name="uuid" th:value="${configurationDto.uuid}" id="modal-form-delete-uuid" />
+							<button type="button" class="btn btn-default" data-dismiss="modal" th:text="'  '+#{module.backoffice.no}+'  '"></button>
+							<button type="submit" class="btn btn-danger" th:text="#{module.backoffice.delete}"></button>
+						</div>
+					</form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
 	</th:block>
 	<th:block layout:fragment="js">
-		<!-- DataTables  & Plugins -->
-		<script th:src="@{/static/adminlte/plugins/datatables/jquery.dataTables.min.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/jszip/jszip.min.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/pdfmake/pdfmake.min.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/pdfmake/vfs_fonts.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
-		<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 
 		<script th:inline="javascript">
-		    /*<![CDATA[*/
-		
-		$(document).ready(function() {
-		    $('#historyDataTable').DataTable( {
-		    		"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-			    	"responsive" : true,
-					'pageLength'  : 10,
-		    	    'paging'      : true,
-		    	    'lengthChange': true,
-		    	    'searching'   : false,
-		    	    'ordering'    : true,
-		    	    'info'        : true,
-		    	    'autoWidth'   : false,
-		    	    'processing': true,
-		    	    'serverSide': true,
-		    	    'searchDelay': 1000,
-			        'bStateSave': false,
-					'ajax': {
-	                    'url': /*[[@{${@environment.getProperty('path.api.configuration.history')}(uuid=${configurationDto.uuid})}]]*/,
-	                    'cache': false,
-	                    'async': false
-	                 },
-			        "columns": [
-			            { "data": "revisionDate" },
-			            { "data": "revisionType" },
-			            { "data": "entity" },
-			            { "data": "entity" }
-			        ],
-			        "columnDefs": [
-		                  {
-		                      "targets": 0,
-		                      "render": function ( data, type, row ) {
-		                          return row.revisionDate;
-		                      }
-		                  },
-		                  {
-		                      "targets": 1,
-		                      "render": function ( data, type, row ) {
-		                          return row.revisionType;
-		                      }
-		                  },
-		                  {
-		                      "targets": 2,
-		                      "render": function ( data, type, row ) {
-		                    	  var message = "";
-		                    	  $.each( row.propertiesChanged, function( index, property ) {
-		                    		  
-		                    		  var value = row.entity[property];
-		                    		  if(value instanceof Array){
-		                    			  var newValue = "";
-		                    			  for (i = 0; i < value.length; i++) { 
-		                    				  if(i > 0){
-		                    					  newValue += ', ';
-		                    				  }
-		                    				  if(value[i].id == null){
-			                    				  newValue += value[i].uuid;
-		                    				  }
-		                    				  else{
-			                    				  newValue += value[i].id;
-		                    				  }
-		                    			  }
-		                    			  value = newValue;
-		                    		  }
-		                    		  else if(Object.prototype.toString.call(value) === '[object Object]'){
-		                    			  if(value.id == null){
-			                    			  value = value.uuid;
-		                    			  }
-		                    			  else{
-			                    			  value = value.id;
-		                    			  }
-		                    		  }
-		                    		  
-		                    		  if(index != 0){
-		                    			  message = message + "<br>";
-		                    		  }
-		                    		  
-		                    		  message = message + " [" + property + "] <span class='fa fa-arrow-right'></span> " + value;	
-		                    	  });
-		                    	  if(message === ''){
-		                    		  message = message + " [id] <span class='fa fa-arrow-right'></span> " + row.entity['id'] + "<br>";	
-		                    		  message = message + " [value] <span class='fa fa-arrow-right'></span> " + row.entity['value'];	
-		                    	  }
-		                          return message;
-		                      }
-		                  },
-		                  {
-		                      "targets": 3,
-		                      "render": function ( data, type, row ) {
-		                    	  if(row.entity.lastModifiedBy){
-		                    		  return row.entity.lastModifiedBy.name + ' ['+row.entity.lastModifiedBy.id+']';
-		                    	  }
-		                    	  else if(row.entity.createdBy){
-		                    		  return row.entity.createdBy.name + ' ['+row.entity.createdBy.id+']';
-		                    	  }
-		                    	  else{
-			                          return 'System';
-		                    	  }
-		                      }
-		                  }
-		              ],
-			        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-			    }).buttons().container().appendTo('#mainDataTable_wrapper .col-md-6:eq(0)');
+			/*<![CDATA[*/
+				
+			$(document).ready(function () {
+				$('#form-save').validate(
+					{
+						rules: {
+							id: {
+								required: true,
+								remote: {
+									url: /*[[@{${@environment.getProperty('path.api.configuration.checkid')}}]]*/ ,
+									type: "get",
+									data: {
+										uuid: $('#form-save input[name=uuid]').val(),
+										id: function () {
+											return $("#form-save input[name='id']").val();
+										}
+									}
+								}
+							}
+						},
+						messages: {
+							id: {
+								required: /*[[#{module.common.id.required}]]*/,
+			                    remote: /*[[#{module.common.id.exists}]]*/
+							}
+						},
+						errorElement: 'span',
+						errorPlacement: function (error, element) {
+							error.addClass('invalid-feedback');
+							element.closest('.form-group').append(error);
+						},
+						highlight: function (element, errorClass, validClass) {
+							$(element).addClass('is-invalid');
+						},
+						unhighlight: function (element, errorClass, validClass) {
+							$(element).removeClass('is-invalid');
+						}
+					});
 			});
+			
 		    /*]]>*/
 		</script>
+		<th:block th:if="${configurationDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.configuration.page.history')}(uuid=${configurationDto.uuid})})}"></th:block>
 	</th:block>
 </body>
+
 </html>

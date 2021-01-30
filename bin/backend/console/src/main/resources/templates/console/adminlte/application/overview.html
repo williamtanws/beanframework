@@ -78,7 +78,7 @@
 							<span class="info-box-icon bg-danger elevation-1"><i class="fas fa-compact-disc"></i></span>
 
 							<div class="info-box-content">
-								<span class="info-box-text">Disk Used</span> <span class="info-box-number"> <span id="healthDiskspaceLoad"></span> <small>%</small></span>
+								<span class="info-box-text">Disk Space Used</span> <span class="info-box-number"> <span id="healthDiskspaceLoad"></span> <small>%</small></span>
 							</div>
 							<!-- /.info-box-content -->
 						</div>
@@ -95,11 +95,11 @@
 							</div>
 							<div class="card-body">
 								<dl class="row">
-									<dt class="col-sm-3" th:text="#{module.console.application.name}"></dt>
+									<dt class="col-sm-3" th:text="'Name'"></dt>
 									<dd class="col-sm-9" id="appName" th:text="@{${@environment.getProperty('info.app.name')}}"></dd>
-									<dt class="col-sm-3" th:text="#{module.console.application.description}"></dt>
+									<dt class="col-sm-3" th:text="'Description'"></dt>
 									<dd class="col-sm-9" id="appDescription" th:text="@{${@environment.getProperty('info.app.description')}}"></dd>
-									<dt class="col-sm-3" th:text="#{module.console.application.startup}"></dt>
+									<dt class="col-sm-3" th:text="'Startup'"></dt>
 									<dd class="col-sm-9" id="metadataApplicationStartup"></dd>
 									<dt class="col-sm-3" th:text="'PID'"></dt>
 									<dd class="col-sm-9" th:text="${pid}"></dd>
@@ -178,7 +178,7 @@
 									<dt class=col-sm-3 th:text="'Instance'"></dt>
 									<dd class="col-sm-9" id="healthStatus"></dd>
 
-									<dt class="col-sm-3" th:text="'Diskspace'"></dt>
+									<dt class="col-sm-3" th:text="'Disk Space'"></dt>
 									<dd class="col-sm-9">
 										Status: <span class="text-block" id="healthDiskspaceStatus"></span>
 									</dd>
@@ -190,6 +190,19 @@
 									</dd>
 									<dd class="col-sm-9 offset-sm-3">
 										Threshold: <span class="text-block" id="healthDiskspaceThreshold"></span>
+									</dd>
+									
+									<dt class="col-sm-3" th:text="'Mail'"></dt>
+									<dd class="col-sm-9">
+										Status: <span class="text-block" id="healthMailStatus"></span>
+									</dd>
+									<dd class="col-sm-9 offset-sm-3">
+										Location: <span class="text-block" id="healthMailLocation"></span>
+									</dd>
+									
+									<dt class="col-sm-3" th:text="'Ping'"></dt>
+									<dd class="col-sm-9">
+										Status: <span class="text-block" id="healthPingStatus"></span>
 									</dd>
 								</dl>
 							</div>
@@ -245,7 +258,10 @@
 			    $.getJSON(actuatorPath + '/health',
 			        function(json) {
 			            var status = json['status'];
-			            var details = json['details'];
+			            var components = json['components'];
+			            var diskSpace = components.diskSpace;
+			            var mail = components.mail;
+			            var ping = components.ping;
 			
 			            if (status == 'UP') {
 			                $('#healthStatus').html('Status: <span class="text-green">' + status + '</span>');
@@ -253,18 +269,30 @@
 			                $('#healthStatus').html('Status: <span class="text-red">' + status + '</span>');
 			            }
 			
-			            if (details.diskSpace.status == 'UP') {
-			                $('#healthDiskspaceStatus').html('<span class="text-green">' + details.diskSpace.status + '</span>');
+			            if (diskSpace.status == 'UP') {
+			                $('#healthDiskspaceStatus').html('<span class="text-green">' + diskSpace.status + '</span>');
 			            } else {
-			                $('#healthDiskspaceStatus').html('<span class="text-red">' + details.diskSpace.status + '</span>');
+			                $('#healthDiskspaceStatus').html('<span class="text-red">' + diskSpace.status + '</span>');
 			            }
-			            $('#healthDiskspaceTotal').text(humanReadable(details.diskSpace.details.total));
-			            $('#healthDiskspaceFree').text(humanReadable(details.diskSpace.details.free));
-			            $('#healthDiskspaceThreshold').text(humanReadable(details.diskSpace.details.threshold));
+			            $('#healthDiskspaceTotal').text(humanReadable(diskSpace.details.total));
+			            $('#healthDiskspaceFree').text(humanReadable(diskSpace.details.free));
+			            $('#healthDiskspaceThreshold').text(humanReadable(diskSpace.details.threshold));
 			            
-			            var diskUsed = details.diskSpace.details.total - details.diskSpace.details.free;
+			            var diskUsed = diskSpace.details.total - diskSpace.details.free;
+					    $("#healthDiskspaceLoad").text(round((diskUsed / diskSpace.details.total) * 100));
+					    
+					    if (mail.status == 'UP') {
+			                $('#healthMailStatus').html('<span class="text-green">' + mail.status + '</span>');
+			            } else {
+			                $('#healthMailStatus').html('<span class="text-red">' + mail.status + '</span>');
+			            }
+			            $('#healthMailLocation').text(mail.details.location);
 			            
-					    $("#healthDiskspaceLoad").text(round((diskUsed / details.diskSpace.details.total) * 100));
+			            if (ping.status == 'UP') {
+			                $('#healthPingStatus').html('<span class="text-green">' + ping.status + '</span>');
+			            } else {
+			                $('#healthPingStatus').html('<span class="text-red">' + ping.status + '</span>');
+			            }
 
 			        });
 			}
