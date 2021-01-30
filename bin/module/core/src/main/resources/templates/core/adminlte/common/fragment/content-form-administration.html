@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<th:block th:fragment="form">
+		<dl class="row">
+			<dt class="col-sm-1" th:text="#{module.backoffice.uuid}"></dt>
+			<dd class="col-sm-11" th:text="*{uuid}"></dd>
+		</dl>
+		<dl class="row">
+			<dt class="col-sm-2" th:text="#{module.backoffice.lastModifiedDate}"></dt>
+			<dd class="col-sm-4" th:text="*{lastModifiedDate != null} ? *{#dates.format(lastModifiedDate, ' dd MMMM yyyy, hh:mma')}"></dd>
+			<dt class="col-sm-2" th:text="#{module.backoffice.lastModifiedBy}"></dt>
+			<dd class="col-sm-4" th:text="*{lastModifiedBy ==  null ? '' : '['+lastModifiedBy.id+'] '+lastModifiedBy.name}"></dd>
+			<dt class="col-sm-2" th:text="#{module.backoffice.createdDate}"></dt>
+			<dd class="col-sm-4" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy, hh:mma')}"></dd>
+			<dt class="col-sm-2" th:text="#{module.backoffice.createdBy}"></dt>
+			<dd class="col-sm-4" th:text="*{createdBy ==  null ? '' : '['+createdBy.id+'] '+createdBy.name}"></dd>
+		</dl>
+	</th:block>
+</body>
+</html>

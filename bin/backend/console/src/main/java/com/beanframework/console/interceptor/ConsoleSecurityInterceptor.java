@@ -22,6 +22,7 @@ import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.LicenseWebConstants;
 import com.beanframework.user.domain.Admin;
 
+@SuppressWarnings("deprecation")
 public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(ConsoleSecurityInterceptor.class);

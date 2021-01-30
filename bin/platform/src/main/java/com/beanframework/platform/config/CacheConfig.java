@@ -1,7 +1,7 @@
 package com.beanframework.platform.config;
 
 import org.ehcache.core.spi.service.StatisticsService;
-import org.ehcache.impl.internal.statistics.DefaultStatisticsService;
+import org.ehcache.core.statistics.DefaultStatisticsService;
 import org.hibernate.cache.jcache.ConfigSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.cache.CacheManager;

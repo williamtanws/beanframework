@@ -23,6 +23,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.internationalization.domain.Language;
 import com.beanframework.user.domain.Employee;
 
+@SuppressWarnings("deprecation")
 public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 
 	protected static final Logger logger = LoggerFactory.getLogger(BackofficeSecurityInterceptor.class);

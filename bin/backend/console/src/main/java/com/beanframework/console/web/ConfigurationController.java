@@ -30,57 +30,47 @@ public class ConfigurationController extends AbstractController {
 
 	@Autowired
 	private ConfigurationFacade configurationFacade;
+	
+	@Value(ConfigurationWebConstants.Path.CONFIGURATION_PAGE)
+	private String PATH_CONFIGURATION_PAGE;
+	
+	@Value(ConfigurationWebConstants.Path.CONFIGURATION_FORM)
+	private String PATH_CONFIGURATION_FORM;
 
-	@Value(ConfigurationWebConstants.Path.CONFIGURATION)
-	private String PATH_CONFIGURATION;
-
-	@Value(ConfigurationWebConstants.View.LIST)
-	private String VIEW_CONFIGURATION_LIST;
+	@Value(ConfigurationWebConstants.View.PAGE)
+	private String VIEW_CONFIGURATION_PAGE;
 
 	@Value(ConfigurationWebConstants.View.FORM)
 	private String VIEW_CONFIGURATION_FORM;
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
-	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION)
+	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_PAGE)
 	public String list(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
-		model.addAttribute("create", false);
-
-		if (configurationDto.getUuid() != null) {
-
-			ConfigurationDto existsDto = configurationFacade.findOneByUuid(configurationDto.getUuid());
-
-			if (existsDto != null) {
-
-				model.addAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO, existsDto);
-				return VIEW_CONFIGURATION_FORM;
-			} else {
-				configurationDto.setUuid(null);
-				addErrorMessage(model, ConsoleWebConstants.Locale.RECORD_UUID_NOT_FOUND);
-			}
-		}
-
-		return VIEW_CONFIGURATION_LIST;
+		return VIEW_CONFIGURATION_PAGE;
 	}
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_CREATE)
-	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "create")
+	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM)
 	public String createView(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model) throws Exception {
 
-		configurationDto = configurationFacade.createDto();
+		if (configurationDto.getUuid() != null) {
+			configurationDto = configurationFacade.findOneByUuid(configurationDto.getUuid());
+		} else {
+			configurationDto = configurationFacade.createDto();
+		}
 		model.addAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO, configurationDto);
-		model.addAttribute("create", true);
 
 		return VIEW_CONFIGURATION_FORM;
 	}
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_CREATE)
-	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "create")
+	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM, params = "create")
 	public RedirectView create(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (configurationDto.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
 		} else {
 			try {
 				configurationDto = configurationFacade.create(configurationDto);
@@ -95,17 +85,17 @@ public class ConfigurationController extends AbstractController {
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_CONFIGURATION);
+		redirectView.setUrl(PATH_CONFIGURATION_FORM);
 		return redirectView;
 	}
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_UPDATE)
-	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "update")
+	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM, params = "update")
 	public RedirectView update(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (configurationDto.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, "Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
 			try {
 				configurationDto = configurationFacade.update(configurationDto);
@@ -120,27 +110,30 @@ public class ConfigurationController extends AbstractController {
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_CONFIGURATION);
+		redirectView.setUrl(PATH_CONFIGURATION_FORM);
 		return redirectView;
 	}
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION, params = "delete")
+	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM, params = "delete")
 	public RedirectView delete(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		try {
-			configurationFacade.delete(configurationDto.getUuid());
+		if (configurationDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, "Delete record required existing UUID.");
+		} else {
+			try {
+				configurationFacade.delete(configurationDto.getUuid());
 
-			addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.DELETE_SUCCESS);
-		} catch (BusinessException e) {
-			addErrorMessage(ConfigurationDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO, configurationDto);
+				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.DELETE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(ConfigurationDto.class, e.getMessage(), bindingResult, redirectAttributes);
+			}
 		}
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_CONFIGURATION);
+		redirectView.setUrl(PATH_CONFIGURATION_FORM);
 		return redirectView;
 
 	}

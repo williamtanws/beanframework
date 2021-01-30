@@ -58,7 +58,7 @@ public class LanguageResource extends AbstractResource {
 	}
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = LanguageWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = LanguageWebConstants.Path.Api.LIST, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<LanguageDataTableResponseData> page(HttpServletRequest request) throws Exception {
 

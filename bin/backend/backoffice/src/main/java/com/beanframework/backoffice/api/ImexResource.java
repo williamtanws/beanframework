@@ -59,7 +59,7 @@ public class ImexResource extends AbstractResource {
 	}
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = ImexWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = ImexWebConstants.Path.Api.LIST, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 

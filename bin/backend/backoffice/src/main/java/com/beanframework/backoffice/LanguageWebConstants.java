@@ -6,7 +6,7 @@ public interface LanguageWebConstants {
 
 		public interface Api {
 			public static final String CHECKID = "${path.api.language.checkid}";
-			public static final String PAGE = "${path.api.language.page}";
+			public static final String LIST = "${path.api.language.page}";
 			public static final String HISTORY = "${path.api.language.history}";
 		}
 

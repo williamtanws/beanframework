@@ -38,7 +38,7 @@ public class ConfigurationResource extends AbstractResource {
 	private ConfigurationFacade configurationFacade;
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
-	@GetMapping(ConfigurationWebConstants.Path.Api.CHECKID)
+	@GetMapping(value = ConfigurationWebConstants.Path.Api.CONFIGURATION_CHECKID)
 	public boolean checkIdExists(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(ConsoleWebConstants.Param.ID).toString();
@@ -60,7 +60,7 @@ public class ConfigurationResource extends AbstractResource {
 	}
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = ConfigurationWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = ConfigurationWebConstants.Path.Api.CONFIGURATION_PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -86,7 +86,7 @@ public class ConfigurationResource extends AbstractResource {
 	}
 
 	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = ConfigurationWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = ConfigurationWebConstants.Path.Api.CONFIGURATION_PAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request, @RequestParam Map<String, Object> requestParams) throws Exception {
 

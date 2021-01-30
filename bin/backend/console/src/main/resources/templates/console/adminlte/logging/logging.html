@@ -1,42 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="~{${@environment.getProperty('layout.console')}}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{${@environment.getProperty('layout.console')}}">
 <head>
 <title th:utext="#{module.logging}"></title>
+<!-- DataTables -->
+<link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+<link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+<link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<section class="content">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="box box-default">
-						<div class="box-header with-border">
-							<h3 class="box-title" th:text="#{module.logging}"></h3>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0" th:text="#{module.logging}"></h1>
 						</div>
-						<div class="box-body">
-							<table id="loggersTable" class="table table-hover">
-								<thead>
-									<tr>
-										<th th:text="#{module.logging.logger}"></th>
-										<th th:text="#{module.logging.effectivelevel}"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr th:each="logger : *{loggers.get('loggers')}">
-										<td th:text="${logger.key}"></td>
-										<td>
-											<select class="form-control" th:id="${logger.key}">
-							                    <option th:selected="${logger.value.effectiveLevel.toString() == level.toString()}" th:each="level : *{loggers.get('levels')}" th:text="${level}"></option>
-							                </select>
-										</td>
-									</tr>
-								</tbody>
-							</table>
+						<!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item" th:text="#{module.console.platform}"></li>
+								<li class="breadcrumb-item active" th:text="#{module.logging}"></li>
+							</ol>
 						</div>
+						<!-- /.col -->
 					</div>
+					<!-- /.row -->
 				</div>
+				<!-- /.container-fluid -->
 			</div>
-		</section>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="card">
+					<!-- /.card-header -->
+					<div class="card-body">
+						<table id="loggersTable" class="table table-hover">
+							<thead>
+								<tr>
+									<th th:text="#{module.logging.logger}"></th>
+									<th th:text="#{module.logging.effectivelevel}" style="width:114px"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="logger : *{loggers.get('loggers')}">
+									<td th:text="${logger.key}"></td>
+									<td>
+										<select class="form-control" th:id="${logger.key}">
+											<option th:selected="${logger.value.effectiveLevel.toString() == level.toString()}" th:each="level : *{loggers.get('levels')}" th:text="${level}"></option>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- /.card-body -->
+				</div>
+				<!-- /.card -->
+			</section>
+		</div>
+	</th:block>
+	<th:block layout:fragment="js">
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    $(document).ready(function() {
@@ -46,9 +74,6 @@
 			var pathSetLoggerLevel = /*[[@{${@environment.getProperty('path.api.application.setloggerlevel')}}]]*/;
 		    	
 		    $('#loggersTable').DataTable({
-	    		  'language' : {
-			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
-			      },
 	    	      'pageLength'  : 10,
 	    	      'paging'      : true,
 	    	      'lengthChange': true,

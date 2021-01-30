@@ -6,7 +6,7 @@ public interface ImexWebConstants {
 
 		public interface Api {
 			public static final String CHECKID = "${path.api.imex.checkid}";
-			public static final String PAGE = "${path.api.imex.page}";
+			public static final String LIST = "${path.api.imex.page}";
 			public static final String HISTORY = "${path.api.imex.history}";
 		}
 
