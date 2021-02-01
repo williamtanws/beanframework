@@ -2,18 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 	<th:block th:fragment="datatable">
-		<div class="card-body">
-			<table id="historyDataTable" class="table table-bordered table-striped">
-				<thead>
-					<tr>
-						<th th:text="#{module.history.revisionDate}" class="text-center" style="width: 108px;"></th>
-						<th th:text="#{module.history.revisionType}" class="text-center" style="width: 100px;"></th>
-						<th th:text="#{module.history.propertiesChanged}" class="text-center"></th>
-						<th th:text="#{module.history.user}" class="text-center"></th>
-					</tr>
-				</thead>
-			</table>
-		</div>
+		<table id="historyDataTable" class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th th:text="#{module.history.revisionDate}" class="text-center" style="width: 108px;"></th>
+					<th th:text="#{module.history.revisionType}" class="text-center" style="width: 100px;"></th>
+					<th th:text="#{module.history.propertiesChanged}" class="text-center"></th>
+					<th th:text="#{module.history.user}" class="text-center"></th>
+				</tr>
+			</thead>
+		</table>
 	</th:block>
 	<th:block th:fragment="js (historyUrl)">
 		<script th:inline="javascript">
