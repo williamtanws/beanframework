@@ -58,7 +58,7 @@ public class EnumerationResource extends AbstractResource {
 	}
 
 	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = EnumerationWebConstants.Path.Api.ENUMERATION_PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = EnumerationWebConstants.Path.Api.ENUMERATION, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<EnumerationDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -85,7 +85,7 @@ public class EnumerationResource extends AbstractResource {
 	}
 
 	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = EnumerationWebConstants.Path.Api.ENUMERATION_PAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = EnumerationWebConstants.Path.Api.ENUMERATION_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

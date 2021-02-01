@@ -79,7 +79,7 @@ public class MediaFacadeImpl extends AbstractFacade<Media, MediaDto> implements 
 
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
-		return findHistory(dataTableRequest, entityClass);
+		return findHistory(dataTableRequest, entityClass, dtoClass);
 	}
 
 	@Override

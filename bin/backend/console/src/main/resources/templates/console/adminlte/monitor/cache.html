@@ -97,7 +97,7 @@
 		                "sortDescending": /*[[#{module.common.datatable.aria.sortDescending}]]*/
 		            }		            
 		        },
-		    	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+				"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, /*[[#{module.common.datatable.all}]]*/] ],
 				"responsive": true,
 				'pageLength': 10,
 				'paging': true,
@@ -120,7 +120,8 @@
 					action: function (e, dt, node, config) {
 						$("#form-clear").submit();
 					}
-				}{
+				},
+				{
 	                extend: 'csv',
 	                text: /*[[#{module.common.export.csv}]]*/,
 	                className: 'btn btn-default',

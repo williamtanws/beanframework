@@ -56,7 +56,7 @@ public class ConfigurationResource extends AbstractResource {
 		return configuration != null ? false : true;
 	}
 
-	@RequestMapping(value = ConfigurationWebConstants.Path.Api.CONFIGURATION_PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = ConfigurationWebConstants.Path.Api.CONFIGURATION, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -81,7 +81,7 @@ public class ConfigurationResource extends AbstractResource {
 		return dataTableResponse;
 	}
 
-	@RequestMapping(value = ConfigurationWebConstants.Path.Api.CONFIGURATION_PAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = ConfigurationWebConstants.Path.Api.CONFIGURATION_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request, @RequestParam Map<String, Object> requestParams) throws Exception {
 

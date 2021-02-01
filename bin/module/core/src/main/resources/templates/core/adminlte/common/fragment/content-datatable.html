@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <head>
+</head>
 <body>
 	<th:block th:fragment="datatable (title, tableId, columnsi18n)">
 		<!-- Main content -->
@@ -11,11 +12,10 @@
 						<div class="card">
 							<!-- /.card-header -->
 							<div class="card-body">
-								<table th:id="${tableId}" class="table table-bordered table-striped">
+								<table th:id="${tableId}" class="table table-bordered table-hover dataTable dtr-inline">
 									<thead>
 										<tr>
 											<th th:each="column : ${columnsi18n}" th:text="${column}"></th>
-											<th th:text="#{module.common.action}"></th>
 										</tr>
 									</thead>
 								</table>
@@ -38,7 +38,7 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<iframe src="" th:id="'modal-form-iframe-'+${tableId}" style="border: none; width: 100%; height: 100%; min-height: 400px"></iframe>
+						
 					</div>
 				</div>
 				<!-- /.modal-content -->
@@ -48,7 +48,7 @@
 		<!-- /.modal -->
 
 	</th:block>
-	<th:block th:fragment="js (tableId, columns, pageUrl, formUrl)">
+	<th:block th:fragment="js (tableId, columns, pageUrl, formUrl, addAuthority)">
 
 		<script th:inline="javascript">
 		/*<![CDATA[*/
@@ -65,18 +65,18 @@
 		var modalFormIframe = "#modal-form-iframe-"+tableId;
 			
 		function addItem(){
-			$(modalFormIframe).attr('src', formUrl);					
+			$(modalForm+' .modal-body').html("<iframe src='"+formUrl+" id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
 	    	$(modalForm).modal('show');
 		}
 			
-		function editItem(uuid){
-			$(modalFormIframe).attr('src', formUrl+"?uuid="+uuid);					
+		function selectItem(uuid){
+			$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"?uuid="+uuid+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
 	    	$(modalForm).modal('show');
 		}
 		
 		$(document).ready(function() {
 
-		    $("#"+tableId).DataTable( {
+		    var table = $("#"+tableId).DataTable( {
 		    	"language": {
 		           	"decimal":        "",
 		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
@@ -101,7 +101,7 @@
 		                "sortDescending": /*[[#{module.common.datatable.aria.sortDescending}]]*/
 		            }		            
 		        },
-		    	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+				"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, /*[[#{module.common.datatable.all}]]*/] ],
 		    	"responsive" : true,
 				'pageLength'  : 10,
 	    	    'paging'      : true,
@@ -120,60 +120,46 @@
 	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
 				'ajax': pageUrl,
 		        "columns": [
-            	    /*[# th:each="column : ${columns}"]*/
+            	    /*[# th:each="column, iterStat : ${columns}"]*/
+            	    
+            	    /*[# th:if="!${iterStat.last}"]*/
             	    { "data": /*[[${column}]]*/ },
+            	    /*[/]*/
+            	    
+            	    /*[# th:if="${iterStat.last}"]*/
+            	    { "data": /*[[${column}]]*/ }
+            	    /*[/]*/
+            	    
                     /*[/]*/
-		            { "data": "uuid" }
-		        ],
-		        "columnDefs": [
-		        	{
-		          		"targets": -1,
-		         		'orderable': false,
-		         		render: function(data, type, row, meta)
-    	                {
-    	                	return "<button type='button' class='btn btn-default' onclick=\"editItem('"+row.uuid+"')\">Edit</button>"; 
-    	                }
-		        	}
-		        
 		        ],
 		        "buttons": [
+		        	/*[# th:if="${addAuthority == true}"]*/
 		        	{
 		                text: /*[[#{module.common.add}]]*/,
 		                action: function ( e, dt, node, config ) {
 		                    addItem();
 		                }
 		            },
+		            /*[/]*/
 		            {
 		                extend: 'csv',
 		                text: /*[[#{module.common.export.csv}]]*/,
-		                className: 'btn btn-default',
-		                exportOptions: {
-		                   columns: 'th:not(:last-child)'
-		                }
+		                className: 'btn btn-default'
 		            },
 		            {
 		                extend: 'excel',
 		                text: /*[[#{module.common.export.excel}]]*/,
-		                className: 'btn btn-default',
-		                exportOptions: {
-		                   columns: 'th:not(:last-child)'
-		                }
+		                className: 'btn btn-default'
 		            },
 		            {
 		                extend: 'pdf',
 		                text: /*[[#{module.common.export.pdf}]]*/,
-		                className: 'btn btn-default',
-		                exportOptions: {
-		                   columns: 'th:not(:last-child)'
-		                }
+		                className: 'btn btn-default'
 		            },
 		            {
 		                extend: 'print',
 		                text: /*[[#{module.common.print}]]*/,
-		                className: 'btn btn-default',
-		                exportOptions: {
-		                   columns: 'th:not(:last-child)'
-		                }
+		                className: 'btn btn-default'
 		            },
 		            {
 		                extend: 'colvis',
@@ -183,12 +169,23 @@
 		        	{
 		                text: /*[[#{module.common.refresh}]]*/,
 		                action: function ( e, dt, node, config ) {
-		                	dt.clear().draw();
-		                    dt.ajax.reload();
+		                	dt.search('').draw();
 		                }
 		            }
 		    	]
 		    });
+		    
+		    $("#"+tableId).on('click', 'tr', function () {
+		    	if ( $(this).hasClass('selected') ) {
+		            $(this).removeClass('selected');
+		        }
+		        else {
+		            table.$('tr.selected').removeClass('selected');
+		            $(this).addClass('selected');
+		        }
+		        var data = table.row( this ).data();
+		        selectItem(data.uuid);
+		    } );
 		});
 		
 		/*]]>*/

@@ -117,6 +117,22 @@
 	<th:block layout:fragment="js">
 		<script th:inline="javascript">
 		
+		$('#changeLanguage').on(
+				"change",
+				function() {
+					var locale = $('#changeLanguage option:selected').val();
+
+					var url = String(window.location.href.replace(
+							/&?locale=([^&]$|[^&]*)/i, ""));
+					if (window.location.href.indexOf('?') > -1) {
+						url = url + '&locale=' + locale;
+					} else {
+						url = url + '?locale=' + locale;
+					}
+
+					window.location.href = url;
+				});
+		
 		/*<![CDATA[*/
 		$(document).ready(function() {
 		  $('#login-form').validate(
