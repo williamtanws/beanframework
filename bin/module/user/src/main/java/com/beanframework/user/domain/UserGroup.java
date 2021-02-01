@@ -1,14 +1,18 @@
 package com.beanframework.user.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -19,7 +23,6 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -47,14 +50,12 @@ public class UserGroup extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	private String name;
-
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
+	
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = UserGroupConstants.Table.USER_GROUP_USER_GROUP_REL, joinColumns = @JoinColumn(name = "uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
-	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
+	@ElementCollection
+	@CollectionTable(name = UserGroupConstants.Table.USER_GROUP_USER_GROUP_REL, joinColumns = @JoinColumn(name = "usergroup_uuid"))
+	@Column(name = "usergrouprel_uuid", columnDefinition = "BINARY(16)", nullable = false)
+	private Set<UUID> userGroups = new HashSet<UUID>();
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
@@ -78,11 +79,11 @@ public class UserGroup extends GenericEntity {
 		this.name = name;
 	}
 
-	public List<UserGroup> getUserGroups() {
+	public Set<UUID> getUserGroups() {
 		return userGroups;
 	}
 
-	public void setUserGroups(List<UserGroup> userGroups) {
+	public void setUserGroups(Set<UUID> userGroups) {
 		this.userGroups = userGroups;
 	}
 

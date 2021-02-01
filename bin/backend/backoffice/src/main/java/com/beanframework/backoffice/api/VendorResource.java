@@ -37,7 +37,7 @@ public class VendorResource extends AbstractResource {
 	private VendorFacade vendorFacade;
 
 	@PreAuthorize(VendorPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(VendorWebConstants.Path.Api.CHECKID)
+	@RequestMapping(VendorWebConstants.Path.Api.VENDOR_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -59,7 +59,7 @@ public class VendorResource extends AbstractResource {
 	}
 
 	@PreAuthorize(VendorPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = VendorWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = VendorWebConstants.Path.Api.VENDOR_PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -85,7 +85,7 @@ public class VendorResource extends AbstractResource {
 	}
 
 	@PreAuthorize(VendorPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = VendorWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = VendorWebConstants.Path.Api.VENDOR_PAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

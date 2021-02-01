@@ -3,7 +3,6 @@ package com.beanframework.core;
 import com.beanframework.cms.domain.Site;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.core.csv.AddressCsv;
-import com.beanframework.core.csv.AdminCsv;
 import com.beanframework.core.csv.CompanyCsv;
 import com.beanframework.core.csv.ConfigurationCsv;
 import com.beanframework.core.csv.CountryCsv;
@@ -40,7 +39,6 @@ import com.beanframework.internationalization.domain.Region;
 import com.beanframework.media.domain.Media;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.Address;
-import com.beanframework.user.domain.Admin;
 import com.beanframework.user.domain.Company;
 import com.beanframework.user.domain.Customer;
 import com.beanframework.user.domain.Employee;
@@ -204,15 +202,6 @@ public interface ImportListenerConstants {
 		public static final String DESCRIPTION = "Update/Remove Address Data";
 		public static final Class<AddressCsv> CLASS_CSV = AddressCsv.class;
 		public static final Class<Address> CLASS_ENTITY = Address.class;
-	}
-
-	public interface AdminImport {
-		public static final String TYPE = Admin.class.getSimpleName();
-		public static final String NAME = "Admin";
-		public static final int SORT = 120;
-		public static final String DESCRIPTION = "Update/Remove Admin Data";
-		public static final Class<AdminCsv> CLASS_CSV = AdminCsv.class;
-		public static final Class<Admin> CLASS_ENTITY = Admin.class;
 	}
 
 	public interface EmployeeImport {

@@ -26,7 +26,7 @@ public class UserAuthorityPopulator extends AbstractPopulator<UserAuthority, Use
 	@Override
 	public void populate(UserAuthority source, UserAuthorityDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setEnabled(source.getEnabled());
 			target.setUserPermission(populateUserPermission(source.getUserPermission()));
 			target.setUserRight(populateUserRight(source.getUserRight()));

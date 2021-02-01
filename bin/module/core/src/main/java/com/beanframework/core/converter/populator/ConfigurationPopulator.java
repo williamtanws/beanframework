@@ -15,7 +15,7 @@ public class ConfigurationPopulator extends AbstractPopulator<Configuration, Con
 
 	@Override
 	public void populate(Configuration source, ConfigurationDto target) throws PopulatorException {
-		populateCommon(source, target);
+		populateGeneric(source, target);
 		target.setValue(source.getValue() != null ? HtmlUtils.htmlEscape(source.getValue()) : null);
 	}
 

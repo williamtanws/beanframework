@@ -15,7 +15,7 @@ public class CronjobDataPopulator extends AbstractPopulator<CronjobData, Cronjob
 
 	@Override
 	public void populate(CronjobData source, CronjobDataDto target) throws PopulatorException {
-		populateCommon(source, target);
+		populateGeneric(source, target);
 		target.setName(source.getName());
 		target.setValue(source.getValue());
 	}

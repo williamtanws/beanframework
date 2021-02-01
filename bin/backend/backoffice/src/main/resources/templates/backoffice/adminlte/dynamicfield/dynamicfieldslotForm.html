@@ -35,13 +35,13 @@
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
 							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
+								<a href="#tab_history" data-toggle="tab" th:text="#{module.common.history}" onclick="changeTab('history')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content">
@@ -130,8 +130,8 @@
 		            },
 		            messages: {
 		                id: {
-		                    required: /*[[#{module.backoffice.id.required}]]*/ ,
-		                    remote: /*[[#{module.backoffice.id.exists}]]*/
+		                    required: /*[[#{module.common.id.required}]]*/ ,
+		                    remote: /*[[#{module.common.id.exists}]]*/
 		                },
 		                sort: {
 		                    required: /*[[#{module.dynamicfieldslot.sort.required}]]*/

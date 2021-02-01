@@ -16,7 +16,7 @@ public class SitePopulator extends AbstractPopulator<Site, SiteDto> implements P
 	@Override
 	public void populate(Site source, SiteDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setUrl(source.getUrl());
 		} catch (Exception e) {

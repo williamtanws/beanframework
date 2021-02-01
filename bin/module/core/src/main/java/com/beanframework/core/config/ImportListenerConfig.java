@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.core.ImportListenerConstants;
 import com.beanframework.core.listenerimport.AddressImportListener;
-import com.beanframework.core.listenerimport.AdminImportListener;
 import com.beanframework.core.listenerimport.CompanyImportListener;
 import com.beanframework.core.listenerimport.ConfigurationImportListener;
 import com.beanframework.core.listenerimport.CountryImportListener;
@@ -46,11 +45,6 @@ public class ImportListenerConfig implements ApplicationListener<ApplicationRead
 
 	@Value("#{'${module.core.import.listener.types}'.split(',')}")
 	private List<String> importListenerTypesList;
-
-	@Bean
-	public AdminImportListener adminImportListener() {
-		return new AdminImportListener();
-	}
 
 	@Bean
 	public ConfigurationImportListener configurationImportListener() {
@@ -174,9 +168,6 @@ public class ImportListenerConfig implements ApplicationListener<ApplicationRead
 
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent event) {
-
-		if (importListenerTypesList.contains(ImportListenerConstants.AdminImport.TYPE))
-			importListenerRegistry.addListener(adminImportListener());
 
 		if (importListenerTypesList.contains(ImportListenerConstants.ConfigurationImport.TYPE))
 			importListenerRegistry.addListener(configurationImportListener());

@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.InterceptorException;
@@ -91,7 +90,7 @@ public interface ModelService {
 	 * @return
 	 * @throws BusinessException
 	 */
-	<T> T saveEntityQuietly(Object model, Class modelClass) throws BusinessException;
+	<T> T saveEntityByLegacyMode(Object model, Class modelClass) throws BusinessException;
 
 	void deleteEntity(Object entityModel, Class modelClass) throws BusinessException;
 
@@ -103,7 +102,7 @@ public interface ModelService {
 	 * @return
 	 * @throws BusinessException
 	 */
-	void deleteEntityQuietly(Object entityModel, Class modelClass) throws BusinessException;
+	void deleteEntityByLegacyModel(Object entityModel, Class modelClass) throws BusinessException;
 
 	void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
@@ -135,25 +134,25 @@ public interface ModelService {
 
 	void initDefaults(Object model, Class modelClass) throws Exception;
 
-	void initialDefaultsInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException;
+	void initialDefaultsInterceptor(Collection models, String typeCode) throws InterceptorException;
 
-	void initialDefaultsInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException;
+	void initialDefaultsInterceptor(Object model, String typeCode) throws InterceptorException;
 
-	void loadInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException;
+	void loadInterceptor(Collection models, String typeCode) throws InterceptorException;
 
-	void loadInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException;
+	void loadInterceptor(Object model, String typeCode) throws InterceptorException;
 
-	void prepareInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException;
+	void prepareInterceptor(Collection models, String typeCode) throws InterceptorException;
 
-	void prepareInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException;
+	void prepareInterceptor(Object model, String typeCode) throws InterceptorException;
 
-	void removeInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException;
+	void removeInterceptor(Collection models, String typeCode) throws InterceptorException;
 
-	void removeInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException;
+	void removeInterceptor(Object model, String typeCode) throws InterceptorException;
 
-	void validateInterceptor(Collection models, InterceptorContext context, String typeCode) throws InterceptorException;
+	void validateInterceptor(Collection models, String typeCode) throws InterceptorException;
 
-	void validateInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException;
+	void validateInterceptor(Object model, String typeCode) throws InterceptorException;
 
 	void entityConverter(Collection models, Class modelClass) throws ConverterException;
 

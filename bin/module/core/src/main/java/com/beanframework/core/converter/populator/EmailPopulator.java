@@ -22,7 +22,7 @@ public class EmailPopulator extends AbstractPopulator<Email, EmailDto> implement
 
 	@Override
 	public void populate(Email source, EmailDto target) throws PopulatorException {
-		populateCommon(source, target);
+		populateGeneric(source, target);
 		target.setName(source.getName());
 		target.setToRecipients(source.getToRecipients());
 		target.setCcRecipients(source.getCcRecipients());

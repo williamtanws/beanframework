@@ -25,7 +25,7 @@ public class CommentServiceImpl implements CommentService {
 
 		if (entities != null)
 			for (Comment comment : entities) {
-				modelService.deleteEntityQuietly(comment, Comment.class);
+				modelService.deleteEntityByLegacyModel(comment, Comment.class);
 			}
 	}
 }

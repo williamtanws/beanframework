@@ -26,30 +26,18 @@ public interface ApplicationWebConstants {
 
 	public interface Path {
 		public static final String APPLICATION_OVERVIEW = "${path.console.application.overview}";
-		public static final String APPLICATION_METRICS = "${path.console.application.metrics}";
-		public static final String APPLICATION_ENVIRONMENT = "${path.console.application.environment}";
-		public static final String APPLICATION_THREADS = "${path.console.application.threads}";
-		public static final String APPLICATION_HTTPTRACES = "${path.console.application.httptraces}";
-		public static final String APPLICATION_AUDITLOG = "${path.console.application.auditlog}";
-		public static final String APPLICATION_HEAPDUMP = "${path.console.application.heapdump}";
 	}
 
 	public interface View {
 		public static final String APPLICATION_OVERVIEW = "${view.console.application.overview}";
-		public static final String APPLICATION_METRICS = "${view.console.application.metrics}";
-		public static final String APPLICATION_ENVIRONMENT = "${view.console.application.environment}";
-		public static final String APPLICATION_THREADS = "${view.console.application.threads}";
-		public static final String APPLICATION_HTTPTRACES = "${view.console.application.httptraces}";
-		public static final String APPLICATION_AUDITLOG = "${view.console.application.auditlog}";
-		public static final String APPLICATION_HEAPDUMP = "${view.console.application.heapdump}";
 	}
 
 	public interface Locale {
-		public static final String SAVE_SUCCESS = "module.console.save.success";
-		public static final String SAVE_FAIL = "module.console.save.fail";
-		public static final String DELETE_SUCCESS = "module.console.delete.success";
-		public static final String DELETE_FAIL = "module.console.delete.fail";
-		public static final String LOGIN_WRONG_USERNAME_PASSWORD = "module.console.login.error.wrongusernameorpassword";
-		public static final String RECORD_UUID_NOT_FOUND = "module.console.record.uuid.notfound";
+		public static final String SAVE_SUCCESS = "module.common.save.success";
+		public static final String SAVE_FAIL = "module.common.save.fail";
+		public static final String DELETE_SUCCESS = "module.common.delete.success";
+		public static final String DELETE_FAIL = "module.common.delete.fail";
+		public static final String LOGIN_WRONG_USERNAME_PASSWORD = "module.common.login.error.wrongusernameorpassword";
+		public static final String RECORD_UUID_NOT_FOUND = "module.common.record.uuid.notfound";
 	}
 }

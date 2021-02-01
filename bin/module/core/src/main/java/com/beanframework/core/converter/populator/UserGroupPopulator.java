@@ -2,6 +2,7 @@ package com.beanframework.core.converter.populator;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.UUID;
 
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class UserGroupPopulator extends AbstractPopulator<UserGroup, UserGroupDt
 	@Override
 	public void populate(UserGroup source, UserGroupDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 
 			Hibernate.initialize(source.getUserAuthorities());
@@ -35,8 +36,7 @@ public class UserGroupPopulator extends AbstractPopulator<UserGroup, UserGroupDt
 				target.getUserAuthorities().add(populateUserAuthority(userAuthority));
 			}
 
-			Hibernate.initialize(source.getUserGroups());
-			for (UserGroup userGroup : source.getUserGroups()) {
+			for (UUID userGroup : source.getUserGroups()) {
 				target.getUserGroups().add(populateUserGroup(userGroup));
 			}
 

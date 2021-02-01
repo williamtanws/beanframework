@@ -29,7 +29,7 @@ public class RegionServiceImpl implements RegionService {
 				if (entities.get(i).getCountry() != null)
 					if (entities.get(i).getCountry().equals(model.getUuid())) {
 						entities.get(i).setCountry(null);
-						modelService.saveEntityQuietly(entities.get(i), Region.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Region.class);
 					}
 			}
 	}

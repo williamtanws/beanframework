@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{${@environment.getProperty('layout.console')}}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout-form}">
 
 <head>
 <title th:utext="#{module.configuration}"></title>
@@ -15,9 +15,7 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-form-delete" th:if="*{uuid != null}">
-							<i class="fas fa-trash-alt"></i>
-						</button>
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}"></th:block>
 					</div>
 					<!-- /.col -->
 					<div class="col-sm-6">
@@ -32,14 +30,9 @@
 				<div class="card-header p-0 border-bottom-0">
 					<ul class="nav nav-tabs" id="custom-tabs-tab" role="tablist">
 						<li class="nav-item">
-							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.console.general}"></a>
+							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" id="custom-tabs-history-tab" data-toggle="pill" href="#custom-tabs-history" role="tab" aria-controls="custom-tabs-history" aria-selected="false" th:text="#{module.console.history}" th:if="*{uuid != null}"></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" id="custom-tabs-administration-tab" data-toggle="pill" href="#custom-tabs-administration" role="tab" aria-controls="custom-tabs-administration" aria-selected="false" th:text="#{module.console.administration}" th:if="*{uuid != null}"></a>
-						</li>
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-tab :: nav}"></th:block>
 					</ul>
 				</div>
 				<div class="card-body">
@@ -49,7 +42,7 @@
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="id" th:text="#{module.backoffice.id}"></label>
+										<label for="id" th:text="#{module.common.id}"></label>
 										<span>*</span>
 										<input type="text" class="form-control" name="id" th:value="*{id}">
 										<span class="help-block"></span>
@@ -57,7 +50,7 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="id" th:text="#{module.configuration.value}"></label>
+										<label for="value" th:text="#{module.configuration.value}"></label>
 										<input type="text" class="form-control" name="value" th:value="*{value}">
 										<span class="help-block"></span>
 									</div>
@@ -65,44 +58,14 @@
 							</div>
 
 						</div>
-						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
-						</div>
-						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
-						</div>
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-tab :: content}"></th:block>
 					</div>
 				</div>
 				<!-- /.card -->
 			</div>
 		</form>
 
-		<div class="modal fade" th:id="'modal-form-delete'">
-			<div class="modal-dialog modal-sm">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4 class="modal-title" th:text="#{module.backoffice.delete.confirm}"></h4>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<p th:utext="#{module.backoffice.delete.confirm.info}"></p>
-					</div>
-					<form th:action="@{${@environment.getProperty('path.configuration.form')}}" method="post">
-						<div class="modal-footer justify-content-between">
-							<input type="hidden" name="delete" />
-							<input type="hidden" name="uuid" th:value="${configurationDto.uuid}" id="modal-form-delete-uuid" />
-							<button type="button" class="btn btn-default" data-dismiss="modal" th:text="'  '+#{module.backoffice.no}+'  '"></button>
-							<button type="submit" class="btn btn-danger" th:text="#{module.backoffice.delete}"></button>
-						</div>
-					</form>
-				</div>
-				<!-- /.modal-content -->
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
-		<!-- /.modal -->
+		<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: modal (uuid=${configurationDto.uuid}, deleteUrl=@{${@environment.getProperty('path.configuration.form')}} )}"></th:block>
 	</th:block>
 	<th:block layout:fragment="js">
 

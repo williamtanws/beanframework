@@ -4,8 +4,6 @@ public interface BackofficeWebConstants {
 
 	public interface Configuration {
 		public static final String DEFAULT_AVATAR = "${module.backoffice.configuration.avatar.default}";
-		public static final String USERGROUP = "${module.backoffice.configuration.usergroup}";
-		public static final String USERGROUP_SPLITTER = "${module.backoffice.configuration.usergroup.splitter}";
 	}
 
 	public interface Pagination {
@@ -33,7 +31,7 @@ public interface BackofficeWebConstants {
 	}
 
 	public interface Path {
-		public static final String BACKOFFICE = "${backoffice.webroot}";
+		public static final String BACKOFFICE = "${path.backoffice}";
 		public static final String BACKOFFICE_API = "${backoffice.api}";
 		public static final String LOGIN = "${path.backoffice.login}";
 		public static final String LOGOUT = "${path.backoffice.logout}";
@@ -41,12 +39,12 @@ public interface BackofficeWebConstants {
 	}
 
 	public interface View {
+		public static final String BACKOFFICE = "${view.backoffice}";
 		public static final String LOGIN = "${view.backoffice.login}";
 		public static final String DASHBOARD = "${view.backoffice.dashboard}";
 	}
 
 	public interface Authority {
-		public static final String BACKOFFICE = "${module.backoffice.authority}";
 		public static final String ESCAPE = "${module.backoffice.authority.escape}";
 	}
 
@@ -65,11 +63,10 @@ public interface BackofficeWebConstants {
 	}
 
 	public interface Locale {
-		public static final String SAVE_SUCCESS = "module.backoffice.save.success";
-		public static final String SAVE_FAIL = "module.backoffice.save.fail";
-		public static final String DELETE_SUCCESS = "module.backoffice.delete.success";
-		public static final String DELETE_FAIL = "module.backoffice.delete.fail";
-		public static final String RECORD_UUID_NOT_FOUND = "module.backoffice.record.uuid.notfound";
-		public static final String LOGIN_WRONG_USERNAME_PASSWORD = "module.backoffice.login.error.wrongusernameorpassword";
+		public static final String SAVE_SUCCESS = "module.common.save.success";
+		public static final String SAVE_FAIL = "module.common.save.fail";
+		public static final String DELETE_SUCCESS = "module.common.delete.success";
+		public static final String DELETE_FAIL = "module.common.delete.fail";
+		public static final String RECORD_UUID_NOT_FOUND = "module.common.record.uuid.notfound";
 	}
 }

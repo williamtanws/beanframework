@@ -21,7 +21,7 @@ public class UserPermissionPopulator extends AbstractPopulator<UserPermission, U
 	@Override
 	public void populate(UserPermission source, UserPermissionDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 

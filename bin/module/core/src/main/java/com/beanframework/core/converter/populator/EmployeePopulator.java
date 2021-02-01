@@ -21,7 +21,7 @@ public class EmployeePopulator extends AbstractPopulator<Employee, EmployeeDto> 
 	@Override
 	public void populate(Employee source, EmployeeDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setPassword(source.getPassword());
 			target.setAccountNonExpired(source.getAccountNonExpired());

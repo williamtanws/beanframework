@@ -3,11 +3,8 @@ package com.beanframework.menu.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -25,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
 
 @Service
@@ -154,112 +152,6 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public List<Menu> findMenuTree(boolean enabled) throws Exception {
-
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Menu.PARENT, null);
-
-		if (enabled) {
-			properties.put(Menu.ENABLED, enabled);
-		}
-
-		Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
-		sorts.put(Menu.SORT, Sort.Direction.ASC);
-
-		List<Menu> menuTree = modelService.findByPropertiesBySortByResult(properties, sorts, null, null, Menu.class);
-
-		for (Menu model : menuTree) {
-			Hibernate.initialize(model.getChilds());
-			for (Menu menu : model.getChilds()) {
-				initializeChilds(menu);
-			}
-
-			Hibernate.initialize(model.getUserGroups());
-			for (UserGroup userGroup : model.getUserGroups()) {
-				Hibernate.initialize(userGroup.getUserAuthorities());
-			}
-		}
-
-		return menuTree;
-	}
-
-	private void initializeChilds(Menu model) {
-
-		Hibernate.initialize(model.getChilds());
-		for (Menu menu : model.getChilds()) {
-			initializeChilds(menu);
-		}
-
-		Hibernate.initialize(model.getUserGroups());
-		for (UserGroup userGroup : model.getUserGroups()) {
-			Hibernate.initialize(userGroup.getUserAuthorities());
-		}
-	}
-
-	@Override
-	public List<Menu> filterMenuByUserGroups(List<Menu> entities, List<UserGroup> userGroups) throws Exception {
-
-		filterAuthorizedMenu(entities, userGroups);
-
-		return entities;
-	}
-
-	private void filterAuthorizedMenu(List<Menu> menuRootList, List<UserGroup> userGroups) {
-		Iterator<Menu> parent = menuRootList.iterator();
-		while (parent.hasNext()) {
-			Menu menu = parent.next();
-
-			boolean removed = false;
-
-			if (removed == Boolean.FALSE && menu.getEnabled() == Boolean.FALSE) {
-				parent.remove();
-				removed = true;
-			}
-
-			// If menu groups or authorities is not authorized
-			if (removed == Boolean.FALSE && isUserGroupAuthorized(menu, userGroups) == Boolean.FALSE) {
-				parent.remove();
-				removed = true;
-			}
-
-			// If menu has childs
-			if (menu.getChilds().isEmpty() == Boolean.FALSE) {
-				filterAuthorizedMenu(menu.getChilds(), userGroups);
-			}
-		}
-	}
-
-	private boolean isUserGroupAuthorized(Menu menu, List<UserGroup> userGroups) {
-
-		Set<String> collectionUserGroupUuid = collectUserGroupUuid(userGroups);
-
-		Set<String> menuUserGroupUuidList = collectUserGroupUuid(menu.getUserGroups());
-		for (String menuUserGroupUuid : menuUserGroupUuidList) {
-			for (String authorizedUserGroupUuid : collectionUserGroupUuid) {
-				if (authorizedUserGroupUuid.equals(menuUserGroupUuid)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	private Set<String> collectUserGroupUuid(List<UserGroup> userGroups) {
-		return collectUserGroupUuid(userGroups, new HashSet<String>());
-	}
-
-	private Set<String> collectUserGroupUuid(List<UserGroup> userGroups, Set<String> userGroupUuids) {
-		for (UserGroup userGroup : userGroups) {
-			if (userGroupUuids.contains(userGroup.getUuid().toString()) == Boolean.FALSE) {
-				userGroupUuids.add(userGroup.getUuid().toString());
-				userGroupUuids.addAll(collectUserGroupUuid(userGroup.getUserGroups(), userGroupUuids));
-			}
-		}
-		return userGroupUuids;
-	}
-
-	@Override
 	public void removeUserGroupsRel(UserGroup model) throws Exception {
 		Specification<Menu> specification = new Specification<Menu>() {
 			private static final long serialVersionUID = 1L;
@@ -285,20 +177,15 @@ public class MenuServiceImpl implements MenuService {
 
 		List<Menu> entities = modelService.findBySpecificationBySort(specification, Menu.class);
 
-		if (entities != null)
-			for (int i = 0; i < entities.size(); i++) {
+		for (int i = 0; i < entities.size(); i++) {
 
-				boolean removed = false;
-				for (int j = 0; j < entities.get(i).getUserGroups().size(); j++) {
-					if (entities.get(i).getUserGroups().get(j).getUuid().equals(model.getUuid())) {
-						entities.get(i).getUserGroups().remove(j);
-						removed = true;
-						break;
-					}
-				}
-
-				if (removed)
-					modelService.saveEntityQuietly(entities.get(i), Menu.class);
+			boolean removed = false;
+			for (int j = 0; j < entities.get(i).getUserGroups().size(); j++) {
+				entities.get(i).getUserGroups().remove(model.getUuid());
 			}
+
+			if (removed)
+				modelService.saveEntityByLegacyMode(entities.get(i), User.class);
+		}
 	}
 }

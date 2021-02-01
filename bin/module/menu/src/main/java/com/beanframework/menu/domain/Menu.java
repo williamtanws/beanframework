@@ -1,16 +1,20 @@
 package com.beanframework.menu.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -23,14 +27,12 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.menu.MenuConstants;
-import com.beanframework.user.domain.UserGroup;
 
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -90,14 +92,12 @@ public class Menu extends GenericEntity {
 	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy(SORT + " ASC")
 	private List<Menu> childs = new ArrayList<Menu>();
-
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "usergroup_uuid"))
+	
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.REFRESH })
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = MenuConstants.Table.MENU_USER_GROUP_REL, joinColumns = @JoinColumn(name = "menu_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "usergroup_uuid", referencedColumnName = "uuid"))
-	private List<UserGroup> userGroups = new ArrayList<UserGroup>();
+	@ElementCollection
+	@CollectionTable(name = MenuConstants.Table.MENU_USER_GROUP_REL, joinColumns = @JoinColumn(name = "menu_uuid"))
+	@Column(name = "usergrou_uuid", columnDefinition = "BINARY(16)", nullable = false)
+	private Set<UUID> userGroups = new HashSet<UUID>();
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
@@ -171,11 +171,11 @@ public class Menu extends GenericEntity {
 		this.childs = childs;
 	}
 
-	public List<UserGroup> getUserGroups() {
+	public Set<UUID> getUserGroups() {
 		return userGroups;
 	}
 
-	public void setUserGroups(List<UserGroup> userGroups) {
+	public void setUserGroups(Set<UUID> userGroups) {
 		this.userGroups = userGroups;
 	}
 

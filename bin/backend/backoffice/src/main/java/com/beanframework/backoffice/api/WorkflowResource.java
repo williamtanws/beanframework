@@ -37,7 +37,7 @@ public class WorkflowResource extends AbstractResource {
 	private WorkflowFacade workflowFacade;
 
 	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(WorkflowWebConstants.Path.Api.CHECKID)
+	@RequestMapping(WorkflowWebConstants.Path.Api.WORKFLOW_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -59,7 +59,7 @@ public class WorkflowResource extends AbstractResource {
 	}
 
 	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = WorkflowWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = WorkflowWebConstants.Path.Api.WORKFLOW_PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -85,7 +85,7 @@ public class WorkflowResource extends AbstractResource {
 	}
 
 	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = WorkflowWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = WorkflowWebConstants.Path.Api.WORKFLOW_PAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

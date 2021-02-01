@@ -17,7 +17,7 @@ public class MediaPopulator extends AbstractPopulator<Media, MediaDto> implement
 	@Override
 	public void populate(Media source, MediaDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setFileName(source.getFileName());
 			target.setFileType(source.getFileType());
 			target.setFileSize(source.getFileSize() == null ? null : SizeUtils.humanReadableByteCount(source.getFileSize(), true));

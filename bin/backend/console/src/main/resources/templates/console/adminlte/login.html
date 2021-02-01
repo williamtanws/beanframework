@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{${@environment.getProperty('layout.console')}}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
 <head>
-<title th:utext="#{module.console.login}"></title>
+<title th:utext="#{module.common.login}"></title>
 </head>
 <body>
 	<th:block layout:fragment="content">
@@ -11,26 +11,26 @@
 			window.top.location.href = /*[[@{${@environment.getProperty('path.console.login')}}]]*/; 
 		}
 		</script>
-		<div class="login-page" style="min-height: 466px;">
+		<div class="login-page">
 			<div class="login-box">
 				<div class="login-logo">
-					<a th:href="@{${@environment.getProperty('console.webroot')}}">
-						<b th:utext="#{module.console}"></b>
+					<a th:href="@{${@environment.getProperty('console.webroot')}}" class="h1"> 
+						<b th:utext="#{module.common.console}"></b>
 					</a>
 				</div>
 				<!-- /.login-logo -->
 				<div class="card">
 					<div class="card-body login-card-body">
-						<p class="login-box-msg" th:utext="#{module.console.login.box.msg}"></p>
+						<p class="login-box-msg" th:utext="#{module.common.signin}"></p>
 
 						<div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null}">
 							<div class="alert alert-danger">
 								<i class="icon fa fa-lock"></i>
 								<span th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}" th:switch="${errorMsg}">
-									<span th:case="'Wrong username or password'" th:utext="#{module.console.login.error.wrongusernameorpassword}"></span>
-									<span th:case="'Your account has been disabled'" th:utext="#{module.console.login.error.accountdisabled}"></span>
-									<span th:case="'Maximum sessions of 1 for this principal exceeded'" th:utext="#{module.console.login.error.exceeded}"></span>
-									<span th:case="*" th:text="${errorMsg}" th:utext="#{module.console.login.error.unknown}"></span>
+									<span th:case="'Wrong username or password'" th:utext="#{module.common.login.error.wrongusernameorpassword}"></span>
+									<span th:case="'Your account has been disabled'" th:utext="#{module.common.login.error.accountdisabled}"></span>
+									<span th:case="'Maximum sessions of 1 for this principal exceeded'" th:utext="#{module.common.login.error.exceeded}"></span>
+									<span th:case="*" th:text="${errorMsg}" th:utext="#{module.common.login.error.unknown}"></span>
 								</span>
 
 							</div>
@@ -38,32 +38,32 @@
 						<div th:if="${param.denied}">
 							<div class="alert alert-danger">
 								<i class="icon fa fa-lock"></i>
-								<span th:utext="#{module.console.login.error.accessdenied}"></span>
+								<span th:utext="#{module.common.login.error.accessdenied}"></span>
 							</div>
 						</div>
 						<div th:if="${param.expired}">
 							<div class="alert alert-danger">
 								<i class="icon fa fa-lock"></i>
-								<span th:utext="#{module.console.login.error.sessionexpired}"></span>
+								<span th:utext="#{module.common.login.error.sessionexpired}"></span>
 							</div>
 						</div>
 						<div th:if="${param.timeout}">
 							<div class="alert alert-danger">
 								<i class="icon fa fa-lock"></i>
-								<span th:utext="#{module.console.login.error.sessiontimeout}"></span>
+								<span th:utext="#{module.common.login.error.sessiontimeout}"></span>
 							</div>
 						</div>
 						<div th:if="${param.logout}">
 							<div class="alert alert-success">
 								<i class="icon fa fa-unlock"></i>
-								<span th:utext="#{module.console.login.loggedout}"></span>
+								<span th:utext="#{module.common.login.loggedout}"></span>
 							</div>
 						</div>
 
 						<form id="login-form" th:action="@{${@environment.getProperty('path.console.login')}}" method="post">
 							<sec:csrfInput />
 							<div class="form-group input-group mb-3">
-								<input type="text" class="form-control" th:placeholder="#{module.admin.id}" name="username" th:value="${@Config.is('demo')} ? 'admin':''">
+								<input type="text" class="form-control" th:placeholder="#{module.employee.id}" name="username" th:value="${@Config.is('demo')} ? 'admin':''">
 								<div class="input-group-append">
 									<div class="input-group-text">
 										<span class="fas fa-user"></span>
@@ -71,7 +71,7 @@
 								</div>
 							</div>
 							<div class="form-group input-group mb-3">
-								<input type="password" class="form-control" th:placeholder="#{module.admin.password}" name="password" th:value="${@Config.is('demo')} ? 'admin':''">
+								<input type="password" class="form-control" th:placeholder="#{module.employee.password}" name="password" th:value="${@Config.is('demo')} ? 'admin':''">
 								<div class="input-group-append">
 									<div class="input-group-text">
 										<span class="fas fa-lock"></span>
@@ -95,12 +95,12 @@
 								<div class="col-8">
 									<div class="icheck-primary">
 										<input type="checkbox" id="remember" name="rememberme">
-										<label for="remember" th:text="#{module.console.login.rememberme}"></label>
+										<label for="remember" th:text="#{module.common.login.rememberme}"></label>
 									</div>
 								</div>
 								<!-- /.col -->
 								<div class="col-4">
-									<button type="submit" class="btn btn-primary btn-block" th:utext="#{module.console.login}"></button>
+									<button type="submit" class="btn btn-primary btn-block" th:utext="#{module.common.login}"></button>
 								</div>
 								<!-- /.col -->
 							</div>
@@ -129,10 +129,10 @@
 		    },
 		    messages: {
 		      username: {
-			      required: /*[[#{module.console.login.username.required}]]*/
+			      required: /*[[#{module.common.login.username.required}]]*/
 			  },
 			  password: {
-		          required: /*[[#{module.console.login.password.required}]]*/
+		          required: /*[[#{module.common.login.password.required}]]*/
 		      }
 		    },
 		    errorElement: 'span',

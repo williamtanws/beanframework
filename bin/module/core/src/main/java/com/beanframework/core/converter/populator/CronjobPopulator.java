@@ -20,7 +20,7 @@ public class CronjobPopulator extends AbstractPopulator<Cronjob, CronjobDto> imp
 	@Override
 	public void populate(Cronjob source, CronjobDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setJobClass(source.getJobClass());
 			target.setJobGroup(source.getJobGroup());
 			target.setName(source.getName());

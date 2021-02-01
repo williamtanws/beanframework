@@ -37,10 +37,6 @@ public interface ConsoleWebConstants {
 		public static final String CONSOLE = "${view.console}";
 	}
 
-	public interface Authority {
-		public static final String CONSOLE = "${module.console.permission.access}";
-	}
-
 	public interface Http {
 		public static final String USERNAME_PARAM = "${module.console.http.username.param}";
 		public static final String PASSWORD_PARAM = "${module.console.http.password.param}";
@@ -56,11 +52,11 @@ public interface ConsoleWebConstants {
 	}
 
 	public interface Locale {
-		public static final String SAVE_SUCCESS = "module.console.save.success";
-		public static final String SAVE_FAIL = "module.console.save.fail";
-		public static final String DELETE_SUCCESS = "module.console.delete.success";
-		public static final String DELETE_FAIL = "module.console.delete.fail";
-		public static final String LOGIN_WRONG_USERNAME_PASSWORD = "module.console.login.error.wrongusernameorpassword";
-		public static final String RECORD_UUID_NOT_FOUND = "module.console.record.uuid.notfound";
+		public static final String SAVE_SUCCESS = "module.common.save.success";
+		public static final String SAVE_FAIL = "module.common.save.fail";
+		public static final String DELETE_SUCCESS = "module.common.delete.success";
+		public static final String DELETE_FAIL = "module.common.delete.fail";
+		public static final String LOGIN_WRONG_USERNAME_PASSWORD = "module.common.login.error.wrongusernameorpassword";
+		public static final String RECORD_UUID_NOT_FOUND = "module.common.record.uuid.notfound";
 	}
 }

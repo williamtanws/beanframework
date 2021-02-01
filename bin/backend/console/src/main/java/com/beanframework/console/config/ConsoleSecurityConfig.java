@@ -16,10 +16,11 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 import com.beanframework.console.ConsoleWebConstants;
-import com.beanframework.console.security.ConsoleAuthProvider;
 import com.beanframework.console.security.ConsoleCsrfHeaderFilter;
 import com.beanframework.console.security.ConsoleSessionExpiredDetectingLoginUrlAuthenticationEntryPoint;
 import com.beanframework.console.security.ConsoleSuccessHandler;
+import com.beanframework.user.UserConstants;
+import com.beanframework.user.security.UserAuthProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -56,17 +57,17 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value(ConsoleWebConstants.Path.LOGOUT)
 	private String PATH_CONSOLE_LOGOUT;
 	
-	@Value(ConsoleWebConstants.Authority.CONSOLE)
-	private String CONSOLE_ACCESS;
-	
 	@Autowired
-	private ConsoleAuthProvider authProvider;
+	private UserAuthProvider authProvider;
 	
 	@Autowired
 	private ConsoleSuccessHandler successHandler;
 	
 	@Autowired
 	private SessionRegistry sessionRegistry;
+	
+	@Value(UserConstants.Admin.DEFAULT_GROUP)
+	private String defaultAdminGroup;
 	
     protected void configure(HttpSecurity http) throws Exception {
     	http
@@ -76,7 +77,7 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
 	        .authorizeRequests()
 	        	.antMatchers(HTTP_ANTPATTERNS_PERMITALL).permitAll()
 	        	.antMatchers(MODULE_CONSOLE_PATH+"/**", MODULE_CONSOLE_PATH_API+"/**").authenticated()
-	        	.antMatchers(MODULE_CONSOLE_PATH+"/**").hasAnyAuthority(CONSOLE_ACCESS)
+	        	.antMatchers(MODULE_CONSOLE_PATH+"/**").hasAnyAuthority(defaultAdminGroup)
 	        	.and()
 	        .addFilterAfter(csrfHeaderFilter(MODULE_CONSOLE_PATH), CsrfFilter.class)
 	        .csrf().csrfTokenRepository(csrfTokenRepository())

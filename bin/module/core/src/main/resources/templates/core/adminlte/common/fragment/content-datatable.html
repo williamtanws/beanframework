@@ -62,7 +62,6 @@
 		})
 		
 		var modalForm = "#modal-form-"+tableId;
-		var modalFormDelete = "#modal-form-delete-"+tableId;
 		var modalFormIframe = "#modal-form-iframe-"+tableId;
 			
 		function addItem(){
@@ -78,6 +77,30 @@
 		$(document).ready(function() {
 
 		    $("#"+tableId).DataTable( {
+		    	"language": {
+		           	"decimal":        "",
+		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
+		            "info":           /*[[#{module.common.datatable.info}]]*/,
+		            "infoEmpty":      /*[[#{module.common.datatable.infoEmpty}]]*/,
+		            "infoFiltered":   /*[[#{module.common.datatable.infoFiltered}]]*/,
+		            "infoPostFix":    "",
+		            "thousands":      ",",
+		            "lengthMenu":     /*[[#{module.common.datatable.lengthMenu}]]*/,
+		            "loadingRecords": /*[[#{module.common.datatable.loadingRecords}]]*/,
+		            "processing":     /*[[#{module.common.datatable.processing}]]*/,
+		            "search":         /*[[#{module.common.datatable.search}]]*/,
+		            "zeroRecords":    /*[[#{module.common.datatable.zeroRecords}]]*/,
+		            "paginate": {
+		                "first":      /*[[#{module.common.datatable.paginate.first}]]*/,
+		                "last":       /*[[#{module.common.datatable.paginate.last}]]*/,
+		                "next":       /*[[#{module.common.datatable.paginate.next}]]*/,
+		                "previous":   /*[[#{module.common.datatable.paginate.previous}]]*/
+		            },
+		            "aria": {
+		                "sortAscending":  /*[[#{module.common.datatable.aria.sortAscending}]]*/,
+		                "sortDescending": /*[[#{module.common.datatable.aria.sortDescending}]]*/
+		            }		            
+		        },
 		    	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
 		    	"responsive" : true,
 				'pageLength'  : 10,
@@ -115,14 +138,14 @@
 		        ],
 		        "buttons": [
 		        	{
-		                text: 'Add',
+		                text: /*[[#{module.common.add}]]*/,
 		                action: function ( e, dt, node, config ) {
 		                    addItem();
 		                }
 		            },
 		            {
 		                extend: 'csv',
-		                text: 'Export CSV',
+		                text: /*[[#{module.common.export.csv}]]*/,
 		                className: 'btn btn-default',
 		                exportOptions: {
 		                   columns: 'th:not(:last-child)'
@@ -130,7 +153,7 @@
 		            },
 		            {
 		                extend: 'excel',
-		                text: 'Export Excel',
+		                text: /*[[#{module.common.export.excel}]]*/,
 		                className: 'btn btn-default',
 		                exportOptions: {
 		                   columns: 'th:not(:last-child)'
@@ -138,7 +161,7 @@
 		            },
 		            {
 		                extend: 'pdf',
-		                text: 'Export PDF',
+		                text: /*[[#{module.common.export.pdf}]]*/,
 		                className: 'btn btn-default',
 		                exportOptions: {
 		                   columns: 'th:not(:last-child)'
@@ -146,7 +169,7 @@
 		            },
 		            {
 		                extend: 'print',
-		                text: 'Print',
+		                text: /*[[#{module.common.print}]]*/,
 		                className: 'btn btn-default',
 		                exportOptions: {
 		                   columns: 'th:not(:last-child)'
@@ -154,11 +177,11 @@
 		            },
 		            {
 		                extend: 'colvis',
-		                text: 'Visibility',
+		                text: /*[[#{module.common.columns}]]*/,
 		                className: 'btn btn-default'
 		            },
 		        	{
-		                text: 'Refresh',
+		                text: /*[[#{module.common.refresh}]]*/,
 		                action: function ( e, dt, node, config ) {
 		                	dt.clear().draw();
 		                    dt.ajax.reload();

@@ -21,7 +21,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.internationalization.domain.Language;
-import com.beanframework.user.domain.Employee;
+import com.beanframework.user.domain.User;
 
 @SuppressWarnings("deprecation")
 public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
@@ -43,7 +43,7 @@ public class BackofficeSecurityInterceptor extends HandlerInterceptorAdapter {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		if (auth != null && auth.getPrincipal() instanceof Employee && modelAndView != null) {
+		if (auth != null && auth.getPrincipal() instanceof User && modelAndView != null) {
 
 			getLanguage(modelAndView);
 		}

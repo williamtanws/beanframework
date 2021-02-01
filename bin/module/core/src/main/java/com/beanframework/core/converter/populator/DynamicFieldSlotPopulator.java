@@ -24,7 +24,7 @@ public class DynamicFieldSlotPopulator extends AbstractPopulator<DynamicFieldSlo
 	@Override
 	public void populate(DynamicFieldSlot source, DynamicFieldSlotDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 			target.setDynamicField(populateDynamicField(source.getDynamicField()));

@@ -39,7 +39,7 @@ public class CompanyServiceImpl implements CompanyService {
 				if (entities.get(i).getContactPerson() != null)
 					if (entities.get(i).getContactPerson().equals(model.getUuid())) {
 						entities.get(i).setContactPerson(null);
-						modelService.saveEntityQuietly(entities.get(i), Company.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Company.class);
 					}
 			}
 	}
@@ -56,7 +56,7 @@ public class CompanyServiceImpl implements CompanyService {
 				if (entities.get(i).getResponsibleCompany() != null)
 					if (entities.get(i).getResponsibleCompany().equals(model.getUuid())) {
 						entities.get(i).setResponsibleCompany(null);
-						modelService.saveEntityQuietly(entities.get(i), Company.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Company.class);
 					}
 			}
 	}
@@ -73,7 +73,7 @@ public class CompanyServiceImpl implements CompanyService {
 				if (entities.get(i).getCountry() != null)
 					if (entities.get(i).getCountry().equals(model.getUuid())) {
 						entities.get(i).setCountry(null);
-						modelService.saveEntityQuietly(entities.get(i), Company.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Company.class);
 					}
 			}
 	}
@@ -128,7 +128,7 @@ public class CompanyServiceImpl implements CompanyService {
 				if (entities.get(i).getShippingAddress() != null)
 					if (entities.get(i).getShippingAddress().equals(model.getUuid())) {
 						entities.get(i).setShippingAddress(null);
-						modelService.saveEntityQuietly(entities.get(i), Company.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Company.class);
 					}
 			}
 	}
@@ -145,7 +145,7 @@ public class CompanyServiceImpl implements CompanyService {
 				if (entities.get(i).getUnloadingAddress() != null)
 					if (entities.get(i).getUnloadingAddress().equals(model.getUuid())) {
 						entities.get(i).setUnloadingAddress(null);
-						modelService.saveEntityQuietly(entities.get(i), Company.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Company.class);
 					}
 			}
 	}
@@ -162,7 +162,7 @@ public class CompanyServiceImpl implements CompanyService {
 				if (entities.get(i).getUnloadingAddress() != null)
 					if (entities.get(i).getUnloadingAddress().equals(model.getUuid())) {
 						entities.get(i).setUnloadingAddress(null);
-						modelService.saveEntityQuietly(entities.get(i), Company.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Company.class);
 					}
 			}
 	}
@@ -179,7 +179,7 @@ public class CompanyServiceImpl implements CompanyService {
 				if (entities.get(i).getUnloadingAddress() != null)
 					if (entities.get(i).getUnloadingAddress().equals(model.getUuid())) {
 						entities.get(i).setUnloadingAddress(null);
-						modelService.saveEntityQuietly(entities.get(i), Company.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Company.class);
 					}
 			}
 	}

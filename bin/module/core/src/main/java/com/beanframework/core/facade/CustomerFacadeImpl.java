@@ -13,17 +13,18 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.converter.entity.EntityCustomerProfileConverter;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.user.domain.Customer;
-import com.beanframework.user.service.CustomerService;
+import com.beanframework.user.domain.User;
+import com.beanframework.user.service.UserService;
 import com.beanframework.user.specification.CustomerSpecification;
 
 @Component
 public class CustomerFacadeImpl extends AbstractFacade<Customer, CustomerDto> implements CustomerFacade {
-	
+
 	private static final Class<Customer> entityClass = Customer.class;
 	private static final Class<CustomerDto> dtoClass = CustomerDto.class;
-	
+
 	@Autowired
-	private CustomerService customerService;
+	private UserService userService;
 
 	@Autowired
 	private EntityCustomerProfileConverter entityCustomerProfileConverter;
@@ -47,7 +48,7 @@ public class CustomerFacadeImpl extends AbstractFacade<Customer, CustomerDto> im
 	public CustomerDto update(CustomerDto model) throws BusinessException {
 		return save(model);
 	}
-	
+
 	public CustomerDto save(CustomerDto dto) throws BusinessException {
 		try {
 			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == Boolean.FALSE) {
@@ -111,7 +112,7 @@ public class CustomerFacadeImpl extends AbstractFacade<Customer, CustomerDto> im
 			Customer entity = entityCustomerProfileConverter.convert(dto);
 
 			entity = modelService.saveEntity(entity);
-			customerService.updatePrincipal(entity);
+			userService.updatePrincipal(entity);
 
 			return modelService.getDto(entity, dtoClass);
 
@@ -122,9 +123,9 @@ public class CustomerFacadeImpl extends AbstractFacade<Customer, CustomerDto> im
 
 	@Override
 	public CustomerDto getCurrentUser() throws Exception {
-		Customer entity = customerService.getCurrentUser();
-		CustomerDto dto = modelService.getDto(entity, dtoClass);
-
+		User user = userService.getCurrentUser();
+		Customer customer = modelService.findOneByUuid(user.getUuid(), Customer.class);
+		CustomerDto dto = modelService.getDto(customer, dtoClass);
 		return dto;
 	}
 }

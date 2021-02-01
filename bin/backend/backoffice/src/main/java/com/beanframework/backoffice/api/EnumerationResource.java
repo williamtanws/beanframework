@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EnumerationWebConstants;
-import com.beanframework.backoffice.EnumerationWebConstants.EnumPreAuthorizeEnum;
+import com.beanframework.backoffice.EnumerationWebConstants.EnumerationPreAuthorizeEnum;
 import com.beanframework.backoffice.data.EnumerationDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -35,8 +35,8 @@ public class EnumerationResource extends AbstractResource {
 	@Autowired
 	private EnumerationFacade enumerationFacade;
 
-	@PreAuthorize(EnumPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(EnumerationWebConstants.Path.Api.CHECKID)
+	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_READ)
+	@RequestMapping(EnumerationWebConstants.Path.Api.ENUMERATION_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -57,8 +57,8 @@ public class EnumerationResource extends AbstractResource {
 		return data != null ? false : true;
 	}
 
-	@PreAuthorize(EnumPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = EnumerationWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_READ)
+	@RequestMapping(value = EnumerationWebConstants.Path.Api.ENUMERATION_PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<EnumerationDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -84,8 +84,8 @@ public class EnumerationResource extends AbstractResource {
 		return dataTableResponse;
 	}
 
-	@PreAuthorize(EnumPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = EnumerationWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_READ)
+	@RequestMapping(value = EnumerationWebConstants.Path.Api.ENUMERATION_PAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

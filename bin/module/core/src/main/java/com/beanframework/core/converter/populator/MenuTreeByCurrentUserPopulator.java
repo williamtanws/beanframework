@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,11 @@ import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
 import com.beanframework.menu.specification.MenuSpecification;
-import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.service.UserService;
 
+/**
+ * Populate enabled menu and filter by current user group
+ */
 public class MenuTreeByCurrentUserPopulator extends AbstractPopulator<Menu, MenuDto> implements Populator<Menu, MenuDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuTreeByCurrentUserPopulator.class);
@@ -33,7 +34,7 @@ public class MenuTreeByCurrentUserPopulator extends AbstractPopulator<Menu, Menu
 	@Override
 	public void populate(Menu source, MenuDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setParent(populateParent(source.getParent()));
 			target.setIcon(source.getIcon());
@@ -42,9 +43,8 @@ public class MenuTreeByCurrentUserPopulator extends AbstractPopulator<Menu, Menu
 			target.setTarget(source.getTarget());
 			target.setEnabled(source.getEnabled());
 			
-			Set<UUID> userGroupUuids = userService.getAllUserGroupUuidsByCurrentUser();
-
-			List<Menu> childs = modelService.findBySpecificationBySort(MenuSpecification.getMenuByUserGroup(source.getUuid(), userGroupUuids), Sort.by(Direction.ASC, Menu.SORT), Menu.class);
+			Set<UUID> userGroupUuids = userService.getAllUserGroupsByCurrentUser();
+			List<Menu> childs = modelService.findBySpecificationBySort(MenuSpecification.getMenuByEnabledByUserGroup(source.getUuid(), userGroupUuids), Sort.by(Direction.ASC, Menu.SORT), Menu.class);
 			for (Menu childMenu : childs) {
 				MenuDto childMenuDto = populateChild(childMenu, userGroupUuids);
 				if(childMenuDto != null) {
@@ -52,8 +52,7 @@ public class MenuTreeByCurrentUserPopulator extends AbstractPopulator<Menu, Menu
 				}
 			}
 			
-			Hibernate.initialize(source.getUserGroups());
-			for (UserGroup userGroup : source.getUserGroups()) {
+			for (UUID userGroup : source.getUserGroups()) {
 				target.getUserGroups().add(populateUserGroup(userGroup));
 			}
 			for (MenuField field : source.getFields()) {
@@ -82,7 +81,7 @@ public class MenuTreeByCurrentUserPopulator extends AbstractPopulator<Menu, Menu
 			return null;
 		
 		MenuDto target = new MenuDto();
-		populateCommon(source, target);
+		populateGeneric(source, target);
 		target.setName(source.getName());
 		target.setIcon(source.getIcon());
 		target.setPath(source.getPath());
@@ -102,7 +101,7 @@ public class MenuTreeByCurrentUserPopulator extends AbstractPopulator<Menu, Menu
 		try {
 			
 			MenuDto target = new MenuDto();
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setIcon(source.getIcon());
 			target.setPath(source.getPath());
@@ -110,7 +109,7 @@ public class MenuTreeByCurrentUserPopulator extends AbstractPopulator<Menu, Menu
 			target.setTarget(source.getTarget());
 			target.setEnabled(source.getEnabled());
 
-			List<Menu> childs = modelService.findBySpecificationBySort(MenuSpecification.getMenuByUserGroup(source.getUuid(), userGroupUuids), Sort.by(Direction.ASC, Menu.SORT), Menu.class);
+			List<Menu> childs = modelService.findBySpecificationBySort(MenuSpecification.getMenuByEnabledByUserGroup(source.getUuid(), userGroupUuids), Sort.by(Direction.ASC, Menu.SORT), Menu.class);
 			for (Menu childMenu : childs) {
 				MenuDto childMenuDto = populateChild(childMenu, userGroupUuids);
 				if(childMenuDto != null) {

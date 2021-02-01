@@ -219,7 +219,7 @@ public class ImexServiceImpl implements ImexService {
 						e.printStackTrace();
 						LOGGER.error(e.getMessage(), e);
 						try {
-							errorMessages.append(localeMessageService.getMessage("module.console.platform.import.fail", new Object[] { resource.getFile().getPath(), e.getMessage() }) + "<br><br>");
+							errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { resource.getFile().getPath(), e.getMessage() }) + "<br><br>");
 						} catch (IOException e1) {
 							e1.printStackTrace();
 							LOGGER.error(e.getMessage(), e);
@@ -319,13 +319,13 @@ public class ImexServiceImpl implements ImexService {
 						LOGGER.info("Imported line: lineNo=" + beanReader.getLineNumber() + ", rowNo=" + beanReader.getRowNumber() + ", " + csv);
 					}
 				}
-				successMessages.append(localeMessageService.getMessage("module.console.platform.update.success", new Object[] { importName }) + "<br>");
+				successMessages.append(localeMessageService.getMessage("module.common.update.success", new Object[] { importName }) + "<br>");
 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error(e.getMessage(), e);
-			errorMessages.append(localeMessageService.getMessage("module.console.platform.import.fail", new Object[] { importName, e.getMessage() }) + "<br><br>");
+			errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { importName, e.getMessage() }) + "<br><br>");
 		}
 	}
 
@@ -389,7 +389,7 @@ public class ImexServiceImpl implements ImexService {
 
 			if (model.getMedias().isEmpty()) {
 				model.getMedias().add(media);
-				modelService.saveEntityQuietly(model, Imex.class);
+				modelService.saveEntityByLegacyMode(model, Imex.class);
 			}
 		}
 

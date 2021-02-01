@@ -5,16 +5,18 @@ public interface UserPermissionWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.userpermission.checkid}";
-			public static final String PAGE = "${path.api.userpermission.page}";
-			public static final String HISTORY = "${path.api.userpermission.history}";
+			public static final String USERPERMISSION_PAGE = "${path.api.userpermission.page}";
+			public static final String USERPERMISSION_PAGE_HISTORY = "${path.api.userpermission.page.history}";
+			public static final String USERPERMISSION_CHECKID = "${path.api.userpermission.checkid}";
 		}
 
-		public static final String USERPERMISSION = "${path.userpermission}";
+		public static final String USERPERMISSION_PAGE = "${path.userpermission.page}";
+		public static final String USERPERMISSION_FORM = "${path.userpermission.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.userpermission.list}";
+		public static final String PAGE = "${view.userpermission.page}";
+		public static final String FORM = "${view.userpermission.form}";
 	}
 
 	public interface ModelAttribute {

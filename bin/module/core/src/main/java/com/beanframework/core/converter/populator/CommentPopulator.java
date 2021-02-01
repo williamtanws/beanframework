@@ -19,7 +19,7 @@ public class CommentPopulator extends AbstractPopulator<Comment, CommentDto> imp
 	@Override
 	public void populate(Comment source, CommentDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setHtml(source.getHtml());
 			target.setVisibled(source.getVisibled());
 			target.setUser(populateUser(source.getUser()));

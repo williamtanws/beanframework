@@ -20,7 +20,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title" th:text="#{module.backoffice.record.new}"></h4>
+						<h4 class="modal-title" th:text="#{module.common.record.new}"></h4>
 					</div>
 					<form id="create-form" role="form" th:action="${createAction}" method="post" th:object="${createObject}">
 						<input type="hidden" name="create">
@@ -39,8 +39,8 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
-							<button type="submit" class="btn btn-success" th:text="#{module.backoffice.save}"></button>
+							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.common.cancel}+'  '"></button>
+							<button type="submit" class="btn btn-success" th:text="#{module.common.save}"></button>
 						</div>
 					</form>
 				</div>

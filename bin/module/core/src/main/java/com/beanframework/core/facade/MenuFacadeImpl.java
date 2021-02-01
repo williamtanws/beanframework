@@ -1,6 +1,7 @@
 package com.beanframework.core.facade;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.converter.dto.DtoMenuTreeByCurrentUserConverter;
+import com.beanframework.core.converter.dto.DtoMenuTreeConverter;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
@@ -27,6 +29,9 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 	
 	private static final Class<Menu> entityClass = Menu.class;
 	private static final Class<MenuDto> dtoClass = MenuDto.class;
+	
+	@Autowired
+	private DtoMenuTreeConverter dtoMenuTreeConverter;
 	
 	@Autowired
 	private DtoMenuTreeByCurrentUserConverter dtoMenuTreeByCurrentUserConverter;
@@ -97,13 +102,22 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
 
-			List<Menu> entities = menuService.findMenuTree(false);
-			List<MenuDto> dtos = modelService.getDtoList(entities, dtoClass);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(Menu.PARENT, null);
+			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
+			sorts.put(Menu.SORT, Sort.Direction.ASC);
+			List<Menu> rootEntity = modelService.findByPropertiesBySortByResult(properties, sorts, null, null, Menu.class);
+			
+			List<MenuDto> rootDto = new ArrayList<MenuDto>();
+			for (Menu menu : rootEntity) {
+				rootDto.add(dtoMenuTreeConverter.convert(menu, new MenuDto()));
+			}
 
-			return dtos;
+			return rootDto;
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
@@ -113,13 +127,12 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 	@Transactional(readOnly = true)
 	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
 		
-		Set<UUID> userGroupUuids = userService.getAllUserGroupUuidsByCurrentUser();
-		
+		Set<UUID> userGroupUuids = userService.getAllUserGroupsByCurrentUser();
 		if(userGroupUuids == null || userGroupUuids.isEmpty()) {
 			return new ArrayList<MenuDto>();
 		}
-
-		List<Menu> rootEntity = modelService.findBySpecificationBySort(MenuSpecification.getMenuByUserGroup(null, userGroupUuids), Sort.by(Direction.ASC, Menu.SORT), Menu.class);
+		List<Menu> rootEntity = modelService.findBySpecificationBySort(MenuSpecification.getMenuByEnabledByUserGroup(null, userGroupUuids), Sort.by(Direction.ASC, Menu.SORT), Menu.class);
+		
 		List<MenuDto> rootDto = new ArrayList<MenuDto>();
 		for (Menu menu : rootEntity) {
 			rootDto.add(dtoMenuTreeByCurrentUserConverter.convert(menu, new MenuDto()));

@@ -21,7 +21,7 @@ public class VendorPopulator extends AbstractPopulator<Vendor, VendorDto> implem
 	@Override
 	public void populate(Vendor source, VendorDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setPassword(source.getPassword());
 			target.setAccountNonExpired(source.getAccountNonExpired());

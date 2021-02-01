@@ -23,7 +23,7 @@ public class CompanyPopulator extends AbstractPopulator<Company, CompanyDto> imp
 	@Override
 	public void populate(Company source, CompanyDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setDescription(source.getDescription());
 			target.setLineOfBusiness(source.getLineOfBusiness());

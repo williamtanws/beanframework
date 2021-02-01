@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.WorkflowWebConstants;
-import com.beanframework.backoffice.WorkflowWebConstants.WorkflowPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.WorkflowDto;
@@ -28,52 +30,45 @@ public class WorkflowController extends AbstractController {
 
 	@Autowired
 	private WorkflowFacade workflowFacade;
+	
+	@Value(WorkflowWebConstants.Path.WORKFLOW_PAGE)
+	private String PATH_WORKFLOW_PAGE;
+	
+	@Value(WorkflowWebConstants.Path.WORKFLOW_FORM)
+	private String PATH_WORKFLOW_FORM;
 
-	@Value(WorkflowWebConstants.Path.WORKFLOW)
-	private String PATH_WORKFLOW;
+	@Value(WorkflowWebConstants.View.PAGE)
+	private String VIEW_WORKFLOW_PAGE;
 
-	@Value(WorkflowWebConstants.View.LIST)
-	private String VIEW_WORKFLOW_LIST;
+	@Value(WorkflowWebConstants.View.FORM)
+	private String VIEW_WORKFLOW_FORM;
 
-	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_READ)
-	@GetMapping(value = WorkflowWebConstants.Path.WORKFLOW)
-	public String list(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model) throws Exception {
-		model.addAttribute("create", false);
-
-		if (workflowDto.getUuid() != null) {
-
-			WorkflowDto existsDto = workflowFacade.findOneByUuid(workflowDto.getUuid());
-
-			if (existsDto != null) {
-				model.addAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO, existsDto);
-			} else {
-				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
-			}
-		}
-
-		return VIEW_WORKFLOW_LIST;
+	@GetMapping(value = WorkflowWebConstants.Path.WORKFLOW_PAGE)
+	public String list(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, @RequestParam Map<String, Object> requestParams)
+			throws Exception {
+		return VIEW_WORKFLOW_PAGE;
 	}
 
-	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_CREATE)
-	@GetMapping(value = WorkflowWebConstants.Path.WORKFLOW, params = "create")
+	@GetMapping(value = WorkflowWebConstants.Path.WORKFLOW_FORM)
 	public String createView(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model) throws Exception {
 
-		workflowDto = workflowFacade.createDto();
+		if (workflowDto.getUuid() != null) {
+			workflowDto = workflowFacade.findOneByUuid(workflowDto.getUuid());
+		} else {
+			workflowDto = workflowFacade.createDto();
+		}
 		model.addAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO, workflowDto);
-		model.addAttribute("create", true);
 
-		return VIEW_WORKFLOW_LIST;
+		return VIEW_WORKFLOW_FORM;
 	}
 
-	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_CREATE)
-	@PostMapping(value = WorkflowWebConstants.Path.WORKFLOW, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
-			throws Exception {
+	@PostMapping(value = WorkflowWebConstants.Path.WORKFLOW_FORM, params = "create")
+	public RedirectView create(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (workflowDto.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
 		} else {
-
 			try {
 				workflowDto = workflowFacade.create(workflowDto);
 
@@ -87,19 +82,17 @@ public class WorkflowController extends AbstractController {
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_WORKFLOW);
+		redirectView.setUrl(PATH_WORKFLOW_FORM);
 		return redirectView;
 	}
 
-	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_UPDATE)
-	@PostMapping(value = WorkflowWebConstants.Path.WORKFLOW, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
-			throws Exception {
+	@PostMapping(value = WorkflowWebConstants.Path.WORKFLOW_FORM, params = "update")
+	public RedirectView update(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (workflowDto.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
-
 			try {
 				workflowDto = workflowFacade.update(workflowDto);
 
@@ -113,26 +106,29 @@ public class WorkflowController extends AbstractController {
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_WORKFLOW);
+		redirectView.setUrl(PATH_WORKFLOW_FORM);
 		return redirectView;
 	}
 
-	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = WorkflowWebConstants.Path.WORKFLOW, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	@PostMapping(value = WorkflowWebConstants.Path.WORKFLOW_FORM, params = "delete")
+	public RedirectView delete(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		try {
-			workflowFacade.delete(workflowDto.getUuid());
+		if (workflowDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
+		} else {
+			try {
+				workflowFacade.delete(workflowDto.getUuid());
 
-			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
-		} catch (BusinessException e) {
-			addErrorMessage(WorkflowDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(WorkflowDto.UUID, workflowDto.getUuid());
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(WorkflowDto.class, e.getMessage(), bindingResult, redirectAttributes);
+			}
 		}
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_WORKFLOW);
+		redirectView.setUrl(PATH_WORKFLOW_FORM);
 		return redirectView;
 
 	}
