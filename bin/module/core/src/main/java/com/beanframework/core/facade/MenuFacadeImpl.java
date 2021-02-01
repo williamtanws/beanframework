@@ -79,7 +79,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
-		return findHistory(dataTableRequest, entityClass);
+		return findHistory(dataTableRequest, entityClass, dtoClass);
 	}
 
 	@Override

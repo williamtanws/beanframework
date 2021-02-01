@@ -31,7 +31,7 @@ public class ConfigurationController extends AbstractController {
 	@Autowired
 	private ConfigurationFacade configurationFacade;
 	
-	@Value(ConfigurationWebConstants.Path.CONFIGURATION_PAGE)
+	@Value(ConfigurationWebConstants.Path.CONFIGURATION)
 	private String PATH_CONFIGURATION_PAGE;
 	
 	@Value(ConfigurationWebConstants.Path.CONFIGURATION_FORM)
@@ -43,14 +43,14 @@ public class ConfigurationController extends AbstractController {
 	@Value(ConfigurationWebConstants.View.FORM)
 	private String VIEW_CONFIGURATION_FORM;
 
-	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_PAGE)
-	public String list(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, @RequestParam Map<String, Object> requestParams)
+	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION)
+	public String page(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		return VIEW_CONFIGURATION_PAGE;
 	}
 
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM)
-	public String createView(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model) throws Exception {
+	public String form(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model) throws Exception {
 
 		if (configurationDto.getUuid() != null) {
 			configurationDto = configurationFacade.findOneByUuid(configurationDto.getUuid());

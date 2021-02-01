@@ -24,6 +24,50 @@
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
+
+<style>
+	.selected {
+		background-color: #cccccc;
+	}
+	
+	.modal {
+	  padding: 0 !important; // override inline padding-right added from js
+	}
+	.modal .modal-dialog {
+	  width: 100%;
+	  max-width: none;
+	  height: 100%;
+	  margin: 0;
+	}
+	.modal .modal-content {
+	  height: 100%;
+	  border: 0;
+	  border-radius: 0;
+	}
+	.modal .modal-body {
+	  overflow-y: auto;
+	}
+	
+	.modal .modal-header .close{
+	  font-size: 36px;
+	}
+	
+	.consistent-height .tab-content {
+	  display: flex;
+	}
+	
+	.consistent-height .tab-content > .tab-pane {
+	  display: block; /* undo "display: none;" */
+	  visibility: hidden;
+	  margin-right: -100%;
+	  width: 100%;
+	}
+	
+	.consistent-height .tab-content > .active {
+	  visibility: visible;
+	}
+</style>
+
 </head>
 <body class="layout-top-nav" style="height: auto;">
 	<div class="wrapper">
@@ -67,26 +111,6 @@
 	<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 	<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 
-	<script th:inline="javascript">
-		/*<![CDATA[*/
-		$('#changeLanguage').on(
-				"change",
-				function() {
-					var locale = $('#changeLanguage option:selected').val();
-
-					var url = String(window.location.href.replace(
-							/&?locale=([^&]$|[^&]*)/i, ""));
-					if (window.location.href.indexOf('?') > -1) {
-						url = url + '&locale=' + locale;
-					} else {
-						url = url + '?locale=' + locale;
-					}
-
-					window.location.href = url;
-				});
-
-		/*]]>*/
-	</script>
 	<th:block layout:fragment="toastr">
 		<th:block th:insert="/core/adminlte/common/fragment/toastr :: js"></th:block>
 	</th:block>

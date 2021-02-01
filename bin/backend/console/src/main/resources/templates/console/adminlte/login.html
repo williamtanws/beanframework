@@ -14,7 +14,7 @@
 		<div class="login-page">
 			<div class="login-box">
 				<div class="login-logo">
-					<a th:href="@{${@environment.getProperty('console.webroot')}}" class="h1"> 
+					<a th:href="@{${@environment.getProperty('console.webroot')}}" class="h1">
 						<b th:utext="#{module.common.console}"></b>
 					</a>
 				</div>
@@ -114,6 +114,22 @@
 	</th:block>
 	<th:block layout:fragment="js">
 		<script th:inline="javascript">
+		
+		$('#changeLanguage').on(
+				"change",
+				function() {
+					var locale = $('#changeLanguage option:selected').val();
+
+					var url = String(window.location.href.replace(
+							/&?locale=([^&]$|[^&]*)/i, ""));
+					if (window.location.href.indexOf('?') > -1) {
+						url = url + '&locale=' + locale;
+					} else {
+						url = url + '?locale=' + locale;
+					}
+
+					window.location.href = url;
+				});
 		
 		/*<![CDATA[*/
 		$(document).ready(function() {

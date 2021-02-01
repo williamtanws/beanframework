@@ -11,13 +11,14 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.user.domain.RevisionsEntity;
+import com.beanframework.core.config.dto.RevisionsDto;
 
 public class AbstractResource {
 
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
+	@SuppressWarnings("unchecked")
 	public DataTableResponse<HistoryDataTableResponseData> historyDataTableResponse(DataTableRequest dataTableRequest, List<Object[]> history, int recordsTotal) throws Exception {
 
 		DataTableResponse<HistoryDataTableResponseData> dataTableResponse = new DataTableResponse<HistoryDataTableResponseData>();
@@ -27,15 +28,14 @@ public class AbstractResource {
 
 		for (Object[] object : history) {
 
-			RevisionsEntity revisionEntity = (RevisionsEntity) object[1];
+			RevisionsDto revisionDto = (RevisionsDto) object[1];
 			RevisionType revisionType = (RevisionType) object[2];
-			@SuppressWarnings("unchecked")
 			Set<String> propertiesChanged = (Set<String>) object[3];
 
 			HistoryDataTableResponseData data = new HistoryDataTableResponseData();
 			data.setEntity(object[0]);
-			data.setRevisionId(String.valueOf(revisionEntity.getId()));
-			data.setRevisionDate(new SimpleDateFormat("dd MMM yy, HH:mm:ss").format(revisionEntity.getRevisionDate()));
+			data.setRevisionId(String.valueOf(revisionDto.getId()));
+			data.setRevisionDate(new SimpleDateFormat("dd MMM yy, HH:mm:ss").format(revisionDto.getRevisionDate()));
 			data.setRevisionType(localeMessageService.getMessage("revision." + revisionType.name()));
 			data.setPropertiesChanged(propertiesChanged);
 

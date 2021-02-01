@@ -56,7 +56,7 @@ public class EnumerationFacadeImpl extends AbstractFacade<Enumeration, Enumerati
 
 	@Override
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
-		return findHistory(dataTableRequest, entityClass);
+		return findHistory(dataTableRequest, entityClass, dtoClass);
 	}
 
 	@Override

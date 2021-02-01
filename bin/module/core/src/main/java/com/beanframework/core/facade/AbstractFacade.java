@@ -3,8 +3,10 @@ package com.beanframework.core.facade;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
+import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -12,17 +14,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.converter.dto.DtoRevisionsConverter;
+import com.beanframework.user.domain.RevisionsEntity;
 
 public class AbstractFacade<ENTITY extends GenericEntity, DTO extends GenericDto> {
 
 	@Autowired
 	protected ModelService modelService;
+	
+	@Autowired
+	private DtoRevisionsConverter dtoRevisionsConverter;
 
 	public DTO findOneByUuid(UUID uuid, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
 		return modelService.getDto(modelService.findOneByUuid(uuid, entityClass), dtoClass);
@@ -43,7 +51,9 @@ public class AbstractFacade<ENTITY extends GenericEntity, DTO extends GenericDto
 		return modelService.countAll(entityClass);
 	}
 
-	public List<Object[]> findHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass) throws Exception {
+	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = true)
+	public List<Object[]> findHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
 
 		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
 		if (dataTableRequest.getAuditCriterion() != null)
@@ -53,7 +63,24 @@ public class AbstractFacade<ENTITY extends GenericEntity, DTO extends GenericDto
 		if (dataTableRequest.getAuditOrder() != null)
 			auditOrders.add(dataTableRequest.getAuditOrder());
 
-		return modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), entityClass);
+		List<Object[]> entities = modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), entityClass);
+
+		List<Object[]> dtos = new ArrayList<Object[]>();
+		for (Object[] entity : entities) {
+			
+			Object object = entity[0];
+			RevisionsEntity revisionEntity = (RevisionsEntity) entity[1];
+			RevisionType revisionType = (RevisionType) entity[2];
+			Set<String> propertiesChanged = (Set<String>) entity[3];
+
+			Object[] dto = new Object[4];
+			dto[0] = modelService.getDto(object, dtoClass);
+			dto[1] = dtoRevisionsConverter.convert(revisionEntity);
+			dto[2] = revisionType;
+			dto[3] = propertiesChanged;
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 
 	public int findCountHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass) throws Exception {

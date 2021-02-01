@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout-form}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
 
 <head>
 <title th:utext="#{module.configuration}"></title>
@@ -7,7 +7,7 @@
 
 <body>
 	<th:block layout:fragment="content">
-		<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.configuration')}}" method="post" th:object="${configurationDto}">
+		<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.configuration.form')}}" method="post" th:object="${configurationDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}" />
 			<input type="hidden" name="update" th:if="*{uuid != null}" />
 			<input type="hidden" name="uuid" th:value="*{uuid}" th:if="*{uuid != null}" />
@@ -26,7 +26,7 @@
 					<!-- /.col -->
 				</div>
 			</div>
-			<div class="card card-primary card-outline card-outline-tabs">
+			<div class="card card-primary card-outline card-outline-tabs consistent-height">
 				<div class="card-header p-0 border-bottom-0">
 					<ul class="nav nav-tabs" id="custom-tabs-tab" role="tablist">
 						<li class="nav-item">
@@ -112,7 +112,7 @@
 			
 		    /*]]>*/
 		</script>
-		<th:block th:if="${configurationDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.configuration.page.history')}(uuid=${configurationDto.uuid})})}"></th:block>
+		<th:block th:if="${configurationDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.configuration.history')}(uuid=${configurationDto.uuid})})}"></th:block>
 	</th:block>
 </body>
 
