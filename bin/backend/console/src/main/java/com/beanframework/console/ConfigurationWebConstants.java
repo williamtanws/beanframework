@@ -22,17 +22,4 @@ public interface ConfigurationWebConstants {
 	public interface ModelAttribute {
 		public static final String CONFIGURATION_DTO = "configurationDto";
 	}
-
-	public interface ConfigurationPreAuthorizeEnum {
-		public static final String AUTHORITY_READ = "configuration_read";
-		public static final String AUTHORITY_CREATE = "configuration_create";
-		public static final String AUTHORITY_UPDATE = "configuration_update";
-		public static final String AUTHORITY_DELETE = "configuration_delete";
-
-		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
-		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
-		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
-		public static final String HAS_CREATE_UPDATE = HAS_CREATE + " or " + HAS_UPDATE;
-		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
-	}
 }

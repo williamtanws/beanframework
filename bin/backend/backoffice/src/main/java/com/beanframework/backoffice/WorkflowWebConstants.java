@@ -5,16 +5,18 @@ public interface WorkflowWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.workflow.checkid}";
-			public static final String PAGE = "${path.api.workflow.page}";
-			public static final String HISTORY = "${path.api.workflow.history}";
+			public static final String WORKFLOW_PAGE = "${path.api.workflow.page}";
+			public static final String WORKFLOW_PAGE_HISTORY = "${path.api.workflow.page.history}";
+			public static final String WORKFLOW_CHECKID = "${path.api.workflow.checkid}";
 		}
 
-		public static final String WORKFLOW = "${path.workflow}";
+		public static final String WORKFLOW_PAGE = "${path.workflow.page}";
+		public static final String WORKFLOW_FORM = "${path.workflow.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.workflow.list}";
+		public static final String PAGE = "${view.workflow.page}";
+		public static final String FORM = "${view.workflow.form}";
 	}
 
 	public interface ModelAttribute {
@@ -26,10 +28,10 @@ public interface WorkflowWebConstants {
 		public static final String AUTHORITY_CREATE = "workflow_create";
 		public static final String AUTHORITY_UPDATE = "workflow_update";
 		public static final String AUTHORITY_DELETE = "workflow_delete";
-		
-		public static final String HAS_READ = "hasAuthority('"+AUTHORITY_READ+"')";
-		public static final String HAS_CREATE = "hasAuthority('"+AUTHORITY_CREATE+"')";
-		public static final String HAS_UPDATE = "hasAuthority('"+AUTHORITY_UPDATE+"')";
-		public static final String HAS_DELETE = "hasAuthority('"+AUTHORITY_DELETE+"')";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
 	}
 }

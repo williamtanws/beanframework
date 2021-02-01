@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title th:utext="#{module.console}"></title>
+<title th:utext="#{module.common.console}"></title>
 
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback}">
@@ -20,9 +20,15 @@
 
 </head>
 <body class="layout-top-nav layout-footer-not-fixed" data-panel-auto-height-mode="height">
+	<script th:inline="javascript">
+		if ( self !== top ) {
+			// you're in an iframe
+			window.top.location.href = /*[[@{${@environment.getProperty('path.console')}}]]*/; 
+		}
+	</script>
 	<div class="wrapper">
 		<!-- Header -->
-		<th:block th:insert="${@environment.getProperty('fragement.console.main.header')} :: header"></th:block>
+		<th:block th:insert="~{console/adminlte/common/fragment/main-header :: header}"></th:block>
 
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper iframe-mode" data-widget="iframe" data-loading-screen="750">
@@ -41,12 +47,12 @@
 			</div>
 			<div class="tab-content">
 				<div class="tab-empty">
-					<h2 class="display-4"></h2>
+					<h2 class="display-4" th:utext="#{module.common.console.login.box.msg}"></h2>
 				</div>
 				<div class="tab-loading">
 					<div>
 						<h2 class="display-4">
-							<span th:text="#{module.console.loading}"></span>
+							<span th:text="#{module.common.loading}"></span>
 							<i class="fa fa-sync fa-spin"></i>
 						</h2>
 					</div>
@@ -55,7 +61,7 @@
 		</div>
 
 		<!-- Footer -->
-		<th:block th:insert="${@environment.getProperty('fragement.console.main.footer')} :: footer"></th:block>
+		<th:block th:insert="~{console/adminlte/common/fragment/main-footer :: footer}"></th:block>
 	</div>
 	<!-- jQuery -->
 	<script th:src="@{/static/adminlte/plugins/jquery/jquery.min.js}"></script>
@@ -97,9 +103,9 @@
 			  iconMinimize: 'fa-compress'
 		});
 
-		var overviewName = /*[[#{module.console.application.overview}]]*/;
+		var overviewName = /*[[#{module.common.overview}]]*/;
 		var overviewPath = /*[[@{${@environment.getProperty('path.console.application.overview')}}]]*/;
-		$('.content-wrapper').IFrame('createTab', overviewName, overviewPath, 'index', true);
+		//$('.content-wrapper').IFrame('createTab', overviewName, overviewPath, 'index', true);
 		
 		function changeLocale(locale) {
 				var url = window.location.href.split('#')[0];
@@ -116,7 +122,7 @@
 		
 		/*]]>*/
 	</script>
-	
+
 	<!-- toastr -->
 	<th:block th:insert="/core/adminlte/common/fragment/toastr :: js"></th:block>
 </body>

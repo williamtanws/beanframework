@@ -17,7 +17,7 @@ public class DynamicFieldTemplatePopulator extends AbstractPopulator<DynamicFiel
 	@Override
 	public void populate(DynamicFieldTemplate source, DynamicFieldTemplateDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			for (UUID uuid : source.getDynamicFieldSlots()) {
 				target.getDynamicFieldSlots().add(populateDynamicFieldSlot(uuid));

@@ -5,26 +5,25 @@ public interface VendorWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.vendor.checkid}";
-			public static final String PAGE = "${path.api.vendor.page}";
-			public static final String HISTORY = "${path.api.vendor.history}";
+			public static final String VENDOR_PAGE = "${path.api.vendor.page}";
+			public static final String VENDOR_PAGE_HISTORY = "${path.api.vendor.page.history}";
+			public static final String VENDOR_CHECKID = "${path.api.vendor.checkid}";
 		}
 
-		public static final String VENDOR = "${path.vendor}";
-		public static final String PROFILE = "${path.vendor.profile}";
+		public static final String VENDOR_PAGE = "${path.vendor.page}";
+		public static final String VENDOR_FORM = "${path.vendor.form}";
 	}
 
 	public interface View {
-		public static final String PROFILE = "${view.vendor.profile}";
-		public static final String LIST = "${view.vendor.list}";
+		public static final String PAGE = "${view.vendor.page}";
+		public static final String FORM = "${view.vendor.form}";
 	}
 
 	public interface ModelAttribute {
 		public static final String VENDOR_DTO = "vendorDto";
-		public static final String PROFILE = "vendorProfile";
 	}
 	
-	public static interface VendorPreAuthorizeEnum {
+	public interface VendorPreAuthorizeEnum {
 		public static final String AUTHORITY_READ = "vendor_read";
 		public static final String AUTHORITY_CREATE = "vendor_create";
 		public static final String AUTHORITY_UPDATE = "vendor_update";

@@ -14,7 +14,6 @@ import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
-import com.beanframework.user.domain.UserGroup;
 
 public class MenuPopulator extends AbstractPopulator<Menu, MenuDto> implements Populator<Menu, MenuDto> {
 
@@ -23,7 +22,7 @@ public class MenuPopulator extends AbstractPopulator<Menu, MenuDto> implements P
 	@Override
 	public void populate(Menu source, MenuDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setParent(populateParent(source.getParent()));
 			target.setIcon(source.getIcon());
@@ -36,8 +35,7 @@ public class MenuPopulator extends AbstractPopulator<Menu, MenuDto> implements P
 			for (Menu child : source.getChilds()) {
 				target.getChilds().add(populateChild(child.getUuid()));
 			}
-			Hibernate.initialize(source.getUserGroups());
-			for (UserGroup userGroup : source.getUserGroups()) {
+			for (UUID userGroup : source.getUserGroups()) {
 				target.getUserGroups().add(populateUserGroup(userGroup));
 			}
 			for (MenuField field : source.getFields()) {
@@ -66,7 +64,7 @@ public class MenuPopulator extends AbstractPopulator<Menu, MenuDto> implements P
 			return null;
 
 		MenuDto target = new MenuDto();
-		populateCommon(source, target);
+		populateGeneric(source, target);
 		target.setName(source.getName());
 		target.setIcon(source.getIcon());
 		target.setPath(source.getPath());
@@ -86,7 +84,7 @@ public class MenuPopulator extends AbstractPopulator<Menu, MenuDto> implements P
 		try {
 			Menu source = modelService.findOneByUuid(uuid, Menu.class);
 			MenuDto target = new MenuDto();
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setIcon(source.getIcon());
 			target.setPath(source.getPath());
@@ -98,7 +96,7 @@ public class MenuPopulator extends AbstractPopulator<Menu, MenuDto> implements P
 			for (Menu child : source.getChilds()) {
 				target.getChilds().add(populateChild(child.getUuid()));
 			}
-			for (UserGroup userGroup : source.getUserGroups()) {
+			for (UUID userGroup : source.getUserGroups()) {
 				target.getUserGroups().add(populateUserGroup(userGroup));
 			}
 			for (MenuField field : source.getFields()) {

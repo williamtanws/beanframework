@@ -56,15 +56,11 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 			boolean removed = false;
 			for (int j = 0; j < entities.get(i).getUserGroups().size(); j++) {
-				if (entities.get(i).getUserGroups().get(j).getUuid().equals(model.getUuid())) {
-					entities.get(i).getUserGroups().remove(j);
-					removed = true;
-					break;
-				}
+				entities.get(i).getUserGroups().remove(model.getUuid());
 			}
 
 			if (removed)
-				modelService.saveEntityQuietly(entities.get(i), UserGroup.class);
+				modelService.saveEntityByLegacyMode(entities.get(i), User.class);
 		}
 	}
 
@@ -106,7 +102,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 			}
 
 			if (removed)
-				modelService.saveEntityQuietly(entities.get(i), UserGroup.class);
+				modelService.saveEntityByLegacyMode(entities.get(i), UserGroup.class);
 		}
 	}
 
@@ -148,7 +144,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 			}
 
 			if (removed)
-				modelService.saveEntityQuietly(entities.get(i), UserGroup.class);
+				modelService.saveEntityByLegacyMode(entities.get(i), UserGroup.class);
 		}
 	}
 }

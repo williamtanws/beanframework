@@ -21,7 +21,7 @@ public class AddressPopulator extends AbstractPopulator<Address, AddressDto> imp
 	@Override
 	public void populate(Address source, AddressDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setStreetName(source.getStreetName());
 			target.setStreetNumber(source.getStreetNumber());
 			target.setPostalCode(source.getPostalCode());
@@ -101,7 +101,7 @@ public class AddressPopulator extends AbstractPopulator<Address, AddressDto> imp
 		try {
 			Address source = modelService.findOneByUuid(uuid, Address.class);
 			AddressDto target = new AddressDto();
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setStreetName(source.getStreetName());
 			target.setStreetNumber(source.getStreetNumber());
 			target.setPostalCode(source.getPostalCode());

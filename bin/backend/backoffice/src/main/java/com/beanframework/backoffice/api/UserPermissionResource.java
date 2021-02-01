@@ -37,7 +37,7 @@ public class UserPermissionResource extends AbstractResource {
 	private UserPermissionFacade userPermissionFacade;
 
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(UserPermissionWebConstants.Path.Api.CHECKID)
+	@RequestMapping(UserPermissionWebConstants.Path.Api.USERPERMISSION_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -59,7 +59,7 @@ public class UserPermissionResource extends AbstractResource {
 	}
 
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = UserPermissionWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = UserPermissionWebConstants.Path.Api.USERPERMISSION_PAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -86,7 +86,7 @@ public class UserPermissionResource extends AbstractResource {
 	}
 
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = UserPermissionWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = UserPermissionWebConstants.Path.Api.USERPERMISSION_PAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

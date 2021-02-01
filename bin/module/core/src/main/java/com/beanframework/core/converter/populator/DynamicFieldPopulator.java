@@ -21,7 +21,7 @@ public class DynamicFieldPopulator extends AbstractPopulator<DynamicField, Dynam
 	@Override
 	public void populate(DynamicField source, DynamicFieldDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setRequired(source.getRequired());
 			target.setRule(source.getRule());

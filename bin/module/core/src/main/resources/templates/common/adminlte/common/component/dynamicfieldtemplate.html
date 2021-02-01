@@ -5,9 +5,9 @@
 		<table id="dynamicFieldTemplateTable" class="table table-bordered table-hover" style="width:100%">
 			<thead>
 				<tr>
-					<th th:text="#{module.backoffice.id}" class="text-center"></th>
-					<th th:text="#{module.backoffice.name}" class="text-center"></th>
-					<th th:text="#{module.backoffice.select}" class="text-center"></th>
+					<th th:text="#{module.common.id}" class="text-center"></th>
+					<th th:text="#{module.common.name}" class="text-center"></th>
+					<th th:text="#{module.common.select}" class="text-center"></th>
 				</tr>
 			</thead>
 			<thead>
@@ -122,7 +122,7 @@
 		    	$('#dynamicFieldTemplateTable thead tr:eq(1) th').each(function(index){
 		    		if(index < 2){
 		    			var title = $('#dynamicFieldTemplateTable thead tr:eq(0) th').eq( $(this).index() ).text();
-		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+		    			var searchPlaceHolder = /*[[#{module.common.search}]]*/;
 		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
 		    		} else{
 			            $(this).html('');

@@ -73,7 +73,7 @@
 									<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" th:aria-expanded="${objectDto.uuid != null || create ? 'true':'false'}"
 										th:class="${objectDto.uuid == null ? 'collapsed':''}">
 										<span th:if="${objectDto.uuid != null}" th:text="${objectDto.id == null} ?  'UUID: '+${objectDto.uuid} : 'ID: '+${objectDto.id}"></span>
-										<span th:if="${create}" th:text="#{module.backoffice.create}"></span>
+										<span th:if="${create}" th:text="#{module.common.create}"></span>
 										<i class="fa fa-fw fa-angle-double-down"></i>
 									</a>
 								</h4>
@@ -193,7 +193,7 @@
 				    $('#mainTable thead tr:eq(1) th').each(function(index) {
 				        if(filterColumnIndex.includes(index)){
 				        	var title = $('#mainTable thead tr:eq(0) th').eq($(this).index()).text();
-					        var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/ ;
+					        var searchPlaceHolder = /*[[#{module.common.search}]]*/ ;
 					        var search = '';
 					        
 					        if(mainTable.state.loaded()){

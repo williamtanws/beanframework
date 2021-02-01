@@ -14,7 +14,7 @@ public class AuditorPopulator extends AbstractPopulator<Auditor, AuditorDto> imp
 
 	@Override
 	public void populate(Auditor source, AuditorDto target) throws PopulatorException {
-		populateCommon(source, target);
+		populateGeneric(source, target);
 		target.setName(source.getName());
 	}
 

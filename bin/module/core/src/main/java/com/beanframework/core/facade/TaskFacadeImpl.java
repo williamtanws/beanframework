@@ -1,9 +1,7 @@
 package com.beanframework.core.facade;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.flowable.engine.TaskService;
 import org.flowable.task.api.Task;
@@ -15,8 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.user.domain.User;
-import com.beanframework.user.service.UserService;
 
 @Component
 public class TaskFacadeImpl implements TaskFacade {
@@ -24,8 +20,8 @@ public class TaskFacadeImpl implements TaskFacade {
 	@Autowired
 	private TaskService taskService;
 
-	@Autowired
-	private UserService userService;
+//	@Autowired
+//	private UserService userService;
 
 	@Override
 	public Task findOneById(String id) {
@@ -50,17 +46,17 @@ public class TaskFacadeImpl implements TaskFacade {
 		taskService.complete(taskId, variables);
 	}
 
-	@Override
-	public Page<Task> findByCurrentUserGroup(DataTableRequest dataTableRequest) throws Exception {
-		User user = userService.getCurrentUser();
-
-		Set<String> userGroupIds = userService.getAllUserGroupIdsByUserUuid(user.getUuid());
-
-		List<Task> tasks = taskService.createTaskQuery().taskCandidateGroupIn(new ArrayList<String>(userGroupIds)).listPage((int) dataTableRequest.getPageable().getOffset(),
-				dataTableRequest.getPageable().getPageSize());
-
-		return new PageImpl<Task>(tasks, PageRequest.of(dataTableRequest.getPageable().getPageNumber(), dataTableRequest.getPageable().getPageSize(), dataTableRequest.getPageable().getSort()),
-				tasks.size());
-	}
+//	@Override
+//	public Page<Task> findByCurrentUserGroup(DataTableRequest dataTableRequest) throws Exception {
+//		User user = userService.getCurrentUser();
+//
+//		Set<String> userGroupIds = userService.getAllUserGroupIdsByUserUuid(user.getUuid());
+//
+//		List<Task> tasks = taskService.createTaskQuery().taskCandidateGroupIn(new ArrayList<String>(userGroupIds)).listPage((int) dataTableRequest.getPageable().getOffset(),
+//				dataTableRequest.getPageable().getPageSize());
+//
+//		return new PageImpl<Task>(tasks, PageRequest.of(dataTableRequest.getPageable().getPageNumber(), dataTableRequest.getPageable().getPageSize(), dataTableRequest.getPageable().getSort()),
+//				tasks.size());
+//	}
 
 }

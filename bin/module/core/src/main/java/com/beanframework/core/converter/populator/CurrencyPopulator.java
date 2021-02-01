@@ -15,7 +15,7 @@ public class CurrencyPopulator extends AbstractPopulator<Currency, CurrencyDto> 
 
 	@Override
 	public void populate(Currency source, CurrencyDto target) throws PopulatorException {
-		populateCommon(source, target);
+		populateGeneric(source, target);
 		target.setName(source.getName());
 		target.setActive(source.getActive());
 		target.setBase(source.getBase());

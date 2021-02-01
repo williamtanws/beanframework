@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{${@environment.getProperty('layout.console')}}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
 <head>
-<title th:utext="#{module.console.platform.license}"></title>
+<title th:utext="#{module.common.license}"></title>
 <style>
 .license {
 	height: auto;
@@ -19,9 +20,15 @@
 </head>
 <body class="layout-top-nav" data-panel-auto-height-mode="height">
 	<th:block layout:fragment="content">
+		<script th:inline="javascript">
+		if ( self !== top ) {
+			// you're in an iframe
+			window.top.location.href = /*[[@{${@environment.getProperty('path.console.platform.license')}}]]*/; 
+		}
+		</script>
 	
 		<!-- Footer -->
-		<th:block th:insert="${@environment.getProperty('fragement.console.main.footer')} :: footer"></th:block>
+		<th:block th:insert="~{console/adminlte/common/fragment/main-footer :: footer}"></th:block>
 	
 		<!-- Main content -->
 		<section class="content">
@@ -32,7 +39,7 @@
 							<div class="card-header">
 								<h3 class="card-title">
 									<i class="fas fa-certificate"></i>
-									<b th:utext="#{module.console.platform.license.agreements}"></b>
+									<b th:utext="#{module.common.license.agreements}"></b>
 								</h3>
 							</div>
 							<!-- /.card-header -->
@@ -64,22 +71,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 									</pre>
 									</div>
-									<div class="col-xs-12">
+									<div class="col-xs-12" th:if="${license.value != 'true'}">
 										<div class="form-group has-feedback checkbox icheck">
 											<label>
-												<input id="agreeCheckBox" type="checkbox" name="value" th:checked="${license.value == true}">
+												<input id="agreeCheckBox" type="checkbox" name="value">
 												&nbsp;
-												<span th:text="#{module.console.platform.license.agree}"></span><br>
+												<span th:text="#{module.common.license.agree}"></span><br>
 											</label>
 										</div>
 									</div>
-									<div class="col-xs-4 col-md-offset-8">
-										<button type="submit" class="btn btn-block btn-success" th:text="#{module.console.submit}"></button>
+									<div class="col-xs-4 col-md-offset-8" th:if="${license.value != 'true'}">
+										<button type="submit" class="btn btn-block btn-success" th:text="#{module.common.submit}"></button>
 									</div>
 									<div class="col-xs-12 text-center" th:if="${license.value == 'true'}" style="font-size: 16px">
 										<span class="fa fa-check-square text-green"></span>
 										&nbsp;
-										<label th:text="#{module.console.platform.license.accepted}"></label>
+										<label th:text="#{module.common.license.accepted}"></label><br>
+										<a class="btn btn-block btn-success" th:href="@{${@environment.getProperty('console.webroot')}}" type="button" th:text="#{error.returntohome}"></a>
 									</div>
 								</form>
 							</div>
@@ -92,13 +100,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 		</section>
 	</th:block>
 	<th:block layout:fragment="js">
-		<script th:inline="javascript">
+		<!-- <script th:inline="javascript">
 		
 		if ( self !== top ) {
 			// you're in an iframe
 			window.top.location.href = /*[[@{${@environment.getProperty('path.console.platform.license')}}]]*/; 
 		}
-		</script>
+		</script> -->
 		<script th:inline="javascript">
 			/*<![CDATA[*/
 			$(document)
@@ -113,7 +121,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 		                    },
 		                    messages: {
 		                        value: {
-		                            required: /*[[#{module.console.platform.license.required}]]*/
+		                            required: /*[[#{module.common.license.required}]]*/
 		                        }
 		                    },
 		        		    errorElement: 'span',

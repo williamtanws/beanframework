@@ -35,13 +35,13 @@
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
 							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
+								<a href="#tab_history" data-toggle="tab" th:text="#{module.common.history}" onclick="changeTab('history')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content">
@@ -64,8 +64,8 @@
 												<label for="active" th:text="#{module.currency.active}"></label>
 												<select class="form-control" name="active">
 													<option value="" th:text="'&nbsp'"></option>
-													<option value="1" th:selected="*{active == true}" th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="*{active == false}" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="*{active == true}" th:text="#{module.common.yes}"></option>
+													<option value="0" th:selected="*{active == false}" th:text="#{module.common.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -161,8 +161,8 @@
 		            },
 		            messages: {
 		                id: {
-		                    required: /*[[#{module.backoffice.id.required}]]*/ ,
-		                    remote: /*[[#{module.backoffice.id.exists}]]*/
+		                    required: /*[[#{module.common.id.required}]]*/ ,
+		                    remote: /*[[#{module.common.id.exists}]]*/
 		                },
 		                name: {
 		                    required: /*[[#{module.currency.name.required}]]*/

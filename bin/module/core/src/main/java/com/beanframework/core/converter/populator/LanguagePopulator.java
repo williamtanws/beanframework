@@ -15,7 +15,7 @@ public class LanguagePopulator extends AbstractPopulator<Language, LanguageDto> 
 
 	@Override
 	public void populate(Language source, LanguageDto target) throws PopulatorException {
-		populateCommon(source, target);
+		populateGeneric(source, target);
 		target.setName(source.getName());
 		target.setSort(source.getSort());
 		target.setActive(source.getActive());

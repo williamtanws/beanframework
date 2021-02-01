@@ -25,8 +25,8 @@
 									</button>
 								</div>
 								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<a class="btn btn-default" th:text="#{module.backoffice.refresh}" onclick="window.location.reload()"></a>
-									<button type="submit" class="btn btn-success" th:text="#{module.backoffice.save}" sec:authorize="hasAuthority('menu_update')"></button>
+									<a class="btn btn-default" th:text="#{module.common.refresh}" onclick="window.location.reload()"></a>
+									<button type="submit" class="btn btn-success" th:text="#{module.common.save}" sec:authorize="hasAuthority('menu_update')"></button>
 								</div>
 							</div>
 						</div>
@@ -40,16 +40,16 @@
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
 							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li>
-								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.backoffice.attribute}" onclick="changeTab('attribute')"></a>
+								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.common.attribute}" onclick="changeTab('attribute')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
 								<a href="#tab_history" data-toggle="tab" th:text="#{module.history}" onclick="changeTab('history')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content">
@@ -109,8 +109,8 @@
 											<div class="form-group">
 												<label for="active" th:text="#{module.menu.enabled}"></label>
 												<select class="form-control" name="enabled">
-													<option value="1" th:selected="*{enabled == true}" th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="*{enabled == false}" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="*{enabled == true}" th:text="#{module.common.yes}"></option>
+													<option value="0" th:selected="*{enabled == false}" th:text="#{module.common.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>

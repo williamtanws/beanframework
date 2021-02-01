@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
 	<th:block layout:fragment="button (updateAuthority)">
-		<button type="submit" class="btn btn-success" th:text="#{module.backoffice.save}" th:if="${#authorization.expression('hasAuthority('''+updateAuthority+''')')}"></button>
+		<button type="submit" class="btn btn-success" th:text="#{module.common.save}" th:if="${#authorization.expression('hasAuthority('''+updateAuthority+''')')}"></button>
 	</th:block>
 </body>
 </html>

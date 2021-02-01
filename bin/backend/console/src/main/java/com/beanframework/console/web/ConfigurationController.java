@@ -20,11 +20,11 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.console.ConfigurationWebConstants;
-import com.beanframework.console.ConfigurationWebConstants.ConfigurationPreAuthorizeEnum;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.core.data.ConfigurationDto;
 import com.beanframework.core.facade.ConfigurationFacade;
 
+@PreAuthorize("isAuthenticated()")
 @Controller
 public class ConfigurationController extends AbstractController {
 
@@ -43,14 +43,12 @@ public class ConfigurationController extends AbstractController {
 	@Value(ConfigurationWebConstants.View.FORM)
 	private String VIEW_CONFIGURATION_FORM;
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_PAGE)
 	public String list(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		return VIEW_CONFIGURATION_PAGE;
 	}
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM)
 	public String createView(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model) throws Exception {
 
@@ -64,7 +62,6 @@ public class ConfigurationController extends AbstractController {
 		return VIEW_CONFIGURATION_FORM;
 	}
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM, params = "create")
 	public RedirectView create(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -89,7 +86,6 @@ public class ConfigurationController extends AbstractController {
 		return redirectView;
 	}
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM, params = "update")
 	public RedirectView update(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -114,7 +110,6 @@ public class ConfigurationController extends AbstractController {
 		return redirectView;
 	}
 
-	@PreAuthorize(ConfigurationPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM, params = "delete")
 	public RedirectView delete(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {

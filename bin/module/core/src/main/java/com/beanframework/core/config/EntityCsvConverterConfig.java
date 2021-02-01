@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.core.converter.entity.csv.EntityCsvAddressConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvAdminConverter;
 import com.beanframework.core.converter.entity.csv.EntityCsvCompanyConverter;
 import com.beanframework.core.converter.entity.csv.EntityCsvConfigurationConverter;
 import com.beanframework.core.converter.entity.csv.EntityCsvCountryConverter;
@@ -29,7 +28,6 @@ import com.beanframework.core.converter.entity.csv.EntityCsvUserRightConverter;
 import com.beanframework.core.converter.entity.csv.EntityCsvVendorConverter;
 import com.beanframework.core.converter.entity.csv.EntityCsvWorkflowConverter;
 import com.beanframework.core.csv.AddressCsv;
-import com.beanframework.core.csv.AdminCsv;
 import com.beanframework.core.csv.CompanyCsv;
 import com.beanframework.core.csv.ConfigurationCsv;
 import com.beanframework.core.csv.CountryCsv;
@@ -55,20 +53,6 @@ import com.beanframework.core.csv.WorkflowCsv;
 
 @Configuration
 public class EntityCsvConverterConfig {
-
-	@Bean
-	public EntityCsvAdminConverter entityCsvAdminConverter() {
-		return new EntityCsvAdminConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvAdminConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvAdminConverter());
-		mapping.setTypeCode(AdminCsv.class.getSimpleName());
-
-		return mapping;
-	}
 
 	@Bean
 	public EntityCsvConfigurationConverter entityCsvConfigurationConverter() {

@@ -15,11 +15,10 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.utils.AbstractSpecification;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.user.domain.UserGroup;
 
 public class MenuSpecification extends AbstractSpecification {
 
-	public static Specification<Menu> getMenuByUserGroup(UUID parent, Set<UUID> userGroupsUuid) {
+	public static Specification<Menu> getMenuByEnabledByUserGroup(UUID parent, Set<UUID> userGroupsUuid) {
 
 		return new Specification<Menu>() {
 			private static final long serialVersionUID = 1L;
@@ -37,7 +36,7 @@ public class MenuSpecification extends AbstractSpecification {
 				predicates.add(cb.isTrue(root.get(Menu.ENABLED)));
 				
 				if (userGroupsUuid != null && userGroupsUuid.isEmpty() == false) {
-					predicates.add(cb.and(root.join(Menu.USER_GROUPS, JoinType.LEFT).get(UserGroup.UUID).in(userGroupsUuid)));
+					predicates.add(cb.and(root.join(Menu.USER_GROUPS, JoinType.LEFT).in(userGroupsUuid)));
 				}
 				
 				return cb.and(cb.and(predicates.toArray(new Predicate[predicates.size()])));

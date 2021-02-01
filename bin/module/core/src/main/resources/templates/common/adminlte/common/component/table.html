@@ -14,8 +14,8 @@
 							<th th:each="field : ${fields}" th:text="${field}"></th>
 						</th:block>
 						<th:block th:if="${fields == null}">
-							<th style="width: 30%" th:text="#{module.backoffice.id}"></th>
-							<th th:text="#{module.backoffice.name}"></th>
+							<th style="width: 30%" th:text="#{module.common.id}"></th>
+							<th th:text="#{module.common.name}"></th>
 						</th:block>
 						<th style="width: 1%"><button class="btn btn-default btn-sm" type="button" data-toggle="modal" th:data-target="'#modal'+${attributeName}">
 								<i th:class="${list == true} ? 'fa fa-plus' : 'fa fa-edit'"></i>
@@ -66,10 +66,10 @@
 											<th th:each="field : ${fields}" th:text="${field}"></th>
 										</th:block>
 										<th:block th:if="${fields == null}">
-											<th th:text="#{module.backoffice.id}" class="text-center"></th>
-											<th th:text="#{module.backoffice.name}" class="text-center"></th>
+											<th th:text="#{module.common.id}" class="text-center"></th>
+											<th th:text="#{module.common.name}" class="text-center"></th>
 										</th:block>
-										<th th:text="#{module.backoffice.select}" class="text-center"></th>
+										<th th:text="#{module.common.select}" class="text-center"></th>
 									</tr>
 								</thead>
 								<thead>
@@ -209,14 +209,14 @@
 							</script>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
+							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.common.cancel}+'  '"></button>
 							<th:block th:if="${list == null || list == false}">
 								<button type="button" th:onclick="addSelect([[${selectedAttribute}]],[[${tableId}]],[[${selectedTableId}]],[[${fields}]])" class="btn btn-primary" data-dismiss="modal"
-									th:text="'  '+#{module.backoffice.select}+'  '"></button>
+									th:text="'  '+#{module.common.select}+'  '"></button>
 							</th:block>
 							<th:block th:if="${list == true}">
 								<button type="button" th:onclick="addSelects([[${selectedAttribute}]],[[${tableId}]],[[${selectedTableId}]],[[${fields}]])" class="btn btn-primary" data-dismiss="modal"
-									th:text="'  '+#{module.backoffice.select}+'  '"></button>
+									th:text="'  '+#{module.common.select}+'  '"></button>
 							</th:block>
 						</div>
 					</div>

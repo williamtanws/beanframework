@@ -22,7 +22,6 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +39,7 @@ import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.InitialDefaultsInterceptor;
@@ -63,179 +63,150 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	@Autowired
 	protected List<ConverterMapping> converterMappings;
 
-	@Value("${interceptor.strict.use:false}")
-	protected boolean STRICT_USE_INTERCEPTOR;
-
 	@Override
-	public void initialDefaultsInterceptor(Collection models, InterceptorContext context, String typeCode)
-			throws InterceptorException {
+	public void initialDefaultsInterceptor(Collection models, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			initialDefaultsInterceptor(model, context, typeCode);
+			initialDefaultsInterceptor(model, typeCode);
 		}
 	}
 
 	@Override
-	public void initialDefaultsInterceptor(Object model, InterceptorContext context, String typeCode)
-			throws InterceptorException {
+	public void initialDefaultsInterceptor(Object model, String typeCode) throws InterceptorException {
 
-		boolean notIntercepted = true;
+		InterceptorContext context = new InterceptorContext();
+
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof InitialDefaultsInterceptor) {
-				InitialDefaultsInterceptor<Object> interceptor = (InitialDefaultsInterceptor<Object>) interceptorMapping
-						.getInterceptor();
+				InitialDefaultsInterceptor<Object> interceptor = (InitialDefaultsInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					interceptor.onInitialDefaults(model, context);
-					notIntercepted = false;
 				}
 			}
 		}
-
-		if (STRICT_USE_INTERCEPTOR) {
-			if (notIntercepted)
-				throw new InterceptorException(
-						"Cannot find any load interceptor to intercept target typeCode: " + typeCode);
-		}
 	}
 
 	@Override
-	public void loadInterceptor(Collection models, InterceptorContext context, String typeCode)
-			throws InterceptorException {
+	public void loadInterceptor(Collection models, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			loadInterceptor(model, context, typeCode);
+			loadInterceptor(model, typeCode);
 		}
 	}
 
 	@Override
-	public void loadInterceptor(Object model, InterceptorContext context, String typeCode) throws InterceptorException {
+	public void loadInterceptor(Object model, String typeCode) throws InterceptorException {
 
-		boolean notIntercepted = true;
+		InterceptorContext context = new InterceptorContext();
+
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof LoadInterceptor) {
 				LoadInterceptor<Object> interceptor = (LoadInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					interceptor.onLoad(model, context);
-					notIntercepted = false;
 				}
 			}
-		}
-
-		if (STRICT_USE_INTERCEPTOR) {
-			if (notIntercepted)
-				throw new InterceptorException(
-						"Cannot find any load interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
 	@Override
-	public void prepareInterceptor(Collection models, InterceptorContext context, String typeCode)
-			throws InterceptorException {
+	public void prepareInterceptor(Collection models, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			prepareInterceptor(model, context, typeCode);
+			prepareInterceptor(model, typeCode);
 		}
 	}
 
 	@Override
-	public void prepareInterceptor(Object model, InterceptorContext context, String typeCode)
-			throws InterceptorException {
+	public void prepareInterceptor(Object model, String typeCode) throws InterceptorException {
 
-		boolean notIntercepted = true;
+		InterceptorContext context = new InterceptorContext();
+		try {
+			if (((GenericEntity) model).getUuid() != null) {
+				Object oldModel = findOneByUuid(((GenericEntity) model).getUuid(), model.getClass());
+				context.setOldModel(oldModel);
+			}
+		} catch (Exception e) {
+			throw new InterceptorException(e.getMessage(), e);
+		}
+
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof PrepareInterceptor) {
-				PrepareInterceptor<Object> interceptor = (PrepareInterceptor<Object>) interceptorMapping
-						.getInterceptor();
+				PrepareInterceptor<Object> interceptor = (PrepareInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					interceptor.onPrepare(model, context);
-					notIntercepted = false;
 				}
 			}
 		}
 
-		if (STRICT_USE_INTERCEPTOR) {
-			if (notIntercepted)
-				throw new InterceptorException(
-						"Cannot find any prepare interceptor to intercept target typeCode: " + typeCode);
-		}
 	}
 
 	@Override
-	public void removeInterceptor(Collection models, InterceptorContext context, String typeCode)
-			throws InterceptorException {
+	public void removeInterceptor(Collection models, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			removeInterceptor(model, context, typeCode);
+			removeInterceptor(model, typeCode);
 		}
 	}
 
 	@Override
-	public void removeInterceptor(Object model, InterceptorContext context, String typeCode)
-			throws InterceptorException {
+	public void removeInterceptor(Object model, String typeCode) throws InterceptorException {
 
-		boolean notIntercepted = true;
+		InterceptorContext context = new InterceptorContext();
+
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof RemoveInterceptor) {
 				RemoveInterceptor<Object> interceptor = (RemoveInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					interceptor.onRemove(model, context);
-					notIntercepted = false;
 				}
 			}
-		}
-
-		if (STRICT_USE_INTERCEPTOR) {
-			if (notIntercepted)
-				throw new InterceptorException(
-						"Cannot find any remove interceptor to intercept target typeCode: " + typeCode);
 		}
 	}
 
 	@Override
-	public void validateInterceptor(Collection models, InterceptorContext context, String typeCode)
-			throws InterceptorException {
+	public void validateInterceptor(Collection models, String typeCode) throws InterceptorException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
 			Object model = iterator.next();
-			validateInterceptor(model, context, typeCode);
+			validateInterceptor(model, typeCode);
 		}
 	}
 
 	@Override
-	public void validateInterceptor(Object model, InterceptorContext context, String typeCode)
-			throws InterceptorException {
+	public void validateInterceptor(Object model, String typeCode) throws InterceptorException {
 
-		boolean notIntercepted = true;
+		InterceptorContext context = new InterceptorContext();
+		try {
+			if (((GenericEntity) model).getUuid() != null) {
+				Object oldModel = findOneByUuid(((GenericEntity) model).getUuid(), model.getClass());
+				context.setOldModel(oldModel);
+			}
+		} catch (Exception e) {
+			throw new InterceptorException(e.getMessage(), e);
+		}
+
 		for (InterceptorMapping interceptorMapping : interceptorMappings) {
 			if (interceptorMapping.getInterceptor() instanceof ValidateInterceptor) {
-				ValidateInterceptor<Object> interceptor = (ValidateInterceptor<Object>) interceptorMapping
-						.getInterceptor();
+				ValidateInterceptor<Object> interceptor = (ValidateInterceptor<Object>) interceptorMapping.getInterceptor();
 				if (interceptorMapping.getTypeCode().equals(typeCode)) {
 					interceptor.onValidate(model, context);
-					notIntercepted = false;
 				}
 			}
 		}
-
-		if (notIntercepted) {
-			if (STRICT_USE_INTERCEPTOR)
-				throw new InterceptorException(
-						"Cannot find any validate interceptor to intercept target typeCode: " + typeCode);
-		}
 	}
 
 	@Override
-	public void entityConverter(Collection models, Class modelClass)
-			throws ConverterException {
+	public void entityConverter(Collection models, Class modelClass) throws ConverterException {
 
 		Iterator iterator = models.iterator();
 		while (iterator.hasNext()) {
@@ -245,8 +216,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public Object entityConverter(Object model, String typeCode)
-			throws ConverterException {
+	public Object entityConverter(Object model, String typeCode) throws ConverterException {
 		for (ConverterMapping interceptorMapping : converterMappings) {
 			if (interceptorMapping.getConverter() instanceof EntityConverter) {
 				EntityConverter interceptor = (EntityConverter) interceptorMapping.getConverter();
@@ -260,8 +230,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public <T extends Collection> T dtoConverter(Collection models, String typeCode)
-			throws ConverterException, InterceptorException {
+	public <T extends Collection> T dtoConverter(Collection models, String typeCode) throws ConverterException, InterceptorException {
 		if (models instanceof List<?>) {
 			List<Object> listModels = new ArrayList<Object>();
 			Iterator iterator = models.iterator();
@@ -289,16 +258,14 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		throw new ConverterException("Cannot find any dto convert to convert target typeCode: " + typeCode);
 	}
 
-	protected <T> Page readPage(TypedQuery query, final Class domainClass, Pageable pageable,
-			@Nullable Specification spec) {
+	protected <T> Page readPage(TypedQuery query, final Class domainClass, Pageable pageable, @Nullable Specification spec) {
 
 		if (pageable.isPaged()) {
 			query.setFirstResult((int) pageable.getOffset());
 			query.setMaxResults(pageable.getPageSize());
 		}
 
-		return PageableExecutionUtils.getPage(query.getResultList(), pageable,
-				() -> executeCountQuery(getCountQuery(spec, domainClass)));
+		return PageableExecutionUtils.getPage(query.getResultList(), pageable, () -> executeCountQuery(getCountQuery(spec, domainClass)));
 	}
 
 	protected <T> TypedQuery getCountQuery(@Nullable Specification spec, Class domainClass) {
@@ -381,8 +348,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		}
 	}
 
-	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data,
-			Integer firstResult, Integer maxResult, Class modelClass) {
+	protected Query createQuery(Map<String, Object> properties, Map<String, Sort.Direction> sorts, String data, Integer firstResult, Integer maxResult, Class modelClass) {
 		String qlString = "select " + (StringUtils.isBlank(data) ? "o" : data) + " from " + modelClass.getName() + " o";
 
 		if (properties != null && properties.isEmpty() == Boolean.FALSE) {
@@ -395,8 +361,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		Query query = entityManager.createQuery(qlString);
 		if (properties != null && properties.isEmpty() == Boolean.FALSE) {
 			for (Map.Entry<String, Object> entry : properties.entrySet()) {
-				if (entry.getValue() != null && (entry.getValue() instanceof String && entry.getValue().toString()
-						.trim().equalsIgnoreCase(CommonConstants.Query.IS_EMPTY)) == false) {
+				if (entry.getValue() != null && (entry.getValue() instanceof String && entry.getValue().toString().trim().equalsIgnoreCase(CommonConstants.Query.IS_EMPTY)) == false) {
 					query.setParameter(entry.getKey().replace(".", "_"), entry.getValue());
 				}
 			}
@@ -424,13 +389,13 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 
 			if (entry.getValue() == null) {
 				propertiesBuilder.append("o." + entry.getKey() + " " + CommonConstants.Query.IS_NULL);
-				
+
 			} else if (entry.getValue() instanceof String && entry.getValue().toString().trim().equalsIgnoreCase(CommonConstants.Query.IS_EMPTY)) {
 				propertiesBuilder.append("o." + entry.getKey() + " " + CommonConstants.Query.IS_EMPTY);
-				
+
 			} else if (entry.getValue() instanceof String && entry.getValue().toString().trim().contains(CommonConstants.Query.LIKE)) {
 				propertiesBuilder.append("o." + entry.getKey() + " LIKE :" + entry.getKey().replace(".", "_"));
-				
+
 			} else {
 				propertiesBuilder.append("o." + entry.getKey() + " = :" + entry.getKey().replace(".", "_"));
 			}
@@ -453,7 +418,6 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 	protected <T> Page<T> page(@Nullable Specification spec, Pageable pageable, Class modelClass) {
 
 		TypedQuery<T> query = getQuery(spec, pageable, modelClass);
-		return pageable.isUnpaged() ? new PageImpl<T>(query.getResultList())
-				: readPage(query, modelClass, pageable, spec);
+		return pageable.isUnpaged() ? new PageImpl<T>(query.getResultList()) : readPage(query, modelClass, pageable, spec);
 	}
 }

@@ -19,7 +19,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserRightWebConstants;
-import com.beanframework.backoffice.UserRightWebConstants.UserRightPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserRightDto;
@@ -30,56 +29,48 @@ import com.beanframework.core.facade.UserRightFacade;
 public class UserRightController extends AbstractController {
 
 	@Autowired
-	private UserRightFacade userRightFacade;
+	private UserRightFacade userrightFacade;
+	
+	@Value(UserRightWebConstants.Path.USERRIGHT_PAGE)
+	private String PATH_USERRIGHT_PAGE;
+	
+	@Value(UserRightWebConstants.Path.USERRIGHT_FORM)
+	private String PATH_USERRIGHT_FORM;
 
-	@Value(UserRightWebConstants.Path.USERRIGHT)
-	private String PATH_USERRIGHT;
+	@Value(UserRightWebConstants.View.PAGE)
+	private String VIEW_USERRIGHT_PAGE;
 
-	@Value(UserRightWebConstants.View.LIST)
-	private String VIEW_USERRIGHT_LIST;
+	@Value(UserRightWebConstants.View.FORM)
+	private String VIEW_USERRIGHT_FORM;
 
-	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)
-	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT)
-	public String list(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model) throws Exception {
-		model.addAttribute("create", false);
-
-		if (userRightDto.getUuid() != null) {
-
-			UserRightDto existsDto = userRightFacade.findOneByUuid(userRightDto.getUuid());
-
-			if (existsDto != null) {
-				model.addAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO, existsDto);
-			} else {
-				userRightDto.setUuid(null);
-				model.addAttribute(BackofficeWebConstants.Model.ERROR, localeMessageService.getMessage(BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND));
-			}
-		}
-
-		return VIEW_USERRIGHT_LIST;
+	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT_PAGE)
+	public String list(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model, @RequestParam Map<String, Object> requestParams)
+			throws Exception {
+		return VIEW_USERRIGHT_PAGE;
 	}
 
-	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_CREATE)
-	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "create")
-	public String createView(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model) throws Exception {
+	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT_FORM)
+	public String createView(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model) throws Exception {
 
-		userRightDto = userRightFacade.createDto();
-		model.addAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO, userRightDto);
-		model.addAttribute("create", true);
-
-		return VIEW_USERRIGHT_LIST;
-	}
-
-	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_CREATE)
-	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model, BindingResult bindingResult,
-			RedirectAttributes redirectAttributes) {
-
-		if (userRightDto.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
+		if (userrightDto.getUuid() != null) {
+			userrightDto = userrightFacade.findOneByUuid(userrightDto.getUuid());
 		} else {
+			userrightDto = userrightFacade.createDto();
+		}
+		model.addAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO, userrightDto);
 
+		return VIEW_USERRIGHT_FORM;
+	}
+
+	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT_FORM, params = "create")
+	public RedirectView create(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
+
+		if (userrightDto.getUuid() != null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
+		} else {
 			try {
-				userRightDto = userRightFacade.create(userRightDto);
+				userrightDto = userrightFacade.create(userrightDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -87,24 +78,23 @@ public class UserRightController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(UserRightDto.UUID, userRightDto.getUuid());
+		redirectAttributes.addAttribute(UserRightDto.UUID, userrightDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_USERRIGHT);
+		redirectView.setUrl(PATH_USERRIGHT_FORM);
 		return redirectView;
 	}
 
-	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_UPDATE)
-	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model, BindingResult bindingResult,
+	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT_FORM, params = "update")
+	public RedirectView update(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (userRightDto.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
+		if (userrightDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
 			try {
-				userRightDto = userRightFacade.update(userRightDto);
+				userrightDto = userrightFacade.update(userrightDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -112,32 +102,33 @@ public class UserRightController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(UserRightDto.UUID, userRightDto.getUuid());
+		redirectAttributes.addAttribute(UserRightDto.UUID, userrightDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_USERRIGHT);
+		redirectView.setUrl(PATH_USERRIGHT_FORM);
 		return redirectView;
 	}
 
-	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userRightDto, Model model, BindingResult bindingResult,
+	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT_FORM, params = "delete")
+	public RedirectView delete(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		try {
+		if (userrightDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
+		} else {
+			try {
+				userrightFacade.delete(userrightDto.getUuid());
 
-			userRightFacade.delete(userRightDto.getUuid());
-
-			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
-		} catch (BusinessException e) {
-			addErrorMessage(UserRightDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO, userRightDto);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(UserRightDto.class, e.getMessage(), bindingResult, redirectAttributes);
+			}
 		}
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_USERRIGHT);
+		redirectView.setUrl(PATH_USERRIGHT_FORM);
 		return redirectView;
 
 	}

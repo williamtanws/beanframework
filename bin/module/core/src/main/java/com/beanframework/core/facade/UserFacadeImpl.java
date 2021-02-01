@@ -1,5 +1,6 @@
 package com.beanframework.core.facade;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserDto;
+import com.beanframework.user.UserSession;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
 import com.beanframework.user.specification.UserSpecification;
@@ -60,6 +62,22 @@ public class UserFacadeImpl extends AbstractFacade<User, UserDto> implements Use
 	@Override
 	public int count() throws Exception {
 		return count(entityClass);
+	}
+	
+	@Override
+	public Set<UserSession> findAllSessions() {
+		return userService.findAllSessions();
+
+	}
+
+	@Override
+	public void expireAllSessionsByUuid(UUID uuid) {
+		userService.expireAllSessionsByUuid(uuid);
+	}
+
+	@Override
+	public void expireAllSessions() {
+		userService.expireAllSessions();
 	}
 
 }

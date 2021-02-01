@@ -2,7 +2,6 @@ package com.beanframework.core.facade;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Page;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.user.EmployeeSession;
 
 public interface EmployeeFacade {
 
@@ -31,12 +29,6 @@ public interface EmployeeFacade {
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 
 	int countHistory(DataTableRequest dataTableRequest) throws Exception;
-
-	Set<EmployeeSession> findAllSessions();
-
-	void expireAllSessionsByUuid(UUID uuid);
-
-	void expireAllSessions();
 
 	EmployeeDto createDto() throws Exception;
 

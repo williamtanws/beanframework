@@ -16,11 +16,11 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
-import com.beanframework.backoffice.security.BackofficeAuthProvider;
 import com.beanframework.backoffice.security.BackofficeCsrfHeaderFilter;
 import com.beanframework.backoffice.security.BackofficeSessionExpiredDetectingLoginUrlAuthenticationEntryPoint;
 import com.beanframework.backoffice.security.BackofficeSuccessHandler;
 import com.beanframework.user.UserConstants;
+import com.beanframework.user.security.UserAuthProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -57,9 +57,6 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value(BackofficeWebConstants.Path.LOGOUT)
 	private String PATH_BACKOFFICE_LOGOUT;
 
-	@Value(BackofficeWebConstants.Authority.BACKOFFICE)
-	private String BACKOFFICE_ACCESS;
-
 	@Value(UserConstants.MAX_SESSION_USER)
 	private int SESSION_MAX;
 
@@ -67,13 +64,19 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
 	private boolean SESSION_LOGIN_PREVENT;
 
 	@Autowired
-	private BackofficeAuthProvider authProvider;
+	private UserAuthProvider authProvider;
 
 	@Autowired
 	private BackofficeSuccessHandler successHandler;
 
 	@Autowired
 	private SessionRegistry sessionRegistry;
+	
+	@Value(UserConstants.Admin.DEFAULT_GROUP)
+	private String defaultAdminGroup;
+
+	@Value(UserConstants.Employee.DEFAULT_GROUP)
+	private String defaultEmployeeGroup;
 
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -83,7 +86,7 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
 	        .authorizeRequests()
 	        	.antMatchers(HTTP_ANTPATTERNS_PERMITALL).permitAll()
 	        	.antMatchers(PATH_BACKOFFICE+"/**").authenticated()
-	        	.antMatchers(PATH_BACKOFFICE+"/**").hasAnyAuthority(BACKOFFICE_ACCESS)
+	        	.antMatchers(PATH_BACKOFFICE+"/**").hasAnyAuthority(defaultAdminGroup, defaultEmployeeGroup)
 	        	.and()
 	        .addFilterAfter(csrfHeaderFilter(PATH_BACKOFFICE), CsrfFilter.class)
 	        .csrf().csrfTokenRepository(csrfTokenRepository())

@@ -18,5 +18,5 @@ public interface TaskFacade {
 
 	void complete(String taskId, Map<String, Object> variables) throws BusinessException;
 
-	Page<Task> findByCurrentUserGroup(DataTableRequest dataTableRequest) throws Exception;
+//	Page<Task> findByCurrentUserGroup(DataTableRequest dataTableRequest) throws Exception;
 }

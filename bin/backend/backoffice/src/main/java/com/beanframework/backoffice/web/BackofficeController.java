@@ -21,8 +21,8 @@ public class BackofficeController {
 	@Value(BackofficeWebConstants.View.LOGIN)
 	private String VIEW_BACKOFFICE_LOGIN;
 
-	@Value(BackofficeWebConstants.View.DASHBOARD)
-	private String VIEW_BACKOFFICE_DASHBOARD;
+	@Value(BackofficeWebConstants.View.BACKOFFICE)
+	private String VIEW_BACKOFFICE_BACKOFFICE;
 
 	@GetMapping(BackofficeWebConstants.Path.BACKOFFICE)
 	public String backoffice(Model model, RedirectAttributes redirectAttributes) {
@@ -36,7 +36,7 @@ public class BackofficeController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping(BackofficeWebConstants.Path.DASHBOARD)
-	public String dashboard() {
-		return VIEW_BACKOFFICE_DASHBOARD;
+	public String backoffice() {
+		return VIEW_BACKOFFICE_BACKOFFICE;
 	}
 }

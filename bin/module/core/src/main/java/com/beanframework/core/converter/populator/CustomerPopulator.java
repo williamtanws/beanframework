@@ -21,7 +21,7 @@ public class CustomerPopulator extends AbstractPopulator<Customer, CustomerDto> 
 	@Override
 	public void populate(Customer source, CustomerDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setPassword(source.getPassword());
 			target.setAccountNonExpired(source.getAccountNonExpired());

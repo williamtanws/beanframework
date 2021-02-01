@@ -15,7 +15,7 @@ public class EnumerationPopulator extends AbstractPopulator<Enumeration, Enumera
 
 	@Override
 	public void populate(Enumeration source, EnumerationDto target) throws PopulatorException {
-		populateCommon(source, target);
+		populateGeneric(source, target);
 		target.setName(source.getName());
 		target.setSort(source.getSort());
 	}

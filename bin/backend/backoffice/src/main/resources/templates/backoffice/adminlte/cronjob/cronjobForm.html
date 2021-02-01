@@ -37,13 +37,13 @@
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
 							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
+								<a href="#tab_history" data-toggle="tab" th:text="#{module.common.history}" onclick="changeTab('history')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content">
@@ -126,8 +126,8 @@
 												<label for="startup" th:text="#{module.cronjob.startup}"></label>
 												<select class="form-control" name="startup">
 													<option value="" th:text="'&nbsp'"></option>
-													<option value="1" th:selected="*{startup == true}" th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="*{startup == false}" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="*{startup == true}" th:text="#{module.common.yes}"></option>
+													<option value="0" th:selected="*{startup == false}" th:text="#{module.common.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -142,7 +142,7 @@
 														<tr>
 															<th th:text="#{module.cronjob.jobdata.name}"></th>
 															<th th:text="#{module.cronjob.jobdata.value}"></th>
-															<th style="width: 70px" class="action" sec:authorize="hasAuthority('cronjob_update')" th:text="#{module.backoffice.action}"></th>
+															<th style="width: 70px" class="action" sec:authorize="hasAuthority('cronjob_update')" th:text="#{module.common.action}"></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -151,7 +151,7 @@
 															<td th:text="${row.value}"></td>
 															<td sec:authorize="hasAuthority('cronjob_update')">
 																<button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" data-target="#modal-deletejobdata" th:data-jobdatauuid="${row.uuid}"
-																	th:text="#{module.backoffice.delete}"></button>
+																	th:text="#{module.common.delete}"></button>
 															</td>
 														</tr>
 													</tbody>
@@ -162,7 +162,7 @@
 																<!-- Button trigger modal -->
 																<a class="btn btn-block btn-default" data-toggle="modal" data-target="#modal-createjobdata">
 																	<span class="fa fa-plus"></span>
-																	<span th:text="#{module.backoffice.add}"></span>
+																	<span th:text="#{module.common.add}"></span>
 																</a>
 															</td>
 														</tr>
@@ -276,8 +276,8 @@
 		            },
 		            messages: {
 		                id: {
-		                    required: /*[[#{module.backoffice.id.required}]]*/ ,
-		                    remote: /*[[#{module.backoffice.id.exists}]]*/
+		                    required: /*[[#{module.common.id.required}]]*/ ,
+		                    remote: /*[[#{module.common.id.exists}]]*/
 		                },
 		                jobClass: {
 		                    required: /*[[#{module.cronjob.jobclass.required}]]*/
@@ -386,8 +386,8 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
-							<button type="submit" class="btn btn-success" th:text="#{module.backoffice.execute}"></button>
+							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.common.cancel}+'  '"></button>
+							<button type="submit" class="btn btn-success" th:text="#{module.common.execute}"></button>
 						</div>
 					</form>
 				</div>
@@ -430,8 +430,8 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.cancel}+'  '"></button>
-							<button type="submit" class="btn btn-success" th:text="#{module.backoffice.save}"></button>
+							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.common.cancel}+'  '"></button>
+							<button type="submit" class="btn btn-success" th:text="#{module.common.save}"></button>
 						</div>
 					</form>
 				</div>
@@ -446,16 +446,16 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title" th:text="#{module.cronjob.jobdata}+' '+#{module.backoffice.delete.confirm}"></h4>
+						<h4 class="modal-title" th:text="#{module.cronjob.jobdata}+' '+#{module.common.delete.confirm}"></h4>
 					</div>
-					<div class="modal-body" th:utext="#{module.backoffice.delete.confirm.info}"></div>
+					<div class="modal-body" th:utext="#{module.common.delete.confirm.info}"></div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.backoffice.no}+'  '"></button>
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.common.no}+'  '"></button>
 						<form id="delete-cronjob-form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post">
 							<input type="hidden" name="deletejobdata">
 							<input type="hidden" name="jobDataUuid">
 							<input type="hidden" name="uuid" th:value="${cronjobDto.uuid}">
-							<button type="submit" class="btn btn-danger" th:text="#{module.backoffice.delete}"></button>
+							<button type="submit" class="btn btn-danger" th:text="#{module.common.delete}"></button>
 						</form>
 					</div>
 				</div>

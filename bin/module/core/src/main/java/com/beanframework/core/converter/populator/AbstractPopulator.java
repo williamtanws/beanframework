@@ -32,7 +32,7 @@ public abstract class AbstractPopulator<T extends GenericEntity, E extends Gener
 	@Autowired
 	protected ModelService modelService;
 
-	protected void populateCommon(T source, E target) throws PopulatorException {
+	protected void populateGeneric(T source, E target) throws PopulatorException {
 		try {
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());

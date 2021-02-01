@@ -38,7 +38,7 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 				if (entities.get(i).getLanguage() != null)
 					if (entities.get(i).getLanguage().equals(model.getUuid())) {
 						entities.get(i).setLanguage(null);
-						modelService.saveEntityQuietly(entities.get(i), DynamicField.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), DynamicField.class);
 					}
 			}
 	}
@@ -78,7 +78,7 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 				}
 
 				if (removed)
-					modelService.saveEntityQuietly(entities.get(i), DynamicField.class);
+					modelService.saveEntityByLegacyMode(entities.get(i), DynamicField.class);
 			}
 	}
 }

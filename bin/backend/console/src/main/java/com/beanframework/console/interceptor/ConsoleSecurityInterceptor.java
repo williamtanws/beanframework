@@ -20,7 +20,7 @@ import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.LicenseWebConstants;
-import com.beanframework.user.domain.Admin;
+import com.beanframework.user.domain.User;
 
 @SuppressWarnings("deprecation")
 public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
@@ -41,7 +41,7 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		if (auth != null && auth.getPrincipal() instanceof Admin) {
+		if (auth != null && auth.getPrincipal() instanceof User) {
 			String path = new UrlPathHelper().getLookupPathForRequest(request);
 
 			if (path != null && path.equalsIgnoreCase(PATH_LICENSE) == false && path.equalsIgnoreCase(PATH_LOGIN) == false) {

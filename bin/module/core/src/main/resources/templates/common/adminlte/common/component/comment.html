@@ -82,7 +82,7 @@
 		    	$('#commentTable thead tr:eq(1) th').each(function(index){
 		    		if(index <= 2){
 		    			var title = $('#commentTable thead tr:eq(0) th').eq( $(this).index() ).text();
-		    			var searchPlaceHolder = /*[[#{module.backoffice.search}]]*/;
+		    			var searchPlaceHolder = /*[[#{module.common.search}]]*/;
 		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
 		    		}
 		    		else{

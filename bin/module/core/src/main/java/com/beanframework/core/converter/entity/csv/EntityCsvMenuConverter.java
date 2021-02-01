@@ -2,6 +2,7 @@ package com.beanframework.core.converter.entity.csv;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -18,7 +19,6 @@ import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
 import com.beanframework.user.domain.UserGroup;
-
 
 public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu> {
 
@@ -136,8 +136,9 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 				String[] userGroupIds = source.getUserGroupIds().split(ImportListener.SPLITTER);
 				for (int i = 0; i < userGroupIds.length; i++) {
 					boolean add = true;
-					for (UserGroup userGroup : prototype.getUserGroups()) {
-						if (StringUtils.equals(userGroup.getId(), userGroupIds[i]))
+					for (UUID userGroup : prototype.getUserGroups()) {
+						UserGroup entity = modelService.findOneByUuid(userGroup, UserGroup.class);
+						if (StringUtils.equals(entity.getId(), userGroupIds[i]))
 							add = false;
 					}
 
@@ -149,7 +150,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 						if (userGroup == null) {
 							LOGGER.error("UserGroup ID not exists: " + userGroupIds[i]);
 						} else {
-							prototype.getUserGroups().add(userGroup);
+							prototype.getUserGroups().add(userGroup.getUuid());
 						}
 					}
 				}

@@ -127,21 +127,21 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				}
 			}
 
-			// UserGroups
+			// User Groups
 			if (source.getSelectedUserGroups() != null) {
 
-				Iterator<UserGroup> UserGroupsIterator = prototype.getUserGroups().iterator();
-				while (UserGroupsIterator.hasNext()) {
-					UserGroup UserGroup = UserGroupsIterator.next();
+				Iterator<UUID> itr = prototype.getUserGroups().iterator();
+				while (itr.hasNext()) {
+					UUID model = itr.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedUserGroups().length; i++) {
-						if (UserGroup.getUuid().equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
+						if (model.equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
 							remove = false;
 						}
 					}
 					if (remove) {
-						UserGroupsIterator.remove();
+						itr.remove();
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				}
@@ -149,28 +149,27 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				for (int i = 0; i < source.getSelectedUserGroups().length; i++) {
 
 					boolean add = true;
-					UserGroupsIterator = prototype.getUserGroups().iterator();
-					while (UserGroupsIterator.hasNext()) {
-						UserGroup UserGroup = UserGroupsIterator.next();
+					itr = prototype.getUserGroups().iterator();
+					while (itr.hasNext()) {
+						UUID model = itr.next();
 
-						if (UserGroup.getUuid().equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
+						if (model.equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
 							add = false;
 						}
 					}
 
 					if (add) {
-						UserGroup userGroup = modelService.findOneByUuid(UUID.fromString(source.getSelectedUserGroups()[i]), UserGroup.class);
-						if (userGroup != null) {
-							prototype.getUserGroups().add(userGroup);
+						UserGroup entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedUserGroups()[i]), UserGroup.class);
+						if (entity != null) {
+							prototype.getUserGroups().add(entity.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}
-			}
-			else if(prototype.getUserGroups() != null && prototype.getUserGroups().isEmpty() == false){
-				for (final Iterator<UserGroup> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
+			} else if (prototype.getUserGroups() != null && prototype.getUserGroups().isEmpty() == false) {
+				for (final Iterator<UUID> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
 					itr.next();
-				    itr.remove(); 
+					itr.remove();
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			}

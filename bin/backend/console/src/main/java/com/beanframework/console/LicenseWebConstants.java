@@ -25,6 +25,6 @@ public interface LicenseWebConstants extends ConsoleWebConstants {
 	}
 
 	public interface Locale {
-		public static final String ACCEPT_SUCCESS = "module.console.platform.license.accepted";
+		public static final String ACCEPT_SUCCESS = "module.common.license.accepted";
 	}
 }

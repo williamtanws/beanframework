@@ -20,7 +20,7 @@ public class RegionPopulator extends AbstractPopulator<Region, RegionDto> implem
 	@Override
 	public void populate(Region source, RegionDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setActive(source.getActive());
 			target.setCountry(populateCountry(source.getCountry()));

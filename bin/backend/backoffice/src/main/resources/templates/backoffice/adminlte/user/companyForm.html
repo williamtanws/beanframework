@@ -35,13 +35,13 @@
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
 							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
+								<a href="#tab_history" data-toggle="tab" th:text="#{module.common.history}" onclick="changeTab('history')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content">
@@ -97,8 +97,8 @@
 												<label for="buyer" th:text="#{module.company.buyer}"></label>
 												<select class="form-control" name="buyer">
 													<option value="" th:text="'&nbsp'"></option>
-													<option value="1" th:selected="*{buyer == true}" th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="*{buyer == false}" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="*{buyer == true}" th:text="#{module.common.yes}"></option>
+													<option value="0" th:selected="*{buyer == false}" th:text="#{module.common.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -110,8 +110,8 @@
 												<label for="manufacturer" th:text="#{module.company.manufacturer}"></label>
 												<select class="form-control" name="manufacturer">
 													<option value="" th:text="'&nbsp'"></option>
-													<option value="1" th:selected="*{manufacturer == true}" th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="*{manufacturer == false}" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="*{manufacturer == true}" th:text="#{module.common.yes}"></option>
+													<option value="0" th:selected="*{manufacturer == false}" th:text="#{module.common.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -121,8 +121,8 @@
 												<label for="supplier" th:text="#{module.company.supplier}"></label>
 												<select class="form-control" name="supplier">
 													<option value="" th:text="'&nbsp'"></option>
-													<option value="1" th:selected="*{supplier == true}" th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="*{supplier == false}" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="*{supplier == true}" th:text="#{module.common.yes}"></option>
+													<option value="0" th:selected="*{supplier == false}" th:text="#{module.common.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -134,8 +134,8 @@
 												<label for="carrier" th:text="#{module.company.carrier}"></label>
 												<select class="form-control" name="carrier">
 													<option value="" th:text="'&nbsp'"></option>
-													<option value="1" th:selected="*{carrier == true}" th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="*{carrier == false}" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="*{carrier == true}" th:text="#{module.common.yes}"></option>
+													<option value="0" th:selected="*{carrier == false}" th:text="#{module.common.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>

@@ -19,7 +19,7 @@ public class ImexPopulator extends AbstractPopulator<Imex, ImexDto> implements P
 	@Override
 	public void populate(Imex source, ImexDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setType(source.getType());
 			target.setDirectory(source.getDirectory());
 			target.setFileName(source.getFileName());

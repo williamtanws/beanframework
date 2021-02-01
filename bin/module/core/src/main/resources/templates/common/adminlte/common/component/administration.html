@@ -5,7 +5,7 @@
 		<div class="row">
 			<div class="col-md-6">
 				<div class="form-group">
-					<label th:text="#{module.backoffice.uuid}"></label>
+					<label th:text="#{module.common.uuid}"></label>
 					<span>:</span>
 					<span class="text-block" th:text="*{uuid}"></span>
 				</div>
@@ -14,15 +14,15 @@
 		<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
 			<div class="col-md-6">
 				<div class="form-group">
-					<label th:text="#{module.backoffice.lastModifiedDate}"></label>
+					<label th:text="#{module.common.lastModifiedDate}"></label>
 					<span>:</span>
 					<span class="text-block" th:text="*{lastModifiedDate != null} ? *{#dates.format(lastModifiedDate, ' dd MMMM yyyy, hh:mma')}"></span>
 				</div>
 				<div class="form-group">
-					<label th:text="#{module.backoffice.lastModifiedBy}"></label>
+					<label th:text="#{module.common.lastModifiedBy}"></label>
 					<span>:</span>
 					<th:block th:if="*{lastModifiedBy == null}">
-						<span class="text-block" th:text="#{module.backoffice.system}"></span>
+						<span class="text-block" th:text="#{module.common.system}"></span>
 					</th:block>
 					<th:block th:if="*{lastModifiedBy != null}">
 						<span sec:authorize="!hasAuthority('employee_read')" class="text-block" th:text="*{lastModifiedBy.name}"></span>
@@ -33,15 +33,15 @@
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
-					<label th:text="#{module.backoffice.createdDate}"></label>
+					<label th:text="#{module.common.createdDate}"></label>
 					<span>:</span>
 					<span class="text-block" th:text="*{createdDate != null} ? *{#dates.format(createdDate, ' dd MMMM yyyy, hh:mma')}"></span>
 				</div>
 				<div class="form-group">
-					<label th:text="#{module.backoffice.createdBy}"></label>
+					<label th:text="#{module.common.createdBy}"></label>
 					<span>:</span>
 					<th:block th:if="*{createdBy == null}">
-						<span class="text-block" th:text="#{module.backoffice.system}"></span>
+						<span class="text-block" th:text="#{module.common.system}"></span>
 					</th:block>
 					<th:block th:if="*{createdBy != null}">
 						<span sec:authorize="!hasAuthority('employee_read')" class="text-block" th:text="*{createdBy.name}"></span>

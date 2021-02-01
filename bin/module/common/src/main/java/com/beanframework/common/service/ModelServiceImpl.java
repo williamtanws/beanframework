@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.beanframework.common.context.InterceptorContext;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.registry.AfterRemoveEvent;
@@ -105,7 +104,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 		try {
 			Object model = modelClass.newInstance();
-			initialDefaultsInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+			initialDefaultsInterceptor(model, modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -123,7 +122,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = entityManager.find(modelClass, uuid);
 
 			if (model != null)
-				loadInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+				loadInterceptor(model, modelClass.getSimpleName());
 
 			return (T) model;
 		} catch (Exception e) {
@@ -142,7 +141,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = entityManager.find(modelClass, uuid);
 
 			if (model != null)
-				loadInterceptor(model, new InterceptorContext(), typeCode);
+				loadInterceptor(model, typeCode);
 
 			return (T) model;
 		} catch (Exception e) {
@@ -159,7 +158,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = createQuery(properties, null, null, null, null, modelClass).getSingleResult();
 
 			if (model != null)
-				loadInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+				loadInterceptor(model, modelClass.getSimpleName());
 
 			return (T) model;
 		} catch (NoResultException e) {
@@ -229,7 +228,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			List<Object> models = createQuery(properties, sorts, null, firstResult, maxResult, modelClass).getResultList();
 
 			if (models != null)
-				loadInterceptor(models, new InterceptorContext(), modelClass.getSimpleName());
+				loadInterceptor(models, modelClass.getSimpleName());
 
 			return (T) models;
 		} catch (Exception e) {
@@ -246,7 +245,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			List<Object> models = getQuery(specification, modelClass, sort).getResultList();
 
 			if (models != null)
-				loadInterceptor(models, new InterceptorContext(), modelClass.getSimpleName());
+				loadInterceptor(models, modelClass.getSimpleName());
 
 			return (T) models;
 		} catch (Exception e) {
@@ -263,7 +262,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			List<Object> models = getQuery(specification, modelClass, null).getResultList();
 
 			if (models != null)
-				loadInterceptor(models, new InterceptorContext(), modelClass.getSimpleName());
+				loadInterceptor(models, modelClass.getSimpleName());
 
 			return (T) models;
 		} catch (Exception e) {
@@ -345,7 +344,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 
-			loadInterceptor(page.getContent(), new InterceptorContext(), modelClass.getSimpleName());
+			loadInterceptor(page.getContent(), modelClass.getSimpleName());
 
 			return page;
 		} catch (Exception e) {
@@ -373,8 +372,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				}
 			}
 
-			prepareInterceptor(model, new InterceptorContext(), model.getClass().getSimpleName());
-			validateInterceptor(model, new InterceptorContext(), model.getClass().getSimpleName());
+			prepareInterceptor(model, model.getClass().getSimpleName());
+			validateInterceptor(model, model.getClass().getSimpleName());
 
 			Set<Entry<String, BeforeSaveListener>> beforeSaveListeners = beforeSaveListenerRegistry.getListeners().entrySet();
 			for (Entry<String, BeforeSaveListener> entry : beforeSaveListeners) {
@@ -399,7 +398,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public Object saveEntityQuietly(Object model, Class modelClass) throws BusinessException {
+	public Object saveEntityByLegacyMode(Object model, Class modelClass) throws BusinessException {
 
 		if (model == null) {
 			return null;
@@ -419,7 +418,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		try {
 
 			if (model != null) {
-				removeInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+				removeInterceptor(model, modelClass.getSimpleName());
 
 				BeforeRemoveEvent beforeRemoveEvent = new BeforeRemoveEvent();
 				Set<Entry<String, BeforeRemoveListener>> beforeRemoveListeners = beforeRemoveListenerRegistry.getListeners().entrySet();
@@ -428,6 +427,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				}
 
 				modelRepository.delete(model);
+				entityManager.detach(model);
 
 				AfterRemoveEvent afterRemoveEvent = new AfterRemoveEvent(beforeRemoveEvent.getDataMap());
 				Set<Entry<String, AfterRemoveListener>> afterRemoveListeners = afterRemoveListenerRegistry.getListeners().entrySet();
@@ -443,13 +443,14 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public void deleteEntityQuietly(Object model, Class modelClass) throws BusinessException {
+	public void deleteEntityByLegacyModel(Object model, Class modelClass) throws BusinessException {
 		try {
 
 			if (model != null) {
-				removeInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+				removeInterceptor(model, modelClass.getSimpleName());
 
 				modelRepository.delete(model);
+				entityManager.detach(model);
 			}
 
 		} catch (Exception e) {
@@ -483,7 +484,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			Object model = findOneByUuid(uuid, modelClass);
 
 			if (model != null)
-				deleteEntityQuietly(model, modelClass);
+				deleteEntityByLegacyModel(model, modelClass);
 
 		} catch (SQLException e) {
 			LOGGER.error(e.getMessage(), e);
@@ -640,6 +641,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 	@Override
 	public void initDefaults(Object model, Class modelClass) throws Exception {
-		initialDefaultsInterceptor(model, new InterceptorContext(), modelClass.getSimpleName());
+		initialDefaultsInterceptor(model, modelClass.getSimpleName());
 	}
 }

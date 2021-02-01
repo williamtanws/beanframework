@@ -21,7 +21,7 @@ public class UserRightPopulator extends AbstractPopulator<UserRight, UserRightDt
 	@Override
 	public void populate(UserRight source, UserRightDto target) throws PopulatorException {
 		try {
-			populateCommon(source, target);
+			populateGeneric(source, target);
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 

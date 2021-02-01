@@ -19,7 +19,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.VendorWebConstants;
-import com.beanframework.backoffice.VendorWebConstants.VendorPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.VendorDto;
@@ -31,54 +30,45 @@ public class VendorController extends AbstractController {
 
 	@Autowired
 	private VendorFacade vendorFacade;
+	
+	@Value(VendorWebConstants.Path.VENDOR_PAGE)
+	private String PATH_VENDOR_PAGE;
+	
+	@Value(VendorWebConstants.Path.VENDOR_FORM)
+	private String PATH_VENDOR_FORM;
 
-	@Value(VendorWebConstants.Path.VENDOR)
-	private String PATH_VENDOR;
+	@Value(VendorWebConstants.View.PAGE)
+	private String VIEW_VENDOR_PAGE;
 
-	@Value(VendorWebConstants.View.LIST)
-	private String VIEW_VENDOR_LIST;
+	@Value(VendorWebConstants.View.FORM)
+	private String VIEW_VENDOR_FORM;
 
-	@PreAuthorize(VendorPreAuthorizeEnum.HAS_READ)
-	@GetMapping(value = VendorWebConstants.Path.VENDOR)
-	public String list(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		model.addAttribute("create", false);
-
-		if (vendorDto.getUuid() != null) {
-
-			VendorDto existingVendor = vendorFacade.findOneByUuid(vendorDto.getUuid());
-
-			if (existingVendor != null) {
-
-				model.addAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO, existingVendor);
-			} else {
-				vendorDto.setUuid(null);
-				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
-			}
-		}
-
-		return VIEW_VENDOR_LIST;
+	@GetMapping(value = VendorWebConstants.Path.VENDOR_PAGE)
+	public String list(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, @RequestParam Map<String, Object> requestParams)
+			throws Exception {
+		return VIEW_VENDOR_PAGE;
 	}
 
-	@PreAuthorize(VendorPreAuthorizeEnum.HAS_CREATE)
-	@GetMapping(value = VendorWebConstants.Path.VENDOR, params = "create")
+	@GetMapping(value = VendorWebConstants.Path.VENDOR_FORM)
 	public String createView(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model) throws Exception {
 
-		vendorDto = vendorFacade.createDto();
+		if (vendorDto.getUuid() != null) {
+			vendorDto = vendorFacade.findOneByUuid(vendorDto.getUuid());
+		} else {
+			vendorDto = vendorFacade.createDto();
+		}
 		model.addAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO, vendorDto);
-		model.addAttribute("create", true);
 
-		return VIEW_VENDOR_LIST;
+		return VIEW_VENDOR_FORM;
 	}
 
-	@PreAuthorize(VendorPreAuthorizeEnum.HAS_CREATE)
-	@PostMapping(value = VendorWebConstants.Path.VENDOR, params = "create")
+	@PostMapping(value = VendorWebConstants.Path.VENDOR_FORM, params = "create")
 	public RedirectView create(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (vendorDto.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
 		} else {
-
 			try {
 				vendorDto = vendorFacade.create(vendorDto);
 
@@ -92,19 +82,17 @@ public class VendorController extends AbstractController {
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_VENDOR);
+		redirectView.setUrl(PATH_VENDOR_FORM);
 		return redirectView;
 	}
 
-	@PreAuthorize(VendorPreAuthorizeEnum.HAS_UPDATE)
-	@PostMapping(value = VendorWebConstants.Path.VENDOR, params = "update")
+	@PostMapping(value = VendorWebConstants.Path.VENDOR_FORM, params = "update")
 	public RedirectView update(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, BindingResult bindingResult,
-			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (vendorDto.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
-
 			try {
 				vendorDto = vendorFacade.update(vendorDto);
 
@@ -118,27 +106,29 @@ public class VendorController extends AbstractController {
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_VENDOR);
+		redirectView.setUrl(PATH_VENDOR_FORM);
 		return redirectView;
 	}
 
-	@PreAuthorize(VendorPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = VendorWebConstants.Path.VENDOR, params = "delete")
+	@PostMapping(value = VendorWebConstants.Path.VENDOR_FORM, params = "delete")
 	public RedirectView delete(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		try {
-			vendorFacade.delete(vendorDto.getUuid());
+		if (vendorDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
+		} else {
+			try {
+				vendorFacade.delete(vendorDto.getUuid());
 
-			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
-		} catch (BusinessException e) {
-			addErrorMessage(VendorDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO, vendorDto);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(VendorDto.class, e.getMessage(), bindingResult, redirectAttributes);
+			}
 		}
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_VENDOR);
+		redirectView.setUrl(PATH_VENDOR_FORM);
 		return redirectView;
 
 	}

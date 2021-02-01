@@ -94,13 +94,13 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 			// User Groups
 			if (source.getSelectedUserGroups() != null) {
 
-				Iterator<UserGroup> itr = prototype.getUserGroups().iterator();
+				Iterator<UUID> itr = prototype.getUserGroups().iterator();
 				while (itr.hasNext()) {
-					UserGroup model = itr.next();
+					UUID model = itr.next();
 
 					boolean remove = true;
 					for (int i = 0; i < source.getSelectedUserGroups().length; i++) {
-						if (model.getUuid().equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
+						if (model.equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
 							remove = false;
 						}
 					}
@@ -115,9 +115,9 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 					boolean add = true;
 					itr = prototype.getUserGroups().iterator();
 					while (itr.hasNext()) {
-						UserGroup model = itr.next();
+						UUID model = itr.next();
 
-						if (model.getUuid().equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
+						if (model.equals(UUID.fromString(source.getSelectedUserGroups()[i]))) {
 							add = false;
 						}
 					}
@@ -125,13 +125,13 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 					if (add) {
 						UserGroup entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedUserGroups()[i]), UserGroup.class);
 						if (entity != null) {
-							prototype.getUserGroups().add(entity);
+							prototype.getUserGroups().add(entity.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}
 			} else if (prototype.getUserGroups() != null && prototype.getUserGroups().isEmpty() == false) {
-				for (final Iterator<UserGroup> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
+				for (final Iterator<UUID> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
 					itr.next();
 					itr.remove();
 					prototype.setLastModifiedDate(lastModifiedDate);

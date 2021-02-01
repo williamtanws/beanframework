@@ -32,7 +32,7 @@ public class AddressServiceImpl implements AddressService {
 				if (entities.get(i).getOwner() != null)
 					if (entities.get(i).getOwner().equals(model.getUuid())) {
 						entities.get(i).setOwner(null);
-						modelService.saveEntityQuietly(entities.get(i), Address.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Address.class);
 					}
 			}
 	}
@@ -49,7 +49,7 @@ public class AddressServiceImpl implements AddressService {
 				if (entities.get(i).getCountry() != null)
 					if (entities.get(i).getCountry().equals(model.getUuid())) {
 						entities.get(i).setCountry(null);
-						modelService.saveEntityQuietly(entities.get(i), Address.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Address.class);
 					}
 			}
 	}
@@ -66,7 +66,7 @@ public class AddressServiceImpl implements AddressService {
 				if (entities.get(i).getCountry() != null)
 					if (entities.get(i).getCountry().equals(model.getUuid())) {
 						entities.get(i).setCountry(null);
-						modelService.saveEntityQuietly(entities.get(i), Region.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Region.class);
 					}
 			}
 	}
@@ -83,7 +83,7 @@ public class AddressServiceImpl implements AddressService {
 				if (entities.get(i).getShippingAddress() != null)
 					if (entities.get(i).getShippingAddress().equals(model.getUuid())) {
 						entities.get(i).setShippingAddress(null);
-						modelService.saveEntityQuietly(entities.get(i), Address.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Address.class);
 					}
 			}
 	}
@@ -100,7 +100,7 @@ public class AddressServiceImpl implements AddressService {
 				if (entities.get(i).getBillingAddress() != null)
 					if (entities.get(i).getBillingAddress().equals(model.getUuid())) {
 						entities.get(i).setBillingAddress(null);
-						modelService.saveEntityQuietly(entities.get(i), Address.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Address.class);
 					}
 			}
 
@@ -118,7 +118,7 @@ public class AddressServiceImpl implements AddressService {
 				if (entities.get(i).getContactAddress() != null)
 					if (entities.get(i).getContactAddress().equals(model.getUuid())) {
 						entities.get(i).setContactAddress(null);
-						modelService.saveEntityQuietly(entities.get(i), Address.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Address.class);
 					}
 			}
 
@@ -136,7 +136,7 @@ public class AddressServiceImpl implements AddressService {
 				if (entities.get(i).getDefaultPaymentAddress() != null)
 					if (entities.get(i).getDefaultPaymentAddress().equals(model.getUuid())) {
 						entities.get(i).setDefaultPaymentAddress(null);
-						modelService.saveEntityQuietly(entities.get(i), Address.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Address.class);
 					}
 			}
 
@@ -154,7 +154,7 @@ public class AddressServiceImpl implements AddressService {
 				if (entities.get(i).getDefaultShipmentAddress() != null)
 					if (entities.get(i).getDefaultShipmentAddress().equals(model.getUuid())) {
 						entities.get(i).setDefaultShipmentAddress(null);
-						modelService.saveEntityQuietly(entities.get(i), Address.class);
+						modelService.saveEntityByLegacyMode(entities.get(i), Address.class);
 					}
 			}
 

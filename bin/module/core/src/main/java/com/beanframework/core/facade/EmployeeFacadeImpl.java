@@ -2,7 +2,6 @@ package com.beanframework.core.facade;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,9 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.converter.entity.EntityEmployeeProfileConverter;
 import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.user.EmployeeSession;
 import com.beanframework.user.domain.Employee;
-import com.beanframework.user.service.EmployeeService;
+import com.beanframework.user.domain.User;
+import com.beanframework.user.service.UserService;
 import com.beanframework.user.specification.EmployeeSpecification;
 
 @Component
@@ -25,7 +24,7 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto> im
 	private static final Class<EmployeeDto> dtoClass = EmployeeDto.class;
 	
 	@Autowired
-	private EmployeeService employeeService;
+	private UserService userService;
 
 	@Autowired
 	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
@@ -63,7 +62,7 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto> im
 			Employee entity = modelService.getEntity(dto, entityClass);
 			entity = modelService.saveEntity(entity);
 
-			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
+			userService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, dtoClass);
 		} catch (Exception e) {
@@ -74,7 +73,7 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto> im
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
 		delete(uuid, entityClass);
-		employeeService.deleteEmployeeProfilePictureByUuid(uuid);
+		userService.deleteProfilePictureFileByUuid(uuid);
 	}
 
 	@Override
@@ -103,22 +102,6 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto> im
 	}
 
 	@Override
-	public Set<EmployeeSession> findAllSessions() {
-		return employeeService.findAllSessions();
-
-	}
-
-	@Override
-	public void expireAllSessionsByUuid(UUID uuid) {
-		employeeService.expireAllSessionsByUuid(uuid);
-	}
-
-	@Override
-	public void expireAllSessions() {
-		employeeService.expireAllSessions();
-	}
-
-	@Override
 	public EmployeeDto saveProfile(EmployeeDto dto) throws BusinessException {
 
 		try {
@@ -132,8 +115,8 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto> im
 			Employee entity = entityEmployeeProfileConverter.convert(dto);
 
 			entity = modelService.saveEntity(entity);
-			employeeService.updatePrincipal(entity);
-			employeeService.saveProfilePicture(entity, dto.getProfilePicture());
+			userService.updatePrincipal(entity);
+			userService.saveProfilePicture(entity, dto.getProfilePicture());
 
 			return modelService.getDto(entity, dtoClass);
 
@@ -144,9 +127,9 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto> im
 
 	@Override
 	public EmployeeDto getCurrentUser() throws Exception {
-		Employee entity = employeeService.getCurrentUser();
-		EmployeeDto dto = modelService.getDto(entity, dtoClass);
-
+		User user = userService.getCurrentUser();
+		Employee employee = modelService.findOneByUuid(user.getUuid(), Employee.class);
+		EmployeeDto dto = modelService.getDto(employee, dtoClass);
 		return dto;
 	}
 }

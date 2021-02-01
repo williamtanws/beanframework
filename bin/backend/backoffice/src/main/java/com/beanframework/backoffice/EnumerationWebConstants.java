@@ -5,23 +5,25 @@ public interface EnumerationWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.enumeration.checkid}";
-			public static final String PAGE = "${path.api.enumeration.page}";
-			public static final String HISTORY = "${path.api.enumeration.history}";
+			public static final String ENUMERATION_PAGE = "${path.api.enumeration.page}";
+			public static final String ENUMERATION_PAGE_HISTORY = "${path.api.enumeration.page.history}";
+			public static final String ENUMERATION_CHECKID = "${path.api.enumeration.checkid}";
 		}
 
-		public static final String ENUMERATION = "${path.enumeration}";
+		public static final String ENUMERATION_PAGE = "${path.enumeration.page}";
+		public static final String ENUMERATION_FORM = "${path.enumeration.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.enumeration.list}";
+		public static final String PAGE = "${view.enumeration.page}";
+		public static final String FORM = "${view.enumeration.form}";
 	}
 
 	public interface ModelAttribute {
 		public static final String ENUMERATION_DTO = "enumerationDto";
 	}
 	
-	public interface EnumPreAuthorizeEnum {
+	public interface EnumerationPreAuthorizeEnum {
 		public static final String AUTHORITY_READ = "enumeration_read";
 		public static final String AUTHORITY_CREATE = "enumeration_create";
 		public static final String AUTHORITY_UPDATE = "enumeration_update";

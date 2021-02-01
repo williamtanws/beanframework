@@ -35,16 +35,16 @@
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
 							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.backoffice.general}" onclick="changeTab('general')"></a>
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a>
 							</li>
 							<li>
-								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.backoffice.attribute}" onclick="changeTab('attribute')"></a>
+								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.common.attribute}" onclick="changeTab('attribute')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_history" data-toggle="tab" th:text="#{module.backoffice.history}" onclick="changeTab('history')"></a>
+								<a href="#tab_history" data-toggle="tab" th:text="#{module.common.history}" onclick="changeTab('history')"></a>
 							</li>
 							<li th:if="*{uuid != null}">
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.backoffice.administration}" onclick="changeTab('administration')"></a>
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
 							</li>
 						</ul>
 						<div class="tab-content tab-validate">
@@ -81,8 +81,8 @@
 												<label for="enabled" th:text="#{module.employee.enabled}"></label>
 												<small th:text="#{module.employee.enabled.indicate}"></small>
 												<select class="form-control" name="enabled">
-													<option value="1" th:selected="*{enabled == true} " th:text="#{module.backoffice.yes}"></option>
-													<option value="0" th:selected="*{enabled == false}" th:text="#{module.backoffice.no}"></option>
+													<option value="1" th:selected="*{enabled == true} " th:text="#{module.common.yes}"></option>
+													<option value="0" th:selected="*{enabled == false}" th:text="#{module.common.no}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -92,8 +92,8 @@
 												<label for="accountNonLocked" th:text="#{module.employee.locked}"></label>
 												<small th:text="#{module.employee.locked.indicate}"></small>
 												<select class="form-control" name="accountNonLocked">
-													<option value="1" th:selected="*{accountNonLocked == true} " th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="*{accountNonLocked == false}" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="*{accountNonLocked == true} " th:text="#{module.common.no}"></option>
+													<option value="0" th:selected="*{accountNonLocked == false}" th:text="#{module.common.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -103,8 +103,8 @@
 												<label for="accountNonExpired" th:text="#{module.employee.expired}"></label>
 												<small th:text="#{module.employee.expired.indicate}"></small>
 												<select class="form-control" name="accountNonExpired">
-													<option value="1" th:selected="*{accountNonExpired == true} " th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="*{accountNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="*{accountNonExpired == true} " th:text="#{module.common.no}"></option>
+													<option value="0" th:selected="*{accountNonExpired == false}" th:text="#{module.common.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -114,8 +114,8 @@
 												<label for="credentialsNonExpired" th:text="#{module.employee.credentials.expired}"></label>
 												<small th:text="#{module.employee.credentials.expired.indicate}"></small>
 												<select class="form-control" name="credentialsNonExpired">
-													<option value="1" th:selected="*{credentialsNonExpired == true}" th:text="#{module.backoffice.no}"></option>
-													<option value="0" th:selected="*{credentialsNonExpired == false}" th:text="#{module.backoffice.yes}"></option>
+													<option value="1" th:selected="*{credentialsNonExpired == true}" th:text="#{module.common.no}"></option>
+													<option value="0" th:selected="*{credentialsNonExpired == false}" th:text="#{module.common.yes}"></option>
 												</select>
 												<span class="help-block"></span>
 											</div>
@@ -224,8 +224,8 @@
 		            },
 		            messages: {
 		                id: {
-		                    required: /*[[#{module.backoffice.id.required}]]*/ ,
-		                    remote: /*[[#{module.backoffice.id.exists}]]*/
+		                    required: /*[[#{module.common.id.required}]]*/ ,
+		                    remote: /*[[#{module.common.id.exists}]]*/
 		                },
 		                name: {
 		                    required: /*[[#{module.employee.name.required}]]*/
