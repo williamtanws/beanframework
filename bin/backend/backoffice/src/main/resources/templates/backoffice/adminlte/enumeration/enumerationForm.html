@@ -7,7 +7,7 @@
 
 <body>
 	<th:block layout:fragment="content">
-		<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.enumeration')}}" method="post" th:object="${enumerationDto}">
+		<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.enumeration.form')}}" method="post" th:object="${enumerationDto}">
 			<input type="hidden" name="create" th:if="*{uuid == null}" />
 			<input type="hidden" name="update" th:if="*{uuid != null}" />
 			<input type="hidden" name="uuid" th:value="*{uuid}" th:if="*{uuid != null}" />
@@ -32,7 +32,12 @@
 						<li class="nav-item">
 							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
 						</li>
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-tab :: nav}"></th:block>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-history-tab" data-toggle="pill" href="#custom-tabs-history" role="tab" aria-controls="custom-tabs-history" aria-selected="false" th:text="#{module.common.history}" th:if="*{uuid != null}"></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-administration-tab" data-toggle="pill" href="#custom-tabs-administration" role="tab" aria-controls="custom-tabs-administration" aria-selected="false" th:text="#{module.common.administration}" th:if="*{uuid != null}"></a>
+						</li>	
 					</ul>
 				</div>
 				<div class="card-body">
@@ -40,35 +45,33 @@
 						<div class="tab-pane fade show active" id="custom-tabs-general" role="tabpanel" aria-labelledby="custom-tabs-general-tab">
 
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<div class="form-group">
 										<label for="id" th:text="#{module.common.id}"></label>
 										<span>*</span>
 										<input type="text" class="form-control" name="id" th:value="*{id}">
-										<span class="help-block"></span>
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<div class="form-group">
 										<label for="name" th:text="#{module.enumeration.name}"></label>
 										<input type="text" class="form-control" name="name" th:value="*{name}">
-										<span class="help-block"></span>
 									</div>
 								</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<div class="form-group">
 										<label for="sort" th:text="#{module.enumeration.sort}"></label>
 										<input type="number" class="form-control" name="sort" th:value="*{sort}">
-										<span class="help-block"></span>
 									</div>
 								</div>
 							</div>
-
 						</div>
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-tab :: content}"></th:block>
+						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
+						</div>
 					</div>
 				</div>
 				<!-- /.card -->

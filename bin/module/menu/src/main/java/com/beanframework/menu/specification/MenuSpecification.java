@@ -13,7 +13,7 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.beanframework.common.utils.AbstractSpecification;
+import com.beanframework.common.specification.AbstractSpecification;
 import com.beanframework.menu.domain.Menu;
 
 public class MenuSpecification extends AbstractSpecification {

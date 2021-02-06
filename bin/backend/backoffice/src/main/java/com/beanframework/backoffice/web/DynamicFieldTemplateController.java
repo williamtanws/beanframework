@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -30,52 +33,47 @@ public class DynamicFieldTemplateController extends AbstractController {
 	private DynamicFieldTemplateFacade dynamicFieldTemplateFacade;
 
 	@Value(DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE)
-	private String PATH_DYNAMICFILEDTEMPLATE;
+	private String PATH_DYNAMICFIELDTEMPLATE_PAGE;
 
-	@Value(DynamicFieldTemplateWebConstants.View.LIST)
-	private String VIEW_DYNAMICFILEDTEMPLATE_LIST;
+	@Value(DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE_FORM)
+	private String PATH_DYNAMICFIELDTEMPLATE_FORM;
+
+	@Value(DynamicFieldTemplateWebConstants.View.DYNAMICFIELDTEMPLATE)
+	private String VIEW_DYNAMICFIELDTEMPLATE_PAGE;
+
+	@Value(DynamicFieldTemplateWebConstants.View.DYNAMICFIELDTEMPLATE_FORM)
+	private String VIEW_DYNAMICFIELDTEMPLATE_FORM;
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE)
-	public String list(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model) throws Exception {
-		model.addAttribute("create", false);
-
-		if (dynamicfieldtemplateDto.getUuid() != null) {
-
-			DynamicFieldTemplateDto existsDto = dynamicFieldTemplateFacade.findOneByUuid(dynamicfieldtemplateDto.getUuid());
-
-			if (existsDto != null) {
-				model.addAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO, existsDto);
-			} else {
-				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
-			}
-		}
-
-		return VIEW_DYNAMICFILEDTEMPLATE_LIST;
+	public String page(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicFieldTemplateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+		return VIEW_DYNAMICFIELDTEMPLATE_PAGE;
 	}
 
-	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_CREATE)
-	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "create")
-	public String createView(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model) throws Exception {
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE_FORM)
+	public String form(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicFieldTemplateDto, Model model) throws Exception {
 
-		dynamicfieldtemplateDto = dynamicFieldTemplateFacade.createDto();
-		model.addAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO, dynamicfieldtemplateDto);
-		model.addAttribute("create", true);
-
-		return VIEW_DYNAMICFILEDTEMPLATE_LIST;
-	}
-
-	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_CREATE)
-	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
-			BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
-
-		if (dynamicfieldtemplateDto.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
+		if (dynamicFieldTemplateDto.getUuid() != null) {
+			dynamicFieldTemplateDto = dynamicFieldTemplateFacade.findOneByUuid(dynamicFieldTemplateDto.getUuid());
 		} else {
+			dynamicFieldTemplateDto = dynamicFieldTemplateFacade.createDto();
+		}
+		model.addAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO, dynamicFieldTemplateDto);
 
+		return VIEW_DYNAMICFIELDTEMPLATE_FORM;
+	}
+
+	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_CREATE)
+	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE_FORM, params = "create")
+	public RedirectView create(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicFieldTemplateDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
+
+		if (dynamicFieldTemplateDto.getUuid() != null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
+		} else {
 			try {
-				dynamicfieldtemplateDto = dynamicFieldTemplateFacade.create(dynamicfieldtemplateDto);
+				dynamicFieldTemplateDto = dynamicFieldTemplateFacade.create(dynamicFieldTemplateDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -83,25 +81,24 @@ public class DynamicFieldTemplateController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(DynamicFieldTemplateDto.UUID, dynamicfieldtemplateDto.getUuid());
+		redirectAttributes.addAttribute(DynamicFieldTemplateDto.UUID, dynamicFieldTemplateDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_DYNAMICFILEDTEMPLATE);
+		redirectView.setUrl(PATH_DYNAMICFIELDTEMPLATE_FORM);
 		return redirectView;
 	}
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_UPDATE)
-	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
-			BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
+	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE_FORM, params = "update")
+	public RedirectView update(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicFieldTemplateDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (dynamicfieldtemplateDto.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
+		if (dynamicFieldTemplateDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
-
 			try {
-				dynamicfieldtemplateDto = dynamicFieldTemplateFacade.update(dynamicfieldtemplateDto);
+				dynamicFieldTemplateDto = dynamicFieldTemplateFacade.update(dynamicFieldTemplateDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -109,31 +106,34 @@ public class DynamicFieldTemplateController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(DynamicFieldTemplateDto.UUID, dynamicfieldtemplateDto.getUuid());
+		redirectAttributes.addAttribute(DynamicFieldTemplateDto.UUID, dynamicFieldTemplateDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_DYNAMICFILEDTEMPLATE);
+		redirectView.setUrl(PATH_DYNAMICFIELDTEMPLATE_FORM);
 		return redirectView;
 	}
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicfieldtemplateDto, Model model,
-			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	@PostMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE_FORM, params = "delete")
+	public RedirectView delete(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicFieldTemplateDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		try {
-			dynamicFieldTemplateFacade.delete(dynamicfieldtemplateDto.getUuid());
+		if (dynamicFieldTemplateDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
+		} else {
+			try {
+				dynamicFieldTemplateFacade.delete(dynamicFieldTemplateDto.getUuid());
 
-			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
-		} catch (BusinessException e) {
-			addErrorMessage(DynamicFieldTemplateDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(DynamicFieldTemplateDto.UUID, dynamicfieldtemplateDto.getUuid());
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(DynamicFieldTemplateDto.class, e.getMessage(), bindingResult, redirectAttributes);
+			}
 		}
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_DYNAMICFILEDTEMPLATE);
+		redirectView.setUrl(PATH_DYNAMICFIELDTEMPLATE_FORM);
 		return redirectView;
 
 	}

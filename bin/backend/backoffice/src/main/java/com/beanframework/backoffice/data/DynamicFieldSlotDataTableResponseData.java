@@ -4,9 +4,8 @@ import com.beanframework.core.data.DataTableResponseData;
 
 public class DynamicFieldSlotDataTableResponseData extends DataTableResponseData {
 
-	private Integer sort;
-	
 	private String name;
+	private Integer sort;
 
 	public String getName() {
 		return name;

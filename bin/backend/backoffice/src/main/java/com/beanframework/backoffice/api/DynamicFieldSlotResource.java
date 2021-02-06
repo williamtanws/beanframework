@@ -35,7 +35,7 @@ public class DynamicFieldSlotResource extends AbstractResource {
 	private DynamicFieldSlotFacade dynamicFieldSlotFacade;
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(DynamicFieldSlotWebConstants.Path.Api.CHECKID)
+	@RequestMapping(DynamicFieldSlotWebConstants.Path.Api.DYNAMICFIELDSLOT_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -57,7 +57,7 @@ public class DynamicFieldSlotResource extends AbstractResource {
 	}
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = DynamicFieldSlotWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = DynamicFieldSlotWebConstants.Path.Api.DYNAMICFIELDSLOT, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DynamicFieldSlotDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -84,7 +84,7 @@ public class DynamicFieldSlotResource extends AbstractResource {
 	}
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = DynamicFieldSlotWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = DynamicFieldSlotWebConstants.Path.Api.DYNAMICFIELDSLOT_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

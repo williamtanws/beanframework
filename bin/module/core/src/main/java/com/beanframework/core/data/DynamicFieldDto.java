@@ -36,9 +36,9 @@ public class DynamicFieldDto extends GenericDto {
 
 	private List<EnumerationDto> enumerations = new ArrayList<EnumerationDto>();
 
-	private String selectedLanguage;
+	private String selectedLanguageUuid;
 
-	private String[] selectedEnumerations;
+	private String[] selectedEnumerationUuids;
 
 	public String getName() {
 		return name;
@@ -104,20 +104,20 @@ public class DynamicFieldDto extends GenericDto {
 		this.enumerations = enumerations;
 	}
 
-	public String getSelectedLanguage() {
-		return selectedLanguage;
+	public String getSelectedLanguageUuid() {
+		return selectedLanguageUuid;
 	}
 
-	public void setSelectedLanguage(String selectedLanguage) {
-		this.selectedLanguage = selectedLanguage;
+	public void setSelectedLanguageUuid(String selectedLanguageUuid) {
+		this.selectedLanguageUuid = selectedLanguageUuid;
 	}
 
-	public String[] getSelectedEnumerations() {
-		return selectedEnumerations;
+	public String[] getSelectedEnumerationUuids() {
+		return selectedEnumerationUuids;
 	}
 
-	public void setSelectedEnumerations(String[] selectedEnumerations) {
-		this.selectedEnumerations = selectedEnumerations;
+	public void setSelectedEnumerationUuids(String[] selectedEnumerationUuids) {
+		this.selectedEnumerationUuids = selectedEnumerationUuids;
 	}
 
 }

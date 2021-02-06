@@ -1,10 +1,10 @@
 INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dynamicFieldSlotIds
 ,system					,System					,10	,fas fa-cog			,									,,true,				,employeegroup				,menu_0_name_en=System;menu_1_name_cn=系统
-,enumeration			,Enumeration			,20	,fas fa-list-ol		,/backoffice/enumeration			,,true,system		,employeegroup				,menu_0_name_en=Enumeration;menu_1_name_cn=列举
-,field					,Field					,30	,fas fa-paste		,									,,true,system		,employeegroup				,menu_0_name_en=Field;menu_1_name_cn=输入
-,dynamicfield			,Dynamic Field			,10	,fas fa-list-ul		,/backoffice/dynamicfield			,,true,field		,employeegroup				,menu_0_name_en=Dynamic Field;menu_1_name_cn=动态输入
-,dynamicfieldslot		,Dynamic Field Slot		,20	,fas fa-list-alt	,/backoffice/dynamicfield/slot		,,true,field		,employeegroup				,menu_0_name_en=Dynamic Field Slot;menu_1_name_cn=动态场槽
-,dynamicfieldtemplate	,Dynamic Field Template,30	,fas fa-clipboard-list,/backoffice/dynamicfield/template	,,true,field		,employeegroup				,menu_0_name_en=Dynamic Field Template;menu_1_name_cn=动态模板
+,field					,Field					,30	,fas fa-file-alt	,									,,true,system		,employeegroup				,menu_0_name_en=Field;menu_1_name_cn=输入
+,enumeration			,Enumeration			,10	,fas fa-list-ol		,/backoffice/enumeration			,,true,field		,employeegroup				,menu_0_name_en=Enumeration;menu_1_name_cn=列举
+,dynamicfield			,Dynamic Field			,20	,fas fa-list-ul		,/backoffice/dynamicfield			,,true,field		,employeegroup				,menu_0_name_en=Dynamic Field;menu_1_name_cn=动态输入
+,dynamicfieldslot		,Dynamic Field Slot		,30	,fas fa-list-alt	,/backoffice/dynamicfieldslot		,,true,field		,employeegroup				,menu_0_name_en=Dynamic Field Slot;menu_1_name_cn=动态场槽
+,dynamicfieldtemplate	,Dynamic Field Template ,40	,fas fa-clipboard-list,/backoffice/dynamicfieldtemplate	,,true,field		,employeegroup				,menu_0_name_en=Dynamic Field Template;menu_1_name_cn=动态模板
 ,userright				,User Right				,40	,fas fa-user-plus	,/backoffice/userright				,,true,system		,employeegroup				,menu_0_name_en=User Right;menu_1_name_cn=用户权利
 ,userpermission			,User Permission		,50	,fas fa-key			,/backoffice/userpermission			,,true,system		,employeegroup				,menu_0_name_en=User Permission;menu_1_name_cn=用户权限
 ,menu					,Menu					,60	,fas fa-align-justify,/backoffice/menu					,,true,system		,employeegroup				,menu_0_name_en=Menu;menu_1_name_cn=菜单
@@ -29,7 +29,7 @@ INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dyn
 ,multimedia				,Multimedia				,40	,fas fa-photo-video	,									,,true,				,employeegroup				,menu_0_name_en=Multimedia;menu_1_name_cn=多媒体
 ,filemanager			,File Manager			,10	,fas fa-folder		,/backoffice/filemanager			,,true,multimedia	,employeegroup				,menu_0_name_en=File Manager;menu_1_name_cn=文件管理器
 ,media					,Media					,20	,fas fa-file-image	,/backoffice/media					,,true,multimedia	,employeegroup				,menu_0_name_en=Media;menu_1_name_cn=媒体
-,cms					,CMS					,50	,fas fa-file-alt	,									,,true,				,employeegroup				,menu_0_name_en=CMS;menu_1_name_cn=内容管理系统
+,cms					,CMS					,50	,fas fa-home		,									,,true,				,employeegroup				,menu_0_name_en=CMS;menu_1_name_cn=内容管理系统
 ,site					,Site					,10	,fas fa-globe		,/backoffice/site					,,true,cms			,employeegroup				,menu_0_name_en=Site;menu_1_name_cn=网站
-,comment				,Comment				,50	,fas fa-comments	,/backoffice/comment				,,true,				,employeegroup				,menu_0_name_en=Comment;menu_1_name_cn=留言
+,comment				,Comment				,20	,fas fa-comments	,/backoffice/comment				,,true,cms			,employeegroup				,menu_0_name_en=Comment;menu_1_name_cn=留言
 ,task					,Task					,60	,fas fa-tasks		,/backoffice/task					,,true,				,employeegroup				,menu_0_name_en=Task;menu_1_name_cn=任务

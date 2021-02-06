@@ -21,7 +21,7 @@ import com.beanframework.common.context.SpringContext;
 import com.beanframework.common.data.DataTableColumnSpecs;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.common.utils.AbstractSpecification;
+import com.beanframework.common.specification.AbstractSpecification;
 import com.beanframework.user.domain.User;
 
 public class CommentSpecification extends AbstractSpecification {

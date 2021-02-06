@@ -59,7 +59,7 @@ public class UserRightResource extends AbstractResource {
 	}
 
 	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = UserRightWebConstants.Path.Api.USERRIGHT_PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = UserRightWebConstants.Path.Api.USERRIGHT, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -86,7 +86,7 @@ public class UserRightResource extends AbstractResource {
 	}
 
 	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = UserRightWebConstants.Path.Api.USERRIGHT_PAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = UserRightWebConstants.Path.Api.USERRIGHT_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

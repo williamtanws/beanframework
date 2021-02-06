@@ -15,7 +15,7 @@ public class DynamicFieldSlotDto extends GenericDto {
 
 	private DynamicFieldDto dynamicField;
 
-	private String selectedDynamicField;
+	private String selectedDynamicFieldUuid;
 
 	public String getName() {
 		return name;
@@ -41,12 +41,12 @@ public class DynamicFieldSlotDto extends GenericDto {
 		this.dynamicField = dynamicField;
 	}
 
-	public String getSelectedDynamicField() {
-		return selectedDynamicField;
+	public String getSelectedDynamicFieldUuid() {
+		return selectedDynamicFieldUuid;
 	}
 
-	public void setSelectedDynamicField(String selectedDynamicField) {
-		this.selectedDynamicField = selectedDynamicField;
+	public void setSelectedDynamicFieldUuid(String selectedDynamicFieldUuid) {
+		this.selectedDynamicFieldUuid = selectedDynamicFieldUuid;
 	}
 
 }

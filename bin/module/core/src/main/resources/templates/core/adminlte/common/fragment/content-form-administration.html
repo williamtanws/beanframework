@@ -3,10 +3,8 @@
 <body>
 	<th:block th:fragment="form">
 		<dl class="row">
-			<dt class="col-sm-1" th:text="#{module.common.uuid}"></dt>
-			<dd class="col-sm-11" th:text="*{uuid}"></dd>
-		</dl>
-		<dl class="row">
+			<dt class="col-sm-2" th:text="#{module.common.uuid}"></dt>
+			<dd class="col-sm-10" th:text="*{uuid}"></dd>
 			<dt class="col-sm-2" th:text="#{module.common.lastModifiedDate}"></dt>
 			<dd class="col-sm-4" th:text="*{lastModifiedDate != null} ? *{#dates.format(lastModifiedDate, ' dd MMMM yyyy, hh:mma')}"></dd>
 			<dt class="col-sm-2" th:text="#{module.common.lastModifiedBy}"></dt>

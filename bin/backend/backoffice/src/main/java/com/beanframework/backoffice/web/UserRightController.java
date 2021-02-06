@@ -19,6 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserRightWebConstants;
+import com.beanframework.backoffice.UserRightWebConstants.UserRightPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserRightDto;
@@ -30,27 +31,28 @@ public class UserRightController extends AbstractController {
 
 	@Autowired
 	private UserRightFacade userrightFacade;
-	
-	@Value(UserRightWebConstants.Path.USERRIGHT_PAGE)
+
+	@Value(UserRightWebConstants.Path.USERRIGHT)
 	private String PATH_USERRIGHT_PAGE;
-	
+
 	@Value(UserRightWebConstants.Path.USERRIGHT_FORM)
 	private String PATH_USERRIGHT_FORM;
 
-	@Value(UserRightWebConstants.View.PAGE)
+	@Value(UserRightWebConstants.View.USERRIGHT)
 	private String VIEW_USERRIGHT_PAGE;
 
-	@Value(UserRightWebConstants.View.FORM)
+	@Value(UserRightWebConstants.View.USERRIGHT_FORM)
 	private String VIEW_USERRIGHT_FORM;
 
-	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT_PAGE)
-	public String list(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model, @RequestParam Map<String, Object> requestParams)
-			throws Exception {
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT)
+	public String page(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		return VIEW_USERRIGHT_PAGE;
 	}
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT_FORM)
-	public String createView(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model) throws Exception {
+	public String form(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model) throws Exception {
 
 		if (userrightDto.getUuid() != null) {
 			userrightDto = userrightFacade.findOneByUuid(userrightDto.getUuid());
@@ -62,6 +64,7 @@ public class UserRightController extends AbstractController {
 		return VIEW_USERRIGHT_FORM;
 	}
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT_FORM, params = "create")
 	public RedirectView create(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -86,6 +89,7 @@ public class UserRightController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT_FORM, params = "update")
 	public RedirectView update(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -110,6 +114,7 @@ public class UserRightController extends AbstractController {
 		return redirectView;
 	}
 
+	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = UserRightWebConstants.Path.USERRIGHT_FORM, params = "delete")
 	public RedirectView delete(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto userrightDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
