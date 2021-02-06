@@ -60,15 +60,15 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 			}
 
 			// DynamicFieldSlots
-			if (source.getSelectedDynamicFieldSlots() != null) {
+			if (source.getSelectedDynamicFieldSlotUuids() != null) {
 
 				Iterator<UUID> itr = prototype.getDynamicFieldSlots().iterator();
 				while (itr.hasNext()) {
 					UUID enitity = itr.next();
 
 					boolean remove = true;
-					for (int i = 0; i < source.getSelectedDynamicFieldSlots().length; i++) {
-						if (enitity.equals(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]))) {
+					for (int i = 0; i < source.getSelectedDynamicFieldSlotUuids().length; i++) {
+						if (enitity.equals(UUID.fromString(source.getSelectedDynamicFieldSlotUuids()[i]))) {
 							remove = false;
 						}
 					}
@@ -78,20 +78,20 @@ public class EntityDynamicFieldTemplateConverter implements EntityConverter<Dyna
 					}
 				}
 
-				for (int i = 0; i < source.getSelectedDynamicFieldSlots().length; i++) {
+				for (int i = 0; i < source.getSelectedDynamicFieldSlotUuids().length; i++) {
 
 					boolean add = true;
 					itr = prototype.getDynamicFieldSlots().iterator();
 					while (itr.hasNext()) {
 						UUID entity = itr.next();
 
-						if (entity.equals(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]))) {
+						if (entity.equals(UUID.fromString(source.getSelectedDynamicFieldSlotUuids()[i]))) {
 							add = false;
 						}
 					}
 
 					if (add) {
-						DynamicFieldSlot DynamicFieldSlot = modelService.findOneByUuid(UUID.fromString(source.getSelectedDynamicFieldSlots()[i]), DynamicFieldSlot.class);
+						DynamicFieldSlot DynamicFieldSlot = modelService.findOneByUuid(UUID.fromString(source.getSelectedDynamicFieldSlotUuids()[i]), DynamicFieldSlot.class);
 						if (DynamicFieldSlot != null) {
 							prototype.getDynamicFieldSlots().add(DynamicFieldSlot.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);

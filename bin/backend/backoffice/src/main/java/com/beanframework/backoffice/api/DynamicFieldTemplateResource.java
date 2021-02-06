@@ -36,7 +36,7 @@ public class DynamicFieldTemplateResource extends AbstractResource {
 	private DynamicFieldTemplateFacade dynamicFieldTemplateFacade;
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(DynamicFieldTemplateWebConstants.Path.Api.CHECKID)
+	@RequestMapping(DynamicFieldTemplateWebConstants.Path.Api.DYNAMICFIELDTEMPLATE_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -58,7 +58,7 @@ public class DynamicFieldTemplateResource extends AbstractResource {
 	}
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = DynamicFieldTemplateWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = DynamicFieldTemplateWebConstants.Path.Api.DYNAMICFIELDTEMPLATE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -84,7 +84,7 @@ public class DynamicFieldTemplateResource extends AbstractResource {
 	}
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = DynamicFieldTemplateWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = DynamicFieldTemplateWebConstants.Path.Api.DYNAMICFIELDTEMPLATE_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

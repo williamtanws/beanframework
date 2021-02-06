@@ -5,22 +5,24 @@ public interface DynamicFieldWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.dynamicfield.checkid}";
-			public static final String PAGE = "${path.api.dynamicfield.page}";
-			public static final String HISTORY = "${path.api.dynamicfield.history}";
+			public static final String DYNAMICFIELD = "${path.api.dynamicfield}";
+			public static final String DYNAMICFIELD_HISTORY = "${path.api.dynamicfield.history}";
+			public static final String DYNAMICFIELD_CHECKID = "${path.api.dynamicfield.checkid}";
 		}
 
 		public static final String DYNAMICFIELD = "${path.dynamicfield}";
+		public static final String DYNAMICFIELD_FORM = "${path.dynamicfield.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.dynamicfield.list}";
+		public static final String DYNAMICFIELD = "${view.dynamicfield}";
+		public static final String DYNAMICFIELD_FORM = "${view.dynamicfield.form}";
 	}
 
 	public interface ModelAttribute {
 		public static final String DYNAMICFIELD_DTO = "dynamicfieldDto";
 	}
-	
+
 	public interface DynamicFieldPreAuthorizeEnum {
 		public static final String AUTHORITY_READ = "dynamicfield_read";
 		public static final String AUTHORITY_CREATE = "dynamicfield_create";

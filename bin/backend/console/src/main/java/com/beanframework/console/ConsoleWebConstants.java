@@ -23,6 +23,7 @@ public interface ConsoleWebConstants {
 		public static final String INFO = "info";
 		public static final String PAGINATION = "pagination";
 		public static final String REVISIONS = "revisions";
+		public static final String LOGIN_URL = "loginUrl";
 	}
 
 	public interface Path {

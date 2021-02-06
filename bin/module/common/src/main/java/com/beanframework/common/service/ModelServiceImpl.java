@@ -427,7 +427,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				}
 
 				modelRepository.delete(model);
-				entityManager.detach(model);
 
 				AfterRemoveEvent afterRemoveEvent = new AfterRemoveEvent(beforeRemoveEvent.getDataMap());
 				Set<Entry<String, AfterRemoveListener>> afterRemoveListeners = afterRemoveListenerRegistry.getListeners().entrySet();
@@ -450,7 +449,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				removeInterceptor(model, modelClass.getSimpleName());
 
 				modelRepository.delete(model);
-				entityManager.detach(model);
 			}
 
 		} catch (Exception e) {

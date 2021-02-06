@@ -50,7 +50,7 @@ public class EnumerationController extends AbstractController {
 		return VIEW_ENUMERATION_PAGE;
 	}
 
-	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_READ_CREATE)
+	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = EnumerationWebConstants.Path.ENUMERATION_FORM)
 	public String form(@Valid @ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model) throws Exception {
 
@@ -64,7 +64,7 @@ public class EnumerationController extends AbstractController {
 		return VIEW_ENUMERATION_FORM;
 	}
 
-	@PreAuthorize(EnumerationPreAuthorizeEnum.AUTHORITY_CREATE)
+	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = EnumerationWebConstants.Path.ENUMERATION_FORM, params = "create")
 	public RedirectView create(@Valid @ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -89,7 +89,7 @@ public class EnumerationController extends AbstractController {
 		return redirectView;
 	}
 
-	@PreAuthorize(EnumerationPreAuthorizeEnum.AUTHORITY_UPDATE)
+	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = EnumerationWebConstants.Path.ENUMERATION_FORM, params = "update")
 	public RedirectView update(@Valid @ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
@@ -114,7 +114,7 @@ public class EnumerationController extends AbstractController {
 		return redirectView;
 	}
 
-	@PreAuthorize(EnumerationPreAuthorizeEnum.AUTHORITY_UPDATE)
+	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = EnumerationWebConstants.Path.ENUMERATION_FORM, params = "delete")
 	public RedirectView delete(@Valid @ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {

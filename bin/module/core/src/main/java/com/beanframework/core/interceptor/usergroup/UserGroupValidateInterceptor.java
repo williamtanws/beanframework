@@ -26,7 +26,7 @@ public class UserGroupValidateInterceptor extends AbstractValidateInterceptor<Us
 	public void onValidate(UserGroup model, InterceptorContext context) throws InterceptorException {
 		super.onValidate(model, context);
 
-		if(model.getUuid() == null) {
+		if(model.getUuid() == null && context.oldModel != null) {
 			if(model.getId().equals(defaultAdminGroup) | model.getId().equals(defaultEmployeeGroup) | model.getId().equals(defaultCustomerGroup) | model.getId().equals(defaultVendorGroup)) {
 				throw new InterceptorException("Default group is not allowed to add.");
 			}

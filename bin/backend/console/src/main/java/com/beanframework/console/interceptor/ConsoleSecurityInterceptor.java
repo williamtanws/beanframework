@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
@@ -35,6 +36,9 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 
 	@Value(LicenseWebConstants.Path.LICENSE)
 	private String PATH_LICENSE;
+	
+	@Value("${path.console.login}")
+	private String PATH_CONSOLE_LOGIN;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -42,6 +46,7 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (auth != null && auth.getPrincipal() instanceof User) {
+
 			String path = new UrlPathHelper().getLookupPathForRequest(request);
 
 			if (path != null && path.equalsIgnoreCase(PATH_LICENSE) == false && path.equalsIgnoreCase(PATH_LOGIN) == false) {
@@ -60,5 +65,15 @@ public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
 		}
 
 		return true;
+	}
+	
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (auth != null && auth.getPrincipal() instanceof User && modelAndView != null) {
+			modelAndView.getModelMap().addAttribute(ConsoleWebConstants.Model.LOGIN_URL, PATH_CONSOLE_LOGIN);
+		}
 	}
 }

@@ -65,7 +65,7 @@
 		var modalFormIframe = "#modal-form-iframe-"+tableId;
 			
 		function addItem(){
-			$(modalForm+' .modal-body').html("<iframe src='"+formUrl+" id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
+			$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
 	    	$(modalForm).modal('show');
 		}
 			
@@ -118,7 +118,15 @@
 	    	      "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 	    	      "<'row'<'col-sm-12'tr>>" +
 	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
-				'ajax': pageUrl,
+				'ajax': {
+					"url": pageUrl,
+					"statusCode": {
+				    	401: function (xhr, error, thrown) {
+							window.top.location.href = /*[[@{${loginUrl}}]]*/; 
+				        	return false
+				    	}
+				    }
+				},
 		        "columns": [
             	    /*[# th:each="column, iterStat : ${columns}"]*/
             	    
@@ -183,9 +191,9 @@
 		            table.$('tr.selected').removeClass('selected');
 		            $(this).addClass('selected');
 		        }
-		        var data = table.row( this ).data();
+		        var data = table.row(this).data();
 		        selectItem(data.uuid);
-		    } );
+		    });
 		});
 		
 		/*]]>*/

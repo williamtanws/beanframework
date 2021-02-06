@@ -36,7 +36,7 @@ public class LanguageResource extends AbstractResource {
 	private LanguageFacade languageFacade;
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(LanguageWebConstants.Path.Api.CHECKID)
+	@RequestMapping(LanguageWebConstants.Path.Api.LANGUAGE_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -58,7 +58,7 @@ public class LanguageResource extends AbstractResource {
 	}
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = LanguageWebConstants.Path.Api.LIST, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = LanguageWebConstants.Path.Api.LANGUAGE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<LanguageDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -86,7 +86,7 @@ public class LanguageResource extends AbstractResource {
 	}
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = LanguageWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = LanguageWebConstants.Path.Api.LANGUAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

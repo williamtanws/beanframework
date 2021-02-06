@@ -27,7 +27,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 
 import com.beanframework.common.domain.GenericEntity;
-import com.beanframework.common.utils.AbstractSpecification;
+import com.beanframework.common.specification.AbstractSpecification;
 import com.beanframework.common.utils.AppUtil;
 
 /**

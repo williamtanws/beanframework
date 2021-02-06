@@ -28,6 +28,7 @@ public interface BackofficeWebConstants {
 		public static final String MODULE_LANGUAGES = "moduleLanguages";
 		public static final String REVISIONS = "revisions";
 		public static final String FIELD_REVISIONS = "fieldRevisions";
+		public static final String LOGIN_URL = "loginUrl";
 	}
 
 	public interface Path {

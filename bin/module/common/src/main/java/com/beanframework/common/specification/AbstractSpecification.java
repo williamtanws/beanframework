@@ -1,4 +1,4 @@
-package com.beanframework.common.utils;
+package com.beanframework.common.specification;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,8 +16,10 @@ import org.springframework.data.jpa.domain.Specification;
 import com.beanframework.common.data.DataTableColumnSpecs;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.GenericEntity;
+import com.beanframework.common.utils.BooleanUtils;
+import com.beanframework.common.utils.CommonStringUtils;
 
-public class AbstractSpecification {
+public abstract class AbstractSpecification {
 
 	public static String convertToLikePattern(String value) {
 		if (value.contains("%") == Boolean.FALSE) {
@@ -60,7 +62,7 @@ public class AbstractSpecification {
 			predicates.add(cb.or(cb.like(root.get(GenericEntity.ID), convertToLikePattern(dataTableRequest.getSearch()))));
 
 			for (DataTableColumnSpecs specs : dataTableRequest.getColumns()) {
-				if (specs.getData() != GenericEntity.UUID && specs.getData() != GenericEntity.ID) {
+				if (specs.getData().equals(GenericEntity.UUID) == Boolean.FALSE && specs.getData().equals(GenericEntity.ID) == Boolean.FALSE) {
 					if (specs.getData().contains(".")) {
 						String[] objectProperty = specs.getData().split("\\.");
 						predicates.add(cb.or(cb.like(root.get(objectProperty[0]).get(objectProperty[1]), convertToLikePattern(dataTableRequest.getSearch()))));
@@ -70,15 +72,15 @@ public class AbstractSpecification {
 							field.setAccessible(true);
 							if (field.getType().isAssignableFrom(String.class)) {
 								predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(dataTableRequest.getSearch()))));
-							} else if (field.getType().isAssignableFrom(Integer.class)) {
-								predicates.add(cb.or(cb.equal(root.get(specs.getData()), dataTableRequest.getSearch())));
-							} else if (field.getType().isAssignableFrom(Boolean.class)) {
-								if (BooleanUtils.parseBoolean(dataTableRequest.getSearch())) {
-									predicates.add(cb.or(cb.isTrue(root.get(specs.getData()))));
-								} else {
-									predicates.add(cb.or(cb.isFalse(root.get(specs.getData()))));
-								}
+							} else if (field.getType().isAssignableFrom(Integer.class) && CommonStringUtils.isStringInt(dataTableRequest.getSearch())) {
+								predicates.add(cb.or(cb.equal(root.get(specs.getData()), Integer.parseInt(dataTableRequest.getSearch()))));
 							}
+							/*
+							 * else if (field.getType().isAssignableFrom(Boolean.class)) { if
+							 * (BooleanUtils.parseBoolean(dataTableRequest.getSearch())) {
+							 * predicates.add(cb.or(cb.isTrue(root.get(specs.getData())))); } else {
+							 * predicates.add(cb.or(cb.isFalse(root.get(specs.getData())))); } }
+							 */
 						} catch (Exception e) {
 							predicates.add(cb.or(cb.like(root.get(specs.getData()), convertToLikePattern(dataTableRequest.getSearch()))));
 						}

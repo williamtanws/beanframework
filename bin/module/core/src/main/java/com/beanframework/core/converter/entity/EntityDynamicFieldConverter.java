@@ -93,11 +93,11 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 			}
 
 			// Language
-			if (StringUtils.isBlank(source.getSelectedLanguage())) {
+			if (StringUtils.isBlank(source.getSelectedLanguageUuid())) {
 				prototype.setLanguage(null);
 				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				Language entityLanguage = modelService.findOneByUuid(UUID.fromString(source.getSelectedLanguage()), Language.class);
+				Language entityLanguage = modelService.findOneByUuid(UUID.fromString(source.getSelectedLanguageUuid()), Language.class);
 
 				if (entityLanguage != null) {
 
@@ -109,15 +109,15 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 			}
 
 			// Enumerations
-			if (source.getSelectedEnumerations() != null) {
+			if (source.getSelectedEnumerationUuids() != null) {
 
 				Iterator<UUID> enumerationsIterator = prototype.getEnumerations().iterator();
 				while (enumerationsIterator.hasNext()) {
 					UUID enumeration = enumerationsIterator.next();
 
 					boolean remove = true;
-					for (int i = 0; i < source.getSelectedEnumerations().length; i++) {
-						if (enumeration.equals(UUID.fromString(source.getSelectedEnumerations()[i]))) {
+					for (int i = 0; i < source.getSelectedEnumerationUuids().length; i++) {
+						if (enumeration.equals(UUID.fromString(source.getSelectedEnumerationUuids()[i]))) {
 							remove = false;
 						}
 					}
@@ -127,20 +127,20 @@ public class EntityDynamicFieldConverter implements EntityConverter<DynamicField
 					}
 				}
 
-				for (int i = 0; i < source.getSelectedEnumerations().length; i++) {
+				for (int i = 0; i < source.getSelectedEnumerationUuids().length; i++) {
 
 					boolean add = true;
 					enumerationsIterator = prototype.getEnumerations().iterator();
 					while (enumerationsIterator.hasNext()) {
 						UUID enumeration = enumerationsIterator.next();
 
-						if (enumeration.equals(UUID.fromString(source.getSelectedEnumerations()[i]))) {
+						if (enumeration.equals(UUID.fromString(source.getSelectedEnumerationUuids()[i]))) {
 							add = false;
 						}
 					}
 
 					if (add) {
-						Enumeration enumeration = modelService.findOneByUuid(UUID.fromString(source.getSelectedEnumerations()[i]), Enumeration.class);
+						Enumeration enumeration = modelService.findOneByUuid(UUID.fromString(source.getSelectedEnumerationUuids()[i]), Enumeration.class);
 						if (enumeration != null) {
 							prototype.getEnumerations().add(enumeration.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
