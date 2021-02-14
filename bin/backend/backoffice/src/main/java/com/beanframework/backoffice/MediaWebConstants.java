@@ -16,7 +16,7 @@ public interface MediaWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.media.list}";
+		public static final String LIST = "${view.media}";
 	}
 
 	public interface ModelAttribute {

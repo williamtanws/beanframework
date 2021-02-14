@@ -19,8 +19,6 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,8 +48,6 @@ import com.beanframework.common.repository.ModelRepository;
 @Service
 @Transactional
 public class ModelServiceImpl extends AbstractModelServiceImpl {
-
-	protected static Logger LOGGER = LoggerFactory.getLogger(ModelServiceImpl.class);
 
 	@Autowired
 	private ModelRepository modelRepository;
@@ -107,7 +103,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			initialDefaultsInterceptor(model, modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -126,7 +121,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return (T) model;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -145,7 +139,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return (T) model;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -164,7 +157,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -176,7 +168,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return count.intValue();
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -188,7 +179,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return count.intValue();
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -200,7 +190,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return count.equals(0L) ? 0 : Integer.valueOf(count.intValue());
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -215,7 +204,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return count.equals(0L) ? false : true;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -232,7 +221,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return (T) models;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -249,11 +238,11 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return (T) models;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public <T extends Collection> T findBySpecificationBySort(Specification specification, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
@@ -266,7 +255,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return (T) models;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -348,7 +337,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return page;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -392,7 +381,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			return model;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -408,7 +397,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			model = modelRepository.save(model);
 			return model;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -436,7 +425,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -452,7 +440,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -467,10 +454,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				deleteEntity(model, modelClass);
 
 		} catch (SQLException e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -485,10 +470,8 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 				deleteEntityByLegacyModel(model, modelClass);
 
 		} catch (SQLException e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -504,7 +487,6 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			model = entityConverter(model, modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -520,7 +502,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			model = entityConverter(model, typeCode);
 			return (T) model;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -542,7 +524,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 			return (T) entityObjects;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -564,7 +546,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			}
 			return (T) entityObjects;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -578,7 +560,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			model = dtoConverter(model, modelClass.getSimpleName());
 			return (T) model;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -592,7 +574,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			model = dtoConverter(model, typeCode);
 			return (T) model;
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
+
 			throw new Exception(e.getMessage(), e);
 		}
 	}
@@ -605,7 +587,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 
 			if (models.isEmpty())
 				return (T) new ArrayList<T>();
-			
+
 			List<Object> dtoObjects = new ArrayList<Object>();
 			for (Object model : models) {
 				model = dtoConverter(model, modelClass.getSimpleName());

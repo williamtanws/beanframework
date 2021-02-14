@@ -33,9 +33,6 @@
 							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" id="custom-tabs-dynamicfield-tab" data-toggle="pill" href="#custom-tabs-dynamicfield" role="tab" aria-controls="custom-tabs-dynamicfield" aria-selected="false" th:text="#{module.dynamicfield}" th:if="*{uuid != null}"></a>
-						</li>
-						<li class="nav-item">
 							<a class="nav-link" id="custom-tabs-history-tab" data-toggle="pill" href="#custom-tabs-history" role="tab" aria-controls="custom-tabs-history" aria-selected="false" th:text="#{module.common.history}" th:if="*{uuid != null}"></a>
 						</li>
 						<li class="nav-item">
@@ -69,14 +66,14 @@
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="tab-pane fade show" id="custom-tabs-dynamicfield" role="tabpanel" aria-labelledby="custom-tabs-dynamicfield-tab">
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="dynamicfield" th:text="#{module.dynamicfieldslot.dynamicfield}"></label>
-									<th:block th:with="id=#{module.common.id},name=#{module.dynamicfield.name},type=#{module.dynamicfield.type}">
-										<th:block th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.dynamicfieldslot.dynamicfield.select}, tableId='selectedDynamicfieldDataTable', columnsi18n=${#strings.arraySplit(id+','+name+','+type, ',')}, columns=${#strings.arraySplit('id,name,type', ',')}, selectedItemDto=*{dynamicField}, selectedItemUuidName='selectedDynamicFieldUuid' )}"></th:block>
-									</th:block>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="dynamicfield" th:text="#{module.dynamicfieldslot.dynamicfield}"></label>
+										<th:block th:with="id=#{module.common.id},name=#{module.dynamicfield.name},type=#{module.dynamicfield.type}">
+											<th:block th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.dynamicfieldslot.dynamicfield.select}, tableId='selectedDynamicfieldDataTable', columnsi18n=${#strings.arraySplit(id+','+name+','+type, ',')}, columns=${#strings.arraySplit('id,name,type', ',')}, selectedItemDto=*{dynamicField}, selectedItemUuidName='selectedDynamicFieldUuid' )}"></th:block>
+										</th:block>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -106,12 +103,12 @@
 			                    remote: {
 			                        url: /*[[${@environment.getProperty('path.api.dynamicfieldslot.checkid')}]]*/ ,
 			                        type: "get",
-			                        data: {
-			                            uuid: /*[[${dynamicfieldslotDto.uuid}]]*/ ,
-			                            id: function() {
-			                                return $("#update-form input[name='id']").val();
-			                            }
-			                        }
+									data: {
+										uuid: $('#form-save input[name=uuid]').val(),
+										id: function () {
+											return $("#form-save input[name='id']").val();
+										}
+									}
 			                    }
 			                },
 			                sort: {

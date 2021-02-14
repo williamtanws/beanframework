@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.AddressDto;
+import com.beanframework.core.specification.AddressSpecification;
 import com.beanframework.user.domain.Address;
-import com.beanframework.user.specification.AddressSpecification;
 
 @Component
 public class AddressFacadeImpl extends AbstractFacade<Address, AddressDto> implements AddressFacade {

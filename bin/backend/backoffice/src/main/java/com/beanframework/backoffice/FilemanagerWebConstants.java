@@ -11,7 +11,7 @@ public class FilemanagerWebConstants {
 		public interface Api {
 			public static final String FILE_MANAGER = "${path.api.filemanager}";
 			public static final String ANGULARFILEMANAGER = "${path.api.filemanager.angularfilemanager}";
-			public static final String ANGULARFILEMANAGER_LIST = "${path.api.filemanager.angularfilemanager.list}";
+			public static final String ANGULARFILEMANAGER_LIST = "${path.api.filemanager.angularfilemanager}";
 			public static final String ANGULARFILEMANAGER_UPLOAD = "${path.api.filemanager.angularfilemanager.upload}";
 			public static final String ANGULARFILEMANAGER_PREVIEW = "${path.api.filemanager.angularfilemanager.preview}";
 			public static final String ANGULARFILEMANAGER_CREATEFOLDER = "${path.api.filemanager.angularfilemanager.createFolder}";

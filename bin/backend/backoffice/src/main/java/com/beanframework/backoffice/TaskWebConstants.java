@@ -13,7 +13,7 @@ public interface TaskWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.task.list}";
+		public static final String LIST = "${view.task}";
 	}
 
 	public interface ModelAttribute {

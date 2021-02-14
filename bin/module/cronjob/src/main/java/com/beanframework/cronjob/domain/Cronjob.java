@@ -1,24 +1,23 @@
 package com.beanframework.cronjob.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.cache.annotation.Cacheable;
@@ -55,7 +54,7 @@ public class Cronjob extends GenericEntity {
 	public static final String LAST_TRIGGERED_DATE = "lastTriggeredDate";
 	public static final String LAST_START_EXECUTED_DATE = "lastStartExecutedDate";
 	public static final String LAST_FINISH_EXECUTED_DATE = "lastFinishExecutedDate";
-	public static final String CRONJOB_DATAS = "cronjobDatas";
+	public static final String PARAMETERS = "parameters";
 	public static final String STATUS = "status";
 
 	@Audited(withModifiedFlag = true)
@@ -105,12 +104,12 @@ public class Cronjob extends GenericEntity {
 	@NotAudited
 	private Date lastFinishExecutedDate;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.ALL })
-	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
-	@OrderBy("createdDate DESC")
-	private List<CronjobData> cronjobDatas = new ArrayList<CronjobData>(0);
+	@ElementCollection
+	@MapKeyColumn(name = "name")
+	@Column(name = "value")
+	@CollectionTable(name = CronjobConstants.Table.CRONJOB_PARAMETER, joinColumns = @JoinColumn(name = "cronjob_uuid"))
+	Map<String, String> parameters = new HashMap<String, String>();
 
 	public String getName() {
 		return name;
@@ -224,12 +223,12 @@ public class Cronjob extends GenericEntity {
 		this.lastFinishExecutedDate = lastFinishExecutedDate;
 	}
 
-	public List<CronjobData> getCronjobDatas() {
-		return cronjobDatas;
+	public Map<String, String> getParameters() {
+		return parameters;
 	}
 
-	public void setCronjobDatas(List<CronjobData> cronjobDatas) {
-		this.cronjobDatas = cronjobDatas;
+	public void setParameters(Map<String, String> parameters) {
+		this.parameters = parameters;
 	}
 
 }

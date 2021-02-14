@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<head>
+<title th:utext="#{module.cronjob}"></title>
+</head>
+<body>
+	<th:block layout:fragment="update">
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.cronjob')}" method="post" th:object="${cronjobDto}">
+			<input type="hidden" name="create" th:if="*{uuid == null}"/>
+			<input type="hidden" name="update" th:if="*{uuid != null}"/>
+			<input type="hidden" name="uuid" th:value="${cronjobDto.uuid}" />
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box box-solid">
+						<div class="box-body bg-gray">
+							<div class="row">
+								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='cronjob_delete')}"></th:block>
+								</div>
+								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: center">
+									<button th:if="*{uuid != null}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-trigger" th:text="#{module.cronjob.trigger}" sec:authorize="hasAuthority('cronjob_update')"></button>
+								</div>
+								<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align: right">
+									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='cronjob_delete')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='cronjob_update')}"></th:block>
+								</div>
+							</div>
+						</div>
+						<!-- /.box-header -->
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<!-- Custom Tabs -->
+					<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+							<li class="active">
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a>
+							</li>
+							<li th:if="*{uuid != null}">
+								<a href="#tab_history" data-toggle="tab" th:text="#{module.common.history}" onclick="changeTab('history')"></a>
+							</li>
+							<li th:if="*{uuid != null}">
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
+							</li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab_general">
+								<div class="box-body">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="status" th:text="#{module.cronjob.status} + ':'"></label>
+												<span class="text-block" th:text="*{status}"></span>
+											</div>
+											<div class="form-group">
+												<label for="result" th:text="#{module.cronjob.result} + ':'"></label>
+												<span class="text-block" th:text="*{result}"></span>
+											</div>
+											<div class="form-group">
+												<label for="result" th:text="#{module.cronjob.message} + ':'"></label>
+												<span class="text-block" th:text="*{message}"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="lastStartExecutedDate" th:text="#{module.cronjob.laststartexecuteddate} + ':'"></label>
+												<span class="text-block" th:text="*{lastStartExecutedDate != null} ? *{#dates.format(lastStartExecutedDate, ' dd MMMM yyyy hh:mma')}"></span>
+											</div>
+											<div class="form-group">
+												<label for="lastFinishExecutedDate" th:text="#{module.cronjob.lastfinishexecuteddate} + ':'"></label>
+												<span class="text-block" th:text="*{lastFinishExecutedDate != null} ? *{#dates.format(lastFinishExecutedDate, ' dd MMMM yyyy hh:mma')}"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="jobGroup" th:text="#{module.cronjob.jobgroup}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="jobGroup" th:value="*{jobGroup}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="name" th:text="#{module.cronjob.jobname}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="jobClass" th:text="#{module.cronjob.jobclass}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="jobClass" th:value="*{jobClass}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="description" th:text="#{module.cronjob.description}"></label>
+												<textarea class="form-control" name="description" th:text="*{description}"></textarea>
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="cronExpression" th:text="#{module.cronjob.cronexpression}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="cronExpression" th:value="*{cronExpression}">
+												<span id="cronExpressionDescription" class="help-block"></span>
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="startup" th:text="#{module.cronjob.startup}"></label>
+												<select class="form-control" name="startup">
+													<option value="" th:text="'&nbsp'"></option>
+													<option value="1" th:selected="*{startup == true}" th:text="#{module.common.yes}"></option>
+													<option value="0" th:selected="*{startup == false}" th:text="#{module.common.no}"></option>
+												</select>
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;" th:if="*{uuid != null}">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="startup" th:text="#{module.cronjob.jobdata}"></label>
+												<table id="jobdatasTable" class="table table-bordered table-hover">
+													<thead>
+														<tr>
+															<th th:text="#{module.cronjob.jobdata.name}"></th>
+															<th th:text="#{module.cronjob.jobdata.value}"></th>
+															<th style="width: 70px" class="action" sec:authorize="hasAuthority('cronjob_update')" th:text="#{module.common.action}"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="row : ${cronjobDto.cronjobDatas}">
+															<td th:text="${row.name}"></td>
+															<td th:text="${row.value}"></td>
+															<td sec:authorize="hasAuthority('cronjob_update')">
+																<button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" data-target="#modal-deletejobdata" th:data-jobdatauuid="${row.uuid}"
+																	th:text="#{module.common.delete}"></button>
+															</td>
+														</tr>
+													</tbody>
+													<tfoot sec:authorize="hasAuthority('cronjob_update')">
+														<tr>
+															<td colspan="2"></td>
+															<td>
+																<!-- Button trigger modal -->
+																<a class="btn btn-block btn-default" data-toggle="modal" data-target="#modal-createjobdata">
+																	<span class="fa fa-plus"></span>
+																	<span th:text="#{module.common.add}"></span>
+																</a>
+															</td>
+														</tr>
+													</tfoot>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
+								<div class="box-body">
+									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.cronjob.history')}(uuid=*{uuid})} )}"></th:block>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
+								<div class="box-body">
+									<th:block layout:insert="~{common/adminlte/common/component/administration :: administration}"></th:block>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
+						</div>
+						<!-- /.tab-content -->
+					</div>
+					<!-- nav-tabs-custom -->
+				</div>
+				<!-- /.col -->
+			</div>
+		</form>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    
+		    /*[# th:if="${cronjobDto.cronExpression} != null"]*/
+		    var locale = /*[[${#locale.toString()}]]*/;
+		    var cronExpression = /*[[${cronjobDto.cronExpression}]]*/;
+		    
+		    if(locale == "cn"){
+		    	locale = "zh_CN";
+		    }
+		    	
+			$("#cronExpressionDescription").text(cronstrue.toString(cronExpression, { locale: locale }));
+			/*[/]*/
+		    	
+		    $(document).ready(function() {
+		    	
+		    	$('#jobdatasTable').DataTable({
+				      'paging'      : true,
+				      'lengthChange': true,
+				      'searching'   : true,
+				      'ordering'    : true,
+				      'info'        : true,
+				      'autoWidth'   : true,
+				      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+		    	      "<'row'<'col-sm-12'tr>>" +
+		    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+		    	      'buttons': [
+		                  {
+		                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+		                      action: function ( e, dt, node, config ) {
+		                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+		                    	  $('#jobdatasTable').find("input:text").val("");
+		                    	  $("#jobdatasTable").find("select").each(function () { // there is no such thing as input[type=select] 
+		                    	        this.selectedIndex = 0; // this is a <select>
+		                    	  });
+		                    	  $('#jobdatasTable .select2').val('').trigger('change');
+		                      }
+		                  }
+		              ]
+				});
+		    	
+		        $('#update-form').validate({
+		        	onkeyup: function(element) {
+		                this.element(element);
+		            },
+		        	onfocusout: false,
+		            invalidHandler: function(form, validator) {
+		                var errors = validator.numberOfInvalids();
+		                if (errors) {                    
+		                    validator.errorList[0].element.focus();
+		                }
+		            },
+		            rules: {
+		            	id: {
+		                    required: true,
+		                    remote: {
+		                        url: /*[[${@environment.getProperty('path.api.cronjob.checkid')}]]*/ ,
+		                        type: "get",
+		                        data: {
+		                            uuid: /*[[${cronjobDto.uuid}]]*/ ,
+		                            id: function() {
+		                                return $("#update-form input[name='id']").val();
+		                            }
+		                        }
+		                    }
+		                },
+		                jobClass: {
+		                	required: true
+		                },
+		                jobGroup: {
+		                	required: true
+		                },
+		                name: {
+		                	required: true
+		                },
+		                cronExpression: {
+		                	required: true
+		                }
+		            },
+		            messages: {
+		                id: {
+		                    required: /*[[#{module.common.id.required}]]*/ ,
+		                    remote: /*[[#{module.common.id.exists}]]*/
+		                },
+		                jobClass: {
+		                    required: /*[[#{module.cronjob.jobclass.required}]]*/
+		                },
+		                jobGroup: {
+		                    required: /*[[#{module.cronjob.jobgroup.required}]]*/
+		                },
+		                name: {
+		                    required: /*[[#{module.cronjob.jobname.required}]]*/
+		                },
+		                cronExpression: {
+		                    required: /*[[#{module.cronjob.cronexpression.required}]]*/
+		                }
+		            },
+		            highlight: function(element) {
+		                $(element).closest('.form-group').addClass('has-error');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
+		                });
+		            },
+		            unhighlight: function(element) {
+		                $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').find('.help-block').html('');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+		                var noError = true;
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    noError = false;
+		                });
+		                if(noError){
+			                $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','black');
+		                }
+		            },
+		            errorPlacement: function(error, element) {
+		                element.closest('.form-group').find('.help-block').html(error.text());
+		            }
+		        });
+		
+		    });
+		    /*]]>*/
+		</script>
+
+		<th:block
+			layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.cronjob')}}, deleteUuid=${cronjobDto.uuid})}"></th:block>
+
+		<div class="modal fade" id="modal-trigger" sec:authorize="hasAuthority('cronjob_update')">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.cronjob.trigger}"></h4>
+					</div>
+					<form id="cronjob-trigger-form" role="form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post" th:object="${cronjobDto}">
+						<input type="hidden" name="trigger">
+						<input type="hidden" name="uuid" th:value="${cronjobDto.uuid}">
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-12" th:if="*{status != null}">
+										<div class="form-group" th:if="*{status.name() == 'FINISHED' || status.name() == 'ABORTED'}">
+											<label for="jobTriggerStartDate" th:text="#{module.cronjob.triggerstartdate}"></label>
+											<div class="input-group date">
+												<span class="input-group-addon">
+													<span class="glyphicon glyphicon-calendar"></span>
+												</span>
+												<input type='text' class="form-control datetimepicker" name="jobTriggerStartDate" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="jobTrigger" th:text="#{module.cronjob.trigger}"></label>
+											<select name="jobTrigger" class="form-control">
+												<option th:value="${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).RUN_ONCE.name()}" th:text="#{module.cronjob.runonce}"
+													th:if="*{status.name() == 'FINISHED' || status.name() == 'ABORTED'}"></option>
+												<option th:value="${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).START.name()}" th:text="#{module.cronjob.start}"
+													th:if="*{status.name() == 'FINISHED' || status.name() == 'ABORTED'}"></option>
+												<option th:value="${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).PAUSE.name()}" th:text="#{module.cronjob.pause}" th:if="*{status.name() == 'RUNNING'}"></option>
+												<option th:value="${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).RESUME.name()}" th:text="#{module.cronjob.resume}" th:if="*{status.name() == 'PAUSED'}"></option>
+												<option th:value="${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).STOP.name()}" th:text="#{module.cronjob.stop}"
+													th:if="*{status.name() != 'FINISHED' && status.name() != 'ABORTED'}"></option>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-12" th:if="*{status == null}">
+										<div class="form-group">
+											<label for="jobTriggerStartDate" th:text="#{module.cronjob.triggerstartdate}"></label>
+											<div class="input-group date">
+												<span class="input-group-addon">
+													<span class="glyphicon glyphicon-calendar"></span>
+												</span>
+												<input type='text' class="form-control datetimepicker" name="jobTriggerStartDate" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="jobTrigger" th:text="#{module.cronjob.trigger}"></label>
+											<select name="jobTrigger" class="form-control">
+												<option th:value="${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).RUN_ONCE.name()}" th:text="#{module.cronjob.runonce}"></option>
+												<option th:value="${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).START.name()}" th:text="#{module.cronjob.start}"></option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.common.cancel}+'  '"></button>
+							<button type="submit" class="btn btn-success" th:text="#{module.common.execute}"></button>
+						</div>
+					</form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal fade" id="modal-createjobdata">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.cronjob.jobdata}"></h4>
+					</div>
+					<form id="cronjob-createjobdata-form" role="form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post" th:object="${cronjobDto}">
+						<input type="hidden" name="createjobdata">
+						<input type="hidden" name="uuid" th:value="${cronjobDto.uuid}">
+						<div class="modal-body">
+							<div class="modal-body">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="cronjobDataName" th:text="#{module.cronjob.jobdata.name}"></label>
+												<input type="text" class="form-control" name="cronjobDataName">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="cronjobDataValue" th:text="#{module.cronjob.jobdata.value}"></label>
+												<input type="text" class="form-control" name="cronjobDataValue">
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.common.cancel}+'  '"></button>
+							<button type="submit" class="btn btn-success" th:text="#{module.common.save}"></button>
+						</div>
+					</form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal fade" id="modal-deletejobdata">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{module.cronjob.jobdata}+' '+#{module.common.delete.confirm}"></h4>
+					</div>
+					<div class="modal-body" th:utext="#{module.common.delete.confirm.info}"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal" th:text="'  '+#{module.common.no}+'  '"></button>
+						<form id="delete-cronjob-form" th:action="@{${@environment.getProperty('path.cronjob')}}" method="post">
+							<input type="hidden" name="deletejobdata">
+							<input type="hidden" name="jobDataUuid">
+							<input type="hidden" name="uuid" th:value="${cronjobDto.uuid}">
+							<button type="submit" class="btn btn-danger" th:text="#{module.common.delete}"></button>
+						</form>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    $('#modal-deletejobdata').on('show.bs.modal', function(e) {
+
+			    //get data-id attribute of the clicked element
+			    var jobdatauuid = $(e.relatedTarget).data('jobdatauuid');
+			
+			    //populate the textbox
+			    $(e.currentTarget).find('input[name="jobDataUuid"]').val(jobdatauuid);
+			});
+		    
+		    /*]]>*/
+		</script>
+	</th:block>
+	</th:block>
+</body>
+</html>

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.common.controller.AbstractController;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.console.ConfigurationWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
@@ -44,33 +45,33 @@ public class ConfigurationController extends AbstractController {
 	private String VIEW_CONFIGURATION_FORM;
 
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION)
-	public String page(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, @RequestParam Map<String, Object> requestParams)
+	public String page(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto dto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
 		return VIEW_CONFIGURATION_PAGE;
 	}
 
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM)
-	public String form(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model) throws Exception {
+	public String form(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto dto, Model model) throws Exception {
 
-		if (configurationDto.getUuid() != null) {
-			configurationDto = configurationFacade.findOneByUuid(configurationDto.getUuid());
+		if (dto.getUuid() != null) {
+			dto = configurationFacade.findOneByUuid(dto.getUuid());
 		} else {
-			configurationDto = configurationFacade.createDto();
+			dto = configurationFacade.createDto();
 		}
-		model.addAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO, configurationDto);
+		model.addAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO, dto);
 
 		return VIEW_CONFIGURATION_FORM;
 	}
 
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (configurationDto.getUuid() != null) {
+		if (dto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
 		} else {
 			try {
-				configurationDto = configurationFacade.create(configurationDto);
+				dto = configurationFacade.create(dto);
 
 				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -78,7 +79,7 @@ public class ConfigurationController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(ConfigurationDto.UUID, configurationDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -87,14 +88,14 @@ public class ConfigurationController extends AbstractController {
 	}
 
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (configurationDto.getUuid() == null) {
+		if (dto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
 			try {
-				configurationDto = configurationFacade.update(configurationDto);
+				dto = configurationFacade.update(dto);
 
 				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -102,7 +103,7 @@ public class ConfigurationController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(ConfigurationDto.UUID, configurationDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -111,18 +112,19 @@ public class ConfigurationController extends AbstractController {
 	}
 
 	@PostMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto configurationDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (configurationDto.getUuid() == null) {
+		if (dto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, "Delete record required existing UUID.");
 		} else {
 			try {
-				configurationFacade.delete(configurationDto.getUuid());
+				configurationFacade.delete(dto.getUuid());
 
 				addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.DELETE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(ConfigurationDto.class, e.getMessage(), bindingResult, redirectAttributes);
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
 			}
 		}
 

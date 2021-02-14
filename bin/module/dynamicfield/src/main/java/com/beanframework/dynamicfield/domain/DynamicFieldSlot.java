@@ -31,7 +31,6 @@ public class DynamicFieldSlot extends GenericEntity {
 	public static final String NAME = "name";
 	public static final String SORT = "sort";
 	public static final String DYNAMIC_FIELD = "dynamicField";
-	public static final String DYNAMIC_FIELD_TEMPLATE = "dynamicFieldTemplates";
 
 	@Audited(withModifiedFlag = true)
 	private String name;

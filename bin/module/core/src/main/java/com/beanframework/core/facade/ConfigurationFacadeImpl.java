@@ -14,8 +14,8 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.configuration.service.ConfigurationService;
-import com.beanframework.configuration.specification.ConfigurationSpecification;
 import com.beanframework.core.data.ConfigurationDto;
+import com.beanframework.core.specification.ConfigurationSpecification;
 
 @Component
 public class ConfigurationFacadeImpl extends AbstractFacade<Configuration, ConfigurationDto> implements ConfigurationFacade {

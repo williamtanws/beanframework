@@ -46,7 +46,7 @@ import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.user.domain.Vendor;
 import com.beanframework.workflow.domain.Workflow;
 
 public interface ImportListenerConstants {

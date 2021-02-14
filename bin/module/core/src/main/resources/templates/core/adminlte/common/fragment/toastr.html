@@ -13,12 +13,6 @@
 		<script th:inline="javascript" th:if="${error}">
 			toastr.error(/*[[${error}]]*/);
 		</script>
-		<script th:inline="javascript" th:if="${#fields.hasErrors('*')}" th:each="err : ${#fields.errors('*')}" th:utext="${err}+' '">
-			toastr.error(/*[[${err}+' ']]*/);
-		</script>
-		<script th:inline="javascript" th:if="${#fields.hasErrors('global')}" th:each="err : ${#fields.errors('global')}" th:utext="${err}+' '">
-			toastr.error(/*[[${err}+' ']]*/);
-		</script>
 	</th:block>
 </body>
 </html>

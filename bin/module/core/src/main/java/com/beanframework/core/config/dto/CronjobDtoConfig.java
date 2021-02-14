@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.core.converter.dto.DtoCronjobConverter;
-import com.beanframework.core.converter.dto.DtoCronjobDataConverter;
-import com.beanframework.core.converter.populator.CronjobDataPopulator;
 import com.beanframework.core.converter.populator.CronjobPopulator;
 import com.beanframework.core.data.CronjobDto;
 
@@ -29,27 +27,6 @@ public class CronjobDtoConfig {
 	public ConverterMapping dtoCronjobConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoCronjobConverter());
-		mapping.setTypeCode(CronjobDto.class.getSimpleName());
-
-		return mapping;
-	}
-	
-	@Bean
-	public CronjobDataPopulator cronjobDataPopulator() {
-		return new CronjobDataPopulator();
-	}
-
-	@Bean
-	public DtoCronjobDataConverter dtoCronjobDataConverter() {
-		DtoCronjobDataConverter converter = new DtoCronjobDataConverter();
-		converter.addPopulator(cronjobDataPopulator());
-		return converter;
-	}
-
-	@Bean
-	public ConverterMapping dtoCronjobDataConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoCronjobDataConverter());
 		mapping.setTypeCode(CronjobDto.class.getSimpleName());
 
 		return mapping;

@@ -9,7 +9,7 @@ import com.beanframework.core.interceptor.vendor.VendorLoadInterceptor;
 import com.beanframework.core.interceptor.vendor.VendorPrepareInterceptor;
 import com.beanframework.core.interceptor.vendor.VendorRemoveInterceptor;
 import com.beanframework.core.interceptor.vendor.VendorValidateInterceptor;
-import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.user.domain.Vendor;
 
 @Configuration
 public class VendorInterceptorConfig {

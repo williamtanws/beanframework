@@ -12,7 +12,7 @@ import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.UserFieldDto;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.user.domain.UserField;
-import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.user.domain.Vendor;
 
 public class VendorPopulator extends AbstractPopulator<Vendor, VendorDto> implements Populator<Vendor, VendorDto> {
 

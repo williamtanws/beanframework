@@ -7,7 +7,7 @@ import com.beanframework.common.converter.AbstractDtoConverter;
 import com.beanframework.common.converter.DtoConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.core.data.VendorDto;
-import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.user.domain.Vendor;
 
 public class DtoVendorConverter extends AbstractDtoConverter<Vendor, VendorDto> implements DtoConverter<Vendor, VendorDto> {
 

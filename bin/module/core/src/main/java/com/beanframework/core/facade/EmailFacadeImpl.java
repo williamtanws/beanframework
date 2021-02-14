@@ -13,9 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EmailDto;
+import com.beanframework.core.specification.EmailSpecification;
 import com.beanframework.email.domain.Email;
 import com.beanframework.email.service.EmailService;
-import com.beanframework.email.specification.EmailSpecification;
 
 @Component
 public class EmailFacadeImpl  extends AbstractFacade<Email, EmailDto> implements EmailFacade {

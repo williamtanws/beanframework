@@ -138,6 +138,18 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 			}
 		}
 
+		Map<String, String> prototypeParameters = new HashMap<String, String>();
+		if (source.getSelectedParameterKeys() != null && source.getSelectedParameterValues() != null && source.getSelectedParameterKeys().length == source.getSelectedParameterValues().length) {
+			for (int i = 0; i < source.getSelectedParameterKeys().length; i++) {
+				prototypeParameters.put(source.getSelectedParameterKeys()[i], source.getSelectedParameterValues()[i]);
+			}
+		}
+
+		if (source.getParameters().equals(prototypeParameters) == false) {
+			prototype.setParameters(prototypeParameters);
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
+
 		return prototype;
 	}
 

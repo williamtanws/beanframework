@@ -46,7 +46,8 @@ public class DynamicFieldTemplateController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE)
-	public String page(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicFieldTemplateDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String page(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicFieldTemplateDto, Model model,
+			@RequestParam Map<String, Object> requestParams) throws Exception {
 		return VIEW_DYNAMICFIELDTEMPLATE_PAGE;
 	}
 
@@ -127,7 +128,8 @@ public class DynamicFieldTemplateController extends AbstractController {
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(DynamicFieldTemplateDto.class, e.getMessage(), bindingResult, redirectAttributes);
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(DynamicFieldTemplateDto.UUID, dynamicFieldTemplateDto.getUuid());
 			}
 		}
 

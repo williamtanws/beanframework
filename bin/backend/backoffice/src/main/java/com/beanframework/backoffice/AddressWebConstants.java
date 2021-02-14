@@ -14,7 +14,7 @@ public interface AddressWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.address.list}";
+		public static final String LIST = "${view.address}";
 	}
 
 	public interface ModelAttribute {

@@ -40,6 +40,11 @@ public final class UserConstants {
 	public static final String USER_PROFILE_PICTURE_THUMBNAIL_WIDTH = "${module.user.profile.picture.thumbnail.width}";
 	public static final String USER_PROFILE_PICTURE_THUMBNAIL_HEIGHT = "${module.user.profile.picture.thumbnail.height}";
 	
+	public static interface Access {
+		public static final String CONSOLE = "${module.console.access}";
+		public static final String BACKOFFICE = "${module.backoffice.access}";
+	}
+	
 	public static interface Admin {
 		public static final String DEFAULT_ID = "${module.admin.default.id}";
 		public static final String DEFAULT_PASSWORD = "${module.admin.default.password}";

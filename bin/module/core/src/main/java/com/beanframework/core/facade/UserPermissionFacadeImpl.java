@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserPermissionDto;
+import com.beanframework.core.specification.UserPermissionSpecification;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.specification.UserPermissionSpecification;
 
 @Component
 public class UserPermissionFacadeImpl extends AbstractFacade<UserPermission, UserPermissionDto> implements UserPermissionFacade {

@@ -19,9 +19,9 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.converter.dto.DtoMenuTreeByCurrentUserConverter;
 import com.beanframework.core.converter.dto.DtoMenuTreeConverter;
 import com.beanframework.core.data.MenuDto;
+import com.beanframework.core.specification.MenuSpecification;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
-import com.beanframework.menu.specification.MenuSpecification;
 import com.beanframework.user.service.UserService;
 
 @Component

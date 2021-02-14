@@ -57,7 +57,7 @@
 		var pageUrl = /*[[${pageUrl}]]*/;
 		var formUrl = /*[[${formUrl}]]*/;
 			
-		$("#modal-form-"+tableId+",#modal-delete-"+tableId).on('hidden.bs.modal', function () {
+		$("#modal-form-"+tableId).on('hidden.bs.modal', function () {
 			$("#"+tableId).DataTable().ajax.reload(null, false);
 		})
 		

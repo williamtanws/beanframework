@@ -14,7 +14,7 @@ public interface ImexWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.imex.list}";
+		public static final String LIST = "${view.imex}";
 	}
 
 	public interface ModelAttribute {

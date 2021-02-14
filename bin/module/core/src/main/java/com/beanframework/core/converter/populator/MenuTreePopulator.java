@@ -35,7 +35,7 @@ public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implemen
 
 			Hibernate.initialize(source.getChilds());
 			for (Menu child : source.getChilds()) {
-				MenuDto populateChild = populateChild(child.getUuid(), new HashSet<UUID>());
+				MenuDto populateChild = populateChild(child, new HashSet<UUID>());
 				if (populateChild != null) {
 					target.getChilds().add(populateChild);
 				}
@@ -82,14 +82,13 @@ public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implemen
 		return target;
 	}
 
-	public MenuDto populateChild(UUID uuid, Set<UUID> populated) throws PopulatorException {
-		if (uuid == null)
+	public MenuDto populateChild(Menu source, Set<UUID> populated) throws PopulatorException {
+		if (source == null)
 			return null;
 
 		try {
-			if (populated.contains(uuid) == Boolean.FALSE) {
-				populated.add(uuid);
-				Menu source = modelService.findOneByUuid(uuid, Menu.class);
+			if (populated.contains(source.getUuid()) == Boolean.FALSE) {
+				populated.add(source.getUuid());
 				MenuDto target = new MenuDto();
 				populateGeneric(source, target);
 				target.setName(source.getName());
@@ -99,9 +98,8 @@ public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implemen
 				target.setTarget(source.getTarget());
 				target.setEnabled(source.getEnabled());
 
-				Hibernate.initialize(source.getChilds());
-				for (MenuField child : source.getFields()) {
-					MenuDto populateChild = populateChild(child.getUuid(), populated);
+				for (Menu child : source.getChilds()) {
+					MenuDto populateChild = populateChild(child, populated);
 					if (populateChild != null) {
 						target.getChilds().add(populateChild);
 					}

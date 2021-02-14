@@ -35,6 +35,6 @@ public class InterceptorException extends BusinessException {
 	}
 
 	public String getMessage() {
-		return "[" + this.interceptor + "]:" + super.getMessage();
+		return super.getMessage();
 	}
 }

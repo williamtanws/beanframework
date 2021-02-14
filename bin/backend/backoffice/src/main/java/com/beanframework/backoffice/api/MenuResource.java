@@ -45,7 +45,7 @@ public class MenuResource extends AbstractResource {
 	private MenuFacade menuFacade;
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(MenuWebConstants.Path.Api.CHECKID)
+	@RequestMapping(MenuWebConstants.Path.Api.MENU_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = (String) requestParams.get(BackofficeWebConstants.Param.ID);
@@ -66,7 +66,7 @@ public class MenuResource extends AbstractResource {
 	}
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(MenuWebConstants.Path.Api.TREE)
+	@RequestMapping(MenuWebConstants.Path.Api.MENU_TREE)
 	public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams) throws BusinessException {
 		String uuid = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 
@@ -141,7 +141,7 @@ public class MenuResource extends AbstractResource {
 	}
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = MenuWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = MenuWebConstants.Path.Api.MENU, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -168,7 +168,7 @@ public class MenuResource extends AbstractResource {
 	}
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = MenuWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = MenuWebConstants.Path.Api.MENU_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

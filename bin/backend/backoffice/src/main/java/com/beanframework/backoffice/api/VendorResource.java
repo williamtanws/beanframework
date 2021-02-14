@@ -28,7 +28,7 @@ import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.core.facade.VendorFacade;
-import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.user.domain.Vendor;
 
 @RestController
 public class VendorResource extends AbstractResource {

@@ -94,12 +94,12 @@
 			                    remote: {
 			                        url: /*[[${@environment.getProperty('path.api.dynamicfieldtemplate.checkid')}]]*/ ,
 			                        type: "get",
-			                        data: {
-			                            uuid: /*[[${dynamicfieldtemplateDto.uuid}]]*/ ,
-			                            id: function() {
-			                                return $("#update-form input[name='id']").val();
-			                            }
-			                        }
+									data: {
+										uuid: $('#form-save input[name=uuid]').val(),
+										id: function () {
+											return $("#form-save input[name='id']").val();
+										}
+									}
 			                    }
 			                },
 			                sort: {

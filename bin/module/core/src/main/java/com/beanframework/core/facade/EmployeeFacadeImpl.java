@@ -12,10 +12,10 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.converter.entity.EntityEmployeeProfileConverter;
 import com.beanframework.core.data.EmployeeDto;
+import com.beanframework.core.specification.EmployeeSpecification;
 import com.beanframework.user.domain.Employee;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
-import com.beanframework.user.specification.EmployeeSpecification;
 
 @Component
 public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto> implements EmployeeFacade {

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.LanguageDto;
+import com.beanframework.core.specification.LanguageSpecification;
 import com.beanframework.internationalization.domain.Language;
-import com.beanframework.internationalization.specification.LanguageSpecification;
 
 @Component
 public class LanguageFacadeImpl extends AbstractFacade<Language, LanguageDto> implements LanguageFacade {

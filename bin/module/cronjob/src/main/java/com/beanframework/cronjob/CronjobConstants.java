@@ -11,6 +11,7 @@ public final class CronjobConstants {
 
 	public static interface Table {
 		public static final String CRONJOB = "cronjob";
+		public static final String CRONJOB_PARAMETER = "cronjob_param";
 		public static final String CRONJOB_DATA = "cronjob_data";
 	}
 

@@ -37,7 +37,7 @@ public class UserGroupResource extends AbstractResource {
 	private UserGroupFacade userGroupFacade;
 
 	@PreAuthorize(UserGroupPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(UserGroupWebConstants.Path.Api.CHECKID)
+	@RequestMapping(UserGroupWebConstants.Path.Api.USERGROUP_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -59,7 +59,7 @@ public class UserGroupResource extends AbstractResource {
 	}
 
 	@PreAuthorize(UserGroupPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = UserGroupWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = UserGroupWebConstants.Path.Api.USERGROUP, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -85,7 +85,7 @@ public class UserGroupResource extends AbstractResource {
 	}
 
 	@PreAuthorize(UserGroupPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = UserGroupWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = UserGroupWebConstants.Path.Api.USERGROUP_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

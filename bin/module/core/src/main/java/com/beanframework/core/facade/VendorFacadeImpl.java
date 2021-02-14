@@ -12,9 +12,9 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.converter.entity.EntityVendorProfileConverter;
 import com.beanframework.core.data.VendorDto;
-import com.beanframework.vendor.domain.Vendor;
-import com.beanframework.vendor.service.VendorService;
-import com.beanframework.vendor.specification.VendorSpecification;
+import com.beanframework.core.specification.VendorSpecification;
+import com.beanframework.user.domain.Vendor;
+import com.beanframework.user.service.VendorService;
 
 @Component
 public class VendorFacadeImpl extends AbstractFacade<Vendor, VendorDto> implements VendorFacade {

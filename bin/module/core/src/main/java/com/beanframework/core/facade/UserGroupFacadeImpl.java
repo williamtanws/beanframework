@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserGroupDto;
+import com.beanframework.core.specification.UserGroupSpecification;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.specification.UserGroupSpecification;
 
 @Component
 public class UserGroupFacadeImpl extends AbstractFacade<UserGroup, UserGroupDto> implements UserGroupFacade {

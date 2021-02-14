@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CountryDto;
+import com.beanframework.core.specification.CountrySpecification;
 import com.beanframework.internationalization.domain.Country;
-import com.beanframework.internationalization.specification.CountrySpecification;
 
 @Component
 public class CountryFacadeImpl extends AbstractFacade<Country, CountryDto> implements CountryFacade {

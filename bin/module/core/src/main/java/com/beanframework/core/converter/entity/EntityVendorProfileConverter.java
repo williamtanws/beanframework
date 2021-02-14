@@ -13,7 +13,7 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.VendorDto;
-import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.user.domain.Vendor;
 
 @Component
 public class EntityVendorProfileConverter implements EntityConverter<VendorDto, Vendor> {

@@ -5,23 +5,25 @@ public interface MenuWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.menu.checkid}";
-			public static final String TREE = "${path.api.menu.tree}";
-			public static final String PAGE = "${path.api.menu.page}";
-			public static final String HISTORY = "${path.api.menu.history}";
+			public static final String MENU = "${path.api.menu}";
+			public static final String MENU_HISTORY = "${path.api.menu.history}";
+			public static final String MENU_CHECKID = "${path.api.menu.checkid}";
+			public static final String MENU_TREE = "${path.api.menu.tree}";
 		}
 
 		public static final String MENU = "${path.menu}";
+		public static final String MENU_FORM = "${path.menu.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.menu.list}";
+		public static final String MENU = "${view.menu}";
+		public static final String MENU_FORM = "${view.menu.form}";
 	}
 
 	public interface ModelAttribute {
 		public static final String MENU_DTO = "menuDto";
 	}
-	
+
 	public static interface MenuPreAuthorizeEnum {
 		public static final String AUTHORITY_READ = "menu_read";
 		public static final String AUTHORITY_CREATE = "menu_create";
