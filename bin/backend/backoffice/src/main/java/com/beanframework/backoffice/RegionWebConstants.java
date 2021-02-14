@@ -14,7 +14,7 @@ public interface RegionWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.region.list}";
+		public static final String LIST = "${view.region}";
 	}
 
 	public interface ModelAttribute {

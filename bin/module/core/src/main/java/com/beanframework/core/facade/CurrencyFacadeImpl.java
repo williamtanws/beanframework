@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CurrencyDto;
+import com.beanframework.core.specification.CurrencySpecification;
 import com.beanframework.internationalization.domain.Currency;
-import com.beanframework.internationalization.specification.CurrencySpecification;
 
 @Component
 public class CurrencyFacadeImpl extends AbstractFacade<Currency, CurrencyDto> implements CurrencyFacade {

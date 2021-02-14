@@ -14,7 +14,7 @@ public interface CurrencyWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.currency.list}";
+		public static final String LIST = "${view.currency}";
 	}
 
 	public interface ModelAttribute {

@@ -21,6 +21,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants.DynamicFieldPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.DynamicFieldDto;
 import com.beanframework.core.facade.DynamicFieldFacade;
@@ -81,7 +82,7 @@ public class DynamicFieldController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(DynamicFieldDto.UUID, dynamicFieldDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, dynamicFieldDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -106,7 +107,7 @@ public class DynamicFieldController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(DynamicFieldDto.UUID, dynamicFieldDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, dynamicFieldDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -116,18 +117,19 @@ public class DynamicFieldController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = DynamicFieldWebConstants.Path.DYNAMICFIELD_FORM, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dynamicFieldDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(DynamicFieldWebConstants.ModelAttribute.DYNAMICFIELD_DTO) DynamicFieldDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (dynamicFieldDto.getUuid() == null) {
+		if (dto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
 		} else {
 			try {
-				dynamicFieldFacade.delete(dynamicFieldDto.getUuid());
+				dynamicFieldFacade.delete(dto.getUuid());
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(DynamicFieldDto.class, e.getMessage(), bindingResult, redirectAttributes);
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
 			}
 		}
 

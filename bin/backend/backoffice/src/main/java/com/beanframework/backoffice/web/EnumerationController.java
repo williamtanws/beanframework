@@ -21,6 +21,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EnumerationWebConstants;
 import com.beanframework.backoffice.EnumerationWebConstants.EnumerationPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.facade.EnumerationFacade;
@@ -81,7 +82,7 @@ public class EnumerationController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(EnumerationDto.UUID, enumerationDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, enumerationDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -106,7 +107,7 @@ public class EnumerationController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(EnumerationDto.UUID, enumerationDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, enumerationDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -116,18 +117,19 @@ public class EnumerationController extends AbstractController {
 
 	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = EnumerationWebConstants.Path.ENUMERATION_FORM, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (enumerationDto.getUuid() == null) {
+		if (dto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
 		} else {
 			try {
-				enumerationFacade.delete(enumerationDto.getUuid());
+				enumerationFacade.delete(dto.getUuid());
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(EnumerationDto.class, e.getMessage(), bindingResult, redirectAttributes);
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
 			}
 		}
 

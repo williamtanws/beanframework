@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.Auditor;
-import com.beanframework.user.specification.AuditorSpecification;
+import com.beanframework.core.specification.AuditorSpecification;
 
 @Component
 public class AuditorFacadeImpl extends AbstractFacade<Auditor, AuditorDto> implements AuditorFacade {

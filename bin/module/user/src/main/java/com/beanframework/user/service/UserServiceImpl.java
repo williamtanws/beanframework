@@ -94,6 +94,12 @@ public class UserServiceImpl implements UserService {
 
 	@Value(UserConstants.Employee.DEFAULT_GROUP)
 	private String defaultEmployeeGroup;
+	
+	@Value(UserConstants.Access.CONSOLE)
+	private String ACCESS_CONSOLE;
+	
+	@Value(UserConstants.Access.BACKOFFICE)
+	private String ACCESS_BACKOFFICE;
 
 	@Transactional(readOnly = true)
 	@Override
@@ -115,7 +121,7 @@ public class UserServiceImpl implements UserService {
 				user.setId(defaultAdminId);
 				user.setName("Admin");
 
-				return new UsernamePasswordAuthenticationToken(user, defaultAdminPassword, getDefaultAdminAuthority());
+				return new UsernamePasswordAuthenticationToken(user, defaultAdminPassword, getAdminAuthority());
 			} else {
 				throw new BadCredentialsException("Bad Credentials");
 			}
@@ -148,10 +154,13 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	private Set<GrantedAuthority> getDefaultAdminAuthority() {
+	private Set<GrantedAuthority> getAdminAuthority() {
 
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 		// Always add admin group in case not exists in database
+		authorities.add(new SimpleGrantedAuthority(ACCESS_CONSOLE));
+		authorities.add(new SimpleGrantedAuthority(ACCESS_BACKOFFICE));
+		authorities.add(new SimpleGrantedAuthority(defaultAdminGroup));
 		authorities.add(new SimpleGrantedAuthority(defaultAdminGroup));
 
 		List<UserGroup> allUserGroups = modelService.findAll(UserGroup.class);
@@ -190,12 +199,12 @@ public class UserServiceImpl implements UserService {
 				for (UserGroup employeeUserGroup : userGroups) {
 
 					if (employeeUserGroup.getUuid().equals(adminGroup.getUuid())) {
-						return getDefaultAdminAuthority();
+						return getAdminAuthority();
 					}
 
 					// Check if employee user groups' sub groups also contains admingroup
 					if (employeeUserGroup.getUserGroups().contains(adminGroup.getUuid())) {
-						return getDefaultAdminAuthority();
+						return getAdminAuthority();
 					}
 				}
 			}

@@ -8,10 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Site;
-import com.beanframework.cms.specification.SiteSpecification;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.SiteDto;
+import com.beanframework.core.specification.SiteSpecification;
 
 @Component
 public class SiteFacadeImpl extends AbstractFacade<Site, SiteDto> implements SiteFacade {

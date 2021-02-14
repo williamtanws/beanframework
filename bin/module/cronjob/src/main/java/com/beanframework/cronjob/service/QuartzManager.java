@@ -2,6 +2,7 @@ package com.beanframework.cronjob.service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronScheduleBuilder;
@@ -22,12 +23,11 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.cronjob.domain.CronjobEnum;
 
 @Component
 public class QuartzManager {
-	
+
 	protected static final Logger LOGGER = LoggerFactory.getLogger(QuartzManager.class);
 
 	@Autowired
@@ -66,9 +66,9 @@ public class QuartzManager {
 				jobDetail.getJobDataMap().put(CRONJOB_UUID, job.getUuid());
 				jobDetail.getJobDataMap().put(CRONJOB_ID, job.getId());
 
-				if (job.getCronjobDatas() != null) {
-					for (CronjobData param : job.getCronjobDatas()) {
-						jobDetail.getJobDataMap().put(param.getName(), param.getValue());
+				if (job.getParameters() != null) {
+					for (Map.Entry<String, String> entry : job.getParameters().entrySet()) {
+						jobDetail.getJobDataMap().put(entry.getKey(), entry.getValue());
 					}
 				}
 
@@ -104,9 +104,11 @@ public class QuartzManager {
 							newStartDate.set(Calendar.MILLISECOND, oldStartDate.get(Calendar.MILLISECOND));
 							newStartDate.add(Calendar.DATE, 1);
 
-							trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(newStartDate.getTime()).withSchedule(scheduleBuilder.withMisfireHandlingInstructionDoNothing()).build();
+							trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(newStartDate.getTime()).withSchedule(scheduleBuilder.withMisfireHandlingInstructionDoNothing())
+									.build();
 						} else {
-							trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).withSchedule(scheduleBuilder.withMisfireHandlingInstructionDoNothing()).build();
+							trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).startAt(job.getTriggerStartDate()).withSchedule(scheduleBuilder.withMisfireHandlingInstructionDoNothing())
+									.build();
 						}
 					} else {
 						trigger = TriggerBuilder.newTrigger().withIdentity(job.getName(), job.getJobGroup()).withSchedule(scheduleBuilder.withMisfireHandlingInstructionDoNothing()).build();
@@ -131,9 +133,8 @@ public class QuartzManager {
 //		Replaced by global listener
 //		//Adding the listener
 //		scheduler.getListenerManager().addJobListener(new QuartJobSchedulingListener());
-		}
-		else {
-			LOGGER.error("Not able to find cronjob class, please check. Cronjob [Id= "+job.getId()+"]");
+		} else {
+			LOGGER.error("Not able to find cronjob class, please check. Cronjob [Id= " + job.getId() + "]");
 			throw new SchedulerException("Not able to find cronjob class");
 		}
 	}

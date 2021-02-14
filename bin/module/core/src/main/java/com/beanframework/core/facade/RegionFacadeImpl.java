@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.RegionDto;
+import com.beanframework.core.specification.RegionSpecification;
 import com.beanframework.internationalization.domain.Region;
-import com.beanframework.internationalization.specification.RegionSpecification;
 
 @Component
 public class RegionFacadeImpl extends AbstractFacade<Region, RegionDto> implements RegionFacade {

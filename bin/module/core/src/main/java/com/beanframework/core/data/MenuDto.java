@@ -40,7 +40,7 @@ public class MenuDto extends GenericDto {
 
 	private Boolean active;
 
-	private String[] selectedUserGroups;
+	private String[] selectedUserGroupUuids;
 
 	public String getName() {
 		return name;
@@ -130,12 +130,12 @@ public class MenuDto extends GenericDto {
 		this.active = active;
 	}
 
-	public String[] getSelectedUserGroups() {
-		return selectedUserGroups;
+	public String[] getSelectedUserGroupUuids() {
+		return selectedUserGroupUuids;
 	}
 
-	public void setSelectedUserGroups(String[] selectedUserGroups) {
-		this.selectedUserGroups = selectedUserGroups;
+	public void setSelectedUserGroupUuids(String[] selectedUserGroupUuids) {
+		this.selectedUserGroupUuids = selectedUserGroupUuids;
 	}
 
 	public String getName(String languageId) {

@@ -21,6 +21,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldSlotWebConstants;
 import com.beanframework.backoffice.DynamicFieldSlotWebConstants.DynamicFieldSlotPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.facade.DynamicFieldSlotFacade;
@@ -46,34 +47,34 @@ public class DynamicFieldSlotController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT)
-	public String page(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dynamicFieldSlotDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String page(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 		return VIEW_DYNAMICFIELDSLOT_PAGE;
 	}
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT_FORM)
-	public String form(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dynamicFieldSlotDto, Model model) throws Exception {
+	public String form(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dto, Model model) throws Exception {
 
-		if (dynamicFieldSlotDto.getUuid() != null) {
-			dynamicFieldSlotDto = dynamicFieldSlotFacade.findOneByUuid(dynamicFieldSlotDto.getUuid());
+		if (dto.getUuid() != null) {
+			dto = dynamicFieldSlotFacade.findOneByUuid(dto.getUuid());
 		} else {
-			dynamicFieldSlotDto = dynamicFieldSlotFacade.createDto();
+			dto = dynamicFieldSlotFacade.createDto();
 		}
-		model.addAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO, dynamicFieldSlotDto);
+		model.addAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO, dto);
 
 		return VIEW_DYNAMICFIELDSLOT_FORM;
 	}
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_CREATE)
 	@PostMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT_FORM, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dynamicFieldSlotDto, Model model, BindingResult bindingResult,
+	public RedirectView create(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (dynamicFieldSlotDto.getUuid() != null) {
+		if (dto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
 		} else {
 			try {
-				dynamicFieldSlotDto = dynamicFieldSlotFacade.create(dynamicFieldSlotDto);
+				dto = dynamicFieldSlotFacade.create(dto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -81,7 +82,7 @@ public class DynamicFieldSlotController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(DynamicFieldSlotDto.UUID, dynamicFieldSlotDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -91,14 +92,14 @@ public class DynamicFieldSlotController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT_FORM, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dynamicFieldSlotDto, Model model, BindingResult bindingResult,
+	public RedirectView update(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (dynamicFieldSlotDto.getUuid() == null) {
+		if (dto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
 			try {
-				dynamicFieldSlotDto = dynamicFieldSlotFacade.update(dynamicFieldSlotDto);
+				dto = dynamicFieldSlotFacade.update(dto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -106,7 +107,7 @@ public class DynamicFieldSlotController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(DynamicFieldSlotDto.UUID, dynamicFieldSlotDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -116,18 +117,19 @@ public class DynamicFieldSlotController extends AbstractController {
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT_FORM, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dynamicFieldSlotDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (dynamicFieldSlotDto.getUuid() == null) {
+		if (dto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
 		} else {
 			try {
-				dynamicFieldSlotFacade.delete(dynamicFieldSlotDto.getUuid());
+				dynamicFieldSlotFacade.delete(dto.getUuid());
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(DynamicFieldSlotDto.class, e.getMessage(), bindingResult, redirectAttributes);
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
 			}
 		}
 

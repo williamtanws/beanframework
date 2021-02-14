@@ -19,7 +19,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants;
+import com.beanframework.backoffice.UserPermissionWebConstants.UserPermissionPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.facade.UserPermissionFacade;
@@ -29,48 +31,50 @@ import com.beanframework.core.facade.UserPermissionFacade;
 public class UserPermissionController extends AbstractController {
 
 	@Autowired
-	private UserPermissionFacade userPermissionFacade;
-	
-	@Value(UserPermissionWebConstants.Path.USERPERMISSION_PAGE)
-	private String PATH_USERPERMISSION_PAGE;
-	
-	@Value(UserPermissionWebConstants.Path.USERPERMISSION_FORM)
-	private String PATH_USERPERMISSION_FORM;
+	private UserPermissionFacade dynamicFieldFacade;
 
-	@Value(UserPermissionWebConstants.View.PAGE)
-	private String VIEW_USERPERMISSION_PAGE;
+	@Value(UserPermissionWebConstants.Path.PERMISSION)
+	private String PATH_PERMISSION_PAGE;
 
-	@Value(UserPermissionWebConstants.View.FORM)
-	private String VIEW_USERPERMISSION_FORM;
+	@Value(UserPermissionWebConstants.Path.PERMISSION_FORM)
+	private String PATH_PERMISSION_FORM;
 
-	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION_PAGE)
-	public String list(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userPermissionDto, Model model, @RequestParam Map<String, Object> requestParams)
-			throws Exception {
-		return VIEW_USERPERMISSION_PAGE;
+	@Value(UserPermissionWebConstants.View.PERMISSION)
+	private String VIEW_PERMISSION_PAGE;
+
+	@Value(UserPermissionWebConstants.View.PERMISSION_FORM)
+	private String VIEW_PERMISSION_FORM;
+
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = UserPermissionWebConstants.Path.PERMISSION)
+	public String page(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.PERMISSION_DTO) UserPermissionDto dynamicFieldDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+		return VIEW_PERMISSION_PAGE;
 	}
 
-	@GetMapping(value = UserPermissionWebConstants.Path.USERPERMISSION_FORM)
-	public String createView(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userPermissionDto, Model model) throws Exception {
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = UserPermissionWebConstants.Path.PERMISSION_FORM)
+	public String form(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.PERMISSION_DTO) UserPermissionDto dynamicFieldDto, Model model) throws Exception {
 
-		if (userPermissionDto.getUuid() != null) {
-			userPermissionDto = userPermissionFacade.findOneByUuid(userPermissionDto.getUuid());
+		if (dynamicFieldDto.getUuid() != null) {
+			dynamicFieldDto = dynamicFieldFacade.findOneByUuid(dynamicFieldDto.getUuid());
 		} else {
-			userPermissionDto = userPermissionFacade.createDto();
+			dynamicFieldDto = dynamicFieldFacade.createDto();
 		}
-		model.addAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO, userPermissionDto);
+		model.addAttribute(UserPermissionWebConstants.ModelAttribute.PERMISSION_DTO, dynamicFieldDto);
 
-		return VIEW_USERPERMISSION_FORM;
+		return VIEW_PERMISSION_FORM;
 	}
 
-	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION_FORM, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userPermissionDto, Model model, BindingResult bindingResult,
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_CREATE)
+	@PostMapping(value = UserPermissionWebConstants.Path.PERMISSION_FORM, params = "create")
+	public RedirectView create(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.PERMISSION_DTO) UserPermissionDto dynamicFieldDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (userPermissionDto.getUuid() != null) {
+		if (dynamicFieldDto.getUuid() != null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
 		} else {
 			try {
-				userPermissionDto = userPermissionFacade.create(userPermissionDto);
+				dynamicFieldDto = dynamicFieldFacade.create(dynamicFieldDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -78,23 +82,24 @@ public class UserPermissionController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(UserPermissionDto.UUID, userPermissionDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, dynamicFieldDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_USERPERMISSION_FORM);
+		redirectView.setUrl(PATH_PERMISSION_FORM);
 		return redirectView;
 	}
 
-	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION_FORM, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userPermissionDto, Model model, BindingResult bindingResult,
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_UPDATE)
+	@PostMapping(value = UserPermissionWebConstants.Path.PERMISSION_FORM, params = "update")
+	public RedirectView update(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.PERMISSION_DTO) UserPermissionDto dynamicFieldDto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (userPermissionDto.getUuid() == null) {
+		if (dynamicFieldDto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
 			try {
-				userPermissionDto = userPermissionFacade.update(userPermissionDto);
+				dynamicFieldDto = dynamicFieldFacade.update(dynamicFieldDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -102,33 +107,35 @@ public class UserPermissionController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(UserPermissionDto.UUID, userPermissionDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, dynamicFieldDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_USERPERMISSION_FORM);
+		redirectView.setUrl(PATH_PERMISSION_FORM);
 		return redirectView;
 	}
 
-	@PostMapping(value = UserPermissionWebConstants.Path.USERPERMISSION_FORM, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.USERPERMISSION_DTO) UserPermissionDto userPermissionDto, Model model, BindingResult bindingResult,
+	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_DELETE)
+	@PostMapping(value = UserPermissionWebConstants.Path.PERMISSION_FORM, params = "delete")
+	public RedirectView delete(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.PERMISSION_DTO) UserPermissionDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (userPermissionDto.getUuid() == null) {
+		if (dto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
 		} else {
 			try {
-				userPermissionFacade.delete(userPermissionDto.getUuid());
+				dynamicFieldFacade.delete(dto.getUuid());
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(UserPermissionDto.class, e.getMessage(), bindingResult, redirectAttributes);
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
 			}
 		}
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_USERPERMISSION_FORM);
+		redirectView.setUrl(PATH_PERMISSION_FORM);
 		return redirectView;
 
 	}

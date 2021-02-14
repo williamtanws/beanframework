@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.core.data.CronjobDataDto;
 import com.beanframework.core.data.CronjobDto;
 
 public interface CronjobFacade {
@@ -28,12 +27,6 @@ public interface CronjobFacade {
 	int count() throws Exception;
 
 	void trigger(CronjobDto model) throws BusinessException;
-
-	CronjobDto addCronjobData(UUID uuid, String name, String value) throws BusinessException;
-
-	void createCronjobData(UUID cronjobUuid, CronjobDataDto cronjobData) throws BusinessException;
-
-	void removeCronjobData(UUID cronjobUuid, UUID cronjobDataUuid) throws BusinessException;
 
 	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
 

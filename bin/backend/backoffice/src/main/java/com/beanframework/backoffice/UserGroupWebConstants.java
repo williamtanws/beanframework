@@ -5,22 +5,24 @@ public interface UserGroupWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.usergroup.checkid}";
-			public static final String PAGE = "${path.api.usergroup.page}";
-			public static final String HISTORY = "${path.api.usergroup.history}";
+			public static final String USERGROUP = "${path.api.usergroup}";
+			public static final String USERGROUP_HISTORY = "${path.api.usergroup.history}";
+			public static final String USERGROUP_CHECKID = "${path.api.usergroup.checkid}";
 		}
 
 		public static final String USERGROUP = "${path.usergroup}";
+		public static final String USERGROUP_FORM = "${path.usergroup.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.usergroup.list}";
+		public static final String USERGROUP = "${view.usergroup}";
+		public static final String USERGROUP_FORM = "${view.usergroup.form}";
 	}
 
 	public interface ModelAttribute {
 		public static final String USERGROUP_DTO = "usergroupDto";
 	}
-	
+
 	public interface UserGroupPreAuthorizeEnum {
 		public static final String AUTHORITY_READ = "usergroup_read";
 		public static final String AUTHORITY_CREATE = "usergroup_create";

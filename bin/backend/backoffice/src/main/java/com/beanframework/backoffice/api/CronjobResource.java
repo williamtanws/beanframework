@@ -38,7 +38,7 @@ public class CronjobResource extends AbstractResource {
 	private CronjobFacade cronjobFacade;
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(CronjobWebConstants.Path.Api.CHECKID)
+	@RequestMapping(CronjobWebConstants.Path.Api.CRONJOB_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -60,7 +60,7 @@ public class CronjobResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = CronjobWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = CronjobWebConstants.Path.Api.CRONJOB, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -88,7 +88,7 @@ public class CronjobResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = CronjobWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = CronjobWebConstants.Path.Api.CRONJOB_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
@@ -100,7 +100,7 @@ public class CronjobResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(CronjobWebConstants.Path.Api.CHECKJOBGROUPNAME)
+	@RequestMapping(CronjobWebConstants.Path.Api.CRONJOB_CHECKJOBGROUPNAME)
 	public boolean checkName(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
@@ -123,7 +123,7 @@ public class CronjobResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(CronjobWebConstants.Path.Api.CHECKJOBCLASS)
+	@RequestMapping(CronjobWebConstants.Path.Api.CRONJOB_CHECKJOBCLASS)
 	public boolean checkJobClass(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String jobClass = (String) requestParams.get("jobClass");
@@ -138,7 +138,7 @@ public class CronjobResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(CronjobWebConstants.Path.Api.CHECKCRONEXPRESSION)
+	@RequestMapping(CronjobWebConstants.Path.Api.CRONJOB_CHECKCRONEXPRESSION)
 	public boolean checkConExpression(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		String conExpression = (String) requestParams.get("conExpression");

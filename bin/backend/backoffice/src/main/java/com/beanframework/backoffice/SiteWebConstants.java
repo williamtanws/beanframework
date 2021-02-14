@@ -14,7 +14,7 @@ public interface SiteWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.site.list}";
+		public static final String LIST = "${view.site}";
 	}
 
 	public interface ModelAttribute {

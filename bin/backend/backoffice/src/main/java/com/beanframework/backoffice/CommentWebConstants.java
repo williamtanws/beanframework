@@ -14,7 +14,7 @@ public interface CommentWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.comment.list}";
+		public static final String LIST = "${view.comment}";
 	}
 
 	public interface ModelAttribute {

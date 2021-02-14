@@ -11,9 +11,8 @@ public class UserPermissionDto extends GenericDto {
 	 */
 	private static final long serialVersionUID = -3442255085071884522L;
 	public static final String NAME = "name";
-	public static final String USER_PERMISSION_FIELD = "userPermissionField";
-	public static final String SORT = "sort";
 	public static final String FIELDS = "fields";
+	public static final String SORT = "sort";
 
 	private String name;
 

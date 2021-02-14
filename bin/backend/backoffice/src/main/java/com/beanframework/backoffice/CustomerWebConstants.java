@@ -16,7 +16,7 @@ public interface CustomerWebConstants {
 
 	public interface View {
 		public static final String PROFILE = "${view.customer.profile}";
-		public static final String LIST = "${view.customer.list}";
+		public static final String LIST = "${view.customer}";
 	}
 
 	public interface ModelAttribute {

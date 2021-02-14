@@ -46,7 +46,7 @@ public class UserGroupController extends AbstractController {
 	@Value(UserGroupWebConstants.Path.USERGROUP)
 	private String PATH_USERGROUP;
 
-	@Value(UserGroupWebConstants.View.LIST)
+	@Value(UserGroupWebConstants.View.USERGROUP)
 	private String VIEW_USERGROUP_LIST;
 
 	@PreAuthorize(UserGroupPreAuthorizeEnum.HAS_READ)

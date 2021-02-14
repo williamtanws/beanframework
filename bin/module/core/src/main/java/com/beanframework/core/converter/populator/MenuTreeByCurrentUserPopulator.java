@@ -16,9 +16,9 @@ import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
+import com.beanframework.core.specification.MenuSpecification;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
-import com.beanframework.menu.specification.MenuSpecification;
 import com.beanframework.user.service.UserService;
 
 /**

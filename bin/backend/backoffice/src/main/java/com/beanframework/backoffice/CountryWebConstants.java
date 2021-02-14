@@ -14,7 +14,7 @@ public interface CountryWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.country.list}";
+		public static final String LIST = "${view.country}";
 	}
 
 	public interface ModelAttribute {

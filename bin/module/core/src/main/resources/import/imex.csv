@@ -20,7 +20,6 @@ INSERT_UPDATE Imex,id,type,directory,fileName,query,header,seperator
 ,export_menu_fields,EXPORT,,export_menu_fields,"SELECT menu.id,dynamicFieldSlot.id,value FROM MenuField","id,dynamicFieldSlotId,value",","
 ,export_menu_usergroups,EXPORT,,export_menu_usergroups,"SELECT m.id,g.id FROM Menu m JOIN m.userGroups g","id,userGroupIds",","
 ,export_cronjob,EXPORT,,export_cronjob,"SELECT id,jobClass,jobGroup,name,description,cronExpression,startup,jobTrigger,triggerStartDate FROM Cronjob","id,jobClass,jobGroup,name,description,cronExpression,startup,jobTrigger,triggerStartDate",","
-,export_cronjob_datas,EXPORT,,export_cronjob_datas,"SELECT cronjob.id,name,value FROM CronjobData","id,name,value",","
 ,export_employee,EXPORT,,export_employee,"SELECT u.id,u.name,u.password,u.accountNonExpired,u.accountNonLocked,u.credentialsNonExpired,u.enabled FROM Employee u","id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled",","
 ,export_customer,EXPORT,,export_customer,"SELECT u.id,u.name,u.password,u.accountNonExpired,u.accountNonLocked,u.credentialsNonExpired,u.enabled FROM Customer u","id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled",","
 ,export_vendor,EXPORT,,export_vendor,"SELECT u.id,u.name,u.password,u.accountNonExpired,u.accountNonLocked,u.credentialsNonExpired,u.enabled FROM Vendor u","id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled",","

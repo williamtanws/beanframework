@@ -66,8 +66,8 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private SessionRegistry sessionRegistry;
 	
-	@Value(UserConstants.Admin.DEFAULT_GROUP)
-	private String defaultAdminGroup;
+	@Value(UserConstants.Access.CONSOLE)
+	private String ACCESS_CONSOLE;
 	
     protected void configure(HttpSecurity http) throws Exception {
     	http
@@ -77,7 +77,7 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
 	        .authorizeRequests()
 	        	.antMatchers(HTTP_ANTPATTERNS_PERMITALL).permitAll()
 	        	.antMatchers(MODULE_CONSOLE_PATH+"/**", MODULE_CONSOLE_PATH_API+"/**").authenticated()
-	        	.antMatchers(MODULE_CONSOLE_PATH+"/**").hasAnyAuthority(defaultAdminGroup)
+	        	.antMatchers(MODULE_CONSOLE_PATH+"/**").hasAnyAuthority(ACCESS_CONSOLE)
 	        	.and()
 	        .addFilterAfter(csrfHeaderFilter(MODULE_CONSOLE_PATH), CsrfFilter.class)
 	        .csrf().csrfTokenRepository(csrfTokenRepository())

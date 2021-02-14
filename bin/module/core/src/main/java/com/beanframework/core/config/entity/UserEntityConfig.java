@@ -15,7 +15,7 @@ import com.beanframework.user.domain.Employee;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.user.domain.Vendor;
 
 @Configuration
 public class UserEntityConfig {

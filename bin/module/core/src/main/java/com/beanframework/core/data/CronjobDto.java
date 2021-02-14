@@ -1,8 +1,8 @@
 package com.beanframework.core.data;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.cronjob.domain.CronjobEnum.JobTrigger;
@@ -58,7 +58,11 @@ public class CronjobDto extends GenericDto {
 
 	private Date lastFinishExecutedDate;
 
-	private List<CronjobDataDto> cronjobDatas = new ArrayList<CronjobDataDto>(0);
+	private Map<String, String> parameters = new HashMap<String, String>();
+
+	private String[] selectedParameterKeys;
+
+	private String[] selectedParameterValues;
 
 	public String getName() {
 		return name;
@@ -172,12 +176,28 @@ public class CronjobDto extends GenericDto {
 		this.lastFinishExecutedDate = lastFinishExecutedDate;
 	}
 
-	public List<CronjobDataDto> getCronjobDatas() {
-		return cronjobDatas;
+	public Map<String, String> getParameters() {
+		return parameters;
 	}
 
-	public void setCronjobDatas(List<CronjobDataDto> cronjobDatas) {
-		this.cronjobDatas = cronjobDatas;
+	public void setParameters(Map<String, String> parameters) {
+		this.parameters = parameters;
+	}
+
+	public String[] getSelectedParameterKeys() {
+		return selectedParameterKeys;
+	}
+
+	public void setSelectedParameterKeys(String[] selectedParameterKeys) {
+		this.selectedParameterKeys = selectedParameterKeys;
+	}
+
+	public String[] getSelectedParameterValues() {
+		return selectedParameterValues;
+	}
+
+	public void setSelectedParameterValues(String[] selectedParameterValues) {
+		this.selectedParameterValues = selectedParameterValues;
 	}
 
 }

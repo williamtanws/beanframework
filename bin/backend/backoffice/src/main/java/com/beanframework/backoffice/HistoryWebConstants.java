@@ -12,7 +12,7 @@ public interface HistoryWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.history.list}";
+		public static final String LIST = "${view.history}";
 	}
 
 	public interface ModelAttribute {

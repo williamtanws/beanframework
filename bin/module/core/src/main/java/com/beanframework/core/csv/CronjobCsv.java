@@ -22,7 +22,7 @@ public class CronjobCsv extends AbstractCsv {
 	private Boolean startup;
 	private String jobTrigger;
 	private Date triggerStartDate;
-	private String cronjobData;
+	private String parameters;
 
 	public static CellProcessor[] getUpdateProcessors() {
 		final CellProcessor[] processors = new CellProcessor[] { //
@@ -106,18 +106,18 @@ public class CronjobCsv extends AbstractCsv {
 		this.triggerStartDate = triggerStartDate;
 	}
 
-	public String getCronjobData() {
-		return cronjobData;
+	public String getParameters() {
+		return parameters;
 	}
 
-	public void setCronjobData(String cronjobData) {
-		this.cronjobData = cronjobData;
+	public void setParameters(String parameters) {
+		this.parameters = parameters;
 	}
 
 	@Override
 	public String toString() {
 		return "CronjobCsv [id=" + id + ", jobClass=" + jobClass + ", jobGroup=" + jobGroup + ", jobName=" + name + ", description=" + description + ", cronExpression=" + cronExpression + ", startup=" + startup
-				+ ", jobTrigger=" + jobTrigger + ", triggerStartDate=" + triggerStartDate + ", cronjobData=" + cronjobData + "]";
+				+ ", jobTrigger=" + jobTrigger + ", triggerStartDate=" + triggerStartDate + ", parameters=" + parameters + "]";
 	}
 
 	

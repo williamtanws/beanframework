@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.ImexDto;
+import com.beanframework.core.specification.ImexSpecification;
 import com.beanframework.imex.domain.Imex;
-import com.beanframework.imex.specification.ImexSpecification;
 
 @Component
 public class ImexFacadeImpl extends AbstractFacade<Imex, ImexDto> implements ImexFacade {

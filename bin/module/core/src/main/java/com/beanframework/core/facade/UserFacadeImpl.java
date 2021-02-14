@@ -11,10 +11,10 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserDto;
+import com.beanframework.core.specification.UserSpecification;
 import com.beanframework.user.UserSession;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
-import com.beanframework.user.specification.UserSpecification;
 
 @Service
 public class UserFacadeImpl extends AbstractFacade<User, UserDto> implements UserFacade {

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
+import com.beanframework.core.specification.DynamicFieldTemplateSpecification;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
-import com.beanframework.dynamicfield.specification.DynamicFieldTemplateSpecification;
 
 @Component
 public class DynamicFieldTemplateFacadeImpl extends AbstractFacade<DynamicFieldTemplate, DynamicFieldTemplateDto> implements DynamicFieldTemplateFacade {

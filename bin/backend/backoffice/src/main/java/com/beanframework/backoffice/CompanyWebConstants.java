@@ -14,7 +14,7 @@ public interface CompanyWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.company.list}";
+		public static final String LIST = "${view.company}";
 	}
 
 	public interface ModelAttribute {

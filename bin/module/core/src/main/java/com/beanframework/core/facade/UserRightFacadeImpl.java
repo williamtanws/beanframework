@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserRightDto;
+import com.beanframework.core.specification.UserRightSpecification;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.specification.UserRightSpecification;
 
 @Component
 public class UserRightFacadeImpl extends AbstractFacade<UserRight, UserRightDto> implements UserRightFacade {

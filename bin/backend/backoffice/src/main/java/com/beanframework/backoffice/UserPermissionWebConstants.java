@@ -5,24 +5,24 @@ public interface UserPermissionWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String USERPERMISSION_PAGE = "${path.api.userpermission.page}";
-			public static final String USERPERMISSION_PAGE_HISTORY = "${path.api.userpermission.page.history}";
-			public static final String USERPERMISSION_CHECKID = "${path.api.userpermission.checkid}";
+			public static final String PERMISSION = "${path.api.userpermission}";
+			public static final String PERMISSION_HISTORY = "${path.api.userpermission.history}";
+			public static final String PERMISSION_CHECKID = "${path.api.userpermission.checkid}";
 		}
 
-		public static final String USERPERMISSION_PAGE = "${path.userpermission.page}";
-		public static final String USERPERMISSION_FORM = "${path.userpermission.form}";
+		public static final String PERMISSION = "${path.userpermission}";
+		public static final String PERMISSION_FORM = "${path.userpermission.form}";
 	}
 
 	public interface View {
-		public static final String PAGE = "${view.userpermission.page}";
-		public static final String FORM = "${view.userpermission.form}";
+		public static final String PERMISSION = "${view.userpermission}";
+		public static final String PERMISSION_FORM = "${view.userpermission.form}";
 	}
 
 	public interface ModelAttribute {
-		public static final String USERPERMISSION_DTO = "userpermissionDto";
+		public static final String PERMISSION_DTO = "userpermissionDto";
 	}
-	
+
 	public interface UserPermissionPreAuthorizeEnum {
 		public static final String AUTHORITY_READ = "userpermission_read";
 		public static final String AUTHORITY_CREATE = "userpermission_create";

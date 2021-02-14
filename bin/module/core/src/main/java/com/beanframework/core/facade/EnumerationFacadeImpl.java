@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EnumerationDto;
+import com.beanframework.core.specification.EnumerationSpecification;
 import com.beanframework.enumuration.domain.Enumeration;
-import com.beanframework.enumuration.specification.EnumerationSpecification;
 
 @Component
 public class EnumerationFacadeImpl extends AbstractFacade<Enumeration, EnumerationDto> implements EnumerationFacade {

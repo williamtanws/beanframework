@@ -12,10 +12,10 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.converter.entity.EntityCustomerProfileConverter;
 import com.beanframework.core.data.CustomerDto;
+import com.beanframework.core.specification.CustomerSpecification;
 import com.beanframework.user.domain.Customer;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
-import com.beanframework.user.specification.CustomerSpecification;
 
 @Component
 public class CustomerFacadeImpl extends AbstractFacade<Customer, CustomerDto> implements CustomerFacade {

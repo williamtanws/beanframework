@@ -31,15 +31,16 @@ public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private ModelService modelService;
-
+	
 	@Override
 	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
 
 		if (toUuid == null) {
+			// Set to root Menu
 			setParentNullAndSortByUuid(fromUuid, toIndex);
 
+			// Reset position
 			List<Menu> toMenuChilds = findByParentNullOrderBySort();
-
 			List<Menu> menus = changePosition(toMenuChilds, fromUuid, toIndex);
 			for (Menu menu : menus) {
 				modelService.saveEntity(menu);
@@ -56,10 +57,13 @@ public class MenuServiceImpl implements MenuService {
 		}
 	}
 
+	// Set to root menu
 	private void setParentNullAndSortByUuid(UUID fromUuid, int toIndex) throws Exception {
+		
+		// Remove child menu from parent menu
 		Menu menu = modelService.findOneByUuid(fromUuid, Menu.class);
-		Menu parent = menu.getParent();
-		if (parent != null) {
+		if (menu.getParent() != null) {
+			Menu parent = menu.getParent();
 			Hibernate.initialize(parent.getChilds());
 			if (parent.getChilds() != null) {
 				for (int i = 0; i < parent.getChilds().size(); i++) {
@@ -72,6 +76,7 @@ public class MenuServiceImpl implements MenuService {
 			}
 		}
 
+		// Set to root menu
 		menu.setParent(null);
 		menu.setSort(toIndex);
 		modelService.saveEntity(menu);
@@ -91,10 +96,11 @@ public class MenuServiceImpl implements MenuService {
 	private void updateParentByUuid(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
 		Menu menu = modelService.findOneByUuid(fromUuid, Menu.class);
 		Menu parent = modelService.findOneByUuid(toUuid, Menu.class);
-		parent.getChilds().add(menu);
-		menu.setParent(parent);
+		Hibernate.initialize(parent.getChilds());
 		menu.setSort(toIndex);
-		modelService.saveEntity(menu);
+		menu.setParent(parent);
+		parent.getChilds().add(menu);
+		modelService.saveEntity(parent);
 	}
 
 	private List<Menu> findByParentUuidOrderBySort(UUID toUuid) throws Exception {

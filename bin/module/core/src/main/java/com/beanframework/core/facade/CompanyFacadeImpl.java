@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CompanyDto;
+import com.beanframework.core.specification.CompanySpecification;
 import com.beanframework.user.domain.Company;
-import com.beanframework.user.specification.CompanySpecification;
 
 @Component
 public class CompanyFacadeImpl extends AbstractFacade<Company, CompanyDto> implements CompanyFacade {

@@ -16,9 +16,9 @@ import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
+import com.beanframework.user.VendorConstants;
 import com.beanframework.user.domain.UserField;
-import com.beanframework.vendor.VendorConstants;
-import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.user.domain.Vendor;
 
 public class VendorInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Vendor> {
 

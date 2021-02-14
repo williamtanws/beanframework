@@ -37,6 +37,19 @@ public abstract class AbstractSpecification {
 		}
 	}
 
+	public static boolean isInteger(String s) {
+		try {
+			Integer.parseInt(s);
+			return true;
+		} catch (NumberFormatException ex) {
+			return false;
+		}
+	}
+	
+	public static String clean(String s) {
+		return s.trim();
+	}
+
 	public static <T> Specification<T> getSpecification(DataTableRequest dataTableRequest) {
 		return new Specification<T>() {
 			private static final long serialVersionUID = 1L;

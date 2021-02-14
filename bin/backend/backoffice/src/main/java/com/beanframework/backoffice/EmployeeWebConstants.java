@@ -26,7 +26,7 @@ public interface EmployeeWebConstants {
 
 	public interface View {
 		public static final String PROFILE = "${view.employee.profile}";
-		public static final String LIST = "${view.employee.list}";
+		public static final String LIST = "${view.employee}";
 	}
 
 	public interface ModelAttribute {

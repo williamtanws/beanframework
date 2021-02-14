@@ -15,7 +15,7 @@ public interface EmailWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.email.list}";
+		public static final String LIST = "${view.email}";
 	}
 
 	public interface ModelAttribute {

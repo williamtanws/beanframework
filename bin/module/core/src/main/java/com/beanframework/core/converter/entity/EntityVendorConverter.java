@@ -18,7 +18,7 @@ import com.beanframework.core.data.VendorDto;
 import com.beanframework.user.domain.Address;
 import com.beanframework.user.domain.Company;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.vendor.domain.Vendor;
+import com.beanframework.user.domain.Vendor;
 
 public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor> {
 

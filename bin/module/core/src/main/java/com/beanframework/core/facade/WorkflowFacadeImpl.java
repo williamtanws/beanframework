@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.WorkflowDto;
+import com.beanframework.core.specification.WorkflowSpecification;
 import com.beanframework.workflow.domain.Workflow;
-import com.beanframework.workflow.specification.WorkflowSpecification;
 
 @Component
 public class WorkflowFacadeImpl extends AbstractFacade<Workflow, WorkflowDto> implements WorkflowFacade {

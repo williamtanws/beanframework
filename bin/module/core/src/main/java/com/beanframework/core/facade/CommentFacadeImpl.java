@@ -8,10 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.comment.domain.Comment;
-import com.beanframework.comment.specification.CommentSpecification;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CommentDto;
+import com.beanframework.core.specification.CommentSpecification;
 
 @Component
 public class CommentFacadeImpl extends AbstractFacade<Comment, CommentDto> implements CommentFacade {

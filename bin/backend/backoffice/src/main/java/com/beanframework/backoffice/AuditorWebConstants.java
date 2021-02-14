@@ -13,7 +13,7 @@ public interface AuditorWebConstants {
 	}
 
 	public interface View {
-		public static final String LIST = "${view.auditor.list}";
+		public static final String LIST = "${view.auditor}";
 	}
 
 	public interface ModelAttribute {

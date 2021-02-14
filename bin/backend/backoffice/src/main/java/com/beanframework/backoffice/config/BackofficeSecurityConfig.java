@@ -72,11 +72,8 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private SessionRegistry sessionRegistry;
 	
-	@Value(UserConstants.Admin.DEFAULT_GROUP)
-	private String defaultAdminGroup;
-
-	@Value(UserConstants.Employee.DEFAULT_GROUP)
-	private String defaultEmployeeGroup;
+	@Value(UserConstants.Access.BACKOFFICE)
+	private String ACCESS_BACKOFFICE;
 
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -86,7 +83,7 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
 	        .authorizeRequests()
 	        	.antMatchers(HTTP_ANTPATTERNS_PERMITALL).permitAll()
 	        	.antMatchers(PATH_BACKOFFICE+"/**").authenticated()
-	        	.antMatchers(PATH_BACKOFFICE+"/**").hasAnyAuthority(defaultAdminGroup, defaultEmployeeGroup)
+	        	.antMatchers(PATH_BACKOFFICE+"/**").hasAnyAuthority(ACCESS_BACKOFFICE)
 	        	.and()
 	        .addFilterAfter(csrfHeaderFilter(PATH_BACKOFFICE), CsrfFilter.class)
 	        .csrf().csrfTokenRepository(csrfTokenRepository())

@@ -13,7 +13,6 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.csv.CronjobCsv;
 import com.beanframework.cronjob.domain.Cronjob;
-import com.beanframework.cronjob.domain.CronjobData;
 import com.beanframework.imex.registry.ImportListener;
 
 public class EntityCsvCronjobConverter implements EntityCsvConverter<CronjobCsv, Cronjob> {
@@ -71,43 +70,14 @@ public class EntityCsvCronjobConverter implements EntityCsvConverter<CronjobCsv,
 				prototype.setStartup(source.getStartup());
 
 			// Cronjob Data
-			for (int i = 0; i < prototype.getCronjobDatas().size(); i++) {
-				if (StringUtils.isNotBlank(source.getCronjobData())) {
-					String[] cronjobDataList = source.getCronjobData().split(ImportListener.SPLITTER);
-
-					for (String cronjobDataString : cronjobDataList) {
-						String name = cronjobDataString.split(ImportListener.EQUALS)[0];
-						String value = cronjobDataString.split(ImportListener.EQUALS)[1];
-
-						if (prototype.getCronjobDatas().get(i).getName().equals(name)) {
-							prototype.getCronjobDatas().get(i).setValue(value);
-						}
-					}
-				}
-			}
-
-			if (StringUtils.isNotBlank(source.getCronjobData())) {
-
-				String[] cronjobDataList = source.getCronjobData().split(ImportListener.SPLITTER);
+			if (StringUtils.isNotBlank(source.getParameters())) {
+				String[] cronjobDataList = source.getParameters().split(ImportListener.SPLITTER);
 
 				for (String cronjobDataString : cronjobDataList) {
 					String name = cronjobDataString.split(ImportListener.EQUALS)[0];
 					String value = cronjobDataString.split(ImportListener.EQUALS)[1];
 
-					boolean add = true;
-					for (CronjobData cronjobData : prototype.getCronjobDatas()) {
-						if (cronjobData.getName().equals(name)) {
-							add = false;
-						}
-					}
-
-					if (add) {
-						CronjobData cronjobData = new CronjobData();
-						cronjobData.setName(name);
-						cronjobData.setValue(value);
-						cronjobData.setCronjob(prototype);
-						prototype.getCronjobDatas().add(cronjobData);
-					}
+					prototype.getParameters().put(name, value);
 				}
 			}
 
