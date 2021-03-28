@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "command": "npm",
+  "runner": "terminal",
+  "suppressTaskName": true,
+  "tasks": [
+    {
+      "label": "build",
+      "type": "npm",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "script": "build",
+      "problemMatcher": "$tsc"
+    },
+    {
+      "label": "test",
+      "type": "npm",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "script": "test"
+    }
+  ]
+}

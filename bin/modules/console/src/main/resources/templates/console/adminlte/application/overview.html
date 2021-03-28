@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<head>
+<title th:utext="#{module.common.overview}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0" th:text="#{module.common.overview}"></h1>
+						</div>
+						<!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item" th:text="#{module.common.console}"></li>
+								<li class="breadcrumb-item active" th:text="#{module.common.overview}"></li>
+							</ol>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-12 col-sm-6 col-md-3">
+							<div class="info-box">
+								<span class="info-box-icon bg-info elevation-1">
+									<i class="fas fa-cog"></i>
+								</span>
+
+								<div class="info-box-content">
+									<span class="info-box-text">CPU Traffic</span>
+									<span class="info-box-number">
+										<span id="systemLoad"></span>
+										<small>%</small>
+									</span>
+								</div>
+								<!-- /.info-box-content -->
+							</div>
+							<!-- /.info-box -->
+						</div>
+						<!-- /.col -->
+
+						<!-- /.col -->
+						<div class="col-12 col-sm-6 col-md-3">
+							<div class="info-box mb-3">
+								<span class="info-box-icon bg-success elevation-1">
+									<i class="fas fa-memory"></i>
+								</span>
+
+								<div class="info-box-content">
+									<span class="info-box-text">Heap Memory Used</span>
+									<span class="info-box-number">
+										<span id="memoryLoad"></span>
+										<small>%</small>
+									</span>
+								</div>
+								<!-- /.info-box-content -->
+							</div>
+							<!-- /.info-box -->
+						</div>
+						<!-- /.col -->
+						<div class="col-12 col-sm-6 col-md-3">
+							<div class="info-box mb-3">
+								<span class="info-box-icon bg-warning elevation-1">
+									<i class="fas fa-memory"></i>
+								</span>
+
+								<div class="info-box-content">
+									<span class="info-box-text">Non-heap Memory Used</span>
+									<span class="info-box-number">
+										<span id="nonMemoryLoad"></span>
+										<small>%</small>
+									</span>
+								</div>
+								<!-- /.info-box-content -->
+							</div>
+							<!-- /.info-box -->
+						</div>
+
+						<!-- fix for small devices only -->
+						<div class="clearfix hidden-md-up"></div>
+
+						<div class="col-12 col-sm-6 col-md-3">
+							<div class="info-box mb-3">
+								<span class="info-box-icon bg-danger elevation-1">
+									<i class="fas fa-compact-disc"></i>
+								</span>
+
+								<div class="info-box-content">
+									<span class="info-box-text">Disk Space Used</span>
+									<span class="info-box-number">
+										<span id="healthDiskspaceLoad"></span>
+										<small>%</small>
+									</span>
+								</div>
+								<!-- /.info-box-content -->
+							</div>
+							<!-- /.info-box -->
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title" th:text="'Application'"></h5>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-sm-3" th:text="'Name'"></dt>
+										<dd class="col-sm-9" id="appName" th:text="@{${@environment.getProperty('info.app.name')}}"></dd>
+										<dt class="col-sm-3" th:text="'Description'"></dt>
+										<dd class="col-sm-9" id="appDescription" th:text="@{${@environment.getProperty('info.app.description')}}"></dd>
+										<dt class="col-sm-3" th:text="'Startup'"></dt>
+										<dd class="col-sm-9" id="metadataApplicationStartup"></dd>
+										<dt class="col-sm-3" th:text="'PID'"></dt>
+										<dd class="col-sm-9" th:text="${pid}"></dd>
+										<dt class="col-sm-3" th:text="'Up time'"></dt>
+										<dd class="col-sm-9" id="processUptime"></dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title" th:text="'CPU'"></h5>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-sm-3" th:text="'Number of cores'"></dt>
+										<dd class="col-sm-9" id="processCPU"></dd>
+
+										<dt class="col-sm-3" th:text="'Threads'"></dt>
+										<dd class="col-sm-9">
+											Live:
+											<span id="threadsLive"></span>
+										</dd>
+										<dd class="col-sm-9 offset-sm-3">
+											Peak Live:
+											<span id="threadsPeakLive"></span>
+										</dd>
+										<dd class="col-sm-9 offset-sm-3">
+											Daemon:
+											<span id="threadsDaemon"></span>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title" th:text="'Memory'"></h5>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-sm-3" th:text="'Heap memory'"></dt>
+										<dd class="col-sm-9">
+											Used:
+											<span id="memoryUsed"></span>
+										</dd>
+										<dd class="col-sm-9 offset-sm-3">
+											Size:
+											<span id="memorySize"></span>
+										</dd>
+										<dd class="col-sm-9 offset-sm-3">
+											Max:
+											<span id="memoryMax"></span>
+										</dd>
+
+										<dt class="col-sm-3" th:text="'Non-heap memory'"></dt>
+										<dd class="col-sm-9">
+											Used:
+											<span id="nonMemoryUsed"></span>
+										</dd>
+										<dd class="col-sm-9 offset-sm-3">
+											Size:
+											<span id="nonMemorySize"></span>
+										</dd>
+										<dd class="col-sm-9 offset-sm-3">
+											Max:
+											<span id="nonMemoryMax"></span>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title" th:text="'Health'"></h5>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class=col-sm-3 th:text="'Instance'"></dt>
+										<dd class="col-sm-9" id="healthStatus"></dd>
+
+										<dt class="col-sm-3" th:text="'Disk Space'"></dt>
+										<dd class="col-sm-9">
+											Status:
+											<span class="text-block" id="healthDiskspaceStatus"></span>
+										</dd>
+										<dd class="col-sm-9 offset-sm-3">
+											Total:
+											<span class="text-block" id="healthDiskspaceTotal"></span>
+										</dd>
+										<dd class="col-sm-9 offset-sm-3">
+											Free:
+											<span class="text-block" id="healthDiskspaceFree"></span>
+										</dd>
+										<dd class="col-sm-9 offset-sm-3">
+											Threshold:
+											<span class="text-block" id="healthDiskspaceThreshold"></span>
+										</dd>
+
+										<dt class="col-sm-3" th:text="'Mail'"></dt>
+										<dd class="col-sm-9">
+											Status:
+											<span class="text-block" id="healthMailStatus"></span>
+										</dd>
+										<dd class="col-sm-9 offset-sm-3">
+											Location:
+											<span class="text-block" id="healthMailLocation"></span>
+										</dd>
+
+										<dt class="col-sm-3" th:text="'Ping'"></dt>
+										<dd class="col-sm-9">
+											Status:
+											<span class="text-block" id="healthPingStatus"></span>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</th:block>
+	<th:block layout:fragment="js">
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			var path_console_api_cpu = /*[[@{${@environment.getProperty('path.api.console.monitor.cpu')}}]]*/ ;
+			
+			var actuatorPath = /*[[@{${@environment.getProperty('management.endpoints.web.base-path')}}]]*/ ;
+			
+			var memory_used_data;
+			var memory_size_data;
+			var memory_max_data;
+			
+			$.ajax({
+			    url: actuatorPath + '/metrics/jvm.memory.used?tag=area:heap',
+			    dataType: 'json',
+			    async: false,
+			    success: function(json) {
+			        var value = json['measurements'][0].value;
+			        memory_used_data = value;
+			    }
+			});
+			
+			$.ajax({
+			    url: actuatorPath + '/metrics/jvm.memory.committed?tag=area:heap',
+			    dataType: 'json',
+			    async: false,
+			    success: function(json) {
+			        var value = json['measurements'][0].value;
+			        memory_size_data = value;
+			    }
+			});
+			
+			$.ajax({
+			    url: actuatorPath + '/metrics/jvm.memory.max?tag=area:heap',
+			    dataType: 'json',
+			    async: false,
+			    success: function(json) {
+			        var value = json['measurements'][0].value;
+			        memory_max_data = value;
+			    }
+			});
+			
+			function updateHealth() {
+			    $.getJSON(actuatorPath + '/health',
+			        function(json) {
+			            var status = json['status'];
+			            var components = json['components'];
+			            var diskSpace = components.diskSpace;
+			            var mail = components.mail;
+			            var ping = components.ping;
+			
+			            if (status == 'UP') {
+			                $('#healthStatus').html('Status: <span class="text-green">' + status + '</span>');
+			            } else {
+			                $('#healthStatus').html('Status: <span class="text-red">' + status + '</span>');
+			            }
+			
+			            if (diskSpace.status == 'UP') {
+			                $('#healthDiskspaceStatus').html('<span class="text-green">' + diskSpace.status + '</span>');
+			            } else {
+			                $('#healthDiskspaceStatus').html('<span class="text-red">' + diskSpace.status + '</span>');
+			            }
+			            $('#healthDiskspaceTotal').text(humanReadable(diskSpace.details.total));
+			            $('#healthDiskspaceFree').text(humanReadable(diskSpace.details.free));
+			            $('#healthDiskspaceThreshold').text(humanReadable(diskSpace.details.threshold));
+			            
+			            var diskUsed = diskSpace.details.total - diskSpace.details.free;
+					    $("#healthDiskspaceLoad").text(round((diskUsed / diskSpace.details.total) * 100));
+					    
+					    if (mail.status == 'UP') {
+			                $('#healthMailStatus').html('<span class="text-green">' + mail.status + '</span>');
+			            } else {
+			                $('#healthMailStatus').html('<span class="text-red">' + mail.status + '</span>');
+			            }
+			            $('#healthMailLocation').text(mail.details.location);
+			            
+			            if (ping.status == 'UP') {
+			                $('#healthPingStatus').html('<span class="text-green">' + ping.status + '</span>');
+			            } else {
+			                $('#healthPingStatus').html('<span class="text-red">' + ping.status + '</span>');
+			            }
+
+			        });
+			}
+			
+			function updateMetadata() {
+			    updateApplicationStartup();
+			}
+			
+			function updateApplicationStartup() {
+			    $.getJSON(actuatorPath + '/metrics/process.start.time',
+			        function(json) {
+			            var seconds = json['measurements'][0].value;
+			
+			            var d = new Date(seconds * 1000);
+			
+			            $('#metadataApplicationStartup').text(d);
+			        });
+			}
+			
+			function updateProcess() {
+			    updateProcessUptime();
+			    updateCPU();
+			    updateSystemLoad();
+			}
+			
+			function updateProcessUptime() {
+			
+			    $.getJSON(actuatorPath + '/metrics/process.uptime',
+			        function(json) {
+			            var seconds = json['measurements'][0].value;
+			
+			            $('#processUptime').text(millisecondsToStr(seconds * 1000));
+			        });
+			}
+			
+			
+			function updateCPU() {
+			
+			    $.getJSON(actuatorPath + '/metrics/system.cpu.count',
+			        function(json) {
+			            var value = json['measurements'][0].value;
+			
+			            $('#processCPU').text(value);
+			        });
+			}
+			
+			function updateSystemLoad() {
+			
+			    $.getJSON(actuatorPath + '/metrics/system.cpu.usage',
+			        function(json) {
+			            var value = json['measurements'][0].value;
+			            $('#systemLoad').text(round(value * 100));
+			        });
+			}
+			
+			function updateThreads() {
+			    updateThreadsLive();
+			    updateThreadsDaemon();
+			    updateThreadsPeakLive();
+			}
+			
+			function updateThreadsLive() {
+			
+			    $.getJSON(actuatorPath + '/metrics/jvm.threads.live',
+			        function(json) {
+			            var value = json['measurements'][0].value;
+			
+			            $("#threadsLive").text(value);
+			            $("#threadLoad").text(value);
+			        });
+			}
+			
+			function updateThreadsDaemon() {
+			
+			    $.getJSON(actuatorPath + '/metrics/jvm.threads.daemon',
+			        function(json) {
+			            var value = json['measurements'][0].value;
+			
+			            $("#threadsDaemon").text(value);
+			        });
+			}
+			
+			function updateThreadsPeakLive() {
+			
+			    $.getJSON(actuatorPath + '/metrics/jvm.threads.peak',
+			        function(json) {
+			            var value = json['measurements'][0].value;
+			
+			            $("#threadsPeakLive").text(value);
+			        });
+			}
+			
+			function updateMemoryHeap() {
+			
+			    var memoryUsed;
+			    var memorySize;
+			
+			
+			    $.ajax({
+			        url: actuatorPath + '/metrics/jvm.memory.used?tag=area:heap',
+			        dataType: 'json',
+			        async: false,
+			        success: function(json) {
+			            var value = json['measurements'][0].value;
+			            memoryUsed = value;
+			            $("#memoryUsed").text(humanReadable(value));
+			        }
+			    });
+			
+			    $.ajax({
+			        url: actuatorPath + '/metrics/jvm.memory.committed?tag=area:heap',
+			        dataType: 'json',
+			        async: false,
+			        success: function(json) {
+			            var value = json['measurements'][0].value;
+			            memorySize = value;
+			            $("#memorySize").text(humanReadable(value));
+			        }
+			    });
+			
+			    $.ajax({
+			        url: actuatorPath + '/metrics/jvm.memory.max?tag=area:heap',
+			        dataType: 'json',
+			        async: false,
+			        success: function(json) {
+			            var value = json['measurements'][0].value;
+			            memory_max_data = value;
+			            $("#memoryMax").text(humanReadable(value));
+			        }
+			    });
+			
+			    $("#memoryLoad").text(round((memoryUsed / memorySize) * 100));
+			}
+			
+			function updateNonMemoryHeap() {
+				var nonMemoryUsed;
+				var nonMemorySize;
+				
+				$.ajax({
+			        url: actuatorPath + '/metrics/jvm.memory.used?tag=area:nonheap',
+			        dataType: 'json',
+			        async: false,
+			        success: function(json) {
+			            var value = json['measurements'][0].value;
+			            nonMemoryUsed = value;
+			            $("#nonMemoryUsed").text(humanReadable(value));
+			        }
+			    });
+				
+				$.ajax({
+			        url: actuatorPath + '/metrics/jvm.memory.committed?tag=area:nonheap',
+			        dataType: 'json',
+			        async: false,
+			        success: function(json) {
+				        var value = json['measurements'][0].value;
+				        nonMemorySize = value;
+				        $("#nonMemorySize").text(humanReadable(value));
+			        }
+			    });
+			
+			    $.getJSON(actuatorPath + '/metrics/jvm.memory.max?tag=area:nonheap', function(json) {
+			        var value = json['measurements'][0].value;
+			
+			        $("#nonMemoryMax").text(humanReadable(value));
+			    });
+			    
+			    $("#nonMemoryLoad").text(round((nonMemoryUsed / nonMemorySize) * 100));
+			}
+			
+			updateProcess();
+			
+			updateThreads();
+			
+			updateMemoryHeap();
+			
+			updateNonMemoryHeap();
+			
+			$(document).ready(function() {
+			    updateHealth();
+			
+			    updateMetadata();
+			
+			    updateProcess();
+			    setInterval(updateProcess, 1000);
+			
+			    updateThreads();
+			    setInterval(updateThreads, 1000);
+			
+			    updateMemoryHeap();
+			    setInterval(updateMemoryHeap, 1000);
+			
+			    updateNonMemoryHeap();
+			    setInterval(updateNonMemoryHeap, 1000);
+			});
+			
+			function round(value, precision) {
+			    var multiplier = Math.pow(10, precision || 0);
+			    return Math.round(value * multiplier) / multiplier;
+			}
+			
+			function millisecondsToStr(milliseconds) {
+			    var date = new Date(milliseconds);
+			    var str = '';
+			    if (date.getUTCDate() - 1 != 0) {
+			        if (date.getUTCDate() - 1 == 1) {
+			            str += date.getUTCDate() - 1 + " day ";
+			        } else {
+			            str += date.getUTCDate() - 1 + " days ";
+			        }
+			    }
+			    if (date.getUTCHours != 0) {
+			        if (date.getUTCHours == 1) {
+			            str += date.getUTCHours() + " hour ";
+			        } else {
+			            str += date.getUTCHours() + " hours ";
+			        }
+			    }
+			    if (date.getUTCMinutes != 0) {
+			        if (date.getUTCMinutes == 1) {
+			            str += date.getUTCMinutes() + " minute ";
+			        } else {
+			            str += date.getUTCMinutes() + " minutes ";
+			        }
+			    }
+			    if (date.getUTCSeconds != 0) {
+			        if (date.getUTCSeconds == 1) {
+			            str += date.getUTCSeconds() + " second ";
+			        } else {
+			            str += date.getUTCSeconds() + " seconds ";
+			        }
+			    }
+			    return str;
+			}
+			
+			function humanReadable(bytes) {
+			    return getBytesWithUnit(bytes);
+			}
+			
+			function bytesToSize(bytes) {
+			    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+			    if (bytes == 0) return '0 Byte';
+			    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+			    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+			}
+			
+			function formatBytes(bytes) {
+			    if (bytes < 1024) return bytes + " Bytes";
+			    else if (bytes < 1048576) return (bytes / 1024).toFixed(3) + " KB";
+			    else if (bytes < 1073741824) return (bytes / 1048576).toFixed(3) + " MB";
+			    else return (bytes / 1073741824).toFixed(3) + " GB";
+			}
+			
+			function getBytesWithUnit(bytes) {
+			    if (isNaN(bytes)) {
+			        return;
+			    }
+			    var units = [' bytes', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB'];
+			    var amountOf2s = Math.floor(Math.log(+bytes) / Math.log(2));
+			    if (amountOf2s < 1) {
+			        amountOf2s = 0;
+			    }
+			    var i = Math.floor(amountOf2s / 10);
+			    bytes = +bytes / Math.pow(2, 10 * i);
+			
+			    // Rounds to 3 decimals places.
+			    if (bytes.toString().length > bytes.toFixed(3).toString().length) {
+			        bytes = bytes.toFixed(2);
+			    }
+			    return bytes + units[i];
+			}
+		  /*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>

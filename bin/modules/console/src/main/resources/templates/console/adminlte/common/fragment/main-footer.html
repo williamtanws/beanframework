@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<th:block th:fragment="footer">
+		<!-- Main Footer -->
+		<footer class="main-footer">
+			<!-- To the right -->
+			<div class="float-right d-none d-sm-inline" th:utext="#{module.common.copyright.right}"></div>
+			<!-- Default to the left -->
+			<span th:utext="#{module.common.copyright}"></span>
+		</footer>
+	</th:block>
+</body>
+</html>

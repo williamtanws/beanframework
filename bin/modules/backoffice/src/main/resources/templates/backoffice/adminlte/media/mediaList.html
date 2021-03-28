@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<head>
+<title th:utext="#{module.media}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<section class="content" th:with="fileName=#{module.media.fileName}">
+			<!-- List Table-->
+			<th:block
+				layout:insert="~{common/adminlte/common/component/list :: list (icon=@{${@environment.getProperty('module.media.icon')}}, title=#{module.media}, objectDto=${mediaDto}, createAuthority='media_create', updateAuthority='media_update', tableName='media', listUrl=@{${@environment.getProperty('path.api.media.page')}}, listFields=${ {{'id', 'ID'},{'fileName', fileName}} }, editFormAction=@{${@environment.getProperty('path.media')}}, editForm=@{${@environment.getProperty('view.media.form')}}, createButton='1', filterColumnIndex=${ {0, 1} } )}"></th:block>
+		</section>
+	</th:block>
+</body>
+</html>

@@ -1,0 +1,2 @@
+INSERT_UPDATE Company,id,name,addressIds
+,ocn,Oceanetz Technology,ocn_address

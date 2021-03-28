@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+</head>
+<body>
+	<th:block th:fragment="map (title, tableId, columnsi18n, columns, selectedItemDto)">
+		<table th:id="'selected-table-'+${tableId}" class="table table-bordered">
+			<thead>
+				<tr>
+					<th th:each="column : ${columnsi18n}" th:text="${column}"></th>
+					<th style="width: 30px">
+						<button type="button" class="btn btn-default" data-toggle="modal" th:data-target="'#modal-form-'+${tableId}">
+							<i class="fas fa-plus"></i>
+						</button>
+					</th>
+				</tr>
+			</thead>
+		</table>
+	</th:block>
+	<th:block th:fragment="add (tableId)">
+		<div class="modal fade" th:id="'modal-form-'+${tableId}">
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content">
+					<form th:id="'modal-form-add-'+${tableId}" action="#">
+						<div class="modal-header">
+							<h4 class="modal-title" th:text="#{module.common.add}"></h4>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="row mb-2">
+									<div class="col-sm-6"></div>
+									<!-- /.col -->
+									<div class="col-sm-6">
+										<div class="float-sm-right">
+											<button type="button" class="btn btn-primary btnAdd" th:text="#{module.common.add}"></button>
+										</div>
+									</div>
+									<!-- /.col -->
+								</div>
+							</div>
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="name" th:text="#{module.common.key}"></label>
+											<input type="text" class="form-control" name="addKey">
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="name" th:text="#{module.common.value}"></label>
+											<input type="text" class="form-control" name="addValue">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+	</th:block>
+	<th:block th:fragment="js (tableId, columns, selectedItemDto, selectedItemNames, selectedItemValues)">
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		
+		$(document).ready(function () {
+			initialMapDataTable(/*[[${tableId}]]*/, /*[[${pageUrl}]]*/, /*[[${selectedItemDto}]]*/, /*[[${selectedItemNames}]]*/, /*[[${selectedItemValues}]]*/);
+		});
+			
+		function initialMapDataTable(tableId, pageUrl, selectedItemDto, selectedItemNames, selectedItemValues){
+			
+			var tableId = /*[[${tableId}]]*/;
+			var data = /*[[${selectedItemDto}]]*/;
+			var selectedItemNames = /*[[${selectedItemNames}]]*/;
+			var selectedItemValues = /*[[${selectedItemValues}]]*/;
+			
+			var dataArray = [];
+			for(var name in data){
+				if(data.hasOwnProperty(name)){ 
+					dataArray.push([name, data[name]]); 
+				}
+			}
+			
+			var selectedDataTable = $("#selected-table-"+tableId).DataTable( {
+		    	"language": {
+		           	"decimal":        "",
+		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
+		            "info":           /*[[#{module.common.datatable.info}]]*/,
+		            "infoEmpty":      /*[[#{module.common.datatable.infoEmpty}]]*/,
+		            "infoFiltered":   /*[[#{module.common.datatable.infoFiltered}]]*/,
+		            "infoPostFix":    "",
+		            "thousands":      ",",
+		            "lengthMenu":     /*[[#{module.common.datatable.lengthMenu}]]*/,
+		            "loadingRecords": /*[[#{module.common.datatable.loadingRecords}]]*/,
+		            "processing":     /*[[#{module.common.datatable.processing}]]*/,
+		            "search":         /*[[#{module.common.datatable.search}]]*/,
+		            "zeroRecords":    /*[[#{module.common.datatable.zeroRecords}]]*/,
+		            "paginate": {
+		                "first":      /*[[#{module.common.datatable.paginate.first}]]*/,
+		                "last":       /*[[#{module.common.datatable.paginate.last}]]*/,
+		                "next":       /*[[#{module.common.datatable.paginate.next}]]*/,
+		                "previous":   /*[[#{module.common.datatable.paginate.previous}]]*/
+		            },
+		            "aria": {
+		                "sortAscending":  /*[[#{module.common.datatable.aria.sortAscending}]]*/,
+		                "sortDescending": /*[[#{module.common.datatable.aria.sortDescending}]]*/
+		            }		            
+		        },
+				"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, /*[[#{module.common.datatable.all}]]*/] ],
+		    	"responsive" : true,
+				'pageLength'  : 10,
+	    	    'paging'      : true,
+	    	    'lengthChange': true,
+	    	    'searching'   : true,
+	    	    'ordering'    : true,
+	    	    'info'        : true,
+	    	    'autoWidth'   : false,
+	    	    'processing': false,
+	    	    'serverSide': false,
+		        'bStateSave': false,
+		        'dom': 
+	    	      "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+	    	      "<'row'<'col-sm-12'tr>>" +
+	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+				'data': dataArray,
+				"columns": [
+		            { "data" : "[0]"},
+		            { "data" : "[1]"},
+		            { "data" : "[0]"}
+			    ],
+	    	    "columnDefs": [
+		    	    {
+		    	    	"targets": -1,
+		    	    	"orderable": false,
+		    	    	render: function(data, type, row, meta)
+		    	    	{
+		    	    		return '<button type="button" class="btn btn-default btnDelete"><i class="fas fa-trash-alt"></i></button>';
+		    	    	}
+		    	    },
+		    	    { 
+    	            	targets: 0,
+    	                render: function(data, type, row, meta)
+    	                {
+    	                	return row[0]+'<input type="hidden" class="addKey" name="'+selectedItemNames+'" value="'+row[0]+'"></input>'; 
+    	                }
+    	            },
+		    	    { 
+    	            	targets: 1,
+    	                render: function(data, type, row, meta)
+    	                {
+    	                	return row[1]+'<input type="hidden" class="addValue" name="'+selectedItemValues+'" value="'+row[1]+'"></input>'; 
+    	                }
+    	            }
+	    	    
+	    	    ]
+			});
+			
+			$("#selected-table-"+tableId+" tbody").on( 'click', '.btnDelete', function () {
+				$("#selectedItem-"+ tableId).html('');
+				
+				selectedDataTable
+			        .row( $(this).parents('tr') )
+			        .remove()
+			        .draw();
+			});
+			
+		}
+
+		/*]]>*/
+		</script>
+	</th:block>
+	<th:block th:fragment="js-add (tableId)">
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+			
+		jQuery.validator.addMethod("keyExists", function(value, element) {
+		  return keyNotExists(value);
+		}, /*[[#{module.common.key.exists}]]*/);
+			
+		var tableId = /*[[${tableId}]]*/;
+			
+		$('#modal-form-add-'+tableId).validate({
+		    rules: {
+		        addKey: {
+		            required: true,
+		            keyExists: { keyExists : true }
+		        }
+		    },
+		    messages: {
+		        addKey: {
+		            required: /*[[#{module.common.key.required}]]*/ ,
+		            keyExists: /*[[#{module.common.key.exists}]]*/
+		        }
+		    },
+		    errorElement: 'span',
+		    errorPlacement: function(error, element) {
+		        error.addClass('invalid-feedback');
+		        element.closest('.form-group').append(error);
+		    },
+		    highlight: function(element, errorClass, validClass) {
+		        $(element).addClass('is-invalid');
+		    },
+		    unhighlight: function(element, errorClass, validClass) {
+		        $(element).removeClass('is-invalid');
+		    }
+		});
+		
+		function keyNotExists(key){
+			if (!$("#selected-table-"+tableId +" input.addKey[value='"+key+"']").length) {
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		
+		$("#modal-form-"+tableId).on( 'click', '.btnAdd', function () {
+						
+			if (!$('#modal-form-add-'+tableId).valid()) { // Not Valid
+                return false;
+            } else {
+				var key = $("#modal-form-"+tableId+" input[name='addKey']").val();
+				var value = $("#modal-form-"+tableId+" input[name='addValue']").val();
+				
+				if(key){
+					if (!$("#selected-table-"+tableId +" input[value='"+key+"']").length) {				                			
+						$("#selected-table-"+tableId).DataTable().row.add([key, value]).draw();
+						
+						$("#modal-form-"+tableId+" input[name='addKey']").val('');
+						$("#modal-form-"+tableId+" input[name='addValue']").val('');
+						
+						$("#modal-form-"+tableId).modal('hide');
+	    			}
+				}
+            }
+		});
+		/*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>

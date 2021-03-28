@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf">
+<head>
+</head>
+<body>
+	<th:block th:fragment="header">
+		<!-- Navbar -->
+		<nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+			<div class="container">
+				<a th:href="@{${@environment.getProperty('console.webroot')}}" class="navbar-brand">
+					<span class="brand-text font-weight-light" th:utext="#{module.common.console}"></span>
+				</a>
+
+				<button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse order-3" id="navbarCollapse">
+					<!-- Left navbar links -->
+					<ul class="navbar-nav">
+						<li class="nav-item">
+							<a th:href="@{${@environment.getProperty('path.console.application.overview')}}" class="nav-link" th:text="#{module.common.overview}"></a>
+						</li>
+						<li class="nav-item dropdown">
+							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.platform}"></a>
+							<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+								<li>
+									<a th:href="@{${@environment.getProperty('path.logging')}}" class="dropdown-item" th:text="#{module.logging}"></a>
+								</li>
+								<li>
+									<a th:href="@{${@environment.getProperty('path.console.platform.update')}}" class="dropdown-item" th:text="#{module.common.update}"></a>
+								</li>
+								<li>
+									<a th:href="@{${@environment.getProperty('path.console.platform.import')}}" class="dropdown-item" th:text="#{module.common.import}"></a>
+								</li>
+								<li>
+									<a th:href="@{${@environment.getProperty('path.console.platform.export')}}" class="dropdown-item" th:text="#{module.common.export}"></a>
+								</li>
+								<li>
+									<a th:href="@{${@environment.getProperty('path.console.platform.license')}}" class="dropdown-item" th:text="#{module.common.license}"></a>
+								</li>
+							</ul>
+						</li>
+						<li class="nav-item dropdown">
+							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.monitor}"></a>
+							<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+								<li>
+									<a th:href="@{${@environment.getProperty('path.cache')}}" class="dropdown-item" th:text="#{module.common.cache}"></a>
+								</li>
+								<li>
+									<a th:href="@{${@environment.getProperty('path.logging')}}" class="dropdown-item" th:text="#{module.common.logging}"></a>
+								</li>
+							</ul>
+						</li>
+						<li class="nav-item">
+							<a th:href="@{${@environment.getProperty('path.configuration')}}" class="nav-link" th:text="#{module.configuration}"></a>
+						</li>
+					</ul>
+
+					<!-- Right navbar links -->
+					<ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+						<li class="nav-item">
+							<a class="nav-link" data-widget="fullscreen" href="#" role="button">
+								<i class="fas fa-expand-arrows-alt"></i>
+							</a>
+						</li>
+
+						<!-- Language Dropdown Menu -->
+						<li class="nav-item dropdown">
+							<a class="nav-link" data-toggle="dropdown" href="#">
+								<i class="fas fa-globe"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+								<th:block th:each="locale, iterStat : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}">
+									<a href="#" th:onclick="changeLocale([[${#strings.arraySplit(locale,';')[0]}]])" class="dropdown-item" th:text="${#strings.arraySplit(locale,';')[1]}" th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #007bff; color: white':''"></a>
+									<div class="dropdown-divider" th:if="!${iterStat.last}"></div>
+								</th:block>
+							</div>
+						</li>
+
+						<!-- User Account Dropdown Menu -->
+						<li class="nav-item dropdown">
+							<a class="nav-link" data-toggle="dropdown" href="#">
+								<i class="fas fa-user"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+								<div class="nav-link">
+									<i class="fas fa-user-secret"></i>&nbsp;
+									<span th:text="${#authentication.principal.name != null ? #authentication.principal.name : #authentication.principal.id}"></span>
+								</div>
+								<div class="dropdown-divider"></div>
+								<form th:action="@{${@environment.getProperty('path.console.logout')}}" method="post">
+									<a href="#" onclick="this.parentNode.submit(); return false;" class="dropdown-item">
+										<i class="fas fa-sign-out-alt"></i>&nbsp;
+										<span th:text="#{module.common.logout}"></span>
+									</a>
+								</form>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- /.navbar -->
+	</th:block>
+</body>
+</html>

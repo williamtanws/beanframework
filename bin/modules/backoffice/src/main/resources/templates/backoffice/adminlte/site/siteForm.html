@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<head>
+<title th:utext="#{module.site}"></title>
+</head>
+<body>
+	<th:block layout:fragment="update">
+		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.site')}}, deleteUuid=${siteDto.uuid})}"></th:block>
+		<form id="update-form" role="form" th:action="${@environment.getProperty('path.site')}" method="post" th:object="${siteDto}">
+			<input type="hidden" name="create" th:if="*{uuid == null}"/>
+			<input type="hidden" name="update" th:if="*{uuid != null}"/>
+			<input type="hidden" name="uuid" th:value="${siteDto.uuid}" />
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box box-solid">
+						<div class="box-body bg-gray">
+							<div class="row">
+								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
+									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='site_delete')}"></th:block>
+								</div>
+								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
+									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='site_delete')}"></th:block>
+									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='site_update')}"></th:block>
+								</div>
+							</div>
+						</div>
+						<!-- /.box-header -->
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<!-- Custom Tabs -->
+					<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+							<li class="active">
+								<a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a>
+							</li>
+							<li th:if="*{uuid != null}">
+								<a href="#tab_history" data-toggle="tab" th:text="#{module.common.history}" onclick="changeTab('history')"></a>
+							</li>
+							<li th:if="*{uuid != null}">
+								<a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
+							</li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab_general">
+								<div class="box-body">
+									<div class="row">
+										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
+									</div>
+									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="name" th:text="#{module.site.name}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="name" th:value="*{name}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="url" th:text="#{module.site.url}"></label>
+												<span>*</span>
+												<input type="text" class="form-control" name="url" th:value="*{url}">
+												<span class="help-block"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
+								<div class="box-body">
+									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.site.history')}(uuid=*{uuid})} )}"></th:block>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
+								<div class="box-body">
+									<th:block layout:insert="~{common/adminlte/common/component/administration :: administration}"></th:block>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
+						</div>
+						<!-- /.tab-content -->
+					</div>
+					<!-- nav-tabs-custom -->
+				</div>
+				<!-- /.col -->
+			</div>
+		</form>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    $(document).ready(function() {
+		        $('#update-form').validate({
+		        	onkeyup: function(element) {
+		                this.element(element);
+		            },
+		        	onfocusout: false,
+		            invalidHandler: function(form, validator) {
+		                var errors = validator.numberOfInvalids();
+		                if (errors) {                    
+		                    validator.errorList[0].element.focus();
+		                }
+		            },
+		            rules: {
+		            	id: {
+		                    required: true,
+		                    remote: {
+		                        url: /*[[${@environment.getProperty('path.api.site.checkid')}]]*/ ,
+		                        type: "get",
+		                        data: {
+		                            uuid: /*[[${siteDto.uuid}]]*/ ,
+		                            id: function() {
+		                                return $("#update-form input[name='id']").val();
+		                            }
+		                        }
+		                    }
+		                },
+		                name: {
+		                    required: true
+		                },
+		                url: {
+		                    required: true
+		                }
+		            },
+		            messages: {
+		                id: {
+		                    required: /*[[#{module.common.id.required}]]*/ ,
+		                    remote: /*[[#{module.common.id.exists}]]*/
+		                },
+		                name: {
+		                    required: /*[[#{module.site.name.required}]]*/
+		                }
+		            },
+		            highlight: function(element) {
+		                $(element).closest('.form-group').addClass('has-error');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
+		                });
+		            },
+		            unhighlight: function(element) {
+		                $(element).closest('.form-group').removeClass('has-error');
+		                $(element).closest('.form-group').find('.help-block').html('');
+		                
+		                var id = $(element).closest('.tab-pane').attr('id');
+		                var noError = true;
+		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
+		                    noError = false;
+		                });
+		                if(noError){
+			                $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','black');
+		                }
+		            },
+		            errorPlacement: function(error, element) {
+		                element.closest('.form-group').find('.help-block').html(error.text());
+		            }
+		        });
+		
+		    });
+		    /*]]>*/
+		</script>
+
+	</th:block>
+</body>
+</html>

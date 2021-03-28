@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="form">
+		<div class="alert alert-danger alert-dismissible" th:if="${#fields.hasErrors('*')}">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<i class="icon fa fa-ban"></i>
+			<span th:each="err : ${#fields.errors('*')}" th:utext="${err}+' '"></span>
+		</div>
+		<div class="alert alert-danger alert-dismissible" th:if="${#fields.hasErrors('global')}">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<i class="icon fa fa-ban"></i>
+			<span th:each="err : ${#fields.errors('global')}" th:utext="${err}+' '"></span>
+		</div>
+	</th:block>
+	<th:block layout:fragment="custom">
+		<div class="alert alert-danger alert-dismissible" th:if="${error}">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<i class="icon fa fa-ban"></i>
+			<span th:utext=${error}></span>
+		</div>
+		<div class="alert alert-success alert-dismissible" th:if="${success}">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<i class="icon fa fa-info"></i>
+			<span th:utext=${success}></span>
+		</div>
+		<div class="alert alert-info alert-dismissible" th:if="${info}">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<i class="icon fa fa-info"></i>
+			<span th:utext=${success}></span>
+		</div>
+		
+		<script th:inline="javascript" th:if="${success}">
+		$(function() {
+			Toast.fire({
+	        icon: 'success',
+	        title: /*[[${success}]]*/
+	      })
+      	});
+		</script>
+      
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			/* $(document).ready(function () {
+			  window.setTimeout(function() { $(".alert-dismissible").alert('close'); }, 10000);
+			}) */
+			/*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>

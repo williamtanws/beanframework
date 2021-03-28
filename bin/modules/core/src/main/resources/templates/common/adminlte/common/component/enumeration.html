@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block layout:fragment="enumeration (enumerations)">
+		<table id="enumerationTable" class="table table-bordered table-hover" style="width:100%">
+			<thead>
+				<tr>
+					<th th:text="#{module.common.id}" class="text-center"></th>
+					<th th:text="#{module.common.name}" class="text-center"></th>
+					<th th:text="#{module.common.select}" class="text-center"></th>
+				</tr>
+			</thead>
+			<thead>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+		</table>
+		<div id="selectedEnumerations">
+			<th:block th:each="enumeration : *{__${enumerations}__}">
+				<input type="hidden" name="selectedEnumerations" th:value="${enumeration.uuid}" />
+			</th:block>
+		</div>
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    var locale = /*[[${#locale}]]*/;
+		    
+		    var ajaxUrl = /*[[@{${@environment.getProperty('path.api.enumeration.page')}}]]*/;
+
+		    var enumerations = [];
+		    /*[# th:each="object : *{__${enumerations}__}"]*/  	    
+		    enumerations.push(/*[[${object.uuid}]]*/); 	    
+		    /*[/]*/
+		    
+		    var enumerationTable = $('#enumerationTable').DataTable({
+	    		  'language' : {
+			        'url' : '/static/common/plugin/datatables/language/'+locale+'.json'
+			      },
+	    	      'pageLength'  : 10,
+	    	      'paging'      : true,
+	    	      'lengthChange': true,
+	    	      'searching'   : true,
+	    	      'ordering'    : true,
+	    	      'info'        : true,
+	    	      'autoWidth'   : true,
+	    	      'processing': true,
+	    	      'serverSide': true,
+	    	      'searchDelay': 1000,
+		    	  'bStateSave': true,
+	    	      'dom': "<'row'<'col-sm-12 col-md-6'Bl><'col-sm-12 col-md-6'f>>" +
+	    	      "<'row'<'col-sm-12'tr>>" +
+	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+	    	      'buttons': [
+	                  {
+	                      text: 'Clear', className: 'btn btn-primary btn-datatable', init: function(api, node, config) { $(node).removeClass('dt-button') },
+	                      action: function ( e, dt, node, config ) {
+	                    	  dt.search('').columns().search('').draw();dt.order.neutral().draw();
+	                    	  $('#enumerationTable').find("input:text").val("");
+	                    	  $("#enumerationTable").find("select").each(function () { // there is no such thing as input[type=select] 
+	                    	        this.selectedIndex = 0; // this is a <select>
+	                    	  });
+	                    	  $('#enumerationTable .select2').val('').trigger('change');
+	                      }
+	                  }
+	              ],
+	    	      'ajax': {
+	                    'url': ajaxUrl
+	              },
+	              'columns': [
+	                    { "data": "id" },
+	                    { "data": "name" },
+	                    { "data": "" }
+	              ],
+	    	      'columnDefs': [
+	    	            { 
+	    	                targets: 2,
+	    	                'searchable': false,
+	    	                'orderable': false,
+	    	                'className': 'text-center',
+	    	                render: function(data, type, row, meta)
+	    	                {
+	    	                   var selected = enumerations.includes(row.uuid);
+	    	                   if(selected){
+	    	                	   return "<input type='checkbox' value='"+row.uuid+"' name='tableSelectedEnumerations' checked>"; 
+	    	                   }
+	    	                   else{
+	    	                	   var preventSelfUuid = /*[[*{uuid}]]*/;
+	    	                	   if(preventSelfUuid == row.uuid){
+		    	                	   return ""; 
+	    	                	   }
+	    	                	   else{
+		    	                	   return "<input type='checkbox' value='"+row.uuid+"' name='tableSelectedEnumerations'>"; 
+	    	                	   }
+	    	                   }
+	    	                    
+	    	                }
+	    	            },
+		            	{                                 
+		                	"targets": '_all',
+		                	"render": $.fn.dataTable.render.text()
+		                }              
+	    	       ]
+	    	});
+		    
+		    $('#enumerationTable').on('draw.dt', function () {
+		    	$('input').iCheck({
+					checkboxClass : 'icheckbox_square-blue',
+					radioClass : 'iradio_square-blue',
+					increaseArea : '20%' // optional
+				});
+		    });
+		    
+		    $('#enumerationTable').on('ifChecked', 'input[name="tableSelectedEnumerations"]', function () {
+		    	$('#selectedEnumerations').append('<input type="hidden" name="selectedEnumerations" value="'+this.value+'"/>');
+		    	enumerations.push(this.value);
+		    });
+		    
+		    $('#enumerationTable').on('ifUnchecked', 'input[name="tableSelectedEnumerations"]', function () {
+		    	$('#selectedEnumerations input[type="hidden"][name="selectedEnumerations"][value="'+this.value+'"]').remove();
+		    	for( var i = 0; i < enumerations.length; i++){ 
+		    		if ( enumerations[i] === this.value) {
+		    			enumerations.splice(i, 1); 
+		    		}
+		    	}
+		    });
+		    
+		    $(document).ready(function ()
+		    {
+		    	$('#enumerationTable thead tr:eq(1) th').each(function(index){
+		    		if(index < 2){
+		    			var title = $('#enumerationTable thead tr:eq(0) th').eq( $(this).index() ).text();
+		    			var searchPlaceHolder = /*[[#{module.common.search}]]*/;
+		            	$(this).html('<input type="text" class="form-control" style="width: 100%;" placeholder="' + searchPlaceHolder + ' '+ title + '" />');
+		    		} else{
+			            $(this).html('');
+		    		}
+		        });
+		    	
+		    	enumerationTable.columns().every(function (index) {
+		    	    $('#enumerationTable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+		    	    	enumerationTable.column($(this).parent().index() + ':visible')
+		    	            .search(this.value)
+		    	            .draw();
+		    	    });
+		    	});
+		    });
+		    /*]]>*/
+		</script>
+		<th:block sec:authorize="hasAuthority('enumeration_read')">
+			<script th:inline="javascript">
+		    	/*<![CDATA[*/
+		    		$('#enumerationTable').on('click', 'tbody tr td:eq(0)', function() {
+						//console.log('API row values : ', mainTable.row(this).data());
+						var uuid = enumerationTable.row(this).data().uuid;
+						if(uuid){
+							var url = /*[[@{${@environment.getProperty('path.enumeration')}}]]*/;
+							url += '?uuid='+uuid+'#tab_general';
+							window.open(url, '_blank');
+						}
+					});
+		    	/*]]>*/
+			</script>
+		</th:block>
+	</th:block>
+</body>
+</html>
