@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<head>
+<title th:utext="#{module.language}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.system},breadcrumb2=#{module.language},id=#{module.common.id},name=#{module.language.name},sort=#{module.language.sort}">
+
+			<!-- Header -->
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header (title=#{module.language}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
+
+			<!-- Main content -->
+			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.language}, tableId='languageTable', columnsi18n=${#strings.arraySplit(id+','+name+','+sort, ',')})}"></th:block>
+
+		</div>
+
+	</th:block>
+	<th:block layout:fragment="js" th:with="addAuthority=${#authorization.expression('hasAuthority(''language_create'')')}">
+		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='languageTable', columns=${#strings.arraySplit('id,name,sort', ',')}, pageUrl=@{${@environment.getProperty('path.api.language')}}, formUrl=@{${@environment.getProperty('path.language.form')}}, addAuthority=${addAuthority} )}"></th:block>
+	</th:block>
+</body>
+</html>

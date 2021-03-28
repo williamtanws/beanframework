@@ -1,0 +1,2 @@
+INSERT_UPDATE Country,id,name,active
+,MY,Malaysia,true

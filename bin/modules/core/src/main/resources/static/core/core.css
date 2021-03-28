@@ -1,0 +1,251 @@
+.table-bordered {
+    border: 2px solid #f5f5f5;
+}
+
+.fa-minus-circle.color {
+	color: #d73925;
+}
+
+.fa-save.color {
+	color: #008d4c;
+}
+
+.fa-edit.color {
+	color: #f3c613;
+}
+
+.fa-language.color {
+	color: #d83333;
+}
+
+.fa-plus.color {
+	color: #008d4c;
+}
+
+.fa-dashboard.color {
+	color: #3c8dbc;
+}
+
+.fa-globe.color {
+	color: #59DDDD;
+}
+
+.fa-search.color {
+	color: #808080;
+}
+
+.fa-file-code-o.color {
+	color: red;
+}
+
+.fa-folder.color {
+	color: #e0c88d;
+}
+
+.fa-calendar.color {
+	color: #da0000;
+}
+
+.fa-server.color {
+	color: #b31389;
+}
+
+.fa-sitemap.color {
+	color: #e6cd69;
+}
+
+.fa-minus.color {
+	color: #ffa500;
+}
+
+.select2 {
+	width: 100%;
+}
+
+.table tr {
+	cursor: pointer;
+}
+
+.nav-tabs-custom {
+	margin-bottom: 10px;
+}
+
+.btn.btn-success {
+	min-width: 74px;
+}
+
+.span-icon {
+	margin-top: 2px;
+}
+
+.capitalize span {
+	text-transform: capitalize;
+}
+
+pre {
+	background-color: #f5f5f575;
+}
+
+blockquote {
+	padding: 10px 20px;
+	margin: 0 0 20px;
+	font-size: 13px;
+	border-left: 5px solid #eee;
+	color: grey;
+	font-weight: 600;
+}
+
+.chat {
+	padding: 5px 10px 5px 10px;
+}
+
+a.disabled {
+	/* Make the disabled links grayish*/
+	color: #c1c1c1;
+	/* And disable the pointer events */
+	pointer-events: none;
+}
+
+.nav-tabs-custom>.nav-tabs {
+	border-bottom-color: #3c8dbc;
+	background-color: #f9f9f9;
+}
+
+.btn-datatable {
+	margin-right: 10px;
+}
+
+.pre-editor {
+	min-height: 100px;
+	height: auto;
+	overflow: auto;
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+.pre-comment {
+	height: auto;
+	overflow: auto;
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+/*
+  i wish this required CSS was better documented :(
+  https://github.com/FezVrasta/popper.js/issues/674
+  derived from this CSS on this page: https://popper.js.org/tooltip-examples.html
+  */
+.popper, .tooltip {
+	position: absolute;
+	z-index: 9999;
+	background: #FFC107;
+	color: black;
+	border-radius: 3px;
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+	padding: 10px;
+	text-align: center;
+	opacity: 1 !important;
+}
+
+.style5 .tooltip {
+	background: #1E252B;
+	color: #FFFFFF;
+	max-width: 200px;
+	width: auto;
+	font-size: .8rem;
+	padding: .5em 1em;
+}
+
+.popper .popper__arrow, .tooltip .tooltip-arrow {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	position: absolute;
+	margin: 5px;
+}
+
+.tooltip .tooltip-arrow, .popper .popper__arrow {
+	border-color: #FFC107;
+}
+
+.style5 .tooltip .tooltip-arrow {
+	border-color: #1E252B;
+}
+
+.popper[x-placement^="top"], .tooltip[x-placement^="top"] {
+	margin-bottom: 5px;
+}
+
+.popper[x-placement^="top"] .popper__arrow, .tooltip[x-placement^="top"] .tooltip-arrow
+	{
+	border-width: 5px 5px 0 5px;
+	border-left-color: transparent;
+	border-right-color: transparent;
+	border-bottom-color: transparent;
+	bottom: -5px;
+	left: calc(50% - 5px);
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.popper[x-placement^="bottom"], .tooltip[x-placement^="bottom"] {
+	margin-top: 5px;
+}
+
+.tooltip[x-placement^="bottom"] .tooltip-arrow, .popper[x-placement^="bottom"] .popper__arrow
+	{
+	border-width: 0 5px 5px 5px;
+	border-left-color: transparent;
+	border-right-color: transparent;
+	border-top-color: transparent;
+	top: -5px;
+	left: calc(50% - 5px);
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.tooltip[x-placement^="right"], .popper[x-placement^="right"] {
+	margin-left: 5px;
+}
+
+.popper[x-placement^="right"] .popper__arrow, .tooltip[x-placement^="right"] .tooltip-arrow
+	{
+	border-width: 5px 5px 5px 0;
+	border-left-color: transparent;
+	border-top-color: transparent;
+	border-bottom-color: transparent;
+	left: -5px;
+	top: calc(50% - 5px);
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.popper[x-placement^="left"], .tooltip[x-placement^="left"] {
+	margin-right: 5px;
+}
+
+.popper[x-placement^="left"] .popper__arrow, .tooltip[x-placement^="left"] .tooltip-arrow
+	{
+	border-width: 5px 0 5px 5px;
+	border-top-color: transparent;
+	border-right-color: transparent;
+	border-bottom-color: transparent;
+	right: -5px;
+	top: calc(50% - 5px);
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.tooltip-inner {
+    padding: 3px 8px;
+    color: black;
+    text-align: left;
+    background-color: #ffc107;
+    border-radius: 4px;
+}
