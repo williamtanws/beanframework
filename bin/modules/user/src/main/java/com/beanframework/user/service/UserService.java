@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beanframework.user.UserSession;
+import com.beanframework.user.data.UserSession;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
 

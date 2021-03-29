@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<head>
+<title th:utext="#{module.auditor}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.system},breadcrumb2=#{module.auditor},id=#{module.common.id},name=#{module.auditor.name}">
+
+			<!-- Header -->
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header (title=#{module.auditor}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
+
+			<!-- Main content -->
+			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.auditor}, tableId='auditorTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, selectAuthority=false )}"></th:block>
+
+		</div>
+
+	</th:block>
+	<th:block layout:fragment="js">
+		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='auditorTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.auditor')}}, formUrl=@{${@environment.getProperty('path.auditor.form')}}, addAuthority=false, selectAuthority=false )}"></th:block>
+	</th:block>
+</body>
+</html>

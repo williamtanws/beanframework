@@ -1,4 +1,4 @@
-package com.beanframework.user;
+package com.beanframework.user.data;
 
 import java.util.List;
 

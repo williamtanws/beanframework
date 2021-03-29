@@ -5,21 +5,22 @@ public interface AddressWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.address.checkid}";
-			public static final String PAGE = "${path.api.address.page}";
-			public static final String HISTORY = "${path.api.address.history}";
+			public static final String ADDRESS = "${path.api.address}";
+			public static final String ADDRESS_HISTORY = "${path.api.address.history}";
+			public static final String ADDRESS_CHECKID = "${path.api.address.checkid}";
 		}
 
-		public static final String PATH = "${path.address}";
+		public static final String ADDRESS = "${path.address}";
+		public static final String ADDRESS_FORM = "${path.address.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.address}";
+		public static final String ADDRESS = "${view.address}";
+		public static final String ADDRESS_FORM = "${view.address.form}";
 	}
 
 	public interface ModelAttribute {
-
-		public static final String DTO = "addressDto";
+		public static final String ADDRESS_DTO = "addressDto";
 	}
 
 	public interface AddressPreAuthorizeEnum {

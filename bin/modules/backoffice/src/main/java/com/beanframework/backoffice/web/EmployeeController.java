@@ -18,8 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
-import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants.EmployeePreAuthorizeEnum;
+import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.EmployeeDto;
@@ -35,7 +35,7 @@ public class EmployeeController extends AbstractController {
 	@Value(EmployeeWebConstants.Path.EMPLOYEE)
 	private String PATH_EMPLOYEE;
 
-	@Value(EmployeeWebConstants.View.LIST)
+	@Value(EmployeeWebConstants.View.PAGE)
 	private String VIEW_EMPLOYEE_LIST;
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)

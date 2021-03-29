@@ -43,14 +43,14 @@ public class AddressDto extends GenericDto {
 	private AddressDto defaultPaymentAddress;
 	private AddressDto defaultShipmentAddress;
 
-	private String selectedCountry;
-	private String selectedRegion;
-	private String selectedOwner;
-	private String selectedShippingAddress;
-	private String selectedBillingAddress;
-	private String selectedContactAddress;
-	private String selectedDefaultPaymentAddress;
-	private String selectedDefaultShipmentAddress;
+	private String selectedCountryUuid;
+	private String selectedRegionUuid;
+	private String selectedOwnerUuid;
+	private String selectedShippingAddressUuid;
+	private String selectedBillingAddressUuid;
+	private String selectedContactAddressUuid;
+	private String selectedDefaultPaymentAddressUuid;
+	private String selectedDefaultShipmentAddressUuid;
 
 	public String getStreetName() {
 		return streetName;
@@ -236,30 +236,6 @@ public class AddressDto extends GenericDto {
 		this.owner = owner;
 	}
 
-	public String getSelectedCountry() {
-		return selectedCountry;
-	}
-
-	public void setSelectedCountry(String selectedCountry) {
-		this.selectedCountry = selectedCountry;
-	}
-
-	public String getSelectedRegion() {
-		return selectedRegion;
-	}
-
-	public void setSelectedRegion(String selectedRegion) {
-		this.selectedRegion = selectedRegion;
-	}
-
-	public String getSelectedOwner() {
-		return selectedOwner;
-	}
-
-	public void setSelectedOwner(String selectedOwner) {
-		this.selectedOwner = selectedOwner;
-	}
-
 	public AddressDto getShippingAddress() {
 		return shippingAddress;
 	}
@@ -300,44 +276,68 @@ public class AddressDto extends GenericDto {
 		this.defaultShipmentAddress = defaultShipmentAddress;
 	}
 
-	public String getSelectedShippingAddress() {
-		return selectedShippingAddress;
+	public String getSelectedCountryUuid() {
+		return selectedCountryUuid;
 	}
 
-	public void setSelectedShippingAddress(String selectedShippingAddress) {
-		this.selectedShippingAddress = selectedShippingAddress;
+	public void setSelectedCountryUuid(String selectedCountryUuid) {
+		this.selectedCountryUuid = selectedCountryUuid;
 	}
 
-	public String getSelectedBillingAddress() {
-		return selectedBillingAddress;
+	public String getSelectedRegionUuid() {
+		return selectedRegionUuid;
 	}
 
-	public void setSelectedBillingAddress(String selectedBillingAddress) {
-		this.selectedBillingAddress = selectedBillingAddress;
+	public void setSelectedRegionUuid(String selectedRegionUuid) {
+		this.selectedRegionUuid = selectedRegionUuid;
 	}
 
-	public String getSelectedContactAddress() {
-		return selectedContactAddress;
+	public String getSelectedOwnerUuid() {
+		return selectedOwnerUuid;
 	}
 
-	public void setSelectedContactAddress(String selectedContactAddress) {
-		this.selectedContactAddress = selectedContactAddress;
+	public void setSelectedOwnerUuid(String selectedOwnerUuid) {
+		this.selectedOwnerUuid = selectedOwnerUuid;
 	}
 
-	public String getSelectedDefaultPaymentAddress() {
-		return selectedDefaultPaymentAddress;
+	public String getSelectedShippingAddressUuid() {
+		return selectedShippingAddressUuid;
 	}
 
-	public void setSelectedDefaultPaymentAddress(String selectedDefaultPaymentAddress) {
-		this.selectedDefaultPaymentAddress = selectedDefaultPaymentAddress;
+	public void setSelectedShippingAddressUuid(String selectedShippingAddressUuid) {
+		this.selectedShippingAddressUuid = selectedShippingAddressUuid;
 	}
 
-	public String getSelectedDefaultShipmentAddress() {
-		return selectedDefaultShipmentAddress;
+	public String getSelectedBillingAddressUuid() {
+		return selectedBillingAddressUuid;
 	}
 
-	public void setSelectedDefaultShipmentAddress(String selectedDefaultShipmentAddress) {
-		this.selectedDefaultShipmentAddress = selectedDefaultShipmentAddress;
+	public void setSelectedBillingAddressUuid(String selectedBillingAddressUuid) {
+		this.selectedBillingAddressUuid = selectedBillingAddressUuid;
+	}
+
+	public String getSelectedContactAddressUuid() {
+		return selectedContactAddressUuid;
+	}
+
+	public void setSelectedContactAddressUuid(String selectedContactAddressUuid) {
+		this.selectedContactAddressUuid = selectedContactAddressUuid;
+	}
+
+	public String getSelectedDefaultPaymentAddressUuid() {
+		return selectedDefaultPaymentAddressUuid;
+	}
+
+	public void setSelectedDefaultPaymentAddressUuid(String selectedDefaultPaymentAddressUuid) {
+		this.selectedDefaultPaymentAddressUuid = selectedDefaultPaymentAddressUuid;
+	}
+
+	public String getSelectedDefaultShipmentAddressUuid() {
+		return selectedDefaultShipmentAddressUuid;
+	}
+
+	public void setSelectedDefaultShipmentAddressUuid(String selectedDefaultShipmentAddressUuid) {
+		this.selectedDefaultShipmentAddressUuid = selectedDefaultShipmentAddressUuid;
 	}
 
 }

@@ -34,13 +34,13 @@ public class UserRightController extends AbstractController {
 	private UserRightFacade dynamicFieldFacade;
 
 	@Value(UserRightWebConstants.Path.USERRIGHT)
-	private String PATH_USERRIGHT_PAGE;
+	private String PATH_USERRIGHT;
 
 	@Value(UserRightWebConstants.Path.USERRIGHT_FORM)
 	private String PATH_USERRIGHT_FORM;
 
 	@Value(UserRightWebConstants.View.USERRIGHT)
-	private String VIEW_USERRIGHT_PAGE;
+	private String VIEW_USERRIGHT;
 
 	@Value(UserRightWebConstants.View.USERRIGHT_FORM)
 	private String VIEW_USERRIGHT_FORM;
@@ -48,7 +48,7 @@ public class UserRightController extends AbstractController {
 	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = UserRightWebConstants.Path.USERRIGHT)
 	public String page(@Valid @ModelAttribute(UserRightWebConstants.ModelAttribute.USERRIGHT_DTO) UserRightDto dynamicFieldDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		return VIEW_USERRIGHT_PAGE;
+		return VIEW_USERRIGHT;
 	}
 
 	@PreAuthorize(UserRightPreAuthorizeEnum.HAS_READ)

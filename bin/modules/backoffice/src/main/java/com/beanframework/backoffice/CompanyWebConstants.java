@@ -5,23 +5,24 @@ public interface CompanyWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.company.checkid}";
-			public static final String PAGE = "${path.api.company.page}";
-			public static final String HISTORY = "${path.api.company.history}";
+			public static final String COMPANY = "${path.api.company}";
+			public static final String COMPANY_HISTORY = "${path.api.company.history}";
+			public static final String COMPANY_CHECKID = "${path.api.company.checkid}";
 		}
 
-		public static final String COMMENT = "${path.company}";
+		public static final String COMPANY = "${path.company}";
+		public static final String COMPANY_FORM = "${path.company.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.company}";
+		public static final String COMPANY = "${view.company}";
+		public static final String COMPANY_FORM = "${view.company.form}";
 	}
 
 	public interface ModelAttribute {
-
-		public static final String COMMENT_DTO = "companyDto";
+		public static final String COMPANY_DTO = "companyDto";
 	}
-	
+
 	public interface CompanyPreAuthorizeEnum {
 		public static final String AUTHORITY_READ = "company_read";
 		public static final String AUTHORITY_CREATE = "company_create";
@@ -33,5 +34,4 @@ public interface CompanyWebConstants {
 		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
 		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
 	}
-
 }

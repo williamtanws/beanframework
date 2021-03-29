@@ -6,7 +6,7 @@ public interface SiteWebConstants {
 
 		public interface Api {
 			public static final String CHECKID = "${path.api.site.checkid}";
-			public static final String PAGE = "${path.api.site.page}";
+			public static final String PAGE = "${path.api.site}";
 			public static final String HISTORY = "${path.api.site.history}";
 		}
 

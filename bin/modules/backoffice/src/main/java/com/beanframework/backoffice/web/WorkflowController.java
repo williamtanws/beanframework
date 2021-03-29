@@ -31,22 +31,22 @@ public class WorkflowController extends AbstractController {
 	@Autowired
 	private WorkflowFacade workflowFacade;
 	
-	@Value(WorkflowWebConstants.Path.WORKFLOW_PAGE)
-	private String PATH_WORKFLOW_PAGE;
+	@Value(WorkflowWebConstants.Path.WORKFLOW)
+	private String PATH_WORKFLOW;
 	
 	@Value(WorkflowWebConstants.Path.WORKFLOW_FORM)
 	private String PATH_WORKFLOW_FORM;
 
 	@Value(WorkflowWebConstants.View.PAGE)
-	private String VIEW_WORKFLOW_PAGE;
+	private String VIEW_WORKFLOW;
 
 	@Value(WorkflowWebConstants.View.FORM)
 	private String VIEW_WORKFLOW_FORM;
 
-	@GetMapping(value = WorkflowWebConstants.Path.WORKFLOW_PAGE)
+	@GetMapping(value = WorkflowWebConstants.Path.WORKFLOW)
 	public String list(@Valid @ModelAttribute(WorkflowWebConstants.ModelAttribute.WORKFLOW_DTO) WorkflowDto workflowDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
-		return VIEW_WORKFLOW_PAGE;
+		return VIEW_WORKFLOW;
 	}
 
 	@GetMapping(value = WorkflowWebConstants.Path.WORKFLOW_FORM)

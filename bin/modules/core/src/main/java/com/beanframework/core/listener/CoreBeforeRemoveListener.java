@@ -1,5 +1,7 @@
 package com.beanframework.core.listener;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -105,8 +107,8 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 			} else if (model instanceof Imex) {
 				Imex imex = modelService.findOneByUuid(((Imex) model).getUuid(), Imex.class);
-				for (Media media : imex.getMedias()) {
-					mediaService.removeFile(media);
+				for (UUID media : imex.getMedias()) {
+					mediaService.removeMedia(media);
 				}
 
 			} else if (model instanceof UserRight) {

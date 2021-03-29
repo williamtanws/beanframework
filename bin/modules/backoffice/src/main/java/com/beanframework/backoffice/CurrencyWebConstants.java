@@ -5,23 +5,24 @@ public interface CurrencyWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.currency.checkid}";
-			public static final String PAGE = "${path.api.currency.page}";
-			public static final String HISTORY = "${path.api.currency.history}";
+			public static final String CURRENCY = "${path.api.currency}";
+			public static final String CURRENCY_HISTORY = "${path.api.currency.history}";
+			public static final String CURRENCY_CHECKID = "${path.api.currency.checkid}";
 		}
 
-		public static final String COMMENT = "${path.currency}";
+		public static final String CURRENCY = "${path.currency}";
+		public static final String CURRENCY_FORM = "${path.currency.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.currency}";
+		public static final String CURRENCY = "${view.currency}";
+		public static final String CURRENCY_FORM = "${view.currency.form}";
 	}
 
 	public interface ModelAttribute {
-
-		public static final String COMMENT_DTO = "currencyDto";
+		public static final String CURRENCY_DTO = "currencyDto";
 	}
-	
+
 	public interface CurrencyPreAuthorizeEnum {
 		public static final String AUTHORITY_READ = "currency_read";
 		public static final String AUTHORITY_CREATE = "currency_create";

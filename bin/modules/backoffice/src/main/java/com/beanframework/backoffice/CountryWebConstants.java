@@ -5,23 +5,24 @@ public interface CountryWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.country.checkid}";
-			public static final String PAGE = "${path.api.country.page}";
-			public static final String HISTORY = "${path.api.country.history}";
+			public static final String COUNTRY = "${path.api.country}";
+			public static final String COUNTRY_HISTORY = "${path.api.country.history}";
+			public static final String COUNTRY_CHECKID = "${path.api.country.checkid}";
 		}
 
-		public static final String COMMENT = "${path.country}";
+		public static final String COUNTRY = "${path.country}";
+		public static final String COUNTRY_FORM = "${path.country.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.country}";
+		public static final String COUNTRY = "${view.country}";
+		public static final String COUNTRY_FORM = "${view.country.form}";
 	}
 
 	public interface ModelAttribute {
-
-		public static final String COMMENT_DTO = "countryDto";
+		public static final String COUNTRY_DTO = "countryDto";
 	}
-	
+
 	public interface CountryPreAuthorizeEnum {
 		public static final String AUTHORITY_READ = "country_read";
 		public static final String AUTHORITY_CREATE = "country_create";

@@ -29,7 +29,7 @@ public class PaginationWrapper<T> {
 		this.page = new PageImpl<T>(new ArrayList<T>());
 	}
 
-	public PaginationWrapper(Page<T> page, String url, int MAX_PAGE_ITEM_DISPLAY, String direction, String[] properties) {
+	public PaginationWrapper(Page<T> page, String url, int MAX_ITEM_DISPLAY, String direction, String[] properties) {
 		this.direction = direction;
 		this.properties = properties;
 		this.page = page;
@@ -38,22 +38,22 @@ public class PaginationWrapper<T> {
 		this.url = url;
 		items = new ArrayList<PageItem>();
 
-		currentNumber = page.getNumber() + 1; // start from 1 to match page.page
+		currentNumber = page.getNumber() + 1; // start from 1 to match page
 
 		int start, size;
-		if (page.getTotalPages() <= MAX_PAGE_ITEM_DISPLAY) {
+		if (page.getTotalPages() <= MAX_ITEM_DISPLAY) {
 			start = 1;
 			size = page.getTotalPages();
 		} else {
-			if (currentNumber <= MAX_PAGE_ITEM_DISPLAY - MAX_PAGE_ITEM_DISPLAY / 2) {
+			if (currentNumber <= MAX_ITEM_DISPLAY - MAX_ITEM_DISPLAY / 2) {
 				start = 1;
-				size = MAX_PAGE_ITEM_DISPLAY;
-			} else if (currentNumber >= page.getTotalPages() - MAX_PAGE_ITEM_DISPLAY / 2) {
-				start = page.getTotalPages() - MAX_PAGE_ITEM_DISPLAY + 1;
-				size = MAX_PAGE_ITEM_DISPLAY;
+				size = MAX_ITEM_DISPLAY;
+			} else if (currentNumber >= page.getTotalPages() - MAX_ITEM_DISPLAY / 2) {
+				start = page.getTotalPages() - MAX_ITEM_DISPLAY + 1;
+				size = MAX_ITEM_DISPLAY;
 			} else {
-				start = currentNumber - MAX_PAGE_ITEM_DISPLAY / 2;
-				size = MAX_PAGE_ITEM_DISPLAY;
+				start = currentNumber - MAX_ITEM_DISPLAY / 2;
+				size = MAX_ITEM_DISPLAY;
 			}
 		}
 
@@ -61,11 +61,11 @@ public class PaginationWrapper<T> {
 			items.add(new PageItem(start + i, (start + i) == currentNumber));
 		}
 
-		if (total < MAX_PAGE_ITEM_DISPLAY) {
+		if (total < MAX_ITEM_DISPLAY) {
 			recordNumberFrom = 1;
 			recordNumberTo = total;
 		} else {
-			recordNumberFrom = ((currentNumber - 1) * MAX_PAGE_ITEM_DISPLAY) + 1;
+			recordNumberFrom = ((currentNumber - 1) * MAX_ITEM_DISPLAY) + 1;
 			recordNumberTo = (recordNumberFrom + page.getNumberOfElements()) - 1;
 		}
 	}

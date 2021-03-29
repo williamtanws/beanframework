@@ -36,7 +36,7 @@ public class EmployeeResource extends AbstractResource {
 	private EmployeeFacade employeeFacade;
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(EmployeeWebConstants.Path.Api.CHECKID)
+	@RequestMapping(EmployeeWebConstants.Path.Api.EMPLOYEE_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -58,7 +58,7 @@ public class EmployeeResource extends AbstractResource {
 	}
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = EmployeeWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = EmployeeWebConstants.Path.Api.EMPLOYEE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -84,7 +84,7 @@ public class EmployeeResource extends AbstractResource {
 	}
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = EmployeeWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = EmployeeWebConstants.Path.Api.EMPLOYEE_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

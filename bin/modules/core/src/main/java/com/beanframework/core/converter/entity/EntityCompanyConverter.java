@@ -109,186 +109,162 @@ public class EntityCompanyConverter implements EntityConverter<CompanyDto, Compa
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			// Company
-			if (StringUtils.isBlank(source.getSelectedResponsibleCompany())) {
-				if (prototype.getResponsibleCompany() != null) {
-					prototype.setResponsibleCompany(null);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
+			// ResponsibleCompany
+			if (StringUtils.isBlank(source.getSelectedResponsibleCompanyUuid())) {
+				prototype.setResponsibleCompany(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				Company entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedResponsibleCompany()), Company.class);
+				Company entityResponsibleCompany = modelService.findOneByUuid(UUID.fromString(source.getSelectedResponsibleCompanyUuid()), Company.class);
 
-				if (entity != null) {
+				if (entityResponsibleCompany != null) {
 
-					if (prototype.getResponsibleCompany() == null || prototype.getResponsibleCompany().equals(entity.getUuid()) == false) {
-						prototype.setResponsibleCompany(entity.getUuid());
+					if (prototype.getResponsibleCompany() == null || prototype.getResponsibleCompany().equals(entityResponsibleCompany.getUuid()) == Boolean.FALSE) {
+						prototype.setResponsibleCompany(entityResponsibleCompany.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
-				} else {
-					throw new ConverterException("Company UUID not found: " + source.getSelectedResponsibleCompany());
 				}
 			}
 
 			// ContactPerson
-			if (StringUtils.isBlank(source.getSelectedContactPerson())) {
-				if (prototype.getContactPerson() != null) {
-					prototype.setContactPerson(null);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
+			if (StringUtils.isBlank(source.getSelectedContactPersonUuid())) {
+				prototype.setContactPerson(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				User entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedContactPerson()), User.class);
+				User entityUser = modelService.findOneByUuid(UUID.fromString(source.getSelectedContactPersonUuid()), User.class);
 
-				if (entity != null) {
+				if (entityUser != null) {
 
-					if (prototype.getContactPerson() == null || prototype.getContactPerson().equals(entity.getUuid()) == false) {
-						prototype.setContactPerson(entity.getUuid());
+					if (prototype.getContactPerson() == null || prototype.getContactPerson().equals(entityUser.getUuid()) == Boolean.FALSE) {
+						prototype.setContactPerson(entityUser.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
-				} else {
-					throw new ConverterException("ContactPerson UUID not found: " + source.getSelectedContactPerson());
 				}
 			}
 
 			// Country
-			if (StringUtils.isBlank(source.getSelectedCountry())) {
-				if (prototype.getCountry() != null) {
-					prototype.setCountry(null);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
+			if (StringUtils.isBlank(source.getSelectedCountryUuid())) {
+				prototype.setCountry(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				Country entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedCountry()), Country.class);
+				Country entityCountry = modelService.findOneByUuid(UUID.fromString(source.getSelectedCountryUuid()), Country.class);
 
-				if (entity != null) {
+				if (entityCountry != null) {
 
-					if (prototype.getCountry() == null || prototype.getCountry().equals(entity.getUuid()) == false) {
-						prototype.setCountry(entity.getUuid());
+					if (prototype.getCountry() == null || prototype.getCountry().equals(entityCountry.getUuid()) == Boolean.FALSE) {
+						prototype.setCountry(entityCountry.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
-				} else {
-					throw new ConverterException("Country UUID not found: " + source.getSelectedCountry());
 				}
 			}
 
 			// Addresses
-			if (source.getSelectedAddresses() != null) {
+			if (source.getSelectedAddressUuids() != null) {
 
-				Iterator<UUID> it = prototype.getAddresses().iterator();
-				while (it.hasNext()) {
-					UUID o = it.next();
+				Iterator<UUID> enumerationsIterator = prototype.getAddresses().iterator();
+				while (enumerationsIterator.hasNext()) {
+					UUID enumeration = enumerationsIterator.next();
 
 					boolean remove = true;
-					for (int i = 0; i < source.getSelectedAddresses().length; i++) {
-						if (o.equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
+					for (int i = 0; i < source.getSelectedAddressUuids().length; i++) {
+						if (enumeration.equals(UUID.fromString(source.getSelectedAddressUuids()[i]))) {
 							remove = false;
 						}
 					}
 					if (remove) {
-						it.remove();
+						enumerationsIterator.remove();
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				}
 
-				for (int i = 0; i < source.getSelectedAddresses().length; i++) {
+				for (int i = 0; i < source.getSelectedAddressUuids().length; i++) {
 
 					boolean add = true;
-					it = prototype.getAddresses().iterator();
-					while (it.hasNext()) {
-						UUID o = it.next();
+					enumerationsIterator = prototype.getAddresses().iterator();
+					while (enumerationsIterator.hasNext()) {
+						UUID enumeration = enumerationsIterator.next();
 
-						if (o.equals(UUID.fromString(source.getSelectedAddresses()[i]))) {
+						if (enumeration.equals(UUID.fromString(source.getSelectedAddressUuids()[i]))) {
 							add = false;
 						}
 					}
 
 					if (add) {
-						Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedAddresses()[i]), Address.class);
-						if (entity != null) {
-							prototype.getAddresses().add(entity.getUuid());
+						Address enumeration = modelService.findOneByUuid(UUID.fromString(source.getSelectedAddressUuids()[i]), Address.class);
+						if (enumeration != null) {
+							prototype.getAddresses().add(enumeration.getUuid());
 							prototype.setLastModifiedDate(lastModifiedDate);
 						}
 					}
 				}
 			} else if (prototype.getAddresses() != null && prototype.getAddresses().isEmpty() == false) {
-				prototype.setAddresses(null);
+				for (final Iterator<UUID> itr = prototype.getAddresses().iterator(); itr.hasNext();) {
+					itr.next();
+					itr.remove();
+					prototype.setLastModifiedDate(lastModifiedDate);
+				}
 			}
 
 			// ShippingAddress
-			if (StringUtils.isBlank(source.getSelectedShippingAddress())) {
-				if (prototype.getShippingAddress() != null) {
-					prototype.setShippingAddress(null);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
+			if (StringUtils.isBlank(source.getSelectedShippingAddressUuid())) {
+				prototype.setShippingAddress(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedShippingAddress()), Address.class);
+				Address entityShippingAddress = modelService.findOneByUuid(UUID.fromString(source.getSelectedShippingAddressUuid()), Address.class);
 
-				if (entity != null) {
+				if (entityShippingAddress != null) {
 
-					if (prototype.getShippingAddress() == null || prototype.getShippingAddress().equals(entity.getUuid()) == false) {
-						prototype.setShippingAddress(entity.getUuid());
+					if (prototype.getShippingAddress() == null || prototype.getShippingAddress().equals(entityShippingAddress.getUuid()) == Boolean.FALSE) {
+						prototype.setShippingAddress(entityShippingAddress.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
-				} else {
-					throw new ConverterException("ShippingAddress UUID not found: " + source.getSelectedShippingAddress());
 				}
 			}
 
 			// UnloadingAddress
-			if (StringUtils.isBlank(source.getSelectedUnloadingAddress())) {
-				if (prototype.getUnloadingAddress() != null) {
-					prototype.setUnloadingAddress(null);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
+			if (StringUtils.isBlank(source.getSelectedUnloadingAddressUuid())) {
+				prototype.setUnloadingAddress(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedUnloadingAddress()), Address.class);
+				Address entityUnloadingAddress = modelService.findOneByUuid(UUID.fromString(source.getSelectedUnloadingAddressUuid()), Address.class);
 
-				if (entity != null) {
+				if (entityUnloadingAddress != null) {
 
-					if (prototype.getUnloadingAddress() == null || prototype.getUnloadingAddress().equals(entity.getUuid()) == false) {
-						prototype.setUnloadingAddress(entity.getUuid());
+					if (prototype.getUnloadingAddress() == null || prototype.getUnloadingAddress().equals(entityUnloadingAddress.getUuid()) == Boolean.FALSE) {
+						prototype.setUnloadingAddress(entityUnloadingAddress.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
-				} else {
-					throw new ConverterException("UnloadingAddress UUID not found: " + source.getSelectedUnloadingAddress());
 				}
 			}
 
 			// BillingAddress
-			if (StringUtils.isBlank(source.getSelectedBillingAddress())) {
-				if (prototype.getBillingAddress() != null) {
-					prototype.setBillingAddress(null);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
+			if (StringUtils.isBlank(source.getSelectedBillingAddressUuid())) {
+				prototype.setBillingAddress(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedBillingAddress()), Address.class);
+				Address entityBillingAddress = modelService.findOneByUuid(UUID.fromString(source.getSelectedBillingAddressUuid()), Address.class);
 
-				if (entity != null) {
+				if (entityBillingAddress != null) {
 
-					if (prototype.getBillingAddress() == null || prototype.getBillingAddress().equals(entity.getUuid()) == false) {
-						prototype.setBillingAddress(entity.getUuid());
+					if (prototype.getBillingAddress() == null || prototype.getBillingAddress().equals(entityBillingAddress.getUuid()) == Boolean.FALSE) {
+						prototype.setBillingAddress(entityBillingAddress.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
-				} else {
-					throw new ConverterException("BillingAddress UUID not found: " + source.getSelectedBillingAddress());
 				}
 			}
 
 			// ContactAddress
-			if (StringUtils.isBlank(source.getSelectedContactAddress())) {
-				if (prototype.getContactAddress() != null) {
-					prototype.setContactAddress(null);
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
+			if (StringUtils.isBlank(source.getSelectedContactAddressUuid())) {
+				prototype.setContactAddress(null);
+				prototype.setLastModifiedDate(lastModifiedDate);
 			} else {
-				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedContactAddress()), Address.class);
+				Address entityContactAddress = modelService.findOneByUuid(UUID.fromString(source.getSelectedContactAddressUuid()), Address.class);
 
-				if (entity != null) {
+				if (entityContactAddress != null) {
 
-					if (prototype.getContactAddress() == null || prototype.getContactAddress().equals(entity.getUuid()) == false) {
-						prototype.setContactAddress(entity.getUuid());
+					if (prototype.getContactAddress() == null || prototype.getContactAddress().equals(entityContactAddress.getUuid()) == Boolean.FALSE) {
+						prototype.setContactAddress(entityContactAddress.getUuid());
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
-				} else {
-					throw new ConverterException("ContactAddress UUID not found: " + source.getSelectedContactAddress());
 				}
 			}
 		} catch (Exception e) {

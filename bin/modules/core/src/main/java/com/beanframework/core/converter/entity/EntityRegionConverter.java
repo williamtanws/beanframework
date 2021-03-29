@@ -57,13 +57,13 @@ public class EntityRegionConverter implements EntityConverter<RegionDto, Region>
 			}
 
 			// country
-			if (StringUtils.isBlank(source.getSelectedCountry())) {
+			if (StringUtils.isBlank(source.getSelectedCountryUuid())) {
 				if (prototype.getCountry() != null) {
 					prototype.setCountry(null);
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				Country entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedCountry()), Country.class);
+				Country entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedCountryUuid()), Country.class);
 
 				if (entity != null) {
 
@@ -72,7 +72,7 @@ public class EntityRegionConverter implements EntityConverter<RegionDto, Region>
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
-					throw new ConverterException("Country UUID not found: " + source.getSelectedCountry());
+					throw new ConverterException("Country UUID not found: " + source.getSelectedCountryUuid());
 				}
 			}
 

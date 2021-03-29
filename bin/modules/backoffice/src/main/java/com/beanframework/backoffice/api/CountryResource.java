@@ -36,7 +36,7 @@ public class CountryResource extends AbstractResource {
 	private CountryFacade countryFacade;
 
 	@PreAuthorize(CountryPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(CountryWebConstants.Path.Api.CHECKID)
+	@RequestMapping(CountryWebConstants.Path.Api.COUNTRY_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -58,7 +58,7 @@ public class CountryResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CountryPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = CountryWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = CountryWebConstants.Path.Api.COUNTRY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<CountryDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -85,7 +85,7 @@ public class CountryResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CountryPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = CountryWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = CountryWebConstants.Path.Api.COUNTRY_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

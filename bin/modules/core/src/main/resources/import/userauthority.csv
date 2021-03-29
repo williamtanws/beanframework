@@ -15,7 +15,7 @@ INSERT_UPDATE UserAuthority,userGroupId,userPermissionId,create,read,update,dele
 ,employeegroup,cronjob				,+,+,+,+
 ,employeegroup,company				,+,+,+,+
 ,employeegroup,address				,+,+,+,+
-,employeegroup,employeesession		,+,+,+,+
+,employeegroup,usersession			,+,+,+,+
 ,employeegroup,employee				,+,+,+,+
 ,employeegroup,customer				,+,+,+,+
 ,employeegroup,vendor				,+,+,+,+

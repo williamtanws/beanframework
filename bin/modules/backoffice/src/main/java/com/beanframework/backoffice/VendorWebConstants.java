@@ -5,17 +5,17 @@ public interface VendorWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String VENDOR_PAGE = "${path.api.vendor.page}";
-			public static final String VENDOR_PAGE_HISTORY = "${path.api.vendor.page.history}";
+			public static final String VENDOR = "${path.api.vendor}";
+			public static final String VENDOR_HISTORY = "${path.api.vendor.history}";
 			public static final String VENDOR_CHECKID = "${path.api.vendor.checkid}";
 		}
 
-		public static final String VENDOR_PAGE = "${path.vendor.page}";
+		public static final String VENDOR = "${path.vendor}";
 		public static final String VENDOR_FORM = "${path.vendor.form}";
 	}
 
 	public interface View {
-		public static final String PAGE = "${view.vendor.page}";
+		public static final String PAGE = "${view.vendor}";
 		public static final String FORM = "${view.vendor.form}";
 	}
 

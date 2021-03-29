@@ -3,7 +3,7 @@
 <head>
 </head>
 <body>
-	<th:block th:fragment="datatable (title, tableId, columnsi18n)">
+	<th:block th:fragment="datatable (title, tableId, columnsi18n, selectAuthority)">
 		<!-- Main content -->
 		<section class="content">
 			<div class="container-fluid">
@@ -12,7 +12,7 @@
 						<div class="card">
 							<!-- /.card-header -->
 							<div class="card-body">
-								<table th:id="${tableId}" class="table table-bordered table-hover dataTable dtr-inline">
+								<table th:id="${tableId}" th:class="'table table-bordered dataTable dtr-inline '+${selectAuthority ? 'table-hover':''}">
 									<thead>
 										<tr>
 											<th th:each="column : ${columnsi18n}" th:text="${column}"></th>
@@ -48,35 +48,18 @@
 		<!-- /.modal -->
 
 	</th:block>
-	<th:block th:fragment="js (tableId, columns, pageUrl, formUrl, addAuthority)">
+	<th:block th:fragment="js (tableId, columns, pageUrl, formUrl, addAuthority, selectAuthority)">
 
 		<script th:inline="javascript">
 		/*<![CDATA[*/
 		
-		var tableId = /*[[${tableId}]]*/;
-		var pageUrl = /*[[${pageUrl}]]*/;
-		var formUrl = /*[[${formUrl}]]*/;
-			
-		$("#modal-form-"+tableId).on('hidden.bs.modal', function () {
-			$("#"+tableId).DataTable().ajax.reload(null, false);
-		})
-		
-		var modalForm = "#modal-form-"+tableId;
-		var modalFormIframe = "#modal-form-iframe-"+tableId;
-			
-		function addItem(){
-			$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
-	    	$(modalForm).modal('show');
-		}
-			
-		function selectItem(uuid){
-			$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"?uuid="+uuid+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
-	    	$(modalForm).modal('show');
-		}
-		
 		$(document).ready(function() {
+				
+			$("#modal-form-"+/*[[${tableId}]]*/).on('hidden.bs.modal', function () {
+				$("#"+/*[[${tableId}]]*/).DataTable().ajax.reload(null, false);
+			})
 
-		    var table = $("#"+tableId).DataTable( {
+		    $("#"+/*[[${tableId}]]*/).DataTable( {
 		    	"language": {
 		           	"decimal":        "",
 		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
@@ -113,13 +96,13 @@
 	    	    'processing': true,
 	    	    'serverSide': true,
 	    	    'searchDelay': 1000,
-		        'bStateSave': true,
+		        'bStateSave': false,
 		        'dom': "<'row'<'form-group col-sm-12 col-md-12'B>>" +
 	    	      "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 	    	      "<'row'<'col-sm-12'tr>>" +
 	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
 				'ajax': {
-					"url": pageUrl,
+					"url": /*[[${pageUrl}]]*/,
 					"statusCode": {
 				    	401: function (xhr, error, thrown) {
 							window.top.location.href = /*[[@{${loginUrl}}]]*/; 
@@ -145,7 +128,11 @@
 		        	{
 		                text: /*[[#{module.common.add}]]*/,
 		                action: function ( e, dt, node, config ) {
-		                    addItem();
+		                	var tableId = /*[[${tableId}]]*/;
+		                	var formUrl = /*[[${formUrl}]]*/;
+		                	var modalForm = "#modal-form-"+tableId;
+		    				$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
+		    		    	$(modalForm).modal('show');
 		                }
 		            },
 		            /*[/]*/
@@ -184,17 +171,29 @@
 		    	]
 		    });
 		    
-		    $("#"+tableId).on('click', 'tr', function () {
+		    /*[# th:if="${selectAuthority == true}"]*/
+		    
+		    $("#"+/*[[${tableId}]]*/).on('click', 'tr', function () {
+            	var tableId = /*[[${tableId}]]*/;
+				
+				/* Single select*/
 		    	if ( $(this).hasClass('selected') ) {
 		            $(this).removeClass('selected');
 		        }
 		        else {
-		            table.$('tr.selected').removeClass('selected');
+		        	$("#"+tableId+" tr.selected").removeClass('selected');
 		            $(this).addClass('selected');
 		        }
-		        var data = table.row(this).data();
-		        selectItem(data.uuid);
+				
+				var data = $("#"+tableId).DataTable().row(this).data();
+						        
+		        var formUrl = /*[[${formUrl}]]*/;
+				var modalForm = "#modal-form-"+tableId;
+				$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"?uuid="+data.uuid+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
+		    	$(modalForm).modal('show');
 		    });
+
+		    /*[/]*/
 		});
 		
 		/*]]>*/

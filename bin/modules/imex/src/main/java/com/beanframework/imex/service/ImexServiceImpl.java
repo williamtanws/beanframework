@@ -394,7 +394,7 @@ public class ImexServiceImpl implements ImexService {
 			media = mediaService.storeData(media, csv);
 
 			if (model.getMedias().isEmpty()) {
-				model.getMedias().add(media);
+				model.getMedias().add(media.getUuid());
 				modelService.saveEntityByLegacyMode(model, Imex.class);
 			}
 		}

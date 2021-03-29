@@ -12,7 +12,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserDto;
 import com.beanframework.core.specification.UserSpecification;
-import com.beanframework.user.UserSession;
+import com.beanframework.user.data.UserSession;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
 

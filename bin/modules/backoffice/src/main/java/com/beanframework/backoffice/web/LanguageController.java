@@ -21,6 +21,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants.LanguagePreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.core.facade.LanguageFacade;
@@ -33,13 +34,13 @@ public class LanguageController extends AbstractController {
 	private LanguageFacade languageFacade;
 
 	@Value(LanguageWebConstants.Path.LANGUAGE)
-	private String PATH_LANGUAGE_PAGE;
+	private String PATH_LANGUAGE;
 
 	@Value(LanguageWebConstants.Path.LANGUAGE_FORM)
 	private String PATH_LANGUAGE_FORM;
 
 	@Value(LanguageWebConstants.View.LANGUAGE)
-	private String VIEW_LANGUAGE_PAGE;
+	private String VIEW_LANGUAGE;
 
 	@Value(LanguageWebConstants.View.LANGUAGE_FORM)
 	private String VIEW_LANGUAGE_FORM;
@@ -47,7 +48,7 @@ public class LanguageController extends AbstractController {
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = LanguageWebConstants.Path.LANGUAGE)
 	public String page(@Valid @ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		return VIEW_LANGUAGE_PAGE;
+		return VIEW_LANGUAGE;
 	}
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_READ)
@@ -81,7 +82,7 @@ public class LanguageController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(LanguageDto.UUID, languageDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, languageDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -106,7 +107,7 @@ public class LanguageController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(LanguageDto.UUID, languageDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, languageDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
@@ -116,18 +117,19 @@ public class LanguageController extends AbstractController {
 
 	@PreAuthorize(LanguagePreAuthorizeEnum.HAS_DELETE)
 	@PostMapping(value = LanguageWebConstants.Path.LANGUAGE_FORM, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto, Model model, BindingResult bindingResult,
+	public RedirectView delete(@Valid @ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (languageDto.getUuid() == null) {
+		if (dto.getUuid() == null) {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
 		} else {
 			try {
-				languageFacade.delete(languageDto.getUuid());
+				languageFacade.delete(dto.getUuid());
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
 			} catch (BusinessException e) {
-				addErrorMessage(LanguageDto.class, e.getMessage(), bindingResult, redirectAttributes);
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
 			}
 		}
 

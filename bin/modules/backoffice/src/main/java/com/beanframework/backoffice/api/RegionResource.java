@@ -36,7 +36,7 @@ public class RegionResource extends AbstractResource {
 	private RegionFacade regionFacade;
 
 	@PreAuthorize(RegionPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(RegionWebConstants.Path.Api.CHECKID)
+	@RequestMapping(RegionWebConstants.Path.Api.REGION_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -58,7 +58,7 @@ public class RegionResource extends AbstractResource {
 	}
 
 	@PreAuthorize(RegionPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = RegionWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = RegionWebConstants.Path.Api.REGION, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<RegionDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -85,7 +85,7 @@ public class RegionResource extends AbstractResource {
 	}
 
 	@PreAuthorize(RegionPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = RegionWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = RegionWebConstants.Path.Api.REGION_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

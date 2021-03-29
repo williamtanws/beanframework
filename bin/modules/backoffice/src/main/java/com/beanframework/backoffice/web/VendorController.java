@@ -31,22 +31,22 @@ public class VendorController extends AbstractController {
 	@Autowired
 	private VendorFacade vendorFacade;
 	
-	@Value(VendorWebConstants.Path.VENDOR_PAGE)
-	private String PATH_VENDOR_PAGE;
+	@Value(VendorWebConstants.Path.VENDOR)
+	private String PATH_VENDOR;
 	
 	@Value(VendorWebConstants.Path.VENDOR_FORM)
 	private String PATH_VENDOR_FORM;
 
 	@Value(VendorWebConstants.View.PAGE)
-	private String VIEW_VENDOR_PAGE;
+	private String VIEW_VENDOR;
 
 	@Value(VendorWebConstants.View.FORM)
 	private String VIEW_VENDOR_FORM;
 
-	@GetMapping(value = VendorWebConstants.Path.VENDOR_PAGE)
+	@GetMapping(value = VendorWebConstants.Path.VENDOR)
 	public String list(@Valid @ModelAttribute(VendorWebConstants.ModelAttribute.VENDOR_DTO) VendorDto vendorDto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
-		return VIEW_VENDOR_PAGE;
+		return VIEW_VENDOR;
 	}
 
 	@GetMapping(value = VendorWebConstants.Path.VENDOR_FORM)

@@ -1,25 +1,23 @@
 package com.beanframework.imex.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -27,7 +25,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.imex.ImexConstants;
 import com.beanframework.imex.ImexType;
-import com.beanframework.media.domain.Media;
 
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -72,13 +69,11 @@ public class Imex extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String seperator;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@AuditJoinTable(inverseJoinColumns = @JoinColumn(name = "media_uuid"))
 	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.ALL })
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = ImexConstants.Table.IMEX_MEDIA_REL, joinColumns = @JoinColumn(name = "imex_uuid", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "media_uuid", referencedColumnName = "uuid"))
-	private List<Media> medias = new ArrayList<Media>();
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = ImexConstants.Table.IMEX_MEDIA_REL, joinColumns = @JoinColumn(name = "imex_uuid"))
+	@Column(name = "media_uuid", columnDefinition = "BINARY(16)", nullable = false)
+	private Set<UUID> medias = new HashSet<UUID>();
 
 	public ImexType getType() {
 		return type;
@@ -128,11 +123,11 @@ public class Imex extends GenericEntity {
 		this.seperator = seperator;
 	}
 
-	public List<Media> getMedias() {
+	public Set<UUID> getMedias() {
 		return medias;
 	}
 
-	public void setMedias(List<Media> medias) {
+	public void setMedias(Set<UUID> medias) {
 		this.medias = medias;
 	}
 

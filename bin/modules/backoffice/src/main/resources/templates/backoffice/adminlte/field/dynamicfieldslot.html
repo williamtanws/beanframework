@@ -6,19 +6,19 @@
 <body>
 	<th:block layout:fragment="content">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.system},breadcrumb2=#{module.dynamicfieldslot},id=#{module.common.id},name=#{module.dynamicfieldslot.name},sort=#{module.dynamicfieldslot.sort}">
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.system},breadcrumb1=#{module.common.field},breadcrumb2=#{module.dynamicfieldslot},id=#{module.common.id},name=#{module.dynamicfieldslot.name},sort=#{module.dynamicfieldslot.sort}">
 
 			<!-- Header -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header (title=#{module.dynamicfieldslot}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
 
 			<!-- Main content -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.dynamicfieldslot}, tableId='dynamicfieldslotTable', columnsi18n=${#strings.arraySplit(id+','+name+','+sort, ',')})}"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.dynamicfieldslot}, tableId='dynamicfieldslotTable', columnsi18n=${#strings.arraySplit(id+','+name+','+sort, ',')}, selectAuthority=true )}"></th:block>
 
 		</div>
 
 	</th:block>
 	<th:block layout:fragment="js" th:with="addAuthority=${#authorization.expression('hasAuthority(''dynamicfieldslot_create'')')}">
-		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='dynamicfieldslotTable', columns=${#strings.arraySplit('id,name,sort', ',')}, pageUrl=@{${@environment.getProperty('path.api.dynamicfieldslot')}}, formUrl=@{${@environment.getProperty('path.dynamicfieldslot.form')}}, addAuthority=${addAuthority} )}"></th:block>
+		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='dynamicfieldslotTable', columns=${#strings.arraySplit('id,name,sort', ',')}, pageUrl=@{${@environment.getProperty('path.api.dynamicfieldslot')}}, formUrl=@{${@environment.getProperty('path.dynamicfieldslot.form')}}, addAuthority=${addAuthority}, selectAuthority=true  )}"></th:block>
 	</th:block>
 </body>
 </html>

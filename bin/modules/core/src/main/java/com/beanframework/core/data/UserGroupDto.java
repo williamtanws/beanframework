@@ -25,7 +25,7 @@ public class UserGroupDto extends GenericDto {
 
 	private List<UserGroupFieldDto> fields = new ArrayList<UserGroupFieldDto>();
 
-	private String[] selectedUserGroups;
+	private String[] selectedUserGroupUuids;
 
 	public String getName() {
 		return name;
@@ -67,12 +67,12 @@ public class UserGroupDto extends GenericDto {
 		this.fields = fields;
 	}
 
-	public String[] getSelectedUserGroups() {
-		return selectedUserGroups;
+	public String[] getSelectedUserGroupUuids() {
+		return selectedUserGroupUuids;
 	}
 
-	public void setSelectedUserGroups(String[] selectedUserGroups) {
-		this.selectedUserGroups = selectedUserGroups;
+	public void setSelectedUserGroupUuids(String[] selectedUserGroupUuids) {
+		this.selectedUserGroupUuids = selectedUserGroupUuids;
 	}
 
 }

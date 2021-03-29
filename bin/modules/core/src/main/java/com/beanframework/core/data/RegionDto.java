@@ -12,7 +12,7 @@ public class RegionDto extends GenericDto {
 	private Boolean active;
 	private CountryDto country;
 
-	private String selectedCountry;
+	private String selectedCountryUuid;
 
 	public String getName() {
 		return name;
@@ -38,11 +38,11 @@ public class RegionDto extends GenericDto {
 		this.country = country;
 	}
 
-	public String getSelectedCountry() {
-		return selectedCountry;
+	public String getSelectedCountryUuid() {
+		return selectedCountryUuid;
 	}
 
-	public void setSelectedCountry(String selectedCountry) {
-		this.selectedCountry = selectedCountry;
+	public void setSelectedCountryUuid(String selectedCountryUuid) {
+		this.selectedCountryUuid = selectedCountryUuid;
 	}
 }

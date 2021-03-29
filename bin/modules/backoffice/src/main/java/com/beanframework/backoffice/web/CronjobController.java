@@ -34,13 +34,13 @@ public class CronjobController extends AbstractController {
 	private CronjobFacade cronjobFacade;
 
 	@Value(CronjobWebConstants.Path.CRONJOB)
-	private String PATH_CRONJOB_PAGE;
+	private String PATH_CRONJOB;
 
 	@Value(CronjobWebConstants.Path.CRONJOB_FORM)
 	private String PATH_CRONJOB_FORM;
 
 	@Value(CronjobWebConstants.View.CRONJOB)
-	private String VIEW_CRONJOB_PAGE;
+	private String VIEW_CRONJOB;
 
 	@Value(CronjobWebConstants.View.CRONJOB_FORM)
 	private String VIEW_CRONJOB_FORM;
@@ -48,7 +48,7 @@ public class CronjobController extends AbstractController {
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = CronjobWebConstants.Path.CRONJOB)
 	public String page(@Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		return VIEW_CRONJOB_PAGE;
+		return VIEW_CRONJOB;
 	}
 
 	@PreAuthorize(CronjobPreAuthorizeEnum.HAS_READ)

@@ -34,13 +34,13 @@ public class DynamicFieldSlotController extends AbstractController {
 	private DynamicFieldSlotFacade dynamicFieldSlotFacade;
 
 	@Value(DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT)
-	private String PATH_DYNAMICFIELDSLOT_PAGE;
+	private String PATH_DYNAMICFIELDSLOT;
 
 	@Value(DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT_FORM)
 	private String PATH_DYNAMICFIELDSLOT_FORM;
 
 	@Value(DynamicFieldSlotWebConstants.View.DYNAMICFIELDSLOT)
-	private String VIEW_DYNAMICFIELDSLOT_PAGE;
+	private String VIEW_DYNAMICFIELDSLOT;
 
 	@Value(DynamicFieldSlotWebConstants.View.DYNAMICFIELDSLOT_FORM)
 	private String VIEW_DYNAMICFIELDSLOT_FORM;
@@ -48,7 +48,7 @@ public class DynamicFieldSlotController extends AbstractController {
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT)
 	public String page(@Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		return VIEW_DYNAMICFIELDSLOT_PAGE;
+		return VIEW_DYNAMICFIELDSLOT;
 	}
 
 	@PreAuthorize(DynamicFieldSlotPreAuthorizeEnum.HAS_READ)

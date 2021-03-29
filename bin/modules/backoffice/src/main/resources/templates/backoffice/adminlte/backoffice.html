@@ -18,7 +18,7 @@
 <!-- overlayScrollbars -->
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
 <style>
-.nav-item .active{
+.navbar-nav .nav-item .active{
 	 background-color: #f4f6f9;
 }
 </style>
@@ -64,6 +64,14 @@
 	</div>
 	<!-- jQuery -->
 	<script th:src="@{/static/adminlte/plugins/jquery/jquery.min.js}"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script th:src="@{/static/adminlte/plugins/jquery-ui/jquery-ui.min.js}"></script>
+	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+	<script>
+	  $.widget.bridge('uibutton', $.ui.button)
+	</script>
+	<!-- Bootstrap 4 -->
+	<script th:src="@{/static/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
 	<!-- Bootstrap 4 -->
 	<script th:src="@{/static/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
 	<!-- SweetAlert2 -->
