@@ -30,7 +30,7 @@ public class AuditorController extends AbstractController {
 	@Value(AuditorWebConstants.Path.AUDITOR)
 	private String PATH_LANGUAGE;
 
-	@Value(AuditorWebConstants.View.LIST)
+	@Value(AuditorWebConstants.View.AUDITOR)
 	private String VIEW_LANGUAGE_LIST;
 
 	@PreAuthorize(PreAuthorizeEnum.HAS_READ)

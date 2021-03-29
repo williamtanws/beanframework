@@ -52,7 +52,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.UserConstants;
-import com.beanframework.user.UserSession;
+import com.beanframework.user.data.UserSession;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
@@ -261,10 +261,10 @@ public class UserServiceImpl implements UserService {
 
 		for (final Object principal : allPrincipals) {
 			if (principal instanceof User) {
-				final User principalEmployee = (User) principal;
-				if (principalEmployee.getUuid() != null) {
-					List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principalEmployee, false);
-					sessions.add(new UserSession(principalEmployee, sessionInformations));
+				final User user = (User) principal;
+				if (user.getUuid() != null) {
+					List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(user, false);
+					sessions.add(new UserSession(user, sessionInformations));
 				}
 			}
 		}

@@ -1,331 +1,354 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+
 <head>
 <title th:utext="#{module.address}"></title>
 </head>
+
 <body>
-	<th:block layout:fragment="update">
-		<th:block
-			layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.address')}}, deleteUuid=${addressDto.uuid})}"></th:block>
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.address')}" method="post" th:object="${addressDto}">
-			<input type="hidden" name="create" th:if="*{uuid == null}" /> <input type="hidden" name="update" th:if="*{uuid != null}" /> <input type="hidden" name="uuid"
-				th:value="${addressDto.uuid}" />
-			<div class="row">
-				<div class="col-md-12">
-					<div class="box box-solid">
-						<div class="box-body bg-gray">
-							<div class="row">
-								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='address_delete')}"></th:block>
-								</div>
-								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='address_delete')}"></th:block>
-									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='address_update')}"></th:block>
-								</div>
-							</div>
-						</div>
-						<!-- /.box-header -->
+	<th:block layout:fragment="content">
+		<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.address.form')}}" method="post" th:object="${addressDto}">
+			<input type="hidden" name="create" th:if="*{uuid == null}" />
+			<input type="hidden" name="update" th:if="*{uuid != null}" />
+			<input type="hidden" name="uuid" th:value="*{uuid}" th:if="*{uuid != null}" />
+
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('address_delete')"></th:block>
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
 					</div>
+					<!-- /.col -->
+					<div class="col-sm-6">
+						<div class="float-sm-right">
+							<button type="submit" class="btn btn-primary" th:text="#{module.common.save}" sec:authorize="hasAuthority('address_create') or hasAuthority('address_update')"></button>
+						</div>
+					</div>
+					<!-- /.col -->
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<!-- Custom Tabs -->
-					<div class="nav-tabs-custom">
-						<ul class="nav nav-tabs">
-							<li class="active"><a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a></li>
-							<li th:if="*{uuid != null}"><a href="#tab_history" data-toggle="tab" th:text="#{module.common.history}" onclick="changeTab('history')"></a></li>
-							<li th:if="*{uuid != null}"><a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
-							</li>
-						</ul>
-						<div class="tab-content">
-							<div class="tab-pane active" id="tab_general">
-								<div class="box-body">
-									<div class="row">
-										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.owner},'selectedOwnerTable','selectedOwner','owner',*{owner},@{${@environment.getProperty('path.api.user.page')}},'ownerTable')}"></th:block>
-										</div>
-									</div>
-									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="streetName" th:text="#{module.address.streetName}"></label> <span>*</span> <input type="text" class="form-control" name="streetName"
-													th:value="*{streetName}"> <span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="streetNumber" th:text="#{module.address.streetNumber}"></label> <input type="text" class="form-control" name="streetNumber"
-													th:value="*{streetNumber}"> <span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="postalCode" th:text="#{module.address.postalCode}"></label> <input type="text" class="form-control" name="postalCode" th:value="*{postalCode}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="town" th:text="#{module.address.town}"></label> <input type="text" class="form-control" name="town" th:value="*{town}"> <span
-													class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.country},'selectedCountryTable','selectedCountry','country',*{country},@{${@environment.getProperty('path.api.country.page')}},'countryTable')}"></th:block>
-										</div>
-									</div>
-								</div>
-								<!-- /.box-body -->
-								<div class="box-header with-border">
-									<h3 class="box-title" th:text="#{module.address.additionalAddressInformation}"></h3>
-								</div>
-								<div class="box-body">
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="company" th:text="#{module.address.company}"></label> <input type="text" class="form-control" name="company" th:value="*{company}"> <span
-													class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="phone1" th:text="#{module.address.phone1}"></label> <input type="text" class="form-control" name="phone1" th:value="*{phone1}"> <span
-													class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="phone2" th:text="#{module.address.phone2}"></label> <input type="text" class="form-control" name="phone2" th:value="*{phone2}"> <span
-													class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="mobilePhone" th:text="#{module.address.mobilePhone}"></label> <input type="text" class="form-control" name="mobilePhone" th:value="*{mobilePhone}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="email" th:text="#{module.address.email}"></label> <input type="text" class="form-control" name="email" th:value="*{email}"> <span
-													class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="poBox" th:text="#{module.address.poBox}"></label> <input type="text" class="form-control" name="poBox" th:value="*{poBox}"> <span
-													class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="fax" th:text="#{module.address.fax}"></label> <input type="text" class="form-control" name="fax" th:value="*{fax}"> <span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- /.box-body -->
-								<div class="box-header with-border">
-									<h3 class="box-title" th:text="#{module.address.additionalContactInformation}"></h3>
-								</div>
-								<div class="box-body">
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="title" th:text="#{module.address.title}"></label> <input type="text" class="form-control" name="title" th:value="*{title}"> <span
-													class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="lastName" th:text="#{module.address.lastName}"></label> <input type="text" class="form-control" name="lastName" th:value="*{lastName}"> <span
-													class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="firstName" th:text="#{module.address.firstName}"></label> <input type="text" class="form-control" name="firstName" th:value="*{firstName}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="middleName" th:text="#{module.address.middleName}"></label> <input type="text" class="form-control" name="middleName" th:value="*{middleName}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="middleName2" th:text="#{module.address.middleName2}"></label> <input type="text" class="form-control" name="middleName2" th:value="*{middleName2}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="department" th:text="#{module.address.department}"></label> <input type="text" class="form-control" name="department" th:value="*{department}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="building" th:text="#{module.address.building}"></label> <input type="text" class="form-control" name="building" th:value="*{building}"> <span
-													class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="apartment" th:text="#{module.address.apartment}"></label> <input type="text" class="form-control" name="apartment" th:value="*{apartment}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.region},'selectedRegionTable','selectedRegion','region',*{region},@{${@environment.getProperty('path.api.region.page')}},'regionTable')}"></th:block>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="district" th:text="#{module.address.district}"></label> <input type="text" class="form-control" name="district" th:value="*{district}"> <span
-													class="help-block"></span>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="box-header with-border"></div>
-								<div class="box-body" th:with="id=#{module.address.id},streetName=#{module.address.streetName}">
-									<div class="row">
-										<div class="col-md-6">
-											<th:block
-												layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.shippingAddress},'selectedShippingAddressTable','selectedShippingAddress','shippingAddress',*{shippingAddress},@{${@environment.getProperty('path.api.address.page')}},'shippingAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
-										</div>
-										<div class="col-md-6">
-											<th:block
-												layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.billingAddress},'selectedBillingAddressTable','selectedBillingAddress','billingAddress',*{billingAddress},@{${@environment.getProperty('path.api.address.page')}},'billingAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<th:block
-												layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.contactAddress},'selectedContactAddressTable','selectedContactAddress','contactAddress',*{contactAddress},@{${@environment.getProperty('path.api.address.page')}},'contactAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
-										</div>
-										<div class="col-md-6">
-											<th:block
-												layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.defaultPaymentAddress},'selectedDefaultPaymentAddressTable','selectedDefaultPaymentAddress','defaultPaymentAddress',*{defaultPaymentAddress},@{${@environment.getProperty('path.api.address.page')}},'defaultPaymentAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<th:block
-												layout:insert="~{common/adminlte/common/component/table :: select (#{module.address.defaultShipmentAddress},'selectedDefaultShipmentAddressTable','selectedDefaultShipmentAddress','defaultShipmentAddress',*{defaultShipmentAddress},@{${@environment.getProperty('path.api.address.page')}},'defaultShipmentAddressTable',false,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
-								<div class="box-body">
-									<th:block
-										layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.address.history')}(uuid=*{uuid})} )}"></th:block>
-								</div>
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
-								<div class="box-body">
-									<th:block layout:insert="~{common/adminlte/common/component/administration :: administration}"></th:block>
-								</div>
-							</div>
-							<!-- /.tab-pane -->
-						</div>
-						<!-- /.tab-content -->
-					</div>
-					<!-- nav-tabs-custom -->
+			<div class="card card-primary card-outline card-outline-tabs consistent-height">
+				<div class="card-header p-0 border-bottom-0">
+					<ul class="nav nav-tabs" id="custom-tabs-tab" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-history-tab" data-toggle="pill" href="#custom-tabs-history" role="tab" aria-controls="custom-tabs-history" aria-selected="false" th:text="#{module.common.history}" th:if="*{uuid != null}"></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-administration-tab" data-toggle="pill" href="#custom-tabs-administration" role="tab" aria-controls="custom-tabs-administration" aria-selected="false" th:text="#{module.common.administration}" th:if="*{uuid != null}"></a>
+						</li>
+					</ul>
 				</div>
-				<!-- /.col -->
+				<div class="card-body">
+					<div class="tab-content" id="custom-tabs-tabContent">
+						<div class="tab-pane fade show active" id="custom-tabs-general" role="tabpanel" aria-labelledby="custom-tabs-general-tab">
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="id" th:text="#{module.common.id}"></label>
+										<span>*</span>
+										<input type="text" class="form-control" name="id" th:value="*{id}">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="streetName" th:text="#{module.address.streetName}"></label>
+										<input type="text" class="form-control" name="streetName" th:value="*{streetName}">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="streetNumber" th:text="#{module.address.streetNumber}"></label>
+										<input type="text" class="form-control" name="streetNumber" th:value="*{streetNumber}">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="postalCode" th:text="#{module.address.postalCode}"></label>
+										<input type="text" class="form-control" name="postalCode" th:value="*{postalCode}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="town" th:text="#{module.address.town}"></label>
+										<input type="text" class="form-control" name="town" th:value="*{town}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="country" th:text="#{module.address.country}"></label>
+										<th:block th:with="id=#{module.common.id},name=#{module.country.name}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.country.select}, tableId='selectedCountryDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{country}, selectedItemUuidName='selectedCountryUuid' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h5 th:text="#{module.address.additionalAddressInformation}"></h5>
+									<hr>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="company" th:text="#{module.address.company}"></label>
+										<input type="text" class="form-control" name="company" th:value="*{company}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="phone1" th:text="#{module.address.phone1}"></label>
+										<input type="text" class="form-control" name="phone1" th:value="*{phone1}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="phone2" th:text="#{module.address.phone2}"></label>
+										<input type="text" class="form-control" name="phone2" th:value="*{phone2}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="mobilePhone" th:text="#{module.address.mobilePhone}"></label>
+										<input type="text" class="form-control" name="mobilePhone" th:value="*{mobilePhone}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="email" th:text="#{module.address.email}"></label>
+										<input type="text" class="form-control" name="email" th:value="*{email}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="poBox" th:text="#{module.address.poBox}"></label>
+										<input type="text" class="form-control" name="poBox" th:value="*{poBox}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="fax" th:text="#{module.address.fax}"></label>
+										<input type="text" class="form-control" name="fax" th:value="*{fax}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h5 th:text="#{module.address.additionalContactInformation}"></h5>
+									<hr>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="title" th:text="#{module.address.title}"></label>
+										<input type="text" class="form-control" name="title" th:value="*{title}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="lastName" th:text="#{module.address.lastName}"></label>
+										<input type="text" class="form-control" name="lastName" th:value="*{lastName}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="firstName" th:text="#{module.address.firstName}"></label>
+										<input type="text" class="form-control" name="firstName" th:value="*{firstName}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="middleName" th:text="#{module.address.middleName}"></label>
+										<input type="text" class="form-control" name="middleName" th:value="*{middleName}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="middleName2" th:text="#{module.address.middleName2}"></label>
+										<input type="text" class="form-control" name="middleName2" th:value="*{middleName2}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="department" th:text="#{module.address.department}"></label>
+										<input type="text" class="form-control" name="department" th:value="*{department}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="building" th:text="#{module.address.building}"></label>
+										<input type="text" class="form-control" name="building" th:value="*{building}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="apartment" th:text="#{module.address.apartment}"></label>
+										<input type="text" class="form-control" name="apartment" th:value="*{apartment}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="district" th:text="#{module.address.district}"></label>
+										<input type="text" class="form-control" name="district" th:value="*{district}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="region" th:text="#{module.address.region}"></label>
+										<th:block th:with="id=#{module.common.id},name=#{module.region.name}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.region.select}, tableId='selectedRegionDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{region}, selectedItemUuidName='selectedRegionUuid' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<hr>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="contactPerson" th:text="#{module.address.shippingAddress}"></label>
+										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.shippingAddress.select}, tableId='selectedShippingAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{shippingAddress}, selectedItemUuidName='selectedShippingAddressUuid' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="contactPerson" th:text="#{module.address.billingAddress}"></label>
+										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.billingAddress.select}, tableId='selectedBillingAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{billingAddress}, selectedItemUuidName='selectedBillingAddressUuid' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="contactPerson" th:text="#{module.address.contactAddress}"></label>
+										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.contactAddress.select}, tableId='selectedContactAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{contactAddress}, selectedItemUuidName='selectedContactAddressUuid' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="defaultPaymentPerson" th:text="#{module.address.defaultPaymentAddress}"></label>
+										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.defaultPaymentAddress.select}, tableId='selectedDefaultPaymentAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{defaultPaymentAddress}, selectedItemUuidName='selectedDefaultPaymentAddressUuid' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="defaultShipmentPerson" th:text="#{module.address.defaultShipmentAddress}"></label>
+										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.defaultShipmentAddress.select}, tableId='selectedDefaultShipmentAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{defaultShipmentAddress}, selectedItemUuidName='selectedDefaultShipmentAddressUuid' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
+						</div>
+					</div>
+				</div>
+				<!-- /.card -->
 			</div>
 		</form>
+
+		<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: modal (uuid=${addressDto.uuid}, deleteUrl=@{${@environment.getProperty('path.address.form')}} )}"></th:block>
+	</th:block>
+	<th:block layout:fragment="js">
+
 		<script th:inline="javascript">
-		    /*<![CDATA[*/
-		    $(document).ready(function() {
-		        $('#update-form').validate({
-		        	onkeyup: function(element) {
-		                this.element(element);
-		            },
-		        	onfocusout: false,
-		            invalidHandler: function(form, validator) {
-		                var errors = validator.numberOfInvalids();
-		                if (errors) {                    
-		                    validator.errorList[0].element.focus();
-		                }
-		            },
-		            rules: {
-		            	id: {
-		                    required: true,
-		                    remote: {
-		                        url: /*[[${@environment.getProperty('path.api.address.checkid')}]]*/ ,
-		                        type: "get",
-		                        data: {
-		                            uuid: /*[[${addressDto.uuid}]]*/ ,
-		                            id: function() {
-		                                return $("#update-form input[name='id']").val();
-		                            }
-		                        }
-		                    }
-		                },
-		                streetName: {
-		                    required: true
-		                }
-		            },
-		            highlight: function(element) {
-		                $(element).closest('.form-group').addClass('has-error');
-		                
-		                var id = $(element).closest('.tab-pane').attr('id');
-		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
-		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
-		                });
-		            },
-		            unhighlight: function(element) {
-		                $(element).closest('.form-group').removeClass('has-error');
-		                $(element).closest('.form-group').find('.help-block').html('');
-		                
-		                var id = $(element).closest('.tab-pane').attr('id');
-		                var noError = true;
-		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
-		                    noError = false;
-		                });
-		                if(noError){
-			                $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','black');
-		                }
-		            },
-		            errorPlacement: function(error, element) {
-		                element.closest('.form-group').find('.help-block').html(error.text());
-		            }
-		        });
-		
-		    });
+			/*<![CDATA[*/
+				
+			$(document).ready(function () {
+				$('#form-save').validate(
+					{
+						rules: {
+							id: {
+								required: true,
+								remote: {
+									url: /*[[@{${@environment.getProperty('path.api.address.checkid')}}]]*/ ,
+									type: "get",
+									data: {
+										uuid: $('#form-save input[name=uuid]').val(),
+										id: function () {
+											return $("#form-save input[name='id']").val();
+										}
+									}
+								}
+							}
+						},
+						messages: {
+							id: {
+								required: /*[[#{module.common.id.required}]]*/,
+			                    remote: /*[[#{module.common.id.exists}]]*/
+							}
+						},
+						errorElement: 'span',
+						errorPlacement: function (error, element) {
+							error.addClass('invalid-feedback');
+							element.closest('.form-group').append(error);
+						},
+						highlight: function (element, errorClass, validClass) {
+							$(element).addClass('is-invalid');
+						},
+						unhighlight: function (element, errorClass, validClass) {
+							$(element).removeClass('is-invalid');
+						}
+					});
+			});
+			
 		    /*]]>*/
 		</script>
-
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedCountryDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.country')}}, selectedItemDto=${addressDto.country}, selectedItemUuidName='selectedCountryUuid' )}"></th:block>
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedRegionDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.region')}}, selectedItemDto=${addressDto.region}, selectedItemUuidName='selectedRegionUuid' )}"></th:block>
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedShippingAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.shippingAddress}, selectedItemUuidName='selectedShippingAddressUuid' )}"></th:block>
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedBillingAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.billingAddress}, selectedItemUuidName='selectedBillingAddressUuid' )}"></th:block>
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedContactAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.contactAddress}, selectedItemUuidName='selectedContactAddressUuid' )}"></th:block>
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedDefaultPaymentAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.defaultPaymentAddress}, selectedItemUuidName='selectedDefaultPaymentAddressUuid' )}"></th:block>
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedDefaultShipmentAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.defaultShipmentAddress}, selectedItemUuidName='selectedDefaultShipmentAddressUuid' )}"></th:block>
+		<th:block th:if="${addressDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.address.history')}(uuid=${addressDto.uuid})})}"></th:block>
 	</th:block>
 </body>
+
 </html>

@@ -3,11 +3,10 @@ package com.beanframework.backoffice.data;
 import com.beanframework.core.data.DataTableResponseData;
 
 public class LanguageDataTableResponseData extends DataTableResponseData {
-
-	private Boolean active;
-	private Integer sort;
 	
 	private String name;
+	private Boolean active;
+	private Integer sort;
 
 	public String getName() {
 		return name;

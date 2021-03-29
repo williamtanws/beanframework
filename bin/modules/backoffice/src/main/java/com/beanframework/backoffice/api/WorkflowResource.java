@@ -59,7 +59,7 @@ public class WorkflowResource extends AbstractResource {
 	}
 
 	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = WorkflowWebConstants.Path.Api.WORKFLOW_PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = WorkflowWebConstants.Path.Api.WORKFLOW, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -85,7 +85,7 @@ public class WorkflowResource extends AbstractResource {
 	}
 
 	@PreAuthorize(WorkflowPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = WorkflowWebConstants.Path.Api.WORKFLOW_PAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = WorkflowWebConstants.Path.Api.WORKFLOW_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

@@ -36,7 +36,7 @@ public class CurrencyResource extends AbstractResource {
 	private CurrencyFacade currencyFacade;
 
 	@PreAuthorize(CurrencyPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(CurrencyWebConstants.Path.Api.CHECKID)
+	@RequestMapping(CurrencyWebConstants.Path.Api.CURRENCY_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -58,7 +58,7 @@ public class CurrencyResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CurrencyPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = CurrencyWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = CurrencyWebConstants.Path.Api.CURRENCY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<CurrencyDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -78,13 +78,14 @@ public class CurrencyResource extends AbstractResource {
 			data.setUuid(dto.getUuid().toString());
 			data.setId(StringUtils.stripToEmpty(dto.getId()));
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
+			data.setActive(dto.getActive());
 			dataTableResponse.getData().add(data);
 		}
 		return dataTableResponse;
 	}
 
 	@PreAuthorize(CurrencyPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = CurrencyWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = CurrencyWebConstants.Path.Api.CURRENCY_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

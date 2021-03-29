@@ -42,7 +42,7 @@ public class MenuController extends AbstractController {
 	private String PATH_MENU_FORM;
 
 	@Value(MenuWebConstants.View.MENU)
-	private String VIEW_MENU_PAGE;
+	private String VIEW_MENU;
 
 	@Value(MenuWebConstants.View.MENU_FORM)
 	private String VIEW_MENU_FORM;
@@ -50,7 +50,7 @@ public class MenuController extends AbstractController {
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = MenuWebConstants.Path.MENU)
 	public String page(@Valid @ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto dynamicFieldDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		return VIEW_MENU_PAGE;
+		return VIEW_MENU;
 	}
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)

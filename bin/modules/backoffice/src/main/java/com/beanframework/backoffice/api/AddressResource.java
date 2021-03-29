@@ -36,7 +36,7 @@ public class AddressResource extends AbstractResource {
 	private AddressFacade addressFacade;
 
 	@PreAuthorize(AddressPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(AddressWebConstants.Path.Api.CHECKID)
+	@RequestMapping(AddressWebConstants.Path.Api.ADDRESS_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -58,7 +58,7 @@ public class AddressResource extends AbstractResource {
 	}
 
 	@PreAuthorize(AddressPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = AddressWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = AddressWebConstants.Path.Api.ADDRESS, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<AddressDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -84,7 +84,7 @@ public class AddressResource extends AbstractResource {
 	}
 
 	@PreAuthorize(AddressPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = AddressWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = AddressWebConstants.Path.Api.ADDRESS_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

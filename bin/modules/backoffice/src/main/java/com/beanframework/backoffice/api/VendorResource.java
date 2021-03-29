@@ -59,7 +59,7 @@ public class VendorResource extends AbstractResource {
 	}
 
 	@PreAuthorize(VendorPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = VendorWebConstants.Path.Api.VENDOR_PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = VendorWebConstants.Path.Api.VENDOR, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -85,7 +85,7 @@ public class VendorResource extends AbstractResource {
 	}
 
 	@PreAuthorize(VendorPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = VendorWebConstants.Path.Api.VENDOR_PAGE_HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = VendorWebConstants.Path.Api.VENDOR_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

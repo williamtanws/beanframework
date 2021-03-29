@@ -33,13 +33,13 @@ public class ConfigurationController extends AbstractController {
 	private ConfigurationFacade configurationFacade;
 	
 	@Value(ConfigurationWebConstants.Path.CONFIGURATION)
-	private String PATH_CONFIGURATION_PAGE;
+	private String PATH_CONFIGURATION;
 	
 	@Value(ConfigurationWebConstants.Path.CONFIGURATION_FORM)
 	private String PATH_CONFIGURATION_FORM;
 
 	@Value(ConfigurationWebConstants.View.PAGE)
-	private String VIEW_CONFIGURATION_PAGE;
+	private String VIEW_CONFIGURATION;
 
 	@Value(ConfigurationWebConstants.View.FORM)
 	private String VIEW_CONFIGURATION_FORM;
@@ -47,7 +47,7 @@ public class ConfigurationController extends AbstractController {
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION)
 	public String page(@Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto dto, Model model, @RequestParam Map<String, Object> requestParams)
 			throws Exception {
-		return VIEW_CONFIGURATION_PAGE;
+		return VIEW_CONFIGURATION;
 	}
 
 	@GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM)

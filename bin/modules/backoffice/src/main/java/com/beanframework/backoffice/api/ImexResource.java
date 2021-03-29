@@ -37,7 +37,7 @@ public class ImexResource extends AbstractResource {
 	private ImexFacade imexFacade;
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(ImexWebConstants.Path.Api.CHECKID)
+	@RequestMapping(ImexWebConstants.Path.Api.IMEX_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -59,7 +59,7 @@ public class ImexResource extends AbstractResource {
 	}
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = ImexWebConstants.Path.Api.LIST, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = ImexWebConstants.Path.Api.IMEX, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -85,7 +85,7 @@ public class ImexResource extends AbstractResource {
 	}
 
 	@PreAuthorize(ImexPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = ImexWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = ImexWebConstants.Path.Api.IMEX_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

@@ -29,7 +29,7 @@ public class AuditorResource extends AbstractResource {
 	private AuditorFacade auditorFacade;
 
 	@PreAuthorize(PreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = AuditorWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = AuditorWebConstants.Path.Api.AUDITOR, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 

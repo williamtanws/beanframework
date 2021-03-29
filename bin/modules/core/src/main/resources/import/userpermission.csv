@@ -15,8 +15,8 @@ INSERT_UPDATE UserPermission,id,name,sort,dynamicFieldSlotIds
 ,menu				,Menu					,40	,userpermission_0_name_en=Menu;userpermission_1_name_cn=菜单
 ,company			,Company				,50 ,userpermission_0_name_en=Company;userpermission_1_name_cn=公司
 ,address			,Address				,51 ,userpermission_0_name_en=Address;userpermission_1_name_cn=地址
+,usersession		,User Session			,53	,userpermission_0_name_en=User Session;userpermission_1_name_cn=用户会话
 ,employee			,Employee				,52	,userpermission_0_name_en=Employee;userpermission_1_name_cn=雇员
-,employeesession	,Employee Session		,53	,userpermission_0_name_en=Employee Session;userpermission_1_name_cn=员工会话
 ,customer			,Customer				,54	,userpermission_0_name_en=Customer;userpermission_1_name_cn=顾客
 ,vendor				,Vendor					,55	,userpermission_0_name_en=Vendor;userpermission_1_name_cn=供应商
 ,cronjob			,Cronjob				,70 ,userpermission_0_name_en=Cronjob;userpermission_1_name_cn=定时任务

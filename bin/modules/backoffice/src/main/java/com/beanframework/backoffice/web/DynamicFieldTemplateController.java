@@ -33,13 +33,13 @@ public class DynamicFieldTemplateController extends AbstractController {
 	private DynamicFieldTemplateFacade dynamicFieldTemplateFacade;
 
 	@Value(DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE)
-	private String PATH_DYNAMICFIELDTEMPLATE_PAGE;
+	private String PATH_DYNAMICFIELDTEMPLATE;
 
 	@Value(DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE_FORM)
 	private String PATH_DYNAMICFIELDTEMPLATE_FORM;
 
 	@Value(DynamicFieldTemplateWebConstants.View.DYNAMICFIELDTEMPLATE)
-	private String VIEW_DYNAMICFIELDTEMPLATE_PAGE;
+	private String VIEW_DYNAMICFIELDTEMPLATE;
 
 	@Value(DynamicFieldTemplateWebConstants.View.DYNAMICFIELDTEMPLATE_FORM)
 	private String VIEW_DYNAMICFIELDTEMPLATE_FORM;
@@ -48,7 +48,7 @@ public class DynamicFieldTemplateController extends AbstractController {
 	@GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE)
 	public String page(@Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicFieldTemplateDto, Model model,
 			@RequestParam Map<String, Object> requestParams) throws Exception {
-		return VIEW_DYNAMICFIELDTEMPLATE_PAGE;
+		return VIEW_DYNAMICFIELDTEMPLATE;
 	}
 
 	@PreAuthorize(DynamicFieldTemplatePreAuthorizeEnum.HAS_READ)

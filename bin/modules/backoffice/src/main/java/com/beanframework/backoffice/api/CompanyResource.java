@@ -36,7 +36,7 @@ public class CompanyResource extends AbstractResource {
 	private CompanyFacade companyFacade;
 
 	@PreAuthorize(CompanyPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(CompanyWebConstants.Path.Api.CHECKID)
+	@RequestMapping(CompanyWebConstants.Path.Api.COMPANY_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -58,7 +58,7 @@ public class CompanyResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CompanyPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = CompanyWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = CompanyWebConstants.Path.Api.COMPANY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<CompanyDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -84,7 +84,7 @@ public class CompanyResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CompanyPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = CompanyWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = CompanyWebConstants.Path.Api.COMPANY_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

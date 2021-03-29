@@ -6,7 +6,7 @@ public class FilemanagerWebConstants {
 
 		public static final String FILE_MANAGER = "${path.filemanager}";
 		public static final String ANGULARFILEMANAGER = "${path.filemanager.angularfilemanager}";
-		public static final String TEMPLATES_PAGE = "${path.filemanager.angularfilemanager.templates.page}";
+		public static final String TEMPLATES = "${path.filemanager.angularfilemanager.templates}";
 
 		public interface Api {
 			public static final String FILE_MANAGER = "${path.api.filemanager}";

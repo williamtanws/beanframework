@@ -1,5 +1,7 @@
 package com.beanframework.backoffice.web;
 
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -18,6 +21,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.RegionWebConstants;
 import com.beanframework.backoffice.RegionWebConstants.RegionPreAuthorizeEnum;
 import com.beanframework.common.controller.AbstractController;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.RegionDto;
 import com.beanframework.core.facade.RegionFacade;
@@ -27,56 +31,50 @@ import com.beanframework.core.facade.RegionFacade;
 public class RegionController extends AbstractController {
 
 	@Autowired
-	private RegionFacade regionFacade;
+	private RegionFacade languageFacade;
 
 	@Value(RegionWebConstants.Path.REGION)
-	private String PATH_COMMENT;
+	private String PATH_REGION;
 
-	@Value(RegionWebConstants.View.LIST)
-	private String VIEW_COMMENT_LIST;
+	@Value(RegionWebConstants.Path.REGION_FORM)
+	private String PATH_REGION_FORM;
+
+	@Value(RegionWebConstants.View.REGION)
+	private String VIEW_REGION;
+
+	@Value(RegionWebConstants.View.REGION_FORM)
+	private String VIEW_REGION_FORM;
 
 	@PreAuthorize(RegionPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = RegionWebConstants.Path.REGION)
-	public String list(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto regionDto, Model model) throws Exception {
-		model.addAttribute("create", false);
-
-		if (regionDto.getUuid() != null) {
-
-			RegionDto existsDto = regionFacade.findOneByUuid(regionDto.getUuid());
-
-			if (existsDto != null) {
-				model.addAttribute(RegionWebConstants.ModelAttribute.REGION_DTO, existsDto);
-			} else {
-				regionDto.setUuid(null);
-				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
-			}
-		}
-
-		return VIEW_COMMENT_LIST;
+	public String page(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto languageDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+		return VIEW_REGION;
 	}
 
-	@PreAuthorize(RegionPreAuthorizeEnum.HAS_CREATE)
-	@GetMapping(value = RegionWebConstants.Path.REGION, params = "create")
-	public String createView(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto regionDto, Model model) throws Exception {
+	@PreAuthorize(RegionPreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = RegionWebConstants.Path.REGION_FORM)
+	public String form(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto languageDto, Model model) throws Exception {
 
-		regionDto = regionFacade.createDto();
-		model.addAttribute(RegionWebConstants.ModelAttribute.REGION_DTO, regionDto);
-		model.addAttribute("create", true);
-
-		return VIEW_COMMENT_LIST;
-	}
-
-	@PreAuthorize(RegionPreAuthorizeEnum.HAS_CREATE)
-	@PostMapping(value = RegionWebConstants.Path.REGION, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
-			throws Exception {
-
-		if (regionDto.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
+		if (languageDto.getUuid() != null) {
+			languageDto = languageFacade.findOneByUuid(languageDto.getUuid());
 		} else {
+			languageDto = languageFacade.createDto();
+		}
+		model.addAttribute(RegionWebConstants.ModelAttribute.REGION_DTO, languageDto);
 
+		return VIEW_REGION_FORM;
+	}
+
+	@PreAuthorize(RegionPreAuthorizeEnum.HAS_CREATE)
+	@PostMapping(value = RegionWebConstants.Path.REGION_FORM, params = "create")
+	public RedirectView create(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto languageDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
+
+		if (languageDto.getUuid() != null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
+		} else {
 			try {
-				regionDto = regionFacade.create(regionDto);
+				languageDto = languageFacade.create(languageDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -84,23 +82,24 @@ public class RegionController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(RegionDto.UUID, regionDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, languageDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_COMMENT);
+		redirectView.setUrl(PATH_REGION_FORM);
 		return redirectView;
 	}
 
-	@PostMapping(value = RegionWebConstants.Path.REGION, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
+	@PreAuthorize(RegionPreAuthorizeEnum.HAS_UPDATE)
+	@PostMapping(value = RegionWebConstants.Path.REGION_FORM, params = "update")
+	public RedirectView update(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto languageDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		if (regionDto.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
+		if (languageDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
-
 			try {
-				regionDto = regionFacade.update(regionDto);
+				languageDto = languageFacade.update(languageDto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -108,30 +107,35 @@ public class RegionController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(RegionDto.UUID, regionDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, languageDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_COMMENT);
+		redirectView.setUrl(PATH_REGION_FORM);
 		return redirectView;
 	}
 
 	@PreAuthorize(RegionPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = RegionWebConstants.Path.REGION, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto regionDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	@PostMapping(value = RegionWebConstants.Path.REGION_FORM, params = "delete")
+	public RedirectView delete(@Valid @ModelAttribute(RegionWebConstants.ModelAttribute.REGION_DTO) RegionDto dto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		try {
-			regionFacade.delete(regionDto.getUuid());
+		if (dto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
+		} else {
+			try {
+				languageFacade.delete(dto.getUuid());
 
-			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
-		} catch (BusinessException e) {
-			addErrorMessage(RegionDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(RegionDto.UUID, regionDto.getUuid());
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
+			} catch (BusinessException e) {
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
+			}
 		}
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_COMMENT);
+		redirectView.setUrl(PATH_REGION_FORM);
 		return redirectView;
 
 	}

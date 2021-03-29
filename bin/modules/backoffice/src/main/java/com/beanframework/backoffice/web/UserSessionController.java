@@ -15,8 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
-import com.beanframework.backoffice.EmployeeWebConstants;
-import com.beanframework.backoffice.EmployeeWebConstants.EmployeeSessionPreAuthorizeEnum;
+import com.beanframework.backoffice.UserSessionWebConstants;
+import com.beanframework.backoffice.UserSessionWebConstants.UserSessionPreAuthorizeEnum;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.facade.UserFacade;
 
@@ -30,23 +30,23 @@ public class UserSessionController {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-	@Value(EmployeeWebConstants.Session.Path.SESSION)
+	@Value(UserSessionWebConstants.Path.SESSION)
 	private String PATH_SESSION;
 
-	@Value(EmployeeWebConstants.Session.View.SESSION_LIST)
-	private String VIEW_EMPLOYEE_SESSIONLIST;
+	@Value(UserSessionWebConstants.View.SESSION_LIST)
+	private String VIEW_USER_SESSIONLIST;
 
-	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.HAS_READ)
-	@GetMapping(value = EmployeeWebConstants.Session.Path.SESSION)
+	@PreAuthorize(UserSessionPreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = UserSessionWebConstants.Path.SESSION)
 	public String list(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		model.addAttribute("sessions", userFacade.findAllSessions());
 
-		return VIEW_EMPLOYEE_SESSIONLIST;
+		return VIEW_USER_SESSIONLIST;
 	}
 
-	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = EmployeeWebConstants.Session.Path.SESSION, params = "delete")
+	@PreAuthorize(UserSessionPreAuthorizeEnum.HAS_DELETE)
+	@PostMapping(value = UserSessionWebConstants.Path.SESSION, params = "delete")
 	public RedirectView expireAllSessionsByUuid(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		String uuidStr = (String) requestParams.get("uuid");
@@ -62,8 +62,8 @@ public class UserSessionController {
 
 	}
 
-	@PreAuthorize(EmployeeSessionPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = EmployeeWebConstants.Session.Path.SESSION, params = "deleteall")
+	@PreAuthorize(UserSessionPreAuthorizeEnum.HAS_DELETE)
+	@PostMapping(value = UserSessionWebConstants.Path.SESSION, params = "deleteall")
 	public RedirectView expireAllSessions(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		userFacade.expireAllSessions();

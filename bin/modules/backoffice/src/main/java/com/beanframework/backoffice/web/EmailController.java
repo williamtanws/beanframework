@@ -34,13 +34,13 @@ public class EmailController extends AbstractController {
 	private EmailFacade emailFacade;
 
 	@Value(EmailWebConstants.Path.EMAIL)
-	private String PATH_EMAIL_PAGE;
+	private String PATH_EMAIL;
 
 	@Value(EmailWebConstants.Path.EMAIL_FORM)
 	private String PATH_EMAIL_FORM;
 
 	@Value(EmailWebConstants.View.EMAIL)
-	private String VIEW_EMAIL_PAGE;
+	private String VIEW_EMAIL;
 
 	@Value(EmailWebConstants.View.EMAIL_FORM)
 	private String VIEW_EMAIL_FORM;
@@ -48,7 +48,7 @@ public class EmailController extends AbstractController {
 	@PreAuthorize(EmailPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = EmailWebConstants.Path.EMAIL)
 	public String page(@Valid @ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		return VIEW_EMAIL_PAGE;
+		return VIEW_EMAIL;
 	}
 
 	@PreAuthorize(EmailPreAuthorizeEnum.HAS_READ)

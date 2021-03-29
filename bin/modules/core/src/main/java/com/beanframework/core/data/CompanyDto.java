@@ -34,15 +34,15 @@ public class CompanyDto extends GenericDto {
 	private AddressDto contactAddress;
 	private List<UserDto> users = new ArrayList<UserDto>();
 
-	private String selectedContactPerson;
-	private String selectedResponsibleCompany;
-	private String selectedCountry;
-	private String[] selectedAddresses;
-	private String selectedShippingAddress;
-	private String selectedUnloadingAddress;
-	private String selectedBillingAddress;
-	private String selectedContactAddress;
-	private String[] selectedUsers;
+	private String selectedContactPersonUuid;
+	private String selectedResponsibleCompanyUuid;
+	private String selectedCountryUuid;
+	private String[] selectedAddressUuids;
+	private String selectedShippingAddressUuid;
+	private String selectedUnloadingAddressUuid;
+	private String selectedBillingAddressUuid;
+	private String selectedContactAddressUuid;
+	private String[] selectedUserUuids;
 
 	public String getName() {
 		return name;
@@ -204,70 +204,6 @@ public class CompanyDto extends GenericDto {
 		this.contactAddress = contactAddress;
 	}
 
-	public String getSelectedResponsibleCompany() {
-		return selectedResponsibleCompany;
-	}
-
-	public void setSelectedResponsibleCompany(String selectedResponsibleCompany) {
-		this.selectedResponsibleCompany = selectedResponsibleCompany;
-	}
-
-	public String getSelectedCountry() {
-		return selectedCountry;
-	}
-
-	public void setSelectedCountry(String selectedCountry) {
-		this.selectedCountry = selectedCountry;
-	}
-
-	public String[] getSelectedAddresses() {
-		return selectedAddresses;
-	}
-
-	public void setSelectedAddresses(String[] selectedAddresses) {
-		this.selectedAddresses = selectedAddresses;
-	}
-
-	public String getSelectedShippingAddress() {
-		return selectedShippingAddress;
-	}
-
-	public void setSelectedShippingAddress(String selectedShippingAddress) {
-		this.selectedShippingAddress = selectedShippingAddress;
-	}
-
-	public String getSelectedUnloadingAddress() {
-		return selectedUnloadingAddress;
-	}
-
-	public void setSelectedUnloadingAddress(String selectedUnloadingAddress) {
-		this.selectedUnloadingAddress = selectedUnloadingAddress;
-	}
-
-	public String getSelectedBillingAddress() {
-		return selectedBillingAddress;
-	}
-
-	public void setSelectedBillingAddress(String selectedBillingAddress) {
-		this.selectedBillingAddress = selectedBillingAddress;
-	}
-
-	public String getSelectedContactAddress() {
-		return selectedContactAddress;
-	}
-
-	public void setSelectedContactAddress(String selectedContactAddress) {
-		this.selectedContactAddress = selectedContactAddress;
-	}
-
-	public String getSelectedContactPerson() {
-		return selectedContactPerson;
-	}
-
-	public void setSelectedContactPerson(String selectedContactPerson) {
-		this.selectedContactPerson = selectedContactPerson;
-	}
-
 	public List<UserDto> getUsers() {
 		return users;
 	}
@@ -276,12 +212,76 @@ public class CompanyDto extends GenericDto {
 		this.users = users;
 	}
 
-	public String[] getSelectedUsers() {
-		return selectedUsers;
+	public String getSelectedContactPersonUuid() {
+		return selectedContactPersonUuid;
 	}
 
-	public void setSelectedUsers(String[] selectedUsers) {
-		this.selectedUsers = selectedUsers;
+	public void setSelectedContactPersonUuid(String selectedContactPersonUuid) {
+		this.selectedContactPersonUuid = selectedContactPersonUuid;
+	}
+
+	public String getSelectedResponsibleCompanyUuid() {
+		return selectedResponsibleCompanyUuid;
+	}
+
+	public void setSelectedResponsibleCompanyUuid(String selectedResponsibleCompanyUuid) {
+		this.selectedResponsibleCompanyUuid = selectedResponsibleCompanyUuid;
+	}
+
+	public String getSelectedCountryUuid() {
+		return selectedCountryUuid;
+	}
+
+	public void setSelectedCountryUuid(String selectedCountryUuid) {
+		this.selectedCountryUuid = selectedCountryUuid;
+	}
+
+	public String[] getSelectedAddressUuids() {
+		return selectedAddressUuids;
+	}
+
+	public void setSelectedAddressUuids(String[] selectedAddressUuids) {
+		this.selectedAddressUuids = selectedAddressUuids;
+	}
+
+	public String getSelectedShippingAddressUuid() {
+		return selectedShippingAddressUuid;
+	}
+
+	public void setSelectedShippingAddressUuid(String selectedShippingAddressUuid) {
+		this.selectedShippingAddressUuid = selectedShippingAddressUuid;
+	}
+
+	public String getSelectedUnloadingAddressUuid() {
+		return selectedUnloadingAddressUuid;
+	}
+
+	public void setSelectedUnloadingAddressUuid(String selectedUnloadingAddressUuid) {
+		this.selectedUnloadingAddressUuid = selectedUnloadingAddressUuid;
+	}
+
+	public String getSelectedBillingAddressUuid() {
+		return selectedBillingAddressUuid;
+	}
+
+	public void setSelectedBillingAddressUuid(String selectedBillingAddressUuid) {
+		this.selectedBillingAddressUuid = selectedBillingAddressUuid;
+	}
+
+	public String getSelectedContactAddressUuid() {
+		return selectedContactAddressUuid;
+	}
+
+	public void setSelectedContactAddressUuid(String selectedContactAddressUuid) {
+		this.selectedContactAddressUuid = selectedContactAddressUuid;
+	}
+
+	public String[] getSelectedUserUuids() {
+		return selectedUserUuids;
+	}
+
+	public void setSelectedUserUuids(String[] selectedUserUuids) {
+		this.selectedUserUuids = selectedUserUuids;
 	}
 
 }

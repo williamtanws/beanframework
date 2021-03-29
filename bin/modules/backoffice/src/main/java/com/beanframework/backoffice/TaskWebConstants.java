@@ -5,7 +5,7 @@ public interface TaskWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String PAGE = "${path.api.task.page}";
+			public static final String PAGE = "${path.api.task}";
 			public static final String HISTORY = "${path.api.task.history}";
 		}
 

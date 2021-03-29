@@ -6,7 +6,7 @@ public interface CommentWebConstants {
 
 		public interface Api {
 			public static final String CHECKID = "${path.api.comment.checkid}";
-			public static final String PAGE = "${path.api.comment.page}";
+			public static final String PAGE = "${path.api.comment}";
 			public static final String HISTORY = "${path.api.comment.history}";
 		}
 

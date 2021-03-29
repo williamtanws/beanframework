@@ -1,262 +1,194 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+
 <head>
 <title th:utext="#{module.imex}"></title>
 </head>
+
 <body>
-	<th:block layout:fragment="update">
-		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.imex')}}, deleteUuid=${imexDto.uuid})}"></th:block>
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.imex')}" method="post" th:object="${imexDto}">
-			<input type="hidden" name="create" th:if="*{uuid == null}"/>
-			<input type="hidden" name="update" th:if="*{uuid != null}"/>
-			<input type="hidden" name="uuid" th:value="${imexDto.uuid}" />
-			<div class="row">
-				<div class="col-md-12">
-					<div class="box box-solid">
-						<div class="box-body bg-gray">
-							<div class="row">
-								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='imex_delete')}"></th:block>
-								</div>
-								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='imex_delete')}"></th:block>
-									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='imex_update')}"></th:block>
-								</div>
-							</div>
-						</div>
-						<!-- /.box-header -->
+	<th:block layout:fragment="content">
+		<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.imex.form')}}" method="post" th:object="${imexDto}">
+			<input type="hidden" name="create" th:if="*{uuid == null}" />
+			<input type="hidden" name="update" th:if="*{uuid != null}" />
+			<input type="hidden" name="uuid" th:value="*{uuid}" th:if="*{uuid != null}" />
+
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('imex_delete')"></th:block>
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
 					</div>
+					<!-- /.col -->
+					<div class="col-sm-6">
+						<div class="float-sm-right">
+							<button type="submit" class="btn btn-primary" th:text="#{module.common.save}" sec:authorize="hasAuthority('imex_create') or hasAuthority('imex_update')"></button>
+						</div>
+					</div>
+					<!-- /.col -->
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<!-- Custom Tabs -->
-					<div class="nav-tabs-custom">
-						<ul class="nav nav-tabs">
-							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a>
-							</li>
-							<li th:if="*{uuid != null}">
-								<a href="#tab_history" data-toggle="tab" th:text="#{module.common.history}" onclick="changeTab('history')"></a>
-							</li>
-							<li th:if="*{uuid != null}">
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
-							</li>
-						</ul>
-						<div class="tab-content">
-							<div class="tab-pane active" id="tab_general">
-								<div class="box-body">
-									<div class="row">
-										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="type" th:text="#{module.imex.type}"></label>
-												<span>*</span>
-												<select name="type" class="form-control" id="imexType">
-													<option th:each="state: ${T(com.beanframework.imex.ImexType).values()}" th:value="${state.name()}" th:text="${state}" th:selected="${imexDto.type == state}"></option>
-												</select>
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="directory" th:text="#{module.imex.directory}"></label>
-												<input class="form-control" name="directory" th:value="*{directory}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="fileName" th:text="#{module.imex.fileName}"></label>
-												<span>*</span>
-												<input class="form-control" name="fileName" th:value="*{fileName}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label for="query" th:text="#{module.imex.query}"></label>
-												<span>*</span>
-												<textarea class="form-control" rows="3" name="query" th:text="*{query}"></textarea>
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="form-group">
-												<label for="header" th:text="#{module.imex.header}"></label>
-												<textarea class="form-control" rows="3" name="header" th:text="*{header}"></textarea>
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="seperator" th:text="#{module.imex.seperator}"></label>
-												<input class="form-control" name="seperator" th:value="*{seperator}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- /.box-body -->
-								<div class="box-body" style="border: 5px solid #f4f4f4; padding-top: 10px;" th:if="*{uuid != null}">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<table class="table table-bordered" id="media-table">
-													<thead>
-														<tr>
-															<th class="text-center" th:text="#{module.media.fileName}"></th>
-															<th class="text-center" th:text="#{module.media.url}"></th>
-															<th class="text-center" th:text="#{module.common.download}"></th>
-															<th class="text-center hidden-xs" th:text="#{module.common.createdDate}"></th>
-															<th class="text-center hidden-xs" th:text="#{module.common.createdBy}"></th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr th:each="media : *{medias}" th:id="${media.uuid}">
-															<td>
-																<span th:text="${media.fileName}"></span>
-															</td>
-															<td>
-																<a th:href="${media.url}" th:text="${media.url}"></a>
-															</td>
-															<td class="text-center" style="width: 10px">
-																<a th:href="@{${@environment.getProperty('path.dms.form.media')}(download=,mediaUuid=${media.uuid})}">
-																	<i class="glyphicon glyphicon-download-alt"></i>
-																</a>
-															</td>
-															<td class="text-center hidden-xs" style="width: 200px">
-																<span class="text-block" th:text="${media.createdDate != null} ? ${#dates.format(media.createdDate, ' dd MMMM yyyy, hh:mma')}"></span>
-															</td>
-															<td class="text-center hidden-xs" style="width: 100px">
-																<span class="name" style="font-weight: 600; vertical-align: top;" th:text="${media.createdBy != null} ? ${media.createdBy.name} : ''"></span>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
-								<div class="box-body">
-									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.imex.history')}(uuid=*{uuid})} )}"></th:block>
-								</div>
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
-								<div class="box-body">
-									<th:block layout:insert="~{common/adminlte/common/component/administration :: administration}"></th:block>
-								</div>
-							</div>
-							<!-- /.tab-pane -->
-						</div>
-						<!-- /.tab-content -->
-					</div>
-					<!-- nav-tabs-custom -->
+			<div class="card card-primary card-outline card-outline-tabs consistent-height">
+				<div class="card-header p-0 border-bottom-0">
+					<ul class="nav nav-tabs" id="custom-tabs-tab" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-history-tab" data-toggle="pill" href="#custom-tabs-history" role="tab" aria-controls="custom-tabs-history" aria-selected="false" th:text="#{module.common.history}" th:if="*{uuid != null}"></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-administration-tab" data-toggle="pill" href="#custom-tabs-administration" role="tab" aria-controls="custom-tabs-administration" aria-selected="false" th:text="#{module.common.administration}" th:if="*{uuid != null}"></a>
+						</li>
+					</ul>
 				</div>
-				<!-- /.col -->
+				<div class="card-body">
+					<div class="tab-content" id="custom-tabs-tabContent">
+						<div class="tab-pane fade show active" id="custom-tabs-general" role="tabpanel" aria-labelledby="custom-tabs-general-tab">
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="id" th:text="#{module.common.id}"></label>
+										<span>*</span>
+										<input type="text" class="form-control" name="id" th:value="*{id}">
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="fileName" th:text="#{module.imex.fileName}"></label>
+										<input type="text" class="form-control" name="fileName" th:value="*{fileName}">
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="type" th:text="#{module.imex.type}"></label>
+										<span>*</span>
+										<select name="type" class="form-control" id="imexType">
+											<option th:each="state: ${T(com.beanframework.imex.ImexType).values()}" th:value="${state.name()}" th:text="${state}" th:selected="${imexDto.type == state}"></option>
+										</select>
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="directory" th:text="#{module.imex.directory}"></label>
+										<input class="form-control" name="directory" th:value="*{directory}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="query" th:text="#{module.imex.query}"></label>
+										<span>*</span>
+										<textarea class="form-control" rows="3" name="query" th:text="*{query}"></textarea>
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="header" th:text="#{module.imex.header}"></label>
+										<textarea class="form-control" rows="3" name="header" th:text="*{header}"></textarea>
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="seperator" th:text="#{module.imex.seperator}"></label>
+										<input class="form-control" name="seperator" th:value="*{seperator}">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="email" th:text="#{module.imex.medias}"></label>
+										<table id="selected-table-selectedMediaDataTable" class="table table-bordered">
+											<thead>
+												<tr>
+													<th th:text="#{module.media.id}"></th>
+													<th th:text="#{module.media.fileName}"></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="media: *{medias}">
+													<td th:text="${media.id}"></td>
+													<td th:text="${media.fileName}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
+						</div>
+					</div>
+				</div>
+				<!-- /.card -->
 			</div>
 		</form>
+		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable-map :: add (tableId='parameterDataTable')}"></th:block>
+		<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: modal (uuid=${imexDto.uuid}, deleteUrl=@{${@environment.getProperty('path.imex.form')}} )}"></th:block>
+	</th:block>
+	<th:block layout:fragment="js">
+
 		<script th:inline="javascript">
-		    /*<![CDATA[*/
-		    	
-		    $(document).ready(function() {
-			    $('#media-table').DataTable({
-			        'paging': true,
-			        'lengthChange': true,
-			        'searching': true,
-			        'ordering': true,
-			        'info': true,
-			        'autoWidth': true
-			    });
-			});
+			/*<![CDATA[*/
 		    
-		    $(document).ready(function() {
-		        $('#update-form').validate({
-		        	onkeyup: function(element) {
-		                this.element(element);
-		            },
-		        	onfocusout: false,
-		            invalidHandler: function(form, validator) {
-		                var errors = validator.numberOfInvalids();
-		                if (errors) {                    
-		                    validator.errorList[0].element.focus();
-		                }
-		            },
-		            rules: {
-		            	id: {
-		                    required: true,
-		                    remote: {
-		                        url: /*[[${@environment.getProperty('path.api.imex.checkid')}]]*/ ,
-		                        type: "get",
-		                        data: {
-		                            uuid: /*[[${imexDto.uuid}]]*/ ,
-		                            id: function() {
-		                                return $("#update-form input[name='id']").val();
-		                            }
-		                        }
-		                    }
-		                },
-		                type: {
-		                    required: true
-		                },
-		                fileName: {
-		                    required: true
-		                },
-		                query: {
-		                    required: true
-		                },
-		                header: {
-		                	required: function() {
-		                        return $('#imexType').val() == "EXPORT";
-		                    }
-		                },
-		                seperator: {
-		                	required: function() {
-		                        return $('#imexType').val() == "EXPORT";
-		                    }
-		                }
-		            },
-		            messages: {
-		            },
-		            highlight: function(element) {
-		                $(element).closest('.form-group').addClass('has-error');
-		                
-		                var id = $(element).closest('.tab-pane').attr('id');
-		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
-		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
-		                });
-		            },
-		            unhighlight: function(element) {
-		                $(element).closest('.form-group').removeClass('has-error');
-		                $(element).closest('.form-group').find('.help-block').html('');
-		                
-		                var id = $(element).closest('.tab-pane').attr('id');
-		                var noError = true;
-		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
-		                    noError = false;
-		                });
-		                if(noError){
-			                $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','black');
-		                }
-		            },
-		            errorPlacement: function(error, element) {
-		                element.closest('.form-group').find('.help-block').html(error.text());
-		            }
-		        });
-		
-		    });
+		    $('#datetimepicker').daterangepicker({
+		      singleDatePicker: true,
+		      timePicker: true,
+		      timePickerIncrement: 30,
+		      locale: {
+		        format: 'MM/DD/YYYY hh:mm A'
+		      }
+		    })
+
+				
+			$(document).ready(function () {
+				$('#form-save').validate(
+					{
+						rules: {
+							id: {
+								required: true,
+								remote: {
+									url: /*[[@{${@environment.getProperty('path.api.imex.checkid')}}]]*/ ,
+									type: "get",
+									data: {
+										uuid: $('#form-save input[name=uuid]').val(),
+										id: function () {
+											return $("#form-save input[name='id']").val();
+										}
+									}
+								}
+							}
+						},
+						messages: {
+							id: {
+								required: /*[[#{module.common.id.required}]]*/,
+			                    remote: /*[[#{module.common.id.exists}]]*/
+							}
+						},
+						errorElement: 'span',
+						errorPlacement: function (error, element) {
+							error.addClass('invalid-feedback');
+							element.closest('.form-group').append(error);
+						},
+						highlight: function (element, errorClass, validClass) {
+							$(element).addClass('is-invalid');
+						},
+						unhighlight: function (element, errorClass, validClass) {
+							$(element).removeClass('is-invalid');
+						}
+					});
+			});
+			
 		    /*]]>*/
 		</script>
-
+		<th:block th:if="${imexDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.imex.history')}(uuid=${imexDto.uuid})})}"></th:block>
 	</th:block>
 </body>
+
 </html>

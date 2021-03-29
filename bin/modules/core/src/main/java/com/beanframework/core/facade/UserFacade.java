@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserDto;
-import com.beanframework.user.UserSession;
+import com.beanframework.user.data.UserSession;
 
 public interface UserFacade {
 

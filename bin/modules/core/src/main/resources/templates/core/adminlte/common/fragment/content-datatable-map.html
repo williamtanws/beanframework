@@ -71,15 +71,7 @@
 		/*<![CDATA[*/
 		
 		$(document).ready(function () {
-			initialMapDataTable(/*[[${tableId}]]*/, /*[[${pageUrl}]]*/, /*[[${selectedItemDto}]]*/, /*[[${selectedItemNames}]]*/, /*[[${selectedItemValues}]]*/);
-		});
-			
-		function initialMapDataTable(tableId, pageUrl, selectedItemDto, selectedItemNames, selectedItemValues){
-			
-			var tableId = /*[[${tableId}]]*/;
 			var data = /*[[${selectedItemDto}]]*/;
-			var selectedItemNames = /*[[${selectedItemNames}]]*/;
-			var selectedItemValues = /*[[${selectedItemValues}]]*/;
 			
 			var dataArray = [];
 			for(var name in data){
@@ -88,7 +80,7 @@
 				}
 			}
 			
-			var selectedDataTable = $("#selected-table-"+tableId).DataTable( {
+			$("#selected-table-"+/*[[${tableId}]]*/).DataTable( {
 		    	"language": {
 		           	"decimal":        "",
 		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
@@ -148,6 +140,7 @@
     	            	targets: 0,
     	                render: function(data, type, row, meta)
     	                {
+    	        			var selectedItemNames = /*[[${selectedItemNames}]]*/;
     	                	return row[0]+'<input type="hidden" class="addKey" name="'+selectedItemNames+'" value="'+row[0]+'"></input>'; 
     	                }
     	            },
@@ -155,6 +148,7 @@
     	            	targets: 1,
     	                render: function(data, type, row, meta)
     	                {
+    	        			var selectedItemValues = /*[[${selectedItemValues}]]*/;
     	                	return row[1]+'<input type="hidden" class="addValue" name="'+selectedItemValues+'" value="'+row[1]+'"></input>'; 
     	                }
     	            }
@@ -162,16 +156,15 @@
 	    	    ]
 			});
 			
-			$("#selected-table-"+tableId+" tbody").on( 'click', '.btnDelete', function () {
-				$("#selectedItem-"+ tableId).html('');
+			$("#selected-table-"+/*[[${tableId}]]*/).on( 'click', 'tbody .btnDelete', function () {
+				$("#selectedItem-"+/*[[${tableId}]]*/).html('');
 				
-				selectedDataTable
+				$("#selected-table-"+/*[[${tableId}]]*/).DataTable()
 			        .row( $(this).parents('tr') )
 			        .remove()
 			        .draw();
 			});
-			
-		}
+		});
 
 		/*]]>*/
 		</script>

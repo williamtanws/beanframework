@@ -34,13 +34,13 @@ public class UserPermissionController extends AbstractController {
 	private UserPermissionFacade dynamicFieldFacade;
 
 	@Value(UserPermissionWebConstants.Path.PERMISSION)
-	private String PATH_PERMISSION_PAGE;
+	private String PATH_PERMISSION;
 
 	@Value(UserPermissionWebConstants.Path.PERMISSION_FORM)
 	private String PATH_PERMISSION_FORM;
 
 	@Value(UserPermissionWebConstants.View.PERMISSION)
-	private String VIEW_PERMISSION_PAGE;
+	private String VIEW_PERMISSION;
 
 	@Value(UserPermissionWebConstants.View.PERMISSION_FORM)
 	private String VIEW_PERMISSION_FORM;
@@ -48,7 +48,7 @@ public class UserPermissionController extends AbstractController {
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = UserPermissionWebConstants.Path.PERMISSION)
 	public String page(@Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.PERMISSION_DTO) UserPermissionDto dynamicFieldDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		return VIEW_PERMISSION_PAGE;
+		return VIEW_PERMISSION;
 	}
 
 	@PreAuthorize(UserPermissionPreAuthorizeEnum.HAS_READ)

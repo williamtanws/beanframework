@@ -149,13 +149,13 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 			}
 
 			// Country
-			if (StringUtils.isBlank(source.getSelectedCountry())) {
+			if (StringUtils.isBlank(source.getSelectedCountryUuid())) {
 				if (prototype.getCountry() != null) {
 					prototype.setCountry(null);
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				Country entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedCountry()), Country.class);
+				Country entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedCountryUuid()), Country.class);
 
 				if (entity != null) {
 
@@ -164,18 +164,18 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
-					throw new ConverterException("Country UUID not found: " + source.getSelectedCountry());
+					throw new ConverterException("Country UUID not found: " + source.getSelectedCountryUuid());
 				}
 			}
 
 			// Region
-			if (StringUtils.isBlank(source.getSelectedRegion())) {
+			if (StringUtils.isBlank(source.getSelectedRegionUuid())) {
 				if (prototype.getRegion() != null) {
 					prototype.setRegion(null);
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				Region entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedRegion()), Region.class);
+				Region entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedRegionUuid()), Region.class);
 
 				if (entity != null) {
 
@@ -184,18 +184,18 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
-					throw new ConverterException("Region UUID not found: " + source.getSelectedRegion());
+					throw new ConverterException("Region UUID not found: " + source.getSelectedRegionUuid());
 				}
 			}
 
 			// Owner
-			if (StringUtils.isBlank(source.getSelectedOwner())) {
+			if (StringUtils.isBlank(source.getSelectedOwnerUuid())) {
 				if (prototype.getOwner() != null) {
 					prototype.setOwner(null);
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				User entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedOwner()), User.class);
+				User entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedOwnerUuid()), User.class);
 
 				if (entity != null) {
 
@@ -204,18 +204,18 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
-					throw new ConverterException("Owner UUID not found: " + source.getSelectedOwner());
+					throw new ConverterException("Owner UUID not found: " + source.getSelectedOwnerUuid());
 				}
 			}
 
 			// ShippingAddress
-			if (StringUtils.isBlank(source.getSelectedShippingAddress())) {
+			if (StringUtils.isBlank(source.getSelectedShippingAddressUuid())) {
 				if (prototype.getShippingAddress() != null) {
 					prototype.setShippingAddress(null);
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedShippingAddress()), Address.class);
+				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedShippingAddressUuid()), Address.class);
 
 				if (entity != null) {
 
@@ -224,18 +224,18 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
-					throw new ConverterException("ShippingAddress UUID not found: " + source.getSelectedShippingAddress());
+					throw new ConverterException("ShippingAddress UUID not found: " + source.getSelectedShippingAddressUuid());
 				}
 			}
 
 			// BillingAddress
-			if (StringUtils.isBlank(source.getSelectedBillingAddress())) {
+			if (StringUtils.isBlank(source.getSelectedBillingAddressUuid())) {
 				if (prototype.getBillingAddress() != null) {
 					prototype.setBillingAddress(null);
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedBillingAddress()), Address.class);
+				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedBillingAddressUuid()), Address.class);
 
 				if (entity != null) {
 
@@ -244,18 +244,18 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
-					throw new ConverterException("BillingAddress UUID not found: " + source.getSelectedBillingAddress());
+					throw new ConverterException("BillingAddress UUID not found: " + source.getSelectedBillingAddressUuid());
 				}
 			}
 
 			// ContactAddress
-			if (StringUtils.isBlank(source.getSelectedContactAddress())) {
+			if (StringUtils.isBlank(source.getSelectedContactAddressUuid())) {
 				if (prototype.getContactAddress() != null) {
 					prototype.setContactAddress(null);
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedContactAddress()), Address.class);
+				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedContactAddressUuid()), Address.class);
 
 				if (entity != null) {
 
@@ -264,18 +264,18 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
-					throw new ConverterException("ContactAddress UUID not found: " + source.getSelectedContactAddress());
+					throw new ConverterException("ContactAddress UUID not found: " + source.getSelectedContactAddressUuid());
 				}
 			}
 
 			// DefaultPaymentAddress
-			if (StringUtils.isBlank(source.getSelectedDefaultPaymentAddress())) {
+			if (StringUtils.isBlank(source.getSelectedDefaultPaymentAddressUuid())) {
 				if (prototype.getDefaultPaymentAddress() != null) {
 					prototype.setDefaultPaymentAddress(null);
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedDefaultPaymentAddress()), Address.class);
+				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedDefaultPaymentAddressUuid()), Address.class);
 
 				if (entity != null) {
 
@@ -284,18 +284,18 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
-					throw new ConverterException("DefaultPaymentAddress UUID not found: " + source.getSelectedDefaultPaymentAddress());
+					throw new ConverterException("DefaultPaymentAddress UUID not found: " + source.getSelectedDefaultPaymentAddressUuid());
 				}
 			}
 
 			// DefaultShipmentAddress
-			if (StringUtils.isBlank(source.getSelectedDefaultShipmentAddress())) {
+			if (StringUtils.isBlank(source.getSelectedDefaultShipmentAddressUuid())) {
 				if (prototype.getDefaultShipmentAddress() != null) {
 					prototype.setDefaultShipmentAddress(null);
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
 			} else {
-				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedDefaultShipmentAddress()), Address.class);
+				Address entity = modelService.findOneByUuid(UUID.fromString(source.getSelectedDefaultShipmentAddressUuid()), Address.class);
 
 				if (entity != null) {
 
@@ -304,7 +304,7 @@ public class EntityAddressConverter implements EntityConverter<AddressDto, Addre
 						prototype.setLastModifiedDate(lastModifiedDate);
 					}
 				} else {
-					throw new ConverterException("DefaultShipmentAddress UUID not found: " + source.getSelectedDefaultShipmentAddress());
+					throw new ConverterException("DefaultShipmentAddress UUID not found: " + source.getSelectedDefaultShipmentAddressUuid());
 				}
 			}
 

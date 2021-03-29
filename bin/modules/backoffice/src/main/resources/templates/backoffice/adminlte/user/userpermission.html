@@ -12,13 +12,13 @@
 			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header (title=#{module.userpermission}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
 
 			<!-- Main content -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.userpermission}, tableId='userpermissionTable', columnsi18n=${#strings.arraySplit(id+','+name+','+sort, ',')})}"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.userpermission}, tableId='userpermissionTable', columnsi18n=${#strings.arraySplit(id+','+name+','+sort, ',')}, selectAuthority=true )}"></th:block>
 
 		</div>
 
 	</th:block>
 	<th:block layout:fragment="js" th:with="addAuthority=${#authorization.expression('hasAuthority(''userpermission_create'')')}">
-		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='userpermissionTable', columns=${#strings.arraySplit('id,name,sort', ',')}, pageUrl=@{${@environment.getProperty('path.api.userpermission')}}, formUrl=@{${@environment.getProperty('path.userpermission.form')}}, addAuthority=${addAuthority} )}"></th:block>
+		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='userpermissionTable', columns=${#strings.arraySplit('id,name,sort', ',')}, pageUrl=@{${@environment.getProperty('path.api.userpermission')}}, formUrl=@{${@environment.getProperty('path.userpermission.form')}}, addAuthority=${addAuthority}, selectAuthority=true  )}"></th:block>
 	</th:block>
 </body>
 </html>

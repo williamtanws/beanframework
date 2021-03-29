@@ -5,17 +5,17 @@ public interface WorkflowWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String WORKFLOW_PAGE = "${path.api.workflow.page}";
-			public static final String WORKFLOW_PAGE_HISTORY = "${path.api.workflow.page.history}";
+			public static final String WORKFLOW = "${path.api.workflow}";
+			public static final String WORKFLOW_HISTORY = "${path.api.workflow.history}";
 			public static final String WORKFLOW_CHECKID = "${path.api.workflow.checkid}";
 		}
 
-		public static final String WORKFLOW_PAGE = "${path.workflow.page}";
+		public static final String WORKFLOW = "${path.workflow}";
 		public static final String WORKFLOW_FORM = "${path.workflow.form}";
 	}
 
 	public interface View {
-		public static final String PAGE = "${view.workflow.page}";
+		public static final String PAGE = "${view.workflow}";
 		public static final String FORM = "${view.workflow.form}";
 	}
 

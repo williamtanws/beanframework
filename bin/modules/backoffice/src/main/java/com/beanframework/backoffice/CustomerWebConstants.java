@@ -6,7 +6,7 @@ public interface CustomerWebConstants {
 
 		public interface Api {
 			public static final String CHECKID = "${path.api.customer.checkid}";
-			public static final String PAGE = "${path.api.customer.page}";
+			public static final String PAGE = "${path.api.customer}";
 			public static final String HISTORY = "${path.api.customer.history}";
 		}
 

@@ -18,7 +18,7 @@
 //
 //public class PaginationUtils {
 //
-//	public static final String PARAM_PAGE = "page";
+//	public static final String PARAM = "page";
 //	public static final String PARAM_SIZE = "size";
 //	public static final String PARAM_DIRECTION = "direction";
 //	public static final String PARAM_PROPERTIES = "properties";
@@ -29,12 +29,12 @@
 //	public static Map<String, Object> getPaginationParam(Model model, @RequestParam Map<String, Object> requestParams) {
 //		Map<String, Object> params = new HashMap<String, Object>();
 //
-//		int page = isNotBlank(requestParams.get(PARAM_PAGE)) ? Integer.valueOf(requestParams.get(PARAM_PAGE).toString()) - 1 : 0;
+//		int page = isNotBlank(requestParams.get(PARAM)) ? Integer.valueOf(requestParams.get(PARAM).toString()) - 1 : 0;
 //		int size = isNotBlank(requestParams.get(PARAM_SIZE)) ? Integer.valueOf(requestParams.get(PARAM_SIZE).toString()) : DEFAULT_SIZE;
 //		Direction direction = isNotBlank(requestParams.get(PARAM_DIRECTION)) ? Direction.valueOf(requestParams.get(PARAM_DIRECTION).toString().toUpperCase()) : null;
 //		String properties = isNotBlank(requestParams.get(PARAM_PROPERTIES)) ? String.valueOf(requestParams.get(PARAM_PROPERTIES).toString().toUpperCase()) : null;
 //		
-//		params.put(PARAM_PAGE, page);
+//		params.put(PARAM, page);
 //		params.put(PARAM_SIZE, size);
 //		params.put(PARAM_DIRECTION, direction);
 //		params.put(PARAM_PROPERTIES, properties);
@@ -44,13 +44,13 @@
 //
 //	public static String getPaginationPath(String path, @RequestParam Map<String, Object> requestParams) {
 //
-//		int page = isNotBlank(requestParams.get(PARAM_PAGE)) ? Integer.valueOf(requestParams.get(PARAM_PAGE).toString()) - 1 : 0;
+//		int page = isNotBlank(requestParams.get(PARAM)) ? Integer.valueOf(requestParams.get(PARAM).toString()) - 1 : 0;
 //		int size = isNotBlank(requestParams.get(PARAM_SIZE)) ? Integer.valueOf(requestParams.get(PARAM_SIZE).toString()) : DEFAULT_SIZE;
 //		String properties = isNotBlank(requestParams.get(PARAM_PROPERTIES)) ? String.valueOf(requestParams.get(PARAM_PROPERTIES).toString().toUpperCase()) : null;
 //		Direction direction = isNotBlank(requestParams.get(PARAM_DIRECTION)) ? Direction.valueOf(requestParams.get(PARAM_DIRECTION).toString().toUpperCase()) : null;
 //		
 //		MultiValueMap<String, String> paginationParams = new LinkedMultiValueMap<String, String>();
-//		paginationParams.set(PARAM_PAGE, String.valueOf(page));
+//		paginationParams.set(PARAM, String.valueOf(page));
 //		paginationParams.set(PARAM_SIZE, String.valueOf(size));
 //		paginationParams.set(PARAM_PROPERTIES, convertParam(properties));
 //		paginationParams.set(PARAM_DIRECTION, convertParam(direction));
@@ -62,13 +62,13 @@
 //
 //	public static String generatePath(String path, Map<String, String> additionalParams, @RequestParam Map<String, Object> requestParams) {
 //
-//		int page = isNotBlank(requestParams.get(PARAM_PAGE)) ? Integer.valueOf(requestParams.get(PARAM_PAGE).toString()) - 1 : 0;
+//		int page = isNotBlank(requestParams.get(PARAM)) ? Integer.valueOf(requestParams.get(PARAM).toString()) - 1 : 0;
 //		int size = isNotBlank(requestParams.get(PARAM_SIZE)) ? Integer.valueOf(requestParams.get(PARAM_SIZE).toString()) : DEFAULT_SIZE;
 //		String properties = isNotBlank(requestParams.get(PARAM_PROPERTIES)) ? String.valueOf(requestParams.get(PARAM_PROPERTIES).toString().toUpperCase()) : null;
 //		Direction direction = isNotBlank(requestParams.get(PARAM_DIRECTION)) ? Direction.valueOf(requestParams.get(PARAM_DIRECTION).toString().toUpperCase()) : null;
 //		
 //		MultiValueMap<String, String> paginationParams = new LinkedMultiValueMap<String, String>();
-//		paginationParams.set(PARAM_PAGE, String.valueOf(page));
+//		paginationParams.set(PARAM, String.valueOf(page));
 //		paginationParams.set(PARAM_SIZE, String.valueOf(size));
 //		paginationParams.set(PARAM_PROPERTIES, convertParam(properties));
 //		paginationParams.set(PARAM_DIRECTION, convertParam(direction));
@@ -85,7 +85,7 @@
 //	public static void setPaginationParams(Model model, @RequestParam Map<String, Object> requestParams) {
 //
 //		model.addAttribute(PARAM_SIZE, convertParamEncode(requestParams.get(PARAM_SIZE)));
-//		model.addAttribute(PARAM_PAGE, convertParamEncode(requestParams.get(PARAM_PAGE)));
+//		model.addAttribute(PARAM, convertParamEncode(requestParams.get(PARAM)));
 //		model.addAttribute(PARAM_PROPERTIES, convertParamEncode(requestParams.get(PARAM_PROPERTIES)));
 //		model.addAttribute(PARAM_DIRECTION, convertParamEncode(requestParams.get(PARAM_DIRECTION)));
 //	}
@@ -93,7 +93,7 @@
 //	public static void setPaginationParams(RedirectAttributes redirectAttributes, @RequestParam Map<String, Object> requestParams) {
 //
 //		redirectAttributes.addAttribute(PARAM_SIZE, convertParamEncode(requestParams.get(PARAM_SIZE)));
-//		redirectAttributes.addAttribute(PARAM_PAGE, convertParamEncode(requestParams.get(PARAM_PAGE)));
+//		redirectAttributes.addAttribute(PARAM, convertParamEncode(requestParams.get(PARAM)));
 //		redirectAttributes.addAttribute(PARAM_PROPERTIES, convertParamEncode(requestParams.get(PARAM_PROPERTIES)));
 //		redirectAttributes.addAttribute(PARAM_DIRECTION, convertParamEncode(requestParams.get(PARAM_DIRECTION)));
 //	}

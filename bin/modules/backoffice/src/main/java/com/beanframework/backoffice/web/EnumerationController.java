@@ -34,13 +34,13 @@ public class EnumerationController extends AbstractController {
 	private EnumerationFacade enumerationFacade;
 
 	@Value(EnumerationWebConstants.Path.ENUMERATION)
-	private String PATH_ENUMERATION_PAGE;
+	private String PATH_ENUMERATION;
 
 	@Value(EnumerationWebConstants.Path.ENUMERATION_FORM)
 	private String PATH_ENUMERATION_FORM;
 
 	@Value(EnumerationWebConstants.View.ENUMERATION)
-	private String VIEW_ENUMERATION_PAGE;
+	private String VIEW_ENUMERATION;
 
 	@Value(EnumerationWebConstants.View.ENUMERATION_FORM)
 	private String VIEW_ENUMERATION_FORM;
@@ -48,7 +48,7 @@ public class EnumerationController extends AbstractController {
 	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = EnumerationWebConstants.Path.ENUMERATION)
 	public String page(@Valid @ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		return VIEW_ENUMERATION_PAGE;
+		return VIEW_ENUMERATION;
 	}
 
 	@PreAuthorize(EnumerationPreAuthorizeEnum.HAS_READ)

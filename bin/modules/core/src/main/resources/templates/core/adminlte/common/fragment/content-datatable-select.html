@@ -44,20 +44,12 @@
 	<th:block th:fragment="js-single (tableId, columns, pageUrl, selectedItemDto, selectedItemUuidName)">
 		<script th:inline="javascript">
 		/*<![CDATA[*/
-		
-		$(document).ready(function () {
-			initialSingleSelectDataTable(/*[[${tableId}]]*/, /*[[${pageUrl}]]*/, /*[[${selectedItemDto}]]*/, /*[[${selectedItemUuidName}]]*/);
-		});
 			
-			
-		function initialSingleSelectDataTable(tableId, pageUrl, selectedItemDto, selectedItemUuidName){
-			
-			var tableId = /*[[${tableId}]]*/;
-			var pageUrl = /*[[${pageUrl}]]*/;
+			$(document).ready(function () {
+				
 			var selectedItemDto = /*[[${selectedItemDto}]]*/;
-			var selectedItemUuidName = /*[[${selectedItemUuidName}]]*/;
 			
-			var selectedDataTable = $("#selected-table-"+tableId).DataTable( {
+			$("#selected-table-"+/*[[${tableId}]]*/).DataTable( {
 		    	"language": {
 		           	"decimal":        "",
 		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
@@ -85,21 +77,21 @@
 				"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, /*[[#{module.common.datatable.all}]]*/] ],
 		    	"responsive" : true,
 				'pageLength'  : 10,
-	    	    'paging'      : false,
-	    	    'lengthChange': false,
-	    	    'searching'   : false,
-	    	    'ordering'    : false,
-	    	    'info'        : false,
+	    	    'paging'      : true,
+	    	    'lengthChange': true,
+	    	    'searching'   : true,
+	    	    'ordering'    : true,
+	    	    'info'        : true,
 	    	    'autoWidth'   : false,
 	    	    'processing': false,
 	    	    'serverSide': false,
-		        'bStateSave': true,
+		        'bStateSave': false,
 		        'dom': 
 	    	      "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 	    	      "<'row'<'col-sm-12'tr>>" +
 	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
 	    	    /*[# th:if="${selectedItemDto != null}"]*/
-				'data': [selectedItemDto],
+				'data':  [selectedItemDto],
 				/*[/]*/
 			    "columns": [
 		            /*[# th:each="column, iterStat : ${columns}"]*/
@@ -123,23 +115,24 @@
     	            	targets: 0,
     	                render: function(data, type, row, meta)
     	                {
-    	                	return row.id+'<input type="hidden" name="'+selectedItemUuidName+'" value="'+row.uuid+'"></input>'; 
+    	                	var selectedItem = /*[[${selectedItemUuidName}]]*/;
+    	                	return row.id+'<input type="hidden" name="'+selectedItem+'" value="'+row.uuid+'"></input>'; 
     	                }
     	            }
 	    	    
 	    	    ]
 			});
-			
-			$("#selected-table-"+tableId+" tbody").on( 'click', '.btnDelete', function () {
-				$("#selectedItem-"+ tableId).html('');
+		
+			$("#selected-table-"+/*[[${tableId}]]*/+" tbody").on( 'click', '.btnDelete', function () {
+				$("#selectedItem-"+ /*[[${tableId}]]*/).html('');
 				
-				selectedDataTable
+				$("#selected-table-"+/*[[${tableId}]]*/).DataTable()
 			        .row( $(this).parents('tr') )
 			        .remove()
 			        .draw();
 			});
 			
-			var selectDataTable = $("#select-table-"+tableId).DataTable( {
+			$("#select-table-"+/*[[${tableId}]]*/).DataTable( {
 		    	"language": {
 		           	"decimal":        "",
 		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
@@ -176,13 +169,13 @@
 	    	    'processing': true,
 	    	    'serverSide': true,
 	    	    'searchDelay': 1000,
-		        'bStateSave': true,
+		        'bStateSave': false,
 		        'dom': "<'row'<'form-group col-sm-12 col-md-12'B>>" +
 	    	      "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 	    	      "<'row'<'col-sm-12'tr>>" +
 	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
 				'ajax': {
-					"url": pageUrl,
+					"url": /*[[${pageUrl}]]*/,
 					"statusCode": {
 				    	401: function (xhr, error, thrown) {
 							window.top.location.href = /*[[@{${loginUrl}}]]*/; 
@@ -208,14 +201,15 @@
 		                text: /*[[#{module.common.select}]]*/,
 		                className: 'btn btn-primary',
 		                action: function ( e, dt, node, config ) {
+		                	var tableId = /*[[${tableId}]]*/;
 		                	
 		                	/* Single select*/
-		                	var data=selectDataTable.rows('.selected').data()[0];
+		                	var data=dt.rows('.selected').data()[0];
 		                	if(data){
 		                		$("#selected-table-"+tableId).dataTable().fnClearTable();
 		                		$("#selected-table-"+tableId).DataTable().row.add(data).draw();
 		                		$("#modal-form-"+tableId).modal('hide');
-		                	}
+		                	}             	
 		                }
 		            },
 		        	{
@@ -228,27 +222,20 @@
 		    	]
 		    });
 			
-			$("#select-table-"+tableId).on('click', 'tr', function () {
-				
-				/* Multi select*/
-				/* if ( $(this).hasClass('selected') ) {
-		            $(this).removeClass('selected');
-				}
-				else{
-					$(this).addClass('selected');
-				} */
-				
+			$("#select-table-"+/*[[${tableId}]]*/).on('click', 'tr', function () {
+            	var tableId = /*[[${tableId}]]*/;
 				
 				/* Single select*/
 		    	if ( $(this).hasClass('selected') ) {
 		            $(this).removeClass('selected');
 		        }
 		        else {
-		        	selectDataTable.$('tr.selected').removeClass('selected');
+		        	$("#select-table-"+tableId+" tr.selected").removeClass('selected');
 		            $(this).addClass('selected');
 		        }
 		    });
-		}
+			
+		});
 		
 		/*]]>*/
 		</script>
@@ -259,18 +246,8 @@
 		/*<![CDATA[*/
 			
 		$(document).ready(function () {
-			initialMultiSelectDataTable(/*[[${tableId}]]*/, /*[[${pageUrl}]]*/, /*[[${selectedItemDto}]]*/, /*[[${selectedItemUuidName}]]*/);
-		});
-			
-			
-		function initialMultiSelectDataTable(tableId, pageUrl, selectedItemDto, selectedItemUuidName){
-			
-			var tableId = /*[[${tableId}]]*/;
-			var pageUrl = /*[[${pageUrl}]]*/;
-			var selectedItemDto = /*[[${selectedItemDto}]]*/;
-			var selectedItemUuidName = /*[[${selectedItemUuidName}]]*/;
-			
-			var selectedDataTable = $("#selected-table-"+tableId).DataTable( {
+						
+		$("#selected-table-"+/*[[${tableId}]]*/).DataTable( {
 		    	"language": {
 		           	"decimal":        "",
 		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
@@ -306,13 +283,13 @@
 	    	    'autoWidth'   : false,
 	    	    'processing': false,
 	    	    'serverSide': false,
-		        'bStateSave': true,
+		        'bStateSave': false,
 		        'dom': 
 	    	      "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 	    	      "<'row'<'col-sm-12'tr>>" +
 	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
 	    	    /*[# th:if="${selectedItemDto != null}"]*/
-				'data': selectedItemDto,
+				'data': /*[[${selectedItemDto}]]*/,
 				/*[/]*/
 			    "columns": [
 		            /*[# th:each="column, iterStat : ${columns}"]*/
@@ -336,6 +313,7 @@
     	            	targets: 0,
     	                render: function(data, type, row, meta)
     	                {
+    	        			var selectedItemUuidName = /*[[${selectedItemUuidName}]]*/;
     	                	return row.id+'<input type="hidden" name="'+selectedItemUuidName+'" value="'+row.uuid+'"></input>'; 
     	                }
     	            }
@@ -343,16 +321,16 @@
 	    	    ]
 			});
 			
-			$("#selected-table-"+tableId+" tbody").on( 'click', '.btnDelete', function () {
-				$("#selectedItem-"+ tableId).html('');
+			$("#selected-table-"+/*[[${tableId}]]*/).on( 'click', 'tbody .btnDelete', function () {
+				$("#selectedItem-"+ /*[[${tableId}]]*/).html('');
 				
-				selectedDataTable
+				$("#selected-table-"+/*[[${tableId}]]*/).DataTable()
 			        .row( $(this).parents('tr') )
 			        .remove()
 			        .draw();
 			});
 			
-			var selectDataTable = $("#select-table-"+tableId).DataTable( {
+			$("#select-table-"+/*[[${tableId}]]*/).DataTable( {
 		    	"language": {
 		           	"decimal":        "",
 		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
@@ -389,13 +367,13 @@
 	    	    'processing': true,
 	    	    'serverSide': true,
 	    	    'searchDelay': 1000,
-		        'bStateSave': true,
+		        'bStateSave': false,
 		        'dom': "<'row'<'form-group col-sm-12 col-md-12'B>>" +
 	    	      "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 	    	      "<'row'<'col-sm-12'tr>>" +
 	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
 				'ajax': {
-					"url": pageUrl,
+					"url": /*[[${pageUrl}]]*/,
 					"statusCode": {
 				    	401: function (xhr, error, thrown) {
 							window.top.location.href = /*[[@{${loginUrl}}]]*/; 
@@ -421,9 +399,10 @@
 		                text: /*[[#{module.common.select}]]*/,
 		                className: 'btn btn-primary',
 		                action: function ( e, dt, node, config ) {
+		                	var tableId = /*[[${tableId}]]*/;
 		                	
-		                	/* Single select*/
-		                	var data=selectDataTable.rows('.selected').data();
+		                	/* multiple select*/
+		                	var data=dt.rows('.selected').data();
 		                	if(data){
 		                		
 		                		$.each( data, function( index, value ){			                			
@@ -447,7 +426,7 @@
 		    	]
 		    });
 			
-			$("#select-table-"+tableId).on('click', 'tr', function () {
+			$("#select-table-"+/*[[${tableId}]]*/).on('click', 'tr', function () {
 				
 				/* Multi select*/
 				if ( $(this).hasClass('selected') ) {
@@ -457,7 +436,9 @@
 					$(this).addClass('selected');
 				}
 		    });
-		}
+			
+			
+		});
 
 		
 		/*]]>*/

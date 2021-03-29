@@ -5,23 +5,24 @@ public interface RegionWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.region.checkid}";
-			public static final String PAGE = "${path.api.region.page}";
-			public static final String HISTORY = "${path.api.region.history}";
+			public static final String REGION = "${path.api.region}";
+			public static final String REGION_HISTORY = "${path.api.region.history}";
+			public static final String REGION_CHECKID = "${path.api.region.checkid}";
 		}
 
 		public static final String REGION = "${path.region}";
+		public static final String REGION_FORM = "${path.region.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.region}";
+		public static final String REGION = "${view.region}";
+		public static final String REGION_FORM = "${view.region.form}";
 	}
 
 	public interface ModelAttribute {
-
 		public static final String REGION_DTO = "regionDto";
 	}
-	
+
 	public interface RegionPreAuthorizeEnum {
 		public static final String AUTHORITY_READ = "region_read";
 		public static final String AUTHORITY_CREATE = "region_create";

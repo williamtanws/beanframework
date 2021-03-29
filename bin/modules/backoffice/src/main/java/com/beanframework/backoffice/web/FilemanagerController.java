@@ -54,7 +54,7 @@ public class FilemanagerController {
 	}
 
 	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = FilemanagerWebConstants.Path.TEMPLATES_PAGE, method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = FilemanagerWebConstants.Path.TEMPLATES, method = { RequestMethod.GET, RequestMethod.POST })
 	public String template(@PathVariable("page") String page, Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEWE_TEMPLATES + "/" + page;
 	}
