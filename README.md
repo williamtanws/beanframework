@@ -2,7 +2,7 @@
 
 ## Development Status
 
-Developing Beanframework 2.0.x
+Developing Beanframework 3.0.x
 
 ## Why Beanframework
 
