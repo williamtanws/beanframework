@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.PlatformExportWebConstants;
+import com.beanframework.core.controller.AbstractController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

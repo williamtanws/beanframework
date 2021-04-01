@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.console.ConfigurationWebConstants;
 import com.beanframework.console.ConsoleWebConstants;
+import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.ConfigurationDto;
 import com.beanframework.core.facade.ConfigurationFacade;
 

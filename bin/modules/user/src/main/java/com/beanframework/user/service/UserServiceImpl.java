@@ -276,8 +276,8 @@ public class UserServiceImpl implements UserService {
 		Set<UserSession> userList = findAllSessions();
 
 		for (UserSession userSession : userList) {
-			if (userSession.getPrincipal().getUuid().equals(uuid)) {
-				List<SessionInformation> session = sessionRegistry.getAllSessions(userSession.getPrincipal(), false);
+			if (userSession.getUser().getUuid().equals(uuid)) {
+				List<SessionInformation> session = sessionRegistry.getAllSessions(userSession.getUser(), false);
 				for (SessionInformation sessionInformation : session) {
 					sessionInformation.expireNow();
 				}
@@ -290,7 +290,7 @@ public class UserServiceImpl implements UserService {
 		Set<UserSession> userList = findAllSessions();
 
 		for (UserSession userSession : userList) {
-			List<SessionInformation> session = sessionRegistry.getAllSessions(userSession.getPrincipal(), false);
+			List<SessionInformation> session = sessionRegistry.getAllSessions(userSession.getUser(), false);
 			for (SessionInformation sessionInformation : session) {
 				sessionInformation.expireNow();
 			}

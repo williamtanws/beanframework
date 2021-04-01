@@ -18,10 +18,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
-import com.beanframework.backoffice.EmployeeWebConstants.EmployeePreAuthorizeEnum;
 import com.beanframework.backoffice.EmployeeWebConstants;
-import com.beanframework.common.controller.AbstractController;
+import com.beanframework.backoffice.EmployeeWebConstants.EmployeePreAuthorizeEnum;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.facade.EmployeeFacade;
 
@@ -35,50 +36,43 @@ public class EmployeeController extends AbstractController {
 	@Value(EmployeeWebConstants.Path.EMPLOYEE)
 	private String PATH_EMPLOYEE;
 
-	@Value(EmployeeWebConstants.View.PAGE)
-	private String VIEW_EMPLOYEE_LIST;
+	@Value(EmployeeWebConstants.Path.EMPLOYEE_FORM)
+	private String PATH_EMPLOYEE_FORM;
+
+	@Value(EmployeeWebConstants.View.EMPLOYEE)
+	private String VIEW_EMPLOYEE;
+
+	@Value(EmployeeWebConstants.View.EMPLOYEE_FORM)
+	private String VIEW_EMPLOYEE_FORM;
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE)
-	public String list(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
-		model.addAttribute("create", false);
-
-		if (employeeDto.getUuid() != null) {
-
-			EmployeeDto existingEmployee = employeeFacade.findOneByUuid(employeeDto.getUuid());
-
-			if (existingEmployee != null) {
-
-				model.addAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO, existingEmployee);
-			} else {
-				employeeDto.setUuid(null);
-				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
-			}
-		}
-
-		return VIEW_EMPLOYEE_LIST;
+	public String page(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+		return VIEW_EMPLOYEE;
 	}
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_CREATE)
-	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
-	public String createView(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model) throws Exception {
-
-		employeeDto = employeeFacade.createDto();
-		model.addAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO, employeeDto);
-		model.addAttribute("create", true);
-
-		return VIEW_EMPLOYEE_LIST;
-	}
-
-	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_CREATE)
-	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
-			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = EmployeeWebConstants.Path.EMPLOYEE_FORM)
+	public String form(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model) throws Exception {
 
 		if (employeeDto.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
+			employeeDto = employeeFacade.findOneByUuid(employeeDto.getUuid());
 		} else {
+			employeeDto = employeeFacade.createDto();
+		}
+		model.addAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO, employeeDto);
 
+		return VIEW_EMPLOYEE_FORM;
+	}
+
+	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_CREATE)
+	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE_FORM, params = "create")
+	public RedirectView create(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
+
+		if (employeeDto.getUuid() != null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
+		} else {
 			try {
 				employeeDto = employeeFacade.create(employeeDto);
 
@@ -88,21 +82,21 @@ public class EmployeeController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(EmployeeDto.UUID, employeeDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, employeeDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_EMPLOYEE);
+		redirectView.setUrl(PATH_EMPLOYEE_FORM);
 		return redirectView;
 	}
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_UPDATE)
-	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "update")
+	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE_FORM, params = "update")
 	public RedirectView update(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
-			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (employeeDto.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
 			try {
 				employeeDto = employeeFacade.update(employeeDto);
@@ -110,35 +104,38 @@ public class EmployeeController extends AbstractController {
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
 				addErrorMessage(EmployeeDto.class, e.getMessage(), bindingResult, redirectAttributes);
-
 			}
 		}
 
-		redirectAttributes.addAttribute(EmployeeDto.UUID, employeeDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, employeeDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_EMPLOYEE);
+		redirectView.setUrl(PATH_EMPLOYEE_FORM);
 		return redirectView;
 	}
 
 	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto employeeDto, Model model, BindingResult bindingResult,
+	@PostMapping(value = EmployeeWebConstants.Path.EMPLOYEE_FORM, params = "delete")
+	public RedirectView delete(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO) EmployeeDto dto, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		try {
-			employeeFacade.delete(employeeDto.getUuid());
+		if (dto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
+		} else {
+			try {
+				employeeFacade.delete(dto.getUuid());
 
-			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
-		} catch (BusinessException e) {
-			addErrorMessage(EmployeeDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addFlashAttribute(EmployeeWebConstants.ModelAttribute.EMPLOYEE_DTO, employeeDto);
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
+			} catch (BusinessException e) {
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
+			}
 		}
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_EMPLOYEE);
+		redirectView.setUrl(PATH_EMPLOYEE_FORM);
 		return redirectView;
 
 	}

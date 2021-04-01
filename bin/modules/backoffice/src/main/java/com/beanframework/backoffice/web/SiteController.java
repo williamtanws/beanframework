@@ -17,8 +17,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.SiteWebConstants;
 import com.beanframework.backoffice.SiteWebConstants.SitePreAuthorizeEnum;
-import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.SiteDto;
 import com.beanframework.core.facade.SiteFacade;
 

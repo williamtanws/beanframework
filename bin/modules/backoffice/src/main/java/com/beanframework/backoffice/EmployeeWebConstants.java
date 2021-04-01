@@ -16,8 +16,8 @@ public interface EmployeeWebConstants {
 	}
 
 	public interface View {
-		public static final String PAGE = "${view.employee}";
-		public static final String FORM = "${view.employee.form}";
+		public static final String EMPLOYEE = "${view.employee}";
+		public static final String EMPLOYEE_FORM = "${view.employee.form}";
 		public static final String PROFILE = "${view.employee.profile}";
 	}
 

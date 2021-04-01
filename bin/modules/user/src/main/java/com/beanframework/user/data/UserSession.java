@@ -11,18 +11,18 @@ public class UserSession {
 	private User user;
 	private List<SessionInformation> sessionInformations;
 
-	public UserSession(User principalUser, List<SessionInformation> sessionInformations) {
+	public UserSession(User user, List<SessionInformation> sessionInformations) {
 		super();
-		this.user = principalUser;
+		this.user = user;
 		this.sessionInformations = sessionInformations;
 	}
 
-	public User getPrincipal() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setPrincipal(User principalUser) {
-		this.user = principalUser;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public List<SessionInformation> getSessionInformations() {
