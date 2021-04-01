@@ -42,7 +42,7 @@ http://localhost:8080/console
 
 Default Account
 Username: admin
-Password: nimda
+Password: admin
 
 Thre are two ways to change default admin's password:
 Add/Modify "module.admin.default.id=admin" and "module.admin.default.password=admin" in properties file
