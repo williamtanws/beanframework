@@ -18,9 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.common.controller.AbstractController;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.PlatformImportWebConstants;
+import com.beanframework.core.controller.AbstractController;
 import com.beanframework.imex.service.ImexService;
 
 @PreAuthorize("isAuthenticated()")

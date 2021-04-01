@@ -52,7 +52,6 @@ public class User extends GenericEntity {
 	public static final String USER_GROUPS = "userGroups";
 	public static final String COMPANIES = "companies";
 	public static final String ADDRESSES = "addresses";
-	public static final String USER_ROLES = "userRoles";
 	public static final String FIELDS = "fields";
 	public static final String NAME = "name";
 

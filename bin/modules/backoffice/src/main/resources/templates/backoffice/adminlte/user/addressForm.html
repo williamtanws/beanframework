@@ -52,8 +52,20 @@
 										<input type="text" class="form-control" name="id" th:value="*{id}">
 									</div>
 								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="owner" th:text="#{module.address.owner}"></label>
+										<th:block th:with="id=#{module.common.id},name=#{module.user.name}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.owner.select}, tableId='selectedOwnerDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{owner}, selectedItemUuidName='selectedOwnerUuid' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
 							</div>
 							<div class="row">
+								<div class="col-md-12">
+									<hr>
+								</div>
 								<div class="col-md-4">
 									<div class="form-group">
 										<label for="streetName" th:text="#{module.address.streetName}"></label>
@@ -229,7 +241,7 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="contactPerson" th:text="#{module.address.shippingAddress}"></label>
+										<label for="shippingAddress" th:text="#{module.address.shippingAddress}"></label>
 										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
 											<th:block
 												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.shippingAddress.select}, tableId='selectedShippingAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{shippingAddress}, selectedItemUuidName='selectedShippingAddressUuid' )}"></th:block>
@@ -238,7 +250,7 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="contactPerson" th:text="#{module.address.billingAddress}"></label>
+										<label for="billingAddress" th:text="#{module.address.billingAddress}"></label>
 										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
 											<th:block
 												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.billingAddress.select}, tableId='selectedBillingAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{billingAddress}, selectedItemUuidName='selectedBillingAddressUuid' )}"></th:block>
@@ -247,7 +259,7 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="contactPerson" th:text="#{module.address.contactAddress}"></label>
+										<label for="contactAddress" th:text="#{module.address.contactAddress}"></label>
 										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
 											<th:block
 												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.contactAddress.select}, tableId='selectedContactAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{contactAddress}, selectedItemUuidName='selectedContactAddressUuid' )}"></th:block>
@@ -333,6 +345,8 @@
 			
 		    /*]]>*/
 		</script>
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedOwnerDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.user')}}, selectedItemDto=${addressDto.owner}, selectedItemUuidName='selectedOwnerUuid' )}"></th:block>
 		<th:block
 			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedCountryDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.country')}}, selectedItemDto=${addressDto.country}, selectedItemUuidName='selectedCountryUuid' )}"></th:block>
 		<th:block

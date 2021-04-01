@@ -20,9 +20,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.ImexWebConstants;
 import com.beanframework.backoffice.ImexWebConstants.ImexPreAuthorizeEnum;
-import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.ImexDto;
 import com.beanframework.core.facade.ImexFacade;
 

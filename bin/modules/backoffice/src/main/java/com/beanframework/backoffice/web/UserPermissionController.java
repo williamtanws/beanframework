@@ -20,9 +20,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants;
 import com.beanframework.backoffice.UserPermissionWebConstants.UserPermissionPreAuthorizeEnum;
-import com.beanframework.common.controller.AbstractController;
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.facade.UserPermissionFacade;
 

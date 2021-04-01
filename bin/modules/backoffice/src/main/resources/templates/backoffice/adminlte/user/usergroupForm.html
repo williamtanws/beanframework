@@ -78,12 +78,12 @@
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-attribute" role="tabpanel" aria-labelledby="custom-tabs-attribute-tab" th:if="*{uuid != null}">
 							<div class="row">
-								<th:block layout:insert="~{common/adminlte/common/dynamicfield/layout :: input(fields=*{fields})}"></th:block>
+								<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/layout :: input(fields=*{fields})}"></th:block>
 							</div>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-userauthority" role="tabpanel" aria-labelledby="custom-tabs-userauthority-tab" th:if="*{uuid != null}">
 							<div class="row">
-								<th:block layout:insert="~{common/adminlte/common/component/userauthority :: userauthority}"></th:block>
+								<th:block layout:insert="~{core/adminlte/common/fragment/userauthority :: userauthority}"></th:block>
 							</div>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
