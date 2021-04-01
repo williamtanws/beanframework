@@ -12,8 +12,8 @@ Beanframework is not a product and not build for any specific solution, it is a 
 ## Technologies
 
 * Java: 1.8.x
-* Spring Boot: 2.1.1.RELEASE
-* AdminLTE 2.4.5
+* Spring Boot: 2.4.2.RELEASE
+* AdminLTE 3.1.0
 
 ## Instruction
 
@@ -42,7 +42,7 @@ http://localhost:8080/console
 
 Default Account
 Username: admin
-Password: admin
+Password: nimda
 
 Thre are two ways to change default admin's password:
 Add/Modify "module.admin.default.id=admin" and "module.admin.default.password=admin" in properties file
@@ -61,6 +61,6 @@ Password: employee
 MIT license. https://github.com/williamtanws/beanframework/blob/master/LICENSE
 
 ## Donation :)
-If this open source project helped in your project, you could always back up this project hosting at https://beanframework.com by donation: 
+If this open source project helped in your project, you could always back up this project hosting by donation: 
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QSJEVREPCXW72)
