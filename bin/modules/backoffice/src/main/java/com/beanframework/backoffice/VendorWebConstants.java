@@ -15,8 +15,8 @@ public interface VendorWebConstants {
 	}
 
 	public interface View {
-		public static final String PAGE = "${view.vendor}";
-		public static final String FORM = "${view.vendor.form}";
+		public static final String VENDOR = "${view.vendor}";
+		public static final String VENDOR_FORM = "${view.vendor.form}";
 	}
 
 	public interface ModelAttribute {

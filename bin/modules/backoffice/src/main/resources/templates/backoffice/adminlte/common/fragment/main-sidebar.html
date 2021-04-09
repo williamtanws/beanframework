@@ -19,7 +19,7 @@
 						<img th:src="@{${@environment.getProperty('path.user.profile.picture')}(uuid=${#authentication.principal.uuid})}" class="img-circle elevation-2" alt="User Image">
 					</div>
 					<div class="info">
-						<a href="#" class="d-block" th:text="${#authentication.principal.name != null ? #authentication.principal.name : #authentication.principal.id}"></a>						
+						<a th:href="@{${@environment.getProperty('path.user.profile')}}" class="d-block" th:text="${#authentication.principal.name != null ? #authentication.principal.name : #authentication.principal.id}"></a>						
 					</div>
 				</div>
 

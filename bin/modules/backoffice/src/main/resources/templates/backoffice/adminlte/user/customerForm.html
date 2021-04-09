@@ -1,273 +1,263 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="~{${@environment.getProperty('layout.backoffice')}}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+
 <head>
 <title th:utext="#{module.customer}"></title>
 </head>
+
 <body>
-	<th:block layout:fragment="update">
-		<th:block layout:insert="~{common/adminlte/common/component/delete :: delete (deleteAction=@{${@environment.getProperty('path.customer')}}, deleteUuid=${customerDto.uuid})}"></th:block>
-		<form id="update-form" role="form" th:action="${@environment.getProperty('path.customer')}" enctype="multipart/form-data" method="post" th:object="${customerDto}">
+	<th:block layout:fragment="content">
+		<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.customer.form')}}" method="post" th:object="${customerDto}" enctype="multipart/form-data">
 			<input type="hidden" name="create" th:if="*{uuid == null}" />
 			<input type="hidden" name="update" th:if="*{uuid != null}" />
-			<input type="hidden" name="uuid" th:value="${customerDto.uuid}" />
-			<div class="row">
-				<div class="col-md-12">
-					<div class="box box-solid">
-						<div class="box-body bg-gray">
-							<div class="row">
-								<div class="col-xs-4 col-sm-6 col-md-6 col-lg-6">
-									<th:block th:if="*{uuid != null}" layout:insert="~{common/adminlte/common/component/delete :: button (deleteAuthority='customer_delete')}"></th:block>
-								</div>
-								<div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="text-align: right">
-									<th:block layout:insert="~{common/adminlte/common/component/refresh :: button (deleteAuthority='customer_delete')}"></th:block>
-									<th:block layout:insert="~{common/adminlte/common/component/update :: button (updateAuthority='customer_update')}"></th:block>
-								</div>
-							</div>
-						</div>
-						<!-- /.box-header -->
+			<input type="hidden" name="uuid" th:value="*{uuid}" th:if="*{uuid != null}" />
+
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('customer_delete')"></th:block>
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
 					</div>
+					<!-- /.col -->
+					<div class="col-sm-6">
+						<div class="float-sm-right">
+							<button type="submit" class="btn btn-primary" th:text="#{module.common.save}" sec:authorize="hasAuthority('customer_create') or hasAuthority('customer_update')"></button>
+						</div>
+					</div>
+					<!-- /.col -->
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<!-- Custom Tabs -->
-					<div class="nav-tabs-custom">
-						<ul class="nav nav-tabs">
-							<li class="active">
-								<a href="#tab_general" data-toggle="tab" th:text="#{module.common.general}" onclick="changeTab('general')"></a>
-							</li>
-							<li>
-								<a href="#tab_attribute" data-toggle="tab" th:text="#{module.common.attribute}" onclick="changeTab('attribute')"></a>
-							</li>
-							<li th:if="*{uuid != null}">
-								<a href="#tab_history" data-toggle="tab" th:text="#{module.common.history}" onclick="changeTab('history')"></a>
-							</li>
-							<li th:if="*{uuid != null}">
-								<a href="#tab_administration" data-toggle="tab" th:text="#{module.common.administration}" onclick="changeTab('administration')"></a>
-							</li>
-						</ul>
-						<div class="tab-content tab-validate">
-							<div class="tab-pane active" id="tab_general">
-								<div class="box-body">
-									<div class="row">
-										<th:block layout:insert="~{common/adminlte/common/component/general :: general}"></th:block>
-									</div>
-									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="name" th:text="#{module.customer.name}"></label>
-												<span>*</span>
-												<input type="text" class="form-control" name="name" th:value="*{name}">
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="password" th:text="#{module.customer.password}"></label>
-												<input type="password" class="form-control" name="password">
-												<span class="help-block"></span>
-											</div>
-											<div class="form-group">
-												<label for="confirmPassword" th:text="#{module.customer.password.confirm}"></label>
-												<input name="confirmPassword" type="password" class="form-control">
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="enabled" th:text="#{module.customer.enabled}"></label>
-												<small th:text="#{module.customer.enabled.indicate}"></small>
-												<select class="form-control" name="enabled">
-													<option value="1" th:selected="*{enabled == true} " th:text="#{module.common.yes}"></option>
-													<option value="0" th:selected="*{enabled == false}" th:text="#{module.common.no}"></option>
-												</select>
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="accountNonLocked" th:text="#{module.customer.locked}"></label>
-												<small th:text="#{module.customer.locked.indicate}"></small>
-												<select class="form-control" name="accountNonLocked">
-													<option value="1" th:selected="*{accountNonLocked == true} " th:text="#{module.common.no}"></option>
-													<option value="0" th:selected="*{accountNonLocked == false}" th:text="#{module.common.yes}"></option>
-												</select>
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="accountNonExpired" th:text="#{module.customer.expired}"></label>
-												<small th:text="#{module.customer.expired.indicate}"></small>
-												<select class="form-control" name="accountNonExpired">
-													<option value="1" th:selected="*{accountNonExpired == true} " th:text="#{module.common.no}"></option>
-													<option value="0" th:selected="*{accountNonExpired == false}" th:text="#{module.common.yes}"></option>
-												</select>
-												<span class="help-block"></span>
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="credentialsNonExpired" th:text="#{module.customer.credentials.expired}"></label>
-												<small th:text="#{module.customer.credentials.expired.indicate}"></small>
-												<select class="form-control" name="credentialsNonExpired">
-													<option value="1" th:selected="*{credentialsNonExpired == true}" th:text="#{module.common.no}"></option>
-													<option value="0" th:selected="*{credentialsNonExpired == false}" th:text="#{module.common.yes}"></option>
-												</select>
-												<span class="help-block"></span>
-											</div>
-										</div>
-									</div>
-									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.customer.userGroups},'selectedUserGroupsTable','selectedUserGroups','userGroups',*{userGroups},@{${@environment.getProperty('path.api.usergroup.page')}},'userGroupsTable',true)}"></th:block>
-										</div>
-										<div class="col-md-6">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.customer.companies},'selectedCompaniesTable','selectedCompanies','companies',*{companies},@{${@environment.getProperty('path.api.company.page')}},'companiesTable',true)}"></th:block>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6" th:with="id=#{module.address.id},streetName=#{module.address.streetName}">
-											<th:block layout:insert="~{common/adminlte/common/component/table :: select (#{module.customer.addresses},'selectedAddressesTable','selectedAddresses','addresses',*{addresses},@{${@environment.getProperty('path.api.address.page')}},'addressesTable',true,${ {'id','streetName'} },${ {id,streetName} })}"></th:block>
-										</div>
-									</div>
-									<div class="row" style="border-top: 1px solid #f4f4f4; padding-top: 10px;">
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="picture" th:text="#{module.customer.picture}"></label>
-												<input type="file" class="form-control" name="profilePicture" accept="image/*">
-												<span class="help-block"></span>
-											</div>
-											<div class="form-group" style="text-align: center;">
-												<img style="max-width: 100%" th:src="@{${@environment.getProperty('path.user.profile.picture')}(type='original',uuid=*{uuid})}" class="img-circle" alt="User Image">
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- /.box-body -->
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_attribute">
-								<div class="box-body">
-									<div class="row">
-										<th:block layout:insert="~{common/adminlte/common/dynamicfield/layout :: input(fields=*{fields})}"></th:block>
-									</div>
-								</div>
-								<!-- /.box-body -->
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_history" th:if="*{uuid != null}">
-								<div class="box-body">
-									<th:block layout:insert="~{common/adminlte/common/component/history :: history (historyListUrl=@{${@environment.getProperty('path.api.customer.history')}(uuid=*{uuid})} )}"></th:block>
-								</div>
-							</div>
-							<!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_administration" th:if="*{uuid != null}">
-								<div class="box-body">
-									<th:block layout:insert="~{common/adminlte/common/component/administration :: administration}"></th:block>
-								</div>
-							</div>
-							<!-- /.tab-pane -->
-						</div>
-						<!-- /.tab-content -->
-					</div>
-					<!-- nav-tabs-custom -->
+			<div class="card card-primary card-outline card-outline-tabs consistent-height">
+				<div class="card-header p-0 border-bottom-0">
+					<ul class="nav nav-tabs" id="custom-tabs-tab" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-history-tab" data-toggle="pill" href="#custom-tabs-history" role="tab" aria-controls="custom-tabs-history" aria-selected="false" th:text="#{module.common.history}" th:if="*{uuid != null}"></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-administration-tab" data-toggle="pill" href="#custom-tabs-administration" role="tab" aria-controls="custom-tabs-administration" aria-selected="false" th:text="#{module.common.administration}" th:if="*{uuid != null}"></a>
+						</li>
+					</ul>
 				</div>
-				<!-- /.col -->
+				<div class="card-body">
+					<div class="tab-content" id="custom-tabs-tabContent">
+						<div class="tab-pane fade show active" id="custom-tabs-general" role="tabpanel" aria-labelledby="custom-tabs-general-tab">
+
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="id" th:text="#{module.common.id}"></label>
+										<span>*</span>
+										<input type="text" class="form-control" name="id" th:value="*{id}">
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="name" th:text="#{module.customer.name}"></label>
+										<input type="text" class="form-control" name="name" th:value="*{name}">
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="password" th:text="#{module.customer.password}"></label>
+										<input type="password" class="form-control" name="password">
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="confirmPassword" th:text="#{module.customer.password.confirm}"></label>
+										<input name="confirmPassword" type="password" class="form-control">
+										<span class="help-block"></span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<hr>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="enabled" th:text="#{module.customer.enabled}"></label>
+										<small th:text="#{module.customer.enabled.indicate}"></small>
+										<select class="form-control" name="enabled">
+											<option value="1" th:selected="*{enabled == true} " th:text="#{module.common.yes}"></option>
+											<option value="0" th:selected="*{enabled == false}" th:text="#{module.common.no}"></option>
+										</select>
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="accountNonLocked" th:text="#{module.customer.locked}"></label>
+										<small th:text="#{module.customer.locked.indicate}"></small>
+										<select class="form-control" name="accountNonLocked">
+											<option value="1" th:selected="*{accountNonLocked == true} " th:text="#{module.common.no}"></option>
+											<option value="0" th:selected="*{accountNonLocked == false}" th:text="#{module.common.yes}"></option>
+										</select>
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="accountNonExpired" th:text="#{module.customer.expired}"></label>
+										<small th:text="#{module.customer.expired.indicate}"></small>
+										<select class="form-control" name="accountNonExpired">
+											<option value="1" th:selected="*{accountNonExpired == true} " th:text="#{module.common.no}"></option>
+											<option value="0" th:selected="*{accountNonExpired == false}" th:text="#{module.common.yes}"></option>
+										</select>
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="credentialsNonExpired" th:text="#{module.customer.credentials.expired}"></label>
+										<small th:text="#{module.customer.credentials.expired.indicate}"></small>
+										<select class="form-control" name="credentialsNonExpired">
+											<option value="1" th:selected="*{credentialsNonExpired == true}" th:text="#{module.common.no}"></option>
+											<option value="0" th:selected="*{credentialsNonExpired == false}" th:text="#{module.common.yes}"></option>
+										</select>
+										<span class="help-block"></span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<hr>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="dynamicfield" th:text="#{module.customer.userGroups}"></label>
+										<th:block th:with="id=#{module.common.id},name=#{module.common.name}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.customer.userGroups.select}, tableId='selectedUserGroupDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{userGroups}, selectedItemUuidName='selectedUserGroupUuids' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="dynamicfield" th:text="#{module.customer.companies}"></label>
+										<th:block th:with="id=#{module.common.id},name=#{module.common.name}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.customer.companies.select}, tableId='selectedCompanyDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{companies}, selectedItemUuidName='selectedCompanyUuids' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="dynamicfield" th:text="#{module.customer.addresses}"></label>
+										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.customer.addresses.select}, tableId='selectedAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{addresses}, selectedItemUuidName='selectedAddressUuids' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<hr>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="picture" th:text="#{module.customer.picture}"></label>
+										<input type="file" class="form-control" name="profilePicture" accept="image/*">
+										<span class="help-block"></span>
+									</div>
+									<div class="form-group" style="text-align: center;">
+										<img style="max-width: 100%" th:src="@{${@environment.getProperty('path.user.profile.picture')}(type='original',uuid=*{uuid})}" class="img-circle" alt="User Image">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
+						</div>
+					</div>
+				</div>
+				<!-- /.card -->
 			</div>
 		</form>
+
+		<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: modal (uuid=${customerDto.uuid}, deleteUrl=@{${@environment.getProperty('path.customer.form')}} )}"></th:block>
+	</th:block>
+	<th:block layout:fragment="js">
+
 		<script th:inline="javascript">
-		    /*<![CDATA[*/
-		    $(document).ready(function() {
-		    	
-		        $('#update-form').validate({
-		        	onkeyup: function(element) {
-		                this.element(element);
-		            },
-		        	onfocusout: false,
-		        	ignore: [],
-		            
-		            invalidHandler: function(form, validator) {
-		                var errors = validator.numberOfInvalids();
-		                if (errors) {                    
-		                    validator.errorList[0].element.focus();
-		                }
-		            },
-		            rules: {
-		            	id: {
-		                    required: true,
-		                    remote: {
-		                        url: /*[[${@environment.getProperty('path.api.customer.checkid')}]]*/ ,
-		                        type: "get",
-		                        data: {
-		                            uuid: /*[[${customerDto.uuid}]]*/ ,
-		                            id: function() {
-		                                return $("#update-form input[name='id']").val();
-		                            }
-		                        }
-		                    }
-		                },
-		                name: {
-		                    required: true
-		                },
-		                password: {
-		                    required: false,
-		                    minlength: /*[[${@environment.getProperty('module.customer.password.min')}]]*/,
-		                    maxlength: /*[[${@environment.getProperty('module.customer.password.max')}]]*/
-		                },
-		                confirmPassword: {
-		                    equalTo: "#update-form input[name='password']"
-		                }
-		            },
-		            messages: {
-		                id: {
-		                    required: /*[[#{module.common.id.required}]]*/ ,
-		                    remote: /*[[#{module.common.id.exists}]]*/
-		                },
-		                name: {
-		                    required: /*[[#{module.customer.name.required}]]*/
-		                },
-		                password: {
-		                    required: /*[[#{module.customer.password.required}]]*/
-		                },
-		                confirmPassword: {
-		                    required: /*[[#{module.customer.password.confirm.required}]]*/ ,
-		                    equalTo: /*[[#{module.customer.password.confirm.notmatch}]]*/
-		                }
-		            },
-		            highlight: function(element) {
-		                $(element).closest('.form-group').addClass('has-error');
-		                
-		                var id = $(element).closest('.tab-pane').attr('id');
-		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
-		                    $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','#dd4b39');
-		                });
-		            },
-		            unhighlight: function(element) {
-		                $(element).closest('.form-group').removeClass('has-error');
-		                $(element).closest('.form-group').find('.help-block').html('');
-		                
-		                var id = $(element).closest('.tab-pane').attr('id');
-		                var noError = true;
-		                $('.tab-content.tab-validate .tab-pane:has(div.has-error)').each(function() {
-		                    noError = false;
-		                });
-		                if(noError){
-			                $('.nav.nav-tabs').find('a[href^="#' + id + '"]').css('color','black');
-		                }
-		            },
-		            errorPlacement: function(error, element) {
-		                element.closest('.form-group').find('.help-block').html(error.text());
-		            }
-		        });
-		
-		    });
+			/*<![CDATA[*/
+				
+			$(document).ready(function () {
+				$('#form-save').validate(
+					{
+						rules: {
+							id: {
+								required: true,
+								remote: {
+									url: /*[[@{${@environment.getProperty('path.api.customer.checkid')}}]]*/ ,
+									type: "get",
+									data: {
+										uuid: $('#form-save input[name=uuid]').val(),
+										id: function () {
+											return $("#form-save input[name='id']").val();
+										}
+									}
+								}
+							},
+			                name: {
+			                    required: true
+			                },
+			                password: {
+			                    required: false,
+			                    minlength: /*[[${@environment.getProperty('module.customer.password.min')}]]*/,
+			                    maxlength: /*[[${@environment.getProperty('module.customer.password.max')}]]*/
+			                },
+			                confirmPassword: {
+			                    equalTo: "#form-save input[name='password']"
+			                }
+						},
+						messages: {
+							id: {
+								required: /*[[#{module.common.id.required}]]*/,
+			                    remote: /*[[#{module.common.id.exists}]]*/
+							},
+			                name: {
+			                    required: /*[[#{module.customer.name.required}]]*/
+			                },
+			                password: {
+			                    required: /*[[#{module.customer.password.required}]]*/
+			                },
+			                confirmPassword: {
+			                    required: /*[[#{module.customer.password.confirm.required}]]*/ ,
+			                    equalTo: /*[[#{module.customer.password.confirm.notmatch}]]*/
+			                }
+						},
+						errorElement: 'span',
+						errorPlacement: function (error, element) {
+							error.addClass('invalid-feedback');
+							element.closest('.form-group').append(error);
+						},
+						highlight: function (element, errorClass, validClass) {
+							$(element).addClass('is-invalid');
+						},
+						unhighlight: function (element, errorClass, validClass) {
+							$(element).removeClass('is-invalid');
+						}
+					});
+			});
+			
 		    /*]]>*/
 		</script>
-
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedUserGroupDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.usergroup')}}, selectedItemDto=${customerDto.userGroups}, selectedItemUuidName='selectedUserGroupUuids' )}"></th:block>
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedCompanyDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.company')}}, selectedItemDto=${customerDto.companies}, selectedItemUuidName='selectedCompanyUuids' )}"></th:block>
+		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${customerDto.addresses}, selectedItemUuidName='selectedAddressUuids' )}"></th:block>
+		<th:block th:if="${customerDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.customer.history')}(uuid=${customerDto.uuid})})}"></th:block>
 	</th:block>
 </body>
+
 </html>
