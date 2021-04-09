@@ -25,7 +25,7 @@ public class UserResource extends AbstractResource {
 	@Autowired
 	private UserFacade userFacade;
 
-	@RequestMapping(value = MyAccountWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = MyAccountWebConstants.Path.MYACCOUNT, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
