@@ -14,12 +14,14 @@ database.backup.dir=${project.dir}/data/db
 # ===============================
 # = CACHE
 # ===============================
-spring.cache.type=NONE
+#spring.cache.type=NONE
 
 # ===============================
 # = THYMELEAF
 # ===============================
 spring.thymeleaf.cache=false
+spring.freemarker.cache=false
+spring.groovy.template.cache=false
 
 # ===============================
 # = PLATFORM
@@ -31,10 +33,10 @@ platform.import.startup=classpath*:import/*-dev.sql
 # ===============================
 # = DATA SOURCE
 # ===============================
-datasource.platform.host=localhost:3306
-datasource.platform.database=beanframework2
+datasource.platform.host=
+datasource.platform.database=
 datasource.platform.url=jdbc:mariadb://${datasource.platform.host}/${datasource.platform.database}?useUnicode=yes&characterEncoding=UTF-8
-datasource.platform.username=root
+datasource.platform.username=
 datasource.platform.password=
 datasource.platform.driverClassName=org.mariadb.jdbc.Driver
 platform.hibernate.dialect=org.hibernate.dialect.MariaDB53Dialect
@@ -42,8 +44,8 @@ platform.hibernate.dialect=org.hibernate.dialect.MariaDB53Dialect
 # ===============================
 # = EMAIL
 # ===============================
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
+spring.mail.host=
+spring.mail.port=
 spring.mail.username=
 spring.mail.password=
 spring.mail.from.name=
