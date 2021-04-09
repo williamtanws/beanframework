@@ -12,18 +12,15 @@ public interface EmployeeWebConstants {
 
 		public static final String EMPLOYEE = "${path.employee}";
 		public static final String EMPLOYEE_FORM = "${path.employee.form}";
-		public static final String PROFILE = "${path.employee.profile}";
 	}
 
 	public interface View {
 		public static final String EMPLOYEE = "${view.employee}";
 		public static final String EMPLOYEE_FORM = "${view.employee.form}";
-		public static final String PROFILE = "${view.employee.profile}";
 	}
 
 	public interface ModelAttribute {
 		public static final String EMPLOYEE_DTO = "employeeDto";
-		public static final String PROFILE = "employeeProfile";
 	}
 	
 	public interface EmployeePreAuthorizeEnum {

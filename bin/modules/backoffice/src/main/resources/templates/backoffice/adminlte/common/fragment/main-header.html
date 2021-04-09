@@ -13,6 +13,16 @@
 						<i class="fas fa-bars"></i>
 					</a>
 				</li>
+				<li class="nav-item d-none d-sm-inline-block">
+					<a th:href="@{${@environment.getProperty('path.user.profile')}}" class="nav-link"><span th:text="#{module.user.myaccount}"></span></a>
+				</li>
+				<li class="nav-item d-none d-sm-inline-block">
+					<form th:action="@{${@environment.getProperty('path.backoffice.logout')}}" method="post">
+						<a href="#" onclick="this.parentNode.submit(); return false;" class="nav-link">
+							<span th:text="#{module.common.logout}"></span>
+						</a>
+					</form>
+				</li>
 			</ul>
 
 			<!-- Right navbar links -->
@@ -120,7 +130,7 @@
 						<a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
 					</div>
 				</li>
-				
+
 				<li class="nav-item">
 					<a class="nav-link" data-widget="fullscreen" href="#" role="button">
 						<i class="fas fa-expand-arrows-alt"></i>
@@ -138,22 +148,6 @@
 								th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #007bff; color: white':''"></a>
 							<div class="dropdown-divider" th:if="!${iterStat.last}"></div>
 						</th:block>
-					</div>
-				</li>
-
-				<!-- User Account Dropdown Menu -->
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#">
-						<i class="fas fa-user"></i>
-					</a>
-					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-						<form th:action="@{${@environment.getProperty('path.backoffice.logout')}}" method="post">
-							<a href="#" onclick="this.parentNode.submit(); return false;" class="dropdown-item">
-								<i class="fas fa-sign-out-alt"></i>
-								&nbsp;
-								<span th:text="#{module.common.logout}"></span>
-							</a>
-						</form>
 					</div>
 				</li>
 			</ul>

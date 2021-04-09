@@ -5,23 +5,22 @@ public interface CustomerWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.customer.checkid}";
-			public static final String PAGE = "${path.api.customer}";
-			public static final String HISTORY = "${path.api.customer.history}";
+			public static final String CUSTOMER = "${path.api.customer}";
+			public static final String CUSTOMER_HISTORY = "${path.api.customer.history}";
+			public static final String CUSTOMER_CHECKID = "${path.api.customer.checkid}";
 		}
 
 		public static final String CUSTOMER = "${path.customer}";
-		public static final String PROFILE = "${path.customer.profile}";
+		public static final String CUSTOMER_FORM = "${path.customer.form}";
 	}
 
 	public interface View {
-		public static final String PROFILE = "${view.customer.profile}";
-		public static final String LIST = "${view.customer}";
+		public static final String CUSTOMER = "${view.customer}";
+		public static final String CUSTOMER_FORM = "${view.customer.form}";
 	}
 
 	public interface ModelAttribute {
 		public static final String CUSTOMER_DTO = "customerDto";
-		public static final String PROFILE = "customerProfile";
 	}
 	
 	public interface CustomerPreAuthorizeEnum {

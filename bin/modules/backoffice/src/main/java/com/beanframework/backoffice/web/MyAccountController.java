@@ -21,60 +21,60 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
-import com.beanframework.backoffice.EmployeeWebConstants;
+import com.beanframework.backoffice.MyAccountWebConstants;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.core.data.EmployeeDto;
-import com.beanframework.core.facade.EmployeeFacade;
+import com.beanframework.core.data.UserDto;
+import com.beanframework.core.facade.UserFacade;
 
 @PreAuthorize("isAuthenticated()")
 @Controller
-public class EmployeeProfileController {
+public class MyAccountController {
 
 	@Autowired
-	private EmployeeFacade employeeFacade;
+	private UserFacade userFacade;
 
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-	@Value(EmployeeWebConstants.Path.PROFILE)
+	@Value(MyAccountWebConstants.Path.MYACCOUNT)
 	private String PATH_PROFILE;
 
-	@Value(EmployeeWebConstants.View.PROFILE)
-	private String VIEW_EMPLOYEE_PROFILE;
+	@Value(MyAccountWebConstants.View.MYACCOUNT)
+	private String VIEW_USER_PROFILE;
 
 	@Value(BackofficeWebConstants.Configuration.DEFAULT_AVATAR)
 	public String CONFIGURATION_DEFAULT_AVATAR;
 
-	@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE)
-	public EmployeeDto populateEmployeeForm(HttpServletRequest request) throws Exception {
-		return new EmployeeDto();
+	@Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT)
+	public UserDto populateUserForm(HttpServletRequest request) throws Exception {
+		return new UserDto();
 	}
 
-	@GetMapping(value = EmployeeWebConstants.Path.PROFILE)
-	public String profile(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) EmployeeDto employeeProfile, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	@GetMapping(value = MyAccountWebConstants.Path.MYACCOUNT)
+	public String profile(@Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT) UserDto userProfile, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
-		employeeProfile = employeeFacade.getCurrentUser();
+		userProfile = userFacade.getCurrentUser();
 
-		model.addAttribute(EmployeeWebConstants.ModelAttribute.PROFILE, employeeProfile);
+		model.addAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT, userProfile);
 
-		return VIEW_EMPLOYEE_PROFILE;
+		return VIEW_USER_PROFILE;
 	}
 
-	@PostMapping(value = EmployeeWebConstants.Path.PROFILE, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(EmployeeWebConstants.ModelAttribute.PROFILE) EmployeeDto employeeProfile, Model model, BindingResult bindingResult,
+	@PostMapping(value = MyAccountWebConstants.Path.MYACCOUNT, params = "update")
+	public RedirectView update(@Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT) UserDto userProfile, Model model, BindingResult bindingResult,
 			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
 
 		try {
-			EmployeeDto employee = employeeFacade.getCurrentUser();
-			if (employee.getUuid().equals(employeeProfile.getUuid()) == false)
-				throw new Exception("Invalid attempted employee profile update.");
+			UserDto user = userFacade.getCurrentUser();
+			if (user.getUuid().equals(userProfile.getUuid()) == false)
+				throw new Exception("Invalid attempted user profile update.");
 
-			employeeProfile = employeeFacade.saveProfile(employeeProfile);
+			userProfile = userFacade.saveProfile(userProfile);
 
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS, localeMessageService.getMessage(BackofficeWebConstants.Locale.SAVE_SUCCESS));
 		} catch (BusinessException e) {
-			bindingResult.reject(EmployeeDto.class.getSimpleName(), e.getMessage());
+			bindingResult.reject(UserDto.class.getSimpleName(), e.getMessage());
 
 			StringBuilder errorMessage = new StringBuilder();
 			List<ObjectError> errors = bindingResult.getAllErrors();
