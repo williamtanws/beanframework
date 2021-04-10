@@ -37,7 +37,7 @@ public class SiteResource extends AbstractResource {
 	private SiteFacade siteFacade;
 
 	@PreAuthorize(SitePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(SiteWebConstants.Path.Api.CHECKID)
+	@RequestMapping(SiteWebConstants.Path.Api.SITE_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -59,7 +59,7 @@ public class SiteResource extends AbstractResource {
 	}
 
 	@PreAuthorize(SitePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = SiteWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = SiteWebConstants.Path.Api.SITE, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -86,7 +86,7 @@ public class SiteResource extends AbstractResource {
 	}
 
 	@PreAuthorize(SitePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = SiteWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = SiteWebConstants.Path.Api.SITE_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 
