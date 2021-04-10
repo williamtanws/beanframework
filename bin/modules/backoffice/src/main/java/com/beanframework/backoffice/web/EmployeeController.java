@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.facade.EmployeeFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class EmployeeController extends AbstractController {
 

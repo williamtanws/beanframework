@@ -28,7 +28,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.facade.MenuFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class MenuController extends AbstractController {
 

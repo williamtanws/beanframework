@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.facade.UserPermissionFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class UserPermissionController extends AbstractController {
 

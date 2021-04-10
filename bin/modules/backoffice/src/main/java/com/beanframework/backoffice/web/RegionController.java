@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.RegionDto;
 import com.beanframework.core.facade.RegionFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class RegionController extends AbstractController {
 

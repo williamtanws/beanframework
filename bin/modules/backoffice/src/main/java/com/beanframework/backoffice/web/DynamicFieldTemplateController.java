@@ -25,7 +25,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.DynamicFieldTemplateDto;
 import com.beanframework.core.facade.DynamicFieldTemplateFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class DynamicFieldTemplateController extends AbstractController {
 

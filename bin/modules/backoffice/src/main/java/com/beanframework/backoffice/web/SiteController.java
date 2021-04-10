@@ -22,7 +22,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.SiteDto;
 import com.beanframework.core.facade.SiteFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class SiteController extends AbstractController {
 

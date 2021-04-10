@@ -11,6 +11,7 @@ public interface MediaWebConstants {
 		}
 
 		public static final String MEDIA = "${path.media}";
+		public static final String MEDIA_FORM = "${path.media.form}";
 		public static final String MEDIA_UPLOAD = "${path.media.upload}";
 		public static final String MEDIA_BROWSE = "${path.media.browse}";
 	}

@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.facade.CustomerFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class CustomerController extends AbstractController {
 

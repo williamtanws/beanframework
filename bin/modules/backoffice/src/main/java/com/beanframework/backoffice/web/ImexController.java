@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.ImexDto;
 import com.beanframework.core.facade.ImexFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class ImexController extends AbstractController {
 

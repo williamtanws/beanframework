@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.EnumerationDto;
 import com.beanframework.core.facade.EnumerationFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class EnumerationController extends AbstractController {
 

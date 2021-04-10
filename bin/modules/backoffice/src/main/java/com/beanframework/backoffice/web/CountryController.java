@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.CountryDto;
 import com.beanframework.core.facade.CountryFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class CountryController extends AbstractController {
 

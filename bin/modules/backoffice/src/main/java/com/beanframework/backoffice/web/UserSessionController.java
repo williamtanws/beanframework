@@ -20,7 +20,7 @@ import com.beanframework.backoffice.UserSessionWebConstants.UserSessionPreAuthor
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.facade.UserFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class UserSessionController {
 
