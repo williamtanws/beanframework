@@ -35,6 +35,7 @@ import com.beanframework.core.listenerimport.UserPermissionImportListener;
 import com.beanframework.core.listenerimport.UserRightImportListener;
 import com.beanframework.core.listenerimport.VendorImportListener;
 import com.beanframework.core.listenerimport.WorkflowImportListener;
+import com.beanframework.imex.ImexConstants;
 import com.beanframework.imex.registry.ImportListenerRegistry;
 
 @Configuration
@@ -43,7 +44,7 @@ public class ImportListenerConfig implements ApplicationListener<ApplicationRead
 	@Autowired
 	private ImportListenerRegistry importListenerRegistry;
 
-	@Value("#{'${module.core.import.listener.types}'.split(',')}")
+	@Value(ImexConstants.IMEX_IMPORT_LISTENER_TYPES)
 	private List<String> importListenerTypesList;
 
 	@Bean

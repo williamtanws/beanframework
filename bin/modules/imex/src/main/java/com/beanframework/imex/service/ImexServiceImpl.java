@@ -75,11 +75,14 @@ public class ImexServiceImpl implements ImexService {
 	@Autowired
 	private EntityManager entityManager;
 
-	@Value(MediaConstants.MEDIA_LOCATION)
-	private String MEDIA_LOCATION;
-
 	@Value(ImexConstants.IMEX_MEDIA_LOCATION)
 	private String IMEX_MEDIA_LOCATION;
+
+	@Value(ImexConstants.IMEX_IMPORT_LOCATION)
+	private String IMEX_IMPORT_LOCATION;
+
+	@Value(MediaConstants.MEDIA_LOCATION)
+	private String MEDIA_LOCATION;
 
 	@Value(MediaConstants.MEDIA_URL)
 	private String MEDIA_URL;
@@ -87,7 +90,7 @@ public class ImexServiceImpl implements ImexService {
 	@Transactional
 	@Override
 	public String[] importByListenerKeys(Set<String> keys) {
-		return importByKeysAndReader(keys, "classpath*:import/**/*.csv");
+		return importByKeysAndReader(keys, IMEX_IMPORT_LOCATION);
 	}
 
 	@Transactional
