@@ -15,25 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.backoffice.FilemanagerWebConstants;
+import com.beanframework.backoffice.FilemanagerWebConstants.FilemanagerPreAuthorizeEnum;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class FilemanagerController {
-
-	public static interface FilemanagerPreAuthorizeEnum {
-		public static final String AUTHORITY_READ = "filemanager_read";
-		public static final String AUTHORITY_CREATE = "filemanager_create";
-		public static final String AUTHORITY_UPDATE = "filemanager_update";
-		public static final String AUTHORITY_DELETE = "hfilemanager_delete";
-
-		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
-		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
-		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
-		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
-	}
-
-	@Value(FilemanagerWebConstants.View.CONTAINER)
-	private String VIEW_CONTAINER;
 
 	@Value(FilemanagerWebConstants.View.TEMPLATES)
 	private String VIEWE_TEMPLATES;
@@ -44,12 +30,6 @@ public class FilemanagerController {
 	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(value = FilemanagerWebConstants.Path.FILE_MANAGER, method = { RequestMethod.GET, RequestMethod.POST })
 	public String filemanager(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-		return VIEW_CONTAINER;
-	}
-
-	@PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = FilemanagerWebConstants.Path.ANGULARFILEMANAGER, method = { RequestMethod.GET, RequestMethod.POST })
-	public String angularfilemanager(Model model, @RequestParam Map<String, Object> allRequestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_ANGULARFILEMANAGER;
 	}
 

@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <meta charset="utf-8">
-<title>File Manager</title>
+<title th:utext="#{module.filemanager}"></title>
 
 <!-- third party -->
 <script th:src="@{/static/angular-filemanager/bower_components/angular/angular.min.js}"></script>
@@ -62,7 +62,7 @@
 																downloadMultiple : false,
 																changePermissions : true
 															}),
-											tplPath : /*[[${@environment.getProperty('path.filemanager.angularfilemanager.templates')}]]*/
+											tplPath : /*[[${@environment.getProperty('path.filemanager.angularfilemanager.page')}]]*/
 										});
 							} ]);
 	/*]]>*/

@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.DynamicFieldSlotDto;
 import com.beanframework.core.facade.DynamicFieldSlotFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class DynamicFieldSlotController extends AbstractController {
 

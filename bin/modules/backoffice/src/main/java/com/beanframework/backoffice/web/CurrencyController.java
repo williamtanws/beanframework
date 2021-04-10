@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.CurrencyDto;
 import com.beanframework.core.facade.CurrencyFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class CurrencyController extends AbstractController {
 

@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.core.facade.CronjobFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class CronjobController extends AbstractController {
 

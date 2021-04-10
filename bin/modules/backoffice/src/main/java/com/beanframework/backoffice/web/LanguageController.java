@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.LanguageDto;
 import com.beanframework.core.facade.LanguageFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class LanguageController extends AbstractController {
 

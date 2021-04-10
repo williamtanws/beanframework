@@ -33,6 +33,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MediaWebConstants;
 import com.beanframework.backoffice.MediaWebConstants.MediaPreAuthorizeEnum;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.MediaDto;
@@ -40,7 +41,6 @@ import com.beanframework.core.facade.MediaFacade;
 import com.beanframework.media.MediaConstants;
 import com.beanframework.media.domain.Media;
 
-@PreAuthorize("isAuthenticated()")
 @Controller
 public class MediaController extends AbstractController {
 
@@ -50,11 +50,14 @@ public class MediaController extends AbstractController {
 	@Value(MediaWebConstants.Path.MEDIA)
 	private String PATH_MEDIA;
 
-	@Value(MediaWebConstants.View.MEDIA)
-	private String VIEW_MEDIA_LIST;
+	@Value(MediaWebConstants.Path.MEDIA_FORM)
+	private String PATH_MEDIA_FORM;
 
-	@Value("${module.media.location.assets}")
-	private String MEDIA_ASSETS;
+	@Value(MediaWebConstants.View.MEDIA)
+	private String VIEW_MEDIA;
+
+	@Value(MediaWebConstants.View.MEDIA_FORM)
+	private String VIEW_MEDIA_FORM;
 
 	@Value(MediaConstants.MEDIA_LOCATION)
 	private String MEDIA_LOCATION;
@@ -64,43 +67,32 @@ public class MediaController extends AbstractController {
 
 	@PreAuthorize(MediaPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = MediaWebConstants.Path.MEDIA)
-	public String list(@Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model) throws Exception {
-		model.addAttribute("create", false);
-
-		if (mediaDto.getUuid() != null) {
-
-			MediaDto existsDto = mediaFacade.findOneByUuid(mediaDto.getUuid());
-
-			if (existsDto != null) {
-				model.addAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO, existsDto);
-			} else {
-				addErrorMessage(model, BackofficeWebConstants.Locale.RECORD_UUID_NOT_FOUND);
-			}
-		}
-
-		return VIEW_MEDIA_LIST;
+	public String page(@Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+		return VIEW_MEDIA;
 	}
 
-	@PreAuthorize(MediaPreAuthorizeEnum.HAS_CREATE)
-	@GetMapping(value = MediaWebConstants.Path.MEDIA, params = "create")
-	public String createView(@Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model) throws Exception {
-
-		mediaDto = mediaFacade.createDto();
-		model.addAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO, mediaDto);
-		model.addAttribute("create", true);
-
-		return VIEW_MEDIA_LIST;
-	}
-
-	@PreAuthorize(MediaPreAuthorizeEnum.HAS_CREATE)
-	@PostMapping(value = MediaWebConstants.Path.MEDIA, params = "create")
-	public RedirectView create(@Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
-			throws Exception {
+	@PreAuthorize(MediaPreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = MediaWebConstants.Path.MEDIA_FORM)
+	public String form(@Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model) throws Exception {
 
 		if (mediaDto.getUuid() != null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't need UUID.");
+			mediaDto = mediaFacade.findOneByUuid(mediaDto.getUuid());
 		} else {
+			mediaDto = mediaFacade.createDto();
+		}
+		model.addAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO, mediaDto);
 
+		return VIEW_MEDIA_FORM;
+	}
+
+	@PreAuthorize(MediaPreAuthorizeEnum.HAS_CREATE)
+	@PostMapping(value = MediaWebConstants.Path.MEDIA_FORM, params = "create")
+	public RedirectView create(@Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
+
+		if (mediaDto.getUuid() != null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
+		} else {
 			try {
 				mediaDto = mediaFacade.create(mediaDto);
 
@@ -110,23 +102,22 @@ public class MediaController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(MediaDto.UUID, mediaDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, mediaDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_MEDIA);
+		redirectView.setUrl(PATH_MEDIA_FORM);
 		return redirectView;
 	}
 
 	@PreAuthorize(MediaPreAuthorizeEnum.HAS_UPDATE)
-	@PostMapping(value = MediaWebConstants.Path.MEDIA, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes)
-			throws Exception {
+	@PostMapping(value = MediaWebConstants.Path.MEDIA_FORM, params = "update")
+	public RedirectView update(@Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		if (mediaDto.getUuid() == null) {
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record needed existing UUID.");
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
-
 			try {
 				mediaDto = mediaFacade.update(mediaDto);
 
@@ -136,31 +127,37 @@ public class MediaController extends AbstractController {
 			}
 		}
 
-		redirectAttributes.addAttribute(MediaDto.UUID, mediaDto.getUuid());
+		redirectAttributes.addAttribute(GenericDto.UUID, mediaDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_MEDIA);
+		redirectView.setUrl(PATH_MEDIA_FORM);
 		return redirectView;
 	}
 
 	@PreAuthorize(MediaPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = MediaWebConstants.Path.MEDIA, params = "delete")
-	public RedirectView delete(@Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	@PostMapping(value = MediaWebConstants.Path.MEDIA_FORM, params = "delete")
+	public RedirectView delete(@Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto dto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		try {
-			mediaFacade.delete(mediaDto.getUuid());
+		if (dto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
+		} else {
+			try {
+				mediaFacade.delete(dto.getUuid());
 
-			addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
-		} catch (BusinessException e) {
-			addErrorMessage(MediaDto.class, e.getMessage(), bindingResult, redirectAttributes);
-			redirectAttributes.addAttribute(MediaDto.UUID, mediaDto.getUuid());
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
+			} catch (BusinessException e) {
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
+			}
 		}
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_MEDIA);
+		redirectView.setUrl(PATH_MEDIA_FORM);
 		return redirectView;
+
 	}
 
 	@PreAuthorize(MediaPreAuthorizeEnum.HAS_READ)

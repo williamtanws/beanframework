@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.core.facade.VendorFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class VendorController extends AbstractController {
 

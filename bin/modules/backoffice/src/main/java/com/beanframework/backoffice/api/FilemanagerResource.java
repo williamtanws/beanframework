@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.beanframework.backoffice.FilemanagerWebConstants;
-import com.beanframework.backoffice.web.FilemanagerController.FilemanagerPreAuthorizeEnum;
+import com.beanframework.backoffice.FilemanagerWebConstants.FilemanagerPreAuthorizeEnum;
 import com.beanframework.core.api.AbstractResource;
 
 @RestController

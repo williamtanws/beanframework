@@ -25,7 +25,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.facade.TaskFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class TaskController extends AbstractController {
 

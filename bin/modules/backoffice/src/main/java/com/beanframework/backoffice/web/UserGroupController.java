@@ -31,7 +31,7 @@ import com.beanframework.core.facade.UserGroupFacade;
 import com.beanframework.core.facade.UserPermissionFacade;
 import com.beanframework.core.facade.UserRightFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class UserGroupController extends AbstractController {
 

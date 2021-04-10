@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.AddressWebConstants;
 import com.beanframework.backoffice.AddressWebConstants.AddressPreAuthorizeEnum;
+import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.AddressDto;
 import com.beanframework.core.facade.AddressFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class AddressController extends AbstractController {
 

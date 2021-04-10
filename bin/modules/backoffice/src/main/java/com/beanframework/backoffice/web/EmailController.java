@@ -26,7 +26,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.EmailDto;
 import com.beanframework.core.facade.EmailFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class EmailController extends AbstractController {
 

@@ -22,7 +22,7 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.facade.CommentFacade;
 
-@PreAuthorize("isAuthenticated()")
+
 @Controller
 public class CommentController extends AbstractController {
 
