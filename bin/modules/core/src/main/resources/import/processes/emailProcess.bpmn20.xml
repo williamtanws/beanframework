@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="Examples">
+
+	<process id="emailDelivery" name="Email Delivery">
+		<startEvent id="theStart" />
+
+		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="verifyEmailStatus" />
+
+		<userTask id="verifyEmailStatus" name="Verify Email Status">
+			<documentation>
+				Verify Email status for sending email
+			</documentation>
+			<potentialOwner>
+				<resourceAssignmentExpression>
+					<formalExpression>emailStatus</formalExpression>
+				</resourceAssignmentExpression>
+			</potentialOwner>
+		</userTask>
+
+		<sequenceFlow id="sendEmail" sourceRef="verifyEmailStatus" targetRef="sendEmail" />
+
+		<userTask id="sendEmail" name="Send Email">
+			<documentation>
+				Send Email with Publish or Processing status
+			</documentation>
+			<potentialOwner>
+				<resourceAssignmentExpression>
+					<formalExpression>sendEmail</formalExpression>
+				</resourceAssignmentExpression>
+			</potentialOwner>
+		</userTask>
+
+		<sequenceFlow id="flow3" sourceRef="sendEmail" targetRef="theEnd" />
+
+		<endEvent id="theEnd" />
+
+	</process>
+
+</definitions>
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+	xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" typeLanguage="http://www.w3.org/2001/XMLSchema"
+	expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
+	<process id="emailDelivery" name="Email Delivery Process" isExecutable="true">
+		<startEvent id="start" />
+		<sequenceFlow sourceRef="start" targetRef="verifyEmail" />
+		<userTask id="verifyEmail" name="Review the submitted sendEmail" flowable:candidateGroups="email" />
+		<sequenceFlow sourceRef="verifyEmail" targetRef="decision" />
+		<exclusiveGateway id="decision" />
+		<sequenceFlow sourceRef="decision" targetRef="sendEmailApproved">
+			<conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${approved}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow sourceRef="decision" targetRef="sendEmailRejected">
+			<conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${!approved}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<serviceTask id="sendEmailApproved" name="Publish the approved sendEmail." flowable:class="com.beanframework.core.task.VerifyEmailService" />
+		<sequenceFlow sourceRef="sendEmailApproved" targetRef="end" />
+		<serviceTask id="sendEmailRejected" name="Send out rejection email" flowable:class="com.beanframework.core.task.SendEmailService" />
+		<sequenceFlow sourceRef="sendEmailRejected" targetRef="end" />
+		<endEvent id="end" />
+	</process>
+</definitions>

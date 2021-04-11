@@ -11,7 +11,9 @@ INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dyn
 ,cronjob				,Cronjob				,70	,fas fa-calendar	,/backoffice/cronjob				,,true,system		,employeegroup				,menu_0_name_en=Cron Job;menu_1_name_cn=定时任务
 ,email					,Email					,80	,fas fa-envelope	,/backoffice/email					,,true,system		,employeegroup				,menu_0_name_en=Email;menu_1_name_cn=电子邮件
 ,auditor				,Auditor				,90	,fas fa-users		,/backoffice/auditor				,,true,system		,employeegroup				,menu_0_name_en=Auditor;menu_1_name_cn=稽核员
-,workflow				,Workflow				,100,fas fa-briefcase	,/backoffice/workflow				,,true,system		,employeegroup				,menu_0_name_en=Workflow;menu_1_name_cn=工作流程
+,wfm					,WFM					,100,fas fa-project-diagram,								,,true,system		,employeegroup				,menu_0_name_en=WFM;menu_1_name_cn=工作流程管理
+,workflow				,Workflow				,10,fas fa-stream		,/backoffice/workflow				,,true,wfm			,employeegroup				,menu_0_name_en=Workflow;menu_1_name_cn=工作流程
+,task					,Task					,20	,fas fa-tasks		,/backoffice/task					,,true,wfm			,employeegroup				,menu_0_name_en=Task;menu_1_name_cn=任务
 ,imex					,Import Export			,110,fas fa-file-import	,/backoffice/imex					,,true,system		,employeegroup				,menu_0_name_en=Import Export;menu_1_name_cn=导入导出
 ,internationalization	,Internationalization	,20	,fas fa-globe		,									,,true,				,employeegroup				,menu_0_name_en=Internationalization;menu_1_name_cn=国际化
 ,language				,Language				,10	,fas fa-language	,/backoffice/language				,,true,internationalization		,employeegroup	,menu_0_name_en=Language;menu_1_name_cn=语言
@@ -32,4 +34,3 @@ INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dyn
 ,cms					,CMS					,50	,fas fa-home		,									,,true,				,employeegroup				,menu_0_name_en=CMS;menu_1_name_cn=内容管理系统
 ,site					,Site					,10	,fas fa-globe		,/backoffice/site					,,true,cms			,employeegroup				,menu_0_name_en=Site;menu_1_name_cn=网站
 ,comment				,Comment				,20	,fas fa-comments	,/backoffice/comment				,,true,cms			,employeegroup				,menu_0_name_en=Comment;menu_1_name_cn=留言
-,task					,Task					,60	,fas fa-tasks		,/backoffice/task					,,true,				,employeegroup				,menu_0_name_en=Task;menu_1_name_cn=任务
