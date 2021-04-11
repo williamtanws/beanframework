@@ -26,7 +26,9 @@ public class Workflow extends GenericEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final String NAME = "name";
+	public static final String DEPLOYMENT = "deploymentId";
 	public static final String CLASSPATH = "classpath";
+	public static final String ACTIVE = "active";
 
 	@Audited(withModifiedFlag = true)
 	private String name;
@@ -36,6 +38,9 @@ public class Workflow extends GenericEntity {
 
 	@Audited(withModifiedFlag = true)
 	private String deploymentId;
+
+	@Audited(withModifiedFlag = true)
+	private Boolean active;
 
 	public String getName() {
 		return name;
@@ -59,6 +64,14 @@ public class Workflow extends GenericEntity {
 
 	public void setDeploymentId(String deploymentId) {
 		this.deploymentId = deploymentId;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 }

@@ -17,7 +17,7 @@
 		</div>
 
 	</th:block>
-	<th:block layout:fragment="js" th:with="addAuthority=${#authorization.expression('hasAuthority(''task_create'')')}">
+	<th:block layout:fragment="js" th:with="addAuthority=false">
 		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='taskTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.task')}}, formUrl=@{${@environment.getProperty('path.task.form')}}, addAuthority=${addAuthority}, selectAuthority=true )}"></th:block>
 	</th:block>
 </body>

@@ -50,8 +50,18 @@ public class EntityWorkflowConverter implements EntityConverter<WorkflowDto, Wor
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
+		if (StringUtils.equals(StringUtils.stripToNull(source.getDeploymentId()), prototype.getDeploymentId()) == Boolean.FALSE) {
+			prototype.setDeploymentId(StringUtils.stripToNull(source.getDeploymentId()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
+
 		if (StringUtils.equals(StringUtils.stripToNull(source.getClasspath()), prototype.getClasspath()) == Boolean.FALSE) {
 			prototype.setClasspath(StringUtils.stripToNull(source.getClasspath()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
+		
+		if (prototype.getActive() == source.getActive() == Boolean.FALSE) {
+			prototype.setActive(source.getActive());
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 

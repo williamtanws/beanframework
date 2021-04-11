@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.repository.Deployment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +23,9 @@ public class WorkflowFacadeImpl extends AbstractFacade<Workflow, WorkflowDto> im
 	private static final Class<Workflow> entityClass = Workflow.class;
 	private static final Class<WorkflowDto> dtoClass = WorkflowDto.class;
 
+	@Autowired
+	private RepositoryService repositoryService;
+
 	@Override
 	public WorkflowDto findOneByUuid(UUID uuid) throws Exception {
 		return findOneByUuid(uuid, entityClass, dtoClass);
@@ -31,12 +38,26 @@ public class WorkflowFacadeImpl extends AbstractFacade<Workflow, WorkflowDto> im
 
 	@Override
 	public WorkflowDto create(WorkflowDto model) throws BusinessException {
-		return save(model, entityClass, dtoClass);
+		return save(model);
 	}
 
 	@Override
 	public WorkflowDto update(WorkflowDto model) throws BusinessException {
-		return save(model, entityClass, dtoClass);
+		return save(model);
+	}
+
+	public WorkflowDto save(WorkflowDto workflow) throws BusinessException {
+		if (workflow.getActive() == Boolean.TRUE && StringUtils.isBlank(workflow.getDeploymentId()) && StringUtils.isNotBlank(workflow.getClasspath())) {
+			Deployment deployment = repositoryService.createDeployment().addClasspathResource(workflow.getClasspath()).deploy();
+			workflow.setDeploymentId(deployment.getId());
+		}
+		
+		if (workflow.getActive() == Boolean.FALSE && StringUtils.isBlank(workflow.getDeploymentId()) && StringUtils.isNotBlank(workflow.getClasspath())) {
+			repositoryService.deleteDeployment(workflow.getDeploymentId());
+			workflow.setDeploymentId(null);
+		}
+
+		return save(workflow, entityClass, dtoClass);
 	}
 
 	@Override

@@ -17,8 +17,9 @@ public class WorkflowPopulator extends AbstractPopulator<Workflow, WorkflowDto> 
 	public void populate(Workflow source, WorkflowDto target) throws PopulatorException {
 		populateGeneric(source, target);
 		target.setName(source.getName());
-		target.setClasspath(source.getClasspath());
 		target.setDeploymentId(source.getDeploymentId());
+		target.setClasspath(source.getClasspath());
+		target.setActive(source.getActive());
 	}
 
 }

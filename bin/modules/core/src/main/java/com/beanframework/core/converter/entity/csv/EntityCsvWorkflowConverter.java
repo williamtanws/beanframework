@@ -56,6 +56,9 @@ public class EntityCsvWorkflowConverter implements EntityCsvConverter<WorkflowCs
 			if (StringUtils.isNotBlank(source.getClasspath()))
 				prototype.setClasspath(source.getClasspath());
 
+			if (source.getActive() != null)
+				prototype.setActive(source.getActive());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ConverterException(e.getMessage(), e);
