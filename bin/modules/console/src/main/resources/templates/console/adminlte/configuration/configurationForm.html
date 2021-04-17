@@ -15,7 +15,8 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}"></th:block>
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('configuration_delete')"></th:block>
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
 					</div>
 					<!-- /.col -->
 					<div class="col-sm-6">
@@ -32,7 +33,12 @@
 						<li class="nav-item">
 							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
 						</li>
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-tab :: nav}"></th:block>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-history-tab" data-toggle="pill" href="#custom-tabs-history" role="tab" aria-controls="custom-tabs-history" aria-selected="false" th:text="#{module.common.history}" th:if="*{uuid != null}"></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-administration-tab" data-toggle="pill" href="#custom-tabs-administration" role="tab" aria-controls="custom-tabs-administration" aria-selected="false" th:text="#{module.common.administration}" th:if="*{uuid != null}"></a>
+						</li>	
 					</ul>
 				</div>
 				<div class="card-body">
@@ -54,9 +60,13 @@
 									</div>
 								</div>
 							</div>
-
 						</div>
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-tab :: content}"></th:block>
+						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
+						</div>
 					</div>
 				</div>
 				<!-- /.card -->
