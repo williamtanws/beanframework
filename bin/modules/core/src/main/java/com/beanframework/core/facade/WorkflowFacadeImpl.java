@@ -51,8 +51,8 @@ public class WorkflowFacadeImpl extends AbstractFacade<Workflow, WorkflowDto> im
 			Deployment deployment = repositoryService.createDeployment().addClasspathResource(workflow.getClasspath()).deploy();
 			workflow.setDeploymentId(deployment.getId());
 		}
-		
-		if (workflow.getActive() == Boolean.FALSE && StringUtils.isBlank(workflow.getDeploymentId()) && StringUtils.isNotBlank(workflow.getClasspath())) {
+
+		if (workflow.getActive() == Boolean.FALSE && StringUtils.isBlank(workflow.getDeploymentId())) {
 			repositoryService.deleteDeployment(workflow.getDeploymentId());
 			workflow.setDeploymentId(null);
 		}
@@ -62,7 +62,18 @@ public class WorkflowFacadeImpl extends AbstractFacade<Workflow, WorkflowDto> im
 
 	@Override
 	public void delete(UUID uuid) throws BusinessException {
-		delete(uuid, entityClass);
+		try {
+			Workflow workflow = modelService.findOneByUuid(uuid, entityClass);
+
+			if (StringUtils.isBlank(workflow.getDeploymentId())) {
+				repositoryService.deleteDeployment(workflow.getDeploymentId());
+				workflow.setDeploymentId(null);
+			}
+
+			delete(uuid, entityClass);
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@Override
