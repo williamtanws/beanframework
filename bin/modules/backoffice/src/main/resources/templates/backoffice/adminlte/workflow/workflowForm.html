@@ -69,7 +69,17 @@
 								</div>
 								<div class="col-md-3">
 									<div class="form-group">
-										<label for="deploymentId" th:text="#{module.workflow.deploymentId}"></label>
+										<label for="active" th:text="#{module.common.active}"></label>
+										<select class="form-control" name="active">
+											<option value="" th:text="'&nbsp'"></option>
+											<option value="1" th:selected="*{active == true}" th:text="#{module.common.yes}"></option>
+											<option value="0" th:selected="*{active == false}" th:text="#{module.common.no}"></option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="deploymentId" th:text="#{module.workflow.deploymentId}"></label>:
 										<span th:text="*{deploymentId}"></span>
 									</div>
 								</div>
