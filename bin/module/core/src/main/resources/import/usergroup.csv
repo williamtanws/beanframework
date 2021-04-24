@@ -1,4 +1,0 @@
-INSERT_UPDATE UserGroup,id,name,userGroupIds,dynamicFieldSlotIds
-,customergroup			,Customer Group			,																		,usergroup_0_name_en=Customer Group;usergroup_1_name_cn=客户组
-,vendorgroup			,Vendor Group			,																		,usergroup_0_name_en=Vendor Group;usergroup_1_name_cn=供应商
-,employeegroup			,Employee Group			,																		,usergroup_0_name_en=Employee Group;usergroup_1_name_cn=雇员组

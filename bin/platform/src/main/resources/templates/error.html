@@ -1,69 +1,46 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE" th:utext="#{error.page}"></title>
-<!-- Tell the browser to be responsive to screen width -->
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<link rel="shortcut icon" type="image/x-icon" th:href="${@environment.getProperty('favicon')}" />
-<!-- Bootstrap 3.3.7 -->
-<link rel="stylesheet" th:href="@{/static/adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css}">
-<!-- Font Awesome -->
-<link rel="stylesheet" th:href="@{/static/adminlte/bower_components/font-awesome/css/font-awesome.min.css}">
-<!-- Ionicons -->
-<link rel="stylesheet" th:href="@{/static/adminlte/bower_components/Ionicons/css/ionicons.min.css}">
-<!-- Theme style -->
-<link rel="stylesheet" th:href="@{/static/adminlte/dist/css/AdminLTE.min.css}">
-<!-- iCheck -->
-<link rel="stylesheet" th:href="@{/static/adminlte/plugins/iCheck/square/blue.css}">
-<!-- Pace style -->
-<link rel="stylesheet" th:href="@{/static/adminlte/plugins/pace/themes/blue/pace-theme-minimal.css}">
-
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js}"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js}"></script>
-  <![endif]-->
-
-<!-- Google Font -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-<link rel="stylesheet" th:href="@{/static/common/common.css}">
+<title th:utext="#{error.page}"></title>
 </head>
-<body class="hold-transition login-page">
-	<section class="content">
-		<div class="error-page" style="text-align: center;width: 500px;">
-			<h2 class="headline text-yellow" th:text="${statusCode}"></h2>
+<body class="hold-transition layout-top-nav">
+	<th:block layout:fragment="content">
+		<div class="content-wrapper sidebar-mini">
 
-			<div class="error-content">
-				<h3>
-					<i class="fa fa-warning text-yellow"></i>
-					<span th:text="#{error.info}"></span>
-				</h3>
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1></h1>
+						</div>
+						<div class="col-sm-6">
+						</div>
+					</div>
+				</div>
+				<!-- /.container-fluid -->
+			</section>
 
-				<p th:text="${message}"></p>
-				<p th:text="${exception}" style="display:none"></p>
+			<!-- Main content -->
+			<section class="content" th:with="textColor=${statusCode == 400 ? 'text-warning' : 'text-danger'}">
+				<div class="error-page">
+					<h2 th:class="'headline '+${textColor}" th:text="${statusCode}"></h2>
 
-				<p th:if="${redirectUrl != null}">
-					<a th:href="${redirectUrl}" type="button" th:text="#{error.returntohome}"></a>
-				</p>
-			</div>
-			<!-- /.error-content -->
+					<div class="error-content">
+						<h3>
+							<i th:class="'fas fa-exclamation-triangle '+${textColor}"></i>
+							<span th:text="#{error.info}"></span>
+						</h3>
+						
+						<p th:text="${message}"></p>
+						<p th:text="${exception}"></p>
+					</div>
+					<!-- /.error-content -->
+				</div>
+				<!-- /.error-page -->
+			</section>
+			<!-- /.content -->
 		</div>
-	</section>
-	<!-- jQuery 3 -->
-	<script th:src="@{/static/adminlte/bower_components/jquery/dist/jquery.min.js}"></script>
-	<!-- Bootstrap 3.3.7 -->
-	<script th:src="@{/static/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
-	<!-- iCheck -->
-	<script th:src="@{/static/adminlte/plugins/iCheck/icheck.min.js}"></script>
-	<!-- PACE -->
-	<script th:src="@{/static/adminlte/plugins/pace/pace.min.js}"></script>
-
-	<script type="text/javascript" th:src="@{/static/common/common.js}">
-		
-	</script>
-	<th:block layout:fragment="js"></th:block>
+	</th:block>
 </body>
 </html>

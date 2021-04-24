@@ -1,0 +1,8 @@
+INSERT_UPDATE DynamicFieldTemplate,id,name,dynamicFieldSlotIds
+,menutemplate			,Menu Template				,menu_0_name_en;menu_1_name_cn
+,userrighttemplate		,User Right Template		,userright_0_name_en;userright_1_name_cn
+,userpermissiontemplate	,User Permission Template	,userpermission_0_name_en;userpermission_1_name_cn
+,usergrouptemplate		,User Group Template		,usergroup_0_name_en;usergroup_1_name_cn
+,employeetemplate		,Employee Template			,employee_0_name_en;employee_1_name_cn
+,customertemplate		,Customer Template			,customer_0_name_en;customer_1_name_cn
+,vendortemplate			,Vendor Template			,vendor_0_name_en;vendor_1_name_cn

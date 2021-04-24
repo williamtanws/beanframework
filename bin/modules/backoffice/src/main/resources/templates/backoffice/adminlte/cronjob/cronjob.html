@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<head>
+<title th:utext="#{module.cronjob}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.system},breadcrumb2=#{module.cronjob},id=#{module.common.id},name=#{module.cronjob.name},type=#{module.cronjob.type}">
+
+			<!-- Header -->
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header (title=#{module.cronjob}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
+
+			<!-- Main content -->
+			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.cronjob}, tableId='cronjobTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, selectAuthority=true )}"></th:block>
+
+		</div>
+
+	</th:block>
+	<th:block layout:fragment="js" th:with="addAuthority=${#authorization.expression('hasAuthority(''cronjob_create'')')}">
+		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='cronjobTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.cronjob')}}, formUrl=@{${@environment.getProperty('path.cronjob.form')}}, addAuthority=${addAuthority}, selectAuthority=true  )}"></th:block>
+	</th:block>
+</body>
+</html>

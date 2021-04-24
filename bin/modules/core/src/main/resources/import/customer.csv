@@ -1,0 +1,2 @@
+INSERT_UPDATE Customer,id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,companyIds,addressIds,dynamicFieldSlotIds,profilePicture
+,customer	,Customer 			,customer		,true,true,true,true,customergroup		,,,,static/adminlte/dist/img/user8-128x128.jpg

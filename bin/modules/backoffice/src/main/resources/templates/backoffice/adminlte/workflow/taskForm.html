@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+
+<head>
+<title th:utext="#{module.task}"></title>
+</head>
+
+<body>
+	<th:block layout:fragment="content">
+		<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.task.form')}}" method="post" th:object="${taskDto}">
+			<input type="hidden" name="create" th:if="*{uuid == null}" />
+			<input type="hidden" name="update" th:if="*{uuid != null}" />
+			<input type="hidden" name="uuid" th:value="*{uuid}" th:if="*{uuid != null}" />
+
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('task_delete')"></th:block>
+						<th:block th:insert="~{core/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
+					</div>
+					<!-- /.col -->
+					<div class="col-sm-6">
+						<div class="float-sm-right">
+							<button type="submit" class="btn btn-primary" th:text="#{module.common.save}" sec:authorize="hasAuthority('task_create') or hasAuthority('task_update')"></button>
+						</div>
+					</div>
+					<!-- /.col -->
+				</div>
+			</div>
+			<div class="card card-primary card-outline card-outline-tabs consistent-height">
+				<div class="card-header p-0 border-bottom-0">
+					<ul class="nav nav-tabs" id="custom-tabs-tab" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-history-tab" data-toggle="pill" href="#custom-tabs-history" role="tab" aria-controls="custom-tabs-history" aria-selected="false" th:text="#{module.common.history}" th:if="*{uuid != null}"></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-administration-tab" data-toggle="pill" href="#custom-tabs-administration" role="tab" aria-controls="custom-tabs-administration" aria-selected="false" th:text="#{module.common.administration}" th:if="*{uuid != null}"></a>
+						</li>	
+					</ul>
+				</div>
+				<div class="card-body">
+					<div class="tab-content" id="custom-tabs-tabContent">
+						<div class="tab-pane fade show active" id="custom-tabs-general" role="tabpanel" aria-labelledby="custom-tabs-general-tab">
+
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="id" th:text="#{module.common.id}"></label>
+										<span>*</span>
+										<input type="text" class="form-control" name="id" th:value="*{id}">
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="name" th:text="#{module.task.name}"></label>
+										<input type="text" class="form-control" name="name" th:value="*{name}">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
+						</div>
+					</div>
+				</div>
+				<!-- /.card -->
+			</div>
+		</form>
+
+		<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: modal (uuid=${taskDto.uuid}, deleteUrl=@{${@environment.getProperty('path.task.form')}} )}"></th:block>
+	</th:block>
+	<th:block layout:fragment="js">
+
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+				
+			$(document).ready(function () {
+				$('#form-save').validate(
+					{
+						rules: {
+							id: {
+								required: true,
+								remote: {
+									url: /*[[@{${@environment.getProperty('path.api.task.checkid')}}]]*/ ,
+									type: "get",
+									data: {
+										uuid: $('#form-save input[name=uuid]').val(),
+										id: function () {
+											return $("#form-save input[name='id']").val();
+										}
+									}
+								}
+							}
+						},
+						messages: {
+							id: {
+								required: /*[[#{module.common.id.required}]]*/,
+			                    remote: /*[[#{module.common.id.exists}]]*/
+							}
+						},
+						errorElement: 'span',
+						errorPlacement: function (error, element) {
+							error.addClass('invalid-feedback');
+							element.closest('.form-group').append(error);
+						},
+						highlight: function (element, errorClass, validClass) {
+							$(element).addClass('is-invalid');
+						},
+						unhighlight: function (element, errorClass, validClass) {
+							$(element).removeClass('is-invalid');
+						}
+					});
+			});
+			
+		    /*]]>*/
+		</script>
+		<th:block th:if="${taskDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.task.history')}(uuid=${taskDto.uuid})})}"></th:block>
+	</th:block>
+</body>
+
+</html>

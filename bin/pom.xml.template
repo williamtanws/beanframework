@@ -9,32 +9,32 @@
     <packaging>pom</packaging>
 	
 	<properties>
-		<beanframework.version>2.0.0</beanframework.version>
+		<beanframework.version>3.0.0</beanframework.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 	</properties>
 
     <modules>
-    	<module>module/common</module>
-    	<module>module/enumeration</module>
-    	<module>module/internationalization</module>
-    	<module>module/user</module>
-    	<module>module/email</module>
-    	<module>module/cronjob</module>
-    	<module>module/configuration</module>
-    	<module>module/dynamicfield</module>
-    	<module>module/menu</module>
-        <module>module/filemanager</module>
-        <module>module/media</module>
-        <module>module/comment</module>
-        <module>module/cms</module>
-        <module>module/workflow</module>
-        <module>module/imex</module>
-        <module>module/core</module>
-		<module>ui/adminlte</module>
-        <module>backend/console</module>
-        <module>backend/backoffice</module>
-        <module>backend/cockpit</module>
+    	<module>modules/common</module>
+    	<module>modules/enumeration</module>
+    	<module>modules/internationalization</module>
+    	<module>modules/user</module>
+    	<module>modules/email</module>
+    	<module>modules/cronjob</module>
+    	<module>modules/configuration</module>
+    	<module>modules/dynamicfield</module>
+    	<module>modules/menu</module>
+        <module>modules/filemanager</module>
+        <module>modules/media</module>
+        <module>modules/comment</module>
+        <module>modules/cms</module>
+        <module>modules/workflow</module>
+        <module>modules/imex</module>
+        <module>modules/core</module>
+		<module>modules/adminlte</module>
+        <module>modules/console</module>
+        <module>modules/backoffice</module>
+        <module>modules/cockpit</module>
         <module>platform</module>
         <module>../config</module>
     </modules>
