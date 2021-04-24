@@ -1,2 +1,0 @@
-INSERT_UPDATE Workflow,id,name,classpath,active
-,emailDelivery,Email Delivery,import/processes/emailProcess.bpmn20.xml,1

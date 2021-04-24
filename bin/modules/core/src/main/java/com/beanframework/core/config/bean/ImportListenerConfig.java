@@ -34,7 +34,6 @@ import com.beanframework.core.listenerimport.UserGroupImportListener;
 import com.beanframework.core.listenerimport.UserPermissionImportListener;
 import com.beanframework.core.listenerimport.UserRightImportListener;
 import com.beanframework.core.listenerimport.VendorImportListener;
-import com.beanframework.core.listenerimport.WorkflowImportListener;
 import com.beanframework.imex.ImexConstants;
 import com.beanframework.imex.registry.ImportListenerRegistry;
 
@@ -153,11 +152,6 @@ public class ImportListenerConfig implements ApplicationListener<ApplicationRead
 	}
 
 	@Bean
-	public WorkflowImportListener workflowImportListener() {
-		return new WorkflowImportListener();
-	}
-
-	@Bean
 	public MediaImportListener mediaImportListener() {
 		return new MediaImportListener();
 	}
@@ -232,9 +226,6 @@ public class ImportListenerConfig implements ApplicationListener<ApplicationRead
 
 		if (importListenerTypesList.contains(ImportListenerConstants.SiteImport.TYPE))
 			importListenerRegistry.addListener(siteImportListener());
-
-		if (importListenerTypesList.contains(ImportListenerConstants.WorkflowImport.TYPE))
-			importListenerRegistry.addListener(workflowImportListener());
 
 		if (importListenerTypesList.contains(ImportListenerConstants.MediaImport.TYPE))
 			importListenerRegistry.addListener(mediaImportListener());

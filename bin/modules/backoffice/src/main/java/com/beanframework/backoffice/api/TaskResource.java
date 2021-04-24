@@ -27,7 +27,7 @@ public class TaskResource extends AbstractResource {
 	private TaskFacade taskFacade;
 
 	@PreAuthorize(TaskPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = TaskWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = TaskWebConstants.Path.Api.TASK, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
 

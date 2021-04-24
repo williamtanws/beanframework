@@ -24,7 +24,8 @@ INSERT_UPDATE UserAuthority,userGroupId,userPermissionId,create,read,update,dele
 ,employeegroup,email				,+,+,+,+
 ,employeegroup,media				,+,+,+,+
 ,employeegroup,site					,+,+,+,+
-,employeegroup,workflow				,+,+,+,+
+,employeegroup,deployment			,+,+,+,+
+,employeegroup,task					,+,+,+,+
 ,employeegroup,imex					,+,+,+,+
 ,employeegroup,task					,+,+,+,+
 ,employeegroup,comment				,+,+,+,+

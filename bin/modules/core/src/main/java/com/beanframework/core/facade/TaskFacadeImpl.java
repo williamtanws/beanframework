@@ -1,7 +1,6 @@
 package com.beanframework.core.facade;
 
 import java.util.List;
-import java.util.Map;
 
 import org.flowable.engine.TaskService;
 import org.flowable.task.api.Task;
@@ -20,12 +19,14 @@ public class TaskFacadeImpl implements TaskFacade {
 	@Autowired
 	private TaskService taskService;
 
-//	@Autowired
-//	private UserService userService;
-
 	@Override
-	public Task findOneById(String id) {
-		return taskService.createTaskQuery().taskId(id).singleResult();
+	public Task findOneById(String taskId) throws BusinessException {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		
+		if (task == null) {
+			throw new BusinessException("Could not find a task with id '" + taskId + "'.");
+		}
+		return task;
 	}
 
 	@Override
@@ -40,23 +41,4 @@ public class TaskFacadeImpl implements TaskFacade {
 	public int count() {
 		return (int) taskService.createTaskQuery().count();
 	}
-
-	@Override
-	public void complete(String taskId, Map<String, Object> variables) throws BusinessException {
-		taskService.complete(taskId, variables);
-	}
-
-//	@Override
-//	public Page<Task> findByCurrentUserGroup(DataTableRequest dataTableRequest) throws Exception {
-//		User user = userService.getCurrentUser();
-//
-//		Set<String> userGroupIds = userService.getAllUserGroupIdsByUserUuid(user.getUuid());
-//
-//		List<Task> tasks = taskService.createTaskQuery().taskCandidateGroupIn(new ArrayList<String>(userGroupIds)).listPage((int) dataTableRequest.getPageable().getOffset(),
-//				dataTableRequest.getPageable().getPageSize());
-//
-//		return new PageImpl<Task>(tasks, PageRequest.of(dataTableRequest.getPageable().getPageNumber(), dataTableRequest.getPageable().getPageSize(), dataTableRequest.getPageable().getSort()),
-//				tasks.size());
-//	}
-
 }

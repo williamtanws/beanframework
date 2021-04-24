@@ -2,7 +2,7 @@ package com.beanframework.backoffice.data;
 
 import com.beanframework.core.data.DataTableResponseData;
 
-public class WorkflowDataTableResponseData extends DataTableResponseData {
+public class DeploymentDataTableResponseData extends DataTableResponseData {
 	
 	private String name;
 

@@ -13,6 +13,9 @@
 						<i class="fas fa-bars"></i>
 					</a>
 				</li>
+				<li class="nav-item d-none d-sm-inline-block" sec:authorize="${#authorization.expression('hasAuthority(''console_read'')')}">
+					<a href="#" class="nav-link" th:onClick="'window.location.href=\''+@{${@environment.getProperty('path.console')}}+'\''"><span th:text="#{module.common.console}"></span></a>
+				</li>
 				<li class="nav-item d-none d-sm-inline-block">
 					<a th:href="@{${@environment.getProperty('path.user.profile')}}" class="nav-link"><span th:text="#{module.user.myaccount}"></span></a>
 				</li>
