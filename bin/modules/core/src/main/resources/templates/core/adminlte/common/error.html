@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{${@environment.getProperty('layout.console')}}">
+<head>
+<title th:utext="#{error.page}"></title>
+</head>
+<body class="hold-transition sidebar-mini">
+	<th:block layout:fragment="content">
+		<div class="content-wrapper sidebar-mini">
+
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1></h1>
+						</div>
+						<div class="col-sm-6">
+						</div>
+					</div>
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+
+			<!-- Main content -->
+			<section class="content" th:with="textColor=${statusCode == 400 ? 'text-warning' : 'text-danger'}">
+				<div class="error-page">
+					<h2 th:class="'headline '+${textColor}" th:text="${statusCode}"></h2>
+
+					<div class="error-content">
+						<h3>
+							<i th:class="'fas fa-exclamation-triangle '+${textColor}"></i>
+							<span th:text="#{error.info}"></span>
+						</h3>
+						
+						<p th:text="${message}"></p>
+						<p th:text="${exception}"></p>
+					</div>
+					<!-- /.error-content -->
+				</div>
+				<!-- /.error-page -->
+			</section>
+			<!-- /.content -->
+		</div>
+	</th:block>
+</body>
+</html>

@@ -1,5 +1,0 @@
-INSERT_UPDATE Cronjob,id,jobClass,jobGroup,name,description,cronExpression,startup,jobTrigger,triggerStartDate,cronjobData
-,samplejob	,com.beanframework.core.job.SampleJob	,Sample Group	,Sample			,Just a sample job run at every 20 seconds,*/20 * * * * ?,false,STOP,,dataname1=datavalue1;dataname2=datavalue2
-,emailjob	,com.beanframework.core.job.EmailJob	,Email Group	,Send Email		,Process emails every 20 seconds,*/20 * * * * ?,false,STOP,,limit=1000
-,imexjob	,com.beanframework.core.job.ImexJob		,Imex Group		,Import Export	,Import or Export CSV data,,false,STOP,,
-,dumpdb		,com.beanframework.core.job.DumpDbJob	,Database Group	,Dump Db		,Dump database from local database,,false,STOP,,

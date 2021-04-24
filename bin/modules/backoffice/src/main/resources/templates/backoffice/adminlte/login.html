@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<head>
+<title th:utext="#{module.common.login}"></title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<script th:inline="javascript">
+		if ( self !== top ) {
+			// you're in an iframe
+			window.top.location.href = /*[[@{${@environment.getProperty('path.backoffice.login')}}]]*/; 
+		}
+		</script>
+		<div class="login-page">
+			<div class="login-box">
+				<!-- /.login-logo -->
+				<div class="card card-outline card-primary">
+					<div class="card-header text-center">
+						<a th:href="@{${@environment.getProperty('backoffice.webroot')}}" class="h1">
+							<b th:utext="#{module.common.backoffice}"></b>
+						</a>
+					</div>
+					<div class="card-body">
+						<p class="login-box-msg" th:utext="#{module.common.signin}"></p>
+
+						<div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null}">
+							<div class="alert alert-danger">
+								<i class="icon fa fa-lock"></i>
+								<span th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}" th:switch="${errorMsg}">
+									<span th:case="'Wrong username or password'" th:utext="#{module.common.login.error.wrongusernameorpassword}"></span>
+									<span th:case="'Your account has been disabled'" th:utext="#{module.common.login.error.accountdisabled}"></span>
+									<span th:case="'Maximum sessions of 1 for this principal exceeded'" th:utext="#{module.common.login.error.exceeded}"></span>
+									<span th:case="*" th:text="${errorMsg}" th:utext="#{module.common.login.error.unknown}"></span>
+								</span>
+
+							</div>
+						</div>
+						<div th:if="${param.denied}">
+							<div class="alert alert-danger">
+								<i class="icon fa fa-lock"></i>
+								<span th:utext="#{module.common.login.error.accessdenied}"></span>
+							</div>
+						</div>
+						<div th:if="${param.expired}">
+							<div class="alert alert-danger">
+								<i class="icon fa fa-lock"></i>
+								<span th:utext="#{module.common.login.error.sessionexpired}"></span>
+							</div>
+						</div>
+						<div th:if="${param.timeout}">
+							<div class="alert alert-danger">
+								<i class="icon fa fa-lock"></i>
+								<span th:utext="#{module.common.login.error.sessiontimeout}"></span>
+							</div>
+						</div>
+						<div th:if="${param.logout}">
+							<div class="alert alert-success">
+								<i class="icon fa fa-unlock"></i>
+								<span th:utext="#{module.common.login.loggedout}"></span>
+							</div>
+						</div>
+
+						<form id="login-form" th:action="@{${@environment.getProperty('path.backoffice.login')}}" method="post">
+							<sec:csrfInput />
+							<div class="form-group input-group mb-3">
+								<input type="text" class="form-control" th:placeholder="#{module.employee.id}" name="username" th:value="${@Config.is('demo')} ? ${@environment.getProperty('module.employee.default.id')}:''">
+								<div class="input-group-append">
+									<div class="input-group-text">
+										<span class="fas fa-user"></span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group input-group mb-3">
+								<input type="password" class="form-control" th:placeholder="#{module.employee.password}" name="password" th:value="${@Config.is('demo')} ? ${@environment.getProperty('module.employee.default.password')}:''">
+								<div class="input-group-append">
+									<div class="input-group-text">
+										<span class="fas fa-lock"></span>
+									</div>
+								</div>
+							</div>
+							<div class="input-group mb-3">
+								<select class="form-control select2" id="changeLanguage">
+									<option th:value="${#strings.arraySplit(locale,';')[0]}" th:text="${#strings.arraySplit(locale,';')[1]}" th:selected="(${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()})"
+										th:each="locale : ${#strings.arraySplit(@environment.getProperty('module.backoffice.locale'), ',')}"></option>
+								</select>
+								<div class="input-group-append">
+									<div class="input-group-text">
+										<span class="input-group-addon">
+											<i class="fa fa-globe"></i>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-8">
+									<div class="icheck-primary">
+										<input type="checkbox" id="remember" name="rememberme">
+										<label for="remember" th:text="#{module.common.login.rememberme}"></label>
+									</div>
+								</div>
+								<!-- /.col -->
+								<div class="col-4">
+									<button type="submit" class="btn btn-primary btn-block" th:utext="#{module.common.login}"></button>
+								</div>
+								<!-- /.col -->
+							</div>
+						</form>
+					</div>
+					<!-- /.card-body -->
+				</div>
+				<!-- /.card -->
+			</div>
+			<!-- /.login-box -->
+		</div>
+	</th:block>
+	<th:block layout:fragment="js">
+		<script th:inline="javascript">
+		
+		$('#changeLanguage').on(
+				"change",
+				function() {
+					var locale = $('#changeLanguage option:selected').val();
+
+					var url = String(window.location.href.replace(
+							/&?locale=([^&]$|[^&]*)/i, ""));
+					if (window.location.href.indexOf('?') > -1) {
+						url = url + '&locale=' + locale;
+					} else {
+						url = url + '?locale=' + locale;
+					}
+
+					window.location.href = url;
+				});
+		
+		/*<![CDATA[*/
+		$(document).ready(function() {
+		  $('#login-form').validate(
+		  {
+		    rules: {
+		      username: {
+		        required: true
+		      },
+		      password: {
+			    required: true
+			  }
+		    },
+		    messages: {
+		      username: {
+			      required: /*[[#{module.common.login.username.required}]]*/
+			  },
+			  password: {
+		          required: /*[[#{module.common.login.password.required}]]*/
+		      }
+		    },
+		    errorElement: 'span',
+		    errorPlacement: function (error, element) {
+		      error.addClass('invalid-feedback');
+		      element.closest('.form-group').append(error);
+		    },
+		    highlight: function (element, errorClass, validClass) {
+		      $(element).addClass('is-invalid');
+		    },
+		    unhighlight: function (element, errorClass, validClass) {
+		      $(element).removeClass('is-invalid');
+		    }
+		  });
+		});
+		/*]]>*/
+		</script>
+	</th:block>
+</body>
+</html>
