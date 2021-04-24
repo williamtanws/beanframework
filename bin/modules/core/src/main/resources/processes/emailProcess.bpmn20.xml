@@ -3,11 +3,11 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
 	xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" typeLanguage="http://www.w3.org/2001/XMLSchema"
 	expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
-	<process id="emailProcess" name="A simple process for email send." isExecutable="true">
+	<process id="emailProcess" name="Process for email." isExecutable="true">
 		<startEvent id="start" />
-		<sequenceFlow sourceRef="start" targetRef="publishEmail" />
-		<serviceTask id="publishEmail" name="Publish email" flowable:class="com.beanframework.core.task.PublishEmailTask"/>
-		<sequenceFlow sourceRef="publishEmail" targetRef="decision" />
+		<sequenceFlow sourceRef="start" targetRef="processEmail" />
+		<serviceTask id="processEmail" name="Process email" flowable:delegateExpression="${processEmailTask}"/>
+		<sequenceFlow sourceRef="processEmail" targetRef="decision" />
 		<exclusiveGateway id="decision" />
 		<sequenceFlow sourceRef="decision" targetRef="sendEmailApproved">
 			<conditionExpression xsi:type="tFormalExpression">
@@ -19,7 +19,7 @@
                 <![CDATA[${!send}]]>
 			</conditionExpression>
 		</sequenceFlow>
-		<serviceTask id="sendEmailApproved" name="Send email." flowable:class="com.beanframework.core.task.SendEmailTask" />
+		<serviceTask id="sendEmailApproved" name="Send email." flowable:delegateExpression="${sendEmailTask}" />
 		<sequenceFlow sourceRef="sendEmailApproved" targetRef="end" />
 		<endEvent id="end" />
 	</process>

@@ -8,7 +8,7 @@ import com.beanframework.common.exception.BusinessException;
 
 public interface TaskFacade {
 
-	Task findOneById(String taskId) throws BusinessException;
+	Task findOneById(String id) throws BusinessException;
 
 	Page<Task> findPage(DataTableRequest dataTableRequest);
 

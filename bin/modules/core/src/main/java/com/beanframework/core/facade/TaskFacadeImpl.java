@@ -2,6 +2,7 @@ package com.beanframework.core.facade;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.flowable.engine.TaskService;
 import org.flowable.task.api.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +21,25 @@ public class TaskFacadeImpl implements TaskFacade {
 	private TaskService taskService;
 
 	@Override
-	public Task findOneById(String taskId) throws BusinessException {
-		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-		
+	public Task findOneById(String id) throws BusinessException {
+		Task task = taskService.createTaskQuery().taskId(id).singleResult();
+
 		if (task == null) {
-			throw new BusinessException("Could not find a task with id '" + taskId + "'.");
+			throw new BusinessException("Could not find a task with id '" + id + "'.");
 		}
 		return task;
 	}
 
 	@Override
 	public Page<Task> findPage(DataTableRequest dataTableRequest) {
-		List<Task> tasks = taskService.createTaskQuery().listPage((int) dataTableRequest.getPageable().getOffset(), dataTableRequest.getPageable().getPageSize());
+		List<Task> page = null;
 
-		return new PageImpl<Task>(tasks, PageRequest.of(dataTableRequest.getPageable().getPageNumber(), dataTableRequest.getPageable().getPageSize(), dataTableRequest.getPageable().getSort()),
-				tasks.size());
+		if (dataTableRequest.isGlobalSearch() && StringUtils.isNotEmpty(dataTableRequest.getSearch())) {
+			page = taskService.createTaskQuery().taskNameLike(dataTableRequest.getSearch()).orderByTaskCreateTime().desc().listPage((int) dataTableRequest.getPageable().getOffset(), dataTableRequest.getPageable().getPageSize());
+		} else {
+			page = taskService.createTaskQuery().orderByTaskCreateTime().desc().listPage((int) dataTableRequest.getPageable().getOffset(), dataTableRequest.getPageable().getPageSize());
+		}
+		return new PageImpl<Task>(page, PageRequest.of(dataTableRequest.getPageable().getPageNumber(), dataTableRequest.getPageable().getPageSize(), dataTableRequest.getPageable().getSort()), page.size());
 	}
 
 	@Override
