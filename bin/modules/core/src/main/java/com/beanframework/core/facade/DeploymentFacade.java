@@ -8,7 +8,7 @@ import com.beanframework.common.exception.BusinessException;
 
 public interface DeploymentFacade {
 
-	Deployment findOneById(String deploymentId) throws BusinessException;
+	Deployment findOneById(String id) throws BusinessException;
 
 	Page<Deployment> findPage(DataTableRequest dataTableRequest) throws Exception;
 

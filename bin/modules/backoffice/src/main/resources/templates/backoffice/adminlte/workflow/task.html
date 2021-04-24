@@ -6,7 +6,7 @@
 <body>
 	<th:block layout:fragment="content">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.internationalization},breadcrumb2=#{module.task},id=#{module.common.id},name=#{module.task.name}">
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.workflow},breadcrumb2=#{module.task},id=#{module.common.id},name=#{module.task.name}">
 
 			<!-- Header -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header (title=#{module.task}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
@@ -18,7 +18,7 @@
 
 	</th:block>
 	<th:block layout:fragment="js">
-		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='taskTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.task')}}, formUrl=@{${@environment.getProperty('path.task.form')}}, addAuthority=false, selectAuthority=true )}"></th:block>
+		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='taskTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.task')}}, formUrl=@{${@environment.getProperty('path.task.form')}}, addAuthority=false, selectAuthority=true, search=false )}"></th:block>
 	</th:block>
 </body>
 </html>
