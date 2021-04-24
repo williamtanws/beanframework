@@ -19,8 +19,7 @@ Beanframework is not a product and not build for any specific solution, it is a 
 
 * Quick Startup
 
-1. Create a new database:
-a. CREATE SCHEMA 'beanframework' DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+1. Create a new database: **CREATE SCHEMA 'beanframework' DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci**;
 2. Duplicate all *.template files and remove .template suffix:
 a. beanframework/bin/pom.xml.template
 a. beanframework/bin/server.bat.template
