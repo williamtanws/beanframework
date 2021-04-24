@@ -25,7 +25,6 @@ import com.beanframework.core.csv.UserGroupCsv;
 import com.beanframework.core.csv.UserPermissionCsv;
 import com.beanframework.core.csv.UserRightCsv;
 import com.beanframework.core.csv.VendorCsv;
-import com.beanframework.core.csv.WorkflowCsv;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
@@ -47,7 +46,6 @@ import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.Vendor;
-import com.beanframework.workflow.domain.Workflow;
 
 public interface ImportListenerConstants {
 
@@ -247,15 +245,6 @@ public interface ImportListenerConstants {
 		public static final String DESCRIPTION = "Update/Remove Media Data";
 		public static final Class<MediaCsv> CLASS_CSV = MediaCsv.class;
 		public static final Class<Media> CLASS_ENTITY = Media.class;
-	}
-
-	public interface WorkflowImport {
-		public static final String TYPE = Workflow.class.getSimpleName();
-		public static final String NAME = "Workflow";
-		public static final int SORT = 170;
-		public static final String DESCRIPTION = "Update/Remove Workflow Data";
-		public static final Class<WorkflowCsv> CLASS_CSV = WorkflowCsv.class;
-		public static final Class<Workflow> CLASS_ENTITY = Workflow.class;
 	}
 
 	public interface ImexImport {

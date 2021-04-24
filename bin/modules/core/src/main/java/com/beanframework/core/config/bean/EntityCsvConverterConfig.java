@@ -26,7 +26,6 @@ import com.beanframework.core.converter.entity.csv.EntityCsvUserGroupConverter;
 import com.beanframework.core.converter.entity.csv.EntityCsvUserPermissionConverter;
 import com.beanframework.core.converter.entity.csv.EntityCsvUserRightConverter;
 import com.beanframework.core.converter.entity.csv.EntityCsvVendorConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvWorkflowConverter;
 import com.beanframework.core.csv.AddressCsv;
 import com.beanframework.core.csv.CompanyCsv;
 import com.beanframework.core.csv.ConfigurationCsv;
@@ -49,7 +48,6 @@ import com.beanframework.core.csv.UserGroupCsv;
 import com.beanframework.core.csv.UserPermissionCsv;
 import com.beanframework.core.csv.UserRightCsv;
 import com.beanframework.core.csv.VendorCsv;
-import com.beanframework.core.csv.WorkflowCsv;
 
 @Configuration
 public class EntityCsvConverterConfig {
@@ -288,20 +286,6 @@ public class EntityCsvConverterConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(entityCsvVendorConverter());
 		mapping.setTypeCode(VendorCsv.class.getSimpleName());
-
-		return mapping;
-	}
-
-	@Bean
-	public EntityCsvWorkflowConverter entityCsvWorkflowConverter() {
-		return new EntityCsvWorkflowConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvWorkflowConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvWorkflowConverter());
-		mapping.setTypeCode(WorkflowCsv.class.getSimpleName());
 
 		return mapping;
 	}

@@ -10,6 +10,7 @@ import java.util.UUID;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.StringUtils;
+import org.flowable.engine.RuntimeService;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -54,9 +55,14 @@ public class EmailJob implements Job {
 
 	@Autowired
 	private MediaService mediaService;
+	
+	@Autowired
+	private RuntimeService runtimeService;
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
+		
+		runtimeService.startProcessInstanceByKey("emailProcess");
 
 		int EMAIL_PROCESS_NUMBER = 10;
 

@@ -55,6 +55,9 @@
 						<li class="nav-item">
 							<a th:href="@{${@environment.getProperty('path.configuration')}}" class="nav-link" th:text="#{module.configuration}"></a>
 						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link" th:onClick="'window.location.href=\''+@{${@environment.getProperty('path.backoffice')}}+'\''" th:text="#{module.common.backoffice}"></a>
+						</li>
 					</ul>
 
 					<!-- Right navbar links -->

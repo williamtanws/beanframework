@@ -19,7 +19,9 @@ Beanframework is not a product and not build for any specific solution, it is a 
 
 * Quick Startup
 
-1. Duplicate all *.template files and remove .template suffix:
+1. Create a new database
+a. CREATE SCHEMA `beanframework` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+2. Duplicate all *.template files and remove .template suffix:
 a. beanframework/bin/pom.xml.template
 a. beanframework/bin/server.bat.template
 a. beanframework/bin/server.sh.template
@@ -27,10 +29,10 @@ a. beanframework/bin/install/app.xml.template
 a. beanframework/bin/platform/pom.xml.template
 b. beanframework/config/pom.xml.template
 c. beanframework/config/src/main/resources/*.template
-2. Configure all the duplicated template files properly
-3. Navigate to /beanframework/bin and run "mvnw clean install" command
-4. Run server.bat or server.sh
-5. Browse http://localhost:8080/console , navigate to Platform->Update to update all modules' data
+3. Configure all the duplicated template files properly
+4. Navigate to /beanframework/bin and run "mvnw clean install" command
+5. Run server.bat or server.sh
+6. Browse http://localhost:8080/console , navigate to Platform->Update to update all modules' data
 
 * Install Application as Service
 1. Navigate command line to beanframework/bin/install
@@ -44,17 +46,21 @@ Default Account
 Username: admin
 Password: admin
 
-Thre are two ways to change default admin's password:
-Add/Modify "module.admin.default.id=admin" and "module.admin.default.password=admin" in properties file
-or
-Create admin record in console and change its password, this will allow console to validate admin credential from database instead of properties file
-
 * Backoffice
 http://localhost:8080/backoffice
 
 Default Account
 Username: employee
 Password: employee
+
+* Admin Account
+
+There are two ways to change default admin's password:
+Add/Modify "module.admin.default.id=admin" and "module.admin.default.password=admin" in properties file
+or
+Create/Update "admin" id and change password, this will allow console to validate admin credential from database instead of properties file
+
+Any employee with admin group allowed to login console and have highest permission.
 
 ## License
 

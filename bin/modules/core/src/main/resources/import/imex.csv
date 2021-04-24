@@ -30,5 +30,4 @@ INSERT_UPDATE Imex,id,type,directory,fileName,query,header,seperator
 ,export_comment,EXPORT,,export_comment,"SELECT id,html,visibled,user.id FROM Comment","id,html,visibled,userId",","
 ,export_site,EXPORT,,export_site,"SELECT id,name,url FROM Site","id,name,url",","
 ,export_media,EXPORT,,export_media,"SELECT id,fileName,fileType,fileSize,title,caption,altText,description,url,folder FROM Media","id,fileName,fileType,fileSize,title,caption,altText,description,url,folder",","
-,export_workflow,EXPORT,,export_email,"SELECT id,name,classpath,deploymentId FROM Workflow","id,name,classpath,deploymentId",","
 ,export_imex,EXPORT,,export_imex,"SELECT id,type,directory,fileName,query,header,seperator FROM Imex","id,type,directory,fileName,query,header,seperator",","

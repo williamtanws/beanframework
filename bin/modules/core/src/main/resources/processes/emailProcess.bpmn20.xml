@@ -3,26 +3,24 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
 	xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" typeLanguage="http://www.w3.org/2001/XMLSchema"
 	expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
-	<process id="emailDelivery" name="Email Delivery Process" isExecutable="true">
+	<process id="emailProcess" name="A simple process for email send." isExecutable="true">
 		<startEvent id="start" />
-		<sequenceFlow sourceRef="start" targetRef="verifyEmail" />
-		<userTask id="verifyEmail" name="Review the submitted sendEmail" flowable:candidateGroups="email" />
-		<sequenceFlow sourceRef="verifyEmail" targetRef="decision" />
+		<sequenceFlow sourceRef="start" targetRef="publishEmail" />
+		<serviceTask id="publishEmail" name="Publish email" flowable:class="com.beanframework.core.task.PublishEmailTask"/>
+		<sequenceFlow sourceRef="publishEmail" targetRef="decision" />
 		<exclusiveGateway id="decision" />
 		<sequenceFlow sourceRef="decision" targetRef="sendEmailApproved">
 			<conditionExpression xsi:type="tFormalExpression">
-                <![CDATA[${approved}]]>
+                <![CDATA[${send}]]>
 			</conditionExpression>
 		</sequenceFlow>
-		<sequenceFlow sourceRef="decision" targetRef="sendEmailRejected">
+		<sequenceFlow sourceRef="decision" targetRef="end">
 			<conditionExpression xsi:type="tFormalExpression">
-                <![CDATA[${!approved}]]>
+                <![CDATA[${!send}]]>
 			</conditionExpression>
 		</sequenceFlow>
-		<serviceTask id="sendEmailApproved" name="Publish the approved sendEmail." flowable:class="com.beanframework.core.task.VerifyEmailService" />
+		<serviceTask id="sendEmailApproved" name="Send email." flowable:class="com.beanframework.core.task.SendEmailTask" />
 		<sequenceFlow sourceRef="sendEmailApproved" targetRef="end" />
-		<serviceTask id="sendEmailRejected" name="Send out rejection email" flowable:class="com.beanframework.core.task.SendEmailService" />
-		<sequenceFlow sourceRef="sendEmailRejected" targetRef="end" />
 		<endEvent id="end" />
 	</process>
 </definitions>
