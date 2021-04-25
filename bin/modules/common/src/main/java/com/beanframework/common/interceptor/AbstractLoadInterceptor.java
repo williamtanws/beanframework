@@ -9,4 +9,8 @@ public abstract class AbstractLoadInterceptor<T extends GenericEntity> implement
 	@Override
 	public void onLoad(T model, InterceptorContext context) throws InterceptorException {
 	}
+	
+	public void generateDynamicFields() {
+		
+	}
 }
