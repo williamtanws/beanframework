@@ -34,6 +34,9 @@
 							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
 						</li>
 						<li class="nav-item">
+							<a class="nav-link" id="custom-tabs-attribute-tab" data-toggle="pill" href="#custom-tabs-attribute" role="tab" aria-controls="custom-tabs-attribute" aria-selected="false" th:text="#{module.common.attribute}" th:if="*{uuid != null}"></a>
+						</li>
+						<li class="nav-item">
 							<a class="nav-link" id="custom-tabs-history-tab" data-toggle="pill" href="#custom-tabs-history" role="tab" aria-controls="custom-tabs-history" aria-selected="false" th:text="#{module.common.history}" th:if="*{uuid != null}"></a>
 						</li>
 						<li class="nav-item">
@@ -170,6 +173,9 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="tab-pane fade" id="custom-tabs-attribute" role="tabpanel" aria-labelledby="custom-tabs-attribute-tab" th:if="*{uuid != null}">
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-attribute :: form(fields=*{fields})}"></th:block>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
 							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
