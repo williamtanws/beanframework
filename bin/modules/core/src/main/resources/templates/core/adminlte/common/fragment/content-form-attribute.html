@@ -16,7 +16,7 @@
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block layout:insert="~{common/adminlte/common/dynamicfield/integer :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/integer :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -31,7 +31,7 @@
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block layout:insert="~{common/adminlte/common/dynamicfield/floatingpoint :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/floatingpoint :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -46,7 +46,7 @@
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block layout:insert="~{common/adminlte/common/dynamicfield/text :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/text :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -61,7 +61,7 @@
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block layout:insert="~{common/adminlte/common/dynamicfield/textarea :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/textarea :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -76,7 +76,7 @@
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block layout:insert="~{common/adminlte/common/dynamicfield/editor :: input (uuid=${field.uuid}, name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/editor :: input (uuid=${field.uuid}, name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -92,7 +92,7 @@
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
 							<th:block
-								layout:insert="~{common/adminlte/common/dynamicfield/select :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required}, enumerations=${field.dynamicFieldSlot.dynamicField.enumerations})}"></th:block>
+								layout:insert="~{core/adminlte/common/fragment/dynamicfield/select :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required}, enumerations=${field.dynamicFieldSlot.dynamicField.enumerations})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -107,7 +107,7 @@
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block layout:insert="~{common/adminlte/common/dynamicfield/date :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/date :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -122,7 +122,7 @@
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block layout:insert="~{common/adminlte/common/dynamicfield/boolean :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/boolean :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -137,7 +137,7 @@
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block layout:insert="~{common/adminlte/common/dynamicfield/file :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/file :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -157,7 +157,7 @@
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{common/adminlte/common/dynamicfield/integer :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/integer :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
@@ -171,7 +171,7 @@
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{common/adminlte/common/dynamicfield/floatingpoint :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/floatingpoint :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
@@ -185,7 +185,7 @@
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{common/adminlte/common/dynamicfield/text :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/text :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
@@ -199,7 +199,7 @@
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{common/adminlte/common/dynamicfield/textarea :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/textarea :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
@@ -213,7 +213,7 @@
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{common/adminlte/common/dynamicfield/editor :: output (uuid=${field.uuid}, name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/editor :: output (uuid=${field.uuid}, name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
@@ -228,7 +228,7 @@
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
 						<th:block
-							layout:insert="~{common/adminlte/common/dynamicfield/select :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required}, enumerations=${field.dynamicFieldSlot.dynamicField.enumerations})}"></th:block>
+							layout:insert="~{core/adminlte/common/fragment/dynamicfield/select :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required}, enumerations=${field.dynamicFieldSlot.dynamicField.enumerations})}"></th:block>
 					</div>
 				</div>
 			</th:block>
@@ -242,7 +242,7 @@
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{common/adminlte/common/dynamicfield/date :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/date :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
@@ -256,7 +256,7 @@
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{common/adminlte/common/dynamicfield/boolean :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/boolean :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
@@ -270,7 +270,7 @@
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
 						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{common/adminlte/common/dynamicfield/file :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/file :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
