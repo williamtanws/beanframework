@@ -37,9 +37,9 @@ public class UserDto extends GenericDto {
 	private List<UserFieldDto> fields = new ArrayList<UserFieldDto>();
 	private MultipartFile profilePicture;
 
-	private String[] selectedUserGroups;
-	private String[] selectedCompanies;
-	private String[] selectedAddresses;
+	private String[] selectedUserGroupUuids;
+	private String[] selectedCompanyUuids;
+	private String[] selectedAddressUuids;
 
 	public String getType() {
 		return type;
@@ -137,28 +137,28 @@ public class UserDto extends GenericDto {
 		this.profilePicture = profilePicture;
 	}
 
-	public String[] getSelectedUserGroups() {
-		return selectedUserGroups;
+	public String[] getSelectedUserGroupUuids() {
+		return selectedUserGroupUuids;
 	}
 
-	public void setSelectedUserGroups(String[] selectedUserGroups) {
-		this.selectedUserGroups = selectedUserGroups;
+	public void setSelectedUserGroupUuids(String[] selectedUserGroups) {
+		this.selectedUserGroupUuids = selectedUserGroups;
 	}
 
-	public String[] getSelectedCompanies() {
-		return selectedCompanies;
+	public String[] getSelectedCompanyUuids() {
+		return selectedCompanyUuids;
 	}
 
-	public void setSelectedCompanies(String[] selectedCompanies) {
-		this.selectedCompanies = selectedCompanies;
+	public void setSelectedCompanyUuids(String[] selectedCompanies) {
+		this.selectedCompanyUuids = selectedCompanies;
 	}
 
-	public String[] getSelectedAddresses() {
-		return selectedAddresses;
+	public String[] getSelectedAddressUuids() {
+		return selectedAddressUuids;
 	}
 
-	public void setSelectedAddresses(String[] selectedAddresses) {
-		this.selectedAddresses = selectedAddresses;
+	public void setSelectedAddressUuids(String[] selectedAddresses) {
+		this.selectedAddressUuids = selectedAddresses;
 	}
 
 }
