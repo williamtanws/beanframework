@@ -10,8 +10,10 @@ import com.beanframework.common.exception.ListenerException;
 import com.beanframework.common.registry.BeforeRemoveEvent;
 import com.beanframework.common.registry.BeforeRemoveListener;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.service.DynamicFieldService;
+import com.beanframework.dynamicfield.service.DynamicFieldSlotService;
 import com.beanframework.dynamicfield.service.DynamicFieldTemplateService;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.imex.domain.Imex;
@@ -36,7 +38,7 @@ import com.beanframework.user.service.UserGroupService;
 import com.beanframework.user.service.UserService;
 
 public class CoreBeforeRemoveListener implements BeforeRemoveListener {
-	
+
 	@Autowired
 	private ModelService modelService;
 
@@ -45,6 +47,12 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 	@Autowired
 	private DynamicFieldService dynamicFieldService;
+
+	@Autowired
+	private DynamicFieldSlotService dynamicFieldSlotService;
+
+	@Autowired
+	private DynamicFieldTemplateService dynamicFieldTemplateService;
 
 	@Autowired
 	private UserService userService;
@@ -63,12 +71,9 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 	@Autowired
 	private RegionService regionService;
-	
-	@Autowired
-	private MediaService mediaService;
 
 	@Autowired
-	private DynamicFieldTemplateService dynamicFieldTemplateService;
+	private MediaService mediaService;
 
 	@Value(UserConstants.USER_MEDIA_LOCATION)
 	public String PROFILE_PICTURE_LOCATION;
@@ -87,6 +92,14 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 			} else if (model instanceof Enumeration) {
 				Enumeration enumeration = (Enumeration) model;
 				dynamicFieldService.removeEnumerationsRel(enumeration);
+
+			} else if (model instanceof DynamicField) {
+				DynamicField dynamicField = (DynamicField) model;
+				dynamicFieldSlotService.removeDynamicFieldRel(dynamicField);
+
+			} else if (model instanceof DynamicFieldSlot) {
+				DynamicFieldSlot dynamicFieldSlot = (DynamicFieldSlot) model;
+				dynamicFieldTemplateService.removeDynamicFieldSlotsRel(dynamicFieldSlot);
 
 			} else if (model instanceof UserGroup) {
 				UserGroup userGroup = (UserGroup) model;
@@ -119,10 +132,6 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 				UserPermission userPermission = (UserPermission) model;
 				userGroupService.removeUserPermissionsRel(userPermission);
 
-			} else if (model instanceof DynamicFieldSlot) {
-				DynamicFieldSlot dynamicFieldSlot = (DynamicFieldSlot) model;
-				dynamicFieldTemplateService.removeDynamicFieldSlotsRel(dynamicFieldSlot);
-
 			} else if (model instanceof Country) {
 				Country country = (Country) model;
 				companyService.removeCountryRel(country);
@@ -140,16 +149,20 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 				addressService.removeContactAddressRel(address);
 				addressService.removeDefaultPaymentAddressRel(address);
 				addressService.removeDefaultShipmentAddressRel(address);
-				
+
 				companyService.removeAddressesRel(address);
 				companyService.removeShippingAddressRel(address);
 				companyService.removeUnloadingAddressRel(address);
 				companyService.removeBillingAddressRel(address);
 				companyService.removeContactAddressRel(address);
 
+				userService.removeAddressesRel(address);
+
 			} else if (model instanceof Company) {
 				Company company = (Company) model;
 				companyService.removeResponsibleCompanyRel(company);
+
+				userService.removeCompaniesRel(company);
 			}
 
 		} catch (Exception e) {

@@ -53,6 +53,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.user.UserConstants;
 import com.beanframework.user.data.UserSession;
+import com.beanframework.user.domain.Address;
+import com.beanframework.user.domain.Company;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
@@ -440,13 +442,81 @@ public class UserServiceImpl implements UserService {
 
 		for (int i = 0; i < entities.size(); i++) {
 
-			boolean removed = false;
 			for (int j = 0; j < entities.get(i).getUserGroups().size(); j++) {
 				entities.get(i).getUserGroups().remove(model.getUuid());
 			}
+			modelService.saveEntityByLegacyMode(entities.get(i), User.class);
+		}
+	}
+	
+	@Override
+	public void removeCompaniesRel(Company model) throws Exception {
+		Specification<User> specification = new Specification<User>() {
+			private static final long serialVersionUID = 1L;
 
-			if (removed)
-				modelService.saveEntityByLegacyMode(entities.get(i), User.class);
+			public String toString() {
+				return model.getUuid().toString();
+			}
+
+			@Override
+			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicates = new ArrayList<Predicate>();
+
+				predicates.add(cb.or(root.join(User.COMPANIES, JoinType.LEFT).in(model.getUuid())));
+
+				if (predicates.isEmpty()) {
+					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+				} else {
+					return cb.or(predicates.toArray(new Predicate[predicates.size()]));
+				}
+
+			}
+		};
+
+		List<User> entities = modelService.findBySpecificationBySort(specification, User.class);
+
+		for (int i = 0; i < entities.size(); i++) {
+
+			for (int j = 0; j < entities.get(i).getCompanies().size(); j++) {
+				entities.get(i).getCompanies().remove(model.getUuid());
+			}
+			modelService.saveEntityByLegacyMode(entities.get(i), User.class);
+		}
+	}
+	
+	@Override
+	public void removeAddressesRel(Address model) throws Exception {
+		Specification<User> specification = new Specification<User>() {
+			private static final long serialVersionUID = 1L;
+
+			public String toString() {
+				return model.getUuid().toString();
+			}
+
+			@Override
+			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicates = new ArrayList<Predicate>();
+
+				predicates.add(cb.or(root.join(User.ADDRESSES, JoinType.LEFT).in(model.getUuid())));
+
+				if (predicates.isEmpty()) {
+					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+				} else {
+					return cb.or(predicates.toArray(new Predicate[predicates.size()]));
+				}
+
+			}
+		};
+
+		List<User> entities = modelService.findBySpecificationBySort(specification, User.class);
+
+		for (int i = 0; i < entities.size(); i++) {
+
+			for (int j = 0; j < entities.get(i).getAddresses().size(); j++) {
+				entities.get(i).getAddresses().remove(model.getUuid());
+			}
+
+			modelService.saveEntityByLegacyMode(entities.get(i), User.class);
 		}
 	}
 }

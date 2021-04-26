@@ -9,6 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.user.data.UserSession;
+import com.beanframework.user.domain.Address;
+import com.beanframework.user.domain.Company;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
 
@@ -32,7 +34,11 @@ public interface UserService {
 
 	void deleteProfilePictureFileByUuid(UUID uuid);
 
+	Set<UUID> getAllUserGroupsByCurrentUser() throws Exception;
+
 	void removeUserGroupsRel(UserGroup userGroup) throws Exception;
 
-	Set<UUID> getAllUserGroupsByCurrentUser() throws Exception;
+	void removeCompaniesRel(Company model) throws Exception;
+
+	void removeAddressesRel(Address model) throws Exception;
 }

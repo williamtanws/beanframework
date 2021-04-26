@@ -51,13 +51,10 @@ public class DynamicFieldTemplateServiceImpl implements DynamicFieldTemplateServ
 
 		for (int i = 0; i < entities.size(); i++) {
 
-			boolean removed = false;
 			for (int j = 0; j < entities.get(i).getDynamicFieldSlots().size(); j++) {
 				entities.get(i).getDynamicFieldSlots().remove(model.getUuid());
 			}
-
-			if (removed)
-				modelService.saveEntity(entities.get(i));
+			modelService.saveEntityByLegacyMode(entities.get(i), DynamicFieldTemplate.class);
 		}
 	}
 }

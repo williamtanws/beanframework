@@ -72,13 +72,10 @@ public class DynamicFieldServiceImpl implements DynamicFieldService {
 		if (entities != null)
 			for (int i = 0; i < entities.size(); i++) {
 
-				boolean removed = false;
 				for (int j = 0; j < entities.get(i).getEnumerations().size(); j++) {
 					entities.get(i).getEnumerations().remove(model.getUuid());
 				}
-
-				if (removed)
-					modelService.saveEntityByLegacyMode(entities.get(i), DynamicField.class);
+				modelService.saveEntityByLegacyMode(entities.get(i), DynamicField.class);
 			}
 	}
 }
