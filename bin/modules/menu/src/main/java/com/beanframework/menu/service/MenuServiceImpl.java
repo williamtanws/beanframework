@@ -185,13 +185,10 @@ public class MenuServiceImpl implements MenuService {
 
 		for (int i = 0; i < entities.size(); i++) {
 
-			boolean removed = false;
 			for (int j = 0; j < entities.get(i).getUserGroups().size(); j++) {
 				entities.get(i).getUserGroups().remove(model.getUuid());
 			}
-
-			if (removed)
-				modelService.saveEntityByLegacyMode(entities.get(i), User.class);
+			modelService.saveEntityByLegacyMode(entities.get(i), User.class);
 		}
 	}
 }

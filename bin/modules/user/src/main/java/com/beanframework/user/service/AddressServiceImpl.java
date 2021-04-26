@@ -11,7 +11,6 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.internationalization.domain.Country;
 import com.beanframework.internationalization.domain.Region;
 import com.beanframework.user.domain.Address;
-import com.beanframework.user.domain.Company;
 import com.beanframework.user.domain.User;
 
 @Service
@@ -57,7 +56,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public void removeRegionRel(Region model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Address.COUNTRY, model.getUuid());
+		properties.put(Region.COUNTRY, model.getUuid());
 		List<Region> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, Region.class);
 
 		if (entities != null)
@@ -74,7 +73,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public void removeShippingAddressRel(Address model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Company.CONTACT_ADDRESS, model.getUuid());
+		properties.put(Address.SHIPPING_ADDRESS, model.getUuid());
 		List<Address> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, Address.class);
 
 		if (entities != null)
@@ -91,7 +90,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public void removeBillingAddressRel(Address model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Company.CONTACT_ADDRESS, model.getUuid());
+		properties.put(Address.BILLING_ADDRESS, model.getUuid());
 		List<Address> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, Address.class);
 
 		if (entities != null)
@@ -109,7 +108,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public void removeContactAddressRel(Address model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Company.CONTACT_ADDRESS, model.getUuid());
+		properties.put(Address.CONTACT_ADDRESS, model.getUuid());
 		List<Address> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, Address.class);
 
 		if (entities != null)
@@ -127,7 +126,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public void removeDefaultPaymentAddressRel(Address model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Company.CONTACT_ADDRESS, model.getUuid());
+		properties.put(Address.DEFAULT_PAYMENT_ADDRESS, model.getUuid());
 		List<Address> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, Address.class);
 
 		if (entities != null)
@@ -145,7 +144,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public void removeDefaultShipmentAddressRel(Address model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Company.CONTACT_ADDRESS, model.getUuid());
+		properties.put(Address.DEFAULT_SHIPMENT_ADDRESS, model.getUuid());
 		List<Address> entities = modelService.findByPropertiesBySortByResult(properties, null, null, null, Address.class);
 
 		if (entities != null)
