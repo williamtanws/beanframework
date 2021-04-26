@@ -46,6 +46,10 @@ public class DynamicFieldPopulator extends AbstractPopulator<DynamicField, Dynam
 
 		try {
 			Language source = modelService.findOneByUuid(uuid, Language.class);
+			if(source == null) {
+				return null;
+			}
+			
 			LanguageDto target = new LanguageDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -70,6 +74,10 @@ public class DynamicFieldPopulator extends AbstractPopulator<DynamicField, Dynam
 
 		try {
 			Enumeration source = modelService.findOneByUuid(uuid, Enumeration.class);
+			if(source == null) {
+				return null;
+			}
+			
 			EnumerationDto target = new EnumerationDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());

@@ -34,6 +34,10 @@ public class CommentPopulator extends AbstractPopulator<Comment, CommentDto> imp
 		
 		try {
 			User source = modelService.findOneByUuid(uuid, User.class);
+			if(source == null) {
+				return null;
+			}
+			
 			UserDto target = new UserDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
