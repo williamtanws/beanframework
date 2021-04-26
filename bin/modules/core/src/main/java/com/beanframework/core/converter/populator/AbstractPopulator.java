@@ -66,6 +66,10 @@ public abstract class AbstractPopulator<T extends GenericEntity, E extends Gener
 		
 		try {
 			User source = modelService.findOneByUuid(uuid, User.class);
+			if(source == null) {
+				return null;
+			}
+			
 			UserDto target = new UserDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -83,6 +87,10 @@ public abstract class AbstractPopulator<T extends GenericEntity, E extends Gener
 
 		try {
 			UserGroup source = modelService.findOneByUuid(uuid, UserGroup.class);
+			if(source == null) {
+				return null;
+			}
+			
 			UserGroupDto target = new UserGroupDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -125,6 +133,10 @@ public abstract class AbstractPopulator<T extends GenericEntity, E extends Gener
 
 		try {
 			Company source = modelService.findOneByUuid(uuid, Company.class);
+			if(source == null) {
+				return null;
+			}
+			
 			CompanyDto target = new CompanyDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -146,6 +158,10 @@ public abstract class AbstractPopulator<T extends GenericEntity, E extends Gener
 
 		try {
 			Address source = modelService.findOneByUuid(uuid, Address.class);
+			if(source == null) {
+				return null;
+			}
+			
 			AddressDto target = new AddressDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -167,6 +183,10 @@ public abstract class AbstractPopulator<T extends GenericEntity, E extends Gener
 
 		try {
 			DynamicFieldSlot source = modelService.findOneByUuid(uuid, DynamicFieldSlot.class);
+			if(source == null) {
+				return null;
+			}
+			
 			DynamicFieldSlotDto target = new DynamicFieldSlotDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -191,6 +211,10 @@ public abstract class AbstractPopulator<T extends GenericEntity, E extends Gener
 
 		try {
 			DynamicField source = modelService.findOneByUuid(uuid, DynamicField.class);
+			if(source == null) {
+				return null;
+			}
+			
 			DynamicFieldDto target = new DynamicFieldDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -224,6 +248,10 @@ public abstract class AbstractPopulator<T extends GenericEntity, E extends Gener
 
 		try {
 			Language source = modelService.findOneByUuid(uuid, Language.class);
+			if(source == null) {
+				return null;
+			}
+			
 			LanguageDto target = new LanguageDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -248,6 +276,10 @@ public abstract class AbstractPopulator<T extends GenericEntity, E extends Gener
 
 		try {
 			Enumeration source = modelService.findOneByUuid(uuid, Enumeration.class);
+			if(source == null) {
+				return null;
+			}
+			
 			EnumerationDto target = new EnumerationDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -271,6 +303,10 @@ public abstract class AbstractPopulator<T extends GenericEntity, E extends Gener
 
 		try {
 			Media source = modelService.findOneByUuid(uuid, Media.class);
+			if(source == null) {
+				return null;
+			}
+			
 			MediaDto target = new MediaDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());

@@ -83,6 +83,10 @@ public class MenuPopulator extends AbstractPopulator<Menu, MenuDto> implements P
 
 		try {
 			Menu source = modelService.findOneByUuid(uuid, Menu.class);
+			if(source == null) {
+				return null;
+			}
+			
 			MenuDto target = new MenuDto();
 			populateGeneric(source, target);
 			target.setName(source.getName());

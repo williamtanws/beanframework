@@ -1,29 +1,19 @@
 package com.beanframework.menu.service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.user.domain.User;
-import com.beanframework.user.domain.UserGroup;
 
 @Service
 @Transactional
@@ -155,40 +145,5 @@ public class MenuServiceImpl implements MenuService {
 		}
 
 		return menuList;
-	}
-
-	@Override
-	public void removeUserGroupsRel(UserGroup model) throws Exception {
-		Specification<Menu> specification = new Specification<Menu>() {
-			private static final long serialVersionUID = 1L;
-
-			public String toString() {
-				return model.getUuid().toString();
-			}
-
-			@Override
-			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				List<Predicate> predicates = new ArrayList<Predicate>();
-
-				predicates.add(cb.or(root.join(Menu.USER_GROUPS, JoinType.LEFT).get(UserGroup.UUID).in(model.getUuid())));
-
-				if (predicates.isEmpty()) {
-					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-				} else {
-					return cb.or(predicates.toArray(new Predicate[predicates.size()]));
-				}
-
-			}
-		};
-
-		List<Menu> entities = modelService.findBySpecificationBySort(specification, Menu.class);
-
-		for (int i = 0; i < entities.size(); i++) {
-
-			for (int j = 0; j < entities.get(i).getUserGroups().size(); j++) {
-				entities.get(i).getUserGroups().remove(model.getUuid());
-			}
-			modelService.saveEntityByLegacyMode(entities.get(i), User.class);
-		}
 	}
 }
