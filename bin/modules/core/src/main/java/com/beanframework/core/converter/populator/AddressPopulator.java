@@ -64,6 +64,10 @@ public class AddressPopulator extends AbstractPopulator<Address, AddressDto> imp
 		
 		try {
 			Country source = modelService.findOneByUuid(uuid, Country.class);
+			if(source == null) {
+				return null;
+			}
+			
 			CountryDto target = new CountryDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -82,6 +86,10 @@ public class AddressPopulator extends AbstractPopulator<Address, AddressDto> imp
 		
 		try {
 			Region source = modelService.findOneByUuid(uuid, Region.class);
+			if(source == null) {
+				return null;
+			}
+			
 			RegionDto target = new RegionDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -100,6 +108,10 @@ public class AddressPopulator extends AbstractPopulator<Address, AddressDto> imp
 		
 		try {
 			Address source = modelService.findOneByUuid(uuid, Address.class);
+			if(source == null) {
+				return null;
+			}
+			
 			AddressDto target = new AddressDto();
 			populateGeneric(source, target);
 			target.setStreetName(source.getStreetName());

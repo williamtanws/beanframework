@@ -36,6 +36,10 @@ public class RegionPopulator extends AbstractPopulator<Region, RegionDto> implem
 		
 		try {
 			Country source = modelService.findOneByUuid(uuid, Country.class);
+			if(source == null) {
+				return null;
+			}
+			
 			CountryDto target = new CountryDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
