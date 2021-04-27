@@ -61,6 +61,10 @@ public class CompanyPopulator extends AbstractPopulator<Company, CompanyDto> imp
 
 		try {
 			Company source = modelService.findOneByUuid(uuid, Company.class);
+			if(source == null) {
+				return null;
+			}
+			
 			CompanyDto target = new CompanyDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -78,6 +82,10 @@ public class CompanyPopulator extends AbstractPopulator<Company, CompanyDto> imp
 		
 		try {
 			Country source = modelService.findOneByUuid(uuid, Country.class);
+			if(source == null) {
+				return null;
+			}
+			
 			CountryDto target = new CountryDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -94,6 +102,10 @@ public class CompanyPopulator extends AbstractPopulator<Company, CompanyDto> imp
 		
 		try {
 			Address source = modelService.findOneByUuid(uuid, Address.class);
+			if(source == null) {
+				return null;
+			}
+			
 			AddressDto target = new AddressDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -138,6 +150,10 @@ public class CompanyPopulator extends AbstractPopulator<Company, CompanyDto> imp
 		
 		try {
 			Region source = modelService.findOneByUuid(uuid, Region.class);
+			if(source == null) {
+				return null;
+			}
+			
 			RegionDto target = new RegionDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());

@@ -40,6 +40,10 @@ public class DynamicFieldSlotPopulator extends AbstractPopulator<DynamicFieldSlo
 
 		try {
 			DynamicField source = modelService.findOneByUuid(uuid, DynamicField.class);
+			if(source == null) {
+				return null;
+			}
+			
 			DynamicFieldDto target = new DynamicFieldDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -73,6 +77,10 @@ public class DynamicFieldSlotPopulator extends AbstractPopulator<DynamicFieldSlo
 
 		try {
 			Language source = modelService.findOneByUuid(uuid, Language.class);
+			if(source == null) {
+				return null;
+			}
+			
 			LanguageDto target = new LanguageDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -97,6 +105,10 @@ public class DynamicFieldSlotPopulator extends AbstractPopulator<DynamicFieldSlo
 
 		try {
 			Enumeration source = modelService.findOneByUuid(uuid, Enumeration.class);
+			if(source == null) {
+				return null;
+			}
+			
 			EnumerationDto target = new EnumerationDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());

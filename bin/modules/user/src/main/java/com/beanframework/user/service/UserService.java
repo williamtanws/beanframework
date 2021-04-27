@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.user.data.UserSession;
 import com.beanframework.user.domain.User;
-import com.beanframework.user.domain.UserGroup;
 
 public interface UserService {
 
@@ -31,8 +30,6 @@ public interface UserService {
 	void saveProfilePicture(User model, InputStream inputStream) throws IOException;
 
 	void deleteProfilePictureFileByUuid(UUID uuid);
-
-	void removeUserGroupsRel(UserGroup userGroup) throws Exception;
 
 	Set<UUID> getAllUserGroupsByCurrentUser() throws Exception;
 }
