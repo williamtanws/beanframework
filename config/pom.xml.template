@@ -39,11 +39,6 @@
 			<artifactId>backoffice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>cockpit</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<!-- Add Cache support -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CronjobWebConstants;
 import com.beanframework.backoffice.CronjobWebConstants.CronjobPreAuthorizeEnum;
-import com.beanframework.backoffice.data.CronjobDataTableResponseData;
+import com.beanframework.backoffice.api.data.CronjobDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;

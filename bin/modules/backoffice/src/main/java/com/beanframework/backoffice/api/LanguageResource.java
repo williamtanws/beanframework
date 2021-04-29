@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants;
 import com.beanframework.backoffice.LanguageWebConstants.LanguagePreAuthorizeEnum;
-import com.beanframework.backoffice.data.LanguageDataTableResponseData;
+import com.beanframework.backoffice.api.data.LanguageDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;

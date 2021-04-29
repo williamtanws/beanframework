@@ -34,7 +34,7 @@
 		<module>modules/adminlte</module>
         <module>modules/console</module>
         <module>modules/backoffice</module>
-        <module>modules/cockpit</module>
+        <module>modules/notification</module>
         <module>platform</module>
         <module>../config</module>
     </modules>
