@@ -79,7 +79,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 					for (UserAuthorityDto sourceUserAuthority : source.getUserAuthorities()) {
 						if (prototype.getUserAuthorities().get(i).getUuid().equals(sourceUserAuthority.getUuid())) {
 							if (sourceUserAuthority.getEnabled() != prototype.getUserAuthorities().get(i).getEnabled()) {
-								prototype.getUserAuthorities().get(i).setEnabled(sourceUserAuthority.getEnabled());
+								prototype.getUserAuthorities().get(i).setEnabled(sourceUserAuthority.getEnabled() == null ? Boolean.FALSE : sourceUserAuthority.getEnabled());
 								prototype.setLastModifiedDate(lastModifiedDate);
 							}
 						}

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.core.converter.entity.EntityCustomerProfileConverter;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.specification.CustomerSpecification;
 import com.beanframework.user.domain.Customer;
@@ -25,9 +24,6 @@ public class CustomerFacadeImpl extends AbstractFacade<Customer, CustomerDto> im
 
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private EntityCustomerProfileConverter entityCustomerProfileConverter;
 
 	@Override
 	public CustomerDto findOneByUuid(UUID uuid) throws Exception {
@@ -96,29 +92,6 @@ public class CustomerFacadeImpl extends AbstractFacade<Customer, CustomerDto> im
 	@Override
 	public CustomerDto createDto() throws Exception {
 		return createDto(entityClass, dtoClass);
-	}
-
-	@Override
-	public CustomerDto saveProfile(CustomerDto dto) throws BusinessException {
-
-		try {
-			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == Boolean.FALSE) {
-				String mimetype = dto.getProfilePicture().getContentType();
-				String type = mimetype.split("/")[0];
-				if (type.equals("image") == Boolean.FALSE) {
-					throw new Exception("Wrong picture format");
-				}
-			}
-			Customer entity = entityCustomerProfileConverter.convert(dto);
-
-			entity = modelService.saveEntity(entity);
-			userService.updatePrincipal(entity);
-
-			return modelService.getDto(entity, dtoClass);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
 	}
 
 	@Override

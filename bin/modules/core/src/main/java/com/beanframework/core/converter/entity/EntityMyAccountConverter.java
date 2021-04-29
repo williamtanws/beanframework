@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.data.CustomerDto;
-import com.beanframework.user.domain.Customer;
+import com.beanframework.core.data.UserDto;
+import com.beanframework.user.domain.User;
 
 @Component
-public class EntityCustomerProfileConverter implements EntityConverter<CustomerDto, Customer> {
+public class EntityMyAccountConverter implements EntityConverter<UserDto, User> {
 
 	@Autowired
 	private ModelService modelService;
@@ -23,19 +23,19 @@ public class EntityCustomerProfileConverter implements EntityConverter<CustomerD
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public Customer convert(CustomerDto source) throws ConverterException {
+	public User convert(UserDto source) throws ConverterException {
 
 		try {
 
 			if (source.getUuid() != null) {
-				Customer prototype = modelService.findOneByUuid(source.getUuid(), Customer.class);
+				User prototype = modelService.findOneByUuid(source.getUuid(), User.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertToEntity(source, modelService.create(Customer.class));
+			return convertToEntity(source, modelService.create(User.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -43,7 +43,7 @@ public class EntityCustomerProfileConverter implements EntityConverter<CustomerD
 
 	}
 
-	private Customer convertToEntity(CustomerDto source, Customer prototype) throws ConverterException {
+	private User convertToEntity(UserDto source, User prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();

@@ -1,17 +1,15 @@
 package com.beanframework.backoffice.web;
 
-import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,75 +19,58 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MyAccountWebConstants;
+import com.beanframework.backoffice.MyAccountWebConstants.MyAccountPreAuthorizeEnum;
+import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.core.data.UserDto;
-import com.beanframework.core.facade.UserFacade;
+import com.beanframework.core.controller.AbstractController;
+import com.beanframework.core.data.MyAccountDto;
+import com.beanframework.core.facade.MyAccountFacade;
 
 
 @Controller
-public class MyAccountController {
+public class MyAccountController extends AbstractController {
 
 	@Autowired
-	private UserFacade userFacade;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
+	private MyAccountFacade myaccountFacade;
 
 	@Value(MyAccountWebConstants.Path.MYACCOUNT)
-	private String PATH_PROFILE;
+	private String PATH_MYACCOUNT;
 
-	@Value(MyAccountWebConstants.View.MYACCOUNT)
-	private String VIEW_USER_PROFILE;
+	@Value(MyAccountWebConstants.View.MYACCOUNT_FORM)
+	private String VIEW_MYACCOUNT_FORM;
 
-	@Value(BackofficeWebConstants.Configuration.DEFAULT_AVATAR)
-	public String CONFIGURATION_DEFAULT_AVATAR;
-
-	@Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT)
-	public UserDto populateUserForm(HttpServletRequest request) throws Exception {
-		return new UserDto();
-	}
-
+	@PreAuthorize(MyAccountPreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = MyAccountWebConstants.Path.MYACCOUNT)
-	public String profile(@Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT) UserDto userProfile, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String form(@Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT_DTO) MyAccountDto myaccountDto, Model model) throws Exception {
 
-		userProfile = userFacade.getCurrentUser();
+		myaccountDto = myaccountFacade.getCurrentUser();
+		model.addAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT_DTO, myaccountDto);
 
-		model.addAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT, userProfile);
-
-		return VIEW_USER_PROFILE;
+		return VIEW_MYACCOUNT_FORM;
 	}
 
+	@PreAuthorize(MyAccountPreAuthorizeEnum.HAS_UPDATE)
 	@PostMapping(value = MyAccountWebConstants.Path.MYACCOUNT, params = "update")
-	public RedirectView update(@Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT) UserDto userProfile, Model model, BindingResult bindingResult,
-			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) throws Exception {
+	public RedirectView update(@Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT_DTO) MyAccountDto myaccountDto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
-		try {
-			UserDto user = userFacade.getCurrentUser();
-			if (user.getUuid().equals(userProfile.getUuid()) == false)
-				throw new Exception("Invalid attempted user profile update.");
+		if (myaccountDto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
+		} else {
+			try {
+				myaccountDto = myaccountFacade.update(myaccountDto);
 
-			userProfile = userFacade.saveProfile(userProfile);
-
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.SUCCESS, localeMessageService.getMessage(BackofficeWebConstants.Locale.SAVE_SUCCESS));
-		} catch (BusinessException e) {
-			bindingResult.reject(UserDto.class.getSimpleName(), e.getMessage());
-
-			StringBuilder errorMessage = new StringBuilder();
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				if (errorMessage.length() != 0) {
-					errorMessage.append("<br>");
-				}
-				errorMessage.append(error.getDefaultMessage());
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(MyAccountDto.class, e.getMessage(), bindingResult, redirectAttributes);
 			}
-
-			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, errorMessage.toString());
 		}
+
+		redirectAttributes.addAttribute(GenericDto.UUID, myaccountDto.getUuid());
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setContextRelative(true);
-		redirectView.setUrl(PATH_PROFILE);
+		redirectView.setUrl(PATH_MYACCOUNT);
 		return redirectView;
 	}
 }

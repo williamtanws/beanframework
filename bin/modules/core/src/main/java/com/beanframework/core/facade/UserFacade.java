@@ -1,12 +1,12 @@
 package com.beanframework.core.facade;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 
 import com.beanframework.common.data.DataTableRequest;
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.UserDto;
 import com.beanframework.user.data.UserSession;
 
@@ -14,9 +14,9 @@ public interface UserFacade {
 
 	UserDto findOneByUuid(UUID uuid) throws Exception;
 
-	UserDto getCurrentUser() throws Exception;
+	UserDto findOneProperties(Map<String, Object> properties) throws Exception;
 
-	UserDto saveProfile(UserDto user) throws BusinessException;
+	UserDto getCurrentUser() throws Exception;
 
 	Page<UserDto> findPage(DataTableRequest dataTableRequest) throws Exception;
 

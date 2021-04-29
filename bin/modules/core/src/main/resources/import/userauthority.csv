@@ -1,5 +1,6 @@
 INSERT_UPDATE UserAuthority,userGroupId,userPermissionId,create,read,update,delete
-,employeegroup,backoffice			,+,+,+,+
+,employeegroup,backoffice			,,+,,
+,employeegroup,console				,,+,,
 ,employeegroup,enumeration			,+,+,+,+
 ,employeegroup,dynamicfield			,+,+,+,+
 ,employeegroup,dynamicfieldslot		,+,+,+,+
@@ -16,6 +17,7 @@ INSERT_UPDATE UserAuthority,userGroupId,userPermissionId,create,read,update,dele
 ,employeegroup,company				,+,+,+,+
 ,employeegroup,address				,+,+,+,+
 ,employeegroup,usersession			,+,+,+,+
+,employeegroup,myaccount			,,+,+,
 ,employeegroup,employee				,+,+,+,+
 ,employeegroup,customer				,+,+,+,+
 ,employeegroup,vendor				,+,+,+,+

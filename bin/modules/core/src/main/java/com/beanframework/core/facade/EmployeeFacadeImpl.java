@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.core.converter.entity.EntityEmployeeProfileConverter;
 import com.beanframework.core.data.EmployeeDto;
 import com.beanframework.core.specification.EmployeeSpecification;
 import com.beanframework.user.domain.Employee;
@@ -25,9 +24,6 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto> im
 	
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private EntityEmployeeProfileConverter entityEmployeeProfileConverter;
 
 	@Override
 	public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
@@ -99,30 +95,6 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto> im
 	@Override
 	public EmployeeDto createDto() throws Exception {
 		return createDto(entityClass, dtoClass);
-	}
-
-	@Override
-	public EmployeeDto saveProfile(EmployeeDto dto) throws BusinessException {
-
-		try {
-			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == Boolean.FALSE) {
-				String mimetype = dto.getProfilePicture().getContentType();
-				String type = mimetype.split("/")[0];
-				if (type.equals("image") == Boolean.FALSE) {
-					throw new Exception("Wrong picture format");
-				}
-			}
-			Employee entity = entityEmployeeProfileConverter.convert(dto);
-
-			entity = modelService.saveEntity(entity);
-			userService.updatePrincipal(entity);
-			userService.saveProfilePicture(entity, dto.getProfilePicture());
-
-			return modelService.getDto(entity, dtoClass);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
 	}
 
 	@Override
