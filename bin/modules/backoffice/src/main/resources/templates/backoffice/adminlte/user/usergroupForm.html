@@ -77,14 +77,10 @@
 							</div>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-attribute" role="tabpanel" aria-labelledby="custom-tabs-attribute-tab" th:if="*{uuid != null}">
-							<div class="row">
-								<th:block layout:insert="~{core/adminlte/common/fragment/dynamicfield/layout :: input(fields=*{fields})}"></th:block>
-							</div>
+							<th:block th:insert="~{core/adminlte/common/fragment/content-form-attribute :: form(fields=*{fields})}"></th:block>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-userauthority" role="tabpanel" aria-labelledby="custom-tabs-userauthority-tab" th:if="*{uuid != null}">
-							<div class="row">
-								<th:block layout:insert="~{core/adminlte/common/fragment/userauthority :: userauthority}"></th:block>
-							</div>
+							<th:block th:insert="~{core/adminlte/common/fragment/userauthority :: userauthority}"></th:block>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
 							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
@@ -145,6 +141,7 @@
 			
 		    /*]]>*/
 		</script>
+		<th:block th:insert="~{core/adminlte/common/fragment/userauthority :: js}"></th:block>
 		<th:block
 			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedUserGroupDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.usergroup')}}, selectedItemDto=${usergroupDto.userGroups}, selectedItemUuidName='selectedUserGroupUuids' )}"></th:block>
 		<th:block th:if="${usergroupDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.usergroup.history')}(uuid=${usergroupDto.uuid})})}"></th:block>

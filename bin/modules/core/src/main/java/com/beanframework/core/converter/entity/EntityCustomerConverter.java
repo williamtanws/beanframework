@@ -62,6 +62,11 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
+			if (StringUtils.isNotBlank(source.getPassword())) {
+				prototype.setPassword(passwordEncoder.encode(source.getPassword()));
+				prototype.setLastModifiedDate(lastModifiedDate);
+			}
+
 			if (source.getAccountNonExpired() == null) {
 				if (prototype.getAccountNonExpired() != null) {
 					prototype.setAccountNonExpired(null);
@@ -108,16 +113,6 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 					prototype.setEnabled(source.getEnabled());
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
-			}
-
-			if (StringUtils.isNotBlank(source.getPassword())) {
-				prototype.setPassword(passwordEncoder.encode(source.getPassword()));
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
-
-			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
-				prototype.setName(StringUtils.stripToNull(source.getName()));
-				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
 			// Field

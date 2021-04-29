@@ -67,6 +67,7 @@ temp
 /bin/install/logs
 /bin/install/app.xml
 /bin/platform/pom.xml
+/bin/custom/*
 /config/pom.xml
 /config/src/main/resources/*
 !/config/src/main/resources/*.template

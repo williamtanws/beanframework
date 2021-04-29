@@ -60,7 +60,6 @@ public class UserAuthorityImportListener extends ImportListener {
 		userGroupUserAuthorityList.add(csv);
 
 		userGroupMap.put(csv.getUserGroupId(), userGroupUserAuthorityList);
-		
 
 		for (Map.Entry<String, List<UserAuthorityCsv>> entry : userGroupMap.entrySet()) {
 			String entryKeyUserGroupId = entry.getKey();
@@ -82,16 +81,24 @@ public class UserAuthorityImportListener extends ImportListener {
 						if (StringUtils.isNotBlank(userAuthorityCsv.getUserPermissionId())) {
 							if (userGroup.getUserAuthorities().get(i).getUserPermission().getId().equals(userAuthorityCsv.getUserPermissionId())) {
 								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("create")) {
-									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getCreate()) ? Boolean.TRUE : Boolean.FALSE);
+									if (StringUtils.isNotBlank(userAuthorityCsv.getCreate())) {
+										userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getCreate()) ? Boolean.TRUE : Boolean.FALSE);
+									}
 								}
 								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("read")) {
-									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getRead()) ? Boolean.TRUE : Boolean.FALSE);
+									if (StringUtils.isNotBlank(userAuthorityCsv.getRead())) {
+										userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getRead()) ? Boolean.TRUE : Boolean.FALSE);
+									}
 								}
 								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("update")) {
-									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getUpdate()) ? Boolean.TRUE : Boolean.FALSE);
+									if (StringUtils.isNotBlank(userAuthorityCsv.getUpdate())) {
+										userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getUpdate()) ? Boolean.TRUE : Boolean.FALSE);
+									}
 								}
 								if (userGroup.getUserAuthorities().get(i).getUserRight().getId().equals("delete")) {
-									userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getDelete()) ? Boolean.TRUE : Boolean.FALSE);
+									if (StringUtils.isNotBlank(userAuthorityCsv.getDelete())) {
+										userGroup.getUserAuthorities().get(i).setEnabled(POSITIVE.equals(userAuthorityCsv.getDelete()) ? Boolean.TRUE : Boolean.FALSE);
+									}
 								}
 							}
 						}
@@ -102,7 +109,7 @@ public class UserAuthorityImportListener extends ImportListener {
 				imported = true;
 			}
 		}
-		
+
 		return imported;
 	}
 

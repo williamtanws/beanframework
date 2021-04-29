@@ -4,8 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
+import com.beanframework.core.CoreConstants;
 import com.beanframework.core.converter.entity.EntityCustomerConverter;
 import com.beanframework.core.converter.entity.EntityEmployeeConverter;
+import com.beanframework.core.converter.entity.EntityMyAccountConverter;
 import com.beanframework.core.converter.entity.EntityUserGroupConverter;
 import com.beanframework.core.converter.entity.EntityUserPermissionConverter;
 import com.beanframework.core.converter.entity.EntityUserRightConverter;
@@ -58,6 +60,20 @@ public class UserEntityConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(entityUserRightConverter());
 		mapping.setTypeCode(UserRight.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	@Bean
+	public EntityMyAccountConverter entityMyAccountConverter() {
+		return new EntityMyAccountConverter();
+	}
+
+	@Bean
+	public ConverterMapping entityMyAccountConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(entityMyAccountConverter());
+		mapping.setTypeCode(CoreConstants.TypeCode.MYACCOUNT);
 
 		return mapping;
 	}
