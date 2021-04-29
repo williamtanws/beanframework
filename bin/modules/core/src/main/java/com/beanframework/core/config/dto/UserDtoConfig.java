@@ -194,7 +194,7 @@ public class UserDtoConfig {
 	@Bean
 	public ConverterMapping dtoMyAccountConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoEmployeeConverter());
+		mapping.setConverter(dtoMyAccountConverter());
 		mapping.setTypeCode(MyAccountDto.class.getSimpleName());
 
 		return mapping;

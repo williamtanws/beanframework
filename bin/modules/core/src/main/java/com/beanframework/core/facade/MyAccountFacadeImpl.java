@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.CoreConstants;
 import com.beanframework.core.data.MyAccountDto;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
@@ -12,7 +13,6 @@ import com.beanframework.user.service.UserService;
 @Component
 public class MyAccountFacadeImpl extends AbstractFacade<User, MyAccountDto> implements MyAccountFacade {
 
-	private static final Class<User> entityClass = User.class;
 	private static final Class<MyAccountDto> dtoClass = MyAccountDto.class;
 
 	@Autowired
@@ -37,7 +37,7 @@ public class MyAccountFacadeImpl extends AbstractFacade<User, MyAccountDto> impl
 					throw new Exception("Wrong picture format");
 				}
 			}
-			User entity = modelService.getEntity(dto, entityClass);
+			User entity = modelService.getEntity(dto, CoreConstants.TypeCode.MYACCOUNT);
 			entity = modelService.saveEntity(entity);
 			
 			userService.updatePrincipal(entity);
