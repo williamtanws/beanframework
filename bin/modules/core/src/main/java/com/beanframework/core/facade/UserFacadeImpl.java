@@ -1,5 +1,6 @@
 package com.beanframework.core.facade;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -8,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.beanframework.common.data.DataTableRequest;
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserDto;
 import com.beanframework.core.specification.UserSpecification;
@@ -35,22 +35,14 @@ public class UserFacadeImpl extends AbstractFacade<User, UserDto> implements Use
 	}
 
 	@Override
-	public UserDto getCurrentUser() throws Exception {
-		User user = userService.getCurrentUser();
-		return modelService.getDto(user, dtoClass);
+	public UserDto findOneProperties(Map<String, Object> properties) throws Exception {
+		return findOneProperties(properties, entityClass, dtoClass);
 	}
 
 	@Override
-	public UserDto saveProfile(UserDto dto) throws BusinessException {
-		try {
-			User entity = modelService.getEntity(dto, entityClass);
-			entity = (User) modelService.saveEntity(entity);
-
-			return modelService.getDto(entity, dtoClass);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
+	public UserDto getCurrentUser() throws Exception {
+		User user = userService.getCurrentUser();
+		return modelService.getDto(user, dtoClass);
 	}
 
 	@Override

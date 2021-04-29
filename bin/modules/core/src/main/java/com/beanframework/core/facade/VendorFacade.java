@@ -32,8 +32,6 @@ public interface VendorFacade {
 
 	VendorDto createDto() throws Exception;
 
-	VendorDto saveProfile(VendorDto dto) throws BusinessException;
-
 	VendorDto getCurrentUser() throws Exception;
 
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.core.converter.entity.EntityVendorProfileConverter;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.core.specification.VendorSpecification;
 import com.beanframework.user.domain.Vendor;
@@ -24,9 +23,6 @@ public class VendorFacadeImpl extends AbstractFacade<Vendor, VendorDto> implemen
 	
 	@Autowired
 	private VendorService vendorService;
-
-	@Autowired
-	private EntityVendorProfileConverter entityVendorProfileConverter;
 
 	@Override
 	public VendorDto findOneByUuid(UUID uuid) throws Exception {
@@ -95,29 +91,6 @@ public class VendorFacadeImpl extends AbstractFacade<Vendor, VendorDto> implemen
 	@Override
 	public VendorDto createDto() throws Exception {
 		return createDto(entityClass, dtoClass);
-	}
-
-	@Override
-	public VendorDto saveProfile(VendorDto dto) throws BusinessException {
-
-		try {
-			if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == Boolean.FALSE) {
-				String mimetype = dto.getProfilePicture().getContentType();
-				String type = mimetype.split("/")[0];
-				if (type.equals("image") == Boolean.FALSE) {
-					throw new Exception("Wrong picture format");
-				}
-			}
-			Vendor entity = entityVendorProfileConverter.convert(dto);
-
-			entity = modelService.saveEntity(entity);
-			vendorService.updatePrincipal(entity);
-
-			return modelService.getDto(entity, dtoClass);
-
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
 	}
 
 	@Override

@@ -32,8 +32,6 @@ public interface CustomerFacade {
 
 	CustomerDto createDto() throws Exception;
 
-	CustomerDto saveProfile(CustomerDto dto) throws BusinessException;
-
 	CustomerDto getCurrentUser() throws Exception;
 
 }

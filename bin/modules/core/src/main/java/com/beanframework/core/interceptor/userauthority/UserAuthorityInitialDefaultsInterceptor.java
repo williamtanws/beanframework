@@ -10,7 +10,6 @@ public class UserAuthorityInitialDefaultsInterceptor extends AbstractInitialDefa
 	@Override
 	public void onInitialDefaults(UserAuthority model, InterceptorContext context) throws InterceptorException {
 		super.onInitialDefaults(model, context);
-		model.setEnabled(Boolean.FALSE);
 	}
 
 }

@@ -69,20 +69,22 @@
 							</div>
 							<hr/>
 							<dl class="row">
-								<dt class="col-sm-2" th:text="#{module.cronjob.triggerstartdate}"></dt>
+								<dt class="col-sm-2" th:text="#{module.cronjob.triggerstartdate}+':'"></dt>
 								<dd class="col-sm-4" th:text="*{triggerStartDate != null} ? *{#dates.format(triggerStartDate, ' dd MMMM yyyy hh:mma')}"></dd>
-								<dt class="col-sm-2" th:text="#{module.cronjob.trigger}"></dt>
+								<dt class="col-sm-2" th:text="#{module.cronjob.trigger}+':'"></dt>
 								<dd class="col-sm-4" th:text="*{jobTrigger}"></dd>
-								<dt class="col-sm-2" th:text="#{module.cronjob.status}"></dt>
+								<dt class="col-sm-2" th:text="#{module.cronjob.status}+':'"></dt>
 								<dd class="col-sm-4" th:text="*{status}"></dd>
-								<dt class="col-sm-2" th:text="#{module.cronjob.result}"></dt>
+								<dt class="col-sm-2" th:text="#{module.cronjob.result}+':'"></dt>
 								<dd class="col-sm-4" th:text="*{result}"></dd>
-								<dt class="col-sm-2" th:text="#{module.cronjob.message}"></dt>
-								<dd class="col-sm-4" th:text="*{message}"></dd>
-								<dt class="col-sm-2" th:text="#{module.cronjob.laststartexecuteddate}"></dt>
-								<dd class="col-sm-4" th:text="*{lastStartExecutedDate != null} ? *{#dates.format(lastStartExecutedDate, ' dd MMMM yyyy hh:mm:ssa')}"></dd>
-								<dt class="col-sm-2" th:text="#{module.cronjob.lastfinishexecuteddate}"></dt>
-								<dd class="col-sm-4" th:text="*{lastFinishExecutedDate != null} ? *{#dates.format(lastFinishExecutedDate, ' dd MMMM yyyy hh:mma')}"></dd>
+								<dt class="col-sm-2" th:text="#{module.cronjob.message}+':'"></dt>
+								<dd class="col-sm-10" th:text="*{message}"></dd>
+							</dl>
+							<dl class="row">
+								<dt class="col-sm-3" th:text="#{module.cronjob.laststartexecuteddate}+':'"></dt>
+								<dd class="col-sm-3" th:text="*{lastStartExecutedDate != null} ? *{#dates.format(lastStartExecutedDate, ' dd MMMM yyyy hh:mm:ssa')}"></dd>
+								<dt class="col-sm-3" th:text="#{module.cronjob.lastfinishexecuteddate}+':'"></dt>
+								<dd class="col-sm-3" th:text="*{lastFinishExecutedDate != null} ? *{#dates.format(lastFinishExecutedDate, ' dd MMMM yyyy hh:mma')}"></dd>
 							</dl>
 							<hr/>
 							<div class="row">
