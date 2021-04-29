@@ -1,9 +1,13 @@
 package com.beanframework.core.facade;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.criteria.Order;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.data.DataTableRequest;
@@ -41,6 +45,12 @@ public class NotificationFacadeImpl extends AbstractFacade<Notification, Notific
 	@Override
 	public Page<NotificationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
 		return findPage(dataTableRequest, NotificationSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+	}
+	
+	@Override
+	public List<NotificationDto> findList(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult) throws Exception {
+		List<Notification> list = modelService.findByPropertiesBySortByResult(properties, sorts, firstResult, maxResult, entityClass);
+		return modelService.getDtoList(list, dtoClass);
 	}
 
 	@Override

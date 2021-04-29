@@ -2,18 +2,24 @@ package com.beanframework.backoffice.api;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.NotificationWebConstants;
+import com.beanframework.backoffice.api.data.NotificationCheckDataTableResponseData;
 import com.beanframework.backoffice.api.data.NotificationDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
@@ -49,10 +55,30 @@ public class NotificationResource extends AbstractResource {
 
 			NotificationDataTableResponseData data = new NotificationDataTableResponseData();
 			data.setMessage(StringUtils.stripToEmpty(dto.getMessage()));
-			data.setTimeAgo(StringUtils.stripToEmpty(TimeUtil.getTimeAgo(dto.getCreatedDate())));
 			data.setType(StringUtils.stripToEmpty(dto.getType()));
 			data.setCreatedDate(dateFormat.format(dto.getCreatedDate()));
 			dataTableResponse.getData().add(data);
+		}
+		return dataTableResponse;
+	}
+	
+	@RequestMapping(value = NotificationWebConstants.Path.Api.NOTIFICATION_CHECK, method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public List<NotificationCheckDataTableResponseData> check(HttpServletRequest request) throws Exception {
+
+		Map<String, Direction> sorts = new HashMap<String, Direction>();
+		sorts.put("createdDate", Direction.DESC);
+
+		List<NotificationDto> pagination = notificationFacade.findList(null, sorts, 0, 3);
+				
+		List<NotificationCheckDataTableResponseData> dataTableResponse = new ArrayList<NotificationCheckDataTableResponseData>();
+		for (NotificationDto dto : pagination) {
+
+			NotificationCheckDataTableResponseData data = new NotificationCheckDataTableResponseData();
+			data.setIcon(StringUtils.stripToEmpty(dto.getIcon()));
+			data.setMessage(StringUtils.stripToEmpty(dto.getMessage()));
+			data.setTimeAgo(StringUtils.stripToEmpty(TimeUtil.getTimeAgo(dto.getCreatedDate())));
+			dataTableResponse.add(data);
 		}
 		return dataTableResponse;
 	}
