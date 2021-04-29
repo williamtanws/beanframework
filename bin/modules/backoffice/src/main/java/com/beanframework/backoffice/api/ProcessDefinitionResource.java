@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.ProcessDefinitionWebConstants;
 import com.beanframework.backoffice.ProcessDefinitionWebConstants.ProcessDefinitionPreAuthorizeEnum;
-import com.beanframework.backoffice.data.ProcessDefinitionDataTableResponseData;
+import com.beanframework.backoffice.api.data.ProcessDefinitionDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.core.api.AbstractResource;

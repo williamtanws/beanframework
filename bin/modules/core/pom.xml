@@ -94,6 +94,11 @@
 			<artifactId>imex</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.beanframework</groupId>
+			<artifactId>notification</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

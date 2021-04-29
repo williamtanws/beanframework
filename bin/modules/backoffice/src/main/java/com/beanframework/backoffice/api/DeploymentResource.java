@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.DeploymentWebConstants;
 import com.beanframework.backoffice.DeploymentWebConstants.DeploymentPreAuthorizeEnum;
-import com.beanframework.backoffice.data.DeploymentDataTableResponseData;
+import com.beanframework.backoffice.api.data.DeploymentDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.core.api.AbstractResource;
