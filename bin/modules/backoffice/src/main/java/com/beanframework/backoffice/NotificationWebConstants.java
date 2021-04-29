@@ -6,6 +6,7 @@ public interface NotificationWebConstants {
 
 		public interface Api {
 			public static final String NOTIFICATION = "${path.api.notification}";
+			public static final String NOTIFICATION_CHECK = "${path.api.notification.check}";
 		}
 		public static final String NOTIFICATION = "${path.notification}";
 	}

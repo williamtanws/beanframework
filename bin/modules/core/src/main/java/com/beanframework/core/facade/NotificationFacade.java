@@ -1,9 +1,11 @@
 package com.beanframework.core.facade;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -19,6 +21,8 @@ public interface NotificationFacade {
 	void delete(UUID uuid) throws BusinessException;
 
 	Page<NotificationDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+
+	List<NotificationDto> findList(Map<String, Object> properties, Map<String, Direction> sorts, Integer firstResult, Integer maxResult) throws Exception;
 
 	int count() throws Exception;
 
