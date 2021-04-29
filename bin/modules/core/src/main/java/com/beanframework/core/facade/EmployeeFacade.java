@@ -32,7 +32,5 @@ public interface EmployeeFacade {
 
 	EmployeeDto createDto() throws Exception;
 
-	EmployeeDto saveProfile(EmployeeDto employee) throws BusinessException;
-
 	EmployeeDto getCurrentUser() throws Exception;
 }

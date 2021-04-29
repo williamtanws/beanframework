@@ -8,6 +8,7 @@ import com.beanframework.common.data.AuditorDto;
 import com.beanframework.core.converter.dto.DtoAuditorConverter;
 import com.beanframework.core.converter.dto.DtoCustomerConverter;
 import com.beanframework.core.converter.dto.DtoEmployeeConverter;
+import com.beanframework.core.converter.dto.DtoMyAccountConverter;
 import com.beanframework.core.converter.dto.DtoRevisionsConverter;
 import com.beanframework.core.converter.dto.DtoUserAuthorityConverter;
 import com.beanframework.core.converter.dto.DtoUserConverter;
@@ -18,6 +19,7 @@ import com.beanframework.core.converter.dto.DtoVendorConverter;
 import com.beanframework.core.converter.populator.AuditorPopulator;
 import com.beanframework.core.converter.populator.CustomerPopulator;
 import com.beanframework.core.converter.populator.EmployeePopulator;
+import com.beanframework.core.converter.populator.MyAccountPopulator;
 import com.beanframework.core.converter.populator.UserAuthorityPopulator;
 import com.beanframework.core.converter.populator.UserGroupPopulator;
 import com.beanframework.core.converter.populator.UserPermissionPopulator;
@@ -26,6 +28,7 @@ import com.beanframework.core.converter.populator.UserRightPopulator;
 import com.beanframework.core.converter.populator.VendorPopulator;
 import com.beanframework.core.data.CustomerDto;
 import com.beanframework.core.data.EmployeeDto;
+import com.beanframework.core.data.MyAccountDto;
 import com.beanframework.core.data.UserAuthorityDto;
 import com.beanframework.core.data.UserDto;
 import com.beanframework.core.data.UserGroupDto;
@@ -171,6 +174,28 @@ public class UserDtoConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(dtoUserAuthorityConverter());
 		mapping.setTypeCode(UserAuthorityDto.class.getSimpleName());
+
+		return mapping;
+	}
+	
+	// My Account
+	@Bean
+	public MyAccountPopulator myAccountPopulator() {
+		return new MyAccountPopulator();
+	}
+
+	@Bean
+	public DtoMyAccountConverter dtoMyAccountConverter() {
+		DtoMyAccountConverter converter = new DtoMyAccountConverter();
+		converter.addPopulator(myAccountPopulator());
+		return converter;
+	}
+
+	@Bean
+	public ConverterMapping dtoMyAccountConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dtoMyAccountConverter());
+		mapping.setTypeCode(MyAccountDto.class.getSimpleName());
 
 		return mapping;
 	}
