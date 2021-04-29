@@ -7,189 +7,56 @@
 
 <body>
 	<th:block layout:fragment="content">
-		<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.myaccount.form')}}" method="post" th:object="${myaccountDto}" enctype="multipart/form-data">
-			<input type="hidden" name="create" th:if="*{uuid == null}" />
-			<input type="hidden" name="update" th:if="*{uuid != null}" />
-			<input type="hidden" name="uuid" th:value="*{uuid}" th:if="*{uuid != null}" />
+		<div class="content-wrapper">
+			<!-- Header -->
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header-title (title=#{module.myaccount})}"></th:block>
 
-			<div class="container-fluid">
-				<div class="row mb-2">
-					<div class="col-sm-6">
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('myaccount_delete')"></th:block>
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
-					</div>
-					<!-- /.col -->
-					<div class="col-sm-6">
-						<div class="float-sm-right">
-							<button type="submit" class="btn btn-primary" th:text="#{module.common.save}" sec:authorize="hasAuthority('myaccount_create') or hasAuthority('myaccount_update')"></button>
-						</div>
-					</div>
-					<!-- /.col -->
-				</div>
-			</div>
-			<div class="card card-primary card-outline card-outline-tabs consistent-height">
-				<div class="card-header p-0 border-bottom-0">
-					<ul class="nav nav-tabs" id="custom-tabs-tab" role="tablist">
-						<li class="nav-item">
-							<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" id="custom-tabs-attribute-tab" data-toggle="pill" href="#custom-tabs-attribute" role="tab" aria-controls="custom-tabs-attribute" aria-selected="false" th:text="#{module.common.attribute}" th:if="*{uuid != null}"></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" id="custom-tabs-history-tab" data-toggle="pill" href="#custom-tabs-history" role="tab" aria-controls="custom-tabs-history" aria-selected="false" th:text="#{module.common.history}" th:if="*{uuid != null}"></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" id="custom-tabs-administration-tab" data-toggle="pill" href="#custom-tabs-administration" role="tab" aria-controls="custom-tabs-administration" aria-selected="false" th:text="#{module.common.administration}" th:if="*{uuid != null}"></a>
-						</li>
-					</ul>
-				</div>
-				<div class="card-body">
-					<div class="tab-content" id="custom-tabs-tabContent">
-						<div class="tab-pane fade show active" id="custom-tabs-general" role="tabpanel" aria-labelledby="custom-tabs-general-tab">
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<!-- general form elements -->
+							<div class="card card-primary">
+								<!-- form start -->
+								<form id="form-save" role="form" th:action="@{${@environment.getProperty('path.myaccount.form')}}" method="post" th:object="${myaccountDto}" enctype="multipart/form-data">
+									<input type="hidden" name="update" th:if="*{uuid != null}" />
+									<input type="hidden" name="uuid" th:value="*{uuid}" th:if="*{uuid != null}" />
 
-							<div class="row">
-								<div class="col-md-3">
-									<div class="form-group">
-										<label for="id" th:text="#{module.common.id}"></label>
-										<span>*</span>
-										<input type="text" class="form-control" name="id" th:value="*{id}">
+									<div class="card-body">
+										<div class="form-group">
+											<label for="id" th:text="#{module.common.id}"></label>
+											<span>*</span>
+											<input type="text" class="form-control" name="id" th:value="*{id}">
+										</div>
+										<div class="form-group">
+											<label for="name" th:text="#{module.myaccount.name}"></label>
+											<input type="text" class="form-control" name="name" th:value="*{name}">
+										</div>
+										<div class="form-group">
+											<label for="password" th:text="#{module.myaccount.password}"></label>
+											<input type="password" class="form-control" name="password">
+											<span class="help-block"></span>
+										</div>
+										<div class="form-group">
+											<label for="confirmPassword" th:text="#{module.myaccount.password.confirm}"></label>
+											<input name="confirmPassword" type="password" class="form-control">
+											<span class="help-block"></span>
+										</div>
 									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group">
-										<label for="name" th:text="#{module.myaccount.name}"></label>
-										<input type="text" class="form-control" name="name" th:value="*{name}">
+									<!-- /.card-body -->
+
+									<div class="card-footer">
+										<button type="submit" class="btn btn-primary" th:text="#{module.common.save}" sec:authorize="hasAuthority('myaccount_create') or hasAuthority('myaccount_update')"></button>
 									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group">
-										<label for="password" th:text="#{module.myaccount.password}"></label>
-										<input type="password" class="form-control" name="password">
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group">
-										<label for="confirmPassword" th:text="#{module.myaccount.password.confirm}"></label>
-										<input name="confirmPassword" type="password" class="form-control">
-										<span class="help-block"></span>
-									</div>
-								</div>
+								</form>
 							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<hr>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="enabled" th:text="#{module.myaccount.enabled}"></label>
-										<small th:text="#{module.myaccount.enabled.indicate}"></small>
-										<select class="form-control" name="enabled">
-											<option value="1" th:selected="*{enabled == true} " th:text="#{module.common.yes}"></option>
-											<option value="0" th:selected="*{enabled == false}" th:text="#{module.common.no}"></option>
-										</select>
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="accountNonLocked" th:text="#{module.myaccount.locked}"></label>
-										<small th:text="#{module.myaccount.locked.indicate}"></small>
-										<select class="form-control" name="accountNonLocked">
-											<option value="1" th:selected="*{accountNonLocked == true} " th:text="#{module.common.no}"></option>
-											<option value="0" th:selected="*{accountNonLocked == false}" th:text="#{module.common.yes}"></option>
-										</select>
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="accountNonExpired" th:text="#{module.myaccount.expired}"></label>
-										<small th:text="#{module.myaccount.expired.indicate}"></small>
-										<select class="form-control" name="accountNonExpired">
-											<option value="1" th:selected="*{accountNonExpired == true} " th:text="#{module.common.no}"></option>
-											<option value="0" th:selected="*{accountNonExpired == false}" th:text="#{module.common.yes}"></option>
-										</select>
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="credentialsNonExpired" th:text="#{module.myaccount.credentials.expired}"></label>
-										<small th:text="#{module.myaccount.credentials.expired.indicate}"></small>
-										<select class="form-control" name="credentialsNonExpired">
-											<option value="1" th:selected="*{credentialsNonExpired == true}" th:text="#{module.common.no}"></option>
-											<option value="0" th:selected="*{credentialsNonExpired == false}" th:text="#{module.common.yes}"></option>
-										</select>
-										<span class="help-block"></span>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<hr>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="dynamicfield" th:text="#{module.myaccount.userGroups}"></label>
-										<th:block th:with="id=#{module.common.id},name=#{module.common.name}">
-											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.myaccount.userGroups.select}, tableId='selectedUserGroupDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{userGroups}, selectedItemUuidName='selectedUserGroupUuids' )}"></th:block>
-										</th:block>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="dynamicfield" th:text="#{module.myaccount.companies}"></label>
-										<th:block th:with="id=#{module.common.id},name=#{module.common.name}">
-											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.myaccount.companies.select}, tableId='selectedCompanyDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{companies}, selectedItemUuidName='selectedCompanyUuids' )}"></th:block>
-										</th:block>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="dynamicfield" th:text="#{module.myaccount.addresses}"></label>
-										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
-											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.myaccount.addresses.select}, tableId='selectedAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{addresses}, selectedItemUuidName='selectedAddressUuids' )}"></th:block>
-										</th:block>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<hr>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group">
-										<label for="picture" th:text="#{module.myaccount.picture}"></label>
-										<input type="file" class="form-control" name="profilePicture" accept="image/*">
-										<span class="help-block"></span>
-									</div>
-									<div class="form-group" style="text-align: center;">
-										<img style="max-width: 100%" th:src="@{${@environment.getProperty('path.user.profile.picture')}(type='original',uuid=*{uuid})}" class="img-circle" alt="User Image">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="tab-pane fade" id="custom-tabs-attribute" role="tabpanel" aria-labelledby="custom-tabs-attribute-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-attribute :: form(fields=*{fields})}"></th:block>
-						</div>
-						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
-						</div>
-						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
+							<!-- /.card -->
 						</div>
 					</div>
 				</div>
-				<!-- /.card -->
-			</div>
-		</form>
-
-		<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: modal (uuid=${myaccountDto.uuid}, deleteUrl=@{${@environment.getProperty('path.myaccount.form')}} )}"></th:block>
+			</section>
+		</div>
 	</th:block>
 	<th:block layout:fragment="js">
 
@@ -257,12 +124,6 @@
 			
 		    /*]]>*/
 		</script>
-		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedUserGroupDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.usergroup')}}, selectedItemDto=${myaccountDto.userGroups}, selectedItemUuidName='selectedUserGroupUuids' )}"></th:block>
-		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedCompanyDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.company')}}, selectedItemDto=${myaccountDto.companies}, selectedItemUuidName='selectedCompanyUuids' )}"></th:block>
-		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${myaccountDto.addresses}, selectedItemUuidName='selectedAddressUuids' )}"></th:block>
-		<th:block th:if="${myaccountDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.myaccount.history')}(uuid=${myaccountDto.uuid})})}"></th:block>
 	</th:block>
 </body>
 
