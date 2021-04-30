@@ -40,11 +40,6 @@ public class EntityNotificationConverter implements EntityConverter<Notification
 
 		Date lastModifiedDate = new Date();
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getIcon()), prototype.getIcon()) == Boolean.FALSE) {
-			prototype.setIcon(StringUtils.stripToNull(source.getIcon()));
-			prototype.setLastModifiedDate(lastModifiedDate);
-		}
-
 		if (StringUtils.equals(StringUtils.stripToNull(source.getType()), prototype.getType()) == Boolean.FALSE) {
 			prototype.setType(StringUtils.stripToNull(source.getType()));
 			prototype.setLastModifiedDate(lastModifiedDate);

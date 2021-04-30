@@ -76,6 +76,15 @@
 										<span class="help-block"></span>
 									</div>
 								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="name" th:text="#{module.common.parameters}"></label>
+										<th:block th:with="key=#{module.common.key}, value=#{module.common.value}">
+											<th:block
+												th:insert="~{core/adminlte/common/fragment/content-datatable-map :: map (title=#{module.common.edit}, tableId='parameterDataTable', columnsi18n=${#strings.arraySplit(key+','+value, ',')}, columns=${#strings.arraySplit('key,value', ',')}, selectedItemDto=*{parameters} )}"></th:block>
+										</th:block>
+									</div>
+								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-12">
@@ -188,7 +197,7 @@
 				<!-- /.card -->
 			</div>
 		</form>
-
+		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable-map :: add (tableId='parameterDataTable')}"></th:block>
 		<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: modal (uuid=${employeeDto.uuid}, deleteUrl=@{${@environment.getProperty('path.employee.form')}} )}"></th:block>
 	</th:block>
 	<th:block layout:fragment="js">
@@ -257,6 +266,8 @@
 			
 		    /*]]>*/
 		</script>
+		<th:block
+			th:insert="~{core/adminlte/common/fragment/content-datatable-map :: js (tableId='parameterDataTable', columns=${#strings.arraySplit('key,value', ',')}, selectedItemDto=${employeeDto.parameters}, selectedItemNames='selectedParameterKeys', selectedItemValues='selectedParameterValues' )}"></th:block>
 		<th:block
 			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedUserGroupDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.usergroup')}}, selectedItemDto=${employeeDto.userGroups}, selectedItemUuidName='selectedUserGroupUuids' )}"></th:block>
 		<th:block

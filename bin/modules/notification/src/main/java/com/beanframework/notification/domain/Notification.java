@@ -28,13 +28,11 @@ import com.beanframework.notification.NotificationConstants;
 public class Notification extends GenericEntity {
 
 	private static final long serialVersionUID = 5992760081038782486L;
-	public static final String ICON = "icon";
-	public static final String MESSAGE = "message";
 	public static final String TYPE = "type";
+	public static final String MESSAGE = "message";
 
-	private String icon;
-	private String message;
 	private String type;
+	private String message;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@MapKeyColumn(name = "name")
@@ -42,12 +40,12 @@ public class Notification extends GenericEntity {
 	@CollectionTable(name = NotificationConstants.Table.NOTIFICATION_PARAMETER, joinColumns = @JoinColumn(name = "notification_uuid"))
 	Map<String, String> parameters = new HashMap<String, String>();
 
-	public String getIcon() {
-		return icon;
+	public String getType() {
+		return type;
 	}
 
-	public void setIcon(String icon) {
-		this.icon = icon;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getMessage() {
@@ -56,14 +54,6 @@ public class Notification extends GenericEntity {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public Map<String, String> getParameters() {

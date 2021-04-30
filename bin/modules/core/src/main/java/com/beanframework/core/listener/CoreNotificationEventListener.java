@@ -26,7 +26,6 @@ public class CoreNotificationEventListener implements ApplicationListener<Abstra
 		try {
 			if (event instanceof CronjobEvent) {
 				NotificationDto dto = notificationFacade.createDto();
-				dto.setIcon(event.getIcon() == null ? "fas fa-calendar" : event.getIcon());
 				dto.setMessage(event.getMessage());
 				dto.setType(Cronjob.class.getSimpleName());
 				notificationFacade.create(dto);
