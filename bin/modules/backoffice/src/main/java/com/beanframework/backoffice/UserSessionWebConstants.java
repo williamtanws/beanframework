@@ -3,11 +3,15 @@ package com.beanframework.backoffice;
 public interface UserSessionWebConstants {
 
 	public interface Path {
-		public static final String SESSION = "${path.user.session}";
+
+		public interface Api {
+			public static final String USERSESSION_COUNT = "${path.api.user.session.count}";
+		}
+		public static final String USERSESSION = "${path.user.session}";
 	}
 
 	public interface View {
-		public static final String SESSION_LIST = "${view.user.session}";
+		public static final String USERSESSION_LIST = "${view.user.session}";
 	}
 
 	public static interface UserSessionPreAuthorizeEnum {

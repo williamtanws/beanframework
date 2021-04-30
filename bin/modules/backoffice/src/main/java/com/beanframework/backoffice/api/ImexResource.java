@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.ImexWebConstants;
 import com.beanframework.backoffice.ImexWebConstants.ImexPreAuthorizeEnum;
-import com.beanframework.backoffice.data.ImexDataTableResponseData;
+import com.beanframework.backoffice.api.data.ImexDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;

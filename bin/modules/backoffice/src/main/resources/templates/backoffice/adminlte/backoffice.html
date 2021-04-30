@@ -122,6 +122,74 @@
 			    window.location.href = url;
 		}
 		
+		function openUserSession(){
+
+			var title =/*[[#{module.user.session}]]*/;
+			var link = /*[[@{${@environment.getProperty('path.user.session')}}]]*/;
+			var uniqueName =/*[[#{module.user.session}]]*/;
+		
+			$('.content-wrapper').IFrame('createTab', title, link, '-backoffice-user-session', true);
+		}
+		
+		$(document).ready( function() {
+			
+			
+			const checkForNotifications = (delay) => {
+			    setTimeout(() => {
+			    	var url = /*[[@{${@environment.getProperty('path.api.notification.new')}}]]*/;
+			        $.ajax({
+			        	url: url,
+				        async: true,
+				        success: function (result) {
+				        	if(result.total > 0){
+					            $("#notification-total").html(result.total);
+				        	}
+				            $("#notification-overall").html(result.overallMessage);
+				            
+				            $.each(result.notificationMessages, function (i, notification) {
+					        	$("#notification-messages").html("<div class='dropdown-divider'></div><a class='dropdown-item'><i class='"+notification.icon+"'></i>&nbsp;&nbsp;"+notification.message+"<span class='float-right text-muted text-sm'>"+notification.timeAgo+"</span></a>")
+					        });
+				        },
+				        error: function(data){
+				            console.log(data);
+				        }
+			        }).done(() => {
+			            // do your staff 
+			            checkForNotifications(10000)
+			        })
+			    }, delay)
+			}
+			checkForNotifications(0);
+			
+			$("#notification-checked").click(function() {
+				var url = /*[[@{${@environment.getProperty('path.api.notification.checked')}}]]*/;
+				$.ajax({
+		        	url: url,
+			        async: true,
+			        success: function (result) {
+			            
+			        },
+			        error: function(data){
+			            console.log(data);
+			        }
+		        });
+			});
+		});
+		
+		$('.dropdown-header').on('click', function(e) {
+			  e.stopPropagation();
+		});
+		
+		$('#notification-messages').on('click', function(e) {
+			  e.stopPropagation();
+		});
+		
+		$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+		    if ( jqxhr.status== 401 ) {
+		    	window.top.location.href = /*[[@{${@environment.getProperty('path.backoffice.login')}}]]*/; 
+		    }
+		});
+		
 		/*]]>*/
 	</script>
 	

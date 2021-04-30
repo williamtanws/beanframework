@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants.EmployeePreAuthorizeEnum;
-import com.beanframework.backoffice.data.EmployeeDataTableResponseData;
+import com.beanframework.backoffice.api.data.EmployeeDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;

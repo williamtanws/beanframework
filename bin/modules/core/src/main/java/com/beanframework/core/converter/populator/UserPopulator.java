@@ -28,6 +28,7 @@ public class UserPopulator extends AbstractPopulator<User, UserDto> implements P
 			target.setAccountNonLocked(source.getAccountNonLocked());
 			target.setCredentialsNonExpired(source.getCredentialsNonExpired());
 			target.setEnabled(source.getEnabled());
+			target.setParameters(source.getParameters());
 
 			for (UUID uuid : source.getUserGroups()) {
 				target.getUserGroups().add(populateUserGroup(uuid));

@@ -244,7 +244,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T extends Collection> T findBySpecificationBySort(Specification specification, Class modelClass) throws Exception {
+	public <T extends Collection> T findBySpecification(Specification specification, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {

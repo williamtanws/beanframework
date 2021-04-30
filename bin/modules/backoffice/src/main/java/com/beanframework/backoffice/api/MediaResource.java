@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MediaWebConstants;
 import com.beanframework.backoffice.MediaWebConstants.MediaPreAuthorizeEnum;
-import com.beanframework.backoffice.data.MediaDataTableResponseData;
+import com.beanframework.backoffice.api.data.MediaDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
