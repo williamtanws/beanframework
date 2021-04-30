@@ -1,8 +1,10 @@
 package com.beanframework.user.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -104,6 +107,13 @@ public class User extends GenericEntity {
 	@Fetch(value = FetchMode.SUBSELECT)
 	@OrderBy(UserField.DYNAMIC_FIELD_SLOT)
 	private List<UserField> fields = new ArrayList<UserField>();
+
+	@Audited(withModifiedFlag = true)
+	@ElementCollection(fetch = FetchType.EAGER)
+	@MapKeyColumn(name = "name")
+	@Column(name = "value")
+	@CollectionTable(name = UserConstants.Table.USER_PARAMETER, joinColumns = @JoinColumn(name = "user_uuid"))
+	Map<String, String> parameters = new HashMap<String, String>();
 
 	@Transient
 	private String profilePicture;
@@ -202,6 +212,14 @@ public class User extends GenericEntity {
 
 	public void setAddresses(Set<UUID> addresses) {
 		this.addresses = addresses;
+	}
+
+	public Map<String, String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(Map<String, String> parameters) {
+		this.parameters = parameters;
 	}
 
 }

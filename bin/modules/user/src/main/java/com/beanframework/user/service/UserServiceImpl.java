@@ -298,7 +298,7 @@ public class UserServiceImpl implements UserService {
 		if (auth != null) {
 
 			User principal = (User) auth.getPrincipal();
-			return modelService.findOneByUuid(principal.getUuid(), User.class);
+			return principal;
 		} else {
 			return null;
 		}

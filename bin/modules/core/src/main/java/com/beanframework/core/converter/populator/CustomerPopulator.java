@@ -28,6 +28,7 @@ public class CustomerPopulator extends AbstractPopulator<Customer, CustomerDto> 
 			target.setAccountNonLocked(source.getAccountNonLocked());
 			target.setCredentialsNonExpired(source.getCredentialsNonExpired());
 			target.setEnabled(source.getEnabled());
+			target.setParameters(source.getParameters());
 
 			for (UUID uuid : source.getUserGroups()) {
 				target.getUserGroups().add(populateUserGroup(uuid));

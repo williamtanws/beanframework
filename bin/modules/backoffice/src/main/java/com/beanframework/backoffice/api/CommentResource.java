@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CommentWebConstants;
 import com.beanframework.backoffice.CommentWebConstants.CommentPreAuthorizeEnum;
-import com.beanframework.backoffice.data.CommentDataTableResponseData;
+import com.beanframework.backoffice.api.data.CommentDataTableResponseData;
 import com.beanframework.comment.domain.Comment;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;

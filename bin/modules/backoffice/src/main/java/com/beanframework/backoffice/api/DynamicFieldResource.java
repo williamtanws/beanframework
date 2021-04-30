@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants;
 import com.beanframework.backoffice.DynamicFieldWebConstants.DynamicFieldPreAuthorizeEnum;
-import com.beanframework.backoffice.data.DynamicFieldDataTableResponseData;
+import com.beanframework.backoffice.api.data.DynamicFieldDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;

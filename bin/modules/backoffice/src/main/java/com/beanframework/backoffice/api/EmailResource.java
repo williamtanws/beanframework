@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmailWebConstants;
 import com.beanframework.backoffice.EmailWebConstants.EmailPreAuthorizeEnum;
-import com.beanframework.backoffice.data.EmailDataTableResponseData;
+import com.beanframework.backoffice.api.data.EmailDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;

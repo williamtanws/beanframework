@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CurrencyWebConstants;
 import com.beanframework.backoffice.CurrencyWebConstants.CurrencyPreAuthorizeEnum;
-import com.beanframework.backoffice.data.CurrencyDataTableResponseData;
+import com.beanframework.backoffice.api.data.CurrencyDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;

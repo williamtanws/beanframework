@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.TaskWebConstants;
 import com.beanframework.backoffice.TaskWebConstants.TaskPreAuthorizeEnum;
-import com.beanframework.backoffice.data.TaskDataTableResponseData;
+import com.beanframework.backoffice.api.data.TaskDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.core.api.AbstractResource;
