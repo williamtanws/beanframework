@@ -122,6 +122,15 @@
 			    window.location.href = url;
 		}
 		
+		function openUserSession(){
+
+			var title =/*[[#{module.user.session}]]*/;
+			var link = /*[[@{${@environment.getProperty('path.user.session')}}]]*/;
+			var uniqueName =/*[[#{module.user.session}]]*/;
+		
+			$('.content-wrapper').IFrame('createTab', title, link, '-backoffice-user-session', true);
+		}
+		
 		$(document).ready( function() {
 			
 			

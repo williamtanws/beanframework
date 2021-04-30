@@ -30,14 +30,14 @@ public class UserSessionController {
 	@Autowired
 	private LocaleMessageService localeMessageService;
 
-	@Value(UserSessionWebConstants.Path.SESSION)
+	@Value(UserSessionWebConstants.Path.USERSESSION)
 	private String PATH_SESSION;
 
-	@Value(UserSessionWebConstants.View.SESSION_LIST)
+	@Value(UserSessionWebConstants.View.USERSESSION_LIST)
 	private String VIEW_USER_SESSIONLIST;
 
 	@PreAuthorize(UserSessionPreAuthorizeEnum.HAS_READ)
-	@GetMapping(value = UserSessionWebConstants.Path.SESSION)
+	@GetMapping(value = UserSessionWebConstants.Path.USERSESSION)
 	public String list(Model model, @RequestParam Map<String, Object> requestParams) {
 
 		model.addAttribute("sessions", userFacade.findAllSessions());
@@ -46,7 +46,7 @@ public class UserSessionController {
 	}
 
 	@PreAuthorize(UserSessionPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = UserSessionWebConstants.Path.SESSION, params = "delete")
+	@PostMapping(value = UserSessionWebConstants.Path.USERSESSION, params = "delete")
 	public RedirectView expireAllSessionsByUuid(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		String uuidStr = (String) requestParams.get("uuid");
@@ -63,7 +63,7 @@ public class UserSessionController {
 	}
 
 	@PreAuthorize(UserSessionPreAuthorizeEnum.HAS_DELETE)
-	@PostMapping(value = UserSessionWebConstants.Path.SESSION, params = "deleteall")
+	@PostMapping(value = UserSessionWebConstants.Path.USERSESSION, params = "deleteall")
 	public RedirectView expireAllSessions(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
 
 		userFacade.expireAllSessions();
