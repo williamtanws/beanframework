@@ -1,7 +1,9 @@
 package com.beanframework.core.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +37,8 @@ public class UserDto extends GenericDto {
 	private List<CompanyDto> companies = new ArrayList<CompanyDto>();
 	private List<AddressDto> addresses = new ArrayList<AddressDto>();
 	private List<UserFieldDto> fields = new ArrayList<UserFieldDto>();
+	private Map<String, String> parameters = new HashMap<String, String>();
+	
 	private MultipartFile profilePicture;
 
 	private String[] selectedUserGroupUuids;
@@ -159,6 +163,14 @@ public class UserDto extends GenericDto {
 
 	public void setSelectedAddressUuids(String[] selectedAddresses) {
 		this.selectedAddressUuids = selectedAddresses;
+	}
+
+	public Map<String, String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(Map<String, String> parameters) {
+		this.parameters = parameters;
 	}
 
 }

@@ -16,7 +16,6 @@ public class NotificationPopulator extends AbstractPopulator<Notification, Notif
 	@Override
 	public void populate(Notification source, NotificationDto target) throws PopulatorException {
 		populateGeneric(source, target);
-		target.setIcon(source.getIcon());
 		target.setType(source.getType());
 		target.setMessage(source.getMessage());
 		target.setParameters(source.getParameters());

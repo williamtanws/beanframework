@@ -145,11 +145,10 @@
 									</div>
 								</div>
 							</div>
-
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="name" th:text="#{module.cronjob.parameters}"></label>
+										<label for="name" th:text="#{module.common.parameters}"></label>
 										<th:block th:with="key=#{module.common.key}, value=#{module.common.value}">
 											<th:block
 												th:insert="~{core/adminlte/common/fragment/content-datatable-map :: map (title=#{module.common.edit}, tableId='parameterDataTable', columnsi18n=${#strings.arraySplit(key+','+value, ',')}, columns=${#strings.arraySplit('key,value', ',')}, selectedItemDto=*{parameters} )}"></th:block>

@@ -67,7 +67,7 @@ public interface ModelService {
 
 	<T extends Collection> T findBySpecificationBySort(Specification specification, Sort sort, Class modelClass) throws Exception;
 
-	<T extends Collection> T findBySpecificationBySort(Specification specification, Class modelClass) throws Exception;
+	<T extends Collection> T findBySpecification(Specification specification, Class modelClass) throws Exception;
 
 	<T extends Collection> T findAll(Class modelClass);
 	

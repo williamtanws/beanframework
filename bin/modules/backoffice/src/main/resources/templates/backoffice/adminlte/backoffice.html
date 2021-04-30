@@ -122,18 +122,64 @@
 			    window.location.href = url;
 		}
 		
-		function checkForNotifications(){
-		    $.ajax({
-		        url: "/notification?draw=2&columns%5B0%5D%5Bdata%5D=type&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=message&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=createdDate&columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=0&order%5B0%5D%5Bdir%5D=asc&start=0&length=3&search%5Bvalue%5D=&search%5Bregex%5D=false&_=1619718780050", 
-		        type: "GET",
-		        success: function( notification ) {
-		            //Check if any notifications are returned - if so then display alert
-		        },
-		        error: function(data){
-		            //handle any error 
-		        }
-		    });
-		}
+		$(document).ready( function() {
+			
+			
+			const checkForNotifications = (delay) => {
+			    setTimeout(() => {
+			    	var url = /*[[@{${@environment.getProperty('path.api.notification.new')}}]]*/;
+			        $.ajax({
+			        	url: url,
+				        async: true,
+				        success: function (result) {
+				        	if(result.total > 0){
+					            $("#notification-total").html(result.total);
+				        	}
+				            $("#notification-overall").html(result.overallMessage);
+				            
+				            $.each(result.notificationMessages, function (i, notification) {
+					        	$("#notification-messages").html("<div class='dropdown-divider'></div><a class='dropdown-item'><i class='"+notification.icon+"'></i>&nbsp;&nbsp;"+notification.message+"<span class='float-right text-muted text-sm'>"+notification.timeAgo+"</span></a>")
+					        });
+				        },
+				        error: function(data){
+				            console.log(data);
+				        }
+			        }).done(() => {
+			            // do your staff 
+			            checkForNotifications(10000)
+			        })
+			    }, delay)
+			}
+			checkForNotifications(0);
+			
+			$("#notification-checked").click(function() {
+				var url = /*[[@{${@environment.getProperty('path.api.notification.checked')}}]]*/;
+				$.ajax({
+		        	url: url,
+			        async: true,
+			        success: function (result) {
+			            
+			        },
+			        error: function(data){
+			            console.log(data);
+			        }
+		        });
+			});
+		});
+		
+		$('.dropdown-header').on('click', function(e) {
+			  e.stopPropagation();
+		});
+		
+		$('#notification-messages').on('click', function(e) {
+			  e.stopPropagation();
+		});
+		
+		$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+		    if ( jqxhr.status== 401 ) {
+		    	window.top.location.href = /*[[@{${@environment.getProperty('path.backoffice.login')}}]]*/; 
+		    }
+		});
 		
 		/*]]>*/
 	</script>

@@ -124,6 +124,12 @@
 			    window.location.href = url;
 		}
 		
+		$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+		    if ( jqxhr.status== 401 ) {
+		    	window.top.location.href = /*[[@{${@environment.getProperty('path.console.login')}}]]*/; 
+		    }
+		});
+		
 		/*]]>*/
 	</script>
 
