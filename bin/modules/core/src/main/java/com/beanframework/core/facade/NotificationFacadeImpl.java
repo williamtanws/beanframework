@@ -1,6 +1,5 @@
 package com.beanframework.core.facade;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.NotificationDto;
 import com.beanframework.core.specification.NotificationSpecification;
+import com.beanframework.notification.NotificationConstants;
 import com.beanframework.notification.domain.Notification;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
@@ -62,31 +62,60 @@ public class NotificationFacadeImpl extends AbstractFacade<Notification, Notific
 		return createDto(entityClass, dtoClass);
 	}
 
-	private static final String USER_NOTIFICATION = "user_notification";
-	private static final SimpleDateFormat USER_NOTIFICATION_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 	@Override
 	public List<NotificationDto> findAllNewNotificationByUser(UUID uuid) throws Exception {
 		User user = modelService.findOneByUuid(uuid, User.class);
 		List<Notification> notifications = null;
 
-		if (user.getParameters().get(USER_NOTIFICATION) != null) {
-			Date userNotificationDate = USER_NOTIFICATION_DATEFORMAT.parse(user.getParameters().get(USER_NOTIFICATION));
+		if (user.getParameters().get(NotificationConstants.USER_NOTIFICATION) != null) {
+			Date userNotificationDate = NotificationConstants.USER_NOTIFICATION_DATEFORMAT.parse(user.getParameters().get(NotificationConstants.USER_NOTIFICATION));
 
-			notifications = modelService.findBySpecification(NotificationSpecification.getSpecificationByDate(userNotificationDate), entityClass);
+			notifications = modelService.findBySpecification(NotificationSpecification.getNewNotificationByFromDate(userNotificationDate), entityClass);
 		} else {
-			notifications = modelService.findBySpecification(NotificationSpecification.getSpecificationByDate(null), entityClass);
+			notifications = modelService.findBySpecification(NotificationSpecification.getNewNotificationByFromDate(null), entityClass);
 		}
 
 		return modelService.getDtoList(notifications, dtoClass);
 	}
 
 	@Override
+	public void refreshAllNewNotificationByUser(UUID uuid) throws Exception {
+		// Do nothing, just evict cache from interface
+	}
+
+	@Override
 	public void checkedNotification(UUID uuid) throws Exception {
 		User user = modelService.findOneByUuid(uuid, User.class);
-		user.getParameters().put(USER_NOTIFICATION, USER_NOTIFICATION_DATEFORMAT.format(new Date()));
+		user.getParameters().put(NotificationConstants.USER_NOTIFICATION, NotificationConstants.USER_NOTIFICATION_DATEFORMAT.format(new Date()));
 		modelService.saveEntity(user);
 		userService.updatePrincipal(user);
+	}
+
+	@Override
+	public int removeAllNotification() throws BusinessException {
+		int count = 0;
+		
+		List<Notification> oldNotification = modelService.findAll(entityClass);
+		count = oldNotification.size();
+
+		for (Notification notification : oldNotification) {
+			modelService.deleteEntity(notification, entityClass);
+		}
+
+		return count;
+	}
+
+	@Override
+	public int removeOldNotificationByToDate(Date date) throws Exception {
+		int count = 0;
+		
+		List<Notification> oldNotification = modelService.findBySpecification(NotificationSpecification.getOldNotificationByToDate(date), entityClass);
+		count = oldNotification.size();
+
+		for (Notification notification : oldNotification) {
+			modelService.deleteEntity(notification, entityClass);
+		}
+		return count;
 	}
 
 }

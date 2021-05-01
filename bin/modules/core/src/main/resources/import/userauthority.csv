@@ -18,6 +18,7 @@ INSERT_UPDATE UserAuthority,userGroupId,userPermissionId,create,read,update,dele
 ,employeegroup,address				,+,+,+,+
 ,employeegroup,usersession			,+,+,+,+
 ,employeegroup,myaccount			,,+,+,
+,employeegroup,user					,+,+,+,+
 ,employeegroup,employee				,+,+,+,+
 ,employeegroup,customer				,+,+,+,+
 ,employeegroup,vendor				,+,+,+,+

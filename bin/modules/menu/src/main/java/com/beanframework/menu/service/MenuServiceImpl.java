@@ -6,14 +6,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.service.ModelService;
+import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
+import com.beanframework.menu.MenuConstants;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.menu.domain.MenuField;
 
 @Service
 @Transactional
@@ -21,7 +27,10 @@ public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private ModelService modelService;
-	
+
+	@Value(MenuConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
+	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
+
 	@Override
 	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
 
@@ -49,7 +58,7 @@ public class MenuServiceImpl implements MenuService {
 
 	// Set to root menu
 	private void setParentNullAndSortByUuid(UUID fromUuid, int toIndex) throws Exception {
-		
+
 		// Remove child menu from parent menu
 		Menu menu = modelService.findOneByUuid(fromUuid, Menu.class);
 		if (menu.getParent() != null) {
@@ -145,5 +154,63 @@ public class MenuServiceImpl implements MenuService {
 		}
 
 		return menuList;
+	}
+
+	@Override
+	public void generateMenuFieldsOnInitialDefault(Menu model) throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
+		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
+
+		if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
+			properties = new HashMap<String, Object>();
+			properties.put(DynamicFieldTemplate.ID, configuration.getValue());
+
+			DynamicFieldTemplate dynamicFieldTemplate = modelService.findOneByProperties(properties, DynamicFieldTemplate.class);
+
+			if (dynamicFieldTemplate != null) {
+
+				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
+					MenuField field = new MenuField();
+					field.setDynamicFieldSlot(dynamicFieldSlot);
+					field.setMenu(model);
+					model.getFields().add(field);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void generateMenuFieldOnLoad(Menu model) throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
+		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
+
+		if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
+			properties = new HashMap<String, Object>();
+			properties.put(DynamicFieldTemplate.ID, configuration.getValue());
+
+			DynamicFieldTemplate dynamicFieldTemplate = modelService.findOneByProperties(properties, DynamicFieldTemplate.class);
+
+			if (dynamicFieldTemplate != null) {
+
+				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
+
+					boolean addField = true;
+					for (MenuField field : model.getFields()) {
+						if (field.getDynamicFieldSlot().equals(dynamicFieldSlot)) {
+							addField = false;
+						}
+					}
+
+					if (addField) {
+						MenuField field = new MenuField();
+						field.setDynamicFieldSlot(dynamicFieldSlot);
+						field.setMenu(model);
+						model.getFields().add(field);
+					}
+				}
+			}
+		}
 	}
 }

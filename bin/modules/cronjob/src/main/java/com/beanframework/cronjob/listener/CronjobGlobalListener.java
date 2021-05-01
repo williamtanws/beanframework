@@ -74,8 +74,6 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error(e.getMessage(), e);
-		} finally {
-			applicationEventPublisher.publishEvent(new CronjobEvent(cronjob, cronjob.getName()+": "+CronjobEnum.Status.RUNNING.toString()));
 		}
 	}
 
@@ -98,8 +96,6 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error(e.getMessage(), e);
-		} finally {
-			applicationEventPublisher.publishEvent(new CronjobEvent(cronjob, cronjob.getName()+": "+CronjobEnum.Status.ABORTED.toString()));
 		}
 	}
 
@@ -154,11 +150,12 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			LOGGER.error(e.getMessage(), e);
 			jobException.addSuppressed(e);
 		} finally {
-			applicationEventPublisher.publishEvent(new CronjobEvent(cronjob, cronjob.getName()+": "+status.toString()+"["+result.toString()+"]["+message.toString()+"]"));
+			if(context.get(QuartzManager.CRONJOB_NOTIFICATION) == Boolean.TRUE) {
+				applicationEventPublisher.publishEvent(new CronjobEvent(cronjob, cronjob.getName()+": "+status.toString()+" with "+result.toString()+". "+message.toString()));
+			}
 		}
 	}
 

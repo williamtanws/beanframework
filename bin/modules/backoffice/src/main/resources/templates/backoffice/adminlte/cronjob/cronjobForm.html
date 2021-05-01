@@ -61,8 +61,7 @@
 										<label for="jobTrigger" th:text="#{module.cronjob.trigger}"></label>
 										<select name="jobTrigger" class="form-control">
 											<option></option>
-											<option th:value="${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).RUN_ONCE.name()}" th:text="${@LocaleMessage.get('module.cronjob.status.'+T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).RUN_ONCE.name())}"></option>
-											<option th:value="${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).START.name()}" th:text="${@LocaleMessage.get('module.cronjob.status.'+T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).START.name())}"></option>
+											<option th:each="state : ${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).values()}" th:value="${state.name()}" th:text="${state}"></option>	
 										</select>
 									</div>
 								</div>
