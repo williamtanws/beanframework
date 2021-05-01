@@ -6,7 +6,7 @@
 <body>
 	<th:block layout:fragment="content">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.internationalization},breadcrumb2=#{module.usergroup},id=#{module.common.id},name=#{module.usergroup.name}">
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.user},breadcrumb2=#{module.usergroup},id=#{module.common.id},name=#{module.usergroup.name}">
 
 			<!-- Header -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header (title=#{module.usergroup}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>

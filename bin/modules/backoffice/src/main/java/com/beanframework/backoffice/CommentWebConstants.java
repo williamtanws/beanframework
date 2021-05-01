@@ -5,20 +5,21 @@ public interface CommentWebConstants {
 	public interface Path {
 
 		public interface Api {
-			public static final String CHECKID = "${path.api.comment.checkid}";
-			public static final String PAGE = "${path.api.comment}";
-			public static final String HISTORY = "${path.api.comment.history}";
+			public static final String COMMENT = "${path.api.comment}";
+			public static final String COMMENT_HISTORY = "${path.api.comment.history}";
+			public static final String COMMENT_CHECKID = "${path.api.comment.checkid}";
 		}
 
 		public static final String COMMENT = "${path.comment}";
+		public static final String COMMENT_FORM = "${path.comment.form}";
 	}
 
 	public interface View {
-		public static final String LIST = "${view.comment}";
+		public static final String COMMENT = "${view.comment}";
+		public static final String COMMENT_FORM = "${view.comment.form}";
 	}
 
 	public interface ModelAttribute {
-
 		public static final String COMMENT_DTO = "commentDto";
 	}
 
