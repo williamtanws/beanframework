@@ -40,6 +40,7 @@ public final class UserConstants {
 	public static final String PATH_USER_PROFILE_PICTURE = "${path.user.profile.picture}";
 	public static final String USER_PROFILE_PICTURE_THUMBNAIL_WIDTH = "${module.user.profile.picture.thumbnail.width}";
 	public static final String USER_PROFILE_PICTURE_THUMBNAIL_HEIGHT = "${module.user.profile.picture.thumbnail.height}";
+	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "module.user.dynamicfield.template";
 	
 	public static interface Access {
 		public static final String CONSOLE = "${module.console.access}";

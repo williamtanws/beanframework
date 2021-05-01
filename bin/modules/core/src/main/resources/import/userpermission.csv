@@ -17,9 +17,10 @@ INSERT_UPDATE UserPermission,id,name,sort,dynamicFieldSlotIds
 ,address			,Address				,51 ,userpermission_0_name_en=Address;userpermission_1_name_cn=地址
 ,usersession		,User Session			,53	,userpermission_0_name_en=User Session;userpermission_1_name_cn=用户会话
 ,myaccount			,My Account				,53	,userpermission_0_name_en=My Account;userpermission_1_name_cn=我的帐户
-,employee			,Employee				,54	,userpermission_0_name_en=Employee;userpermission_1_name_cn=雇员
-,customer			,Customer				,55	,userpermission_0_name_en=Customer;userpermission_1_name_cn=顾客
-,vendor				,Vendor					,56	,userpermission_0_name_en=Vendor;userpermission_1_name_cn=供应商
+,user				,User					,54	,userpermission_0_name_en=User;userpermission_1_name_cn=用户
+,employee			,Employee				,55	,userpermission_0_name_en=Employee;userpermission_1_name_cn=雇员
+,customer			,Customer				,56	,userpermission_0_name_en=Customer;userpermission_1_name_cn=顾客
+,vendor				,Vendor					,57	,userpermission_0_name_en=Vendor;userpermission_1_name_cn=供应商
 ,cronjob			,Cronjob				,70 ,userpermission_0_name_en=Cronjob;userpermission_1_name_cn=定时任务
 ,filemanager		,File Manager			,80 ,userpermission_0_name_en=File Manager;userpermission_1_name_cn=文件管理器
 ,email				,Email					,90 ,userpermission_0_name_en=Email;userpermission_1_name_cn=电子邮件
