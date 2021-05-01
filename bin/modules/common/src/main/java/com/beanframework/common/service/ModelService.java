@@ -106,6 +106,8 @@ public interface ModelService {
 
 	void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
+	void deleteAll(Class modelClass) throws BusinessException;
+
 	/**
 	 * Quietly means it skip listener events, mostly used by listener itself.
 	 * 

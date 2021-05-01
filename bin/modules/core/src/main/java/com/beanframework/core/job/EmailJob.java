@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.cronjob.service.QuartzManager;
+
 @Component
 @DisallowConcurrentExecution
 public class EmailJob implements Job {
@@ -31,17 +33,27 @@ public class EmailJob implements Job {
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
-		String limit = (String) context.getMergedJobDataMap().get(LIMIT);
+		try {
+			String limit = (String) context.get(LIMIT);
 
-		String result = null;
+			Map<String, Object> variables = new HashMap<String, Object>();
+			variables.put(LIMIT, limit);
 
-		Map<String, Object> variables = new HashMap<String, Object>();
-		variables.put(LIMIT, limit);
+			ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("emailProcess", variables);
 
-		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("emailProcess", variables);
+			int sentEmail = (int) processInstance.getProcessVariables().get(SENT_EMAIL);
+			int failedEmail = (int) processInstance.getProcessVariables().get(FAILED_EMAIL);
 
-		result = new MessageFormat("{0} sent, {1} failed").format(new Object[] { processInstance.getProcessVariables().get(SENT_EMAIL), processInstance.getProcessVariables().get(FAILED_EMAIL) });
-		context.setResult(result);
+			context.setResult(new MessageFormat("{0} sent, {1} failed").format(new Object[] { sentEmail, failedEmail }));
+
+			if (sentEmail > 0 || failedEmail > 0) {
+				context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+			}
+		} catch (Exception e) {
+			context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+			LOGGER.error(e.getMessage(), e);
+			throw new JobExecutionException(e.getMessage(), e);
+		}
 	}
 
 }

@@ -78,13 +78,17 @@ public class ProcessEmailTask implements JavaDelegate {
 			Map<String, Sort.Direction> processingSorts = new HashMap<String, Sort.Direction>();
 			processingSorts.put(Email.CREATED_DATE, Sort.Direction.ASC);
 
-			List<Email> processingEmails = modelService.findByPropertiesBySortByResult(processingProperties, processingSorts, null, EMAIL_PROCESS_NUMBER, Email.class);
+			List<Email> processingEmails = null;
+			if (EMAIL_PROCESS_NUMBER == 0) {
+				processingEmails = modelService.findByPropertiesBySortByResult(processingProperties, processingSorts, null, null, Email.class);
+			} else {
+				processingEmails = modelService.findByPropertiesBySortByResult(processingProperties, processingSorts, null, EMAIL_PROCESS_NUMBER, Email.class);
+			}
 
 			if (processingEmails.size() > 0) {
 				execution.setVariable(PROCESSING_EMAILS, processingEmails);
 				execution.setTransientVariable("send", true);
-			}
-			else {
+			} else {
 				execution.setVariable(EmailJob.SENT_EMAIL, 0);
 				execution.setVariable(EmailJob.FAILED_EMAIL, 0);
 				execution.setTransientVariable("send", false);

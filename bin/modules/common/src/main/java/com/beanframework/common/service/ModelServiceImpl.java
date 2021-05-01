@@ -461,6 +461,19 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
+	public void deleteAll(Class modelClass) throws BusinessException {
+		try {
+
+			Collection models = findAll(modelClass);
+			for (Object model : models) {
+				deleteEntity(model, modelClass);
+			}
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@Override
 	public void deleteQuietlyByUuid(UUID uuid, Class modelClass) throws BusinessException {
 		try {
 

@@ -12,9 +12,13 @@ import com.beanframework.common.exception.ListenerException;
 import com.beanframework.common.registry.AfterSaveEvent;
 import com.beanframework.common.registry.AfterSaveListener;
 import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.core.data.UserDto;
+import com.beanframework.core.facade.NotificationFacade;
+import com.beanframework.core.facade.UserFacade;
 import com.beanframework.imex.domain.Imex;
 import com.beanframework.imex.service.ImexService;
 import com.beanframework.menu.domain.Menu;
+import com.beanframework.notification.NotificationConstants;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
@@ -30,6 +34,12 @@ public class CoreAfterSaveListener implements AfterSaveListener {
 
 	@Autowired
 	private ImexService imexService;
+	
+	@Autowired
+	private UserFacade userFacade;
+	
+	@Autowired
+	private NotificationFacade notificationFacade;
 
 	@Override
 	public void afterSave(final Object model, final AfterSaveEvent event) throws ListenerException {
@@ -48,6 +58,11 @@ public class CoreAfterSaveListener implements AfterSaveListener {
 						e.printStackTrace();
 						LOGGER.error(e.getMessage(), e);
 					}
+				}
+				
+				UserDto currentUser = userFacade.getCurrentUser();
+				if(currentUser.getParameters().get(NotificationConstants.USER_NOTIFICATION) == null) {
+					notificationFacade.refreshAllNewNotificationByUser(userFacade.getCurrentUser().getUuid());
 				}
 
 			} else if (model instanceof Imex) {
