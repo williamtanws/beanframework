@@ -1,5 +1,6 @@
 package com.beanframework.menu.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -212,5 +213,38 @@ public class MenuServiceImpl implements MenuService {
 				}
 			}
 		}
+	}
+
+	@Override
+	public List<Menu> findMenuBreadcrumbsByPath(String path) throws Exception {
+		List<Menu> breadcrumbs = new ArrayList<Menu>();
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Menu.PATH, path);
+		List<Menu> menu = modelService.findByProperties(properties, Menu.class);
+
+		if (menu == null || menu.isEmpty()) {
+			return null;
+		} else {
+			breadcrumbs.add(menu.get(0));
+
+			if (menu.get(0).getParent() != null) {
+				breadcrumbs.addAll(getParent(menu.get(0).getParent()));
+			}
+
+			Collections.reverse(breadcrumbs);
+
+			return breadcrumbs;
+		}
+	}
+
+	public List<Menu> getParent(Menu menu) {
+		List<Menu> breadcrumbs = new ArrayList<Menu>();
+		breadcrumbs.add(menu);
+		if (menu.getParent() != null) {
+			breadcrumbs.addAll(getParent(menu.getParent()));
+		}
+
+		return breadcrumbs;
 	}
 }

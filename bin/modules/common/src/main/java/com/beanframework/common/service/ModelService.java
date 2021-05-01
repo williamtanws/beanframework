@@ -36,7 +36,7 @@ public interface ModelService {
 	<T> T create(Class modelClass) throws Exception;
 
 	<T> T findOneByUuid(UUID uuid, Class modelClass) throws Exception;
-	
+
 	<T> T findOneByUuid(UUID uuid, Class modelClass, String typeCode) throws Exception;
 
 	<T> T findOneByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
@@ -62,19 +62,19 @@ public interface ModelService {
 	 * @return
 	 * @throws Exception
 	 */
-	<T extends Collection> T findByPropertiesBySortByResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass)
-			throws Exception;
+	<T extends Collection> T findByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
+
+	<T extends Collection> T findByPropertiesBySortByResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception;
 
 	<T extends Collection> T findBySpecificationBySort(Specification specification, Sort sort, Class modelClass) throws Exception;
 
 	<T extends Collection> T findBySpecification(Specification specification, Class modelClass) throws Exception;
 
 	<T extends Collection> T findAll(Class modelClass);
-	
+
 	List<Tuple> search(String qlString);
 
-	List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass)
-			throws Exception;
+	List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
 
 	int countHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Class modelClass) throws Exception;
 
@@ -119,7 +119,7 @@ public interface ModelService {
 	void deleteQuietlyByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
 	<T> T getEntity(Object model, Class modelClas) throws Exception;
-	
+
 	<T> T getEntity(Object model, String typeCode) throws Exception;
 
 	<T extends Collection> T getEntityList(Collection model, Class modelClass) throws Exception;
@@ -127,11 +127,11 @@ public interface ModelService {
 	<T extends Collection> T getEntityList(Collection model, String typeCode) throws Exception;
 
 	<T> T getDto(Object model, Class modelClass) throws Exception;
-	
+
 	<T> T getDto(Object model, String typeCode) throws Exception;
 
 	<T extends Collection> T getDtoList(Collection models, Class modelClass) throws Exception;
-	
+
 	<T extends Collection> T getDtoList(Collection models, String typeCode) throws Exception;
 
 	void initDefaults(Object model, Class modelClass) throws Exception;

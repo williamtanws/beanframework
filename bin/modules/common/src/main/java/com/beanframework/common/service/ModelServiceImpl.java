@@ -208,6 +208,23 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
+	
+	@Override
+	public <T extends Collection> T findByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
+		Assert.notNull(modelClass, "modelClass was null");
+
+		try {
+			List<Object> models = createQuery(properties, null, null, null, null, modelClass).getResultList();
+
+			if (models != null)
+				loadInterceptor(models, modelClass.getSimpleName());
+
+			return (T) models;
+		} catch (Exception e) {
+
+			throw new Exception(e.getMessage(), e);
+		}
+	}
 
 	@Override
 	public <T extends Collection> T findByPropertiesBySortByResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception {

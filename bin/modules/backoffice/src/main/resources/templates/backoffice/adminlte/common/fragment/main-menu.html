@@ -5,12 +5,6 @@
 <body>
 	<th:block th:fragment="tree">
 		<!-- sidebar menu: : style can be found in sidebar.less -->
-		<li class="nav-item">
-			<a th:href="@{${@environment.getProperty('path.backoffice.dashboard')}}" class="nav-link">
-				<i class="nav-icon fas fa-tachometer-alt"></i>
-				<p th:text="#{module.common.dashboard}"></p>
-			</a>
-		</li>
 		<th:block th:each="menu : ${@MenuNavigation.findMenuTreeByCurrentUser()}">
 			<th:block th:insert="backoffice/adminlte/common/fragment/main-menu :: tree-submenu (menu=${menu})"></th:block>
 		</th:block>
