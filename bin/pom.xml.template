@@ -26,7 +26,6 @@
     	<module>modules/menu</module>
         <module>modules/filemanager</module>
         <module>modules/media</module>
-        <module>modules/comment</module>
         <module>modules/cms</module>
         <module>modules/workflow</module>
         <module>modules/imex</module>

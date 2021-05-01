@@ -1,4 +1,5 @@
 INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dynamicFieldSlotIds
+,dashboard				,Dashboard				,0	,fas fa-tachometer-alt,/backoffice/dashboard			,,true,				,employeegroup				,menu_0_name_en=Dashboard;menu_1_name_cn=仪表盘
 ,system					,System					,10	,fas fa-cog			,									,,true,				,employeegroup				,menu_0_name_en=System;menu_1_name_cn=系统
 ,field					,Field					,30	,fas fa-file-alt	,									,,true,system		,employeegroup				,menu_0_name_en=Field;menu_1_name_cn=输入
 ,enumeration			,Enumeration			,10	,fas fa-list-ol		,/backoffice/enumeration			,,true,field		,employeegroup				,menu_0_name_en=Enumeration;menu_1_name_cn=列举

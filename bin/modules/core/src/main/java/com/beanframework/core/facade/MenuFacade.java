@@ -38,4 +38,6 @@ public interface MenuFacade {
 
 	List<MenuDto> findMenuTreeByCurrentUser() throws Exception;
 
+	List<MenuDto> findMenuBreadcrumbsByPath(String path) throws Exception;
+
 }

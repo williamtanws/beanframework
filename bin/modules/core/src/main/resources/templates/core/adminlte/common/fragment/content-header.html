@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-	<th:block th:fragment="header (title, breadcrumbs)">
+	<th:block th:fragment="title-breadcrumbs (title)">
 		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
@@ -12,7 +12,7 @@
 					<!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-							<li th:each="breadcrumb, iterStat : ${breadcrumbs}" th:class="${iterStat.last ? 'breadcrumb-item active' : 'breadcrumb-item'}" th:text="${breadcrumb}"></li>
+							<li th:each="menu, iterStat : ${@MenuNavigation.findMenuBreadcrumbsByPath(#httpServletRequest.requestURI)}" th:class="${iterStat.last ? 'breadcrumb-item active' : 'breadcrumb-item'}" th:text="${menu.getName(#locale.toString())}"></li>
 						</ol>
 					</div>
 					<!-- /.col -->
@@ -23,7 +23,7 @@
 		</div>
 		<!-- /.content-header -->
 	</th:block>
-	<th:block th:fragment="header-title (title)">
+	<th:block th:fragment="title (title)">
 		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">

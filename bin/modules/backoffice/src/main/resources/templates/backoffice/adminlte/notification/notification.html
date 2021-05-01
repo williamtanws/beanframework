@@ -9,7 +9,7 @@
 		<div class="content-wrapper" th:with="type=#{module.notification.type},message=#{module.notification.message},createdDate=#{module.common.createdDate}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header-title (title=#{module.notification})}"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title (title=#{module.notification})}"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.notification}, tableId='notificationTable', columnsi18n=${#strings.arraySplit(type+','+message+','+createdDate, ',')}, selectAuthority=false )}"></th:block>
