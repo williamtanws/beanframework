@@ -13,14 +13,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.core.data.UserDto;
 import com.beanframework.core.data.UserFieldDto;
-import com.beanframework.core.data.VendorDto;
 import com.beanframework.user.domain.Address;
 import com.beanframework.user.domain.Company;
+import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.Vendor;
 
-public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor> {
+public class EntityUserConverter implements EntityConverter<UserDto, User> {
 
 	@Autowired
 	private ModelService modelService;
@@ -29,19 +29,19 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public Vendor convert(VendorDto source) throws ConverterException {
+	public User convert(UserDto source) throws ConverterException {
 
 		try {
 
 			if (source.getUuid() != null) {
-				Vendor prototype = modelService.findOneByUuid(source.getUuid(), Vendor.class);
+				User prototype = modelService.findOneByUuid(source.getUuid(), User.class);
 
 				if (prototype != null) {
 					return convertToEntity(source, prototype);
 				}
 			}
 
-			return convertToEntity(source, modelService.create(Vendor.class));
+			return convertToEntity(source, modelService.create(User.class));
 
 		} catch (Exception e) {
 			throw new ConverterException(e.getMessage(), e);
@@ -49,7 +49,7 @@ public class EntityVendorConverter implements EntityConverter<VendorDto, Vendor>
 
 	}
 
-	private Vendor convertToEntity(VendorDto source, Vendor prototype) throws ConverterException {
+	private User convertToEntity(UserDto source, User prototype) throws ConverterException {
 
 		try {
 			Date lastModifiedDate = new Date();

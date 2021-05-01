@@ -26,9 +26,10 @@ INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dyn
 ,address				,Address				,20	,fas fa-home		,/backoffice/address				,,true,user			,employeegroup				,menu_0_name_en=Address;menu_1_name_cn=地址
 ,usergroup				,User Group				,30	,fas fa-users		,/backoffice/usergroup				,,true,user			,employeegroup				,menu_0_name_en=User Group;menu_1_name_cn=用户组
 ,usersession			,User Session			,40	,fas fa-clock		,/backoffice/user/session			,,true,user			,employeegroup				,menu_0_name_en=User Session;menu_1_name_cn=用户会话
-,employee				,Employee				,50	,fas fa-user		,/backoffice/employee				,,true,user			,employeegroup				,menu_0_name_en=Employee;menu_1_name_cn=雇员
-,customer				,Customer				,60	,fas fa-user		,/backoffice/customer				,,true,user			,employeegroup				,menu_0_name_en=Customer;menu_1_name_cn=顾客
-,vendor					,Vendor					,70	,fas fa-user		,/backoffice/vendor					,,true,user			,employeegroup				,menu_0_name_en=Vendor;menu_1_name_cn=供应商
+,users					,Users					,50	,fas fa-user		,/backoffice/user					,,true,user			,employeegroup				,menu_0_name_en=Users;menu_1_name_cn=用户
+,employee				,Employee				,60	,fas fa-user		,/backoffice/employee				,,true,user			,employeegroup				,menu_0_name_en=Employee;menu_1_name_cn=雇员
+,customer				,Customer				,70	,fas fa-user		,/backoffice/customer				,,true,user			,employeegroup				,menu_0_name_en=Customer;menu_1_name_cn=顾客
+,vendor					,Vendor					,80	,fas fa-user		,/backoffice/vendor					,,true,user			,employeegroup				,menu_0_name_en=Vendor;menu_1_name_cn=供应商
 ,multimedia				,Multimedia				,40	,fas fa-photo-video	,									,,true,				,employeegroup				,menu_0_name_en=Multimedia;menu_1_name_cn=多媒体
 ,filemanager			,File Manager			,10	,fas fa-folder		,/backoffice/filemanager			,,true,multimedia	,employeegroup				,menu_0_name_en=File Manager;menu_1_name_cn=文件管理器
 ,media					,Media					,20	,fas fa-file-image	,/backoffice/media					,,true,multimedia	,employeegroup				,menu_0_name_en=Media;menu_1_name_cn=媒体

@@ -1,5 +1,6 @@
 package com.beanframework.core.facade;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,7 +33,14 @@ public interface NotificationFacade {
 
 	@Cacheable(value = NotificationConstants.CACHE_NOTIFICATIONS, key="#uuid")
 	List<NotificationDto> findAllNewNotificationByUser(UUID uuid) throws Exception;
+	
+	@CacheEvict(value = NotificationConstants.CACHE_NOTIFICATIONS, key="#uuid")
+	void refreshAllNewNotificationByUser(UUID uuid) throws Exception;
 
 	@CacheEvict(value = NotificationConstants.CACHE_NOTIFICATIONS, key="#uuid")
 	void checkedNotification(UUID uuid) throws Exception;
+
+	int removeAllNotification() throws BusinessException;
+
+	int removeOldNotificationByToDate(Date date) throws Exception;
 }

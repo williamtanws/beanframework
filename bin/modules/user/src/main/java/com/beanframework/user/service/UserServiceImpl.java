@@ -45,10 +45,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.service.ModelService;
+import com.beanframework.configuration.domain.Configuration;
+import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.user.UserConstants;
 import com.beanframework.user.data.UserSession;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
+import com.beanframework.user.domain.UserField;
 import com.beanframework.user.domain.UserGroup;
 
 @Service
@@ -404,5 +407,63 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return userGroupUuids;
+	}
+
+	@Override
+	public void generateUserFieldsOnInitialDefault(User model, String configurationDynamicFieldTemplate) throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, configurationDynamicFieldTemplate);
+		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
+
+		if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
+			properties = new HashMap<String, Object>();
+			properties.put(DynamicFieldTemplate.ID, configuration.getValue());
+
+			DynamicFieldTemplate dynamicFieldTemplate = modelService.findOneByProperties(properties, DynamicFieldTemplate.class);
+
+			if (dynamicFieldTemplate != null) {
+
+				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
+					UserField field = new UserField();
+					field.setDynamicFieldSlot(dynamicFieldSlot);
+					field.setUser(model);
+					model.getFields().add(field);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void generateUserFieldOnLoad(User model, String configurationDynamicFieldTemplate) throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Configuration.ID, configurationDynamicFieldTemplate);
+		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
+
+		if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
+			properties = new HashMap<String, Object>();
+			properties.put(DynamicFieldTemplate.ID, configuration.getValue());
+
+			DynamicFieldTemplate dynamicFieldTemplate = modelService.findOneByProperties(properties, DynamicFieldTemplate.class);
+
+			if (dynamicFieldTemplate != null) {
+
+				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
+
+					boolean addField = true;
+					for (UserField field : model.getFields()) {
+						if (field.getDynamicFieldSlot().equals(dynamicFieldSlot)) {
+							addField = false;
+						}
+					}
+
+					if (addField) {
+						UserField field = new UserField();
+						field.setDynamicFieldSlot(dynamicFieldSlot);
+						field.setUser(model);
+						model.getFields().add(field);
+					}
+				}
+			}
+		}
 	}
 }

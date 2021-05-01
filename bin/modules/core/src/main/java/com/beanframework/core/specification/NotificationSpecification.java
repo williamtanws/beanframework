@@ -46,7 +46,7 @@ public class NotificationSpecification extends AbstractSpecification {
 		};
 	}
 
-	public static <T> Specification<T> getSpecificationByDate(Date date) {
+	public static <T> Specification<T> getNewNotificationByFromDate(Date date) {
 		return new Specification<T>() {
 			private static final long serialVersionUID = 1L;
 
@@ -56,6 +56,27 @@ public class NotificationSpecification extends AbstractSpecification {
 
 				if (date != null) {
 					predicates.add(cb.greaterThanOrEqualTo(root.get(GenericEntity.CREATED_DATE), date));
+				}
+
+				if (predicates.isEmpty()) {
+					return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+				} else {
+					return cb.or(predicates.toArray(new Predicate[predicates.size()]));
+				}
+			}
+		};
+	}
+
+	public static <T> Specification<T> getOldNotificationByToDate(Date date) {
+		return new Specification<T>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicates = new ArrayList<Predicate>();
+
+				if (date != null) {
+					predicates.add(cb.lessThanOrEqualTo(root.get(GenericEntity.CREATED_DATE), date));
 				}
 
 				if (predicates.isEmpty()) {

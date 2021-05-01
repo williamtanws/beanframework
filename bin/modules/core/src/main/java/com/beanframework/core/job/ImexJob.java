@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.service.ModelService;
+import com.beanframework.cronjob.service.QuartzManager;
 import com.beanframework.imex.domain.Imex;
 import com.beanframework.imex.service.ImexService;
 
@@ -32,27 +33,33 @@ public class ImexJob implements Job {
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
-		String uuid = (String) context.getMergedJobDataMap().get("uuid");
+		String uuid = (String) context.get("uuid");
 
 		try {
 			if (StringUtils.isNotBlank(uuid)) {
 				Imex model = modelService.findOneByUuid(UUID.fromString(uuid), Imex.class);
 
-				if (model != null)
+				if (model != null) {
 					imexService.importExportMedia(model);
+					context.setResult("Generated 1 imex");
+				} else {
+					context.setResult("UUID not found in database");
+				}
+
 			} else {
 				List<Imex> models = modelService.findAll(Imex.class);
 				for (Imex model : models) {
 					imexService.importExportMedia(model);
 				}
-			}
 
-			context.setResult("Success");
+				context.setResult("Executed " + models.size() + " imex");
+			}
+			context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+
 		} catch (Exception e) {
-			context.setResult("Failed: " + e.getMessage());
+			context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
 			LOGGER.error(e.getMessage(), e);
 			throw new JobExecutionException(e.getMessage(), e);
 		}
-
 	}
 }

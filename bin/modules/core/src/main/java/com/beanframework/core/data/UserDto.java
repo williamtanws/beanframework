@@ -14,17 +14,6 @@ public class UserDto extends GenericDto {
 	 * 
 	 */
 	private static final long serialVersionUID = -7847327425785013603L;
-	public static final String PASSWORD = "password";
-	public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";
-	public static final String ACCOUNT_NON_LOCKED = "accountNonLocked";
-	public static final String CREDENTIALS_NON_EXPIRED = "credentialsNonExpired";
-	public static final String ENABLED = "enabled";
-	public static final String USER_GROUPS = "userGroups";
-	public static final String COMPANIES = "companies";
-	public static final String ADDRESSES = "addresses";
-	public static final String USER_ROLES = "userRoles";
-	public static final String FIELDS = "fields";
-	public static final String NAME = "name";
 
 	private String type;
 	private String password;
@@ -38,12 +27,14 @@ public class UserDto extends GenericDto {
 	private List<AddressDto> addresses = new ArrayList<AddressDto>();
 	private List<UserFieldDto> fields = new ArrayList<UserFieldDto>();
 	private Map<String, String> parameters = new HashMap<String, String>();
-	
-	private MultipartFile profilePicture;
 
+	private String[] selectedParameterKeys;
+	private String[] selectedParameterValues;
 	private String[] selectedUserGroupUuids;
 	private String[] selectedCompanyUuids;
 	private String[] selectedAddressUuids;
+
+	private MultipartFile profilePicture;
 
 	public String getType() {
 		return type;
@@ -133,44 +124,60 @@ public class UserDto extends GenericDto {
 		this.fields = fields;
 	}
 
-	public MultipartFile getProfilePicture() {
-		return profilePicture;
-	}
-
-	public void setProfilePicture(MultipartFile profilePicture) {
-		this.profilePicture = profilePicture;
-	}
-
-	public String[] getSelectedUserGroupUuids() {
-		return selectedUserGroupUuids;
-	}
-
-	public void setSelectedUserGroupUuids(String[] selectedUserGroups) {
-		this.selectedUserGroupUuids = selectedUserGroups;
-	}
-
-	public String[] getSelectedCompanyUuids() {
-		return selectedCompanyUuids;
-	}
-
-	public void setSelectedCompanyUuids(String[] selectedCompanies) {
-		this.selectedCompanyUuids = selectedCompanies;
-	}
-
-	public String[] getSelectedAddressUuids() {
-		return selectedAddressUuids;
-	}
-
-	public void setSelectedAddressUuids(String[] selectedAddresses) {
-		this.selectedAddressUuids = selectedAddresses;
-	}
-
 	public Map<String, String> getParameters() {
 		return parameters;
 	}
 
 	public void setParameters(Map<String, String> parameters) {
 		this.parameters = parameters;
+	}
+
+	public String[] getSelectedParameterKeys() {
+		return selectedParameterKeys;
+	}
+
+	public void setSelectedParameterKeys(String[] selectedParameterKeys) {
+		this.selectedParameterKeys = selectedParameterKeys;
+	}
+
+	public String[] getSelectedParameterValues() {
+		return selectedParameterValues;
+	}
+
+	public void setSelectedParameterValues(String[] selectedParameterValues) {
+		this.selectedParameterValues = selectedParameterValues;
+	}
+
+	public String[] getSelectedUserGroupUuids() {
+		return selectedUserGroupUuids;
+	}
+
+	public void setSelectedUserGroupUuids(String[] selectedUserGroupUuids) {
+		this.selectedUserGroupUuids = selectedUserGroupUuids;
+	}
+
+	public String[] getSelectedCompanyUuids() {
+		return selectedCompanyUuids;
+	}
+
+	public void setSelectedCompanyUuids(String[] selectedCompanyUuids) {
+		this.selectedCompanyUuids = selectedCompanyUuids;
+	}
+
+	public String[] getSelectedAddressUuids() {
+		return selectedAddressUuids;
+	}
+
+	public void setSelectedAddressUuids(String[] selectedAddressUuids) {
+		this.selectedAddressUuids = selectedAddressUuids;
+	}
+
+	public MultipartFile getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(MultipartFile profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 
 }

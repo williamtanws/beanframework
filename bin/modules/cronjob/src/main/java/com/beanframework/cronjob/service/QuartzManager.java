@@ -34,6 +34,7 @@ public class QuartzManager {
 
 	public static final String CRONJOB_UUID = "cronjobUuid";
 	public static final String CRONJOB_ID = "cronjobId";
+	public static final String CRONJOB_NOTIFICATION = "notification";
 
 	@SuppressWarnings("unchecked")
 	public void startOrUpdateJob(Cronjob job) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SchedulerException {

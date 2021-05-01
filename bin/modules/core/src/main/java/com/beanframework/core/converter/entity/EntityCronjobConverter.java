@@ -84,13 +84,13 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 		}
-		
+
 		if (source.getJobTrigger() != prototype.getJobTrigger()) {
 			prototype.setJobTrigger(source.getJobTrigger());
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
-		
-		if(source.getJobTrigger() != null) {
+
+		if (source.getJobTrigger() != null) {
 			prototype.setLastTriggeredDate(new Date());
 		}
 
@@ -121,6 +121,7 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 			prototype.setLastModifiedDate(lastModifiedDate);
 		}
 
+		// Parameters
 		Map<String, String> prototypeParameters = new HashMap<String, String>();
 		if (source.getSelectedParameterKeys() != null && source.getSelectedParameterValues() != null && source.getSelectedParameterKeys().length == source.getSelectedParameterValues().length) {
 			for (int i = 0; i < source.getSelectedParameterKeys().length; i++) {
@@ -128,11 +129,18 @@ public class EntityCronjobConverter implements EntityConverter<CronjobDto, Cronj
 			}
 		}
 
-		if (source.getParameters().equals(prototypeParameters) == false) {
-			prototype.setParameters(prototypeParameters);
-			prototype.setLastModifiedDate(lastModifiedDate);
+		if (prototypeParameters.isEmpty()) {
+			prototype.getParameters().clear();
+		} else {
+
+			for (Map.Entry<String, String> entry : prototypeParameters.entrySet()) {
+				prototype.getParameters().put(entry.getKey(), entry.getValue());
+			}
 		}
 
+		if (source.getParameters().equals(prototypeParameters) == false) {
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
 		return prototype;
 	}
 

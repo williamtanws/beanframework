@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.beanframework.backoffice.NotificationWebConstants;
-import com.beanframework.backoffice.api.data.NotificationOverallDataTableResponseData;
 import com.beanframework.backoffice.api.data.NotificationDataTableResponseData;
 import com.beanframework.backoffice.api.data.NotificationMessageDataTableResponseData;
+import com.beanframework.backoffice.api.data.NotificationOverallDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.service.LocaleMessageService;
@@ -30,6 +30,7 @@ import com.beanframework.common.utils.TimeUtil;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.NotificationDto;
+import com.beanframework.core.data.UserDto;
 import com.beanframework.core.facade.NotificationFacade;
 import com.beanframework.core.facade.UserFacade;
 
@@ -84,8 +85,10 @@ public class NotificationResource extends AbstractResource {
 	@RequestMapping(value = NotificationWebConstants.Path.Api.NOTIFICATION_NEW, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public NotificationOverallDataTableResponseData newNotification(HttpServletRequest request) throws Exception {
+		
+		UserDto currentUser = userFacade.getCurrentUser();
 
-		List<NotificationDto> result = notificationFacade.findAllNewNotificationByUser(userFacade.getCurrentUser().getUuid());		
+		List<NotificationDto> result = notificationFacade.findAllNewNotificationByUser(currentUser.getUuid());		
 		NotificationOverallDataTableResponseData data = new NotificationOverallDataTableResponseData();
 
 		if (result == null || result.isEmpty()) {

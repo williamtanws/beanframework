@@ -1,7 +1,9 @@
 package com.beanframework.core.converter.entity;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -113,6 +115,27 @@ public class EntityCustomerConverter implements EntityConverter<CustomerDto, Cus
 					prototype.setEnabled(source.getEnabled());
 					prototype.setLastModifiedDate(lastModifiedDate);
 				}
+			}
+
+			// Parameters
+			Map<String, String> prototypeParameters = new HashMap<String, String>();
+			if (source.getSelectedParameterKeys() != null && source.getSelectedParameterValues() != null && source.getSelectedParameterKeys().length == source.getSelectedParameterValues().length) {
+				for (int i = 0; i < source.getSelectedParameterKeys().length; i++) {
+					prototypeParameters.put(source.getSelectedParameterKeys()[i], source.getSelectedParameterValues()[i]);
+				}
+			}
+
+			if (prototypeParameters.isEmpty()) {
+				prototype.getParameters().clear();
+			} else {
+
+				for (Map.Entry<String, String> entry : prototypeParameters.entrySet()) {
+					prototype.getParameters().put(entry.getKey(), entry.getValue());
+				}
+			}
+
+			if (source.getParameters().equals(prototypeParameters) == false) {
+				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
 			// Field

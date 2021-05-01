@@ -144,11 +144,20 @@
 				        	if(result.total > 0){
 					            $("#notification-total").html(result.total);
 				        	}
+				        	else{
+				        		$("#notification-total").html('');
+				        	}
+				        	
 				            $("#notification-overall").html(result.overallMessage);
 				            
-				            $.each(result.notificationMessages, function (i, notification) {
-					        	$("#notification-messages").html("<div class='dropdown-divider'></div><a class='dropdown-item'><i class='"+notification.icon+"'></i>&nbsp;&nbsp;"+notification.message+"<span class='float-right text-muted text-sm'>"+notification.timeAgo+"</span></a>")
-					        });
+				            if (jQuery.isEmptyObject(result.notificationMessages)){
+				        		$("#notification-messages").html('');
+				            }
+				            else{
+					            $.each(result.notificationMessages, function (i, notification) {
+						        	$("#notification-messages").html("<div class='dropdown-divider'></div><a class='dropdown-item'><i class='"+notification.icon+"'></i>&nbsp;&nbsp;"+notification.message+"<span class='float-right text-muted text-sm'>"+notification.timeAgo+"</span></a>")
+						        });
+				            }
 				        },
 				        error: function(data){
 				            console.log(data);
