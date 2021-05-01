@@ -3,7 +3,7 @@ package com.beanframework.core.config.interceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.beanframework.comment.domain.Comment;
+import com.beanframework.cms.domain.Comment;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.core.interceptor.comment.CommentInitialDefaultsInterceptor;
 import com.beanframework.core.interceptor.comment.CommentLoadInterceptor;

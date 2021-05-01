@@ -1,4 +1,4 @@
-package com.beanframework.comment.domain;
+package com.beanframework.cms.domain;
 
 import java.util.UUID;
 
@@ -14,7 +14,7 @@ import org.hibernate.envers.Audited;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.beanframework.comment.CommentConstants;
+import com.beanframework.cms.CommentConstants;
 import com.beanframework.common.domain.GenericEntity;
 
 @Cacheable

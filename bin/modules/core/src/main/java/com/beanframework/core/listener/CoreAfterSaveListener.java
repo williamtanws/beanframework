@@ -61,7 +61,7 @@ public class CoreAfterSaveListener implements AfterSaveListener {
 				}
 				
 				UserDto currentUser = userFacade.getCurrentUser();
-				if(currentUser.getParameters().get(NotificationConstants.USER_NOTIFICATION) == null) {
+				if(userFacade.getCurrentUser().getUuid() != null && currentUser.getParameters().get(NotificationConstants.USER_NOTIFICATION) == null) {
 					notificationFacade.refreshAllNewNotificationByUser(userFacade.getCurrentUser().getUuid());
 				}
 

@@ -1,6 +1,7 @@
 INSERT_UPDATE UserPermission,id,name,sort,dynamicFieldSlotIds
 ,console			,Console				,0	,userpermission_0_name_en=Console;userpermission_1_name_cn=控制台
 ,backoffice			,Backoffice				,1	,userpermission_0_name_en=Backoffice;userpermission_1_name_cn=后台
+,dashboard			,Dashboard				,1	,userpermission_0_name_en=Dashboard;userpermission_1_name_cn=仪表盘
 ,enumeration		,Enumeration			,10	,userpermission_0_name_en=Enumeration;userpermission_1_name_cn=列举
 ,dynamicfield		,Dynamic Field			,11	,userpermission_0_name_en=Dynamic Field;userpermission_1_name_cn=动态场
 ,dynamicfieldslot	,Dynamic Field Slot		,12	,userpermission_0_name_en=Dynamic Field Slot;userpermission_1_name_cn=动态场槽

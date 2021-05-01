@@ -17,4 +17,9 @@ public class MenuNavigationBeanImpl implements MenuNavigationBean {
 		return menuFacade.findMenuTreeByCurrentUser();
 	}
 
+	@Override
+	public List<MenuDto> findMenuBreadcrumbsByPath(String path) throws Exception {
+		return menuFacade.findMenuBreadcrumbsByPath(path);
+	}
+
 }

@@ -6,10 +6,10 @@
 <body>
 	<th:block layout:fragment="content">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.internationalization},breadcrumb2=#{module.region},id=#{module.common.id},name=#{module.region.name},active=#{module.region.active}">
+		<div class="content-wrapper" th:with="id=#{module.common.id},name=#{module.region.name},active=#{module.region.active}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header (title=#{module.region}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.region}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.region}, tableId='regionTable', columnsi18n=${#strings.arraySplit(id+','+name+','+active, ',')}, selectAuthority=true )}"></th:block>
