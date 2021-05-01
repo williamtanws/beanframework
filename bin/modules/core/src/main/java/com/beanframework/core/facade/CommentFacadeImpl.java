@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.comment.domain.Comment;
+import com.beanframework.cms.domain.Comment;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.CommentDto;

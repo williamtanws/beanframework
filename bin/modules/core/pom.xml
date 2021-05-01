@@ -46,11 +46,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.beanframework</groupId>
-			<artifactId>comment</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
 			<artifactId>configuration</artifactId>
 			<version>${project.version}</version>
 		</dependency>

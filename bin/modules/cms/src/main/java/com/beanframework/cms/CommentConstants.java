@@ -1,4 +1,4 @@
-package com.beanframework.comment;
+package com.beanframework.cms;
 
 public class CommentConstants {
 
