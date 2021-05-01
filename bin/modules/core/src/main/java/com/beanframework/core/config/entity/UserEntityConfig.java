@@ -8,12 +8,14 @@ import com.beanframework.core.CoreConstants;
 import com.beanframework.core.converter.entity.EntityCustomerConverter;
 import com.beanframework.core.converter.entity.EntityEmployeeConverter;
 import com.beanframework.core.converter.entity.EntityMyAccountConverter;
+import com.beanframework.core.converter.entity.EntityUserConverter;
 import com.beanframework.core.converter.entity.EntityUserGroupConverter;
 import com.beanframework.core.converter.entity.EntityUserPermissionConverter;
 import com.beanframework.core.converter.entity.EntityUserRightConverter;
 import com.beanframework.core.converter.entity.EntityVendorConverter;
 import com.beanframework.user.domain.Customer;
 import com.beanframework.user.domain.Employee;
+import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
@@ -63,7 +65,7 @@ public class UserEntityConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public EntityMyAccountConverter entityMyAccountConverter() {
 		return new EntityMyAccountConverter();
@@ -74,6 +76,20 @@ public class UserEntityConfig {
 		ConverterMapping mapping = new ConverterMapping();
 		mapping.setConverter(entityMyAccountConverter());
 		mapping.setTypeCode(CoreConstants.TypeCode.MYACCOUNT);
+
+		return mapping;
+	}
+
+	@Bean
+	public EntityUserConverter entityUserConverter() {
+		return new EntityUserConverter();
+	}
+
+	@Bean
+	public ConverterMapping entityUserConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(entityUserConverter());
+		mapping.setTypeCode(User.class.getSimpleName());
 
 		return mapping;
 	}
@@ -105,7 +121,7 @@ public class UserEntityConfig {
 
 		return mapping;
 	}
-	
+
 	@Bean
 	public EntityVendorConverter entityVendorConverter() {
 		return new EntityVendorConverter();
