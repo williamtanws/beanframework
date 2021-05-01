@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.converter.dto.DtoMenuBreadcrumbsConverter;
 import com.beanframework.core.converter.dto.DtoMenuTreeByCurrentUserConverter;
 import com.beanframework.core.converter.dto.DtoMenuTreeConverter;
 import com.beanframework.core.data.MenuDto;
@@ -26,19 +27,22 @@ import com.beanframework.user.service.UserService;
 
 @Component
 public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements MenuFacade {
-	
+
 	private static final Class<Menu> entityClass = Menu.class;
 	private static final Class<MenuDto> dtoClass = MenuDto.class;
-	
+
 	@Autowired
 	private DtoMenuTreeConverter dtoMenuTreeConverter;
-	
+
 	@Autowired
 	private DtoMenuTreeByCurrentUserConverter dtoMenuTreeByCurrentUserConverter;
-	
+
+	@Autowired
+	private DtoMenuBreadcrumbsConverter dtoMenuBreadcrumbsConverter;
+
 	@Autowired
 	private MenuService menuService;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -91,7 +95,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 	public MenuDto createDto() throws Exception {
 		return createDto(entityClass, dtoClass);
 	}
-	
+
 	@Override
 	public void changePosition(UUID fromUuid, UUID toUuid, int toIndex) throws BusinessException {
 		try {
@@ -111,7 +115,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 			Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
 			sorts.put(Menu.SORT, Sort.Direction.ASC);
 			List<Menu> rootEntity = modelService.findByPropertiesBySortByResult(properties, sorts, null, null, Menu.class);
-			
+
 			List<MenuDto> rootDto = new ArrayList<MenuDto>();
 			for (Menu menu : rootEntity) {
 				rootDto.add(dtoMenuTreeConverter.convert(menu, new MenuDto()));
@@ -126,18 +130,30 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 	@Override
 	@Transactional(readOnly = true)
 	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
-		
+
 		Set<UUID> userGroupUuids = userService.getAllUserGroupsByCurrentUser();
-		if(userGroupUuids == null || userGroupUuids.isEmpty()) {
+		if (userGroupUuids == null || userGroupUuids.isEmpty()) {
 			return new ArrayList<MenuDto>();
 		}
 		List<Menu> rootEntity = modelService.findBySpecificationBySort(MenuSpecification.getMenuByEnabledByUserGroup(null, userGroupUuids), Sort.by(Direction.ASC, Menu.SORT), Menu.class);
-		
+
 		List<MenuDto> rootDto = new ArrayList<MenuDto>();
 		for (Menu menu : rootEntity) {
 			rootDto.add(dtoMenuTreeByCurrentUserConverter.convert(menu, new MenuDto()));
 		}
 		return rootDto;
-		
+
+	}
+
+	@Override
+	public List<MenuDto> findMenuBreadcrumbsByPath(String path) throws Exception {
+		List<Menu> models = menuService.findMenuBreadcrumbsByPath(path);
+
+		List<MenuDto> dtos = new ArrayList<MenuDto>();
+		for (Menu menu : models) {
+			dtos.add(dtoMenuBreadcrumbsConverter.convert(menu, new MenuDto()));
+		}
+
+		return dtos;
 	}
 }

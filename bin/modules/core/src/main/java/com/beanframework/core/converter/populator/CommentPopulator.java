@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beanframework.comment.domain.Comment;
+import com.beanframework.cms.domain.Comment;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.CommentDto;

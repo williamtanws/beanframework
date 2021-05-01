@@ -6,10 +6,10 @@
 <body>
 	<th:block layout:fragment="content">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.system},breadcrumb1=#{module.common.field},breadcrumb2=#{module.dynamicfield},id=#{module.common.id},name=#{module.dynamicfield.name},type=#{module.dynamicfield.type}">
+		<div class="content-wrapper" th:with="id=#{module.common.id},name=#{module.dynamicfield.name},type=#{module.dynamicfield.type}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: header (title=#{module.dynamicfield}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.dynamicfield}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.dynamicfield}, tableId='dynamicfieldTable', columnsi18n=${#strings.arraySplit(id+','+name+','+type, ',')}, selectAuthority=true )}"></th:block>

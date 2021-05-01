@@ -4,9 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
+import com.beanframework.core.converter.dto.DtoMenuBreadcrumbsConverter;
 import com.beanframework.core.converter.dto.DtoMenuConverter;
 import com.beanframework.core.converter.dto.DtoMenuTreeByCurrentUserConverter;
 import com.beanframework.core.converter.dto.DtoMenuTreeConverter;
+import com.beanframework.core.converter.populator.MenuBreadcrumbsPopulator;
 import com.beanframework.core.converter.populator.MenuPopulator;
 import com.beanframework.core.converter.populator.MenuTreeByCurrentUserPopulator;
 import com.beanframework.core.converter.populator.MenuTreePopulator;
@@ -36,7 +38,7 @@ public class MenuDtoConfig {
 
 		return mapping;
 	}
-	
+
 	// Menu Tree
 	@Bean
 	public MenuTreePopulator menuTreePopulator() {
@@ -58,7 +60,7 @@ public class MenuDtoConfig {
 
 		return mapping;
 	}
-	
+
 	// Menu Tree By Current User
 	@Bean
 	public MenuTreeByCurrentUserPopulator menuTreeByCurrentUserPopulator() {
@@ -69,6 +71,19 @@ public class MenuDtoConfig {
 	public DtoMenuTreeByCurrentUserConverter dtoMenuTreeByCurrentUserConverter() {
 		DtoMenuTreeByCurrentUserConverter converter = new DtoMenuTreeByCurrentUserConverter();
 		converter.addPopulator(menuTreeByCurrentUserPopulator());
+		return converter;
+	}
+
+	// Menu Breadcrumbs
+	@Bean
+	public MenuBreadcrumbsPopulator menuBreadcrumbsPopulator() {
+		return new MenuBreadcrumbsPopulator();
+	}
+
+	@Bean
+	public DtoMenuBreadcrumbsConverter dtoMenuBreadcrumbsConverter() {
+		DtoMenuBreadcrumbsConverter converter = new DtoMenuBreadcrumbsConverter();
+		converter.addPopulator(menuBreadcrumbsPopulator());
 		return converter;
 	}
 }

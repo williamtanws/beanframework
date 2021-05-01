@@ -23,7 +23,7 @@ import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.CommentWebConstants;
 import com.beanframework.backoffice.CommentWebConstants.CommentPreAuthorizeEnum;
 import com.beanframework.backoffice.api.data.CommentDataTableResponseData;
-import com.beanframework.comment.domain.Comment;
+import com.beanframework.cms.domain.Comment;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
@@ -38,7 +38,7 @@ public class CommentResource extends AbstractResource {
 	private CommentFacade commentFacade;
 
 	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(CommentWebConstants.Path.Api.CHECKID)
+	@RequestMapping(CommentWebConstants.Path.Api.COMMENT_CHECKID)
 	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
 
 		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
@@ -60,7 +60,7 @@ public class CommentResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = CommentWebConstants.Path.Api.PAGE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = CommentWebConstants.Path.Api.COMMENT, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<CommentDataTableResponseData> page(HttpServletRequest request) throws Exception {
 
@@ -99,7 +99,7 @@ public class CommentResource extends AbstractResource {
 	}
 
 	@PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = CommentWebConstants.Path.Api.HISTORY, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = CommentWebConstants.Path.Api.COMMENT_HISTORY, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
 

@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.beanframework.comment.domain.Comment;
+import com.beanframework.cms.domain.Comment;
 import com.beanframework.common.context.SpringContext;
 import com.beanframework.common.data.DataTableColumnSpecs;
 import com.beanframework.common.data.DataTableRequest;
