@@ -32,4 +32,8 @@ public interface UserService {
 	void deleteProfilePictureFileByUuid(UUID uuid);
 
 	Set<UUID> getAllUserGroupsByCurrentUser() throws Exception;
+
+	void generateUserFieldsOnInitialDefault(User model, String configurationDynamicFieldTemplate) throws Exception;
+
+	void generateUserFieldOnLoad(User model, String configurationDynamicFieldTemplate) throws Exception;
 }
