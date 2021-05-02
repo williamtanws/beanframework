@@ -9,7 +9,7 @@
 		<div class="content-wrapper" th:with="id=#{module.common.id},name=#{module.auditor.name}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.auditor}) }"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.auditor}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.auditor}, tableId='auditorTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, selectAuthority=false )}"></th:block>

@@ -68,8 +68,8 @@ temp
 /bin/install/app.xml
 /bin/platform/pom.xml
 /bin/custom/*
+!/bin/custom/README.md
 /config/pom.xml
 /config/src/main/resources/*
 !/config/src/main/resources/*.template
 !.mvn/wrapper/maven-wrapper.jar
-!/bin/ui/adminlte/src/main/resources/static/*

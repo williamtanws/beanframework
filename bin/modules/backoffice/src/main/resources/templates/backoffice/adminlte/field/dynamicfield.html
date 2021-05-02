@@ -9,7 +9,7 @@
 		<div class="content-wrapper" th:with="id=#{module.common.id},name=#{module.dynamicfield.name},type=#{module.dynamicfield.type}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.dynamicfield}) }"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.dynamicfield}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.dynamicfield}, tableId='dynamicfieldTable', columnsi18n=${#strings.arraySplit(id+','+name+','+type, ',')}, selectAuthority=true )}"></th:block>

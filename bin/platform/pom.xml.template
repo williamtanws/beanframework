@@ -53,7 +53,6 @@
 					<finalName>beanframework</finalName>
 					<mainClass>com.beanframework.platform.PlatformApplication</mainClass>
 					<exclude>../module/filemanager/angular-filemanager/**</exclude>
-					<exclude>../ui/adminlte/bootstrap-adminlte/**</exclude>
 					<outputDirectory>
 						..
 					</outputDirectory>

@@ -9,7 +9,7 @@
 		<div class="content-wrapper" th:with="id=#{module.common.id},name=#{module.userpermission.name},sort=#{module.userpermission.sort}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.userpermission}) }"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.userpermission}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.userpermission}, tableId='userpermissionTable', columnsi18n=${#strings.arraySplit(id+','+name+','+sort, ',')}, selectAuthority=true )}"></th:block>

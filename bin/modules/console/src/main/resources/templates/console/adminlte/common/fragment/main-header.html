@@ -56,6 +56,9 @@
 							<a th:href="@{${@environment.getProperty('path.configuration')}}" class="nav-link" th:text="#{module.configuration}"></a>
 						</li>
 						<li class="nav-item">
+							<a href="#" class="nav-link" target="_blank" onClick="window.open('/documentation', '_blank').focus();" th:text="#{module.common.documentation}"> </a>
+						</li>
+						<li class="nav-item">
 							<a href="#" class="nav-link" th:onClick="'window.location.href=\''+@{${@environment.getProperty('path.backoffice')}}+'\''" th:text="#{module.common.backoffice}"></a>
 						</li>
 					</ul>
@@ -75,7 +78,8 @@
 							</a>
 							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 								<th:block th:each="locale, iterStat : ${#strings.arraySplit(@environment.getProperty('module.console.locale'), ',')}">
-									<a href="#" th:onclick="changeLocale([[${#strings.arraySplit(locale,';')[0]}]])" class="dropdown-item" th:text="${#strings.arraySplit(locale,';')[1]}" th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #007bff; color: white':''"></a>
+									<a href="#" th:onclick="changeLocale([[${#strings.arraySplit(locale,';')[0]}]])" class="dropdown-item" th:text="${#strings.arraySplit(locale,';')[1]}"
+										th:style="${#strings.arraySplit(locale,';')[0]} == ${#locale.toString()} ? 'background-color: #007bff; color: white':''"></a>
 									<div class="dropdown-divider" th:if="!${iterStat.last}"></div>
 								</th:block>
 							</div>
@@ -88,13 +92,15 @@
 							</a>
 							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 								<div class="nav-link">
-									<i class="fas fa-user-secret"></i>&nbsp;
+									<i class="fas fa-user-secret"></i>
+									&nbsp;
 									<span th:text="${#authentication.principal.name != null ? #authentication.principal.name : #authentication.principal.id}"></span>
 								</div>
 								<div class="dropdown-divider"></div>
 								<form th:action="@{${@environment.getProperty('path.console.logout')}}" method="post">
 									<a href="#" onclick="this.parentNode.submit(); return false;" class="dropdown-item">
-										<i class="fas fa-sign-out-alt"></i>&nbsp;
+										<i class="fas fa-sign-out-alt"></i>
+										&nbsp;
 										<span th:text="#{module.common.logout}"></span>
 									</a>
 								</form>

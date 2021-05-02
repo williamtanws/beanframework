@@ -15,6 +15,7 @@
 	</properties>
 
     <modules>
+        <module>modules/documentation</module>
     	<module>modules/common</module>
     	<module>modules/enumeration</module>
     	<module>modules/internationalization</module>
