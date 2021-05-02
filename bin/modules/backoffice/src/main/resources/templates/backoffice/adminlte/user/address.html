@@ -9,7 +9,7 @@
 		<div class="content-wrapper" th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.address}) }"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.address}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.address}, tableId='addressTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, selectAuthority=true )}"></th:block>

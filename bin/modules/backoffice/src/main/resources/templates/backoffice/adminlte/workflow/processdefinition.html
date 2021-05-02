@@ -9,7 +9,7 @@
 		<div class="content-wrapper" th:with="id=#{module.common.id},name=#{module.processdefinition.name},deploymentId=#{module.processdefinition.deploymentId}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.processdefinition}) }"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.processdefinition}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.processdefinition}, tableId='processdefinitionTable', columnsi18n=${#strings.arraySplit(id+','+name+','+deploymentId, ',')}, selectAuthority=true )}"></th:block>

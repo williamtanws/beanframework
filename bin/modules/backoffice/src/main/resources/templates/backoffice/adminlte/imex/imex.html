@@ -9,7 +9,7 @@
 		<div class="content-wrapper" th:with="id=#{module.common.id},fileName=#{module.imex.fileName},type=#{module.imex.type}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.imex}) }"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.imex}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.imex}, tableId='imexTable', columnsi18n=${#strings.arraySplit(id+','+fileName, ',')}, selectAuthority=true )}"></th:block>

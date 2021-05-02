@@ -9,7 +9,7 @@
 		<div class="content-wrapper" th:with="user=#{module.user},html=#{module.comment.html}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.comment}) }"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.comment}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.comment}, tableId='commentTable', columnsi18n=${#strings.arraySplit(user+','+html, ',')}, selectAuthority=true )}"></th:block>
