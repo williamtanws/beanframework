@@ -137,6 +137,7 @@
 			const checkForNotifications = (delay) => {
 			    setTimeout(() => {
 			    	var url = /*[[@{${@environment.getProperty('path.api.notification.new')}}]]*/;
+					var interval = /*[[${@Config.get('notification.interval','5000')}]]*/;
 			        $.ajax({
 			        	url: url,
 				        async: true,
@@ -164,7 +165,7 @@
 				        }
 			        }).done(() => {
 			            // do your staff 
-			            checkForNotifications(10000)
+			            checkForNotifications(interval)
 			        })
 			    }, delay)
 			}

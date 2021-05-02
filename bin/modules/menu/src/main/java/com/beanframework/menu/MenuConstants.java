@@ -15,5 +15,5 @@ public interface MenuConstants {
 		public static final String ID_EXISTS = "module.menu.id.exists";
 	}
 
-	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "module.menu.dynamicfield.template";
+	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "menu.dynamicfield.template";
 }

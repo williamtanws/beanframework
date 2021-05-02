@@ -17,5 +17,5 @@ public final class UserRightConstants {
 		public static final String UUID_NOT_EXISTS = "module.userright.uuid.notexists";;
 	}
 
-	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "module.userright.dynamicfield.template";
+	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "userright.dynamicfield.template";
 }
