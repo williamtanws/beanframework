@@ -4,10 +4,18 @@
 </head>
 <body>
 	<th:block th:fragment="tree">
+		<li class="nav-header" th:text="#{module.menu}" style="text-transform: uppercase;"></li>
 		<!-- sidebar menu: : style can be found in sidebar.less -->
 		<th:block th:each="menu : ${@MenuNavigation.findMenuTreeByCurrentUser()}">
 			<th:block th:insert="backoffice/adminlte/common/fragment/main-menu :: tree-submenu (menu=${menu})"></th:block>
 		</th:block>
+		<li class="nav-header" th:text="#{module.common.miscellaneous}" style="text-transform: uppercase;"></li>
+		<li class="nav-item">
+			<a href="#" class="nav-link" target="_blank" onClick="window.open('/documentation', '_blank').focus();">
+				<i class="nav-icon fas fa-file"></i>
+				<p th:text="#{module.common.documentation}"></p>
+			</a>
+		</li>
 	</th:block>
 	<th:block th:fragment="tree-submenu (menu)">
 		<li class="nav-item">
@@ -15,7 +23,7 @@
 				<i th:class="'nav-icon '+${menu.icon}"></i>
 				<p>
 					<th:block th:text="${menu.getName(#locale.toString())}"></th:block>
-                	<i class="right fas fa-angle-left" th:if="${not #lists.isEmpty(menu.childs)}"></i>
+					<i class="right fas fa-angle-left" th:if="${not #lists.isEmpty(menu.childs)}"></i>
 				</p>
 			</a>
 			<ul class="nav nav-treeview" th:if="${not #lists.isEmpty(menu.childs)}">
