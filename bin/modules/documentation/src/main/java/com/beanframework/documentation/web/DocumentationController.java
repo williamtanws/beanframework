@@ -1,0 +1,13 @@
+package com.beanframework.documentation.web;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class DocumentationController {
+
+	@GetMapping(value = "/documentation")
+	public String documentation() {
+		return "/documentation/index";
+	}
+}

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
+<title>Documentation</title>
+<meta name="description" content="Your ThemeForest item Name and description">
+<meta name="author" content="harnishdesign.net">
+
+<!-- Stylesheet
+============================== -->
+<!-- Bootstrap -->
+<link rel="stylesheet" type="text/css" th:href="@{/static/iDocs/assets/vendor/bootstrap/css/bootstrap.min.css}" />
+<!-- Font Awesome Icon -->
+<link rel="stylesheet" type="text/css" th:href="@{/static/iDocs/assets/vendor/font-awesome/css/all.min.css}" />
+<!-- Magnific Popup -->
+<link rel="stylesheet" type="text/css" th:href="@{/static/iDocs/assets/vendor/magnific-popup/magnific-popup.min.css}" />
+<!-- Highlight Syntax -->
+<link rel="stylesheet" type="text/css" th:href="@{/static/iDocs/assets/vendor/highlight.js/styles/github.css}" />
+<!-- Custom Stylesheet -->
+<link rel="stylesheet" type="text/css" th:href="@{/static/iDocs/assets/css/stylesheet.css}" />
+</head>
+
+<body data-spy="scroll" data-target=".idocs-navigation" data-offset="125">
+
+	<!-- Preloader -->
+	<div class="preloader">
+		<div class="lds-ellipsis">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	</div>
+	<!-- Preloader End -->
+
+	<!-- Document Wrapper -->
+	<div id="main-wrapper">
+
+		<!-- Header -->
+		<header id="header" class="sticky-top">
+			<!-- Navbar -->
+			<nav class="primary-menu navbar navbar-expand-lg navbar-dropdown-dark">
+				<div class="container-fluid">
+					<!-- Sidebar Toggler -->
+					<button id="sidebarCollapse" class="navbar-toggler d-block d-md-none" type="button">
+						<span></span>
+						<span class="w-75"></span>
+						<span></span>
+					</button>
+
+					<!-- Logo -->
+					<a class="logo ml-md-3" href="/documentation" title="Beanframework Documentation">
+						<span>Beanframework Documentation</span>
+					</a>
+					<span class="text-2 ml-2">v3.0.0</span>
+					<!-- Logo End -->
+
+					<!-- Navbar Toggler -->
+					<button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#header-nav">
+						<span></span>
+						<span></span>
+						<span></span>
+					</button>
+
+					<div id="header-nav" class="collapse navbar-collapse justify-content-end"></div>
+					<ul class="social-icons social-icons-sm ml-lg-2 mr-2">
+
+					</ul>
+				</div>
+			</nav>
+			<!-- Navbar End -->
+		</header>
+		<!-- Header End -->
+
+		<!-- Content
+  ============================ -->
+		<div id="content" role="main">
+
+			<!-- Sidebar Navigation
+	============================ -->
+			<div class="idocs-navigation bg-light">
+				<ul class="nav flex-column ">
+					<li class="nav-item">
+						<a class="nav-link active" href="#idocs_start">Getting Started</a>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_license">License</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_installation">Installation</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_project_structure">Project Structure</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Docs Content -->
+			<div class="idocs-content">
+				<div class="container">
+
+					<!-- Getting Started -->
+					<section id="idocs_start">
+						<h1>Documentation</h1>
+						<h2>Beanframework</h2>
+						<p class="lead">Thank you so much for using beanframework project. 100% open source project under MIT license.</p>
+						<hr>
+						<div class="row">
+							<div class="col-sm-6 col-lg-4">
+								<ul class="list-unstyled">
+									<li>
+										<strong>Version:</strong>
+										3.0.0
+									</li>
+									<li>
+										<strong>Github:</strong>
+										<a href="https://github.com/williamtanws/beanframework" target="_blank">Beanframework</a>
+									</li>
+								</ul>
+							</div>
+							<div class="col-sm-6 col-lg-4">
+								<ul class="list-unstyled">
+									<li>
+										<strong class="font-weight-700">Created:</strong>
+										2 May, 2021
+									</li>
+									<li>
+										<strong>Update:</strong>
+										2 May, 2021
+									</li>
+								</ul>
+							</div>
+						</div>
+						<p class="alert alert-info">
+							If you have any questions that are beyond the scope of this help file, Please feel free to post via
+							<a target="_blank" href="https://github.com/williamtanws/beanframework/discussions">Github Discussion Page</a>
+							.
+						</p>
+					</section>
+
+					<hr class="divider">
+
+					<!-- License -->
+					<section id="idocs_license">
+						<h2>License</h2>
+						<pre>
+MIT License
+								
+Copyright 2021 <strong>Beanframework</strong>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+									
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+									
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</pre>
+					</section>
+
+					<hr class="divider">
+
+					<!-- Installation -->
+					<section id="idocs_installation">
+						<h2>Installation</h2>
+						<p class="lead">Create a new database:</p>
+						<ol>
+							<li>
+								By default, this project supported unicode character such as Chinese language, therefore the database must use CHARACTER SET utf8 COLLATE utf8_unicode_ci
+								<pre>
+									<code class="html">CREATE SCHEMA `beanframework` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci</code></pre>
+							</li>
+							<li>
+								Configure project by duplicating all .template files in current location, without .template suffix:
+								<ul>
+									<li>
+										<code>beanframework/bin/pom.xml.template</code>
+										- Contains maven modules in project.
+									</li>
+									<li>
+										<code>beanframework/bin/server.bat.template</code>
+										- Contains execute command to run application in windows environment.
+									</li>
+									<li>
+										<code>beanframework/bin/server.sh.template</code>
+										- Contains execute command to run application in linux environment.
+									</li>
+									<li>
+										<code>beanframework/bin/install/app.xml.template</code>
+										- Contains exe progrom to run application as service in windows environment.
+									</li>
+									<li>
+										<code>beanframework/bin/platform/pom.xml.template</code>
+										- Contains platform maven configuration, such as configure jar packaging to include/exclude resources
+									</li>
+									<li>
+										<code>beanframework/config/pom.xml.template</code>
+										- Contains project modules/dependencies configuration.
+									</li>
+									<li>
+										<code>beanframework/config/src/main/resources/*</code>
+										- Contains application properties, xml, and sql files for different environments.
+									</li>
+								</ul>
+							</li>
+							<li>
+								Optional: To startup application first time in command: Navigate to
+								<code>/beanframework/bin</code>
+								and run
+								<code>mvnw clean install</code>
+								command. - To download dependencies, compile project and package project into jar application.
+							</li>
+							<li>
+								Optional: To run application, execute command
+								<code>/beanframework/bin/server.bat</code>
+								or
+								<code>/beanframework/bin/server.sh</code>
+							</li>
+							<li>
+								Access application endpoints:	
+								<ul>
+									<li>Console: <a href="http://localhost:8080/console" target="_blank">http://localhost:8080/console</a></li>
+									<li>Backoffice: <a href="http://localhost:8080/backoffice" target="_blank">http://localhost:8080/backoffice</a></li>
+									<li>Documentation: <a href="http://localhost:8080/documentation" target="_blank">http://localhost:8080/documentation</a></li>
+								</ul>
+							</li>
+							<li>
+								Import sample data:
+								<ul>
+									<li>Access Console: <a href="http://localhost:8080/console" target="_blank">http://localhost:8080/console</a></li>
+									<li>Login with default admin account: username:<code>admin</code>, password:<code>admin</code></li>
+									<li>Goto Platform->Update menu, check all and update.</li>
+								</ul>
+							</li>
+							<li>You are good to go for run your project now!</li>
+						</ol>
+					</section>
+
+					<hr class="divider">
+
+					<!-- Project Structure -->
+					<section id="idocs_project_structure">
+						<h2>Project Structure</h2>
+						<ol>
+							<li>
+								Below is the beanframework folder structure:
+								<ul>
+									<li>
+										<code>bin</code>
+										- Source files
+										<ul>
+											<li>
+												<code>custom</code>
+												- Create a custom modules and put in this folder, best practice for not mixing with original project structure and codes, and easily to upgrade software in future.
+											</li>
+											<li>
+												<code>install</code>
+												- Install application as service in windows environments.
+											</li>
+											<li>
+												<code>modules</code>
+												- Project default modules.
+											</li>
+											<li>
+												<code>platform</code>
+												- Platform that startup this application with default properties. With IDE, it can run on server at <code>platform/src/main/java/com/beanframework/platform/PlatformApplication.java</code>
+											</li>
+										</ul>
+									</li>
+									<li>
+										<code>config</code>
+										- Mainly use for application properties for different environments. You can create more files prefix with different environments such as <code>-dev.xml</code>, and assign <code>dev</code> to <code>spring.profiles.active=</code> in <code>application.properties</code>
+										<ul>
+											<li>
+												<code>application.properties</code>
+												- Highest priority properties file in Spring Boot.
+											</li>
+											<li>
+												<code>application-dev.properties</code>
+												- Override default properties for dev environments.
+											</li>
+											<li>
+												<code>ehcache-dev.xml</code>
+												- Cache configuration for dev environments.
+											</li>
+											<li>
+												<code>logback-dev.xml</code>
+												- Logback configuration for dev environments.
+											</li>
+											<li>
+												<code>import/quartz-dev.xml</code>
+												- Import quartz query for dev environments.
+											</li>
+										</ul>
+									</li>
+									<li>
+										<code>data</code>
+										- Data storage for this application
+										<ul>
+											<li>
+												<code>media</code>
+												- All the media stored in this directory.
+											</li>
+											<li>
+												<code>integration</code>
+												- Spring integration directory to process files. Can be used for import/export files.
+											</li>
+										</ul>
+									</li>
+									<li>
+										<code>log</code>
+										- Application logging files, with archived rotated logging.
+									</li>
+									<li>
+										<code>temp</code>
+										- Application temporary files.
+									</li>
+								</ul>
+							</li>
+						</ol>
+					</section>	
+				</div>
+			</div>
+
+		</div>
+		<!-- Content end -->
+	</div>
+	<!-- Document Wrapper end -->
+
+	<!-- Back To Top -->
+	<a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)">
+		<i class="fa fa-chevron-up"></i>
+	</a>
+
+	<!-- JavaScript  -->
+	<script th:src="@{/static/iDocs/assets/vendor/jquery/jquery.min.js}"></script>
+	<script th:src="@{/static/iDocs/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<!-- Highlight JS -->
+	<script th:src="@{/static/iDocs/assets/vendor/highlight.js/highlight.min.js}"></script>
+	<!-- Easing -->
+	<script th:src="@{/static/iDocs/assets/vendor/jquery.easing/jquery.easing.min.js}"></script>
+	<!-- Magnific Popup -->
+	<script th:src="@{/static/iDocs/assets/vendor/magnific-popup/jquery.magnific-popup.min.js}"></script>
+	<!-- Custom Script -->
+	<script th:src="@{/static/iDocs/assets/js/theme.js}"></script>
+</body>
+</html>

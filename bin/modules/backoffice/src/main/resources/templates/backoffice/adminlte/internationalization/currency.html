@@ -9,7 +9,7 @@
 		<div class="content-wrapper" th:with="id=#{module.common.id},name=#{module.currency.name},active=#{module.currency.active}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.currency}) }"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.currency}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.currency}, tableId='currencyTable', columnsi18n=${#strings.arraySplit(id+','+name+','+active, ',')}, selectAuthority=true )}"></th:block>

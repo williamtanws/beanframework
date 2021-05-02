@@ -15,5 +15,5 @@ public interface VendorConstants {
 		public static final String SAVE_CURRENT_VENDOR_ERROR = "module.vendor.current.save.error";
 	}
 
-	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "module.vendor.dynamicfield.template";
+	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "vendor.dynamicfield.template";
 }

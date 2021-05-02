@@ -19,5 +19,5 @@ public final class UserGroupConstants {
 		public static final String UUID_NOT_EXISTS = "module.usergroup.uuid.notexists";;
 	}
 
-	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "module.usergroup.dynamicfield.template";
+	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "usergroup.dynamicfield.template";
 }

@@ -24,5 +24,5 @@ public interface EmployeeConstants {
 		public static final String PICTURE_WRONGFORMAT = "module.employee.picture.wrongformat";
 	}
 
-	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "module.employee.dynamicfield.template";
+	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "employee.dynamicfield.template";
 }

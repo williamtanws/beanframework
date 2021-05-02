@@ -9,28 +9,10 @@
 
 <body>
 	<th:block layout:fragment="content">
-		<div class="content-wrapper">
-			<!-- Content Header (Page header) -->
-			<div class="content-header">
-				<div class="container-fluid">
-					<div class="row mb-2">
-						<div class="col-sm-6">
-							<h1 class="m-0" th:text="#{module.cache}"></h1>
-						</div>
-						<!-- /.col -->
-						<div class="col-sm-6">
-							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item" th:text="#{module.common.console}"></li>
-								<li class="breadcrumb-item active" th:text="#{module.cache}"></li>
-							</ol>
-						</div>
-						<!-- /.col -->
-					</div>
-					<!-- /.row -->
-				</div>
-				<!-- /.container-fluid -->
-			</div>
-			<!-- /.content-header -->
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.monitor},breadcrumb2=#{module.cache}">
+			<!-- Header -->
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs (title=#{module.cache}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
+			
 
 			<!-- Main content -->
 			<section class="content">

@@ -87,6 +87,10 @@ public class NotificationResource extends AbstractResource {
 	public NotificationOverallDataTableResponseData newNotification(HttpServletRequest request) throws Exception {
 		
 		UserDto currentUser = userFacade.getCurrentUser();
+		
+		if(currentUser.getUuid() == null) {
+			return null;
+		}
 
 		List<NotificationDto> result = notificationFacade.findAllNewNotificationByUser(currentUser.getUuid());		
 		NotificationOverallDataTableResponseData data = new NotificationOverallDataTableResponseData();
