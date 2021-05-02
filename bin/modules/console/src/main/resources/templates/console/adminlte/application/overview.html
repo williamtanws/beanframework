@@ -6,28 +6,10 @@
 </head>
 <body>
 	<th:block layout:fragment="content">
-		<div class="content-wrapper">
-			<!-- Content Header (Page header) -->
-			<div class="content-header">
-				<div class="container-fluid">
-					<div class="row mb-2">
-						<div class="col-sm-6">
-							<h1 class="m-0" th:text="#{module.common.overview}"></h1>
-						</div>
-						<!-- /.col -->
-						<div class="col-sm-6">
-							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item" th:text="#{module.common.console}"></li>
-								<li class="breadcrumb-item active" th:text="#{module.common.overview}"></li>
-							</ol>
-						</div>
-						<!-- /.col -->
-					</div>
-					<!-- /.row -->
-				</div>
-				<!-- /.container-fluid -->
-			</div>
-			<!-- /.content-header -->
+		<div class="content-wrapper" th:with="id=#{module.common.id},value=#{module.configuration.value}">
+
+			<!-- Header -->
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title (title=#{module.common.overview} )}"></th:block>
 
 			<!-- Main content -->
 			<section class="content">

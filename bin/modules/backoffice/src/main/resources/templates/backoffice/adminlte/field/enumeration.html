@@ -9,7 +9,7 @@
 		<div class="content-wrapper" th:with="id=#{module.common.id},name=#{module.enumeration.name},sort=#{module.enumeration.sort}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs(title=#{module.enumeration}) }"></th:block>
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.enumeration}) }"></th:block>
 
 			<!-- Main content -->
 			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.enumeration}, tableId='enumerationTable', columnsi18n=${#strings.arraySplit(id+','+name+','+sort, ',')}, selectAuthority=true )}"></th:block>

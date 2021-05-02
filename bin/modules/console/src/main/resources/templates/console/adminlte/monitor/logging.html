@@ -15,30 +15,10 @@
 <body>
 	<th:block layout:fragment="content">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper">
-
-			<!-- Content Header (Page header) -->
-			<div class="content-header">
-				<div class="container-fluid">
-					<div class="row mb-2">
-						<div class="col-sm-6">
-							<h1 class="m-0" th:text="#{module.logging}"></h1>
-						</div>
-						<!-- /.col -->
-						<div class="col-sm-6">
-							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item" th:text="#{module.common.platform}"></li>
-								<li class="breadcrumb-item active" th:text="#{module.logging}"></li>
-							</ol>
-						</div>
-						<!-- /.col -->
-					</div>
-					<!-- /.row -->
-				</div>
-				<!-- /.container-fluid -->
-			</div>
-			<!-- /.content-header -->
-
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.monitor},breadcrumb2=#{module.logging}">
+			<!-- Header -->
+			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs (title=#{module.logging}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
+		
 			<!-- Main content -->
 			<section class="content">
 				<div class="card">
