@@ -15,5 +15,5 @@ public interface CustomerConstants {
 		public static final String SAVE_CURRENT_CUSTOMER_ERROR = "module.customer.current.save.error";
 	}
 
-	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "module.customer.dynamicfield.template";
+	public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "customer.dynamicfield.template";
 }
