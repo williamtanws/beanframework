@@ -18,20 +18,20 @@
 <!-- overlayScrollbars -->
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
 <style>
-.navbar-nav .nav-item .active{
-	 background-color: #f4f6f9;
+.navbar-nav .nav-item .active {
+	background-color: #f4f6f9;
 }
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
 	<div class="wrapper">
-	
+
 		<!-- Header -->
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/main-header :: header}"></th:block>
 
 		<!-- Main sidebar -->
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/main-sidebar :: sidebar}"></th:block>
-	
+
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper iframe-mode" data-widget="iframe" data-loading-screen="750">
 			<div class="nav navbar navbar-expand-lg navbar-white navbar-light border-bottom p-0">
@@ -64,14 +64,6 @@
 	</div>
 	<!-- jQuery -->
 	<script th:src="@{/static/adminlte/plugins/jquery/jquery.min.js}"></script>
-	<!-- jQuery UI 1.11.4 -->
-	<script th:src="@{/static/adminlte/plugins/jquery-ui/jquery-ui.min.js}"></script>
-	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-	<script>
-	  $.widget.bridge('uibutton', $.ui.button)
-	</script>
-	<!-- Bootstrap 4 -->
-	<script th:src="@{/static/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
 	<!-- Bootstrap 4 -->
 	<script th:src="@{/static/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
 	<!-- SweetAlert2 -->
@@ -202,7 +194,7 @@
 		
 		/*]]>*/
 	</script>
-	
+
 	<!-- toastr -->
 	<th:block th:insert="/core/adminlte/common/fragment/toastr :: js"></th:block>
 </body>
