@@ -182,6 +182,10 @@ public class UserController extends AbstractController {
 
 				User principal = (User) auth.getPrincipal();
 				userUuid = principal.getUuid();
+				
+				if(userUuid == null) {
+					return getDefaultPicture();
+				}
 			} else {
 				return getDefaultPicture();
 			}
@@ -207,7 +211,7 @@ public class UserController extends AbstractController {
 	private ResponseEntity<byte[]> getDefaultPicture() throws Exception {
 		InputStream targetStream;
 
-		String configurationValue = configurationFacade.get(CONFIGURATION_DEFAULT_AVATAR, null);
+		String configurationValue = configurationFacade.get(CONFIGURATION_DEFAULT_AVATAR, "/static/core/img/avatar.png");
 
 		if (configurationValue == null) {
 			return null;
