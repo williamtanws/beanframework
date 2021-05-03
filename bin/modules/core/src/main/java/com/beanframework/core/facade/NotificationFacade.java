@@ -31,13 +31,13 @@ public interface NotificationFacade {
 
 	NotificationDto createDto() throws Exception;
 
-	@Cacheable(value = NotificationConstants.CACHE_NOTIFICATIONS, key="#uuid")
+	@Cacheable(value = NotificationConstants.CACHE_NOTIFICATIONS, key = "#uuid")
 	List<NotificationDto> findAllNewNotificationByUser(UUID uuid) throws Exception;
-	
-	@CacheEvict(value = NotificationConstants.CACHE_NOTIFICATIONS, key="#uuid")
+
+	@CacheEvict(value = NotificationConstants.CACHE_NOTIFICATIONS, key = "#uuid")
 	void refreshAllNewNotificationByUser(UUID uuid) throws Exception;
 
-	@CacheEvict(value = NotificationConstants.CACHE_NOTIFICATIONS, key="#uuid")
+	@CacheEvict(value = NotificationConstants.CACHE_NOTIFICATIONS, key = "#uuid")
 	void checkedNotification(UUID uuid) throws Exception;
 
 	int removeAllNotification() throws BusinessException;

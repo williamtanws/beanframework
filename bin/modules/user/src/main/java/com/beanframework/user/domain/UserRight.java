@@ -10,21 +10,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserRightConstants;
 
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
@@ -42,7 +37,6 @@ public class UserRight extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String name;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
