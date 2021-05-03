@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<th:block th:fragment="action">
+		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-form-delete" th:if="*{uuid != null}">
+			<i class="fas fa-trash-alt"></i>
+		</button>
+	</th:block>
+	<th:block th:fragment="modal (uuid, deleteUrl)">
+		<div class="modal fade" th:id="'modal-form-delete'">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" th:text="#{module.common.delete.confirm}"></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p th:utext="#{module.common.delete.confirm.info}"></p>
+					</div>
+					<form th:action="${deleteUrl}" method="post">
+						<div class="modal-footer justify-content-between">
+							<input type="hidden" name="delete" />
+							<input type="hidden" name="uuid" th:value="${uuid}" id="modal-form-delete-uuid" />
+							<button type="button" class="btn btn-default" data-dismiss="modal" th:text="'  '+#{module.common.no}+'  '"></button>
+							<button type="submit" class="btn btn-danger" th:text="#{module.common.delete}"></button>
+						</div>
+					</form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+	</th:block>
+</body>
+</html>

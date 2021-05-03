@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layout}">
 
 <head>
 <title th:utext="#{module.comment}"></title>
@@ -15,8 +15,8 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('comment_delete')"></th:block>
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
+						<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('comment_delete')"></th:block>
+						<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
 					</div>
 					<!-- /.col -->
 					<div class="col-sm-6">
@@ -51,7 +51,7 @@
 										<label for="user" th:text="#{module.comment.user}"></label>
 										<th:block th:with="id=#{module.common.id},name=#{module.user.name}">
 											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.comment.user.select}, tableId='selectedUserDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{user}, selectedItemUuidName='selectedUserUuid' )}"></th:block>
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.comment.user.select}, tableId='selectedUserDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{user}, selectedItemUuidName='selectedUserUuid' )}"></th:block>
 										</th:block>
 									</div>
 								</div>
@@ -76,10 +76,10 @@
 							</div>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-administration :: form}"></th:block>
 						</div>
 					</div>
 				</div>
@@ -87,7 +87,7 @@
 			</div>
 		</form>
 
-		<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: modal (uuid=${commentDto.uuid}, deleteUrl=@{${@environment.getProperty('path.comment.form')}} )}"></th:block>
+		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-delete :: modal (uuid=${commentDto.uuid}, deleteUrl=@{${@environment.getProperty('path.comment.form')}} )}"></th:block>
 	</th:block>
 	<th:block layout:fragment="js">
 
@@ -119,8 +119,8 @@
 			/*]]>*/
 		</script>
 		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedUserDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.user')}}, selectedItemDto=${addressDto.user}, selectedItemUuidName='selectedUserUuid' )}"></th:block>
-		<th:block th:if="${commentDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.comment.history')}(uuid=${commentDto.uuid})})}"></th:block>
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedUserDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.user')}}, selectedItemDto=${addressDto.user}, selectedItemUuidName='selectedUserUuid' )}"></th:block>
+		<th:block th:if="${commentDto.uuid != null}" th:insert="~{backoffice/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.comment.history')}(uuid=${commentDto.uuid})})}"></th:block>
 	</th:block>
 </body>
 

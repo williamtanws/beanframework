@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block th:fragment="input (name, value, required)">
+		<input type="number" class="form-control" th:name="${name}" th:value="${value}" th:required="${required}" min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+	</th:block>
+	<th:block th:fragment="output (name, value, required)">
+		<span class="text-block" th:text="${value}"></span>
+	</th:block>
+</body>
+</html>

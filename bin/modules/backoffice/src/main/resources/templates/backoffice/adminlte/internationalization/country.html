@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layout}">
 <head>
 <title th:utext="#{module.country}"></title>
 </head>
@@ -9,16 +9,16 @@
 		<div class="content-wrapper" th:with="id=#{module.common.id},name=#{module.country.name},active=#{module.country.active}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.country}) }"></th:block>
+			<th:block th:insert="~{backoffice/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.country}) }"></th:block>
 
 			<!-- Main content -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.country}, tableId='countryTable', columnsi18n=${#strings.arraySplit(id+','+name+','+active, ',')}, selectAuthority=true )}"></th:block>
+			<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: datatable (title=#{module.country}, tableId='countryTable', columnsi18n=${#strings.arraySplit(id+','+name+','+active, ',')}, selectAuthority=true )}"></th:block>
 
 		</div>
 
 	</th:block>
 	<th:block layout:fragment="js" th:with="addAuthority=${#authorization.expression('hasAuthority(''country_create'')')}">
-		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='countryTable', columns=${#strings.arraySplit('id,name,active', ',')}, pageUrl=@{${@environment.getProperty('path.api.country')}}, formUrl=@{${@environment.getProperty('path.country.form')}}, addAuthority=${addAuthority}, selectAuthority=true )}"></th:block>
+		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='countryTable', columns=${#strings.arraySplit('id,name,active', ',')}, pageUrl=@{${@environment.getProperty('path.api.country')}}, formUrl=@{${@environment.getProperty('path.country.form')}}, addAuthority=${addAuthority}, selectAuthority=true )}"></th:block>
 	</th:block>
 </body>
 </html>
