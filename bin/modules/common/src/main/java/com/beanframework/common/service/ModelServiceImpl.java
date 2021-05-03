@@ -447,7 +447,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public void deleteEntityByLegacyModel(Object model, Class modelClass) throws BusinessException {
+	public void deleteEntityByLegacyMode(Object model, Class modelClass) throws BusinessException {
 		try {
 
 			if (model != null) {
@@ -491,13 +491,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public void deleteQuietlyByUuid(UUID uuid, Class modelClass) throws BusinessException {
+	public void deleteEntityByLegacyModeByUuid(UUID uuid, Class modelClass) throws BusinessException {
 		try {
 
 			Object model = findOneByUuid(uuid, modelClass);
 
 			if (model != null)
-				deleteEntityByLegacyModel(model, modelClass);
+				deleteEntityByLegacyMode(model, modelClass);
 
 		} catch (SQLException e) {
 			throw new BusinessException(e.getMessage(), e);
