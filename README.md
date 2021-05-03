@@ -15,8 +15,9 @@ Beanframework is not a product and not build for any specific solution, it is a 
 * Spring Boot: 2.4.2.RELEASE
 
 ## Credit
-Adminlte: 3.1.0 (https://adminlte.io/)
-iDocs: 1.0 (http://www.harnishdesign.net/idocs-one-page-documentation-html-template/)
+
+* Adminlte: 3.1.0 (https://adminlte.io/)
+* iDocs: 1.0 (http://www.harnishdesign.net/idocs-one-page-documentation-html-template/)
 
 ## Instruction
 
