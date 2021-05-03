@@ -12,16 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
-import org.springframework.cache.annotation.Cacheable;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.notification.NotificationConstants;
 
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Audited
 @Table(name = NotificationConstants.Table.NOTIFICATION)
