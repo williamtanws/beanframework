@@ -102,7 +102,7 @@ public interface ModelService {
 	 * @return
 	 * @throws BusinessException
 	 */
-	void deleteEntityByLegacyModel(Object entityModel, Class modelClass) throws BusinessException;
+	void deleteEntityByLegacyMode(Object entityModel, Class modelClass) throws BusinessException;
 
 	void deleteByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
@@ -116,7 +116,7 @@ public interface ModelService {
 	 * @return
 	 * @throws BusinessException
 	 */
-	void deleteQuietlyByUuid(UUID uuid, Class modelClass) throws BusinessException;
+	void deleteEntityByLegacyModeByUuid(UUID uuid, Class modelClass) throws BusinessException;
 
 	<T> T getEntity(Object model, Class modelClas) throws Exception;
 
