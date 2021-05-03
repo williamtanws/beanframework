@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{console/adminlte/common/layout/layout}">
 
 <head>
 <title th:utext="#{module.configuration}"></title>
@@ -15,8 +15,8 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('configuration_delete')"></th:block>
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
+						<th:block th:insert="~{console/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('configuration_delete')"></th:block>
+						<th:block th:insert="~{console/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
 					</div>
 					<!-- /.col -->
 					<div class="col-sm-6">
@@ -62,10 +62,10 @@
 							</div>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
+							<th:block th:insert="~{console/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
+							<th:block th:insert="~{console/adminlte/common/fragment/content-form-administration :: form}"></th:block>
 						</div>
 					</div>
 				</div>
@@ -73,7 +73,7 @@
 			</div>
 		</form>
 
-		<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: modal (uuid=${configurationDto.uuid}, deleteUrl=@{${@environment.getProperty('path.configuration.form')}} )}"></th:block>
+		<th:block th:insert="~{console/adminlte/common/fragment/content-form-delete :: modal (uuid=${configurationDto.uuid}, deleteUrl=@{${@environment.getProperty('path.configuration.form')}} )}"></th:block>
 	</th:block>
 	<th:block layout:fragment="js">
 
@@ -120,7 +120,7 @@
 			
 		    /*]]>*/
 		</script>
-		<th:block th:if="${configurationDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.configuration.history')}(uuid=${configurationDto.uuid})})}"></th:block>
+		<th:block th:if="${configurationDto.uuid != null}" th:insert="~{console/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.configuration.history')}(uuid=${configurationDto.uuid})})}"></th:block>
 	</th:block>
 </body>
 

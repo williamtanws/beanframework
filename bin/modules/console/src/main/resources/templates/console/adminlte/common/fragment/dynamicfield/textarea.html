@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block th:fragment="input (name, value, required)">
+		<textarea rows="4" cols="50" class="form-control" th:name="${name}" th:text="${value}" th:required="${required}"></textarea>
+	</th:block>
+	<th:block th:fragment="output (name, value, required)">
+		<span class="text-block" th:text="${value}"></span>
+	</th:block>
+</body>
+</html>

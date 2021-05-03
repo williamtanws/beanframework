@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body>
+	<th:block th:fragment="input (name, value, required)">
+		<input type="radio" class="form-control" th:name="${name}" value="0" th:required="${required}"><span th:text="#{module.common.yes}"></span>&nbsp;&nbsp;
+		<input type="radio" class="form-control" th:name="${name}" value="1" th:required="${required}"><span th:text="#{module.common.no}"></span>
+	</th:block>
+	<th:block th:fragment="output (name, value, required)">
+		<span class="text-block" th:text="${value}"></span>
+	</th:block>
+</body>
+</html>

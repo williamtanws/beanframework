@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
 	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-	layout:decorate="~{core/adminlte/common/layout/layout}">
+	layout:decorate="~{console/adminlte/common/layout/layout}">
 
 <head>
 	<title th:utext="#{module.logging}"></title>
@@ -17,7 +17,7 @@
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.monitor},breadcrumb2=#{module.logging}">
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title-breadcrumbs (title=#{module.logging}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
+			<th:block th:insert="~{console/adminlte/common/fragment/content-header :: title-breadcrumbs (title=#{module.logging}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
 		
 			<!-- Main content -->
 			<section class="content">
