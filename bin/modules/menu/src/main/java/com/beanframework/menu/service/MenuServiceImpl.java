@@ -221,15 +221,15 @@ public class MenuServiceImpl implements MenuService {
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Menu.PATH, path);
-		List<Menu> menu = modelService.findByProperties(properties, Menu.class);
+		Menu menu = modelService.findOneByProperties(properties, Menu.class);
 
-		if (menu == null || menu.isEmpty()) {
+		if (menu == null) {
 			return null;
 		} else {
-			breadcrumbs.add(menu.get(0));
+			breadcrumbs.add(menu);
 
-			if (menu.get(0).getParent() != null) {
-				breadcrumbs.addAll(getParent(menu.get(0).getParent()));
+			if (menu.getParent() != null) {
+				breadcrumbs.addAll(getParent(menu.getParent()));
 			}
 
 			Collections.reverse(breadcrumbs);

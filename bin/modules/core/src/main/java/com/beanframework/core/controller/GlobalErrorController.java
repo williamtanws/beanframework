@@ -5,19 +5,29 @@ import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
+@RequestMapping(value = { "/error", "/*/error" })
 public class GlobalErrorController implements ErrorController {
 
 	@Value("#{'${webroots}'.split(',')}")
 	private List<String> WEBROOTS;
 
-	@RequestMapping("/error")
+	@Autowired
+	private Environment environment;
+
+	@RequestMapping
 	public String handleError(Model model, HttpServletRequest request) {
 		String originalUri = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
 		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
@@ -28,8 +38,9 @@ public class GlobalErrorController implements ErrorController {
 			originalUri = request.getRequestURI();
 		}
 
+		String webroot = null;
 		if (originalUri.split("/").length > 1) {
-			String webroot = originalUri.split("/")[1];
+			webroot = originalUri.split("/")[1];
 
 			if (WEBROOTS.contains(webroot)) {
 
@@ -50,11 +61,43 @@ public class GlobalErrorController implements ErrorController {
 		if (message != null)
 			model.addAttribute("message", message);
 
-		return "error";
+		String webrootTheme = environment.getProperty(webroot + ".theme");
+
+		if (StringUtils.isBlank(webrootTheme)) {
+			return "/error";
+		} else {
+			return webrootTheme + "/error";
+		}
+	}
+
+	@RequestMapping(value = "notfound", method = RequestMethod.GET)
+	public ResponseEntity<Object> testNotfound() {
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
+	@RequestMapping(value = "internalservererror", method = RequestMethod.GET)
+	public ResponseEntity<Object> testError() {
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@RequestMapping(value = "throwable", method = RequestMethod.GET)
+	public String testThrowable() throws Throwable {
+		throw new Throwable("Throwable");
+	}
+
+	@RequestMapping(value = "exception", method = RequestMethod.GET)
+	public String testException() throws Exception {
+		throw new Exception("Exception");
+	}
+
+	@RequestMapping(value = "badgateway", method = RequestMethod.GET)
+	public ResponseEntity<Object> testBadGateway() {
+		return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
 	}
 
 	@Override
+	@Deprecated
 	public String getErrorPath() {
-		return "/error";
+		return null;
 	}
 }

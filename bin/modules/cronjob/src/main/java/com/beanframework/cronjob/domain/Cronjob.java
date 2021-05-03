@@ -17,11 +17,8 @@ import javax.persistence.Lob;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
@@ -30,8 +27,6 @@ import com.beanframework.cronjob.domain.CronjobEnum.JobTrigger;
 import com.beanframework.cronjob.domain.CronjobEnum.Result;
 import com.beanframework.cronjob.domain.CronjobEnum.Status;
 
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited

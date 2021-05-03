@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layout}">
 
 <head>
 <title th:utext="#{module.address}"></title>
@@ -15,8 +15,8 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('address_delete')"></th:block>
-						<th:block th:insert="~{core/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
+						<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-delete :: action}" sec:authorize="hasAuthority('address_delete')"></th:block>
+						<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
 					</div>
 					<!-- /.col -->
 					<div class="col-sm-6">
@@ -57,7 +57,7 @@
 										<label for="owner" th:text="#{module.address.owner}"></label>
 										<th:block th:with="id=#{module.common.id},name=#{module.user.name}">
 											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.owner.select}, tableId='selectedOwnerDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{owner}, selectedItemUuidName='selectedOwnerUuid' )}"></th:block>
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.owner.select}, tableId='selectedOwnerDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{owner}, selectedItemUuidName='selectedOwnerUuid' )}"></th:block>
 										</th:block>
 									</div>
 								</div>
@@ -97,7 +97,7 @@
 										<label for="country" th:text="#{module.address.country}"></label>
 										<th:block th:with="id=#{module.common.id},name=#{module.country.name}">
 											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.country.select}, tableId='selectedCountryDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{country}, selectedItemUuidName='selectedCountryUuid' )}"></th:block>
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.country.select}, tableId='selectedCountryDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{country}, selectedItemUuidName='selectedCountryUuid' )}"></th:block>
 										</th:block>
 									</div>
 								</div>
@@ -230,7 +230,7 @@
 										<label for="region" th:text="#{module.address.region}"></label>
 										<th:block th:with="id=#{module.common.id},name=#{module.region.name}">
 											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.region.select}, tableId='selectedRegionDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{region}, selectedItemUuidName='selectedRegionUuid' )}"></th:block>
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.region.select}, tableId='selectedRegionDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{region}, selectedItemUuidName='selectedRegionUuid' )}"></th:block>
 										</th:block>
 									</div>
 								</div>
@@ -244,7 +244,7 @@
 										<label for="shippingAddress" th:text="#{module.address.shippingAddress}"></label>
 										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
 											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.shippingAddress.select}, tableId='selectedShippingAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{shippingAddress}, selectedItemUuidName='selectedShippingAddressUuid' )}"></th:block>
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.shippingAddress.select}, tableId='selectedShippingAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{shippingAddress}, selectedItemUuidName='selectedShippingAddressUuid' )}"></th:block>
 										</th:block>
 									</div>
 								</div>
@@ -253,7 +253,7 @@
 										<label for="billingAddress" th:text="#{module.address.billingAddress}"></label>
 										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
 											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.billingAddress.select}, tableId='selectedBillingAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{billingAddress}, selectedItemUuidName='selectedBillingAddressUuid' )}"></th:block>
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.billingAddress.select}, tableId='selectedBillingAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{billingAddress}, selectedItemUuidName='selectedBillingAddressUuid' )}"></th:block>
 										</th:block>
 									</div>
 								</div>
@@ -262,7 +262,7 @@
 										<label for="contactAddress" th:text="#{module.address.contactAddress}"></label>
 										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
 											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.contactAddress.select}, tableId='selectedContactAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{contactAddress}, selectedItemUuidName='selectedContactAddressUuid' )}"></th:block>
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.contactAddress.select}, tableId='selectedContactAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{contactAddress}, selectedItemUuidName='selectedContactAddressUuid' )}"></th:block>
 										</th:block>
 									</div>
 								</div>
@@ -271,7 +271,7 @@
 										<label for="defaultPaymentPerson" th:text="#{module.address.defaultPaymentAddress}"></label>
 										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
 											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.defaultPaymentAddress.select}, tableId='selectedDefaultPaymentAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{defaultPaymentAddress}, selectedItemUuidName='selectedDefaultPaymentAddressUuid' )}"></th:block>
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.defaultPaymentAddress.select}, tableId='selectedDefaultPaymentAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{defaultPaymentAddress}, selectedItemUuidName='selectedDefaultPaymentAddressUuid' )}"></th:block>
 										</th:block>
 									</div>
 								</div>
@@ -280,17 +280,17 @@
 										<label for="defaultShipmentPerson" th:text="#{module.address.defaultShipmentAddress}"></label>
 										<th:block th:with="id=#{module.common.id},streetName=#{module.address.streetName}">
 											<th:block
-												th:insert="~{core/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.defaultShipmentAddress.select}, tableId='selectedDefaultShipmentAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{defaultShipmentAddress}, selectedItemUuidName='selectedDefaultShipmentAddressUuid' )}"></th:block>
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.address.defaultShipmentAddress.select}, tableId='selectedDefaultShipmentAddressDataTable', columnsi18n=${#strings.arraySplit(id+','+streetName, ',')}, columns=${#strings.arraySplit('id,streetName', ',')}, selectedItemDto=*{defaultShipmentAddress}, selectedItemUuidName='selectedDefaultShipmentAddressUuid' )}"></th:block>
 										</th:block>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-history :: datatable}"></th:block>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-administration" role="tabpanel" aria-labelledby="custom-tabs-administration-tab" th:if="*{uuid != null}">
-							<th:block th:insert="~{core/adminlte/common/fragment/content-form-administration :: form}"></th:block>
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-administration :: form}"></th:block>
 						</div>
 					</div>
 				</div>
@@ -298,7 +298,7 @@
 			</div>
 		</form>
 
-		<th:block th:insert="~{core/adminlte/common/fragment/content-form-delete :: modal (uuid=${addressDto.uuid}, deleteUrl=@{${@environment.getProperty('path.address.form')}} )}"></th:block>
+		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-delete :: modal (uuid=${addressDto.uuid}, deleteUrl=@{${@environment.getProperty('path.address.form')}} )}"></th:block>
 	</th:block>
 	<th:block layout:fragment="js">
 
@@ -346,22 +346,22 @@
 		    /*]]>*/
 		</script>
 		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedOwnerDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.user')}}, selectedItemDto=${addressDto.owner}, selectedItemUuidName='selectedOwnerUuid' )}"></th:block>
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedOwnerDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.user')}}, selectedItemDto=${addressDto.owner}, selectedItemUuidName='selectedOwnerUuid' )}"></th:block>
 		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedCountryDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.country')}}, selectedItemDto=${addressDto.country}, selectedItemUuidName='selectedCountryUuid' )}"></th:block>
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedCountryDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.country')}}, selectedItemDto=${addressDto.country}, selectedItemUuidName='selectedCountryUuid' )}"></th:block>
 		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedRegionDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.region')}}, selectedItemDto=${addressDto.region}, selectedItemUuidName='selectedRegionUuid' )}"></th:block>
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedRegionDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.region')}}, selectedItemDto=${addressDto.region}, selectedItemUuidName='selectedRegionUuid' )}"></th:block>
 		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedShippingAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.shippingAddress}, selectedItemUuidName='selectedShippingAddressUuid' )}"></th:block>
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedShippingAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.shippingAddress}, selectedItemUuidName='selectedShippingAddressUuid' )}"></th:block>
 		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedBillingAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.billingAddress}, selectedItemUuidName='selectedBillingAddressUuid' )}"></th:block>
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedBillingAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.billingAddress}, selectedItemUuidName='selectedBillingAddressUuid' )}"></th:block>
 		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedContactAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.contactAddress}, selectedItemUuidName='selectedContactAddressUuid' )}"></th:block>
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedContactAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.contactAddress}, selectedItemUuidName='selectedContactAddressUuid' )}"></th:block>
 		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedDefaultPaymentAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.defaultPaymentAddress}, selectedItemUuidName='selectedDefaultPaymentAddressUuid' )}"></th:block>
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedDefaultPaymentAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.defaultPaymentAddress}, selectedItemUuidName='selectedDefaultPaymentAddressUuid' )}"></th:block>
 		<th:block
-			th:insert="~{core/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedDefaultShipmentAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.defaultShipmentAddress}, selectedItemUuidName='selectedDefaultShipmentAddressUuid' )}"></th:block>
-		<th:block th:if="${addressDto.uuid != null}" th:insert="~{core/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.address.history')}(uuid=${addressDto.uuid})})}"></th:block>
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedDefaultShipmentAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${addressDto.defaultShipmentAddress}, selectedItemUuidName='selectedDefaultShipmentAddressUuid' )}"></th:block>
+		<th:block th:if="${addressDto.uuid != null}" th:insert="~{backoffice/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.address.history')}(uuid=${addressDto.uuid})})}"></th:block>
 	</th:block>
 </body>
 

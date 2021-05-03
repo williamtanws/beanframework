@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{console/adminlte/common/layout/layout}">
 <head>
 <title th:utext="#{module.configuration}"></title>
 </head>
@@ -9,16 +9,16 @@
 		<div class="content-wrapper" th:with="id=#{module.common.id},value=#{module.configuration.value}">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title (title=#{module.configuration} )}"></th:block>
+			<th:block th:insert="~{console/adminlte/common/fragment/content-header :: title (title=#{module.configuration} )}"></th:block>
 
 			<!-- Main content -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: datatable (title=#{module.configuration}, tableId='configurationTable', columnsi18n=${#strings.arraySplit(id+','+value, ',')}, selectAuthority=true )}"></th:block>
+			<th:block th:insert="~{console/adminlte/common/fragment/content-datatable :: datatable (title=#{module.configuration}, tableId='configurationTable', columnsi18n=${#strings.arraySplit(id+','+value, ',')}, selectAuthority=true )}"></th:block>
 
 		</div>
 
 	</th:block>
 	<th:block layout:fragment="js">
-		<th:block th:insert="~{core/adminlte/common/fragment/content-datatable :: js (tableId='configurationTable', columns=${#strings.arraySplit('id,value', ',')}, pageUrl=@{${@environment.getProperty('path.api.configuration')}}, formUrl=@{${@environment.getProperty('path.configuration.form')}}, addAuthority=true, selectAuthority=true )}"></th:block>
+		<th:block th:insert="~{console/adminlte/common/fragment/content-datatable :: js (tableId='configurationTable', columns=${#strings.arraySplit('id,value', ',')}, pageUrl=@{${@environment.getProperty('path.api.configuration')}}, formUrl=@{${@environment.getProperty('path.configuration.form')}}, addAuthority=true, selectAuthority=true )}"></th:block>
 	</th:block>
 </body>
 </html>

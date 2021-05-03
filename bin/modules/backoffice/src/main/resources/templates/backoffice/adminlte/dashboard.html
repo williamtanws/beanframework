@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{core/adminlte/common/layout/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layout}">
 <head>
 <title th:utext="#{module.dashboard}"></title>
   <!-- Ionicons -->
@@ -11,7 +11,7 @@
 		<div class="content-wrapper">
 
 			<!-- Header -->
-			<th:block th:insert="~{core/adminlte/common/fragment/content-header :: title (title=#{module.dashboard})}"></th:block>
+			<th:block th:insert="~{backoffice/adminlte/common/fragment/content-header :: title (title=#{module.dashboard})}"></th:block>
 
 			<section class="content">
 				<div class="container-fluid">
