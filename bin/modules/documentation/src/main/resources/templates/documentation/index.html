@@ -177,7 +177,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 							<li>
 								By default, this project supported unicode character such as Chinese language, therefore the database must use CHARACTER SET utf8 COLLATE utf8_unicode_ci
 								<pre>
-									<code class="html">CREATE SCHEMA `beanframework` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci</code></pre>
+									<code class="html">CREATE SCHEMA `beanframework` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci</code>
+								</pre>
 							</li>
 							<li>
 								Configure project by duplicating all .template files in current location, without .template suffix:
@@ -207,8 +208,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 										- Contains project modules/dependencies configuration.
 									</li>
 									<li>
-										<code>beanframework/config/src/main/resources/*</code>
+										<code>beanframework/config/src/main/resources/*.template</code>
 										- Contains application properties, xml, and sql files for different environments.
+									</li>
+									<li>
+										<code>beanframework/config/src/main/resources/import/*.sql</code>
+										- Contains SQL query to be automatically executed every time when datasource connection is established or server startup.
 									</li>
 								</ul>
 							</li>
@@ -226,18 +231,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 								<code>/beanframework/bin/server.sh</code>
 							</li>
 							<li>
-								Access application endpoints:	
+								Access application endpoints:
 								<ul>
-									<li>Console: <a href="http://localhost:8080/console" target="_blank">http://localhost:8080/console</a></li>
-									<li>Backoffice: <a href="http://localhost:8080/backoffice" target="_blank">http://localhost:8080/backoffice</a></li>
-									<li>Documentation: <a href="http://localhost:8080/documentation" target="_blank">http://localhost:8080/documentation</a></li>
+									<li>
+										Console:
+										<a href="http://localhost:8080/console" target="_blank">http://localhost:8080/console</a>
+									</li>
+									<li>
+										Backoffice:
+										<a href="http://localhost:8080/backoffice" target="_blank">http://localhost:8080/backoffice</a>
+									</li>
+									<li>
+										Documentation:
+										<a href="http://localhost:8080/documentation" target="_blank">http://localhost:8080/documentation</a>
+									</li>
 								</ul>
 							</li>
 							<li>
 								Import sample data:
 								<ul>
-									<li>Access Console: <a href="http://localhost:8080/console" target="_blank">http://localhost:8080/console</a></li>
-									<li>Login with default admin account: username:<code>admin</code>, password:<code>admin</code></li>
+									<li>
+										Access Console:
+										<a href="http://localhost:8080/console" target="_blank">http://localhost:8080/console</a>
+									</li>
+									<li>
+										Login with default admin account: username:
+										<code>admin</code>
+										, password:
+										<code>admin</code>
+									</li>
 									<li>Goto Platform->Update menu, check all and update.</li>
 								</ul>
 							</li>
@@ -272,33 +294,61 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 											</li>
 											<li>
 												<code>platform</code>
-												- Platform that startup this application with default properties. With IDE, it can run on server at <code>platform/src/main/java/com/beanframework/platform/PlatformApplication.java</code>
+												- Platform that startup this application with default properties. With IDE, it can run on server at
+												<code>platform/src/main/java/com/beanframework/platform/PlatformApplication.java</code>
 											</li>
 										</ul>
 									</li>
 									<li>
 										<code>config</code>
-										- Mainly use for application properties for different environments. You can create more files prefix with different environments such as <code>-dev.xml</code>, and assign <code>dev</code> to <code>spring.profiles.active=</code> in <code>application.properties</code>
+										- Mainly use for application properties and configurations for different environments. You can create more files prefix with different environments such as
+										<code>application-[environment].properties</code>
+										, and assign
+										<code>spring.profiles.active=[environment]</code>
+										in
+										<code>application.properties</code>
 										<ul>
 											<li>
 												<code>application.properties</code>
 												- Highest priority properties file in Spring Boot.
 											</li>
 											<li>
-												<code>application-dev.properties</code>
-												- Override default properties for dev environments.
-											</li>
-											<li>
-												<code>ehcache-dev.xml</code>
-												- Cache configuration for dev environments.
-											</li>
-											<li>
-												<code>logback-dev.xml</code>
-												- Logback configuration for dev environments.
-											</li>
-											<li>
-												<code>import/quartz-dev.xml</code>
-												- Import quartz query for dev environments.
+												Example of dev environment properties and configurations:
+												<ul>
+													<li>
+														<code>application-dev.properties</code>
+														- Override default properties for dev environments.
+													</li>
+													<li>
+														<code>ehcache-dev.xml</code>
+														- Cache configuration for dev environments.
+													</li>
+													<li>
+														<code>logback-dev.xml</code>
+														- Logback configuration for dev environments.
+													</li>
+													<li>
+														<code>import/dev/sampledata/*.csv</code>
+														- Import sample data for dev environments. This can be configured in application-dev.properties:
+														<ul>
+															<li>
+																<code>module.imex.import.location=classpath*:import/dev/sampledata/*.csv</code>
+															</li>
+														</ul>
+													</li>
+													<li>
+														<code>import/dev/sql/*.sql</code>
+														- Import sql query for dev environments. This can be configured in application-dev.properties:
+														<ul>
+															<li>
+																<code>platform.import.startup.enabled=true</code>
+															</li>
+															<li>
+																<code>platform.import.startup=classpath*:import/dev/sql/*.sql</code>
+															</li>
+														</ul>
+													</li>
+												</ul>
 											</li>
 										</ul>
 									</li>
@@ -327,7 +377,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 								</ul>
 							</li>
 						</ol>
-					</section>	
+					</section>
 				</div>
 			</div>
 
