@@ -1,0 +1,99 @@
+# ===============================
+# = APPLICATION
+# ===============================
+project.dir=../..
+data.dir=${project.dir}/data
+temp.dir=${project.dir}/temp
+log.dir=${project.dir}/log
+spring.pid.file=${temp.dir}/pid.txt
+server.tomcat.basedir=${temp.dir}/tomcat
+spring.devtools.add-properties=true
+spring.devtools.restart.enabled=true
+database.backup.dir=${project.dir}/data/db
+database.backup.executecommand=C:\\xampp\\mysql\\bin\\mysqldump -u ${datasource.platform.username} -p ${datasource.platform.password}  --databases ${datasource.platform.database} -r 
+
+# ===============================
+# = IMEX
+# ===============================
+module.imex.import.listener.types=Configuration,Language,Currency,Country,Region,Enumeration,DynamicField,DynamicFieldSlot,DynamicFieldTemplate,UserRight,UserPermission,UserGroup,UserAuthority,Menu,Cronjob,Company,Address,Employee,Customer,Vendor,Site,Media,Imex
+module.imex.import.location=classpath*:import/dev/sampledata/*.csv
+
+# ===============================
+# = CACHE
+# ===============================
+#spring.cache.type=NONE
+
+# ===============================
+# = THYMELEAF
+# ===============================
+spring.thymeleaf.cache=false
+spring.freemarker.cache=false
+spring.groovy.template.cache=false
+
+# ===============================
+# = PLATFORM
+# ===============================
+platform.hibernate.show_sql=true
+platform.import.startup.enabled=true
+platform.import.startup=classpath*:import/dev/sql/*.sql
+
+# ===============================
+# = DATA SOURCE
+# ===============================
+datasource.platform.host=localhost:3306
+datasource.platform.database=beanframework
+datasource.platform.url=jdbc:mariadb://${datasource.platform.host}/${datasource.platform.database}?useUnicode=yes&characterEncoding=UTF-8
+datasource.platform.username=
+datasource.platform.password=
+datasource.platform.driverClassName=org.mariadb.jdbc.Driver
+platform.hibernate.dialect=org.hibernate.dialect.MariaDB53Dialect
+
+# ===============================
+# = EMAIL
+# ===============================
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=
+spring.mail.password=
+spring.mail.from.name=
+spring.mail.from.email=
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+# ===============================
+# = QUARTZ
+# ===============================
+spring.quartz.job-store-type=jdbc
+spring.quartz.jdbc.initialize-schema=never
+
+#============================================================================
+# Configure Quartz Scheduler  
+#============================================================================
+spring.quartz.properties.org.quartz.scheduler.skipUpdateCheck=true
+spring.quartz.properties.org.quartz.scheduler.instanceName=DatabaseScheduler
+spring.quartz.properties.org.quartz.scheduler.instanceId=NON_CLUSTERED
+spring.quartz.properties.org.quartz.scheduler.jobFactory.class=org.quartz.simpl.SimpleJobFactory
+
+#============================================================================
+# Configure Quartz JobStore  
+#============================================================================
+#spring.quartz.properties.org.quartz.jobStore.class=spring.quartz.properties.org.quartz.simpl.RAMJobStore
+spring.quartz.properties.org.quartz.jobStore.misfireThreshold=60000
+spring.quartz.properties.org.quartz.jobStore.class=org.quartz.impl.jdbcjobstore.JobStoreTX
+spring.quartz.properties.org.quartz.jobStore.driverDelegateClass=org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+spring.quartz.properties.org.quartz.jobStore.dataSource=quartzDataSource
+spring.quartz.properties.org.quartz.jobStore.tablePrefix=QRTZ_
+
+#============================================================================
+# Configure Quartz ThreadPool  
+#============================================================================
+spring.quartz.properties.org.quartz.threadPool.class=org.quartz.simpl.SimpleThreadPool
+spring.quartz.properties.org.quartz.threadPool.threadCount=5
+spring.quartz.properties.org.quartz.threadPool.threadPriority=4
+
+#============================================================================
+# Configure Quartz Plugins 
+#============================================================================
+#spring.quartz.properties.org.quartz.plugin.triggHistory.class = org.quartz.plugins.history.LoggingJobHistoryPlugin
+spring.quartz.properties.org.quartz.plugin.shutdownHook.class=org.quartz.plugins.management.ShutdownHookPlugin
+spring.quartz.properties.org.quartz.plugin.shutdownHook.cleanShutdown=false

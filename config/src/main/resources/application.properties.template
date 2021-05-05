@@ -1,0 +1,24 @@
+# ===============================
+# = APPLICATION
+# ===============================
+spring.profiles.active=dev
+spring.profiles.include=platform,console,backoffice,cockpit
+webroots=console,backoffice
+favicon=/static/common/favicon.png
+spring.main.allow-bean-definition-overriding=true
+
+# ===============================
+# = QUARTZ
+# ===============================
+quartz.enabled=true
+quartz.task.enabled=true
+
+# ===============================
+# = CACHE
+# ===============================
+platform.hibernate.javax.cache.uri=classpath:ehcache-${spring.profiles.active}.xml
+
+# ===============================
+# = LOGGING
+# ===============================
+logging.config=classpath:logback-${spring.profiles.active}.xml
