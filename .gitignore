@@ -71,5 +71,6 @@ temp
 !/bin/custom/README.md
 /config/pom.xml
 /config/src/main/resources/*
+!/config/src/main/resources/import/dev.template
 !/config/src/main/resources/*.template
 !.mvn/wrapper/maven-wrapper.jar
