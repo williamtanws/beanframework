@@ -10,6 +10,13 @@ server.tomcat.basedir=${temp.dir}/tomcat
 spring.devtools.add-properties=true
 spring.devtools.restart.enabled=true
 database.backup.dir=${project.dir}/data/db
+database.backup.executecommand=C:\\xampp\\mysql\\bin\\mysqldump -u ${datasource.platform.username} -p ${datasource.platform.password}  --databases ${datasource.platform.database} -r 
+
+# ===============================
+# = IMEX
+# ===============================
+module.imex.import.listener.types=Configuration,Language,Currency,Country,Region,Enumeration,DynamicField,DynamicFieldSlot,DynamicFieldTemplate,UserRight,UserPermission,UserGroup,UserAuthority,Menu,Cronjob,Company,Address,Employee,Customer,Vendor,Site,Media,Imex
+module.imex.import.location=classpath*:import/dev/sampledata/*.csv
 
 # ===============================
 # = CACHE
@@ -28,13 +35,13 @@ spring.groovy.template.cache=false
 # ===============================
 platform.hibernate.show_sql=true
 platform.import.startup.enabled=true
-platform.import.startup=classpath*:import/*-dev.sql
+platform.import.startup=classpath*:import/dev/sql/*.sql
 
 # ===============================
 # = DATA SOURCE
 # ===============================
-datasource.platform.host=
-datasource.platform.database=
+datasource.platform.host=localhost:3306
+datasource.platform.database=beanframework
 datasource.platform.url=jdbc:mariadb://${datasource.platform.host}/${datasource.platform.database}?useUnicode=yes&characterEncoding=UTF-8
 datasource.platform.username=
 datasource.platform.password=
@@ -44,12 +51,12 @@ platform.hibernate.dialect=org.hibernate.dialect.MariaDB53Dialect
 # ===============================
 # = EMAIL
 # ===============================
-spring.mail.host=
-spring.mail.port=
-spring.mail.username=
-spring.mail.password=
-spring.mail.from.name=
-spring.mail.from.email=
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=williamtanarvato@gmail.com
+spring.mail.password=0126666401
+spring.mail.from.name=Beanframework
+spring.mail.from.email=williamtanarvato@gmail.com 
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 
