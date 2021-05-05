@@ -211,10 +211,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 										<code>beanframework/config/src/main/resources/*.template</code>
 										- Contains application properties, xml, and sql files for different environments.
 									</li>
-									<li>
-										<code>beanframework/config/src/main/resources/import/*.sql</code>
-										- Contains SQL query to be automatically executed every time when datasource connection is established or server startup.
-									</li>
 								</ul>
 							</li>
 							<li>
@@ -329,7 +325,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 													</li>
 													<li>
 														<code>import/dev/sampledata/*.csv</code>
-														- Import sample data for dev environments. This can be configured in application-dev.properties:
+														- Contains sample data.
+														- This can be configured in application-dev.properties:
 														<ul>
 															<li>
 																<code>module.imex.import.location=classpath*:import/dev/sampledata/*.csv</code>
@@ -338,7 +335,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 													</li>
 													<li>
 														<code>import/dev/sql/*.sql</code>
-														- Import sql query for dev environments. This can be configured in application-dev.properties:
+														- Contains SQL query to be automatically executed every time when datasource connection is established or server startup.<br>
+														- This can be configured in application-dev.properties:
 														<ul>
 															<li>
 																<code>platform.import.startup.enabled=true</code>
