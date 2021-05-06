@@ -176,10 +176,10 @@
 							"targets": 3,
 							"render": function (data, type, row) {
 								if (row.entity.lastModifiedBy) {
-									return row.entity.lastModifiedBy.name + ' [' + row.entity.lastModifiedBy.id + ']';
+									return '[' + row.entity.lastModifiedBy.id + '] ' + row.entity.lastModifiedBy.name;
 								}
 								else if (row.entity.createdBy) {
-									return row.entity.createdBy.name + ' [' + row.entity.createdBy.id + ']';
+									return '[' + row.entity.createdBy.id + '] ' + row.entity.createdBy.name;
 								}
 								else {
 									return '';
