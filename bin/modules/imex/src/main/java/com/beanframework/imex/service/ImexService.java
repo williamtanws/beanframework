@@ -1,6 +1,7 @@
 package com.beanframework.imex.service;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -18,4 +19,6 @@ public interface ImexService {
 	void importByFile(File file) throws Exception;
 
 	void importExportMedia(Imex imex) throws Exception;
+
+	String[] importByKeysAndReader(Set<String> keys, List<String> locations);
 }

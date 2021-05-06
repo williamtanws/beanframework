@@ -63,7 +63,7 @@
 						<form id="login-form" th:action="@{${@environment.getProperty('path.backoffice.login')}}" method="post">
 							<sec:csrfInput />
 							<div class="form-group input-group mb-3">
-								<input type="text" class="form-control" th:placeholder="#{module.employee.id}" name="username" th:value="${@Config.is('demo')} ? ${@environment.getProperty('module.employee.default.id')}:''">
+								<input type="text" class="form-control" th:placeholder="#{module.employee.id}" name="username" th:value="${@Config.is('demo')} ? ${@environment.getProperty('module.demo.employee.default.id')}:''">
 								<div class="input-group-append">
 									<div class="input-group-text">
 										<span class="fas fa-user"></span>
@@ -71,7 +71,7 @@
 								</div>
 							</div>
 							<div class="form-group input-group mb-3">
-								<input type="password" class="form-control" th:placeholder="#{module.employee.password}" name="password" th:value="${@Config.is('demo')} ? ${@environment.getProperty('module.employee.default.password')}:''">
+								<input type="password" class="form-control" th:placeholder="#{module.employee.password}" name="password" th:value="${@Config.is('demo')} ? ${@environment.getProperty('module.demo.employee.default.password')}:''">
 								<div class="input-group-append">
 									<div class="input-group-text">
 										<span class="fas fa-lock"></span>

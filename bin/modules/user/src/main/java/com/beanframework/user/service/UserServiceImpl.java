@@ -80,12 +80,6 @@ public class UserServiceImpl implements UserService {
 	@Value(UserConstants.USER_PROFILE_PICTURE_THUMBNAIL_HEIGHT)
 	public int USER_PROFILE_PICTURE_THUMBNAIL_HEIGHT;
 
-	@Value(UserConstants.Admin.DEFAULT_ID)
-	private String defaultAdminId;
-
-	@Value(UserConstants.Admin.DEFAULT_PASSWORD)
-	private String defaultAdminPassword;
-
 	@Value(UserConstants.Admin.DEFAULT_GROUP)
 	private String defaultAdminGroup;
 
@@ -113,15 +107,7 @@ public class UserServiceImpl implements UserService {
 
 		// If account not exists in database
 		if (user == null) {
-			if (id.equals(defaultAdminId) && password.equals(defaultAdminPassword)) {
-				user = modelService.create(User.class);
-				user.setId(defaultAdminId);
-				user.setName("Admin");
-
-				return new UsernamePasswordAuthenticationToken(user, defaultAdminPassword, getAdminAuthority());
-			} else {
-				throw new BadCredentialsException("Bad Credentials");
-			}
+			throw new BadCredentialsException("Bad Credentials");
 		}
 
 		if (passwordEncoder.matches(password, user.getPassword()) == Boolean.FALSE) {

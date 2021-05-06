@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -73,8 +74,8 @@ public class ImexServiceImpl implements ImexService {
 	@Value(ImexConstants.IMEX_MEDIA_LOCATION)
 	private String IMEX_MEDIA_LOCATION;
 
-	@Value(ImexConstants.IMEX_IMPORT_LOCATION)
-	private String IMEX_IMPORT_LOCATION;
+	@Value(ImexConstants.IMEX_IMPORT_LOCATIONS)
+	private List<String> IMEX_IMPORT_LOCATIONS;
 
 	@Value(MediaConstants.MEDIA_LOCATION)
 	private String MEDIA_LOCATION;
@@ -85,14 +86,16 @@ public class ImexServiceImpl implements ImexService {
 	@Transactional
 	@Override
 	public String[] importByListenerKeys(Set<String> keys) {
-		return importByKeysAndReader(keys, IMEX_IMPORT_LOCATION);
+		return importByKeysAndReader(keys, IMEX_IMPORT_LOCATIONS);
 	}
 
 	@Transactional
 	@Override
 	public void importByFile(File file) throws Exception {
 
-		importByKeysAndReader(null, file.getAbsolutePath());
+		List<String> locations = new ArrayList<String>();
+		locations.add(file.getAbsolutePath());
+		importByKeysAndReader(null, locations);
 	}
 
 	@Transactional
@@ -174,11 +177,8 @@ public class ImexServiceImpl implements ImexService {
 		return messages;
 	}
 
-	private String[] importByKeysAndReader(Set<String> keys, String location) {
-
-		// Messages
-		StringBuilder successMessages = new StringBuilder();
-		StringBuilder errorMessages = new StringBuilder();
+	@Override
+	public String[] importByKeysAndReader(Set<String> keys, List<String> locations) {
 
 		// Sort Import Listener
 		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
@@ -192,40 +192,46 @@ public class ImexServiceImpl implements ImexService {
 			}
 		});
 
-		Resource[] resources = null;
-		try {
-			PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-			resources = loader.getResources(location);
-		} catch (IOException e) {
-			e.printStackTrace();
-			LOGGER.error(e.getMessage(), e);
-		}
+		// Messages
+		StringBuilder successMessages = new StringBuilder();
+		StringBuilder errorMessages = new StringBuilder();
 
-		for (Entry<String, ImportListener> entry : sortedImportListeners) {
-			if ((keys == null) || (keys != null && keys.contains(entry.getKey()))) {
+		for (String loc : locations) {
+			Resource[] resources = null;
+			try {
+				PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+				resources = loader.getResources(loc);
+			} catch (IOException e) {
+				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
+			}
 
-				for (Resource resource : resources) {
+			for (Entry<String, ImportListener> entry : sortedImportListeners) {
+				if ((keys == null) || (keys != null && keys.contains(entry.getKey()))) {
 
-					BufferedReader reader = null;
-					String importName = null;
-					try {
-						InputStream in = resource.getInputStream();
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						IOUtils.copy(in, baos);
-						reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
-						importName = resource.getFilename();
-					} catch (Exception e) {
-						e.printStackTrace();
-						LOGGER.error(e.getMessage(), e);
+					for (Resource resource : resources) {
+
+						BufferedReader reader = null;
+						String importName = null;
 						try {
-							errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { resource.getFile().getPath(), e.getMessage() }) + "<br><br>");
-						} catch (IOException e1) {
-							e1.printStackTrace();
+							InputStream in = resource.getInputStream();
+							ByteArrayOutputStream baos = new ByteArrayOutputStream();
+							IOUtils.copy(in, baos);
+							reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
+							importName = resource.getFilename();
+						} catch (Exception e) {
+							e.printStackTrace();
 							LOGGER.error(e.getMessage(), e);
+							try {
+								errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { resource.getFile().getPath(), e.getMessage() }) + "<br><br>");
+							} catch (IOException e1) {
+								e1.printStackTrace();
+								LOGGER.error(e.getMessage(), e);
+							}
 						}
-					}
 
-					importCsv(importName, reader, entry.getValue(), successMessages, errorMessages);
+						importCsv(importName, reader, entry.getValue(), successMessages, errorMessages);
+					}
 				}
 			}
 		}
@@ -315,7 +321,7 @@ public class ImexServiceImpl implements ImexService {
 								modelService.deleteEntity(genericEntity, classEntity);
 								imported = true;
 							}
-						}						
+						}
 					}
 					listener.afterImport(csv);
 
@@ -339,7 +345,7 @@ public class ImexServiceImpl implements ImexService {
 		String csv = null;
 		if (model.getType() == ImexType.IMPORT) {
 			String errorMessage = importByQuery(model.getId(), model.getQuery())[1];
-			if(StringUtils.isNotBlank(errorMessage)) {
+			if (StringUtils.isNotBlank(errorMessage)) {
 				throw new Exception(errorMessage);
 			}
 			csv = model.getQuery();

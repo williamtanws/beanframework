@@ -78,51 +78,93 @@
 						{
 							"targets": 1,
 							"render": function (data, type, row) {
-								return row.revisionType;
+								return row.revisionTypeLocale;
 							}
 						},
 						{
 							"targets": 2,
 							"render": function (data, type, row) {
 								var message = "";
-								$.each(row.propertiesChanged, function (index, property) {
-
-									var value = row.entity[property];
-									
-									if (value instanceof Array) {
-										var newValue = "";
-										for (i = 0; i < value.length; i++) {
-											if (i > 0) {
-												newValue += ', ';
-											}
-											if (value[i].id == null) {
-												newValue += value[i].uuid;
-											}
-											else {
-												newValue += value[i].id;
-											}
-										}
-										value = newValue;
-									}
-									else if (Object.prototype.toString.call(value) === '[object Object]') {
-										if (value.id != null) {
-											value = value.id;
+								
+								if(row.revisionType === 'ADD'){
+									for (var key in row.entity) {
+										
+										if(key != 'lastModifiedBy' && key != 'lastModifiedDate'){
+											var value = row.entity[key];
 											
-										}
-										else if(value.uuid != null){
-											value = value.uuid;
-										}
-										else{
-											value = JSON.stringify(value);
+											if (value instanceof Array) {
+												var newValue = "";
+												for (i = 0; i < value.length; i++) {
+													if (i > 0) {
+														newValue += ', ';
+													}
+													if (value[i].id == null) {
+														newValue += value[i].uuid;
+													}
+													else {
+														newValue += value[i].id;
+													}
+												}
+												value = newValue;
+											}
+											else if (Object.prototype.toString.call(value) === '[object Object]') {
+												if (value.id != null) {
+													value = value.id;
+													
+												}
+												else if(value.uuid != null){
+													value = value.uuid;
+												}
+												else{
+													value = JSON.stringify(value);
+												}
+											}
+											
+											if(value != null && value != ""){
+												message = message + " [" + key + "] <span class='fa fa-arrow-right'></span> " + value +"<br>";
+											}
 										}
 									}
-
-									if (index != 0) {
-										message = message + "<br>";
-									}
-
-									message = message + " [" + property + "] <span class='fa fa-arrow-right'></span> " + value;
-								});
+								}
+								else if(row.revisionType === 'MOD'){
+									$.each(row.propertiesChanged, function (index, property) {
+										
+										if(property != 'lastModifiedBy'){
+											var value = row.entity[property];
+											
+											if (value instanceof Array) {
+												var newValue = "";
+												for (i = 0; i < value.length; i++) {
+													if (i > 0) {
+														newValue += ', ';
+													}
+													if (value[i].id == null) {
+														newValue += value[i].uuid;
+													}
+													else {
+														newValue += value[i].id;
+													}
+												}
+												value = newValue;
+											}
+											else if (Object.prototype.toString.call(value) === '[object Object]') {
+												if (value.id != null) {
+													value = value.id;
+													
+												}
+												else if(value.uuid != null){
+													value = value.uuid;
+												}
+												else{
+													value = JSON.stringify(value);
+												}
+											}
+	
+											message = message + " [" + property + "] <span class='fa fa-arrow-right'></span> " + value +"<br>";
+										}
+									});
+								}
+								
 								if (message === '') {
 									message = message + " [id] <span class='fa fa-arrow-right'></span> " + row.entity['id'] + "<br>";
 									message = message + " [value] <span class='fa fa-arrow-right'></span> " + row.entity['value'];

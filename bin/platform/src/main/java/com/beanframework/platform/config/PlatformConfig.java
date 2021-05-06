@@ -3,6 +3,7 @@ package com.beanframework.platform.config;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Properties;
 
 import javax.naming.NamingException;
@@ -49,11 +50,11 @@ public class PlatformConfig {
 	@Value("${platform.datasource.maxPoolSize:10}")
 	private int PLATFORM_DATASOURCE_MAX_POOL_SIZE;
 
-	@Value("${platform.import.startup}")
-	private String PLATFORM_IMPORT_STARTUP;
+	@Value("${platform.import.sql.enabled:false}")
+	private boolean PLATFORM_IMPORT_SQL_ENABLED;
 
-	@Value("${platform.import.startup.enabled:false}")
-	private boolean PLATFORM_IMPORT_STARTUP_ENABLED;
+	@Value("#{'${platform.import.sql.locations}'.split(',')}")
+	private List<String> PLATFORM_IMPORT_SQL_LOCATIONS;
 
 	@Value("${data.dir}")
 	private String DIR_DATA;
@@ -120,7 +121,7 @@ public class PlatformConfig {
 
 	@Value("${platform.hibernate.cache.auto_evict_collection_cache:true}")
 	private String PLATFORM_HIBERNATE_CACHE_AUTO_EVICT_COLLECTION_CACHE;
-	
+
 	@Value("${platform.javax.persistence.sharedCache.mode:ALL}")
 	private String PLATFORM_JAVAX_PERSISTENCE_SHAREDCACHE_MODE;
 
@@ -168,28 +169,30 @@ public class PlatformConfig {
 		dataSourceProperties.setPassword(DATASOURCE_PASSWORD);
 		dataSourceProperties.setDriverClassName(DATASOURCE_DRIVER_CLASS_NAME);
 
-		HikariDataSource dataSource = (HikariDataSource) DataSourceBuilder.create(dataSourceProperties.getClassLoader()).driverClassName(dataSourceProperties.getDriverClassName())
-				.url(dataSourceProperties.getUrl()).username(dataSourceProperties.getUsername()).password(dataSourceProperties.getPassword()).type(HikariDataSource.class).build();
+		HikariDataSource dataSource = (HikariDataSource) DataSourceBuilder.create(dataSourceProperties.getClassLoader()).driverClassName(dataSourceProperties.getDriverClassName()).url(dataSourceProperties.getUrl())
+				.username(dataSourceProperties.getUsername()).password(dataSourceProperties.getPassword()).type(HikariDataSource.class).build();
 		dataSource.setMaximumPoolSize(PLATFORM_DATASOURCE_MAX_POOL_SIZE);
 
-		if (PLATFORM_IMPORT_STARTUP_ENABLED) {
-			// schema init
-			try {
-				PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+		if (PLATFORM_IMPORT_SQL_ENABLED) {
+			for (String location : PLATFORM_IMPORT_SQL_LOCATIONS) {
+				// schema init
+				try {
+					PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
 
-				Resource[] initSql = loader.getResources(PLATFORM_IMPORT_STARTUP);
+					Resource[] initSql = loader.getResources(location);
 
-				ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
-				for (Resource resource : initSql) {
-					resourceDatabasePopulator.addScript(resource);
+					ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
+					for (Resource resource : initSql) {
+						resourceDatabasePopulator.addScript(resource);
+					}
+
+					DatabasePopulator databasePopulator = resourceDatabasePopulator;
+					DatabasePopulatorUtils.execute(databasePopulator, dataSource);
+				} catch (DataAccessException e) {
+					logger.warn(e.getMessage());
+				} catch (IOException e) {
+					logger.warn(e.getMessage());
 				}
-
-				DatabasePopulator databasePopulator = resourceDatabasePopulator;
-				DatabasePopulatorUtils.execute(databasePopulator, dataSource);
-			} catch (DataAccessException e) {
-				logger.warn(e.getMessage());
-			} catch (IOException e) {
-				logger.warn(e.getMessage());
 			}
 		}
 

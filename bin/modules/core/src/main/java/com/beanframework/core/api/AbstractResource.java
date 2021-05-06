@@ -36,7 +36,8 @@ public class AbstractResource {
 			data.setEntity(object[0]);
 			data.setRevisionId(String.valueOf(revisionDto.getId()));
 			data.setRevisionDate(new SimpleDateFormat("dd MMM yy, HH:mm:ss").format(revisionDto.getRevisionDate()));
-			data.setRevisionType(localeMessageService.getMessage("revision." + revisionType.name()));
+			data.setRevisionType(revisionType.name());
+			data.setRevisionTypeLocale(localeMessageService.getMessage("revision." + revisionType.name()));
 			data.setPropertiesChanged(propertiesChanged);
 
 			dataTableResponse.getData().add(data);

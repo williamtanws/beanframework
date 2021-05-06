@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.registry.AfterRemoveListenerRegistry;
@@ -40,7 +40,7 @@ import com.beanframework.imex.ImexConstants;
 import com.beanframework.imex.registry.ImportListenerRegistry;
 
 @Component
-public class CoreListener implements ApplicationListener<ApplicationReadyEvent> {
+public class CoreListener implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired
 	private BeforeSaveListenerRegistry beforeSaveListenerRegistry;
@@ -142,7 +142,7 @@ public class CoreListener implements ApplicationListener<ApplicationReadyEvent> 
 	private ImexImportListener imexImportListener;
 
 	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
+	public void onApplicationEvent(ContextRefreshedEvent event) {
 
 		beforeSaveListenerRegistry.addListener(coreBeforeSaveListener);
 		afterSaveListenerRegistry.addListener(coreAfterSaveListener);
