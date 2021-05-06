@@ -17,24 +17,20 @@
 						<th th:text="${userPermission.name}"></th>
 						<td th:each="userRight: ${userRights}">
 							<th:block th:each="userAuthority,itrStat : *{userAuthorities}" th:if="*{uuid == null}">
-								<th:block th:if="${userAuthority.enabled != null}">
-									<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].uuid'" th:value="${userAuthority.uuid}">
-									<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].id'" th:value="*{id}+'_'+${userAuthority.userPermission.id + '_' + userAuthority.userRight.id }">
-									<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].userPermission.uuid'" th:value="${userAuthority.userPermission.uuid}">
-									<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].userRight.uuid'" th:value="${userAuthority.userRight.uuid}">
-									<input type="checkbox" th:name="'userAuthorities['+${itrStat.index}+'].enabled'">
-								</th:block>
+								<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].uuid'" th:value="${userAuthority.uuid}">
+								<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].id'" th:value="*{id}+'_'+${userAuthority.userPermission.id + '_' + userAuthority.userRight.id }">
+								<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].userPermission.uuid'" th:value="${userAuthority.userPermission.uuid}">
+								<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].userRight.uuid'" th:value="${userAuthority.userRight.uuid}">
+								<input type="checkbox" th:name="'userAuthorities['+${itrStat.index}+'].enabled'">
 							</th:block>
 							<th:block th:each="userAuthority,itrStat : *{userAuthorities}" th:if="*{uuid != null}">
-								<th:block th:if="${userAuthority.enabled != null}">
-									<th:block th:if="${userAuthority.userRight.uuid == userRight.uuid && userAuthority.userPermission.uuid == userPermission.uuid}">
-										<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].uuid'" th:value="${userAuthority.uuid}">
-										<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].id'" th:value="*{id}+'_'+${userAuthority.userPermission.id + '_' + userAuthority.userRight.id }">
-										<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].userGroup.uuid'" th:value="*{uuid}">
-										<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].userPermission.uuid'" th:value="${userAuthority.userPermission.uuid}">
-										<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].userRight.uuid'" th:value="${userAuthority.userRight.uuid}">
-										<input type="checkbox" th:name="'userAuthorities['+${itrStat.index}+'].enabled'" th:checked="${userAuthority.enabled}">
-									</th:block>
+								<th:block th:if="${userAuthority.userRight.uuid == userRight.uuid && userAuthority.userPermission.uuid == userPermission.uuid}">
+									<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].uuid'" th:value="${userAuthority.uuid}">
+									<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].id'" th:value="*{id}+'_'+${userAuthority.userPermission.id + '_' + userAuthority.userRight.id }">
+									<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].userGroup.uuid'" th:value="*{uuid}">
+									<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].userPermission.uuid'" th:value="${userAuthority.userPermission.uuid}">
+									<input type="hidden" th:name="'userAuthorities['+${itrStat.index}+'].userRight.uuid'" th:value="${userAuthority.userRight.uuid}">
+									<input type="checkbox" th:name="'userAuthorities['+${itrStat.index}+'].enabled'" th:checked="${userAuthority.enabled}">
 								</th:block>
 							</th:block>
 						</td>

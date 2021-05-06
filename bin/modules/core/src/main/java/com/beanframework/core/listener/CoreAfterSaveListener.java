@@ -61,8 +61,10 @@ public class CoreAfterSaveListener implements AfterSaveListener {
 				}
 				
 				UserDto currentUser = userFacade.getCurrentUser();
-				if(userFacade.getCurrentUser().getUuid() != null && currentUser.getParameters().get(NotificationConstants.USER_NOTIFICATION) == null) {
-					notificationFacade.refreshAllNewNotificationByUser(userFacade.getCurrentUser().getUuid());
+				if(currentUser != null) {
+					if (userFacade.getCurrentUser().getUuid() != null && currentUser.getParameters().get(NotificationConstants.USER_NOTIFICATION) == null) {
+						notificationFacade.refreshAllNewNotificationByUser(userFacade.getCurrentUser().getUuid());
+					}
 				}
 
 			} else if (model instanceof Imex) {

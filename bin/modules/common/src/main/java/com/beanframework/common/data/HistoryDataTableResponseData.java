@@ -9,6 +9,7 @@ public class HistoryDataTableResponseData {
 	String revisionId;
 	String revisionDate;
 	String revisionType;
+	String revisionTypeLocale;
 	Set<String> propertiesChanged = new HashSet<String>();
 
 	public Object getEntity() {
@@ -41,6 +42,14 @@ public class HistoryDataTableResponseData {
 
 	public void setRevisionType(String revisionType) {
 		this.revisionType = revisionType;
+	}
+
+	public String getRevisionTypeLocale() {
+		return revisionTypeLocale;
+	}
+
+	public void setRevisionTypeLocale(String revisionTypeLocale) {
+		this.revisionTypeLocale = revisionTypeLocale;
 	}
 
 	public Set<String> getPropertiesChanged() {

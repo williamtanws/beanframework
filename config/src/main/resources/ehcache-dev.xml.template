@@ -6,9 +6,6 @@
 
 	<!-- file persistance enabling -->
 	<persistence directory="../../temp/cache"></persistence>
-	
-	<cache alias="MenuTree" uses-template="default-cache-template"></cache>
-	<cache alias="Configuration" uses-template="default-cache-template"></cache>
 
 	<!-- the config cache tenplate -->
 	<cache-template name="default-cache-template">

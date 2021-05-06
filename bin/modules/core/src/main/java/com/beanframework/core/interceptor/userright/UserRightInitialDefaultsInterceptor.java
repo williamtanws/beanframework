@@ -20,7 +20,7 @@ public class UserRightInitialDefaultsInterceptor extends AbstractInitialDefaults
 	@Override
 	public void onInitialDefaults(UserRight model, InterceptorContext context) throws InterceptorException {
 		try {
-			userRightService.generateUserRightFieldsOnInitialDefault(model);
+			userRightService.generateUserRightField(model);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new InterceptorException(e.getMessage(), e);

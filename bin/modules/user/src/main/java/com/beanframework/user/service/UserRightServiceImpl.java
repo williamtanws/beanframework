@@ -24,33 +24,9 @@ public class UserRightServiceImpl implements UserRightService {
 	
 	@Value(UserRightConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
 	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
-
-	@Override
-	public void generateUserRightFieldsOnInitialDefault(UserRight model) throws Exception {
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
-		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
-
-		if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
-			properties = new HashMap<String, Object>();
-			properties.put(DynamicFieldTemplate.ID, configuration.getValue());
-
-			DynamicFieldTemplate dynamicFieldTemplate = modelService.findOneByProperties(properties, DynamicFieldTemplate.class);
-
-			if (dynamicFieldTemplate != null) {
-
-				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
-					UserRightField field = new UserRightField();
-					field.setDynamicFieldSlot(dynamicFieldSlot);
-					field.setUserRight(model);
-					model.getFields().add(field);
-				}
-			}
-		}
-	}
 	
 	@Override
-	public void generateUserRightFieldOnLoad(UserRight model) throws Exception {
+	public void generateUserRightField(UserRight model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);

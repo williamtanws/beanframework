@@ -4,8 +4,8 @@ import com.beanframework.user.domain.UserGroup;
 
 public interface UserGroupService {
 
-	void generateUserGroupFieldsOnInitialDefault(UserGroup model) throws Exception;
+	void generateUserGroupField(UserGroup model) throws Exception;
 
-	void generateUserGroupFieldOnLoad(UserGroup model) throws Exception;
+	void generateUserAuthority(UserGroup model) throws Exception;
 
 }

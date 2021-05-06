@@ -80,12 +80,6 @@ public class UserServiceImpl implements UserService {
 	@Value(UserConstants.USER_PROFILE_PICTURE_THUMBNAIL_HEIGHT)
 	public int USER_PROFILE_PICTURE_THUMBNAIL_HEIGHT;
 
-	@Value(UserConstants.Admin.DEFAULT_ID)
-	private String defaultAdminId;
-
-	@Value(UserConstants.Admin.DEFAULT_PASSWORD)
-	private String defaultAdminPassword;
-
 	@Value(UserConstants.Admin.DEFAULT_GROUP)
 	private String defaultAdminGroup;
 
@@ -113,15 +107,7 @@ public class UserServiceImpl implements UserService {
 
 		// If account not exists in database
 		if (user == null) {
-			if (id.equals(defaultAdminId) && password.equals(defaultAdminPassword)) {
-				user = modelService.create(User.class);
-				user.setId(defaultAdminId);
-				user.setName("Admin");
-
-				return new UsernamePasswordAuthenticationToken(user, defaultAdminPassword, getAdminAuthority());
-			} else {
-				throw new BadCredentialsException("Bad Credentials");
-			}
+			throw new BadCredentialsException("Bad Credentials");
 		}
 
 		if (passwordEncoder.matches(password, user.getPassword()) == Boolean.FALSE) {
@@ -408,33 +394,9 @@ public class UserServiceImpl implements UserService {
 
 		return userGroupUuids;
 	}
-
-	@Override
-	public void generateUserFieldsOnInitialDefault(User model, String configurationDynamicFieldTemplate) throws Exception {
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Configuration.ID, configurationDynamicFieldTemplate);
-		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
-
-		if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
-			properties = new HashMap<String, Object>();
-			properties.put(DynamicFieldTemplate.ID, configuration.getValue());
-
-			DynamicFieldTemplate dynamicFieldTemplate = modelService.findOneByProperties(properties, DynamicFieldTemplate.class);
-
-			if (dynamicFieldTemplate != null) {
-
-				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
-					UserField field = new UserField();
-					field.setDynamicFieldSlot(dynamicFieldSlot);
-					field.setUser(model);
-					model.getFields().add(field);
-				}
-			}
-		}
-	}
 	
 	@Override
-	public void generateUserFieldOnLoad(User model, String configurationDynamicFieldTemplate) throws Exception {
+	public void generateUserField(User model, String configurationDynamicFieldTemplate) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, configurationDynamicFieldTemplate);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);

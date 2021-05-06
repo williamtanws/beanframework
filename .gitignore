@@ -58,9 +58,9 @@ hs_err_pid*
 
 ### Beanframework ###
 /data
-log
+/log
 target
-temp
+/temp
 /bin/pom.xml
 /bin/server.bat
 /bin/server.sh
@@ -70,7 +70,6 @@ temp
 /bin/custom/*
 !/bin/custom/README.md
 /config/pom.xml
-/config/src/main/resources/*
-!/config/src/main/resources/import/dev.template
-!/config/src/main/resources/*.template
+/config/src/main/resources/*.properties
+/config/src/main/resources/*.xml
 !.mvn/wrapper/maven-wrapper.jar

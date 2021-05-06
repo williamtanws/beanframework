@@ -25,7 +25,7 @@ public class VendorLoadInterceptor extends AbstractLoadInterceptor<Vendor> {
 	@Override
 	public void onLoad(Vendor model, InterceptorContext context) throws InterceptorException {
 		try {
-			userService.generateUserFieldOnLoad(model, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
+			userService.generateUserField(model, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new InterceptorException(e.getMessage(), e);
