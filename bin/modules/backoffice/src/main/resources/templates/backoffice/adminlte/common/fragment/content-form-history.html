@@ -166,8 +166,7 @@
 								}
 								
 								if (message === '') {
-									message = message + " [id] <span class='fa fa-arrow-right'></span> " + row.entity['id'] + "<br>";
-									message = message + " [value] <span class='fa fa-arrow-right'></span> " + row.entity['value'];
+									message = message + /*[[#{module.common.modified.flagged}]]*/;
 								}
 								return message;
 							}

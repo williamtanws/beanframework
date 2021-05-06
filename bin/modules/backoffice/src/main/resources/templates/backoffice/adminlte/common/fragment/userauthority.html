@@ -7,7 +7,7 @@
 				<thead>
 					<tr>
 						<th th:text="#{module.userpermission}"></th>
-						<th th:each="userRight: ${userRights}">
+						<th th:each="userRight: ${userRights}" class="no-sort">
 							<span th:text="${userRight.name}"></span>
 						</th>
 					</tr>
@@ -76,7 +76,10 @@
 		            'searching': false,
 		            'ordering': true,
 		            'info': true,
-		            'autoWidth': true
+		            'autoWidth': true,
+		            "aoColumnDefs": [
+		                { 'bSortable': false, 'aTargets': ['no-sort'] }
+		            ]
 		        })
 		    });
 		    /*]]>*/
