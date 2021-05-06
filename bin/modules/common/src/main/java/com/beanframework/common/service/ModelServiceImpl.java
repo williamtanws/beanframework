@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Tuple;
+import javax.persistence.Query;
 
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
@@ -283,8 +283,13 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public List<Tuple> search(String qlString) {
+	public List<?> searchByQuery(String qlString) {
 		return entityManager.createQuery(qlString).getResultList();
+	}
+
+	@Override
+	public Query searchByNativeQuery(String sqlString) {
+		return entityManager.createNativeQuery(sqlString);
 	}
 
 	@Override

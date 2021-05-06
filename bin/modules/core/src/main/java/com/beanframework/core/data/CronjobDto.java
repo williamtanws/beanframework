@@ -8,6 +8,7 @@ import com.beanframework.common.data.GenericDto;
 import com.beanframework.cronjob.domain.CronjobEnum.JobTrigger;
 import com.beanframework.cronjob.domain.CronjobEnum.Result;
 import com.beanframework.cronjob.domain.CronjobEnum.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class CronjobDto extends GenericDto {
 	/**
@@ -60,8 +61,9 @@ public class CronjobDto extends GenericDto {
 
 	private Map<String, String> parameters = new HashMap<String, String>();
 
+	@JsonIgnore
 	private String[] selectedParameterKeys;
-
+	@JsonIgnore
 	private String[] selectedParameterValues;
 
 	public String getName() {

@@ -1,4 +1,4 @@
-package com.beanframework.core.data;
+package com.beanframework.core.integration.handle;
 
 import org.springframework.messaging.Message;
 

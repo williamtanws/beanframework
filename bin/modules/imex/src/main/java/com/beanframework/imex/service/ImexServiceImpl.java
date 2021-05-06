@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -71,9 +69,6 @@ public class ImexServiceImpl implements ImexService {
 
 	@Autowired
 	private List<ConverterMapping> converterMappings;
-
-	@Autowired
-	private EntityManager entityManager;
 
 	@Value(ImexConstants.IMEX_MEDIA_LOCATION)
 	private String IMEX_MEDIA_LOCATION;
@@ -350,7 +345,7 @@ public class ImexServiceImpl implements ImexService {
 			csv = model.getQuery();
 		} else if (model.getType() == ImexType.EXPORT) {
 
-			List<?> resultList = entityManager.createQuery(model.getQuery()).getResultList();
+			List<?> resultList = modelService.searchByQuery(model.getQuery());
 
 			final StringBuilder csvBuilder = new StringBuilder();
 			csvBuilder.append(model.getHeader());

@@ -1,6 +1,7 @@
 package com.beanframework.core.data;
 
 import com.beanframework.common.data.GenericDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AddressDto extends GenericDto {
 
@@ -43,13 +44,21 @@ public class AddressDto extends GenericDto {
 	private AddressDto defaultPaymentAddress;
 	private AddressDto defaultShipmentAddress;
 
+	@JsonIgnore
 	private String selectedCountryUuid;
+	@JsonIgnore
 	private String selectedRegionUuid;
+	@JsonIgnore
 	private String selectedOwnerUuid;
+	@JsonIgnore
 	private String selectedShippingAddressUuid;
+	@JsonIgnore
 	private String selectedBillingAddressUuid;
+	@JsonIgnore
 	private String selectedContactAddressUuid;
+	@JsonIgnore
 	private String selectedDefaultPaymentAddressUuid;
+	@JsonIgnore
 	private String selectedDefaultShipmentAddressUuid;
 
 	public String getStreetName() {

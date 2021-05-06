@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.user.LineOfBusinessType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class CompanyDto extends GenericDto {
 
@@ -34,14 +35,23 @@ public class CompanyDto extends GenericDto {
 	private AddressDto contactAddress;
 	private List<UserDto> users = new ArrayList<UserDto>();
 
+	@JsonIgnore
 	private String selectedContactPersonUuid;
+	@JsonIgnore
 	private String selectedResponsibleCompanyUuid;
+	@JsonIgnore
 	private String selectedCountryUuid;
+	@JsonIgnore
 	private String[] selectedAddressUuids;
+	@JsonIgnore
 	private String selectedShippingAddressUuid;
+	@JsonIgnore
 	private String selectedUnloadingAddressUuid;
+	@JsonIgnore
 	private String selectedBillingAddressUuid;
+	@JsonIgnore
 	private String selectedContactAddressUuid;
+	@JsonIgnore
 	private String[] selectedUserUuids;
 
 	public String getName() {

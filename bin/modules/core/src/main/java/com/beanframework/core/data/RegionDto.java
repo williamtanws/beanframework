@@ -1,6 +1,7 @@
 package com.beanframework.core.data;
 
 import com.beanframework.common.data.GenericDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RegionDto extends GenericDto {
 
@@ -12,6 +13,7 @@ public class RegionDto extends GenericDto {
 	private Boolean active;
 	private CountryDto country;
 
+	@JsonIgnore
 	private String selectedCountryUuid;
 
 	public String getName() {

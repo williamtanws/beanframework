@@ -9,7 +9,6 @@ import org.springframework.integration.file.FileHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
-import com.beanframework.core.data.FileProcessor;
 import com.beanframework.imex.service.ImexService;
 
 @Component

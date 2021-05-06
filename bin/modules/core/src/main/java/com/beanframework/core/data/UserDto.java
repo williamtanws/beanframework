@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beanframework.common.data.GenericDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDto extends GenericDto {
 	/**
@@ -28,10 +29,15 @@ public class UserDto extends GenericDto {
 	private List<UserFieldDto> fields = new ArrayList<UserFieldDto>();
 	private Map<String, String> parameters = new HashMap<String, String>();
 
+	@JsonIgnore
 	private String[] selectedParameterKeys;
+	@JsonIgnore
 	private String[] selectedParameterValues;
+	@JsonIgnore
 	private String[] selectedUserGroupUuids;
+	@JsonIgnore
 	private String[] selectedCompanyUuids;
+	@JsonIgnore
 	private String[] selectedAddressUuids;
 
 	private MultipartFile profilePicture;

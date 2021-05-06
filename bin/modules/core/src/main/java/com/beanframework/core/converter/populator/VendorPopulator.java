@@ -23,7 +23,6 @@ public class VendorPopulator extends AbstractPopulator<Vendor, VendorDto> implem
 		try {
 			populateGeneric(source, target);
 			target.setName(source.getName());
-			target.setPassword(source.getPassword());
 			target.setAccountNonExpired(source.getAccountNonExpired());
 			target.setAccountNonLocked(source.getAccountNonLocked());
 			target.setCredentialsNonExpired(source.getCredentialsNonExpired());
