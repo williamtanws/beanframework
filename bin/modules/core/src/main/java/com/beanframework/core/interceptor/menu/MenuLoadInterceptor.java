@@ -20,7 +20,7 @@ public class MenuLoadInterceptor extends AbstractLoadInterceptor<Menu> {
 	@Override
 	public void onLoad(Menu model, InterceptorContext context) throws InterceptorException {
 		try {
-			menuService.generateMenuFieldOnLoad(model);
+			menuService.generateMenuField(model);
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

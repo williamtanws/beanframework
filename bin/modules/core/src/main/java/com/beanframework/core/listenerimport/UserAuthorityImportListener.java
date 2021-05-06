@@ -11,22 +11,22 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.ImportListenerConstants;
 import com.beanframework.core.csv.UserAuthorityCsv;
 import com.beanframework.imex.registry.ImportListener;
-import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserRight;
+import com.beanframework.user.service.UserGroupService;
 
 public class UserAuthorityImportListener extends ImportListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserAuthorityImportListener.class);
 
 	@Autowired
 	private ModelService modelService;
+	
+	@Autowired
+	private UserGroupService userGroupService;
 
 	@PostConstruct
 	public void importer() {
@@ -73,7 +73,7 @@ public class UserAuthorityImportListener extends ImportListener {
 				LOGGER.error("userGroupId not exists: " + entryKeyUserGroupId);
 			} else {
 
-				generateUserAuthority(userGroup);
+				userGroupService.generateUserAuthority(userGroup);
 
 				for (int i = 0; i < userGroup.getUserAuthorities().size(); i++) {
 
@@ -111,41 +111,5 @@ public class UserAuthorityImportListener extends ImportListener {
 		}
 
 		return imported;
-	}
-
-	private void generateUserAuthority(UserGroup model) throws Exception {
-
-		Map<String, Sort.Direction> userPermissionSorts = new HashMap<String, Sort.Direction>();
-		userPermissionSorts.put(UserPermission.SORT, Sort.Direction.ASC);
-		List<UserPermission> userPermissions = modelService.findByPropertiesBySortByResult(null, userPermissionSorts, null, null, UserPermission.class);
-
-		Map<String, Sort.Direction> userRightSorts = new HashMap<String, Sort.Direction>();
-		userRightSorts.put(UserRight.SORT, Sort.Direction.ASC);
-		List<UserRight> userRights = modelService.findByPropertiesBySortByResult(null, userRightSorts, null, null, UserRight.class);
-
-		for (UserPermission userPermission : userPermissions) {
-			for (UserRight userRight : userRights) {
-
-				String authorityId = model.getId() + "_" + userPermission.getId() + "_" + userRight.getId();
-
-				boolean add = true;
-				if (model.getUserAuthorities() != null && model.getUserAuthorities().isEmpty() == false) {
-					for (UserAuthority userAuthority : model.getUserAuthorities()) {
-						if (userAuthority.getId().equals(authorityId)) {
-							add = false;
-						}
-					}
-				}
-
-				if (add) {
-					UserAuthority userAuthority = modelService.create(UserAuthority.class);
-					userAuthority.setId(authorityId);
-					userAuthority.setUserPermission(userPermission);
-					userAuthority.setUserRight(userRight);
-
-					model.getUserAuthorities().add(userAuthority);
-				}
-			}
-		}
 	}
 }

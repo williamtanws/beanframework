@@ -158,31 +158,7 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public void generateMenuFieldsOnInitialDefault(Menu model) throws Exception {
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
-		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
-
-		if (configuration != null && StringUtils.isNotBlank(configuration.getValue())) {
-			properties = new HashMap<String, Object>();
-			properties.put(DynamicFieldTemplate.ID, configuration.getValue());
-
-			DynamicFieldTemplate dynamicFieldTemplate = modelService.findOneByProperties(properties, DynamicFieldTemplate.class);
-
-			if (dynamicFieldTemplate != null) {
-
-				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
-					MenuField field = new MenuField();
-					field.setDynamicFieldSlot(dynamicFieldSlot);
-					field.setMenu(model);
-					model.getFields().add(field);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void generateMenuFieldOnLoad(Menu model) throws Exception {
+	public void generateMenuField(Menu model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
