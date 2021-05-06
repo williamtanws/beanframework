@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.dynamicfield.DynamicFieldType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DynamicFieldDto extends GenericDto {
 	/**
@@ -36,8 +37,9 @@ public class DynamicFieldDto extends GenericDto {
 
 	private List<EnumerationDto> enumerations = new ArrayList<EnumerationDto>();
 
+	@JsonIgnore
 	private String selectedLanguageUuid;
-
+	@JsonIgnore
 	private String[] selectedEnumerationUuids;
 
 	public String getName() {

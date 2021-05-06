@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.persistence.Tuple;
+import javax.persistence.Query;
 
 import org.hibernate.envers.query.criteria.AuditCriterion;
 import org.hibernate.envers.query.order.AuditOrder;
@@ -72,7 +72,9 @@ public interface ModelService {
 
 	<T extends Collection> T findAll(Class modelClass);
 
-	List<Tuple> search(String qlString);
+	List<?> searchByQuery(String qlString);
+	
+	Query searchByNativeQuery(String sqlString);
 
 	List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
 

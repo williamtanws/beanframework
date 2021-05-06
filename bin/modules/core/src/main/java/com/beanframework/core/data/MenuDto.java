@@ -40,6 +40,7 @@ public class MenuDto extends GenericDto {
 
 	private Boolean active;
 
+	@JsonIgnore
 	private String[] selectedUserGroupUuids;
 
 	public String getName() {

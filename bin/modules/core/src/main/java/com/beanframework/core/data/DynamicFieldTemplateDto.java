@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.beanframework.common.data.GenericDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DynamicFieldTemplateDto extends GenericDto {
 
@@ -18,6 +19,7 @@ public class DynamicFieldTemplateDto extends GenericDto {
 
 	private List<DynamicFieldSlotDto> dynamicFieldSlots = new ArrayList<DynamicFieldSlotDto>();
 
+	@JsonIgnore
 	private String[] selectedDynamicFieldSlotUuids;
 
 	public String getName() {

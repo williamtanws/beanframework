@@ -1,6 +1,7 @@
 package com.beanframework.core.data;
 
 import com.beanframework.common.data.GenericDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DynamicFieldSlotDto extends GenericDto {
 
@@ -15,6 +16,7 @@ public class DynamicFieldSlotDto extends GenericDto {
 
 	private DynamicFieldDto dynamicField;
 
+	@JsonIgnore
 	private String selectedDynamicFieldUuid;
 
 	public String getName() {

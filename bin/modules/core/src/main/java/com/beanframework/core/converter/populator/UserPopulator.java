@@ -23,7 +23,6 @@ public class UserPopulator extends AbstractPopulator<User, UserDto> implements P
 		try {
 			populateGeneric(source, target);
 			target.setName(source.getName());
-			target.setPassword(source.getPassword());
 			target.setAccountNonExpired(source.getAccountNonExpired());
 			target.setAccountNonLocked(source.getAccountNonLocked());
 			target.setCredentialsNonExpired(source.getCredentialsNonExpired());

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.beanframework.common.data.GenericDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserGroupDto extends GenericDto {
 	/**
@@ -25,6 +26,7 @@ public class UserGroupDto extends GenericDto {
 
 	private List<UserGroupFieldDto> fields = new ArrayList<UserGroupFieldDto>();
 
+	@JsonIgnore
 	private String[] selectedUserGroupUuids;
 
 	public String getName() {

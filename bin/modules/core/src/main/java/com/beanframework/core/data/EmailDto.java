@@ -6,6 +6,7 @@ import java.util.List;
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.email.domain.EmailEnum.Result;
 import com.beanframework.email.domain.EmailEnum.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class EmailDto extends GenericDto {
 	/**
@@ -46,6 +47,7 @@ public class EmailDto extends GenericDto {
 
 	private List<MediaDto> medias = new ArrayList<MediaDto>();
 
+	@JsonIgnore
 	private String[] selectedMediaUuids;
 
 	public String getName() {

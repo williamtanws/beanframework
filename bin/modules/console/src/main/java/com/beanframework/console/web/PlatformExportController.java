@@ -1,6 +1,13 @@
 package com.beanframework.console.web;
 
-import java.util.Collection;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +31,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.console.PlatformExportWebConstants;
 import com.beanframework.core.controller.AbstractController;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @PreAuthorize("isAuthenticated()")
 @Controller
@@ -37,62 +46,52 @@ public class PlatformExportController extends AbstractController {
 
 	@Autowired
 	private ModelService modelService;
+	
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH:mm:ss");
 
 	@GetMapping(value = PlatformExportWebConstants.Path.EXPORT)
 	public String exportView(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_EXPORT;
 	}
 
-//	@PostMapping(value = PlatformImportWebConstants.Path.IMPORT, params="importFile")
-//	public RedirectView importFile(@RequestParam("files") MultipartFile[] files, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
-//			HttpServletRequest request) {
-//
-//		String[] messages = platformService.importByMultipartFiles(files);
-//		
-//		if (messages[0].length() != 0) {
-//			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
-//		}
-//		if (messages[1].length() != 0) {
-//			redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
-//		}
-//
-//		RedirectView redirectView = new RedirectView();
-//		redirectView.setContextRelative(true);
-//		redirectView.setUrl(PATH_IMPORT);
-//		return redirectView;
-//	}
+	@PostMapping(value = PlatformExportWebConstants.Path.EXPORT)
+	public ResponseEntity<InputStreamResource> exportQuery(@RequestParam("query") String query, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
+			HttpServletRequest request) throws IOException {
 
-	@PostMapping(value = PlatformExportWebConstants.Path.EXPORT, params = "importQuery")
-	public String exportQuery(@RequestParam("query") String query, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) throws JsonProcessingException {
+		List<?> resultList = modelService.searchByQuery(query);
 
-		Collection<?> models = modelService.search(query);
+		final StringBuilder csvBuilder = new StringBuilder();
+		for (final Object object : resultList) {
+			final Object[] values = (Object[]) object;
 
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(models);
+			for (int i = 0; i < values.length; i++) {
 
-		model.addAttribute("query", query);
-		model.addAttribute("result", jsonString);
-		return VIEW_EXPORT;
+				if (values[i] == null) {
+					csvBuilder.append("\"\"");
+				} else {
+					csvBuilder.append("\"" + values[i].toString() + "\"");
+				}
+
+				if (i != 0 && i != values.length - 1) {
+					csvBuilder.append(";");
+				}
+			}
+			csvBuilder.append(System.getProperty("line.separator"));
+		}
+
+		File temp = File.createTempFile("export", ".csv");
+
+		// Delete temp file when program exits.
+		temp.deleteOnExit();
+
+		// Write to temp file
+		BufferedWriter out = new BufferedWriter(new FileWriter(temp));
+		out.write(csvBuilder.toString());
+		out.close();
+
+		InputStreamResource resource = new InputStreamResource(new FileInputStream(temp));
+
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + "export_"+sdf.format(new Date())).contentType(MediaType.valueOf("text/csv")).contentLength(temp.length()).body(resource);
 	}
-	
-//	private static List<ObjectNode> toJson(List<Tuple> results) {
-//
-//	    List<ObjectNode> json = new ArrayList<>();
-//
-//	    ObjectMapper mapper = new ObjectMapper();
-//
-//	    for (Tuple tuple : results)
-//	    {
-//	        List<TupleElement<?>> cols = tuple.getElements();
-//
-//	        ObjectNode node = mapper.createObjectNode();
-//
-//	        for (TupleElement col : cols)
-//	            node.put(col.getAlias(), tuple.get(col.getAlias()).toString());
-//
-//	        json.add(node);
-//	    }
-//	    return json;
-//	}
 
 }
