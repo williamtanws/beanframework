@@ -95,7 +95,7 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 				}
 			}
 
-			// Dynamic Field Slot
+			// Attributes
 			if (StringUtils.isNotBlank(source.getDynamicFieldSlotIds())) {
 				String[] dynamicFieldSlots = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
 
