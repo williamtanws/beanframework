@@ -12,13 +12,13 @@
 			<th:block th:insert="~{backoffice/adminlte/common/fragment/content-header :: title (title=#{module.notification})}"></th:block>
 
 			<!-- Main content -->
-			<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: datatable (title=#{module.notification}, tableId='notificationTable', columnsi18n=${#strings.arraySplit(type+','+message+','+createdDate, ',')}, selectAuthority=false )}"></th:block>
+			<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: datatable (title=#{module.notification}, tableId='notificationTable', columnsi18n=${#strings.arraySplit(createdDate+','+type+','+message, ',')}, selectAuthority=false )}"></th:block>
 
 		</div>
 
 	</th:block>
 	<th:block layout:fragment="js">
-		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='notificationTable', columns=${#strings.arraySplit('type,message,createdDate', ',')}, pageUrl=@{${@environment.getProperty('path.api.notification')}}, formUrl=@{${@environment.getProperty('path.notification.form')}}, addAuthority=false, selectAuthority=false, search=false )}"></th:block>
+		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='notificationTable', columns=${#strings.arraySplit('createdDate,type,message', ',')}, pageUrl=@{${@environment.getProperty('path.api.notification')}}, formUrl=@{${@environment.getProperty('path.notification.form')}}, addAuthority=false, selectAuthority=false, search=false )}"></th:block>
 	</th:block>
 </body>
 </html>

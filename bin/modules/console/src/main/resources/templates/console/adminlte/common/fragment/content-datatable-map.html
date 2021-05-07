@@ -43,13 +43,13 @@
 							</div>
 							<div class="container-fluid">
 								<div class="row">
-									<div class="col-md-3">
+									<div class="col-md-6">
 										<div class="form-group">
 											<label for="name" th:text="#{module.common.key}"></label>
 											<input type="text" class="form-control" name="addKey">
 										</div>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-6">
 										<div class="form-group">
 											<label for="name" th:text="#{module.common.value}"></label>
 											<input type="text" class="form-control" name="addValue">
@@ -122,6 +122,7 @@
 	    	      "<'row'<'col-sm-12'tr>>" +
 	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
 				'data': dataArray,
+				"order": [],
 				"columns": [
 		            { "data" : "[0]"},
 		            { "data" : "[1]"},
