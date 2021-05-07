@@ -110,7 +110,7 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				}
 			}
 
-			// Field
+			// Attribute
 			if (source.getAttributes() != null && source.getAttributes().isEmpty() == Boolean.FALSE) {
 				for (int i = 0; i < prototype.getAttributes().size(); i++) {
 					for (MenuAttributeDto sourceField : source.getAttributes()) {

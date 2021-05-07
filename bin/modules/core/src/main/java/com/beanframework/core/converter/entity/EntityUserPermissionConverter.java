@@ -65,7 +65,7 @@ public class EntityUserPermissionConverter implements EntityConverter<UserPermis
 				}
 			}
 
-			// Field
+			// Attribute
 			if (source.getAttributes() != null && source.getAttributes().isEmpty() == Boolean.FALSE) {
 				for (int i = 0; i < prototype.getAttributes().size(); i++) {
 					for (UserPermissionAttributeDto sourceField : source.getAttributes()) {

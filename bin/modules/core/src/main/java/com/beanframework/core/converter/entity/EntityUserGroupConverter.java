@@ -56,7 +56,7 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			// Field
+			// Attribute
 			if (source.getAttributes() != null && source.getAttributes().isEmpty() == Boolean.FALSE) {
 				for (int i = 0; i < prototype.getAttributes().size(); i++) {
 					for (UserGroupAttributeDto sourceField : source.getAttributes()) {

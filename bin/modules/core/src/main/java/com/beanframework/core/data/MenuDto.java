@@ -141,14 +141,11 @@ public class MenuDto extends GenericDto {
 
 	public String getName(String languageId) {
 		for (MenuAttributeDto attribute : attributes) {
-			if (attribute.getDynamicFieldSlot().getId().endsWith("_name_" + languageId)) {
-				if (attribute.getDynamicFieldSlot().getDynamicField().getLanguage() != null && attribute.getDynamicFieldSlot().getDynamicField().getLanguage().getId().equals(languageId)) {
-
-					if (StringUtils.isBlank(attribute.getValue())) {
-						return StringUtils.isBlank(this.getName()) ? "[" + this.getId() + "]" : this.getName();
-					} else {
-						return attribute.getValue();
-					}
+			if (attribute.getDynamicFieldSlot().getId().equals("menu_name_" + languageId)) {
+				if (StringUtils.isBlank(attribute.getValue())) {
+					return StringUtils.isBlank(this.getName()) ? "[" + this.getId() + "]" : this.getName();
+				} else {
+					return attribute.getValue();
 				}
 			}
 		}
@@ -158,12 +155,9 @@ public class MenuDto extends GenericDto {
 
 	public String getHeader(String languageId) {
 		for (MenuAttributeDto attribute : attributes) {
-			if (attribute.getDynamicFieldSlot().getId().endsWith("_header_" + languageId)) {
-				if (attribute.getDynamicFieldSlot().getDynamicField().getLanguage() != null && attribute.getDynamicFieldSlot().getDynamicField().getLanguage().getId().equals(languageId)) {
-
-					if (StringUtils.isNotBlank(attribute.getValue())) {
-						return attribute.getValue();
-					}
+			if (attribute.getDynamicFieldSlot().getId().equals("menu_header_" + languageId)) {
+				if (StringUtils.isNotBlank(attribute.getValue())) {
+					return attribute.getValue();
 				}
 			}
 		}

@@ -69,6 +69,7 @@ public class Menu extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String path;
 
+	@NotNull
 	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
 	private MenuTargetTypeEnum target;

@@ -12,7 +12,7 @@
 	<th:block th:fragment="tree-submenu (menu)">
 		<li class="nav-header" th:text="${menu.getHeader(#locale.toString())}" style="text-transform: uppercase;" th:if="${menu.getHeader(#locale.toString()) != null}"></li>
 		<li class="nav-item">
-			<a th:href="${menu.target.toString() == '_self' ? menu.path:'#'}" th:target="${menu.target != null ? menu.target:''}" class="nav-link"  th:onClick="menuOnClick([[${menu.path}]],[[${menu.target.toString()}]] );">
+			<a th:href="${menu.target == '_self' ? menu.path : '#'}" class="nav-link"  th:onClick="menuOnClick([[${menu.path}]],[[${menu.target}]] );">
 				<i th:class="'nav-icon '+${menu.icon}"></i>
 				<p>
 					<th:block th:text="${menu.getName(#locale.toString())}"></th:block>

@@ -13,11 +13,9 @@ import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.csv.MenuCsv;
-import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuAttribute;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu> {
@@ -100,32 +98,23 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 			// Dynamic Field Slot
 			if (StringUtils.isNotBlank(source.getDynamicFieldSlotIds())) {
 				String[] dynamicFieldSlots = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
-				for (String dynamicFieldSlot : dynamicFieldSlots) {
-					String dynamicFieldSlotId = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[0]);
-					String value = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[1]);
 
-					boolean add = true;
+				if (dynamicFieldSlots != null) {
 					for (int i = 0; i < prototype.getAttributes().size(); i++) {
-						Map<String, Object> properties = new HashMap<String, Object>();
-						properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
-						DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
-						if (prototype.getAttributes().get(i).getDynamicFieldSlot() == slot.getUuid()) {
-							prototype.getAttributes().get(i).setValue(StringUtils.stripToNull(value));
-							add = false;
-						}
-					}
 
-					if (add) {
-						Map<String, Object> dynamicFieldSlotProperties = new HashMap<String, Object>();
-						dynamicFieldSlotProperties.put(DynamicField.ID, dynamicFieldSlotId);
-						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
+						for (String dynamicFieldSlot : dynamicFieldSlots) {
+							String dynamicFieldSlotId = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[0]);
+							String value = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[1]);
 
-						if (entityDynamicFieldSlot != null) {
-							MenuAttribute field = new MenuAttribute();
-							field.setValue(value);
-							field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
-							field.setMenu(prototype);
-							prototype.getAttributes().add(field);
+							Map<String, Object> properties = new HashMap<String, Object>();
+							properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
+							DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
+
+							if (prototype.getAttributes().get(i).getDynamicFieldSlot().equals(slot.getUuid())) {
+								if (StringUtils.equals(StringUtils.stripToNull(value), prototype.getAttributes().get(i).getValue()) == Boolean.FALSE) {
+									prototype.getAttributes().get(i).setValue(StringUtils.stripToNull(value));
+								}
+							}
 						}
 					}
 				}

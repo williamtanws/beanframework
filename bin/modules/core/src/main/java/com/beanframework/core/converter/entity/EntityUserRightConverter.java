@@ -70,7 +70,7 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				}
 			}
 
-			// Field
+			// Attribute
 			if (source.getAttributes() == null || source.getAttributes().isEmpty()) {
 				if (prototype.getAttributes().isEmpty() == Boolean.FALSE) {
 					prototype.setAttributes(new ArrayList<UserRightAttribute>());

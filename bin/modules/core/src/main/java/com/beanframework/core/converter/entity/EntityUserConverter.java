@@ -138,7 +138,7 @@ public class EntityUserConverter implements EntityConverter<UserDto, User> {
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			// Field
+			// Attribute
 			if (source.getAttributes() != null && source.getAttributes().isEmpty() == Boolean.FALSE) {
 				for (int i = 0; i < prototype.getAttributes().size(); i++) {
 					for (UserAttributeDto sourceField : source.getAttributes()) {
