@@ -249,19 +249,18 @@ public class DataTableRequest {
 
 		if (parameterNames.hasMoreElements()) {
 
-			if(request.getParameter(PaginationCriteria.PAGE_NO) != null)
+			if (request.getParameter(PaginationCriteria.PAGE_NO) != null)
 				this.setStart(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_NO)));
-			
-			if(request.getParameter(PaginationCriteria.PAGE_SIZE) != null) {
-				if(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_SIZE)) > 0) {
+
+			if (request.getParameter(PaginationCriteria.PAGE_SIZE) != null) {
+				if (Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_SIZE)) > 0) {
 					this.setLength(Integer.parseInt(request.getParameter(PaginationCriteria.PAGE_SIZE)));
-				}
-				else {
+				} else {
 					this.setLength(Integer.MAX_VALUE);
 				}
 			}
-			
-			if(request.getParameter(PaginationCriteria.DRAW) != null)
+
+			if (request.getParameter(PaginationCriteria.DRAW) != null)
 				this.setDraw(request.getParameter(PaginationCriteria.DRAW));
 
 			this.setSearch(request.getParameter("search[value]"));
@@ -324,19 +323,21 @@ public class DataTableRequest {
 		}
 
 		List<Order> sortOrders = new ArrayList<Order>();
-		if (orders.isEmpty() == Boolean.FALSE) {
+		if (orders.isEmpty()) {
+			Order order = new Order(Direction.DESC, GenericEntity.LAST_MODIFIED_DATE);
+			sortOrders.add(order);
+			order = new Order(Direction.DESC, GenericEntity.CREATED_DATE);
+			sortOrders.add(order);
+		} else {
 			for (DataTableColumnSpecs spec : orders) {
 				if (StringUtils.isNotBlank(spec.getSortDir())) {
 					Order order = new Order(Direction.fromString(spec.getSortDir()), spec.getData());
 					sortOrders.add(order);
 				}
 			}
-		} else {
-			Order order = new Order(Direction.DESC, GenericEntity.CREATED_DATE);
-			sortOrders.add(order);
 		}
-		
-		if(this.pageable != Pageable.unpaged()) {
+
+		if (this.pageable != Pageable.unpaged()) {
 			this.setPageable(PageRequest.of(this.getPaginationRequest().getPageNumber(), this.getPaginationRequest().getPageSize(), Sort.by(sortOrders)));
 		}
 	}
@@ -444,8 +445,8 @@ public class DataTableRequest {
 
 	@Override
 	public String toString() {
-		return "DataTableRequest [uniqueId=" + uniqueId + ", start=" + start + ", length=" + length + ", search=" + search + ", regex=" + regex + ", columns=" + columns + ", orders=" + orders
-				+ ", isGlobalSearch=" + isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + ", pageable=" + pageable + "]";
+		return "DataTableRequest [uniqueId=" + uniqueId + ", start=" + start + ", length=" + length + ", search=" + search + ", regex=" + regex + ", columns=" + columns + ", orders=" + orders + ", isGlobalSearch="
+				+ isGlobalSearch + ", maxParamsToCheck=" + maxParamsToCheck + ", pageable=" + pageable + "]";
 	}
 
 	public Set<Integer> getSkipColumnIndexes() {

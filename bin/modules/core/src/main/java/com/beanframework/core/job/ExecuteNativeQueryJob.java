@@ -23,13 +23,13 @@ import com.beanframework.media.service.MediaService;
 
 @Component
 @DisallowConcurrentExecution
-public class CreateNativeQueryJob implements Job {
+public class ExecuteNativeQueryJob implements Job {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(CreateNativeQueryJob.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(ExecuteNativeQueryJob.class);
 
 	public static final String QUERY = "query";
 
-	public static final String MEDIA_FOLDER = "\\createnativequery";
+	public static final String MEDIA_FOLDER = "nativequery";
 
 	private SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -64,7 +64,7 @@ public class CreateNativeQueryJob implements Job {
 				media = modelService.saveEntity(media);
 				media = mediaService.storeData(media, resultBuilder.toString());
 
-				context.setResult("Created media: " + media.getId());
+				context.setResult("Created Media: [id=" + media.getId() + ", fileName=" + media.getFileName() + "]");
 			} else {
 				int count = nativeQuery.executeUpdate();
 				context.setResult("Updated " + count + " entity(s)");

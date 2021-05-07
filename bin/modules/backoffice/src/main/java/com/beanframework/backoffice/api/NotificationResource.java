@@ -85,14 +85,14 @@ public class NotificationResource extends AbstractResource {
 	@RequestMapping(value = NotificationWebConstants.Path.Api.NOTIFICATION_NEW, method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public NotificationOverallDataTableResponseData newNotification(HttpServletRequest request) throws Exception {
-		
+
 		UserDto currentUser = userFacade.getCurrentUser();
-		
-		if(currentUser.getUuid() == null) {
+
+		if (currentUser.getUuid() == null) {
 			return null;
 		}
 
-		List<NotificationDto> result = notificationFacade.findAllNewNotificationByUser(currentUser.getUuid());		
+		List<NotificationDto> result = notificationFacade.findAllNewNotificationByUser(currentUser.getUuid());
 		NotificationOverallDataTableResponseData data = new NotificationOverallDataTableResponseData();
 
 		if (result == null || result.isEmpty()) {
