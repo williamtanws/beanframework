@@ -26,7 +26,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 	
 	@Override
-	public void generateUserPermissionField(UserPermission model) throws Exception {
+	public void generateUserPermissionAttribute(UserPermission model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);

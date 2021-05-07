@@ -158,7 +158,7 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public void generateMenuField(Menu model) throws Exception {
+	public void generateMenuAttribute(Menu model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);

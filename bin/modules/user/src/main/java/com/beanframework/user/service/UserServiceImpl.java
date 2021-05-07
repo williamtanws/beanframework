@@ -396,7 +396,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void generateUserField(User model, String configurationDynamicFieldTemplate) throws Exception {
+	public void generateUserAttribute(User model, String configurationDynamicFieldTemplate) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, configurationDynamicFieldTemplate);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);

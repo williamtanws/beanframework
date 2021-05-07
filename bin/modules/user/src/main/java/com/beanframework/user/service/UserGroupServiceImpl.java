@@ -31,7 +31,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 	
 	@Override
-	public void generateUserGroupField(UserGroup model) throws Exception {
+	public void generateUserGroupAttribute(UserGroup model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);

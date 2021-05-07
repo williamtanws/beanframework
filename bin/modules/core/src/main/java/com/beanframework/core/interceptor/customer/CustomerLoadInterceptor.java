@@ -26,7 +26,7 @@ public class CustomerLoadInterceptor extends AbstractLoadInterceptor<Customer> {
 	public void onLoad(Customer model, InterceptorContext context) throws InterceptorException {
 
 		try {
-			userService.generateUserField(model, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
+			userService.generateUserAttribute(model, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new InterceptorException(e.getMessage(), e);

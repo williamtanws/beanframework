@@ -20,7 +20,7 @@ public class UserPermissionInitialDefaultsInterceptor extends AbstractInitialDef
 	@Override
 	public void onInitialDefaults(UserPermission model, InterceptorContext context) throws InterceptorException {
 		try {
-			userPermissionService.generateUserPermissionField(model);
+			userPermissionService.generateUserPermissionAttribute(model);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new InterceptorException(e.getMessage(), e);

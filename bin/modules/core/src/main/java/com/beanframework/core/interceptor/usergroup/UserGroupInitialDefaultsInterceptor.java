@@ -20,7 +20,7 @@ public class UserGroupInitialDefaultsInterceptor extends AbstractInitialDefaults
 	@Override
 	public void onInitialDefaults(UserGroup model, InterceptorContext context) throws InterceptorException {
 		try {
-			userGroupService.generateUserGroupField(model);
+			userGroupService.generateUserGroupAttribute(model);
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

@@ -33,5 +33,5 @@ public interface UserService {
 
 	Set<UUID> getAllUserGroupsByCurrentUser() throws Exception;
 
-	void generateUserField(User model, String configurationDynamicFieldTemplate) throws Exception;
+	void generateUserAttribute(User model, String configurationDynamicFieldTemplate) throws Exception;
 }

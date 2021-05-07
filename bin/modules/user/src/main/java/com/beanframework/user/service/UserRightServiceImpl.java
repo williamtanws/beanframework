@@ -26,7 +26,7 @@ public class UserRightServiceImpl implements UserRightService {
 	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 	
 	@Override
-	public void generateUserRightField(UserRight model) throws Exception {
+	public void generateUserRightAttribute(UserRight model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);

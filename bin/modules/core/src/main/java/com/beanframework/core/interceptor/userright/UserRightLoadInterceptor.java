@@ -20,7 +20,7 @@ public class UserRightLoadInterceptor extends AbstractLoadInterceptor<UserRight>
 	@Override
 	public void onLoad(UserRight model, InterceptorContext context) throws InterceptorException {
 		try {
-			userRightService.generateUserRightField(model);
+			userRightService.generateUserRightAttribute(model);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new InterceptorException(e.getMessage(), e);
