@@ -2,24 +2,31 @@ package com.beanframework.core.converter.populator;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuFieldDto;
+import com.beanframework.core.specification.MenuSpecification;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
+import com.beanframework.user.service.UserService;
 
 public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implements Populator<Menu, MenuDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuTreePopulator.class);
+	
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public void populate(Menu source, MenuDto target) throws PopulatorException {
@@ -32,14 +39,16 @@ public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implemen
 			target.setSort(source.getSort());
 			target.setTarget(source.getTarget());
 			target.setEnabled(source.getEnabled());
-
-			Hibernate.initialize(source.getChilds());
-			for (Menu child : source.getChilds()) {
-				MenuDto populateChild = populateChild(child, new HashSet<UUID>());
-				if (populateChild != null) {
-					target.getChilds().add(populateChild);
+			
+			Set<UUID> userGroupUuids = userService.getAllUserGroupsByCurrentUser();
+			List<Menu> childs = modelService.findBySpecificationBySort(MenuSpecification.getMenuByEnabledByUserGroup(source.getUuid(), userGroupUuids), Sort.by(Direction.ASC, Menu.SORT), Menu.class);
+			for (Menu childMenu : childs) {
+				MenuDto childMenuDto = populateChild(childMenu, userGroupUuids);
+				if(childMenuDto != null) {
+					target.getChilds().add(childMenuDto);
 				}
 			}
+			
 			for (UUID userGroup : source.getUserGroups()) {
 				target.getUserGroups().add(populateUserGroup(userGroup));
 			}
@@ -67,7 +76,7 @@ public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implemen
 	public MenuDto populateParent(Menu source) throws PopulatorException {
 		if (source == null)
 			return null;
-
+		
 		MenuDto target = new MenuDto();
 		populateGeneric(source, target);
 		target.setName(source.getName());
@@ -82,39 +91,34 @@ public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implemen
 		return target;
 	}
 
-	public MenuDto populateChild(Menu source, Set<UUID> populated) throws PopulatorException {
+	public MenuDto populateChild(Menu source, Set<UUID> userGroupUuids) throws PopulatorException {
 		if (source == null)
 			return null;
-
+		
 		try {
-			if (populated.contains(source.getUuid()) == Boolean.FALSE) {
-				populated.add(source.getUuid());
-				MenuDto target = new MenuDto();
-				populateGeneric(source, target);
-				target.setName(source.getName());
-				target.setIcon(source.getIcon());
-				target.setPath(source.getPath());
-				target.setSort(source.getSort());
-				target.setTarget(source.getTarget());
-				target.setEnabled(source.getEnabled());
+			
+			MenuDto target = new MenuDto();
+			populateGeneric(source, target);
+			target.setName(source.getName());
+			target.setIcon(source.getIcon());
+			target.setPath(source.getPath());
+			target.setSort(source.getSort());
+			target.setTarget(source.getTarget());
+			target.setEnabled(source.getEnabled());
 
-				for (Menu child : source.getChilds()) {
-					MenuDto populateChild = populateChild(child, populated);
-					if (populateChild != null) {
-						target.getChilds().add(populateChild);
-					}
+			List<Menu> childs = modelService.findBySpecificationBySort(MenuSpecification.getMenuByEnabledByUserGroup(source.getUuid(), userGroupUuids), Sort.by(Direction.ASC, Menu.SORT), Menu.class);
+			for (Menu childMenu : childs) {
+				MenuDto childMenuDto = populateChild(childMenu, userGroupUuids);
+				if(childMenuDto != null) {
+					target.getChilds().add(childMenuDto);
 				}
-				for (UUID userGroup : source.getUserGroups()) {
-					target.getUserGroups().add(populateUserGroup(userGroup));
-				}
-				for (MenuField field : source.getFields()) {
-					target.getFields().add(populateMenuField(field));
-				}
-				return target;
-			} else {
-				return null;
+			}
+			
+			for (MenuField field : source.getFields()) {
+				target.getFields().add(populateMenuField(field));
 			}
 
+			return target;
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}

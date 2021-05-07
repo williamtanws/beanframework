@@ -20,8 +20,8 @@
 					</div>
 					<!-- /.col -->
 					<div class="col-sm-6">
-						<div class="float-sm-permission">
-							<button type="submit" class="btn btn-primary" th:text="#{module.common.save}" sec:authorize="hasAuthority('userpermission_create') or hasAuthority('userpermission_update')"></button>
+						<div class="float-sm-right">
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-save :: action}" sec:authorize="hasAuthority('userpermission_create') or hasAuthority('userpermission_update')"></th:block>
 						</div>
 					</div>
 					<!-- /.col -->

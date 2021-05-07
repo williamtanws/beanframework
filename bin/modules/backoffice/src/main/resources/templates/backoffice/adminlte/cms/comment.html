@@ -17,8 +17,8 @@
 		</div>
 
 	</th:block>
-	<th:block layout:fragment="js" th:with="addAuthority=${#authorization.expression('hasAuthority(''comment_create'')')}">
-		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='commentTable', columns=${#strings.arraySplit('user,html', ',')}, pageUrl=@{${@environment.getProperty('path.api.comment')}}, formUrl=@{${@environment.getProperty('path.comment.form')}}, addAuthority=${addAuthority}, selectAuthority=true )}"></th:block>
+	<th:block layout:fragment="js">
+		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='commentTable', columns=${#strings.arraySplit('user,html', ',')}, pageUrl=@{${@environment.getProperty('path.api.comment')}}, formUrl=@{${@environment.getProperty('path.comment.form')}}, addAuthority=false, selectAuthority=true )}"></th:block>
 	</th:block>
 </body>
 </html>

@@ -71,7 +71,7 @@ public class AddressCsv extends AbstractCsv {
 
 	@Override
 	public String toString() {
-		return "AddressCsv [streetName=" + streetName + ", streetNumber=" + streetNumber + ", postalCode=" + postalCode + ", town=" + town + ", countryId=" + countryId + "]";
+		return "AddressCsv [id=" + id + ", streetName=" + streetName + ", streetNumber=" + streetNumber + ", postalCode=" + postalCode + ", town=" + town + ", countryId=" + countryId + "]";
 	}
 
 }

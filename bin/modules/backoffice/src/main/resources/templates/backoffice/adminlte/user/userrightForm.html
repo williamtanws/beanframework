@@ -21,7 +21,7 @@
 					<!-- /.col -->
 					<div class="col-sm-6">
 						<div class="float-sm-right">
-							<button type="submit" class="btn btn-primary" th:text="#{module.common.save}" sec:authorize="hasAuthority('userright_create') or hasAuthority('userright_update')"></button>
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-save :: action}" sec:authorize="hasAuthority('userright_create') or hasAuthority('userright_update')"></th:block>
 						</div>
 					</div>
 					<!-- /.col -->
@@ -41,7 +41,7 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" id="custom-tabs-administration-tab" data-toggle="pill" href="#custom-tabs-administration" role="tab" aria-controls="custom-tabs-administration" aria-selected="false" th:text="#{module.common.administration}" th:if="*{uuid != null}"></a>
-						</li>	
+						</li>
 					</ul>
 				</div>
 				<div class="card-body">

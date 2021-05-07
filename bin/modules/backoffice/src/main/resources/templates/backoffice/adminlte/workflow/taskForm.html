@@ -21,7 +21,7 @@
 					<!-- /.col -->
 					<div class="col-sm-6">
 						<div class="float-sm-right">
-							<button type="submit" class="btn btn-primary" th:text="#{module.common.save}" sec:authorize="hasAuthority('task_create') or hasAuthority('task_update')"></button>
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-save :: action}" sec:authorize="hasAuthority('task_create') or hasAuthority('task_update')"></th:block>
 						</div>
 					</div>
 					<!-- /.col -->
