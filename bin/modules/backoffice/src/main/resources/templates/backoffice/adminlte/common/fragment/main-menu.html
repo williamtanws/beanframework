@@ -4,22 +4,15 @@
 </head>
 <body>
 	<th:block th:fragment="tree">
-		<li class="nav-header" th:text="#{module.menu}" style="text-transform: uppercase;"></li>
 		<!-- sidebar menu: : style can be found in sidebar.less -->
 		<th:block th:each="menu : ${@MenuNavigation.findMenuTreeByCurrentUser()}">
 			<th:block th:insert="backoffice/adminlte/common/fragment/main-menu :: tree-submenu (menu=${menu})"></th:block>
 		</th:block>
-		<li class="nav-header" th:text="#{module.common.miscellaneous}" style="text-transform: uppercase;"></li>
-		<li class="nav-item">
-			<a href="#" class="nav-link" target="_blank" onClick="window.open('/documentation', '_blank').focus();">
-				<i class="nav-icon fas fa-file"></i>
-				<p th:text="#{module.common.documentation}"></p>
-			</a>
-		</li>
 	</th:block>
 	<th:block th:fragment="tree-submenu (menu)">
+		<li class="nav-header" th:text="${menu.getHeader(#locale.toString())}" style="text-transform: uppercase;" th:if="${menu.getHeader(#locale.toString()) != null}"></li>
 		<li class="nav-item">
-			<a th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}" class="nav-link">
+			<a th:href="${menu.target.toString() == '_self' ? menu.path:'#'}" th:target="${menu.target != null ? menu.target:''}" class="nav-link"  th:onClick="menuOnClick([[${menu.path}]],[[${menu.target.toString()}]] );">
 				<i th:class="'nav-icon '+${menu.icon}"></i>
 				<p>
 					<th:block th:text="${menu.getName(#locale.toString())}"></th:block>
@@ -32,27 +25,9 @@
 				</th:block>
 			</ul>
 		</li>
-		<!-- 
-		<li class="nav-item">
-			<a th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}">
-				<i th:classappend="${menu.icon}"></i>
-				<p th:text="${menu.getName(#locale.toString())}"></p>
-				<i class="right fas fa-angle-left" th:if="${not #lists.isEmpty(menu.childs)}"></i>
-			</a>
-			<ul class="nav nav-treeview" th:if="${not #lists.isEmpty(menu.childs)}" th:id="${menu.uuid}">
-				<th:block th:each="child : ${menu.childs}" th:id="${child.uuid}">
-					<th:block th:insert="backoffice/adminlte/common/fragment/main-menu :: tree-submenu (menu=${child})"></th:block>
-				</th:block>
-			</ul>
-		</li> 
-		-->
 	</th:block>
 
 	<th:block th:fragment="button">
-		<a class="btn btn-app" th:href="@{${@environment.getProperty('path.backoffice.dashboard')}}">
-			<i class="fa fa-dashboard"></i>
-			<span th:text="#{module.common.dashboard}"></span>
-		</a>
 		<th:block th:each="menu : ${@MenuNavigation.findMenuTreeByCurrentUser()}">
 			<th:block th:insert="backoffice/adminlte/common/fragment/menu :: button-submenu" th:with="menu=${menu}"></th:block>
 		</th:block>

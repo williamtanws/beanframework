@@ -71,7 +71,7 @@
 							</div>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-attribute" role="tabpanel" aria-labelledby="custom-tabs-attribute-tab">
-							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-attribute :: form(fields=*{fields})}"></th:block>
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-attribute :: form(attributes=*{attributes})}"></th:block>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
 							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-history :: datatable}"></th:block>

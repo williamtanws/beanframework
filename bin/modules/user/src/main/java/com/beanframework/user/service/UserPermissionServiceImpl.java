@@ -14,7 +14,7 @@ import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.user.UserPermissionConstants;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserPermissionField;
+import com.beanframework.user.domain.UserPermissionAttribute;
 
 @Service
 public class UserPermissionServiceImpl implements UserPermissionService {
@@ -42,17 +42,17 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 
 					boolean addField = true;
-					for (UserPermissionField field : model.getFields()) {
+					for (UserPermissionAttribute field : model.getAttributes()) {
 						if (field.getDynamicFieldSlot().equals(dynamicFieldSlot)) {
 							addField = false;
 						}
 					}
 
 					if (addField) {
-						UserPermissionField field = new UserPermissionField();
+						UserPermissionAttribute field = new UserPermissionAttribute();
 						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUserPermission(model);
-						model.getFields().add(field);
+						model.getAttributes().add(field);
 					}
 				}
 			}

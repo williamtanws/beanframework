@@ -3,142 +3,142 @@
 <head>
 </head>
 <body>
-	<th:block th:fragment="form (fields)">
+	<th:block th:fragment="form (attributes)">
 		<div class="row">
-			<th:block th:each="field,itrStat : ${fields}">
+			<th:block th:each="attribute,itrStat : ${attributes}">
 
-				<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).INTEGER}">
-					<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+				<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).INTEGER}">
+					<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 						<div class="form-group">
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-							<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/integer :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+							<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/integer :: input (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
 				</th:block>
-				<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).FLOATING_POINT}">
-					<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+				<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).FLOATING_POINT}">
+					<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 						<div class="form-group">
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-							<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/floatingpoint :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+							<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/floatingpoint :: input (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
 				</th:block>
-				<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).TEXT}">
-					<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+				<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).TEXT}">
+					<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 						<div class="form-group">
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-							<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/text :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+							<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/text :: input (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
 				</th:block>
-				<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).TEXTAREA}">
-					<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+				<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).TEXTAREA}">
+					<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 						<div class="form-group">
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-							<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/textarea :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+							<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/textarea :: input (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
 				</th:block>
-				<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).EDITOR}">
-					<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+				<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).EDITOR}">
+					<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 						<div class="form-group">
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-							<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/editor :: input (uuid=${field.uuid}, name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+							<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/editor :: input (uuid=${attribute.uuid}, name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
 				</th:block>
-				<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).SELECT}">
-					<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+				<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).SELECT}">
+					<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 						<div class="form-group">
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-							<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+							<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
 							<th:block
-								th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/select :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required}, enumerations=${field.dynamicFieldSlot.dynamicField.enumerations})}"></th:block>
+								th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/select :: input (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required}, enumerations=${attribute.dynamicFieldSlot.dynamicField.enumerations})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
 				</th:block>
-				<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).DATE}">
-					<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+				<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).DATE}">
+					<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 						<div class="form-group">
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-							<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/date :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+							<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/date :: input (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
 				</th:block>
-				<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).BOOLEAN}">
-					<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+				<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).BOOLEAN}">
+					<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 						<div class="form-group">
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-							<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/boolean :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+							<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/boolean :: input (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
 				</th:block>
-				<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).FILE}">
-					<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+				<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).FILE}">
+					<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 						<div class="form-group">
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-							<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-							<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-							<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/file :: input (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+							<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+							<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+							<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/dynamicfield/file :: input (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -146,132 +146,132 @@
 			</th:block>
 		</div>
 	</th:block>
-	<th:block th:fragment="output (fields)">
-		<th:block th:each="field,itrStat : ${fields}">
-			<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).INTEGER}">
-				<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+	<th:block th:fragment="output (attributes)">
+		<th:block th:each="attribute,itrStat : ${attributes}">
+			<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).INTEGER}">
+				<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 					<div class="form-group">
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-						<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/integer :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+						<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/integer :: output (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
-			<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).FLOATING_POINT}">
-				<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+			<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).FLOATING_POINT}">
+				<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 					<div class="form-group">
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-						<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/floatingpoint :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+						<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/floatingpoint :: output (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
-			<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).TEXT}">
-				<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+			<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).TEXT}">
+				<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 					<div class="form-group">
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-						<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/text :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+						<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/text :: output (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
-			<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).TEXTAREA}">
-				<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+			<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).TEXTAREA}">
+				<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 					<div class="form-group">
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-						<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/textarea :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+						<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/textarea :: output (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
-			<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).EDITOR}">
-				<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+			<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).EDITOR}">
+				<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 					<div class="form-group">
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-						<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/editor :: output (uuid=${field.uuid}, name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+						<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/editor :: output (uuid=${attribute.uuid}, name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
-			<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).SELECT}">
-				<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+			<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).SELECT}">
+				<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 					<div class="form-group">
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-						<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+						<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
 						<th:block
-							layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/select :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required}, enumerations=${field.dynamicFieldSlot.dynamicField.enumerations})}"></th:block>
+							layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/select :: output (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required}, enumerations=${attribute.dynamicFieldSlot.dynamicField.enumerations})}"></th:block>
 					</div>
 				</div>
 			</th:block>
-			<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).DATE}">
-				<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+			<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).DATE}">
+				<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 					<div class="form-group">
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-						<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/date :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+						<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/date :: output (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
-			<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).BOOLEAN}">
-				<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+			<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).BOOLEAN}">
+				<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 					<div class="form-group">
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-						<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/boolean :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+						<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/boolean :: output (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>
-			<th:block th:if="${field.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).FILE}">
-				<div th:class="${field.dynamicFieldSlot.dynamicField.grid}">
+			<th:block th:if="${attribute.dynamicFieldSlot.dynamicField.type == T(com.beanframework.dynamicfield.DynamicFieldType).FILE}">
+				<div th:class="${attribute.dynamicFieldSlot.dynamicField.grid}">
 					<div class="form-group">
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language == null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}"></label>
-						<label th:if="${field.dynamicFieldSlot.dynamicField.language != null}" th:for="'fields['+${itrStat.index}+'].value'" th:text="${field.dynamicFieldSlot.dynamicField.name}+'('+${field.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
-						<span th:if="${field.dynamicFieldSlot.dynamicField.required}">*</span>
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].uuid'" th:value="${field.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${field.dynamicFieldSlot.uuid}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].sort'" th:value="${field.dynamicFieldSlot.sort}">
-						<input type="hidden" th:name="'fields['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${field.dynamicFieldSlot.dynamicField.uuid}">
-						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/file :: output (name='fields['+${itrStat.index}+'].value', value=${field.value}, required=${field.dynamicFieldSlot.dynamicField.required})}"></th:block>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language == null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}"></label>
+						<label th:if="${attribute.dynamicFieldSlot.dynamicField.language != null}" th:for="'attributes['+${itrStat.index}+'].value'" th:text="${attribute.dynamicFieldSlot.dynamicField.name}+'('+${attribute.dynamicFieldSlot.dynamicField.language.id}+')'"></label>
+						<span th:if="${attribute.dynamicFieldSlot.dynamicField.required}">*</span>
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].uuid'" th:value="${attribute.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.uuid'" th:value="${attribute.dynamicFieldSlot.uuid}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].sort'" th:value="${attribute.dynamicFieldSlot.sort}">
+						<input type="hidden" th:name="'attributes['+${itrStat.index}+'].dynamicFieldSlot.selectedDynamicField'" th:value="${attribute.dynamicFieldSlot.dynamicField.uuid}">
+						<th:block layout:insert="~{backoffice/adminlte/common/fragment/dynamicfield/file :: output (name='attributes['+${itrStat.index}+'].value', value=${attribute.value}, required=${attribute.dynamicFieldSlot.dynamicField.required})}"></th:block>
 					</div>
 				</div>
 			</th:block>

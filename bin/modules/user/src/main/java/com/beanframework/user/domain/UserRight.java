@@ -31,7 +31,7 @@ public class UserRight extends GenericEntity {
 	 */
 	private static final long serialVersionUID = 8192305251381233446L;
 	public static final String NAME = "name";
-	public static final String FIELDS = "fields";
+	public static final String ATTRIBUTES = "fields";
 	public static final String SORT = "sort";
 
 	@Audited(withModifiedFlag = true)
@@ -41,8 +41,8 @@ public class UserRight extends GenericEntity {
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
-	@OrderBy(UserRightField.DYNAMIC_FIELD_SLOT)
-	private List<UserRightField> fields = new ArrayList<UserRightField>();
+	@OrderBy(UserRightAttribute.DYNAMIC_FIELD_SLOT)
+	private List<UserRightAttribute> attributes = new ArrayList<UserRightAttribute>();
 
 	@Audited(withModifiedFlag = true)
 	private Integer sort;
@@ -63,12 +63,12 @@ public class UserRight extends GenericEntity {
 		this.sort = sort;
 	}
 
-	public List<UserRightField> getFields() {
-		return fields;
+	public List<UserRightAttribute> getAttributes() {
+		return attributes;
 	}
 
-	public void setFields(List<UserRightField> fields) {
-		this.fields = fields;
+	public void setAttributes(List<UserRightAttribute> fields) {
+		this.attributes = fields;
 	}
 
 }

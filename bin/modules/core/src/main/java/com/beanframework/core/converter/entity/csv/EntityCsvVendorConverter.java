@@ -19,7 +19,7 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.user.domain.Address;
 import com.beanframework.user.domain.Company;
-import com.beanframework.user.domain.UserField;
+import com.beanframework.user.domain.UserAttribute;
 import com.beanframework.user.domain.UserGroup;
 import com.beanframework.user.domain.Vendor;
 
@@ -90,12 +90,12 @@ public class EntityCsvVendorConverter implements EntityCsvConverter<VendorCsv, V
 					String value = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[1]);
 
 					boolean add = true;
-					for (int i = 0; i < prototype.getFields().size(); i++) {
+					for (int i = 0; i < prototype.getAttributes().size(); i++) {
 						Map<String, Object> properties = new HashMap<String, Object>();
 						properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
 						DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
-						if (prototype.getFields().get(i).getDynamicFieldSlot() == slot.getUuid()) {
-							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
+						if (prototype.getAttributes().get(i).getDynamicFieldSlot() == slot.getUuid()) {
+							prototype.getAttributes().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
 					}
@@ -106,11 +106,11 @@ public class EntityCsvVendorConverter implements EntityCsvConverter<VendorCsv, V
 						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
 
 						if (entityDynamicFieldSlot != null) {
-							UserField field = new UserField();
+							UserAttribute field = new UserAttribute();
 							field.setValue(value);
 							field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
 							field.setUser(prototype);
-							prototype.getFields().add(field);
+							prototype.getAttributes().add(field);
 						}
 					}
 				}

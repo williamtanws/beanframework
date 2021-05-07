@@ -16,7 +16,7 @@ public class UserPermissionDto extends GenericDto {
 
 	private String name;
 
-	private List<UserPermissionFieldDto> fields = new ArrayList<UserPermissionFieldDto>();
+	private List<UserPermissionAttributeDto> attributes = new ArrayList<UserPermissionAttributeDto>();
 
 	private Integer sort;
 
@@ -28,12 +28,12 @@ public class UserPermissionDto extends GenericDto {
 		this.name = name;
 	}
 
-	public List<UserPermissionFieldDto> getFields() {
-		return fields;
+	public List<UserPermissionAttributeDto> getAttributes() {
+		return attributes;
 	}
 
-	public void setFields(List<UserPermissionFieldDto> fields) {
-		this.fields = fields;
+	public void setAttributes(List<UserPermissionAttributeDto> attributes) {
+		this.attributes = attributes;
 	}
 
 	public Integer getSort() {

@@ -17,7 +17,7 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuField;
+import com.beanframework.menu.domain.MenuAttribute;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu> {
@@ -105,12 +105,12 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 					String value = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[1]);
 
 					boolean add = true;
-					for (int i = 0; i < prototype.getFields().size(); i++) {
+					for (int i = 0; i < prototype.getAttributes().size(); i++) {
 						Map<String, Object> properties = new HashMap<String, Object>();
 						properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
 						DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
-						if (prototype.getFields().get(i).getDynamicFieldSlot() == slot.getUuid()) {
-							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
+						if (prototype.getAttributes().get(i).getDynamicFieldSlot() == slot.getUuid()) {
+							prototype.getAttributes().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
 					}
@@ -121,11 +121,11 @@ public class EntityCsvMenuConverter implements EntityCsvConverter<MenuCsv, Menu>
 						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
 
 						if (entityDynamicFieldSlot != null) {
-							MenuField field = new MenuField();
+							MenuAttribute field = new MenuAttribute();
 							field.setValue(value);
 							field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
 							field.setMenu(prototype);
-							prototype.getFields().add(field);
+							prototype.getAttributes().add(field);
 						}
 					}
 				}

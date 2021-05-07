@@ -33,7 +33,7 @@ public class UserPermission extends GenericEntity {
 	public static final String NAME = "name";
 	public static final String USER_PERMISSION_FIELD = "userPermissionField";
 	public static final String SORT = "sort";
-	public static final String FIELDS = "fields";
+	public static final String ATTRIBUTES = "fields";
 
 	@Audited(withModifiedFlag = true)
 	private String name;
@@ -42,8 +42,8 @@ public class UserPermission extends GenericEntity {
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
-	@OrderBy(UserPermissionField.DYNAMIC_FIELD_SLOT)
-	private List<UserPermissionField> fields = new ArrayList<UserPermissionField>();
+	@OrderBy(UserPermissionAttribute.DYNAMIC_FIELD_SLOT)
+	private List<UserPermissionAttribute> attributes = new ArrayList<UserPermissionAttribute>();
 
 	@Audited(withModifiedFlag = true)
 	private Integer sort;
@@ -56,12 +56,12 @@ public class UserPermission extends GenericEntity {
 		this.name = name;
 	}
 
-	public List<UserPermissionField> getFields() {
-		return fields;
+	public List<UserPermissionAttribute> getAttributes() {
+		return attributes;
 	}
 
-	public void setFields(List<UserPermissionField> fields) {
-		this.fields = fields;
+	public void setAttributes(List<UserPermissionAttribute> attributes) {
+		this.attributes = attributes;
 	}
 
 	public Integer getSort() {

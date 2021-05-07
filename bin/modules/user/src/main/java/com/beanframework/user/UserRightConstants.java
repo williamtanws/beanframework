@@ -8,7 +8,7 @@ public final class UserRightConstants {
 
 	public interface Table {
 		public static final String USER_RIGHT = "userright";
-		public static final String USER_RIGHT_FIELD = "userright_field";
+		public static final String USER_RIGHT_ATTRIBUTE = "userright_attribute";
 	}
 
 	public interface Locale {

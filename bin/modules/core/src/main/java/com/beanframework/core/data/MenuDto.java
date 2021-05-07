@@ -36,7 +36,7 @@ public class MenuDto extends GenericDto {
 
 	private List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
 
-	private List<MenuFieldDto> fields = new ArrayList<MenuFieldDto>();
+	private List<MenuAttributeDto> attributes = new ArrayList<MenuAttributeDto>();
 
 	private Boolean active;
 
@@ -115,12 +115,12 @@ public class MenuDto extends GenericDto {
 		this.userGroups = userGroups;
 	}
 
-	public List<MenuFieldDto> getFields() {
-		return fields;
+	public List<MenuAttributeDto> getAttributes() {
+		return attributes;
 	}
 
-	public void setFields(List<MenuFieldDto> fields) {
-		this.fields = fields;
+	public void setAttributes(List<MenuAttributeDto> attributes) {
+		this.attributes = attributes;
 	}
 
 	public Boolean getActive() {
@@ -140,17 +140,34 @@ public class MenuDto extends GenericDto {
 	}
 
 	public String getName(String languageId) {
-		for (MenuFieldDto field : fields) {
-			if (field.getDynamicFieldSlot().getDynamicField().getLanguage() != null && field.getDynamicFieldSlot().getDynamicField().getLanguage().getId().equals(languageId)) {
+		for (MenuAttributeDto attribute : attributes) {
+			if (attribute.getDynamicFieldSlot().getId().endsWith("_name_" + languageId)) {
+				if (attribute.getDynamicFieldSlot().getDynamicField().getLanguage() != null && attribute.getDynamicFieldSlot().getDynamicField().getLanguage().getId().equals(languageId)) {
 
-				if (StringUtils.isBlank(field.getValue())) {
-					return StringUtils.isBlank(this.getName()) ? "[" + this.getId() + "]" : this.getName();
-				} else {
-					return field.getValue();
+					if (StringUtils.isBlank(attribute.getValue())) {
+						return StringUtils.isBlank(this.getName()) ? "[" + this.getId() + "]" : this.getName();
+					} else {
+						return attribute.getValue();
+					}
 				}
 			}
 		}
 
 		return StringUtils.isBlank(this.getName()) ? "[" + this.getId() + "]" : this.getName();
+	}
+
+	public String getHeader(String languageId) {
+		for (MenuAttributeDto attribute : attributes) {
+			if (attribute.getDynamicFieldSlot().getId().endsWith("_header_" + languageId)) {
+				if (attribute.getDynamicFieldSlot().getDynamicField().getLanguage() != null && attribute.getDynamicFieldSlot().getDynamicField().getLanguage().getId().equals(languageId)) {
+
+					if (StringUtils.isNotBlank(attribute.getValue())) {
+						return attribute.getValue();
+					}
+				}
+			}
+		}
+
+		return null;
 	}
 }

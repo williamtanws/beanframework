@@ -12,12 +12,12 @@ import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.UserAuthorityDto;
 import com.beanframework.core.data.UserGroupDto;
-import com.beanframework.core.data.UserGroupFieldDto;
+import com.beanframework.core.data.UserGroupAttributeDto;
 import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserRightDto;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupField;
+import com.beanframework.user.domain.UserGroupAttribute;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 
@@ -40,13 +40,13 @@ public class UserGroupPopulator extends AbstractPopulator<UserGroup, UserGroupDt
 				target.getUserGroups().add(populateUserGroup(userGroup));
 			}
 
-			for (UserGroupField field : source.getFields()) {
-				target.getFields().add(populateUserGroupField(field));
+			for (UserGroupAttribute field : source.getAttributes()) {
+				target.getAttributes().add(populateUserGroupField(field));
 			}
 
-			Collections.sort(target.getFields(), new Comparator<UserGroupFieldDto>() {
+			Collections.sort(target.getAttributes(), new Comparator<UserGroupAttributeDto>() {
 				@Override
-				public int compare(UserGroupFieldDto o1, UserGroupFieldDto o2) {
+				public int compare(UserGroupAttributeDto o1, UserGroupAttributeDto o2) {
 					if (o1.getDynamicFieldSlot().getSort() == null)
 						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
@@ -128,12 +128,12 @@ public class UserGroupPopulator extends AbstractPopulator<UserGroup, UserGroupDt
 		}
 	}
 
-	public UserGroupFieldDto populateUserGroupField(UserGroupField source) throws PopulatorException {
+	public UserGroupAttributeDto populateUserGroupField(UserGroupAttribute source) throws PopulatorException {
 		if (source == null)
 			return null;
 
 		try {
-			UserGroupFieldDto target = new UserGroupFieldDto();
+			UserGroupAttributeDto target = new UserGroupAttributeDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
 			target.setCreatedDate(source.getCreatedDate());

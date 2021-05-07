@@ -16,7 +16,7 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.domain.UserRightAttribute;
 
 
 public class EntityCsvUserRightConverter implements EntityCsvConverter<UserRightCsv, UserRight> {
@@ -69,12 +69,12 @@ public class EntityCsvUserRightConverter implements EntityCsvConverter<UserRight
 					String value = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[1]);
 
 					boolean add = true;
-					for (int i = 0; i < prototype.getFields().size(); i++) {
+					for (int i = 0; i < prototype.getAttributes().size(); i++) {
 						Map<String, Object> properties = new HashMap<String, Object>();
 						properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
 						DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
-						if (prototype.getFields().get(i).getDynamicFieldSlot() == slot.getUuid()) {
-							prototype.getFields().get(i).setValue(StringUtils.stripToNull(value));
+						if (prototype.getAttributes().get(i).getDynamicFieldSlot() == slot.getUuid()) {
+							prototype.getAttributes().get(i).setValue(StringUtils.stripToNull(value));
 							add = false;
 						}
 					}
@@ -85,11 +85,11 @@ public class EntityCsvUserRightConverter implements EntityCsvConverter<UserRight
 						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneByProperties(dynamicFieldSlotProperties, DynamicFieldSlot.class);
 
 						if (entityDynamicFieldSlot != null) {
-							UserRightField field = new UserRightField();
+							UserRightAttribute field = new UserRightAttribute();
 							field.setValue(value);
 							field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
 							field.setUserRight(prototype);
-							prototype.getFields().add(field);
+							prototype.getAttributes().add(field);
 						}
 					}
 				}

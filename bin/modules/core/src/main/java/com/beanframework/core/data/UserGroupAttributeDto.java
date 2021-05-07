@@ -2,25 +2,25 @@ package com.beanframework.core.data;
 
 import com.beanframework.common.data.GenericDto;
 
-public class UserRightFieldDto extends GenericDto {
+public class UserGroupAttributeDto extends GenericDto {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7977113522263277626L;
+	private static final long serialVersionUID = -6527945805106422096L;
 
-	private UserRightDto userRight;
+	private UserGroupDto userGroup;
 
 	private DynamicFieldSlotDto dynamicFieldSlot;
 
 	private String value;
 
-	public UserRightDto getUserRight() {
-		return userRight;
+	public UserGroupDto getUserGroup() {
+		return userGroup;
 	}
 
-	public void setUserRight(UserRightDto userRight) {
-		this.userRight = userRight;
+	public void setUserGroup(UserGroupDto userGroup) {
+		this.userGroup = userGroup;
 	}
 
 	public DynamicFieldSlotDto getDynamicFieldSlot() {

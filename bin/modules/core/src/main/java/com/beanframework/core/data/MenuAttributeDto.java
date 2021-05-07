@@ -2,7 +2,7 @@ package com.beanframework.core.data;
 
 import com.beanframework.common.data.GenericDto;
 
-public class MenuFieldDto extends GenericDto {
+public class MenuAttributeDto extends GenericDto {
 
 	/**
 	 * 
