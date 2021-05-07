@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -24,7 +25,7 @@ import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
 import com.beanframework.user.service.UserService;
 
-@Component
+@Service
 public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements MenuFacade {
 
 	private static final Class<Menu> entityClass = Menu.class;
@@ -104,6 +105,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 		}
 	}
 
+	@Transactional
 	@Override
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
@@ -125,6 +127,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 		}
 	}
 
+	@Transactional
 	@Override
 	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
 
@@ -142,6 +145,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 
 	}
 
+	@Transactional
 	@Override
 	public List<MenuDto> findMenuBreadcrumbsByPath(String path) throws Exception {
 		List<Menu> models = menuService.findMenuBreadcrumbsByPath(path);
