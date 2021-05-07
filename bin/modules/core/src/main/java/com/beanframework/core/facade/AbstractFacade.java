@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.GenericDto;
@@ -52,7 +51,6 @@ public class AbstractFacade<ENTITY extends GenericEntity, DTO extends GenericDto
 	}
 
 	@SuppressWarnings("unchecked")
-	@Transactional(readOnly = true)
 	public List<Object[]> findHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
 
 		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();

@@ -81,4 +81,9 @@ public class ImexCsv extends AbstractCsv {
 		this.seperator = seperator;
 	}
 
+	@Override
+	public String toString() {
+		return "ImexCsv [id=" + id + ", type=" + type + ", directory=" + directory + ", fileName=" + fileName + ", query=" + query + ", header=" + header + ", seperator=" + seperator + "]";
+	}
+
 }

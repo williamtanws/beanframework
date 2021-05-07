@@ -30,8 +30,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.beanframework.common.CommonConstants;
@@ -50,8 +48,6 @@ import com.beanframework.common.interceptor.RemoveInterceptor;
 import com.beanframework.common.interceptor.ValidateInterceptor;
 
 @SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
-@Service
-@Transactional
 public abstract class AbstractModelServiceImpl implements ModelService {
 
 	@PersistenceContext

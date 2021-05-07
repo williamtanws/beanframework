@@ -28,6 +28,8 @@ public class DumpDbJob implements Job {
 	@Value("${database.backup.executecommand}")
 	private String DB_EXECUTE_COMMAND;
 
+	private SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		try {
@@ -36,9 +38,8 @@ public class DumpDbJob implements Job {
 			LOGGER.info("Backup Started at " + new Date());
 
 			Date backupDate = new Date();
-			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 			String backupDateStr = format.format(backupDate);
-			//String dbNameList = "client_1 client_2";
+			// String dbNameList = "client_1 client_2";
 
 			String fileName = "mysqldump"; // default file name
 			File f1 = new File(DATABASE_BACKUP_DIR);
@@ -71,7 +72,7 @@ public class DumpDbJob implements Job {
 				LOGGER.info(message);
 				context.setResult(message);
 			}
-			
+
 			context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
 		} catch (Exception e) {
 			context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);

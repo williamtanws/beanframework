@@ -85,14 +85,14 @@ public class UserServiceImpl implements UserService {
 
 	@Value(UserConstants.Employee.DEFAULT_GROUP)
 	private String defaultEmployeeGroup;
-	
+
 	@Value(UserConstants.Access.CONSOLE)
 	private String ACCESS_CONSOLE;
-	
+
 	@Value(UserConstants.Access.BACKOFFICE)
 	private String ACCESS_BACKOFFICE;
 
-	@Transactional(readOnly = true)
+	@Transactional
 	@Override
 	public UsernamePasswordAuthenticationToken findAuthenticate(String id, String password) throws Exception {
 
@@ -354,7 +354,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional
 	@Override
 	public Set<UUID> getAllUserGroupsByCurrentUser() throws Exception {
 		Set<UUID> userGroupUuids = new HashSet<UUID>();
@@ -394,7 +394,7 @@ public class UserServiceImpl implements UserService {
 
 		return userGroupUuids;
 	}
-	
+
 	@Override
 	public void generateUserField(User model, String configurationDynamicFieldTemplate) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();

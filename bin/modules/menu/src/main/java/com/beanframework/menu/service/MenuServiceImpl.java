@@ -23,7 +23,6 @@ import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuField;
 
 @Service
-@Transactional
 public class MenuServiceImpl implements MenuService {
 
 	@Autowired
@@ -32,6 +31,7 @@ public class MenuServiceImpl implements MenuService {
 	@Value(MenuConstants.CONFIGURATION_DYNAMIC_FIELD_TEMPLATE)
 	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 
+	@Transactional
 	@Override
 	public void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception {
 

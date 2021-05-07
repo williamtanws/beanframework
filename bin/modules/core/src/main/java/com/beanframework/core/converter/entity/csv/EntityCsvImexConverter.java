@@ -59,7 +59,7 @@ public class EntityCsvImexConverter implements EntityCsvConverter<ImexCsv, Imex>
 				prototype.setFileName(source.getFileName());
 
 			if (StringUtils.isNotBlank(source.getQuery()))
-				prototype.setQuery(source.getQuery());
+				prototype.setQuery(source.getQuery().replace("%n", System.lineSeparator()));
 
 			if (StringUtils.isNotBlank(source.getHeader()))
 				prototype.setHeader(source.getHeader());

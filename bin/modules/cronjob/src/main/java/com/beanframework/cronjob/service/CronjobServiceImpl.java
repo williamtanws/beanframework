@@ -15,7 +15,7 @@ public class CronjobServiceImpl implements CronjobService {
 	@Autowired
 	private CronjobRepository cronjobRepository;
 
-	@Transactional(readOnly = true)
+	@Transactional
 	@Override
 	public List<Cronjob> findEntityStartupJobIsFalseWithQueueJob() {
 		return cronjobRepository.findStartupJobIsFalseWithQueueJob();

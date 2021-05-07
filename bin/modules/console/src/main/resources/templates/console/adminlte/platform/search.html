@@ -18,15 +18,10 @@
 							<div class="card">
 								<!-- /.card-header -->
 								<div class="card-body">
-									<form method="post" th:action="@{${@environment.getProperty('path.console.export')}}">
+									<form id="form-search" method="post" th:action="@{${@environment.getProperty('path.console.search')}}">
 										<div class="col-md-12">
 											<div class="form-group">
 												<textarea class="form-control" rows="5" name="query" th:utext="${query}" placeholder="JPQL query"></textarea>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<input class="form-control" name="typecode" th:value="${typecode}" placeholder="DTO Type Code"></input>
 											</div>
 										</div>
 										<div class="col-md-12">
@@ -35,9 +30,13 @@
 											</div>
 										</div>
 									</form>
+									<div class="col-md-12" th:if="${result == null}">
+										<hr>
+										<h5 th:text="#{module.common.noresult}"></h5>
+									</div>
 									<div class="col-md-12" th:if="${result != null}">
 										<hr>
-										<h5 th:text="#{module.common.json.result}+':'"></h5>
+										<h5 th:text="#{module.common.result}+':'"></h5>
 										<pre th:utext="${result}"></pre>
 									</div>
 								</div>
@@ -49,6 +48,36 @@
 				</div>
 			</section>
 		</div>
+	</th:block>
+	<th:block layout:fragment="js">
+
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+				
+			$(document).ready(function () {
+				$('#form-search').validate(
+					{
+						rules: {
+			                query: {
+			                    required: true
+			                }
+						},
+						errorElement: 'span',
+						errorPlacement: function (error, element) {
+							error.addClass('invalid-feedback');
+							element.closest('.form-group').append(error);
+						},
+						highlight: function (element, errorClass, validClass) {
+							$(element).addClass('is-invalid');
+						},
+						unhighlight: function (element, errorClass, validClass) {
+							$(element).removeClass('is-invalid');
+						}
+					});
+			});
+			
+		    /*]]>*/
+		</script>
 	</th:block>
 </body>
 </html>

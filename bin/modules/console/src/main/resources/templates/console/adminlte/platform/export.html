@@ -21,7 +21,7 @@
 									<form method="post" th:action="@{${@environment.getProperty('path.console.export')}}">
 										<div class="col-md-12">
 											<div class="form-group">
-												<textarea class="form-control" rows="5" name="query" th:utext="${query}"></textarea>
+												<textarea class="form-control" rows="5" name="query" th:utext="${query}" placeholder="JPQL query"></textarea>
 											</div>
 										</div>
 										<div class="col-md-12">

@@ -44,7 +44,7 @@ public class NotificationJob implements Job {
 
 				count = notificationFacade.removeOldNotificationByToDate(date.toDate());
 
-				context.setResult("Removed " + count + " old notifications more than " + hours + " hours");
+				context.setResult("Removed " + count + " old notifications more than " + hours + " hour(s)");
 			}
 			context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
 

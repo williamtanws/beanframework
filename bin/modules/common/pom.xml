@@ -102,8 +102,8 @@
 			<artifactId>hibernate-core</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>org.hibernate.validator</groupId>
-		    <artifactId>hibernate-validator</artifactId>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -113,7 +113,7 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-envers</artifactId>
 		</dependency>
-		
+
 		<!-- ehcache -->
 		<dependency>
 			<groupId>org.ehcache</groupId>
@@ -187,8 +187,13 @@
 			<version>[30.0-jre,)</version>
 		</dependency>
 		<dependency>
-		    <groupId>javax.validation</groupId>
-		    <artifactId>validation-api</artifactId>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20180813</version>
 		</dependency>
 
 		<!-- Optional -->

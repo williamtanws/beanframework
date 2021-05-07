@@ -208,7 +208,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	public <T extends Collection> T findByProperties(Map<String, Object> properties, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
@@ -282,13 +282,14 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 		return (T) createQuery(null, null, null, null, null, modelClass).getResultList();
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<?> searchByQuery(String qlString) {
 		return entityManager.createQuery(qlString).getResultList();
 	}
 
 	@Override
-	public Query searchByNativeQuery(String sqlString) {
+	public Query createNativeQuery(String sqlString) {
 		return entityManager.createNativeQuery(sqlString);
 	}
 

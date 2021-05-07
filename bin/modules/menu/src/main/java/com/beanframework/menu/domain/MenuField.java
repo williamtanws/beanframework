@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.menu.MenuConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -28,7 +29,8 @@ public class MenuField extends GenericEntity {
 	private static final long serialVersionUID = -7666190244677961254L;
 	public static final String MENU = "menu";
 	public static final String DYNAMIC_FIELD_SLOT = "dynamicFieldSlot";
-
+	
+	@JsonIgnore
 	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "menu_uuid")
