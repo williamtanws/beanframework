@@ -6,11 +6,11 @@
 	<th:block th:fragment="tree">
 		<!-- sidebar menu: : style can be found in sidebar.less -->
 		<th:block th:each="menu : ${@MenuNavigation.findMenuTreeByCurrentUser()}">
+			<li class="nav-header" th:text="${menu.getHeader(#locale.toString())}" style="text-transform: uppercase;" th:if="${menu.getHeader(#locale.toString()) != null}"></li>
 			<th:block th:insert="backoffice/adminlte/common/fragment/main-menu :: tree-submenu (menu=${menu})"></th:block>
 		</th:block>
 	</th:block>
 	<th:block th:fragment="tree-submenu (menu)">
-		<li class="nav-header" th:text="${menu.getHeader(#locale.toString())}" style="text-transform: uppercase;" th:if="${menu.getHeader(#locale.toString()) != null}"></li>
 		<li class="nav-item">
 			<a th:href="${menu.target.toString() == '_self' ? menu.path : '#'}" class="nav-link"  th:onClick="menuOnClick([[${menu.path}]],[[${menu.target.toString()}]] );">
 				<i th:class="'nav-icon '+${menu.icon}"></i>

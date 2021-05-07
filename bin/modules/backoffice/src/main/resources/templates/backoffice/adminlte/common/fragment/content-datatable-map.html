@@ -4,7 +4,7 @@
 </head>
 <body>
 	<th:block th:fragment="map (title, tableId, columnsi18n, columns, selectedItemDto)">
-		<table th:id="'selected-table-'+${tableId}" class="table table-bordered">
+		<table th:id="'selected-table-'+${tableId}" class="table table-bordered table-select">
 			<thead>
 				<tr>
 					<th th:each="column : ${columnsi18n}" th:text="${column}"></th>
