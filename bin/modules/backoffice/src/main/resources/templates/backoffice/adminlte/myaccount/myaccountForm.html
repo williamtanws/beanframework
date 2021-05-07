@@ -47,7 +47,7 @@
 									<!-- /.card-body -->
 
 									<div class="card-footer">
-										<button type="submit" class="btn btn-success" th:text="#{module.common.save}" sec:authorize="hasAuthority('myaccount_update')"></button>
+										<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-save :: action}" sec:authorize="hasAuthority('myaccount_update')"></th:block>
 									</div>
 								</form>
 							</div>

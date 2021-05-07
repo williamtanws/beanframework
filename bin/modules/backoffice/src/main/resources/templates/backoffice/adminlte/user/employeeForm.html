@@ -21,7 +21,7 @@
 					<!-- /.col -->
 					<div class="col-sm-6">
 						<div class="float-sm-right">
-							<button type="submit" class="btn btn-success" th:text="#{module.common.save}" sec:authorize="hasAuthority('employee_create') or hasAuthority('employee_update')"></button>
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-save :: action}" sec:authorize="hasAuthority('employee_create') or hasAuthority('employee_update')"></th:block>
 						</div>
 					</div>
 					<!-- /.col -->
@@ -272,7 +272,8 @@
 			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedUserGroupDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.usergroup')}}, selectedItemDto=${employeeDto.userGroups}, selectedItemUuidName='selectedUserGroupUuids' )}"></th:block>
 		<th:block
 			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedCompanyDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.company')}}, selectedItemDto=${employeeDto.companies}, selectedItemUuidName='selectedCompanyUuids' )}"></th:block>
-		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${employeeDto.addresses}, selectedItemUuidName='selectedAddressUuids' )}"></th:block>
+		<th:block
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedAddressDataTable', columns=${#strings.arraySplit('id,streetName', ',')}, pageUrl=@{${@environment.getProperty('path.api.address')}}, selectedItemDto=${employeeDto.addresses}, selectedItemUuidName='selectedAddressUuids' )}"></th:block>
 		<th:block th:if="${employeeDto.uuid != null}" th:insert="~{backoffice/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.employee.history')}(uuid=${employeeDto.uuid})})}"></th:block>
 	</th:block>
 </body>
