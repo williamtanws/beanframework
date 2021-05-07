@@ -34,7 +34,7 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.MenuDto;
-import com.beanframework.core.data.MenuFieldDto;
+import com.beanframework.core.data.MenuAttributeDto;
 import com.beanframework.core.facade.MenuFacade;
 import com.beanframework.menu.domain.Menu;
 
@@ -114,7 +114,7 @@ public class MenuResource extends AbstractResource {
 
 		Locale locale = LocaleContextHolder.getLocale();
 
-		for (MenuFieldDto menuField : menu.getFields()) {
+		for (MenuAttributeDto menuField : menu.getAttributes()) {
 			if (menuField.getDynamicFieldSlot().getDynamicField().getLanguage() != null) {
 				if (menuField.getDynamicFieldSlot().getDynamicField().getLanguage().getId().equals(locale.toString())) {
 

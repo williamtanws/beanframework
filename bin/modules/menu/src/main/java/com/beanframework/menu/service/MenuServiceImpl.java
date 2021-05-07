@@ -20,7 +20,7 @@ import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.menu.MenuConstants;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuField;
+import com.beanframework.menu.domain.MenuAttribute;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -158,7 +158,7 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public void generateMenuField(Menu model) throws Exception {
+	public void generateMenuAttribute(Menu model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
@@ -174,17 +174,17 @@ public class MenuServiceImpl implements MenuService {
 				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 
 					boolean addField = true;
-					for (MenuField field : model.getFields()) {
+					for (MenuAttribute field : model.getAttributes()) {
 						if (field.getDynamicFieldSlot().equals(dynamicFieldSlot)) {
 							addField = false;
 						}
 					}
 
 					if (addField) {
-						MenuField field = new MenuField();
+						MenuAttribute field = new MenuAttribute();
 						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setMenu(model);
-						model.getFields().add(field);
+						model.getAttributes().add(field);
 					}
 				}
 			}

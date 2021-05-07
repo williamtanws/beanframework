@@ -17,7 +17,7 @@ import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.user.UserGroupConstants;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
-import com.beanframework.user.domain.UserGroupField;
+import com.beanframework.user.domain.UserGroupAttribute;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 
@@ -31,7 +31,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 	
 	@Override
-	public void generateUserGroupField(UserGroup model) throws Exception {
+	public void generateUserGroupAttribute(UserGroup model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
@@ -47,17 +47,17 @@ public class UserGroupServiceImpl implements UserGroupService {
 				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 
 					boolean addField = true;
-					for (UserGroupField field : model.getFields()) {
+					for (UserGroupAttribute field : model.getAttributes()) {
 						if (field.getDynamicFieldSlot().equals(dynamicFieldSlot)) {
 							addField = false;
 						}
 					}
 
 					if (addField) {
-						UserGroupField field = new UserGroupField();
+						UserGroupAttribute field = new UserGroupAttribute();
 						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUserGroup(model);
-						model.getFields().add(field);
+						model.getAttributes().add(field);
 					}
 				}
 			}

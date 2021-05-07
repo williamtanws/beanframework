@@ -21,7 +21,7 @@ public class UserGroupLoadInterceptor extends AbstractLoadInterceptor<UserGroup>
 	public void onLoad(UserGroup model, InterceptorContext context) throws InterceptorException {
 		
 		try {
-			userGroupService.generateUserGroupField(model);
+			userGroupService.generateUserGroupAttribute(model);
 			userGroupService.generateUserAuthority(model);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

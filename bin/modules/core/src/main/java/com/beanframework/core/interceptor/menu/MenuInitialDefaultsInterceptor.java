@@ -25,7 +25,7 @@ public class MenuInitialDefaultsInterceptor extends AbstractInitialDefaultsInter
 		try {
 			model.setTarget(MenuTargetTypeEnum.SELF);
 
-			menuService.generateMenuField(model);
+			menuService.generateMenuAttribute(model);
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

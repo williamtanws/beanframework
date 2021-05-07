@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.MyAccountDto;
-import com.beanframework.core.data.UserFieldDto;
+import com.beanframework.core.data.UserAttributeDto;
 import com.beanframework.user.domain.User;
-import com.beanframework.user.domain.UserField;
+import com.beanframework.user.domain.UserAttribute;
 
 public class MyAccountPopulator extends AbstractPopulator<User, MyAccountDto> implements Populator<User, MyAccountDto> {
 
@@ -24,9 +24,9 @@ public class MyAccountPopulator extends AbstractPopulator<User, MyAccountDto> im
 			target.setName(source.getName());
 			target.setPassword(source.getPassword());
 
-			Collections.sort(target.getFields(), new Comparator<UserFieldDto>() {
+			Collections.sort(target.getAttributes(), new Comparator<UserAttributeDto>() {
 				@Override
-				public int compare(UserFieldDto o1, UserFieldDto o2) {
+				public int compare(UserAttributeDto o1, UserAttributeDto o2) {
 					if (o1.getDynamicFieldSlot().getSort() == null)
 						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
@@ -41,12 +41,12 @@ public class MyAccountPopulator extends AbstractPopulator<User, MyAccountDto> im
 		}
 	}
 
-	public UserFieldDto populateUserField(UserField source) throws PopulatorException {
+	public UserAttributeDto populateUserField(UserAttribute source) throws PopulatorException {
 		if (source == null)
 			return null;
 
 		try {
-			UserFieldDto target = new UserFieldDto();
+			UserAttributeDto target = new UserAttributeDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
 			target.setCreatedDate(source.getCreatedDate());

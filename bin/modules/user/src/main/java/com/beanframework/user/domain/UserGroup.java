@@ -41,7 +41,7 @@ public class UserGroup extends GenericEntity {
 	public static final String USERS = "users";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_AUTHORITIES = "userAuthorities";
-	public static final String FIELDS = "fields";
+	public static final String ATTRIBUTES = "fields";
 
 	@Audited(withModifiedFlag = true)
 	private String name;
@@ -61,8 +61,8 @@ public class UserGroup extends GenericEntity {
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
-	@OrderBy(UserGroupField.DYNAMIC_FIELD_SLOT)
-	private List<UserGroupField> fields = new ArrayList<UserGroupField>();
+	@OrderBy(UserGroupAttribute.DYNAMIC_FIELD_SLOT)
+	private List<UserGroupAttribute> attributes = new ArrayList<UserGroupAttribute>();
 
 	public String getName() {
 		return name;
@@ -88,11 +88,11 @@ public class UserGroup extends GenericEntity {
 		this.userAuthorities = userAuthorities;
 	}
 
-	public List<UserGroupField> getFields() {
-		return fields;
+	public List<UserGroupAttribute> getAttributes() {
+		return attributes;
 	}
 
-	public void setFields(List<UserGroupField> fields) {
-		this.fields = fields;
+	public void setAttributes(List<UserGroupAttribute> attributes) {
+		this.attributes = attributes;
 	}
 }

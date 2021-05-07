@@ -10,14 +10,14 @@ import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.UserAuthorityDto;
 import com.beanframework.core.data.UserPermissionDto;
-import com.beanframework.core.data.UserPermissionFieldDto;
+import com.beanframework.core.data.UserPermissionAttributeDto;
 import com.beanframework.core.data.UserRightDto;
-import com.beanframework.core.data.UserRightFieldDto;
+import com.beanframework.core.data.UserRightAttributeDto;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserPermissionField;
+import com.beanframework.user.domain.UserPermissionAttribute;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.domain.UserRightAttribute;
 
 public class UserAuthorityPopulator extends AbstractPopulator<UserAuthority, UserAuthorityDto> implements Populator<UserAuthority, UserAuthorityDto> {
 
@@ -51,14 +51,14 @@ public class UserAuthorityPopulator extends AbstractPopulator<UserAuthority, Use
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 
-			for (UserPermissionField field : source.getFields()) {
-				target.getFields().add(populateUserPermissionField(field));
+			for (UserPermissionAttribute field : source.getAttributes()) {
+				target.getAttributes().add(populateUserPermissionField(field));
 			}
 
-			if (target.getFields() != null)
-				Collections.sort(target.getFields(), new Comparator<UserPermissionFieldDto>() {
+			if (target.getAttributes() != null)
+				Collections.sort(target.getAttributes(), new Comparator<UserPermissionAttributeDto>() {
 					@Override
-					public int compare(UserPermissionFieldDto o1, UserPermissionFieldDto o2) {
+					public int compare(UserPermissionAttributeDto o1, UserPermissionAttributeDto o2) {
 						if (o1.getDynamicFieldSlot().getSort() == null)
 							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
@@ -75,12 +75,12 @@ public class UserAuthorityPopulator extends AbstractPopulator<UserAuthority, Use
 		}
 	}
 
-	public UserPermissionFieldDto populateUserPermissionField(UserPermissionField source) throws PopulatorException {
+	public UserPermissionAttributeDto populateUserPermissionField(UserPermissionAttribute source) throws PopulatorException {
 		if (source == null)
 			return null;
 
 		try {
-			UserPermissionFieldDto target = new UserPermissionFieldDto();
+			UserPermissionAttributeDto target = new UserPermissionAttributeDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
 			target.setCreatedDate(source.getCreatedDate());
@@ -113,14 +113,14 @@ public class UserAuthorityPopulator extends AbstractPopulator<UserAuthority, Use
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 
-			for (UserRightField field : source.getFields()) {
-				target.getFields().add(populateUserRightField(field));
+			for (UserRightAttribute field : source.getAttributes()) {
+				target.getAttributes().add(populateUserRightField(field));
 			}
 
-			if (target.getFields() != null)
-				Collections.sort(target.getFields(), new Comparator<UserRightFieldDto>() {
+			if (target.getAttributes() != null)
+				Collections.sort(target.getAttributes(), new Comparator<UserRightAttributeDto>() {
 					@Override
-					public int compare(UserRightFieldDto o1, UserRightFieldDto o2) {
+					public int compare(UserRightAttributeDto o1, UserRightAttributeDto o2) {
 						if (o1.getDynamicFieldSlot().getSort() == null)
 							return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
@@ -137,12 +137,12 @@ public class UserAuthorityPopulator extends AbstractPopulator<UserAuthority, Use
 		}
 	}
 
-	public UserRightFieldDto populateUserRightField(UserRightField source) throws PopulatorException {
+	public UserRightAttributeDto populateUserRightField(UserRightAttribute source) throws PopulatorException {
 		if (source == null)
 			return null;
 
 		try {
-			UserRightFieldDto target = new UserRightFieldDto();
+			UserRightAttributeDto target = new UserRightAttributeDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
 			target.setCreatedDate(source.getCreatedDate());

@@ -79,12 +79,12 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-3">
+								<div class="col-md-6">
 									<div class="form-group">
 										<label for="target" th:text="#{module.menu.target}"></label>
 										<small th:text="#{module.menu.target.indicate}"></small>
 										<select class="form-control" name="target">
-											<option th:each="targetEnum : ${T(com.beanframework.menu.domain.MenuTargetTypeEnum).values()}" th:value="${target}" th:selected="*{target} == ${targetEnum} ? true : false" th:text="${targetEnum.toString()}"></option>
+											<option th:each="state : ${T(com.beanframework.menu.domain.MenuTargetTypeEnum).values()}" th:value="${state.name()}" th:text="${state}" th:selected="*{target} == ${state} ? true : false"></option>	
 										</select>
 										<span class="help-block"></span>
 									</div>
@@ -117,7 +117,7 @@
 							</div>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-attribute" role="tabpanel" aria-labelledby="custom-tabs-attribute-tab">
-							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-attribute :: form(fields=*{fields})}"></th:block>
+							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-attribute :: form(attributes=*{attributes})}"></th:block>
 						</div>
 						<div class="tab-pane fade" id="custom-tabs-history" role="tabpanel" aria-labelledby="custom-tabs-history-tab" th:if="*{uuid != null}">
 							<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-history :: datatable}"></th:block>

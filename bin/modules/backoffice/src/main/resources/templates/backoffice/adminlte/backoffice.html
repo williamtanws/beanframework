@@ -114,6 +114,12 @@
 			    window.location.href = url;
 		}
 		
+		function menuOnClick(path, target) {
+			if(target != "_self"){
+				window.open(path, target).focus();
+			}
+		}
+		
 		function openUserSession(){
 
 			var title =/*[[#{module.user.session}]]*/;

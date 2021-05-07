@@ -51,7 +51,7 @@ public class User extends GenericEntity {
 	public static final String USER_GROUPS = "userGroups";
 	public static final String COMPANIES = "companies";
 	public static final String ADDRESSES = "addresses";
-	public static final String FIELDS = "fields";
+	public static final String ATTRIBUTES = "fields";
 	public static final String NAME = "name";
 
 	private static final long serialVersionUID = -7444894280894062710L;
@@ -101,8 +101,8 @@ public class User extends GenericEntity {
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
-	@OrderBy(UserField.DYNAMIC_FIELD_SLOT)
-	private List<UserField> fields = new ArrayList<UserField>();
+	@OrderBy(UserAttribute.DYNAMIC_FIELD_SLOT)
+	private List<UserAttribute> attributes = new ArrayList<UserAttribute>();
 
 	@Audited(withModifiedFlag = true)
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -178,12 +178,12 @@ public class User extends GenericEntity {
 		this.userGroups = userGroups;
 	}
 
-	public List<UserField> getFields() {
-		return fields;
+	public List<UserAttribute> getAttributes() {
+		return attributes;
 	}
 
-	public void setFields(List<UserField> fields) {
-		this.fields = fields;
+	public void setAttributes(List<UserAttribute> attributes) {
+		this.attributes = attributes;
 	}
 
 	public String getProfilePicture() {

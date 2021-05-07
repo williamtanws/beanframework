@@ -14,28 +14,28 @@ import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
-import com.beanframework.user.UserPermissionConstants;
+import com.beanframework.user.UserRightConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
-@Table(name = UserPermissionConstants.Table.USER_PERMISSION_FIELD)
-public class UserPermissionField extends GenericEntity {
+@Table(name = UserRightConstants.Table.USER_RIGHT_ATTRIBUTE)
+public class UserRightAttribute extends GenericEntity {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4279536635924738476L;
+	private static final long serialVersionUID = -7666190244677961254L;
 	public static final String LANGUAGE = "language";
-	public static final String USER_PERMISSION = "userPermission";
+	public static final String USER_RIGHT = "userRight";
 	public static final String DYNAMIC_FIELD_SLOT = "dynamicFieldSlot";
-	
+
 	@JsonIgnore
 	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userPermission_uuid")
-	private UserPermission userPermission;
+	@JoinColumn(name = "userright_uuid")
+	private UserRight userRight;
 
 	@Audited(withModifiedFlag = true)
 	@Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)")
@@ -44,12 +44,12 @@ public class UserPermissionField extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String value;
 
-	public UserPermission getUserPermission() {
-		return userPermission;
+	public UserRight getUserRight() {
+		return userRight;
 	}
 
-	public void setUserPermission(UserPermission userPermission) {
-		this.userPermission = userPermission;
+	public void setUserRight(UserRight userRight) {
+		this.userRight = userRight;
 	}
 
 	public UUID getDynamicFieldSlot() {

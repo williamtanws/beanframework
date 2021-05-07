@@ -54,7 +54,7 @@ public class Menu extends GenericEntity {
 	public static final String CHILDS = "childs";
 	public static final String USER_GROUPS = "userGroups";
 	public static final String USER_GROUPS_UUID = "userGroups.uuid";
-	public static final String FIELDS = "fields";
+	public static final String ATTRIBUTES = "fields";
 
 	@Audited(withModifiedFlag = true)
 	private String name;
@@ -69,6 +69,7 @@ public class Menu extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String path;
 
+	@NotNull
 	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
 	private MenuTargetTypeEnum target;
@@ -92,15 +93,15 @@ public class Menu extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = MenuConstants.Table.MENU_USER_GROUP_REL, joinColumns = @JoinColumn(name = "menu_uuid"))
-	@Column(name = "usergrou_uuid", columnDefinition = "BINARY(16)", nullable = false)
+	@Column(name = "usergroup_uuid", columnDefinition = "BINARY(16)", nullable = false)
 	private Set<UUID> userGroups = new HashSet<UUID>();
 
 	@Audited(withModifiedFlag = true)
 	@Cascade({ CascadeType.ALL })
 	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
-	@OrderBy(MenuField.DYNAMIC_FIELD_SLOT)
-	private List<MenuField> fields = new ArrayList<MenuField>();
+	@OrderBy(MenuAttribute.DYNAMIC_FIELD_SLOT)
+	private List<MenuAttribute> attributes = new ArrayList<MenuAttribute>();
 
 	public String getName() {
 		return name;
@@ -174,11 +175,11 @@ public class Menu extends GenericEntity {
 		this.userGroups = userGroups;
 	}
 
-	public List<MenuField> getFields() {
-		return fields;
+	public List<MenuAttribute> getAttributes() {
+		return attributes;
 	}
 
-	public void setFields(List<MenuField> fields) {
-		this.fields = fields;
+	public void setAttributes(List<MenuAttribute> attributes) {
+		this.attributes = attributes;
 	}
 }

@@ -15,7 +15,7 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.MenuDto;
-import com.beanframework.core.data.MenuFieldDto;
+import com.beanframework.core.data.MenuAttributeDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
 
@@ -110,16 +110,16 @@ public class EntityMenuConverter implements EntityConverter<MenuDto, Menu> {
 				}
 			}
 
-			// Field
-			if (source.getFields() != null && source.getFields().isEmpty() == Boolean.FALSE) {
-				for (int i = 0; i < prototype.getFields().size(); i++) {
-					for (MenuFieldDto sourceField : source.getFields()) {
+			// Attribute
+			if (source.getAttributes() != null && source.getAttributes().isEmpty() == Boolean.FALSE) {
+				for (int i = 0; i < prototype.getAttributes().size(); i++) {
+					for (MenuAttributeDto sourceField : source.getAttributes()) {
 
-						if (prototype.getFields().get(i).getDynamicFieldSlot().equals(sourceField.getDynamicFieldSlot().getUuid())) {
-							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == Boolean.FALSE) {
-								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
+						if (prototype.getAttributes().get(i).getDynamicFieldSlot().equals(sourceField.getDynamicFieldSlot().getUuid())) {
+							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getAttributes().get(i).getValue()) == Boolean.FALSE) {
+								prototype.getAttributes().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
-								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+								prototype.getAttributes().get(i).setLastModifiedDate(lastModifiedDate);
 								prototype.setLastModifiedDate(lastModifiedDate);
 							}
 						}

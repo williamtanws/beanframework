@@ -14,7 +14,7 @@ import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.user.UserRightConstants;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.domain.UserRightAttribute;
 
 @Service
 public class UserRightServiceImpl implements UserRightService {
@@ -26,7 +26,7 @@ public class UserRightServiceImpl implements UserRightService {
 	private String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
 	
 	@Override
-	public void generateUserRightField(UserRight model) throws Exception {
+	public void generateUserRightAttribute(UserRight model) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
@@ -42,17 +42,17 @@ public class UserRightServiceImpl implements UserRightService {
 				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 
 					boolean addField = true;
-					for (UserRightField field : model.getFields()) {
+					for (UserRightAttribute field : model.getAttributes()) {
 						if (field.getDynamicFieldSlot().equals(dynamicFieldSlot)) {
 							addField = false;
 						}
 					}
 
 					if (addField) {
-						UserRightField field = new UserRightField();
+						UserRightAttribute field = new UserRightAttribute();
 						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUserRight(model);
-						model.getFields().add(field);
+						model.getAttributes().add(field);
 					}
 				}
 			}

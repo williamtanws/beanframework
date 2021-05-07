@@ -24,7 +24,7 @@ public class UserGroupDto extends GenericDto {
 
 	private List<UserAuthorityDto> userAuthorities = new ArrayList<UserAuthorityDto>();
 
-	private List<UserGroupFieldDto> fields = new ArrayList<UserGroupFieldDto>();
+	private List<UserGroupAttributeDto> attributes = new ArrayList<UserGroupAttributeDto>();
 
 	@JsonIgnore
 	private String[] selectedUserGroupUuids;
@@ -61,12 +61,12 @@ public class UserGroupDto extends GenericDto {
 		this.userAuthorities = userAuthorities;
 	}
 
-	public List<UserGroupFieldDto> getFields() {
-		return fields;
+	public List<UserGroupAttributeDto> getAttributes() {
+		return attributes;
 	}
 
-	public void setFields(List<UserGroupFieldDto> fields) {
-		this.fields = fields;
+	public void setAttributes(List<UserGroupAttributeDto> attributes) {
+		this.attributes = attributes;
 	}
 
 	public String[] getSelectedUserGroupUuids() {

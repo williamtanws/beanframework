@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.UserRightDto;
-import com.beanframework.core.data.UserRightFieldDto;
+import com.beanframework.core.data.UserRightAttributeDto;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.domain.UserRightAttribute;
 
 
 public class UserRightPopulator extends AbstractPopulator<UserRight, UserRightDto> implements Populator<UserRight, UserRightDto> {
@@ -25,13 +25,13 @@ public class UserRightPopulator extends AbstractPopulator<UserRight, UserRightDt
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 
-			for (UserRightField field : source.getFields()) {
-				target.getFields().add(populateUserRightField(field));
+			for (UserRightAttribute field : source.getAttributes()) {
+				target.getAttributes().add(populateUserRightField(field));
 			}
 
-			Collections.sort(target.getFields(), new Comparator<UserRightFieldDto>() {
+			Collections.sort(target.getAttributes(), new Comparator<UserRightAttributeDto>() {
 				@Override
-				public int compare(UserRightFieldDto o1, UserRightFieldDto o2) {
+				public int compare(UserRightAttributeDto o1, UserRightAttributeDto o2) {
 					if (o1.getDynamicFieldSlot().getSort() == null)
 						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
@@ -46,12 +46,12 @@ public class UserRightPopulator extends AbstractPopulator<UserRight, UserRightDt
 		}
 	}
 	
-	public UserRightFieldDto populateUserRightField(UserRightField source) throws PopulatorException {
+	public UserRightAttributeDto populateUserRightField(UserRightAttribute source) throws PopulatorException {
 		if (source == null)
 			return null;
 
 		try {
-			UserRightFieldDto target = new UserRightFieldDto();
+			UserRightAttributeDto target = new UserRightAttributeDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
 			target.setCreatedDate(source.getCreatedDate());

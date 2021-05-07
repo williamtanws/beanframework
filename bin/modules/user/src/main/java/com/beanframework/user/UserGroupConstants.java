@@ -8,7 +8,7 @@ public final class UserGroupConstants {
 
 	public interface Table {
 		public static final String USER_GROUP = "usergroup";
-		public static final String USER_GROUP_FIELD = "usergroup_field";
+		public static final String USER_GROUP_ATTRIBUTE = "usergroup_attribute";
 		public static final String USER_GROUP_USER_GROUP_REL = "usergroup_rel";
 
 	}

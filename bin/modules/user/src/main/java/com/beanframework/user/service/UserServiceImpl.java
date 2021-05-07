@@ -51,7 +51,7 @@ import com.beanframework.user.UserConstants;
 import com.beanframework.user.data.UserSession;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAuthority;
-import com.beanframework.user.domain.UserField;
+import com.beanframework.user.domain.UserAttribute;
 import com.beanframework.user.domain.UserGroup;
 
 @Service
@@ -396,7 +396,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void generateUserField(User model, String configurationDynamicFieldTemplate) throws Exception {
+	public void generateUserAttribute(User model, String configurationDynamicFieldTemplate) throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(Configuration.ID, configurationDynamicFieldTemplate);
 		Configuration configuration = modelService.findOneByProperties(properties, Configuration.class);
@@ -412,17 +412,17 @@ public class UserServiceImpl implements UserService {
 				for (UUID dynamicFieldSlot : dynamicFieldTemplate.getDynamicFieldSlots()) {
 
 					boolean addField = true;
-					for (UserField field : model.getFields()) {
+					for (UserAttribute field : model.getAttributes()) {
 						if (field.getDynamicFieldSlot().equals(dynamicFieldSlot)) {
 							addField = false;
 						}
 					}
 
 					if (addField) {
-						UserField field = new UserField();
+						UserAttribute field = new UserAttribute();
 						field.setDynamicFieldSlot(dynamicFieldSlot);
 						field.setUser(model);
-						model.getFields().add(field);
+						model.getAttributes().add(field);
 					}
 				}
 			}

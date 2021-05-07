@@ -1,5 +1,0 @@
-INSERT UserGroup,id,name,userGroupIds,dynamicFieldSlotIds
-,admingroup				,Admin Group			,																		,
-,employeegroup			,Employee Group			,																		,
-,customergroup			,Customer Group			,																		,
-,vendorgroup			,Vendor Group			,																		,

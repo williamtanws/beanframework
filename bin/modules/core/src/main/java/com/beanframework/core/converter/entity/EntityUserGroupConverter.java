@@ -12,7 +12,7 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserAuthorityDto;
 import com.beanframework.core.data.UserGroupDto;
-import com.beanframework.core.data.UserGroupFieldDto;
+import com.beanframework.core.data.UserGroupAttributeDto;
 import com.beanframework.user.domain.UserGroup;
 
 public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, UserGroup> {
@@ -56,16 +56,16 @@ public class EntityUserGroupConverter implements EntityConverter<UserGroupDto, U
 				prototype.setLastModifiedDate(lastModifiedDate);
 			}
 
-			// Field
-			if (source.getFields() != null && source.getFields().isEmpty() == Boolean.FALSE) {
-				for (int i = 0; i < prototype.getFields().size(); i++) {
-					for (UserGroupFieldDto sourceField : source.getFields()) {
+			// Attribute
+			if (source.getAttributes() != null && source.getAttributes().isEmpty() == Boolean.FALSE) {
+				for (int i = 0; i < prototype.getAttributes().size(); i++) {
+					for (UserGroupAttributeDto sourceField : source.getAttributes()) {
 
-						if (prototype.getFields().get(i).getDynamicFieldSlot().equals(sourceField.getDynamicFieldSlot().getUuid())) {
-							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == Boolean.FALSE) {
-								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
+						if (prototype.getAttributes().get(i).getDynamicFieldSlot().equals(sourceField.getDynamicFieldSlot().getUuid())) {
+							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getAttributes().get(i).getValue()) == Boolean.FALSE) {
+								prototype.getAttributes().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
-								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+								prototype.getAttributes().get(i).setLastModifiedDate(lastModifiedDate);
 								prototype.setLastModifiedDate(lastModifiedDate);
 							}
 						}

@@ -20,7 +20,7 @@ public class UserPermissionLoadInterceptor extends AbstractLoadInterceptor<UserP
 	@Override
 	public void onLoad(UserPermission model, InterceptorContext context) throws InterceptorException {
 		try {
-			userPermissionService.generateUserPermissionField(model);
+			userPermissionService.generateUserPermissionAttribute(model);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new InterceptorException(e.getMessage(), e);

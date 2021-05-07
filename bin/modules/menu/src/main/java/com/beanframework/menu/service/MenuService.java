@@ -9,7 +9,7 @@ public interface MenuService {
 
 	void savePosition(UUID fromUuid, UUID toUuid, int toIndex) throws Exception;
 
-	void generateMenuField(Menu model) throws Exception;
+	void generateMenuAttribute(Menu model) throws Exception;
 
 	List<Menu> findMenuBreadcrumbsByPath(String path) throws Exception;
 }

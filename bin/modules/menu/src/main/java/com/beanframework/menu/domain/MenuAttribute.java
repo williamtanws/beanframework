@@ -1,4 +1,4 @@
-package com.beanframework.user.domain;
+package com.beanframework.menu.domain;
 
 import java.util.UUID;
 
@@ -14,27 +14,27 @@ import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
-import com.beanframework.user.UserGroupConstants;
+import com.beanframework.menu.MenuConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
-@Table(name = UserGroupConstants.Table.USER_GROUP_FIELD)
-public class UserGroupField extends GenericEntity {
+@Table(name = MenuConstants.Table.MENU_ATTRIBUTE)
+public class MenuAttribute extends GenericEntity {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -115811375029158266L;
-	public static final String USER_GROUP = "userGroup";
+	private static final long serialVersionUID = -7666190244677961254L;
+	public static final String MENU = "menu";
 	public static final String DYNAMIC_FIELD_SLOT = "dynamicFieldSlot";
 	
 	@JsonIgnore
 	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "usergroup_uuid")
-	private UserGroup userGroup;
+	@JoinColumn(name = "menu_uuid")
+	private Menu menu;
 
 	@Audited(withModifiedFlag = true)
 	@Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)")
@@ -43,12 +43,12 @@ public class UserGroupField extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	private String value;
 
-	public UserGroup getUserGroup() {
-		return userGroup;
+	public Menu getMenu() {
+		return menu;
 	}
 
-	public void setUserGroup(UserGroup userGroup) {
-		this.userGroup = userGroup;
+	public void setMenu(Menu menu) {
+		this.menu = menu;
 	}
 
 	public UUID getDynamicFieldSlot() {
@@ -66,5 +66,4 @@ public class UserGroupField extends GenericEntity {
 	public void setValue(String value) {
 		this.value = value;
 	}
-
 }

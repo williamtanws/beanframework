@@ -15,10 +15,10 @@ import org.springframework.data.domain.Sort.Direction;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.MenuDto;
-import com.beanframework.core.data.MenuFieldDto;
+import com.beanframework.core.data.MenuAttributeDto;
 import com.beanframework.core.specification.MenuSpecification;
 import com.beanframework.menu.domain.Menu;
-import com.beanframework.menu.domain.MenuField;
+import com.beanframework.menu.domain.MenuAttribute;
 import com.beanframework.user.service.UserService;
 
 public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implements Populator<Menu, MenuDto> {
@@ -52,13 +52,13 @@ public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implemen
 			for (UUID userGroup : source.getUserGroups()) {
 				target.getUserGroups().add(populateUserGroup(userGroup));
 			}
-			for (MenuField field : source.getFields()) {
-				target.getFields().add(populateMenuField(field));
+			for (MenuAttribute field : source.getAttributes()) {
+				target.getAttributes().add(populateMenuField(field));
 			}
 
-			Collections.sort(target.getFields(), new Comparator<MenuFieldDto>() {
+			Collections.sort(target.getAttributes(), new Comparator<MenuAttributeDto>() {
 				@Override
-				public int compare(MenuFieldDto o1, MenuFieldDto o2) {
+				public int compare(MenuAttributeDto o1, MenuAttributeDto o2) {
 					if (o1.getDynamicFieldSlot().getSort() == null)
 						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
@@ -85,8 +85,8 @@ public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implemen
 		target.setSort(source.getSort());
 		target.setTarget(source.getTarget());
 		target.setEnabled(source.getEnabled());
-		for (MenuField field : source.getFields()) {
-			target.getFields().add(populateMenuField(field));
+		for (MenuAttribute field : source.getAttributes()) {
+			target.getAttributes().add(populateMenuField(field));
 		}
 		return target;
 	}
@@ -114,8 +114,8 @@ public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implemen
 				}
 			}
 			
-			for (MenuField field : source.getFields()) {
-				target.getFields().add(populateMenuField(field));
+			for (MenuAttribute field : source.getAttributes()) {
+				target.getAttributes().add(populateMenuField(field));
 			}
 
 			return target;
@@ -124,12 +124,12 @@ public class MenuTreePopulator extends AbstractPopulator<Menu, MenuDto> implemen
 		}
 	}
 
-	public MenuFieldDto populateMenuField(MenuField source) throws PopulatorException {
+	public MenuAttributeDto populateMenuField(MenuAttribute source) throws PopulatorException {
 		if (source == null)
 			return null;
 
 		try {
-			MenuFieldDto target = new MenuFieldDto();
+			MenuAttributeDto target = new MenuAttributeDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
 			target.setCreatedDate(source.getCreatedDate());

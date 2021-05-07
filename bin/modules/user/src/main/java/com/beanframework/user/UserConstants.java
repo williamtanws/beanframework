@@ -12,7 +12,7 @@ public final class UserConstants {
 
 	public interface Table {
 		public static final String USER = "user";
-		public static final String USER_FIELD = "user_field";
+		public static final String USER_ATTRIBUTE = "user_attribute";
 		public static final String USER_AUTHORITY = "user_authority";
 		public static final String USER_USER_GROUP_REL = "user_usergrouprel";
 		public static final String USER_COMPANY_REL = "user_companyrel";

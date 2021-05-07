@@ -12,11 +12,11 @@ import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.UserRightDto;
-import com.beanframework.core.data.UserRightFieldDto;
+import com.beanframework.core.data.UserRightAttributeDto;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserRight;
-import com.beanframework.user.domain.UserRightField;
+import com.beanframework.user.domain.UserRightAttribute;
 
 public class EntityUserRightConverter implements EntityConverter<UserRightDto, UserRight> {
 
@@ -70,20 +70,20 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				}
 			}
 
-			// Field
-			if (source.getFields() == null || source.getFields().isEmpty()) {
-				if (prototype.getFields().isEmpty() == Boolean.FALSE) {
-					prototype.setFields(new ArrayList<UserRightField>());
+			// Attribute
+			if (source.getAttributes() == null || source.getAttributes().isEmpty()) {
+				if (prototype.getAttributes().isEmpty() == Boolean.FALSE) {
+					prototype.setAttributes(new ArrayList<UserRightAttribute>());
 				}
 			} else {
 				// Update
-				for (int i = 0; i < prototype.getFields().size(); i++) {
-					for (UserRightFieldDto sourceField : source.getFields()) {
-						if (prototype.getFields().get(i).getDynamicFieldSlot().equals(sourceField.getDynamicFieldSlot().getUuid())) {
-							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getFields().get(i).getValue()) == Boolean.FALSE) {
-								prototype.getFields().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
+				for (int i = 0; i < prototype.getAttributes().size(); i++) {
+					for (UserRightAttributeDto sourceField : source.getAttributes()) {
+						if (prototype.getAttributes().get(i).getDynamicFieldSlot().equals(sourceField.getDynamicFieldSlot().getUuid())) {
+							if (StringUtils.equals(StringUtils.stripToNull(sourceField.getValue()), prototype.getAttributes().get(i).getValue()) == Boolean.FALSE) {
+								prototype.getAttributes().get(i).setValue(StringUtils.stripToNull(sourceField.getValue()));
 
-								prototype.getFields().get(i).setLastModifiedDate(lastModifiedDate);
+								prototype.getAttributes().get(i).setLastModifiedDate(lastModifiedDate);
 								prototype.setLastModifiedDate(lastModifiedDate);
 							}
 						}
@@ -91,18 +91,18 @@ public class EntityUserRightConverter implements EntityConverter<UserRightDto, U
 				}
 
 				// Add
-				for (UserRightFieldDto sourceField : source.getFields()) {
+				for (UserRightAttributeDto sourceField : source.getAttributes()) {
 					if (sourceField.getDynamicFieldSlot().getUuid() == null && StringUtils.isNotBlank(sourceField.getDynamicFieldSlot().getId())) {
 						Map<String, Object> properties = new HashMap<String, Object>();
 						properties.put(DynamicField.ID, sourceField.getDynamicFieldSlot().getId());
 						DynamicFieldSlot entityDynamicFieldSlot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
 
-						UserRightField field = new UserRightField();
+						UserRightAttribute field = new UserRightAttribute();
 						field.setUserRight(prototype);
 						field.setDynamicFieldSlot(entityDynamicFieldSlot.getUuid());
 						field.setValue(StringUtils.stripToNull(sourceField.getValue()));
 
-						prototype.getFields().add(field);
+						prototype.getAttributes().add(field);
 					}
 				}
 			}

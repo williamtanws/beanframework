@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.UserPermissionDto;
-import com.beanframework.core.data.UserPermissionFieldDto;
+import com.beanframework.core.data.UserPermissionAttributeDto;
 import com.beanframework.user.domain.UserPermission;
-import com.beanframework.user.domain.UserPermissionField;
+import com.beanframework.user.domain.UserPermissionAttribute;
 
 
 public class UserPermissionPopulator extends AbstractPopulator<UserPermission, UserPermissionDto> implements Populator<UserPermission, UserPermissionDto> {
@@ -25,13 +25,13 @@ public class UserPermissionPopulator extends AbstractPopulator<UserPermission, U
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 
-			for (UserPermissionField field : source.getFields()) {
-				target.getFields().add(populateUserPermissionField(field));
+			for (UserPermissionAttribute field : source.getAttributes()) {
+				target.getAttributes().add(populateUserPermissionField(field));
 			}
 
-			Collections.sort(target.getFields(), new Comparator<UserPermissionFieldDto>() {
+			Collections.sort(target.getAttributes(), new Comparator<UserPermissionAttributeDto>() {
 				@Override
-				public int compare(UserPermissionFieldDto o1, UserPermissionFieldDto o2) {
+				public int compare(UserPermissionAttributeDto o1, UserPermissionAttributeDto o2) {
 					if (o1.getDynamicFieldSlot().getSort() == null)
 						return o2.getDynamicFieldSlot().getSort() == null ? 0 : 1;
 
@@ -46,12 +46,12 @@ public class UserPermissionPopulator extends AbstractPopulator<UserPermission, U
 		}
 	}
 	
-	public UserPermissionFieldDto populateUserPermissionField(UserPermissionField source) throws PopulatorException {
+	public UserPermissionAttributeDto populateUserPermissionField(UserPermissionAttribute source) throws PopulatorException {
 		if (source == null)
 			return null;
 
 		try {
-			UserPermissionFieldDto target = new UserPermissionFieldDto();
+			UserPermissionAttributeDto target = new UserPermissionAttributeDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
 			target.setCreatedDate(source.getCreatedDate());

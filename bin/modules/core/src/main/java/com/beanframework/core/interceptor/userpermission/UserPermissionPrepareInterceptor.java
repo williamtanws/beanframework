@@ -12,9 +12,9 @@ public class UserPermissionPrepareInterceptor extends AbstractPrepareInterceptor
 	@Override
 	public void onPrepare(UserPermission model, InterceptorContext context) throws InterceptorException {
 		super.onPrepare(model, context);
-		for (int i = 0; i < model.getFields().size(); i++) {
-			if (StringUtils.isBlank(model.getFields().get(i).getValue())) {
-				model.getFields().get(i).setValue(null);
+		for (int i = 0; i < model.getAttributes().size(); i++) {
+			if (StringUtils.isBlank(model.getAttributes().get(i).getValue())) {
+				model.getAttributes().get(i).setValue(null);
 			}
 		}
 	}

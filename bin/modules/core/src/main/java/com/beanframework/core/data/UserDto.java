@@ -26,7 +26,7 @@ public class UserDto extends GenericDto {
 	private List<UserGroupDto> userGroups = new ArrayList<UserGroupDto>();
 	private List<CompanyDto> companies = new ArrayList<CompanyDto>();
 	private List<AddressDto> addresses = new ArrayList<AddressDto>();
-	private List<UserFieldDto> fields = new ArrayList<UserFieldDto>();
+	private List<UserAttributeDto> attributes = new ArrayList<UserAttributeDto>();
 	private Map<String, String> parameters = new HashMap<String, String>();
 
 	@JsonIgnore
@@ -122,12 +122,12 @@ public class UserDto extends GenericDto {
 		this.addresses = addresses;
 	}
 
-	public List<UserFieldDto> getFields() {
-		return fields;
+	public List<UserAttributeDto> getAttributes() {
+		return attributes;
 	}
 
-	public void setFields(List<UserFieldDto> fields) {
-		this.fields = fields;
+	public void setAttributes(List<UserAttributeDto> attributes) {
+		this.attributes = attributes;
 	}
 
 	public Map<String, String> getParameters() {

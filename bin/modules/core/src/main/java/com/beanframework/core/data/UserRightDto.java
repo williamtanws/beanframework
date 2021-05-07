@@ -16,7 +16,7 @@ public class UserRightDto extends GenericDto {
 
 	private String name;
 
-	private List<UserRightFieldDto> fields = new ArrayList<UserRightFieldDto>();
+	private List<UserRightAttributeDto> attributes = new ArrayList<UserRightAttributeDto>();
 
 	private Integer sort;
 
@@ -28,12 +28,12 @@ public class UserRightDto extends GenericDto {
 		this.name = name;
 	}
 
-	public List<UserRightFieldDto> getFields() {
-		return fields;
+	public List<UserRightAttributeDto> getAttributes() {
+		return attributes;
 	}
 
-	public void setFields(List<UserRightFieldDto> fields) {
-		this.fields = fields;
+	public void setAttributes(List<UserRightAttributeDto> attributes) {
+		this.attributes = attributes;
 	}
 
 	public Integer getSort() {
