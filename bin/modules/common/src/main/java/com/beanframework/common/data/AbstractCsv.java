@@ -42,4 +42,9 @@ public class AbstractCsv {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	@Override
+	public String toString() {
+		return "AbstractCsv [modeType=" + modeType + ", id=" + id + "]";
+	}
 }

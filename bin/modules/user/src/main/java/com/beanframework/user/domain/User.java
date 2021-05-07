@@ -33,6 +33,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -58,6 +59,7 @@ public class User extends GenericEntity {
 	@Column(insertable = false, updatable = false)
 	private String type;
 
+	@JsonIgnore
 	@Audited(withModifiedFlag = true)
 	@Column(length = 60)
 	private String password;

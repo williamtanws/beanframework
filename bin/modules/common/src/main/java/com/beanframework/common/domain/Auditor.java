@@ -8,7 +8,9 @@ import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.CommonConstants;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties({ "uuid", "createdDate", "createdBy", "lastModifiedDate", "lastModifiedBy" })
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited

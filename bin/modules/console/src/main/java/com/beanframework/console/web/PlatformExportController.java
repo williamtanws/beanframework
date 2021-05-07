@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.common.service.ModelService;
+import com.beanframework.common.utils.CsvUtils;
 import com.beanframework.console.PlatformExportWebConstants;
 import com.beanframework.core.controller.AbstractController;
 
@@ -59,25 +60,8 @@ public class PlatformExportController extends AbstractController {
 			HttpServletRequest request) throws IOException {
 
 		List<?> resultList = modelService.searchByQuery(query);
-
-		final StringBuilder csvBuilder = new StringBuilder();
-		for (final Object object : resultList) {
-			final Object[] values = (Object[]) object;
-
-			for (int i = 0; i < values.length; i++) {
-
-				if (values[i] == null) {
-					csvBuilder.append("\"\"");
-				} else {
-					csvBuilder.append("\"" + values[i].toString() + "\"");
-				}
-
-				if (i != 0 && i != values.length - 1) {
-					csvBuilder.append(";");
-				}
-			}
-			csvBuilder.append(System.getProperty("line.separator"));
-		}
+		
+		StringBuilder resultBuilder = CsvUtils.List2Csv(resultList);
 
 		File temp = File.createTempFile("export", ".csv");
 
@@ -86,12 +70,12 @@ public class PlatformExportController extends AbstractController {
 
 		// Write to temp file
 		BufferedWriter out = new BufferedWriter(new FileWriter(temp));
-		out.write(csvBuilder.toString());
+		out.write(resultBuilder.toString());
 		out.close();
 
 		InputStreamResource resource = new InputStreamResource(new FileInputStream(temp));
 
-		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + "export_"+sdf.format(new Date())).contentType(MediaType.valueOf("text/csv")).contentLength(temp.length()).body(resource);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + "export_"+sdf.format(new Date())+".csv").contentType(MediaType.valueOf("text/csv")).contentLength(temp.length()).body(resource);
 	}
 
 }

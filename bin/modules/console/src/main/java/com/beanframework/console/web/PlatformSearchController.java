@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.common.service.ModelService;
+import com.beanframework.common.utils.CsvUtils;
 import com.beanframework.console.PlatformSearchWebConstants;
 import com.beanframework.core.controller.AbstractController;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @PreAuthorize("isAuthenticated()")
 @Controller
@@ -38,28 +38,22 @@ public class PlatformSearchController extends AbstractController {
 	private ModelService modelService;
 
 	@GetMapping(value = PlatformSearchWebConstants.Path.SEARCH)
-	public String exportView(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	public String searchView(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_SEARCH;
 	}
 
 	@PostMapping(value = PlatformSearchWebConstants.Path.SEARCH)
-	public String search(@RequestParam("query") String query, @RequestParam("typecode") String typecode, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
-			HttpServletRequest request) throws Exception {
+	public String search(@RequestParam("query") String query, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
+
+		model.addAttribute("query", query);
 
 		List<?> resultList = modelService.searchByQuery(query);
 
-		StringBuilder jsonBuilder = new StringBuilder();
-		for (Object object : resultList) {
+		StringBuilder resultBuilder = CsvUtils.List2Csv(resultList);
 
-			Object dto = modelService.getDto(object, typecode);
-
-			ObjectMapper objectMapper = new ObjectMapper();
-			jsonBuilder.append(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(dto));
+		if (resultBuilder.length() != 0) {
+			model.addAttribute("result", resultBuilder.toString());
 		}
-
-		model.addAttribute("query", query);
-		model.addAttribute("typecode", typecode);
-		model.addAttribute("result", jsonBuilder.toString());
 		return VIEW_SEARCH;
 	}
 }

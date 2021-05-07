@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
@@ -106,7 +105,6 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public List<MenuDto> findMenuTree() throws BusinessException {
 		try {
 
@@ -128,7 +126,6 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
 
 		Set<UUID> userGroupUuids = userService.getAllUserGroupsByCurrentUser();

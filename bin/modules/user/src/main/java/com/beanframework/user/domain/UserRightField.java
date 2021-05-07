@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserRightConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -30,6 +31,7 @@ public class UserRightField extends GenericEntity {
 	public static final String USER_RIGHT = "userRight";
 	public static final String DYNAMIC_FIELD_SLOT = "dynamicFieldSlot";
 
+	@JsonIgnore
 	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userright_uuid")

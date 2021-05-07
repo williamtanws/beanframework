@@ -33,5 +33,4 @@ public class ConfigurationCsv extends AbstractCsv {
 	public String toString() {
 		return "ConfigurationCsv [id=" + id + ", value=" + value + "]";
 	}
-
 }

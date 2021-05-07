@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserGroupConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -28,7 +29,8 @@ public class UserGroupField extends GenericEntity {
 	private static final long serialVersionUID = -115811375029158266L;
 	public static final String USER_GROUP = "userGroup";
 	public static final String DYNAMIC_FIELD_SLOT = "dynamicFieldSlot";
-
+	
+	@JsonIgnore
 	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "usergroup_uuid")

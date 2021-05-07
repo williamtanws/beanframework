@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
@@ -68,7 +67,6 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 		}
 	}
 
-	@Transactional
 	@Override
 	public void updateJobAndSaveTrigger(Cronjob cronjob) throws Exception {
 		if (cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE) || cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.START)) {

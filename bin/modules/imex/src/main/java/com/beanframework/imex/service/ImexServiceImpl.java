@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
@@ -42,6 +41,7 @@ import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.common.utils.CsvUtils;
 import com.beanframework.imex.ImexConstants;
 import com.beanframework.imex.ImexType;
 import com.beanframework.imex.domain.Imex;
@@ -71,7 +71,7 @@ public class ImexServiceImpl implements ImexService {
 	@Autowired
 	private List<ConverterMapping> converterMappings;
 
-	@Value(ImexConstants.IMEX_MEDIA_LOCATION)
+	@Value(ImexConstants.IMEX_MEDIA_FOLDER)
 	private String IMEX_MEDIA_LOCATION;
 
 	@Value(ImexConstants.IMEX_IMPORT_LOCATIONS)
@@ -83,13 +83,11 @@ public class ImexServiceImpl implements ImexService {
 	@Value(MediaConstants.MEDIA_URL)
 	private String MEDIA_URL;
 
-	@Transactional
 	@Override
 	public String[] importByListenerKeys(Set<String> keys) {
 		return importByKeysAndReader(keys, IMEX_IMPORT_LOCATIONS);
 	}
 
-	@Transactional
 	@Override
 	public void importByFile(File file) throws Exception {
 
@@ -98,7 +96,6 @@ public class ImexServiceImpl implements ImexService {
 		importByKeysAndReader(null, locations);
 	}
 
-	@Transactional
 	@Override
 	public String[] importByMultipartFiles(MultipartFile[] files) {
 
@@ -144,7 +141,6 @@ public class ImexServiceImpl implements ImexService {
 		return messages;
 	}
 
-	@Transactional
 	@Override
 	public String[] importByQuery(String importName, String query) {
 
@@ -353,31 +349,17 @@ public class ImexServiceImpl implements ImexService {
 
 			List<?> resultList = modelService.searchByQuery(model.getQuery());
 
-			final StringBuilder csvBuilder = new StringBuilder();
-			csvBuilder.append(model.getHeader());
-			for (final Object object : resultList) {
-				final Object[] values = (Object[]) object;
-
-				csvBuilder.append(System.getProperty("line.separator"));
-				for (int i = 0; i < values.length; i++) {
-					if (i != 0) {
-						csvBuilder.append(model.getSeperator());
-					}
-
-					if (values[i] != null)
-						csvBuilder.append(values[i].toString());
-				}
-			}
+			StringBuilder resultBuilder = CsvUtils.List2Csv(resultList);
 
 			if (StringUtils.isNotBlank(model.getDirectory())) {
 				File directory = new File(model.getDirectory());
 				FileUtils.forceMkdir(directory);
 
 				File file = new File(directory, model.getFileName());
-				FileUtils.write(file.getAbsoluteFile(), csvBuilder.toString(), "UTF-8", false);
+				FileUtils.write(file.getAbsoluteFile(), resultBuilder.toString(), "UTF-8", false);
 			}
 
-			csv = csvBuilder.toString();
+			csv = resultBuilder.toString();
 		}
 
 		if (csv != null) {

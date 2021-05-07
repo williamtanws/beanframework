@@ -74,7 +74,7 @@ public interface ModelService {
 
 	List<?> searchByQuery(String qlString);
 	
-	Query searchByNativeQuery(String sqlString);
+	Query createNativeQuery(String sqlString);
 
 	List<Object[]> findHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Integer firstResult, Integer maxResults, Class modelClass) throws Exception;
 
