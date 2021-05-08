@@ -8,7 +8,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,7 +26,6 @@ import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.data.ConfigurationDto;
 import com.beanframework.core.facade.ConfigurationFacade;
 
-@PreAuthorize("isAuthenticated()")
 @Controller
 public class LicenseController extends AbstractController {
 

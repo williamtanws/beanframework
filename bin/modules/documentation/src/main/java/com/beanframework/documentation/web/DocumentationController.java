@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.beanframework.documentation.DocumentationConstants;
 import com.beanframework.documentation.DocumentationConstants.DocumentationPreAuthorizeEnum;
 
-@PreAuthorize("isAuthenticated()")
 @Controller
 public class DocumentationController {
 

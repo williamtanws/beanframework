@@ -20,7 +20,6 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +32,6 @@ import com.beanframework.common.utils.CsvUtils;
 import com.beanframework.console.ExportWebConstants;
 import com.beanframework.core.controller.AbstractController;
 
-@PreAuthorize("isAuthenticated()")
 @Controller
 public class ExportController extends AbstractController {
 
