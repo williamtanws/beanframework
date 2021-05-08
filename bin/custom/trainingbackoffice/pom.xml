@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.beanframework</groupId>
+	<groupId>com.sample</groupId>
 	<artifactId>trainingbackoffice</artifactId>
-	<version>${beanframework.version}</version>
+	<version>3.0.0</version>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -30,9 +30,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.beanframework</groupId>
+            <groupId>com.sample</groupId>
             <artifactId>trainingcore</artifactId>
-            <version>${project.version}</version>
+            <version>3.0.0</version>
         </dependency>
 		
         <dependency>

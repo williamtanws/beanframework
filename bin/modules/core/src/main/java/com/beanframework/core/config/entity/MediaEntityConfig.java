@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntityMediaConverter;
+import com.beanframework.core.converter.entity.MediaEntityConverter;
 import com.beanframework.media.domain.Media;
 
 @Configuration
 public class MediaEntityConfig {
 
 	@Bean
-	public EntityMediaConverter entityMediaConverter() {
-		return new EntityMediaConverter();
+	public MediaEntityConverter entityMediaConverter() {
+		return new MediaEntityConverter();
 	}
 
 	@Bean

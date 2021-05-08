@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
-import com.beanframework.core.converter.dto.DtoMenuBreadcrumbsConverter;
-import com.beanframework.core.converter.dto.DtoMenuTreeByCurrentUserConverter;
-import com.beanframework.core.converter.dto.DtoMenuTreeConverter;
+import com.beanframework.core.converter.dto.MenuBreadcrumbsDtoConverter;
+import com.beanframework.core.converter.dto.MenuTreeByCurrentUserDtoConverter;
+import com.beanframework.core.converter.dto.MenuTreeDtoConverter;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.specification.MenuSpecification;
 import com.beanframework.menu.domain.Menu;
@@ -32,13 +32,13 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 	private static final Class<MenuDto> dtoClass = MenuDto.class;
 
 	@Autowired
-	private DtoMenuTreeConverter dtoMenuTreeConverter;
+	private MenuTreeDtoConverter dtoMenuTreeConverter;
 
 	@Autowired
-	private DtoMenuTreeByCurrentUserConverter dtoMenuTreeByCurrentUserConverter;
+	private MenuTreeByCurrentUserDtoConverter dtoMenuTreeByCurrentUserConverter;
 
 	@Autowired
-	private DtoMenuBreadcrumbsConverter dtoMenuBreadcrumbsConverter;
+	private MenuBreadcrumbsDtoConverter dtoMenuBreadcrumbsConverter;
 
 	@Autowired
 	private MenuService menuService;

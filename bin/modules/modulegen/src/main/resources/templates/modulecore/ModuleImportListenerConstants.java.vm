@@ -1,0 +1,16 @@
+package ${modulegroup}.${moduleartifact}core;
+
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+import ${modulegroup}.${moduleartifact}core.csv.${Moduleartifact}Csv;
+
+public interface ${Moduleartifact}ImportListenerConstants {
+
+	public interface ${Moduleartifact}Import {
+		public static final String TYPE = ${Moduleartifact}.class.getSimpleName();
+		public static final String NAME = "${Moduleartifact}";
+		public static final int SORT = 500;
+		public static final String DESCRIPTION = "Update/Remove ${Moduleartifact} Data";
+		public static final Class<${Moduleartifact}Csv> CLASS_CSV = ${Moduleartifact}Csv.class;
+		public static final Class<${Moduleartifact}> CLASS_ENTITY = ${Moduleartifact}.class;
+	}
+}

@@ -5,14 +5,14 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.cms.domain.Site;
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntitySiteConverter;
+import com.beanframework.core.converter.entity.SiteEntityConverter;
 
 @Configuration
 public class SiteEntityConfig {
 
 	@Bean
-	public EntitySiteConverter entitySiteConverter() {
-		return new EntitySiteConverter();
+	public SiteEntityConverter entitySiteConverter() {
+		return new SiteEntityConverter();
 	}
 
 	@Bean

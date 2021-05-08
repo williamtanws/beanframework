@@ -20,7 +20,7 @@ import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.converter.dto.DtoRevisionsConverter;
+import com.beanframework.core.converter.dto.RevisionsDtoConverter;
 import com.beanframework.user.domain.RevisionsEntity;
 
 public class AbstractFacade<ENTITY extends GenericEntity, DTO extends GenericDto> {
@@ -29,7 +29,7 @@ public class AbstractFacade<ENTITY extends GenericEntity, DTO extends GenericDto
 	protected ModelService modelService;
 	
 	@Autowired
-	private DtoRevisionsConverter dtoRevisionsConverter;
+	private RevisionsDtoConverter dtoRevisionsConverter;
 
 	public DTO findOneByUuid(UUID uuid, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
 		return modelService.getDto(modelService.findOneByUuid(uuid, entityClass), dtoClass);

@@ -1,0 +1,15 @@
+package ${modulegroup}.${moduleartifact}core.interceptor;
+
+import com.beanframework.common.context.InterceptorContext;
+import com.beanframework.common.exception.InterceptorException;
+import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+
+public class ${Moduleartifact}InitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<${Moduleartifact}> {
+
+	@Override
+	public void onInitialDefaults(${Moduleartifact} model, InterceptorContext context) throws InterceptorException {
+		super.onInitialDefaults(model, context);
+	}
+
+}

@@ -1,0 +1,37 @@
+package ${modulegroup}.${moduleartifact}backoffice;
+
+public interface ${Moduleartifact}WebConstants {
+
+	public interface Path {
+
+		public interface Api {
+			public static final String ${MODULEARTIFACT} = "${startbrace}path.api.${moduleartifact}${endbrace}";
+			public static final String ${MODULEARTIFACT}_HISTORY = "${startbrace}path.api.${moduleartifact}.history${endbrace}";
+			public static final String ${MODULEARTIFACT}_CHECKID = "${startbrace}path.api.${moduleartifact}.checkid${endbrace}";
+		}
+
+		public static final String ${MODULEARTIFACT} = "${startbrace}path.${moduleartifact}${endbrace}";
+		public static final String ${MODULEARTIFACT}_FORM = "${startbrace}path.${moduleartifact}.form${endbrace}";
+	}
+
+	public interface View {
+		public static final String ${MODULEARTIFACT} = "${startbrace}view.${moduleartifact}${endbrace}";
+		public static final String ${MODULEARTIFACT}_FORM = "${startbrace}view.${moduleartifact}.form${endbrace}";
+	}
+
+	public interface ModelAttribute {
+		public static final String ${MODULEARTIFACT}_DTO = "${moduleartifact}Dto";
+	}
+
+	public interface ${Moduleartifact}PreAuthorizeEnum {
+		public static final String AUTHORITY_READ = "${moduleartifact}_read";
+		public static final String AUTHORITY_CREATE = "${moduleartifact}_create";
+		public static final String AUTHORITY_UPDATE = "${moduleartifact}_update";
+		public static final String AUTHORITY_DELETE = "${moduleartifact}_delete";
+
+		public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+		public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+		public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+		public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
+	}
+}

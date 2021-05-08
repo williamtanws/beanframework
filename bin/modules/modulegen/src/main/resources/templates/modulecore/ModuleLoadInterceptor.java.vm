@@ -1,0 +1,15 @@
+package ${modulegroup}.${moduleartifact}core.interceptor;
+
+import com.beanframework.common.context.InterceptorContext;
+import com.beanframework.common.exception.InterceptorException;
+import com.beanframework.common.interceptor.AbstractLoadInterceptor;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+
+public class ${Moduleartifact}LoadInterceptor extends AbstractLoadInterceptor<${Moduleartifact}> {
+
+	@Override
+	public void onLoad(${Moduleartifact} model, InterceptorContext context) throws InterceptorException {
+
+	}
+
+}

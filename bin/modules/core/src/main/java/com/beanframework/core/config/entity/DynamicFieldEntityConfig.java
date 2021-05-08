@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntityDynamicFieldConverter;
-import com.beanframework.core.converter.entity.EntityDynamicFieldSlotConverter;
-import com.beanframework.core.converter.entity.EntityDynamicFieldTemplateConverter;
+import com.beanframework.core.converter.entity.DynamicFieldEntityConverter;
+import com.beanframework.core.converter.entity.DynamicFieldSlotEntityConverter;
+import com.beanframework.core.converter.entity.DynamicFieldTemplateEntityConverter;
 import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
@@ -15,8 +15,8 @@ import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 public class DynamicFieldEntityConfig {
 
 	@Bean
-	public EntityDynamicFieldConverter entityDynamicFieldConverter() {
-		return new EntityDynamicFieldConverter();
+	public DynamicFieldEntityConverter entityDynamicFieldConverter() {
+		return new DynamicFieldEntityConverter();
 	}
 
 	@Bean
@@ -29,8 +29,8 @@ public class DynamicFieldEntityConfig {
 	}
 
 	@Bean
-	public EntityDynamicFieldSlotConverter entityDynamicFieldSlotConverter() {
-		return new EntityDynamicFieldSlotConverter();
+	public DynamicFieldSlotEntityConverter entityDynamicFieldSlotConverter() {
+		return new DynamicFieldSlotEntityConverter();
 	}
 
 	@Bean
@@ -43,8 +43,8 @@ public class DynamicFieldEntityConfig {
 	}
 
 	@Bean
-	public EntityDynamicFieldTemplateConverter entityDynamicFieldTemplateConverter() {
-		return new EntityDynamicFieldTemplateConverter();
+	public DynamicFieldTemplateEntityConverter entityDynamicFieldTemplateConverter() {
+		return new DynamicFieldTemplateEntityConverter();
 	}
 
 	@Bean

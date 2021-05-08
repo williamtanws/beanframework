@@ -1,0 +1,9 @@
+module.${moduleartifact}=${Moduleartifact}
+module.${moduleartifact}.uuid.notexists=UUID not exists
+module.${moduleartifact}.id=ID
+module.${moduleartifact}.id.placeholder=Enter ID
+module.${moduleartifact}.id.required=ID required
+module.${moduleartifact}.id.exists=ID already in use
+module.${moduleartifact}.name=Name
+module.${moduleartifact}.name.placeholder=Enter name
+module.${moduleartifact}.name.required=Name required

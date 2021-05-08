@@ -1,0 +1,23 @@
+package ${modulegroup}.${moduleartifact}core.listener;
+
+import org.springframework.stereotype.Component;
+
+import com.beanframework.common.exception.ListenerException;
+import com.beanframework.common.registry.AfterRemoveEvent;
+import com.beanframework.common.registry.AfterRemoveListener;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+
+@Component
+public class ${Moduleartifact}AfterRemoveListener implements AfterRemoveListener {
+
+	@Override
+	public void afterRemove(Object detachedModel, AfterRemoveEvent event) throws ListenerException {
+		try {
+			if (detachedModel instanceof ${Moduleartifact}) {
+
+			}
+		} catch (Exception e) {
+			throw new ListenerException(e.getMessage(), e);
+		}
+	}
+}

@@ -35,9 +35,12 @@
         <module>modules/console</module>
         <module>modules/backoffice</module>
         <module>modules/documentation</module>
-        <module>custom/training</module>
+		<!-- Custom -->
+		<!--
+		<module>custom/training</module>
         <module>custom/trainingcore</module>
         <module>custom/trainingbackoffice</module>
+		-->
         <module>platform</module>
         <module>../config</module>
     </modules>

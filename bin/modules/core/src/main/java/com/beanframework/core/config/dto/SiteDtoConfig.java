@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoSiteConverter;
+import com.beanframework.core.converter.dto.SiteDtoConverter;
 import com.beanframework.core.converter.populator.SitePopulator;
 import com.beanframework.core.data.SiteDto;
 
@@ -17,8 +17,8 @@ public class SiteDtoConfig {
 	}
 
 	@Bean
-	public DtoSiteConverter dtoSiteConverter() {
-		DtoSiteConverter converter = new DtoSiteConverter();
+	public SiteDtoConverter dtoSiteConverter() {
+		SiteDtoConverter converter = new SiteDtoConverter();
 		converter.addPopulator(sitePopulator());
 		return converter;
 	}

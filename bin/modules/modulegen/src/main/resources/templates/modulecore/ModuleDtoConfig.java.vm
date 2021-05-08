@@ -1,0 +1,34 @@
+package ${modulegroup}.${moduleartifact}core.config.dto;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.beanframework.common.converter.ConverterMapping;
+import ${modulegroup}.${moduleartifact}core.converter.dto.${Moduleartifact}DtoConverter;
+import ${modulegroup}.${moduleartifact}core.converter.populator.${Moduleartifact}Populator;
+import ${modulegroup}.${moduleartifact}core.data.${Moduleartifact}Dto;
+
+@Configuration
+public class ${Moduleartifact}DtoConfig {
+
+	@Bean
+	public ${Moduleartifact}Populator ${moduleartifact}Populator() {
+		return new ${Moduleartifact}Populator();
+	}
+
+	@Bean
+	public ${Moduleartifact}DtoConverter dto${Moduleartifact}Converter() {
+		${Moduleartifact}DtoConverter converter = new ${Moduleartifact}DtoConverter();
+		converter.addPopulator(${moduleartifact}Populator());
+		return converter;
+	}
+
+	@Bean
+	public ConverterMapping dto${Moduleartifact}ConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(dto${Moduleartifact}Converter());
+		mapping.setTypeCode(${Moduleartifact}Dto.class.getSimpleName());
+
+		return mapping;
+	}
+}

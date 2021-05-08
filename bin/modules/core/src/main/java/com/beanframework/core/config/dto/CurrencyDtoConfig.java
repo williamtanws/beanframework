@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoCurrencyConverter;
+import com.beanframework.core.converter.dto.CurrencyDtoConverter;
 import com.beanframework.core.converter.populator.CurrencyPopulator;
 import com.beanframework.core.data.CurrencyDto;
 
@@ -17,8 +17,8 @@ public class CurrencyDtoConfig {
 	}
 
 	@Bean
-	public DtoCurrencyConverter dtoCurrencyConverter() {
-		DtoCurrencyConverter converter = new DtoCurrencyConverter();
+	public CurrencyDtoConverter dtoCurrencyConverter() {
+		CurrencyDtoConverter converter = new CurrencyDtoConverter();
 		converter.addPopulator(currencyPopulator());
 		return converter;
 	}

@@ -1,0 +1,25 @@
+package ${modulegroup}.${moduleartifact}core.listener;
+
+import org.springframework.stereotype.Component;
+
+import com.beanframework.common.exception.ListenerException;
+import com.beanframework.common.registry.BeforeSaveEvent;
+import com.beanframework.common.registry.BeforeSaveListener;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+
+@Component
+public class ${Moduleartifact}BeforeSaveListener implements BeforeSaveListener {
+
+	@Override
+	public void beforeSave(Object model, BeforeSaveEvent event) throws ListenerException {
+		try {
+			if (model instanceof ${Moduleartifact}) {
+
+			}
+
+		} catch (Exception e) {
+			throw new ListenerException(e.getMessage(), e);
+		}
+	}
+
+}

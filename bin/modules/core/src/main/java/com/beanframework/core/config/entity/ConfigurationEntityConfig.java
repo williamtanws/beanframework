@@ -4,14 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntityConfigurationConverter;
+import com.beanframework.core.converter.entity.ConfigurationEntityConverter;
 
 @Configuration
 public class ConfigurationEntityConfig {
 
 	@Bean
-	public EntityConfigurationConverter entityConfigurationConverter() {
-		return new EntityConfigurationConverter();
+	public ConfigurationEntityConverter entityConfigurationConverter() {
+		return new ConfigurationEntityConverter();
 	}
 
 	@Bean

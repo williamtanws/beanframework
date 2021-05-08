@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntityAddressConverter;
+import com.beanframework.core.converter.entity.AddressEntityConverter;
 import com.beanframework.user.domain.Address;
 
 @Configuration
 public class AddressEntityConfig {
 
 	@Bean
-	public EntityAddressConverter entityAddressConverter() {
-		return new EntityAddressConverter();
+	public AddressEntityConverter entityAddressConverter() {
+		return new AddressEntityConverter();
 	}
 
 	@Bean

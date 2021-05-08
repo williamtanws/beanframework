@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoAddressConverter;
+import com.beanframework.core.converter.dto.AddressDtoConverter;
 import com.beanframework.core.converter.populator.AddressPopulator;
 import com.beanframework.core.data.AddressDto;
 
@@ -17,8 +17,8 @@ public class AddressDtoConfig {
 	}
 
 	@Bean
-	public DtoAddressConverter dtoAddressConverter() {
-		DtoAddressConverter converter = new DtoAddressConverter();
+	public AddressDtoConverter dtoAddressConverter() {
+		AddressDtoConverter converter = new AddressDtoConverter();
 		converter.addPopulator(addressPopulator());
 		return converter;
 	}

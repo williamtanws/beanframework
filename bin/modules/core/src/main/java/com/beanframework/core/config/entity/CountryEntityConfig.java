@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntityCountryConverter;
+import com.beanframework.core.converter.entity.CountryEntityConverter;
 import com.beanframework.internationalization.domain.Country;
 
 @Configuration
 public class CountryEntityConfig {
 
 	@Bean
-	public EntityCountryConverter entityCountryConverter() {
-		return new EntityCountryConverter();
+	public CountryEntityConverter entityCountryConverter() {
+		return new CountryEntityConverter();
 	}
 
 	@Bean

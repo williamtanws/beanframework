@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntityCurrencyConverter;
+import com.beanframework.core.converter.entity.CurrencyEntityConverter;
 import com.beanframework.internationalization.domain.Currency;
 
 @Configuration
 public class CurrencyEntityConfig {
 
 	@Bean
-	public EntityCurrencyConverter entityCurrencyConverter() {
-		return new EntityCurrencyConverter();
+	public CurrencyEntityConverter entityCurrencyConverter() {
+		return new CurrencyEntityConverter();
 	}
 
 	@Bean

@@ -1,0 +1,31 @@
+package ${modulegroup}.${moduleartifact}.domain;
+
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Table;
+
+import org.hibernate.envers.Audited;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.beanframework.common.domain.GenericEntity;
+import ${modulegroup}.${moduleartifact}.${Moduleartifact}Constants;
+
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@Audited
+@Table(name = ${Moduleartifact}Constants.Table.${MODULEARTIFACT})
+public class ${Moduleartifact} extends GenericEntity {
+
+	public static final String NAME = "name";
+
+	@Audited(withModifiedFlag = true)
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+}

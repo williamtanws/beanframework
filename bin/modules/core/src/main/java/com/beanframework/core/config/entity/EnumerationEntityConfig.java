@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntityEnumerationConverter;
+import com.beanframework.core.converter.entity.EnumerationEntityConverter;
 import com.beanframework.enumuration.domain.Enumeration;
 
 @Configuration
 public class EnumerationEntityConfig {
 
 	@Bean
-	public EntityEnumerationConverter entityEnumerationConverter() {
-		return new EntityEnumerationConverter();
+	public EnumerationEntityConverter entityEnumerationConverter() {
+		return new EnumerationEntityConverter();
 	}
 
 	@Bean
