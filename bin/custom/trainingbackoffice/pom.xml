@@ -26,6 +26,11 @@
 	<dependencies>
         <dependency>
             <groupId>com.beanframework</groupId>
+            <artifactId>backoffice</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beanframework</groupId>
             <artifactId>trainingcore</artifactId>
             <version>${project.version}</version>
         </dependency>

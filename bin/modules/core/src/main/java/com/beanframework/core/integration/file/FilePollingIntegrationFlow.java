@@ -29,7 +29,7 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.beanframework.core.config.bean.IntegrationConfig;
+import com.beanframework.core.config.CoreIntegrationConfig;
 import com.beanframework.core.integration.handle.ArchiveFileProcessor;
 import com.beanframework.core.integration.handle.ImportFileProcessor;
 
@@ -72,17 +72,17 @@ public class FilePollingIntegrationFlow {
 				.from(fileReadingMessageSource,
 						c -> c.poller(Pollers.fixedDelay(period).taskExecutor(taskExecutor).maxMessagesPerPoll(maxMessagesPerPoll)
 								.transactionSynchronizationFactory(transactionSynchronizationFactory()).transactional(transactionManager)))
-				.handle(importFileProcessor).channel(IntegrationConfig.READ_CHANNEL).get();
+				.handle(importFileProcessor).channel(CoreIntegrationConfig.READ_CHANNEL).get();
 	}
 
 	@Bean
 	public IntegrationFlow processedFileIntegration() {
-		return IntegrationFlows.from(IntegrationConfig.PROCESSED_CHANNEL).handle(archiveFileProcessor).get();
+		return IntegrationFlows.from(CoreIntegrationConfig.PROCESSED_CHANNEL).handle(archiveFileProcessor).get();
 	}
 
 	@Bean
 	public IntegrationFlow failedFileIntegration() {
-		return IntegrationFlows.from(IntegrationConfig.FAILED_CHANNEL).handle(archiveFileProcessor).get();
+		return IntegrationFlows.from(CoreIntegrationConfig.FAILED_CHANNEL).handle(archiveFileProcessor).get();
 	}
 
 	@Bean

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.exception.ListenerException;
 import com.beanframework.common.registry.BeforeRemoveEvent;
@@ -17,6 +18,7 @@ import com.beanframework.user.UserConstants;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
 
+@Component
 public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
 	@Autowired

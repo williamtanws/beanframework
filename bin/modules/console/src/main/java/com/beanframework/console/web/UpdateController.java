@@ -45,7 +45,7 @@ public class UpdateController {
 	private String VIEW_UPDATE;
 
 	@Autowired
-	private ImportListenerRegistry importerRegistry;
+	private ImportListenerRegistry importListenerRegistry;
 
 	@Autowired(required = false)
 	private CacheManager cacheManager;
@@ -59,7 +59,7 @@ public class UpdateController {
 	@GetMapping(value = UpdateWebConstants.Path.UPDATE)
 	public String list(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
-		Set<Entry<String, ImportListener>> mapEntries = importerRegistry.getListeners().entrySet();
+		Set<Entry<String, ImportListener>> mapEntries = importListenerRegistry.getListeners().entrySet();
 		List<Entry<String, ImportListener>> aList = new LinkedList<Entry<String, ImportListener>>(mapEntries);
 		Collections.sort(aList, new Comparator<Entry<String, ImportListener>>() {
 			@Override
@@ -81,7 +81,7 @@ public class UpdateController {
 
 		Set<String> keysToUpdate = new HashSet<String>();
 
-		for (Entry<String, ImportListener> entry : importerRegistry.getListeners().entrySet()) {
+		for (Entry<String, ImportListener> entry : importListenerRegistry.getListeners().entrySet()) {
 			if (requestParams.get(entry.getKey()) != null) {
 				String keyValue = requestParams.get(entry.getKey()).toString();
 				if (parseBoolean(keyValue)) {

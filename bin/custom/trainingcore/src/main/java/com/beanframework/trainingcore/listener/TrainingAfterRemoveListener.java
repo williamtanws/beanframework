@@ -1,22 +1,19 @@
-package com.beanframework.core.listener;
+package com.beanframework.trainingcore.listener;
 
 import org.springframework.stereotype.Component;
 
 import com.beanframework.common.exception.ListenerException;
 import com.beanframework.common.registry.AfterRemoveEvent;
 import com.beanframework.common.registry.AfterRemoveListener;
-import com.beanframework.configuration.domain.Configuration;
-import com.beanframework.menu.domain.Menu;
+import com.beanframework.training.domain.Training;
 
 @Component
-public class CoreAfterRemoveListener implements AfterRemoveListener {
+public class TrainingAfterRemoveListener implements AfterRemoveListener {
 
 	@Override
 	public void afterRemove(Object detachedModel, AfterRemoveEvent event) throws ListenerException {
 		try {
-			if (detachedModel instanceof Menu) {
-
-			} else if (detachedModel instanceof Configuration) {
+			if (detachedModel instanceof Training) {
 
 			}
 		} catch (Exception e) {

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.exception.ListenerException;
 import com.beanframework.common.registry.AfterSaveEvent;
@@ -23,6 +24,7 @@ import com.beanframework.user.domain.User;
 import com.beanframework.user.service.AuditorService;
 import com.beanframework.user.service.UserService;
 
+@Component
 public class CoreAfterSaveListener implements AfterSaveListener {
 	protected static Logger LOGGER = LoggerFactory.getLogger(CoreAfterSaveListener.class);
 
