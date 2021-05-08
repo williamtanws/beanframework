@@ -49,11 +49,12 @@ public class CreateModuleCore {
 		createSpecification(context, moduleartifact, modulegroup, location);
 		create_en(context, moduleartifact, modulegroup, location);
 		create_cn(context, moduleartifact, modulegroup, location);
-		create_userauthority(context, moduleartifact, modulegroup, location);
+		create_menu(context, moduleartifact, modulegroup, location);
 		create_userpermission(context, moduleartifact, modulegroup, location);
+		create_userauthority(context, moduleartifact, modulegroup, location);
 		createModule(context, moduleartifact, modulegroup, location);
 	}
-	
+
 	private void createClassPathModuleBackoffice(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
 		String path = location + File.separator + moduleartifact + "core";
 
@@ -156,8 +157,8 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\converter\dto\SampleDtoConverter.java
 	private void createDtoConverter(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "converter" + File.separator + "dto";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "converter"
+				+ File.separator + "dto";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleDtoConverter.java.vm");
 
@@ -171,8 +172,8 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\converter\entity\SampleEntityConverter.java
 	private void createEntityConverter(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "converter" + File.separator + "entity";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "converter"
+				+ File.separator + "entity";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleEntityConverter.java.vm");
 
@@ -186,8 +187,8 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\converter\entity\csv\SampleCsvEntityConverter.java
 	private void createCsvEntityConverter(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "converter" + File.separator + "entity" + File.separator + "csv";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "converter"
+				+ File.separator + "entity" + File.separator + "csv";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleCsvEntityConverter.java.vm");
 
@@ -201,8 +202,8 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\converter\populator\SamplePopulator.java
 	private void createPopulator(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "converter" + File.separator + "populator";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "converter"
+				+ File.separator + "populator";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModulePopulator.java.vm");
 
@@ -287,8 +288,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\interceptor\SampleInitialDefaultsInterceptor.java
 	private void createInitialDefaultsInterceptor(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "interceptor";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "interceptor";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleInitialDefaultsInterceptor.java.vm");
 
@@ -302,8 +302,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\interceptor\SampleLoadInterceptor.java
 	private void createLoadInterceptor(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "interceptor";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "interceptor";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleLoadInterceptor.java.vm");
 
@@ -317,8 +316,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\interceptor\SamplePrepareInterceptor.java
 	private void createPrepareInterceptor(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "interceptor";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "interceptor";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModulePrepareInterceptor.java.vm");
 
@@ -332,8 +330,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\interceptor\SampleRemoveInterceptor.java
 	private void createRemoveInterceptor(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "interceptor";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "interceptor";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleRemoveInterceptor.java.vm");
 
@@ -347,8 +344,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\interceptor\SampleValidateInterceptor.java
 	private void createValidateInterceptor(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "interceptor";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "interceptor";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleValidateInterceptor.java.vm");
 
@@ -362,8 +358,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\listener\SampleAfterRemoveListener.java
 	private void createAfterRemoveListener(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "listener";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "listener";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleAfterRemoveListener.java.vm");
 
@@ -377,8 +372,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\listener\SampleAfterSaveListener.java
 	private void createAfterSaveListener(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "listener";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "listener";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleAfterSaveListener.java.vm");
 
@@ -392,8 +386,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\listener\SampleBeforeRemoveListener.java
 	private void createBeforeRemoveListener(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "listener";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "listener";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleBeforeRemoveListener.java.vm");
 
@@ -407,8 +400,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\listener\SampleBeforeSaveListener.java
 	private void createBeforeSaveListener(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "listener";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "listener";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleBeforeSaveListener.java.vm");
 
@@ -422,8 +414,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\listener\SampleListener.java
 	private void createListener(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "listener";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "listener";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleListener.java.vm");
 
@@ -437,8 +428,7 @@ public class CreateModuleCore {
 
 	// samplecore\src\main\java\com\beanframework\samplecore\specification\TrainingSpecification.java
 	private void createSpecification(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator
-				+ "specification";
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "specification";
 
 		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleSpecification.java.vm");
 
@@ -478,44 +468,60 @@ public class CreateModuleCore {
 		System.out.println("Written: " + moduleEntity.getPath());
 	}
 
-	// samplecore\src\main\resource\import\dev\ updatedate\sample\sample_userpermission.csv
-	private void create_userauthority(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/resources/import/dev/updatedata/" + moduleartifact;
+	// samplecore\src\main\resource\import\dev\ updatedate\sample\sample_menu.csv
+	private void create_menu(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/resources/import/dev/updatedata/100-" + moduleartifact;
 
-		Template template = velocityEngine.getTemplate("templates/modulecore/module_userauthority.csv.vm");
+		Template template = velocityEngine.getTemplate("templates/modulecore/100-module_menu.csv.vm");
 
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
 
-		File moduleEntity = new File(path + File.separator + moduleartifact.toLowerCase() + "_userauthority.csv");
+		File moduleEntity = new File(path + File.separator + "100-" + moduleartifact.toLowerCase() + "_menu.csv");
 		FileUtils.write(moduleEntity, writer.toString(), StandardCharsets.UTF_8.name());
 		System.out.println("Written: " + moduleEntity.getPath());
 	}
 
-	// samplecore\src\main\resource\import\dev\ updatedate\sample\sample_userpermission.csv
+	// samplecore\src\main\resource\import\dev\
+	// updatedate\sample\sample_userpermission.csv
 	private void create_userpermission(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/resources/import/dev/updatedata/" + moduleartifact;
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/resources/import/dev/updatedata/100-" + moduleartifact;
 
-		Template template = velocityEngine.getTemplate("templates/modulecore/module_userpermission.csv.vm");
+		Template template = velocityEngine.getTemplate("templates/modulecore/101-module_userpermission.csv.vm");
 
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
 
-		File moduleEntity = new File(path + File.separator + moduleartifact.toLowerCase() + "_userpermission.csv");
+		File moduleEntity = new File(path + File.separator + "101-" + moduleartifact.toLowerCase() + "_userpermission.csv");
+		FileUtils.write(moduleEntity, writer.toString(), StandardCharsets.UTF_8.name());
+		System.out.println("Written: " + moduleEntity.getPath());
+	}
+
+	// samplecore\src\main\resource\import\dev\
+	// updatedate\sample\sample_userpermission.csv
+	private void create_userauthority(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/resources/import/dev/updatedata/100-" + moduleartifact;
+
+		Template template = velocityEngine.getTemplate("templates/modulecore/102-module_userauthority.csv.vm");
+
+		StringWriter writer = new StringWriter();
+		template.merge(context, writer);
+
+		File moduleEntity = new File(path + File.separator + "102-" + moduleartifact.toLowerCase() + "_userauthority.csv");
 		FileUtils.write(moduleEntity, writer.toString(), StandardCharsets.UTF_8.name());
 		System.out.println("Written: " + moduleEntity.getPath());
 	}
 
 	// samplecore\src\main\resource\import\dev\ updatedate\sample\sample.csv
 	private void createModule(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
-		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/resources/import/dev/updatedata/" + moduleartifact;
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/resources/import/dev/updatedata/100-" + moduleartifact;
 
-		Template template = velocityEngine.getTemplate("templates/modulecore/module.csv.vm");
+		Template template = velocityEngine.getTemplate("templates/modulecore/103-module.csv.vm");
 
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
 
-		File moduleEntity = new File(path + File.separator + moduleartifact.toLowerCase() + ".csv");
+		File moduleEntity = new File(path + File.separator + "103-" + moduleartifact.toLowerCase() + ".csv");
 		FileUtils.write(moduleEntity, writer.toString(), StandardCharsets.UTF_8.name());
 		System.out.println("Written: " + moduleEntity.getPath());
 	}

@@ -46,7 +46,7 @@ public class UpdateResource {
 					return new File(current, name).isDirectory();
 				}
 			});
-			Arrays.sort(directories);
+//			Arrays.sort(directories);
 			for (int i = 0; i < directories.length; i++) {
 				folders.add(directories[i]);
 			}
