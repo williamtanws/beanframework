@@ -1,6 +1,3 @@
-/training/**
-/trainingbackoffice/**
-/trainingcore/**
-/training/*
-/trainingbackoffice/*
-/trainingcore/*
+/training/
+/trainingbackoffice/
+/trainingcore/
