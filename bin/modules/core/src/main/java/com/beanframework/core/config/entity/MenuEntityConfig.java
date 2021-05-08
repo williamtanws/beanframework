@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntityMenuConverter;
+import com.beanframework.core.converter.entity.MenuEntityConverter;
 import com.beanframework.menu.domain.Menu;
 
 @Configuration
 public class MenuEntityConfig {
 
 	@Bean
-	public EntityMenuConverter entityMenuConverter() {
-		return new EntityMenuConverter();
+	public MenuEntityConverter entityMenuConverter() {
+		return new MenuEntityConverter();
 	}
 
 	@Bean

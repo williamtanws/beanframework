@@ -4,28 +4,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.csv.EntityCsvAddressConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvCompanyConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvConfigurationConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvCountryConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvCronjobConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvCurrencyConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvCustomerConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvDynamicFieldConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvDynamicFieldSlotConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvDynamicFieldTemplateConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvEmployeeConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvEnumerationConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvImexConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvLanguageConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvMediaConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvMenuConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvRegionConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvSiteConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvUserGroupConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvUserPermissionConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvUserRightConverter;
-import com.beanframework.core.converter.entity.csv.EntityCsvVendorConverter;
+import com.beanframework.core.converter.entity.csv.AddressCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.CompanyCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.ConfigurationCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.CountryCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.CronjobCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.CurrencyCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.CustomerCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.DynamicFieldCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.DynamicFieldSlotCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.DynamicFieldTemplateCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.EmployeeCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.EnumerationCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.ImexCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.LanguageCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.MediaCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.MenuCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.RegionCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.SiteCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.UserGroupCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.UserPermissionCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.UserRightCsvEntityConverter;
+import com.beanframework.core.converter.entity.csv.VendorCsvEntityConverter;
 import com.beanframework.core.csv.AddressCsv;
 import com.beanframework.core.csv.CompanyCsv;
 import com.beanframework.core.csv.ConfigurationCsv;
@@ -53,8 +53,8 @@ import com.beanframework.core.csv.VendorCsv;
 public class CoreEntityCsvConverterConfig {
 
 	@Bean
-	public EntityCsvConfigurationConverter entityCsvConfigurationConverter() {
-		return new EntityCsvConfigurationConverter();
+	public ConfigurationCsvEntityConverter entityCsvConfigurationConverter() {
+		return new ConfigurationCsvEntityConverter();
 	}
 
 	@Bean
@@ -67,8 +67,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvCronjobConverter entityCsvCronjobConverter() {
-		return new EntityCsvCronjobConverter();
+	public CronjobCsvEntityConverter entityCsvCronjobConverter() {
+		return new CronjobCsvEntityConverter();
 	}
 
 	@Bean
@@ -81,8 +81,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvCustomerConverter entityCsvCustomerConverter() {
-		return new EntityCsvCustomerConverter();
+	public CustomerCsvEntityConverter entityCsvCustomerConverter() {
+		return new CustomerCsvEntityConverter();
 	}
 
 	@Bean
@@ -95,8 +95,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvDynamicFieldConverter entityCsvDynamicFieldConverter() {
-		return new EntityCsvDynamicFieldConverter();
+	public DynamicFieldCsvEntityConverter entityCsvDynamicFieldConverter() {
+		return new DynamicFieldCsvEntityConverter();
 	}
 
 	@Bean
@@ -109,8 +109,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvDynamicFieldSlotConverter entityCsvDynamicFieldSlotConverter() {
-		return new EntityCsvDynamicFieldSlotConverter();
+	public DynamicFieldSlotCsvEntityConverter entityCsvDynamicFieldSlotConverter() {
+		return new DynamicFieldSlotCsvEntityConverter();
 	}
 
 	@Bean
@@ -123,8 +123,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvDynamicFieldTemplateConverter entityCsvDynamicFieldTemplateConverter() {
-		return new EntityCsvDynamicFieldTemplateConverter();
+	public DynamicFieldTemplateCsvEntityConverter entityCsvDynamicFieldTemplateConverter() {
+		return new DynamicFieldTemplateCsvEntityConverter();
 	}
 
 	@Bean
@@ -137,8 +137,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvEmployeeConverter entityCsvEmployeeConverter() {
-		return new EntityCsvEmployeeConverter();
+	public EmployeeCsvEntityConverter entityCsvEmployeeConverter() {
+		return new EmployeeCsvEntityConverter();
 	}
 
 	@Bean
@@ -151,8 +151,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvEnumerationConverter entityCsvEnumerationConverter() {
-		return new EntityCsvEnumerationConverter();
+	public EnumerationCsvEntityConverter entityCsvEnumerationConverter() {
+		return new EnumerationCsvEntityConverter();
 	}
 
 	@Bean
@@ -165,8 +165,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvImexConverter entityCsvImexConverter() {
-		return new EntityCsvImexConverter();
+	public ImexCsvEntityConverter entityCsvImexConverter() {
+		return new ImexCsvEntityConverter();
 	}
 
 	@Bean
@@ -179,8 +179,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvLanguageConverter entityCsvLanguageConverter() {
-		return new EntityCsvLanguageConverter();
+	public LanguageCsvEntityConverter entityCsvLanguageConverter() {
+		return new LanguageCsvEntityConverter();
 	}
 
 	@Bean
@@ -193,8 +193,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvMediaConverter entityCsvMediaConverter() {
-		return new EntityCsvMediaConverter();
+	public MediaCsvEntityConverter entityCsvMediaConverter() {
+		return new MediaCsvEntityConverter();
 	}
 
 	@Bean
@@ -207,8 +207,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvMenuConverter entityCsvMenuConverter() {
-		return new EntityCsvMenuConverter();
+	public MenuCsvEntityConverter entityCsvMenuConverter() {
+		return new MenuCsvEntityConverter();
 	}
 
 	@Bean
@@ -221,8 +221,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvSiteConverter entityCsvSiteConverter() {
-		return new EntityCsvSiteConverter();
+	public SiteCsvEntityConverter entityCsvSiteConverter() {
+		return new SiteCsvEntityConverter();
 	}
 
 	@Bean
@@ -235,8 +235,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvUserGroupConverter entityCsvUserGroupConverter() {
-		return new EntityCsvUserGroupConverter();
+	public UserGroupCsvEntityConverter entityCsvUserGroupConverter() {
+		return new UserGroupCsvEntityConverter();
 	}
 
 	@Bean
@@ -249,8 +249,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvUserPermissionConverter entityCsvUserPermissionConverter() {
-		return new EntityCsvUserPermissionConverter();
+	public UserPermissionCsvEntityConverter entityCsvUserPermissionConverter() {
+		return new UserPermissionCsvEntityConverter();
 	}
 
 	@Bean
@@ -263,8 +263,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvUserRightConverter entityCsvUserRightConverter() {
-		return new EntityCsvUserRightConverter();
+	public UserRightCsvEntityConverter entityCsvUserRightConverter() {
+		return new UserRightCsvEntityConverter();
 	}
 
 	@Bean
@@ -277,8 +277,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvVendorConverter entityCsvVendorConverter() {
-		return new EntityCsvVendorConverter();
+	public VendorCsvEntityConverter entityCsvVendorConverter() {
+		return new VendorCsvEntityConverter();
 	}
 
 	@Bean
@@ -291,8 +291,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvCountryConverter entityCsvCountryConverter() {
-		return new EntityCsvCountryConverter();
+	public CountryCsvEntityConverter entityCsvCountryConverter() {
+		return new CountryCsvEntityConverter();
 	}
 
 	@Bean
@@ -305,8 +305,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvAddressConverter entityCsvAddressConverter() {
-		return new EntityCsvAddressConverter();
+	public AddressCsvEntityConverter entityCsvAddressConverter() {
+		return new AddressCsvEntityConverter();
 	}
 
 	@Bean
@@ -319,8 +319,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvRegionConverter entityCsvRegionConverter() {
-		return new EntityCsvRegionConverter();
+	public RegionCsvEntityConverter entityCsvRegionConverter() {
+		return new RegionCsvEntityConverter();
 	}
 
 	@Bean
@@ -333,8 +333,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 
 	@Bean
-	public EntityCsvCurrencyConverter entityCsvCurrencyConverter() {
-		return new EntityCsvCurrencyConverter();
+	public CurrencyCsvEntityConverter entityCsvCurrencyConverter() {
+		return new CurrencyCsvEntityConverter();
 	}
 
 	@Bean
@@ -347,8 +347,8 @@ public class CoreEntityCsvConverterConfig {
 	}
 	
 	@Bean
-	public EntityCsvCompanyConverter entityCsvCompanyConverter() {
-		return new EntityCsvCompanyConverter();
+	public CompanyCsvEntityConverter entityCsvCompanyConverter() {
+		return new CompanyCsvEntityConverter();
 	}
 
 	@Bean

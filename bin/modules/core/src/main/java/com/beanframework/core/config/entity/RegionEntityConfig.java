@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntityRegionConverter;
+import com.beanframework.core.converter.entity.RegionEntityConverter;
 import com.beanframework.internationalization.domain.Region;
 
 @Configuration
 public class RegionEntityConfig {
 
 	@Bean
-	public EntityRegionConverter entityRegionConverter() {
-		return new EntityRegionConverter();
+	public RegionEntityConverter entityRegionConverter() {
+		return new RegionEntityConverter();
 	}
 
 	@Bean

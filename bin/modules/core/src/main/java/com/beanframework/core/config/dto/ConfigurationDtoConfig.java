@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoConfigurationConverter;
+import com.beanframework.core.converter.dto.ConfigurationDtoConverter;
 import com.beanframework.core.converter.populator.ConfigurationPopulator;
 import com.beanframework.core.data.ConfigurationDto;
 
@@ -17,8 +17,8 @@ public class ConfigurationDtoConfig {
 	}
 
 	@Bean
-	public DtoConfigurationConverter dtoConfigurationConverter() {
-		DtoConfigurationConverter converter = new DtoConfigurationConverter();
+	public ConfigurationDtoConverter dtoConfigurationConverter() {
+		ConfigurationDtoConverter converter = new ConfigurationDtoConverter();
 		converter.addPopulator(configurationPopulator());
 		return converter;
 	}

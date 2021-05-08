@@ -1,0 +1,56 @@
+package ${modulegroup}.${moduleartifact}core.converter.entity;
+
+import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.beanframework.common.converter.EntityConverter;
+import com.beanframework.common.exception.ConverterException;
+import com.beanframework.common.service.ModelService;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+import ${modulegroup}.${moduleartifact}core.data.${Moduleartifact}Dto;
+
+public class ${Moduleartifact}EntityConverter implements EntityConverter<${Moduleartifact}Dto, ${Moduleartifact}> {
+
+	@Autowired
+	private ModelService modelService;
+
+	@Override
+	public ${Moduleartifact} convert(${Moduleartifact}Dto source) throws ConverterException {
+
+		try {
+
+			if (source.getUuid() != null) {
+				${Moduleartifact} prototype = modelService.findOneByUuid(source.getUuid(), ${Moduleartifact}.class);
+
+				if (prototype != null) {
+					return convertToEntity(source, prototype);
+				}
+			}
+
+			return convertToEntity(source, modelService.create(${Moduleartifact}.class));
+
+		} catch (Exception e) {
+			throw new ConverterException(e.getMessage(), e);
+		}
+	}
+
+	private ${Moduleartifact} convertToEntity(${Moduleartifact}Dto source, ${Moduleartifact} prototype) {
+
+		Date lastModifiedDate = new Date();
+
+		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
+			prototype.setId(StringUtils.stripToNull(source.getId()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
+
+		if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
+			prototype.setName(StringUtils.stripToNull(source.getName()));
+			prototype.setLastModifiedDate(lastModifiedDate);
+		}
+
+		return prototype;
+	}
+
+}

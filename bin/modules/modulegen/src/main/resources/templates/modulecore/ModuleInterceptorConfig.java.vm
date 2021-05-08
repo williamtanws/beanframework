@@ -1,0 +1,106 @@
+package ${modulegroup}.${moduleartifact}core.config.interceptor;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.beanframework.common.interceptor.InterceptorMapping;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+import ${modulegroup}.${moduleartifact}core.interceptor.${Moduleartifact}InitialDefaultsInterceptor;
+import ${modulegroup}.${moduleartifact}core.interceptor.${Moduleartifact}LoadInterceptor;
+import ${modulegroup}.${moduleartifact}core.interceptor.${Moduleartifact}PrepareInterceptor;
+import ${modulegroup}.${moduleartifact}core.interceptor.${Moduleartifact}RemoveInterceptor;
+import ${modulegroup}.${moduleartifact}core.interceptor.${Moduleartifact}ValidateInterceptor;
+
+@Configuration
+public class ${Moduleartifact}InterceptorConfig {
+
+	//////////////////////////////////
+	// Initial Defaults Interceptor //
+	//////////////////////////////////
+
+	@Bean
+	public ${Moduleartifact}InitialDefaultsInterceptor ${moduleartifact}InitialDefaultsInterceptor() {
+		return new ${Moduleartifact}InitialDefaultsInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping ${moduleartifact}InitialDefaultsInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(${moduleartifact}InitialDefaultsInterceptor());
+		mapping.setTypeCode(${Moduleartifact}.class.getSimpleName());
+
+		return mapping;
+	}
+
+	//////////////////////
+	// Load Interceptor //
+	//////////////////////
+
+	@Bean
+	public ${Moduleartifact}LoadInterceptor ${moduleartifact}LoadInterceptor() {
+		return new ${Moduleartifact}LoadInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping ${moduleartifact}LoadInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(${moduleartifact}LoadInterceptor());
+		mapping.setTypeCode(${Moduleartifact}.class.getSimpleName());
+
+		return mapping;
+	}
+
+	/////////////////////////
+	// Prepare Interceptor //
+	/////////////////////////
+
+	@Bean
+	public ${Moduleartifact}PrepareInterceptor ${moduleartifact}PrepareInterceptor() {
+		return new ${Moduleartifact}PrepareInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping ${moduleartifact}PrepareInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(${moduleartifact}PrepareInterceptor());
+		mapping.setTypeCode(${Moduleartifact}.class.getSimpleName());
+
+		return mapping;
+	}
+
+	//////////////////////////
+	// Validate Interceptor //
+	//////////////////////////
+
+	@Bean
+	public ${Moduleartifact}ValidateInterceptor ${moduleartifact}ValidateInterceptor() {
+		return new ${Moduleartifact}ValidateInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping ${moduleartifact}ValidateInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(${moduleartifact}ValidateInterceptor());
+		mapping.setTypeCode(${Moduleartifact}.class.getSimpleName());
+
+		return mapping;
+	}
+
+	////////////////////////
+	// Remove Interceptor //
+	////////////////////////
+
+	@Bean
+	public ${Moduleartifact}RemoveInterceptor ${moduleartifact}RemoveInterceptor() {
+		return new ${Moduleartifact}RemoveInterceptor();
+	}
+
+	@Bean
+	public InterceptorMapping ${moduleartifact}RemoveInterceptorMapping() {
+		InterceptorMapping mapping = new InterceptorMapping();
+		mapping.setInterceptor(${moduleartifact}RemoveInterceptor());
+		mapping.setTypeCode(${Moduleartifact}.class.getSimpleName());
+
+		return mapping;
+	}
+}

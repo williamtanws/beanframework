@@ -1,0 +1,8 @@
+package ${modulegroup}.${moduleartifact}core.specification;
+
+import com.beanframework.common.specification.AbstractSpecification;
+
+public class ${Moduleartifact}Specification extends AbstractSpecification {
+	
+
+}

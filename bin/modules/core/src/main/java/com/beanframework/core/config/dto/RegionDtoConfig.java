@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoRegionConverter;
+import com.beanframework.core.converter.dto.RegionDtoConverter;
 import com.beanframework.core.converter.populator.RegionPopulator;
 import com.beanframework.core.data.RegionDto;
 
@@ -17,8 +17,8 @@ public class RegionDtoConfig {
 	}
 
 	@Bean
-	public DtoRegionConverter dtoRegionConverter() {
-		DtoRegionConverter converter = new DtoRegionConverter();
+	public RegionDtoConverter dtoRegionConverter() {
+		RegionDtoConverter converter = new RegionDtoConverter();
 		converter.addPopulator(regionPopulator());
 		return converter;
 	}

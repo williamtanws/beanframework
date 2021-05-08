@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.data.AuditorDto;
-import com.beanframework.core.converter.dto.DtoAuditorConverter;
+import com.beanframework.core.converter.dto.AuditorDtoConverter;
 import com.beanframework.core.converter.populator.AuditorPopulator;
 
 @Configuration
@@ -17,8 +17,8 @@ public class AuditorDtoConfig {
 	}
 
 	@Bean
-	public DtoAuditorConverter dtoAuditorConverter() {
-		DtoAuditorConverter converter = new DtoAuditorConverter();
+	public AuditorDtoConverter dtoAuditorConverter() {
+		AuditorDtoConverter converter = new AuditorDtoConverter();
 		converter.addPopulator(auditorPopulator());
 		return converter;
 	}

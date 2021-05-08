@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.entity.EntityNotificationConverter;
+import com.beanframework.core.converter.entity.NotificationEntityConverter;
 import com.beanframework.notification.domain.Notification;
 
 @Configuration
 public class NotificationEntityConfig {
 
 	@Bean
-	public EntityNotificationConverter entityNotificationConverter() {
-		return new EntityNotificationConverter();
+	public NotificationEntityConverter entityNotificationConverter() {
+		return new NotificationEntityConverter();
 	}
 
 	@Bean

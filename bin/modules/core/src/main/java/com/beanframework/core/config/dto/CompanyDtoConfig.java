@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoCompanyConverter;
+import com.beanframework.core.converter.dto.CompanyDtoConverter;
 import com.beanframework.core.converter.populator.CompanyPopulator;
 import com.beanframework.core.data.CompanyDto;
 
@@ -17,8 +17,8 @@ public class CompanyDtoConfig {
 	}
 
 	@Bean
-	public DtoCompanyConverter dtoCompanyConverter() {
-		DtoCompanyConverter converter = new DtoCompanyConverter();
+	public CompanyDtoConverter dtoCompanyConverter() {
+		CompanyDtoConverter converter = new CompanyDtoConverter();
 		converter.addPopulator(companyPopulator());
 		return converter;
 	}

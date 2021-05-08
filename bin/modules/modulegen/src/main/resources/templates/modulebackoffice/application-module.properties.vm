@@ -1,0 +1,14 @@
+# ===============================
+# = ${MODULEARTIFACT} PATH
+# ===============================
+path.${moduleartifact}=${backoffice.webroot}/${moduleartifact}
+path.${moduleartifact}.form=${backoffice.webroot}/${moduleartifact}/form
+path.api.${moduleartifact}=${backoffice.api}/${moduleartifact}
+path.api.${moduleartifact}.history=${backoffice.api}/${moduleartifact}/history
+path.api.${moduleartifact}.checkid=${backoffice.api}/${moduleartifact}/checkid
+
+# ===============================
+# = ${MODULEARTIFACT} VIEW
+# ===============================
+view.${moduleartifact}=${backoffice.theme}/${moduleartifact}/${moduleartifact}
+view.${moduleartifact}.form=${backoffice.theme}/${moduleartifact}/${moduleartifact}Form

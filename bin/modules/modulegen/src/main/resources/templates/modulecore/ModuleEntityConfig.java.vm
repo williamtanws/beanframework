@@ -1,0 +1,26 @@
+package ${modulegroup}.${moduleartifact}core.config.entity;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.beanframework.common.converter.ConverterMapping;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+import ${modulegroup}.${moduleartifact}core.converter.entity.${Moduleartifact}EntityConverter;
+
+@Configuration
+public class ${Moduleartifact}EntityConfig {
+
+	@Bean
+	public ${Moduleartifact}EntityConverter entity${Moduleartifact}Converter() {
+		return new ${Moduleartifact}EntityConverter();
+	}
+
+	@Bean
+	public ConverterMapping entity${Moduleartifact}ConverterMapping() {
+		ConverterMapping mapping = new ConverterMapping();
+		mapping.setConverter(entity${Moduleartifact}Converter());
+		mapping.setTypeCode(${Moduleartifact}.class.getSimpleName());
+
+		return mapping;
+	}
+}

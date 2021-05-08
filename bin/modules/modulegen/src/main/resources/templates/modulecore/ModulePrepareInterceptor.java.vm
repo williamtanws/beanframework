@@ -1,0 +1,15 @@
+package ${modulegroup}.${moduleartifact}core.interceptor;
+
+import com.beanframework.common.context.InterceptorContext;
+import com.beanframework.common.exception.InterceptorException;
+import com.beanframework.common.interceptor.AbstractPrepareInterceptor;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+
+public class ${Moduleartifact}PrepareInterceptor extends AbstractPrepareInterceptor<${Moduleartifact}> {
+
+	@Override
+	public void onPrepare(${Moduleartifact} model, InterceptorContext context) throws InterceptorException {
+		super.onPrepare(model, context);
+	}
+
+}

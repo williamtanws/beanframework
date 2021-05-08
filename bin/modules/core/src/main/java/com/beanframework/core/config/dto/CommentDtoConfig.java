@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoCommentConverter;
+import com.beanframework.core.converter.dto.CommentDtoConverter;
 import com.beanframework.core.converter.populator.CommentPopulator;
 import com.beanframework.core.data.CommentDto;
 
@@ -17,8 +17,8 @@ public class CommentDtoConfig {
 	}
 
 	@Bean
-	public DtoCommentConverter dtoCommentConverter() {
-		DtoCommentConverter converter = new DtoCommentConverter();
+	public CommentDtoConverter dtoCommentConverter() {
+		CommentDtoConverter converter = new CommentDtoConverter();
 		converter.addPopulator(commentPopulator());
 		return converter;
 	}

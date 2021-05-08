@@ -4,10 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoMenuBreadcrumbsConverter;
-import com.beanframework.core.converter.dto.DtoMenuConverter;
-import com.beanframework.core.converter.dto.DtoMenuTreeByCurrentUserConverter;
-import com.beanframework.core.converter.dto.DtoMenuTreeConverter;
+import com.beanframework.core.converter.dto.MenuBreadcrumbsDtoConverter;
+import com.beanframework.core.converter.dto.MenuDtoConverter;
+import com.beanframework.core.converter.dto.MenuTreeByCurrentUserDtoConverter;
+import com.beanframework.core.converter.dto.MenuTreeDtoConverter;
 import com.beanframework.core.converter.populator.MenuBreadcrumbsPopulator;
 import com.beanframework.core.converter.populator.MenuPopulator;
 import com.beanframework.core.converter.populator.MenuTreeByCurrentUserPopulator;
@@ -24,8 +24,8 @@ public class MenuDtoConfig {
 	}
 
 	@Bean
-	public DtoMenuConverter dtoMenuConverter() {
-		DtoMenuConverter converter = new DtoMenuConverter();
+	public MenuDtoConverter dtoMenuConverter() {
+		MenuDtoConverter converter = new MenuDtoConverter();
 		converter.addPopulator(menuPopulator());
 		return converter;
 	}
@@ -46,8 +46,8 @@ public class MenuDtoConfig {
 	}
 
 	@Bean
-	public DtoMenuTreeConverter dtoMenuTreeConverter() {
-		DtoMenuTreeConverter converter = new DtoMenuTreeConverter();
+	public MenuTreeDtoConverter dtoMenuTreeConverter() {
+		MenuTreeDtoConverter converter = new MenuTreeDtoConverter();
 		converter.addPopulator(menuTreePopulator());
 		return converter;
 	}
@@ -68,8 +68,8 @@ public class MenuDtoConfig {
 	}
 
 	@Bean
-	public DtoMenuTreeByCurrentUserConverter dtoMenuTreeByCurrentUserConverter() {
-		DtoMenuTreeByCurrentUserConverter converter = new DtoMenuTreeByCurrentUserConverter();
+	public MenuTreeByCurrentUserDtoConverter dtoMenuTreeByCurrentUserConverter() {
+		MenuTreeByCurrentUserDtoConverter converter = new MenuTreeByCurrentUserDtoConverter();
 		converter.addPopulator(menuTreeByCurrentUserPopulator());
 		return converter;
 	}
@@ -81,8 +81,8 @@ public class MenuDtoConfig {
 	}
 
 	@Bean
-	public DtoMenuBreadcrumbsConverter dtoMenuBreadcrumbsConverter() {
-		DtoMenuBreadcrumbsConverter converter = new DtoMenuBreadcrumbsConverter();
+	public MenuBreadcrumbsDtoConverter dtoMenuBreadcrumbsConverter() {
+		MenuBreadcrumbsDtoConverter converter = new MenuBreadcrumbsDtoConverter();
 		converter.addPopulator(menuBreadcrumbsPopulator());
 		return converter;
 	}

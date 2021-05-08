@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoCountryConverter;
+import com.beanframework.core.converter.dto.CountryDtoConverter;
 import com.beanframework.core.converter.populator.CountryPopulator;
 import com.beanframework.core.data.CountryDto;
 
@@ -17,8 +17,8 @@ public class CountryDtoConfig {
 	}
 
 	@Bean
-	public DtoCountryConverter dtoCountryConverter() {
-		DtoCountryConverter converter = new DtoCountryConverter();
+	public CountryDtoConverter dtoCountryConverter() {
+		CountryDtoConverter converter = new CountryDtoConverter();
 		converter.addPopulator(countryPopulator());
 		return converter;
 	}

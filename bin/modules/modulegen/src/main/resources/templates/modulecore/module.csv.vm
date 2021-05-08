@@ -1,0 +1,2 @@
+INSERT_UPDATE ${Moduleartifact},id,name
+,beanframework_${moduleartifact},Beanframework ${Moduleartifact}

@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoDynamicFieldConverter;
-import com.beanframework.core.converter.dto.DtoDynamicFieldSlotConverter;
-import com.beanframework.core.converter.dto.DtoDynamicFieldTemplateConverter;
+import com.beanframework.core.converter.dto.DynamicFieldDtoConverter;
+import com.beanframework.core.converter.dto.DynamicFieldSlotDtoConverter;
+import com.beanframework.core.converter.dto.DynamicFieldTemplateDtoConverter;
 import com.beanframework.core.converter.populator.DynamicFieldPopulator;
 import com.beanframework.core.converter.populator.DynamicFieldSlotPopulator;
 import com.beanframework.core.converter.populator.DynamicFieldTemplatePopulator;
@@ -23,8 +23,8 @@ public class DynamicFieldDtoConfig {
 	}
 
 	@Bean
-	public DtoDynamicFieldConverter dtoDynamicFieldConverter() {
-		DtoDynamicFieldConverter converter = new DtoDynamicFieldConverter();
+	public DynamicFieldDtoConverter dtoDynamicFieldConverter() {
+		DynamicFieldDtoConverter converter = new DynamicFieldDtoConverter();
 		converter.addPopulator(dynamicFieldPopulator());
 		return converter;
 	}
@@ -44,8 +44,8 @@ public class DynamicFieldDtoConfig {
 	}
 
 	@Bean
-	public DtoDynamicFieldSlotConverter dtoDynamicFieldSlotConverter() {
-		DtoDynamicFieldSlotConverter converter = new DtoDynamicFieldSlotConverter();
+	public DynamicFieldSlotDtoConverter dtoDynamicFieldSlotConverter() {
+		DynamicFieldSlotDtoConverter converter = new DynamicFieldSlotDtoConverter();
 		converter.addPopulator(dynamicFieldSlotPopulator());
 		return converter;
 	}
@@ -65,8 +65,8 @@ public class DynamicFieldDtoConfig {
 	}
 
 	@Bean
-	public DtoDynamicFieldTemplateConverter dtoDynamicFieldTemplateConverter() {
-		DtoDynamicFieldTemplateConverter converter = new DtoDynamicFieldTemplateConverter();
+	public DynamicFieldTemplateDtoConverter dtoDynamicFieldTemplateConverter() {
+		DynamicFieldTemplateDtoConverter converter = new DynamicFieldTemplateDtoConverter();
 		converter.addPopulator(dynamicFieldTemplatePopulator());
 		return converter;
 	}

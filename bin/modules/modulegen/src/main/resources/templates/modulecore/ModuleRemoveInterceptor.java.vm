@@ -1,0 +1,19 @@
+package ${modulegroup}.${moduleartifact}core.interceptor;
+
+import com.beanframework.common.context.InterceptorContext;
+import com.beanframework.common.exception.InterceptorException;
+import com.beanframework.common.interceptor.AbstractRemoveInterceptor;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+
+public class ${Moduleartifact}RemoveInterceptor extends AbstractRemoveInterceptor<${Moduleartifact}> {
+
+	@Override
+	public void onRemove(${Moduleartifact} model, InterceptorContext context) throws InterceptorException {
+		try {
+			
+		} catch (Exception e) {
+			throw new InterceptorException(e.getMessage(), e);
+		}
+	}
+
+}

@@ -1,0 +1,34 @@
+package ${modulegroup}.${moduleartifact}core.facade;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+
+import com.beanframework.common.data.DataTableRequest;
+import com.beanframework.common.exception.BusinessException;
+import ${modulegroup}.${moduleartifact}core.data.${Moduleartifact}Dto;
+
+public interface ${Moduleartifact}Facade {
+
+	${Moduleartifact}Dto findOneByUuid(UUID uuid) throws Exception;
+
+	${Moduleartifact}Dto findOneProperties(Map<String, Object> properties) throws Exception;
+
+	${Moduleartifact}Dto create(${Moduleartifact}Dto model) throws BusinessException;
+
+	${Moduleartifact}Dto update(${Moduleartifact}Dto model) throws BusinessException;
+
+	void delete(UUID uuid) throws BusinessException;
+
+	Page<${Moduleartifact}Dto> findPage(DataTableRequest dataTableRequest) throws Exception;
+
+	int count() throws Exception;
+
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	int countHistory(DataTableRequest dataTableRequest) throws Exception;
+
+	${Moduleartifact}Dto createDto() throws Exception;
+}

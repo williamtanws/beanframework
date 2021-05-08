@@ -5,14 +5,14 @@ import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.core.CoreConstants;
-import com.beanframework.core.converter.entity.EntityCustomerConverter;
-import com.beanframework.core.converter.entity.EntityEmployeeConverter;
-import com.beanframework.core.converter.entity.EntityMyAccountConverter;
-import com.beanframework.core.converter.entity.EntityUserConverter;
-import com.beanframework.core.converter.entity.EntityUserGroupConverter;
-import com.beanframework.core.converter.entity.EntityUserPermissionConverter;
-import com.beanframework.core.converter.entity.EntityUserRightConverter;
-import com.beanframework.core.converter.entity.EntityVendorConverter;
+import com.beanframework.core.converter.entity.CustomerEntityConverter;
+import com.beanframework.core.converter.entity.EmployeeEntityConverter;
+import com.beanframework.core.converter.entity.MyAccountEntityConverter;
+import com.beanframework.core.converter.entity.UserEntityConverter;
+import com.beanframework.core.converter.entity.UserGroupEntityConverter;
+import com.beanframework.core.converter.entity.UserPermissionEntityConverter;
+import com.beanframework.core.converter.entity.UserRightEntityConverter;
+import com.beanframework.core.converter.entity.VendorEntityConverter;
 import com.beanframework.user.domain.Customer;
 import com.beanframework.user.domain.Employee;
 import com.beanframework.user.domain.User;
@@ -25,8 +25,8 @@ import com.beanframework.user.domain.Vendor;
 public class UserEntityConfig {
 
 	@Bean
-	public EntityUserGroupConverter entityUserGroupConverter() {
-		return new EntityUserGroupConverter();
+	public UserGroupEntityConverter entityUserGroupConverter() {
+		return new UserGroupEntityConverter();
 	}
 
 	@Bean
@@ -39,8 +39,8 @@ public class UserEntityConfig {
 	}
 
 	@Bean
-	public EntityUserPermissionConverter entityUserPermissionConverter() {
-		return new EntityUserPermissionConverter();
+	public UserPermissionEntityConverter entityUserPermissionConverter() {
+		return new UserPermissionEntityConverter();
 	}
 
 	@Bean
@@ -53,8 +53,8 @@ public class UserEntityConfig {
 	}
 
 	@Bean
-	public EntityUserRightConverter entityUserRightConverter() {
-		return new EntityUserRightConverter();
+	public UserRightEntityConverter entityUserRightConverter() {
+		return new UserRightEntityConverter();
 	}
 
 	@Bean
@@ -67,8 +67,8 @@ public class UserEntityConfig {
 	}
 
 	@Bean
-	public EntityMyAccountConverter entityMyAccountConverter() {
-		return new EntityMyAccountConverter();
+	public MyAccountEntityConverter entityMyAccountConverter() {
+		return new MyAccountEntityConverter();
 	}
 
 	@Bean
@@ -81,8 +81,8 @@ public class UserEntityConfig {
 	}
 
 	@Bean
-	public EntityUserConverter entityUserConverter() {
-		return new EntityUserConverter();
+	public UserEntityConverter entityUserConverter() {
+		return new UserEntityConverter();
 	}
 
 	@Bean
@@ -95,8 +95,8 @@ public class UserEntityConfig {
 	}
 
 	@Bean
-	public EntityEmployeeConverter entityEmployeeConverter() {
-		return new EntityEmployeeConverter();
+	public EmployeeEntityConverter entityEmployeeConverter() {
+		return new EmployeeEntityConverter();
 	}
 
 	@Bean
@@ -109,8 +109,8 @@ public class UserEntityConfig {
 	}
 
 	@Bean
-	public EntityCustomerConverter entityCustomerConverter() {
-		return new EntityCustomerConverter();
+	public CustomerEntityConverter entityCustomerConverter() {
+		return new CustomerEntityConverter();
 	}
 
 	@Bean
@@ -123,8 +123,8 @@ public class UserEntityConfig {
 	}
 
 	@Bean
-	public EntityVendorConverter entityVendorConverter() {
-		return new EntityVendorConverter();
+	public VendorEntityConverter entityVendorConverter() {
+		return new VendorEntityConverter();
 	}
 
 	@Bean

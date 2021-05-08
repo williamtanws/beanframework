@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoCronjobConverter;
+import com.beanframework.core.converter.dto.CronjobDtoConverter;
 import com.beanframework.core.converter.populator.CronjobPopulator;
 import com.beanframework.core.data.CronjobDto;
 
@@ -17,8 +17,8 @@ public class CronjobDtoConfig {
 	}
 
 	@Bean
-	public DtoCronjobConverter dtoCronjobConverter() {
-		DtoCronjobConverter converter = new DtoCronjobConverter();
+	public CronjobDtoConverter dtoCronjobConverter() {
+		CronjobDtoConverter converter = new CronjobDtoConverter();
 		converter.addPopulator(cronjobPopulator());
 		return converter;
 	}

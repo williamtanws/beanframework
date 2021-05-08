@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoLanguageConverter;
+import com.beanframework.core.converter.dto.LanguageDtoConverter;
 import com.beanframework.core.converter.populator.LanguagePopulator;
 import com.beanframework.core.data.LanguageDto;
 
@@ -17,8 +17,8 @@ public class LanguageDtoConfig {
 	}
 
 	@Bean
-	public DtoLanguageConverter dtoLanguageConverter() {
-		DtoLanguageConverter converter = new DtoLanguageConverter();
+	public LanguageDtoConverter dtoLanguageConverter() {
+		LanguageDtoConverter converter = new LanguageDtoConverter();
 		converter.addPopulator(languagePopulator());
 		return converter;
 	}

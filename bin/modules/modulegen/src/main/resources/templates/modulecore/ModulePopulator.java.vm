@@ -1,0 +1,23 @@
+package ${modulegroup}.${moduleartifact}core.converter.populator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.beanframework.common.converter.Populator;
+import com.beanframework.common.exception.PopulatorException;
+import com.beanframework.core.converter.populator.AbstractPopulator;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+import ${modulegroup}.${moduleartifact}core.data.${Moduleartifact}Dto;
+
+
+public class ${Moduleartifact}Populator extends AbstractPopulator<${Moduleartifact}, ${Moduleartifact}Dto> implements Populator<${Moduleartifact}, ${Moduleartifact}Dto> {
+
+	protected static Logger LOGGER = LoggerFactory.getLogger(${Moduleartifact}Populator.class);
+
+	@Override
+	public void populate(${Moduleartifact} source, ${Moduleartifact}Dto target) throws PopulatorException {
+		populateGeneric(source, target);
+		target.setName(source.getName());
+	}
+
+}

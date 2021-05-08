@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.beanframework.common.converter.ConverterMapping;
-import com.beanframework.core.converter.dto.DtoEmailConverter;
+import com.beanframework.core.converter.dto.EmailDtoConverter;
 import com.beanframework.core.converter.populator.EmailPopulator;
 import com.beanframework.core.data.EmailDto;
 
@@ -17,8 +17,8 @@ public class EmailDtoConfig {
 	}
 
 	@Bean
-	public DtoEmailConverter dtoEmailConverter() {
-		DtoEmailConverter converter = new DtoEmailConverter();
+	public EmailDtoConverter dtoEmailConverter() {
+		EmailDtoConverter converter = new EmailDtoConverter();
 		converter.addPopulator(emailPopulator());
 		return converter;
 	}

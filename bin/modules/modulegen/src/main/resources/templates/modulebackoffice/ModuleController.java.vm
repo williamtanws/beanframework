@@ -1,0 +1,142 @@
+package ${modulegroup}.${moduleartifact}backoffice.web;
+
+import java.util.Map;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.beanframework.backoffice.BackofficeWebConstants;
+import com.beanframework.common.data.GenericDto;
+import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.controller.AbstractController;
+import ${modulegroup}.${moduleartifact}backoffice.${Moduleartifact}WebConstants;
+import ${modulegroup}.${moduleartifact}backoffice.${Moduleartifact}WebConstants.${Moduleartifact}PreAuthorizeEnum;
+import ${modulegroup}.${moduleartifact}core.data.${Moduleartifact}Dto;
+import ${modulegroup}.${moduleartifact}core.facade.${Moduleartifact}Facade;
+
+
+@Controller
+public class ${Moduleartifact}Controller extends AbstractController {
+
+	@Autowired
+	private ${Moduleartifact}Facade ${moduleartifact}Facade;
+
+	@Value(${Moduleartifact}WebConstants.Path.${MODULEARTIFACT})
+	private String PATH_${MODULEARTIFACT};
+
+	@Value(${Moduleartifact}WebConstants.Path.${MODULEARTIFACT}_FORM)
+	private String PATH_${MODULEARTIFACT}_FORM;
+
+	@Value(${Moduleartifact}WebConstants.View.${MODULEARTIFACT})
+	private String VIEW_${MODULEARTIFACT};
+
+	@Value(${Moduleartifact}WebConstants.View.${MODULEARTIFACT}_FORM)
+	private String VIEW_${MODULEARTIFACT}_FORM;
+
+	@PreAuthorize(${Moduleartifact}PreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = ${Moduleartifact}WebConstants.Path.${MODULEARTIFACT})
+	public String page(@Valid @ModelAttribute(${Moduleartifact}WebConstants.ModelAttribute.${MODULEARTIFACT}_DTO) ${Moduleartifact}Dto ${moduleartifact}Dto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+		return VIEW_${MODULEARTIFACT};
+	}
+
+	@PreAuthorize(${Moduleartifact}PreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = ${Moduleartifact}WebConstants.Path.${MODULEARTIFACT}_FORM)
+	public String form(@Valid @ModelAttribute(${Moduleartifact}WebConstants.ModelAttribute.${MODULEARTIFACT}_DTO) ${Moduleartifact}Dto ${moduleartifact}Dto, Model model) throws Exception {
+
+		if (${moduleartifact}Dto.getUuid() != null) {
+			${moduleartifact}Dto = ${moduleartifact}Facade.findOneByUuid(${moduleartifact}Dto.getUuid());
+		} else {
+			${moduleartifact}Dto = ${moduleartifact}Facade.createDto();
+		}
+		model.addAttribute(${Moduleartifact}WebConstants.ModelAttribute.${MODULEARTIFACT}_DTO, ${moduleartifact}Dto);
+
+		return VIEW_${MODULEARTIFACT}_FORM;
+	}
+
+	@PreAuthorize(${Moduleartifact}PreAuthorizeEnum.HAS_CREATE)
+	@PostMapping(value = ${Moduleartifact}WebConstants.Path.${MODULEARTIFACT}_FORM, params = "create")
+	public RedirectView create(@Valid @ModelAttribute(${Moduleartifact}WebConstants.ModelAttribute.${MODULEARTIFACT}_DTO) ${Moduleartifact}Dto ${moduleartifact}Dto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
+
+		if (${moduleartifact}Dto.getUuid() != null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
+		} else {
+			try {
+				${moduleartifact}Dto = ${moduleartifact}Facade.create(${moduleartifact}Dto);
+
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(${Moduleartifact}Dto.class, e.getMessage(), bindingResult, redirectAttributes);
+			}
+		}
+
+		redirectAttributes.addAttribute(GenericDto.UUID, ${moduleartifact}Dto.getUuid());
+
+		RedirectView redirectView = new RedirectView();
+		redirectView.setContextRelative(true);
+		redirectView.setUrl(PATH_${MODULEARTIFACT}_FORM);
+		return redirectView;
+	}
+
+	@PreAuthorize(${Moduleartifact}PreAuthorizeEnum.HAS_UPDATE)
+	@PostMapping(value = ${Moduleartifact}WebConstants.Path.${MODULEARTIFACT}_FORM, params = "update")
+	public RedirectView update(@Valid @ModelAttribute(${Moduleartifact}WebConstants.ModelAttribute.${MODULEARTIFACT}_DTO) ${Moduleartifact}Dto ${moduleartifact}Dto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
+
+		if (${moduleartifact}Dto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
+		} else {
+			try {
+				${moduleartifact}Dto = ${moduleartifact}Facade.update(${moduleartifact}Dto);
+
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
+			} catch (BusinessException e) {
+				addErrorMessage(${Moduleartifact}Dto.class, e.getMessage(), bindingResult, redirectAttributes);
+			}
+		}
+
+		redirectAttributes.addAttribute(GenericDto.UUID, ${moduleartifact}Dto.getUuid());
+
+		RedirectView redirectView = new RedirectView();
+		redirectView.setContextRelative(true);
+		redirectView.setUrl(PATH_${MODULEARTIFACT}_FORM);
+		return redirectView;
+	}
+
+	@PreAuthorize(${Moduleartifact}PreAuthorizeEnum.HAS_DELETE)
+	@PostMapping(value = ${Moduleartifact}WebConstants.Path.${MODULEARTIFACT}_FORM, params = "delete")
+	public RedirectView delete(@Valid @ModelAttribute(${Moduleartifact}WebConstants.ModelAttribute.${MODULEARTIFACT}_DTO) ${Moduleartifact}Dto dto, Model model, BindingResult bindingResult,
+			@RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes) {
+
+		if (dto.getUuid() == null) {
+			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Delete record required existing UUID.");
+		} else {
+			try {
+				${moduleartifact}Facade.delete(dto.getUuid());
+
+				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.DELETE_SUCCESS);
+			} catch (BusinessException e) {
+				redirectAttributes.addFlashAttribute(ERROR, e.getMessage());
+				redirectAttributes.addAttribute(GenericDto.UUID, dto.getUuid());
+			}
+		}
+
+		RedirectView redirectView = new RedirectView();
+		redirectView.setContextRelative(true);
+		redirectView.setUrl(PATH_${MODULEARTIFACT}_FORM);
+		return redirectView;
+
+	}
+}

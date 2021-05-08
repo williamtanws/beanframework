@@ -1,0 +1,25 @@
+package ${modulegroup}.${moduleartifact}core.listener;
+
+import org.springframework.stereotype.Component;
+
+import com.beanframework.common.exception.ListenerException;
+import com.beanframework.common.registry.BeforeRemoveEvent;
+import com.beanframework.common.registry.BeforeRemoveListener;
+import ${modulegroup}.${moduleartifact}.domain.${Moduleartifact};
+
+@Component
+public class ${Moduleartifact}BeforeRemoveListener implements BeforeRemoveListener {
+
+	@Override
+	public void beforeRemove(final Object model, final BeforeRemoveEvent event) throws ListenerException {
+
+		try {
+			if (model instanceof ${Moduleartifact}) {
+
+			}
+
+		} catch (Exception e) {
+			throw new ListenerException(e.getMessage(), e);
+		}
+	}
+}

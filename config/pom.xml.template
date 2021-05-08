@@ -76,16 +76,18 @@
 		</dependency>
 		
 		<!-- Custom -->
+		<!-- 
 		<dependency>
-			<groupId>com.beanframework</groupId>
+			<groupId>com.sample</groupId>
 			<artifactId>trainingcore</artifactId>
-			<version>${project.version}</version>
+			<version>3.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.beanframework</groupId>
+			<groupId>com.sample</groupId>
 			<artifactId>trainingbackoffice</artifactId>
-			<version>${project.version}</version>
+			<version>3.0.0</version>
 		</dependency>
+		-->
 	</dependencies>
 
 </project>

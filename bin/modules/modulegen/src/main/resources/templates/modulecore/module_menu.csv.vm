@@ -1,0 +1,2 @@
+INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dynamicFieldSlotIds
+,${moduleartifact}					,${Moduleartifact}				,70	,fas fa-certificate,/backoffice/${moduleartifact}			,,true,				,employeegroup				,menu_name_en=${Moduleartifact};menu_name_cn=${Moduleartifact};menu_header_en=Custom Module;menu_header_cn=Custom Module
