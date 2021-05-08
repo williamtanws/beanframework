@@ -1,0 +1,2 @@
+INSERT_UPDATE Employee,id,name,password,accountNonExpired,accountNonLocked,credentialsNonExpired,enabled,userGroupIds,companyIds,addressIds,dynamicFieldSlotIds,profilePicture
+,employee	,Employee			,employee	,true,true,true,true,employeegroup					,beanframework,beanframework_address,,static/adminlte/dist/img/user2-160x160.jpg

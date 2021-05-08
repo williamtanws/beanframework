@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "${jpa.repository.basepackages}", entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
+@EnableJpaRepositories(basePackages = "com.beanframework.*.repository", entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
 @EnableAsync
 @Order(0)
@@ -203,8 +203,8 @@ public class PlatformConfig {
 		return dataSource;
 	}
 
-	@Value("${jpa.domain.packagetoscan}")
-	private String[] jpadomainpackagetoscan;
+	@Value("${jpa.domain.packagetoscans}")
+	private String[] jpadomainpackagetoscans;
 
 	/*
 	 * Entity Manager Factory setup.
@@ -213,7 +213,7 @@ public class PlatformConfig {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws NamingException, IOException {
 		LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 		factoryBean.setDataSource(dataSource());
-		factoryBean.setPackagesToScan(jpadomainpackagetoscan);
+		factoryBean.setPackagesToScan(jpadomainpackagetoscans);
 		factoryBean.setJpaVendorAdapter(jpaVendorAdapter());
 		factoryBean.setJpaProperties(jpaProperties());
 		return factoryBean;

@@ -11,10 +11,14 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CreateModuleBackoffice {
+
+	@Value("${modulegen.moduletheme}")
+	private String moduleTheme;
 
 	@Autowired
 	private VelocityEngine velocityEngine;
@@ -27,8 +31,10 @@ public class CreateModuleBackoffice {
 		createDataTableResponseData(context, moduleartifact, modulegroup, location);
 		createController(context, moduleartifact, modulegroup, location);
 		createApplication(context, moduleartifact, modulegroup, location);
+		createModuleHtml(context, moduleartifact, modulegroup, location);
+		createModuleHtmlForm(context, moduleartifact, modulegroup, location);
 	}
-	
+
 	private void createClassPathModuleCore(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
 		String path = location + File.separator + moduleartifact + "backoffice";
 
@@ -125,6 +131,34 @@ public class CreateModuleBackoffice {
 		template.merge(context, writer);
 
 		File moduleEntity = new File(path + File.separator + "application-" + moduleartifact.toLowerCase() + ".properties");
+		FileUtils.write(moduleEntity, writer.toString(), StandardCharsets.UTF_8.name());
+		System.out.println("Written: " + moduleEntity.getPath());
+	}
+
+	// samplebackoffice\src\main\resource\templates\backoffice\adminlte\training\training.html
+	private void createModuleHtml(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
+		String path = location + File.separator + moduleartifact + "backoffice" + File.separator + "src/main/resources/templates/backoffice/" + moduleTheme + "/" + moduleartifact;
+
+		Template template = velocityEngine.getTemplate("templates/modulebackoffice/module.html.vm");
+
+		StringWriter writer = new StringWriter();
+		template.merge(context, writer);
+
+		File moduleEntity = new File(path + File.separator + moduleartifact.toLowerCase() + ".html");
+		FileUtils.write(moduleEntity, writer.toString(), StandardCharsets.UTF_8.name());
+		System.out.println("Written: " + moduleEntity.getPath());
+	}
+
+	// samplebackoffice\src\main\resource\templates\backoffice\adminlte\sample\sampleForm.html
+	private void createModuleHtmlForm(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
+		String path = location + File.separator + moduleartifact + "backoffice" + File.separator + "src/main/resources/templates/backoffice/" + moduleTheme + "/" + moduleartifact;
+
+		Template template = velocityEngine.getTemplate("templates/modulebackoffice/moduleForm.html.vm");
+
+		StringWriter writer = new StringWriter();
+		template.merge(context, writer);
+
+		File moduleEntity = new File(path + File.separator + moduleartifact.toLowerCase() + "Form.html");
 		FileUtils.write(moduleEntity, writer.toString(), StandardCharsets.UTF_8.name());
 		System.out.println("Written: " + moduleEntity.getPath());
 	}

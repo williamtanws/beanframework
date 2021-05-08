@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +45,7 @@ public class UpdateResource {
 					return new File(current, name).isDirectory();
 				}
 			});
-			Arrays.sort(directories);
+//			Arrays.sort(directories);
 			for (int i = 0; i < directories.length; i++) {
 				folders.add(directories[i]);
 			}

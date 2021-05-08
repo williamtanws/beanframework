@@ -4,8 +4,10 @@
 spring.profiles.active=dev
 spring.profiles.include=platform,console,backoffice,documentation,training
 webroots=console,backoffice
-favicon=/static/common/favicon.png
+favicon=/static/core/favicon.png
 spring.main.allow-bean-definition-overriding=true
+#Multiple values by split by ","
+jpa.domain.packagetoscans=com.beanframework.*.domain,com.sample.*.domain
 
 # ===============================
 # = QUARTZ
