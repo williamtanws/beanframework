@@ -1,0 +1,2 @@
+INSERT_UPDATE UserAuthority,userGroupId,userPermissionId,create,read,update,delete
+,employeegroup,training				,+,+,+,+

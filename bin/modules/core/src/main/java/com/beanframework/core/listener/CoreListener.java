@@ -1,9 +1,6 @@
 package com.beanframework.core.listener;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -12,31 +9,29 @@ import com.beanframework.common.registry.AfterRemoveListenerRegistry;
 import com.beanframework.common.registry.AfterSaveListenerRegistry;
 import com.beanframework.common.registry.BeforeRemoveListenerRegistry;
 import com.beanframework.common.registry.BeforeSaveListenerRegistry;
-import com.beanframework.core.ImportListenerConstants;
-import com.beanframework.core.listenerimport.AddressImportListener;
-import com.beanframework.core.listenerimport.CompanyImportListener;
-import com.beanframework.core.listenerimport.ConfigurationImportListener;
-import com.beanframework.core.listenerimport.CountryImportListener;
-import com.beanframework.core.listenerimport.CronjobImportListener;
-import com.beanframework.core.listenerimport.CurrencyImportListener;
-import com.beanframework.core.listenerimport.CustomerImportListener;
-import com.beanframework.core.listenerimport.DynamicFieldImportListener;
-import com.beanframework.core.listenerimport.DynamicFieldSlotImportListener;
-import com.beanframework.core.listenerimport.DynamicFieldTemplateImportListener;
-import com.beanframework.core.listenerimport.EmployeeImportListener;
-import com.beanframework.core.listenerimport.EnumerationImportListener;
-import com.beanframework.core.listenerimport.ImexImportListener;
-import com.beanframework.core.listenerimport.LanguageImportListener;
-import com.beanframework.core.listenerimport.MediaImportListener;
-import com.beanframework.core.listenerimport.MenuImportListener;
-import com.beanframework.core.listenerimport.RegionImportListener;
-import com.beanframework.core.listenerimport.SiteImportListener;
-import com.beanframework.core.listenerimport.UserAuthorityImportListener;
-import com.beanframework.core.listenerimport.UserGroupImportListener;
-import com.beanframework.core.listenerimport.UserPermissionImportListener;
-import com.beanframework.core.listenerimport.UserRightImportListener;
-import com.beanframework.core.listenerimport.VendorImportListener;
-import com.beanframework.imex.ImexConstants;
+import com.beanframework.core.importlistener.AddressImportListener;
+import com.beanframework.core.importlistener.CompanyImportListener;
+import com.beanframework.core.importlistener.ConfigurationImportListener;
+import com.beanframework.core.importlistener.CountryImportListener;
+import com.beanframework.core.importlistener.CronjobImportListener;
+import com.beanframework.core.importlistener.CurrencyImportListener;
+import com.beanframework.core.importlistener.CustomerImportListener;
+import com.beanframework.core.importlistener.DynamicFieldImportListener;
+import com.beanframework.core.importlistener.DynamicFieldSlotImportListener;
+import com.beanframework.core.importlistener.DynamicFieldTemplateImportListener;
+import com.beanframework.core.importlistener.EmployeeImportListener;
+import com.beanframework.core.importlistener.EnumerationImportListener;
+import com.beanframework.core.importlistener.ImexImportListener;
+import com.beanframework.core.importlistener.LanguageImportListener;
+import com.beanframework.core.importlistener.MediaImportListener;
+import com.beanframework.core.importlistener.MenuImportListener;
+import com.beanframework.core.importlistener.RegionImportListener;
+import com.beanframework.core.importlistener.SiteImportListener;
+import com.beanframework.core.importlistener.UserAuthorityImportListener;
+import com.beanframework.core.importlistener.UserGroupImportListener;
+import com.beanframework.core.importlistener.UserPermissionImportListener;
+import com.beanframework.core.importlistener.UserRightImportListener;
+import com.beanframework.core.importlistener.VendorImportListener;
 import com.beanframework.imex.registry.ImportListenerRegistry;
 
 @Component
@@ -68,9 +63,6 @@ public class CoreListener implements ApplicationListener<ContextRefreshedEvent> 
 
 	@Autowired
 	private ImportListenerRegistry importListenerRegistry;
-
-	@Value(ImexConstants.IMEX_IMPORT_LISTENER_TYPES)
-	private List<String> importListenerTypesList;
 
 	@Autowired
 	private ConfigurationImportListener configurationImportListener;
@@ -149,74 +141,29 @@ public class CoreListener implements ApplicationListener<ContextRefreshedEvent> 
 		beforeRemoveListenerRegistry.addListener(coreBeforeRemoveListener);
 		afterRemoveListenerRegistry.addListener(coreAfterRemoveListener);
 
-		if (importListenerTypesList.contains(ImportListenerConstants.ConfigurationImport.TYPE))
-			importListenerRegistry.addListener(configurationImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.LanguageImport.TYPE))
-			importListenerRegistry.addListener(languageImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.CurrencyImport.TYPE))
-			importListenerRegistry.addListener(currencyImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.CountryImport.TYPE))
-			importListenerRegistry.addListener(countryImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.RegionImport.TYPE))
-			importListenerRegistry.addListener(regionImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.CronjobImport.TYPE))
-			importListenerRegistry.addListener(cronjobImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.CompanyImport.TYPE))
-			importListenerRegistry.addListener(companyImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.AddressImport.TYPE))
-			importListenerRegistry.addListener(addressImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.CustomerImport.TYPE))
-			importListenerRegistry.addListener(customerImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.VendorImport.TYPE))
-			importListenerRegistry.addListener(vendorImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.EnumerationImport.TYPE))
-			importListenerRegistry.addListener(enumerationImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.DynamicFieldImport.TYPE))
-			importListenerRegistry.addListener(dynamicFieldImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.DynamicFieldSlotImport.TYPE))
-			importListenerRegistry.addListener(dynamicFieldSlotImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.DynamicFieldTemplateImport.TYPE))
-			importListenerRegistry.addListener(dynamicFieldTemplateImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.EmployeeImport.TYPE))
-			importListenerRegistry.addListener(employeeImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.MenuImport.TYPE))
-			importListenerRegistry.addListener(menuImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.UserAuthorityImport.TYPE))
-			importListenerRegistry.addListener(userAuthorityImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.UserGroupImport.TYPE))
-			importListenerRegistry.addListener(userGroupImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.UserPermissionImport.TYPE))
-			importListenerRegistry.addListener(userPermissionImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.UserRightImport.TYPE))
-			importListenerRegistry.addListener(userRightImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.SiteImport.TYPE))
-			importListenerRegistry.addListener(siteImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.MediaImport.TYPE))
-			importListenerRegistry.addListener(mediaImportListener);
-
-		if (importListenerTypesList.contains(ImportListenerConstants.ImexImport.TYPE))
-			importListenerRegistry.addListener(imexImportListener);
+		importListenerRegistry.addListener(configurationImportListener);
+		importListenerRegistry.addListener(languageImportListener);
+		importListenerRegistry.addListener(currencyImportListener);
+		importListenerRegistry.addListener(countryImportListener);
+		importListenerRegistry.addListener(regionImportListener);
+		importListenerRegistry.addListener(cronjobImportListener);
+		importListenerRegistry.addListener(companyImportListener);
+		importListenerRegistry.addListener(addressImportListener);
+		importListenerRegistry.addListener(customerImportListener);
+		importListenerRegistry.addListener(vendorImportListener);
+		importListenerRegistry.addListener(enumerationImportListener);
+		importListenerRegistry.addListener(dynamicFieldImportListener);
+		importListenerRegistry.addListener(dynamicFieldSlotImportListener);
+		importListenerRegistry.addListener(dynamicFieldTemplateImportListener);
+		importListenerRegistry.addListener(employeeImportListener);
+		importListenerRegistry.addListener(menuImportListener);
+		importListenerRegistry.addListener(userAuthorityImportListener);
+		importListenerRegistry.addListener(userGroupImportListener);
+		importListenerRegistry.addListener(userPermissionImportListener);
+		importListenerRegistry.addListener(userRightImportListener);
+		importListenerRegistry.addListener(siteImportListener);
+		importListenerRegistry.addListener(mediaImportListener);
+		importListenerRegistry.addListener(imexImportListener);
 	}
 
 }

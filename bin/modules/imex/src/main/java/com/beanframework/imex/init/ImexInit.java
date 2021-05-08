@@ -10,6 +10,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+import com.beanframework.imex.ImexConstants;
 import com.beanframework.imex.service.ImexService;
 
 @Component
@@ -20,7 +21,7 @@ public class ImexInit implements ApplicationListener<ApplicationReadyEvent> {
 	@Autowired
 	private ImexService imexService;
 
-	@Value("#{'${module.imex.import.init.locations}'.split(',')}")
+	@Value(ImexConstants.IMEX_IMPORT_INIT_LOCATIONS)
 	private List<String> IMEX_IMPORT_INIT_LOCATIONS;
 
 	@Override
@@ -29,7 +30,7 @@ public class ImexInit implements ApplicationListener<ApplicationReadyEvent> {
 		try {
 
 			if (IMEX_IMPORT_INIT_LOCATIONS != null) {
-				imexService.importByKeysAndReader(null, IMEX_IMPORT_INIT_LOCATIONS);
+				imexService.importByFoldersByLocations(null, IMEX_IMPORT_INIT_LOCATIONS);
 			}
 
 		} catch (Exception e) {

@@ -1,0 +1,2 @@
+INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dynamicFieldSlotIds
+,training					,Training				,70	,fas fa-certificate,/backoffice/training			,,true,				,employeegroup				,menu_name_en=Training;menu_name_cn=训练;menu_header_en=Custom Module;menu_header_cn=定制模块

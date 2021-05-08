@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -74,8 +75,8 @@ public class ImexServiceImpl implements ImexService {
 	@Value(ImexConstants.IMEX_MEDIA_FOLDER)
 	private String IMEX_MEDIA_LOCATION;
 
-	@Value(ImexConstants.IMEX_IMPORT_LOCATIONS)
-	private List<String> IMEX_IMPORT_LOCATIONS;
+	@Value(ImexConstants.IMEX_IMPORT_UPDATE_LOCATIONS)
+	private List<String> IMEX_IMPORT_UPDATE_LOCATIONS;
 
 	@Value(MediaConstants.MEDIA_LOCATION)
 	private String MEDIA_LOCATION;
@@ -84,8 +85,8 @@ public class ImexServiceImpl implements ImexService {
 	private String MEDIA_URL;
 
 	@Override
-	public String[] importByListenerKeys(Set<String> keys) {
-		return importByKeysAndReader(keys, IMEX_IMPORT_LOCATIONS);
+	public String[] importByFolders(List<String> folders) {
+		return importByFoldersByLocations(folders, IMEX_IMPORT_UPDATE_LOCATIONS);
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class ImexServiceImpl implements ImexService {
 
 		List<String> locations = new ArrayList<String>();
 		locations.add(file.getAbsolutePath());
-		importByKeysAndReader(null, locations);
+		importByFoldersByLocations(null, locations);
 	}
 
 	@Override
@@ -174,7 +175,58 @@ public class ImexServiceImpl implements ImexService {
 	}
 
 	@Override
-	public String[] importByKeysAndReader(Set<String> keys, List<String> locations) {
+	public String[] importByFoldersByLocations(TreeMap<String, Set<String>> locationAndFolders) {
+		// Sort Import Listener
+		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
+		List<Entry<String, ImportListener>> sortedImportListeners = new LinkedList<Entry<String, ImportListener>>(importListeners);
+		Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
+			@Override
+			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
+				Integer sort1 = ele1.getValue().getSort();
+				Integer sort2 = ele2.getValue().getSort();
+				return sort1.compareTo(sort2);
+			}
+		});
+
+		// Messages
+		StringBuilder successMessages = new StringBuilder();
+		StringBuilder errorMessages = new StringBuilder();
+
+		for (Map.Entry<String, Set<String>> entry : locationAndFolders.entrySet()) {
+			LOGGER.info("Import location: " + entry.getKey());
+
+			for (String folder : entry.getValue()) {
+
+				Resource[] resources = null;
+				try {
+					PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+					resources = loader.getResources(entry.getKey() + "/" + folder + "/**/*.csv");
+
+					if (resources != null) {
+						for (Entry<String, ImportListener> entryImportListener : sortedImportListeners) {
+							importResources(resources, entryImportListener.getValue(), successMessages, errorMessages);
+						}
+					}
+				} catch (IOException e) {
+					errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { entry.getKey(), e.getMessage() }) + "<br><br>");
+					LOGGER.error(e.getMessage(), e);
+				}
+			}
+		}
+
+		String[] messages = new String[2];
+		if (successMessages.length() == 0) {
+			messages[0] = localeMessageService.getMessage("module.common.import.empty");
+		} else {
+			messages[0] = successMessages.toString();
+		}
+		messages[1] = errorMessages.toString();
+
+		return messages;
+	}
+
+	@Override
+	public String[] importByFoldersByLocations(List<String> folders, List<String> locations) {
 
 		// Sort Import Listener
 		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
@@ -192,51 +244,80 @@ public class ImexServiceImpl implements ImexService {
 		StringBuilder successMessages = new StringBuilder();
 		StringBuilder errorMessages = new StringBuilder();
 
-		for (String loc : locations) {
-			Resource[] resources = null;
-			try {
-				PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-				resources = loader.getResources(loc);
-			} catch (IOException e) {
-				e.printStackTrace();
-				LOGGER.error(e.getMessage(), e);
+		if (folders == null) {
+
+			for (String path : locations) {
+				LOGGER.info("Import location: " + path);
+
+				Resource[] resources = null;
+				try {
+					PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+					resources = loader.getResources(path);
+
+					if (resources != null) {
+						for (Entry<String, ImportListener> entry : sortedImportListeners) {
+							importResources(resources, entry.getValue(), successMessages, errorMessages);
+						}
+					}
+				} catch (IOException e) {
+					errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { path, e.getMessage() }) + "<br><br>");
+					LOGGER.error(e.getMessage(), e);
+				}
 			}
 
-			for (Entry<String, ImportListener> entry : sortedImportListeners) {
-				if ((keys == null) || (keys != null && keys.contains(entry.getKey()))) {
+		} else {
+			for (String folder : folders) {
 
-					for (Resource resource : resources) {
+				for (String path : locations) {
+					LOGGER.info("Import location: " + path);
 
-						BufferedReader reader = null;
-						String importName = null;
-						try {
-							InputStream in = resource.getInputStream();
-							ByteArrayOutputStream baos = new ByteArrayOutputStream();
-							IOUtils.copy(in, baos);
-							reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
-							importName = resource.getFilename();
-						} catch (Exception e) {
-							e.printStackTrace();
-							LOGGER.error(e.getMessage(), e);
-							try {
-								errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { resource.getFile().getPath(), e.getMessage() }) + "<br><br>");
-							} catch (IOException e1) {
-								e1.printStackTrace();
-								LOGGER.error(e.getMessage(), e);
+					Resource[] resources = null;
+					try {
+						PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+						resources = loader.getResources(path + "/" + folder + "/**/*.csv");
+
+						if (resources != null) {
+							for (Entry<String, ImportListener> entry : sortedImportListeners) {
+								importResources(resources, entry.getValue(), successMessages, errorMessages);
 							}
 						}
-
-						importCsv(importName, reader, entry.getValue(), successMessages, errorMessages);
+					} catch (IOException e) {
+						errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { path, e.getMessage() }) + "<br><br>");
+						LOGGER.error(e.getMessage(), e);
 					}
 				}
 			}
 		}
 
 		String[] messages = new String[2];
-		messages[0] = successMessages.toString();
+		if (successMessages.length() == 0) {
+			messages[0] = localeMessageService.getMessage("module.common.import.empty");
+		} else {
+			messages[0] = successMessages.toString();
+		}
 		messages[1] = errorMessages.toString();
 
 		return messages;
+	}
+
+	private void importResources(Resource[] resources, ImportListener listener, StringBuilder successMessages, StringBuilder errorMessages) throws IOException {
+		for (Resource resource : resources) {
+
+			BufferedReader reader = null;
+			String importName = null;
+			try {
+				InputStream in = resource.getInputStream();
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				IOUtils.copy(in, baos);
+				reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
+				importName = resource.getFilename();
+			} catch (Exception e) {
+				errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { resource.getFile().getPath(), e.getMessage() }) + "<br><br>");
+				LOGGER.error(e.getMessage(), e);
+			}
+
+			importCsv(importName, reader, listener, successMessages, errorMessages);
+		}
 	}
 
 	@SuppressWarnings({ "resource", "unchecked" })
@@ -249,7 +330,7 @@ public class ImexServiceImpl implements ImexService {
 			String type = header[0].trim().replace("  ", " ").split(" ")[1];
 
 			if (type.equalsIgnoreCase(listener.getType())) {
-
+				LOGGER.info("Found import resource: " + importName);
 				LOGGER.info("Import mode=" + mode.toUpperCase() + ", type=" + type.toUpperCase());
 
 				CellProcessor[] processors = null;

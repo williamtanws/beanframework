@@ -67,8 +67,6 @@ target
 /bin/install/logs
 /bin/install/app.xml
 /bin/platform/pom.xml
-/bin/custom/*
-!/bin/custom/README.md
 /config/pom.xml
 /config/src/main/resources/*.properties
 /config/src/main/resources/*.xml

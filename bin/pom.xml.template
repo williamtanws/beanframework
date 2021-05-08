@@ -15,7 +15,6 @@
 	</properties>
 
     <modules>
-        <module>modules/documentation</module>
     	<module>modules/common</module>
     	<module>modules/enumeration</module>
     	<module>modules/internationalization</module>
@@ -30,11 +29,15 @@
         <module>modules/cms</module>
         <module>modules/workflow</module>
         <module>modules/imex</module>
+        <module>modules/notification</module>
         <module>modules/core</module>
 		<module>modules/adminlte</module>
         <module>modules/console</module>
         <module>modules/backoffice</module>
-        <module>modules/notification</module>
+        <module>modules/documentation</module>
+        <module>custom/training</module>
+        <module>custom/trainingcore</module>
+        <module>custom/trainingbackoffice</module>
         <module>platform</module>
         <module>../config</module>
     </modules>

@@ -1,13 +1,18 @@
 package com.beanframework.documentation.web;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.beanframework.documentation.DocumentationConstants;
+import com.beanframework.documentation.DocumentationConstants.DocumentationPreAuthorizeEnum;
 
 @Controller
 public class DocumentationController {
 
-	@GetMapping(value = "/documentation")
+	@PreAuthorize(DocumentationPreAuthorizeEnum.HAS_READ)
+	@GetMapping(value = DocumentationConstants.Path.DOCUMENTATION)
 	public String documentation() {
-		return "/documentation/index";
+		return DocumentationConstants.View.DOCUMENTATION;
 	}
 }

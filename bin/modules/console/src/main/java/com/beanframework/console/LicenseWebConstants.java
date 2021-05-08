@@ -17,11 +17,11 @@ public interface LicenseWebConstants extends ConsoleWebConstants {
 	}
 
 	public interface Path {
-		public static final String LICENSE = "${path.console.platform.license}";
+		public static final String LICENSE = "${path.license}";
 	}
 
 	public interface View {
-		public static final String LICENSE = "${view.console.platform.license}";
+		public static final String LICENSE = "${view.license}";
 	}
 
 	public interface Locale {
