@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.context.ApplicationPidFileWriter;
 
-@SpringBootApplication(scanBasePackages = { "${spring.scanBasePackages}" }, exclude = { SecurityAutoConfiguration.class })
+@SpringBootApplication(scanBasePackages = { "com" }, exclude = { SecurityAutoConfiguration.class })
 public class PlatformApplication {
 
 	public static void main(String[] args) {

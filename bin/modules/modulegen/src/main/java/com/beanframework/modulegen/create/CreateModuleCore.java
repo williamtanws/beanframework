@@ -23,6 +23,7 @@ public class CreateModuleCore {
 		createClassPathModuleBackoffice(context, moduleartifact, modulegroup, location);
 		createPom(context, moduleartifact, modulegroup, location);
 		createImportListenerConstants(context, moduleartifact, modulegroup, location);
+		createModuleConfig(context, moduleartifact, modulegroup, location);
 		createEntityCsvConverterConfig(context, moduleartifact, modulegroup, location);
 		createDtoConfig(context, moduleartifact, modulegroup, location);
 		createEntityConfig(context, moduleartifact, modulegroup, location);
@@ -92,6 +93,20 @@ public class CreateModuleCore {
 		template.merge(context, writer);
 
 		File moduleEntity = new File(path + File.separator + StringUtils.capitalize(moduleartifact.toLowerCase()) + "ImportListenerConstants.java");
+		FileUtils.write(moduleEntity, writer.toString(), StandardCharsets.UTF_8.name());
+		System.out.println("Written: " + moduleEntity.getPath());
+	}
+
+	// samplecore\src\main\java\com\beanframework\samplecore\config\SampleConfig.java
+	private void createModuleConfig(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
+		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "config";
+
+		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleConfig.java.vm");
+
+		StringWriter writer = new StringWriter();
+		template.merge(context, writer);
+
+		File moduleEntity = new File(path + File.separator + StringUtils.capitalize(moduleartifact.toLowerCase()) + "Config.java");
 		FileUtils.write(moduleEntity, writer.toString(), StandardCharsets.UTF_8.name());
 		System.out.println("Written: " + moduleEntity.getPath());
 	}
