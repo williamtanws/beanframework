@@ -16,6 +16,11 @@ import ${modulegroup}.${moduleartifact}.${Moduleartifact}Constants;
 @Table(name = ${Moduleartifact}Constants.Table.${MODULEARTIFACT})
 public class ${Moduleartifact} extends GenericEntity {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static final String NAME = "name";
 
 	@Audited(withModifiedFlag = true)
