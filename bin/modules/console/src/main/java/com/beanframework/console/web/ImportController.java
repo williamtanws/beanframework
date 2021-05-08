@@ -19,31 +19,31 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.beanframework.console.ConsoleWebConstants;
-import com.beanframework.console.PlatformImportWebConstants;
+import com.beanframework.console.ImportWebConstants;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.imex.service.ImexService;
 
 @PreAuthorize("isAuthenticated()")
 @Controller
-public class PlatformImportController extends AbstractController {
+public class ImportController extends AbstractController {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(PlatformUpdateController.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(UpdateController.class);
 
-	@Value(PlatformImportWebConstants.Path.IMPORT)
+	@Value(ImportWebConstants.Path.IMPORT)
 	private String PATH_IMPORT;
 
-	@Value(PlatformImportWebConstants.View.IMPORT)
+	@Value(ImportWebConstants.View.IMPORT)
 	private String VIEW_IMPORT;
 
 	@Autowired
 	private ImexService platformService;
 
-	@GetMapping(value = PlatformImportWebConstants.Path.IMPORT)
+	@GetMapping(value = ImportWebConstants.Path.IMPORT)
 	public String importView(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_IMPORT;
 	}
 
-	@PostMapping(value = PlatformImportWebConstants.Path.IMPORT, params="importFile")
+	@PostMapping(value = ImportWebConstants.Path.IMPORT, params="importFile")
 	public RedirectView importFile(@RequestParam("files") MultipartFile[] files, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 
@@ -62,7 +62,7 @@ public class PlatformImportController extends AbstractController {
 		return redirectView;
 	}
 	
-	@PostMapping(value = PlatformImportWebConstants.Path.IMPORT, params="importQuery")
+	@PostMapping(value = ImportWebConstants.Path.IMPORT, params="importQuery")
 	public RedirectView importQuery(@RequestParam("query") String query, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 

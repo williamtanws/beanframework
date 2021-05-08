@@ -15,7 +15,7 @@
 <body>
 	<th:block layout:fragment="content">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.monitor},breadcrumb2=#{module.logging}">
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.platform},breadcrumb2=#{module.logging}">
 			<!-- Header -->
 			<th:block th:insert="~{console/adminlte/common/fragment/content-header :: title-breadcrumbs (title=#{module.logging}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
 		

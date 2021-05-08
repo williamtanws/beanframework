@@ -27,21 +27,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.console.ConsoleWebConstants;
-import com.beanframework.console.PlatformUpdateWebConstants;
+import com.beanframework.console.UpdateWebConstants;
 import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.imex.registry.ImportListenerRegistry;
 import com.beanframework.imex.service.ImexService;
 
 @PreAuthorize("isAuthenticated()")
 @Controller
-public class PlatformUpdateController {
+public class UpdateController {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(PlatformUpdateController.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(UpdateController.class);
 
-	@Value(PlatformUpdateWebConstants.Path.UPDATE)
+	@Value(UpdateWebConstants.Path.UPDATE)
 	private String PATH_UPDATE;
 
-	@Value(PlatformUpdateWebConstants.View.UPDATE)
+	@Value(UpdateWebConstants.View.UPDATE)
 	private String VIEW_UPDATE;
 
 	@Autowired
@@ -56,7 +56,7 @@ public class PlatformUpdateController {
 	@Autowired
 	private ImexService platformService;
 
-	@GetMapping(value = PlatformUpdateWebConstants.Path.UPDATE)
+	@GetMapping(value = UpdateWebConstants.Path.UPDATE)
 	public String list(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
 		Set<Entry<String, ImportListener>> mapEntries = importerRegistry.getListeners().entrySet();
@@ -76,7 +76,7 @@ public class PlatformUpdateController {
 		return VIEW_UPDATE;
 	}
 
-	@PostMapping(value = PlatformUpdateWebConstants.Path.UPDATE)
+	@PostMapping(value = UpdateWebConstants.Path.UPDATE)
 	public String update(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
 
 		Set<String> keysToUpdate = new HashSet<String>();

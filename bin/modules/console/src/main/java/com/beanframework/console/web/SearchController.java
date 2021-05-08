@@ -19,30 +19,30 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.CsvUtils;
-import com.beanframework.console.PlatformSearchWebConstants;
+import com.beanframework.console.SearchWebConstants;
 import com.beanframework.core.controller.AbstractController;
 
 @PreAuthorize("isAuthenticated()")
 @Controller
-public class PlatformSearchController extends AbstractController {
+public class SearchController extends AbstractController {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(PlatformUpdateController.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(UpdateController.class);
 
-	@Value(PlatformSearchWebConstants.Path.SEARCH)
+	@Value(SearchWebConstants.Path.SEARCH)
 	private String PATH_SEARCH;
 
-	@Value(PlatformSearchWebConstants.View.SEARCH)
+	@Value(SearchWebConstants.View.SEARCH)
 	private String VIEW_SEARCH;
 
 	@Autowired
 	private ModelService modelService;
 
-	@GetMapping(value = PlatformSearchWebConstants.Path.SEARCH)
+	@GetMapping(value = SearchWebConstants.Path.SEARCH)
 	public String searchView(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_SEARCH;
 	}
 
-	@PostMapping(value = PlatformSearchWebConstants.Path.SEARCH)
+	@PostMapping(value = SearchWebConstants.Path.SEARCH)
 	public String search(@RequestParam("query") String query, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
 
 		model.addAttribute("query", query);

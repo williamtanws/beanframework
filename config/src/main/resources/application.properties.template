@@ -2,7 +2,7 @@
 # = APPLICATION
 # ===============================
 spring.profiles.active=dev
-spring.profiles.include=platform,console,backoffice,cockpit
+spring.profiles.include=platform,console,backoffice,documentation,training
 webroots=console,backoffice
 favicon=/static/common/favicon.png
 spring.main.allow-bean-definition-overriding=true

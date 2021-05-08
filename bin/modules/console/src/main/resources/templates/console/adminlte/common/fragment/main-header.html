@@ -25,22 +25,30 @@
 							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.platform}"></a>
 							<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
 								<li>
+									<a th:href="@{${@environment.getProperty('path.configuration')}}" class="dropdown-item" th:text="#{module.configuration}"></a>
+								</li>
+								<li>
 									<a th:href="@{${@environment.getProperty('path.logging')}}" class="dropdown-item" th:text="#{module.logging}"></a>
 								</li>
 								<li>
-									<a th:href="@{${@environment.getProperty('path.console.platform.update')}}" class="dropdown-item" th:text="#{module.common.update}"></a>
+									<a th:href="@{${@environment.getProperty('path.update')}}" class="dropdown-item" th:text="#{module.common.update}"></a>
 								</li>
 								<li>
-									<a th:href="@{${@environment.getProperty('path.console.platform.import')}}" class="dropdown-item" th:text="#{module.common.import}"></a>
+									<a th:href="@{${@environment.getProperty('path.license')}}" class="dropdown-item" th:text="#{module.common.license}"></a>
+								</li>
+							</ul>
+						</li>
+						<li class="nav-item dropdown">
+							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.tools}"></a>
+							<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+								<li>
+									<a th:href="@{${@environment.getProperty('path.search')}}" class="dropdown-item" th:text="#{module.common.search}"></a>
 								</li>
 								<li>
-									<a th:href="@{${@environment.getProperty('path.console.platform.export')}}" class="dropdown-item" th:text="#{module.common.export}"></a>
+									<a th:href="@{${@environment.getProperty('path.import')}}" class="dropdown-item" th:text="#{module.common.import}"></a>
 								</li>
 								<li>
-									<a th:href="@{${@environment.getProperty('path.console.platform.search')}}" class="dropdown-item" th:text="#{module.common.search}"></a>
-								</li>
-								<li>
-									<a th:href="@{${@environment.getProperty('path.console.platform.license')}}" class="dropdown-item" th:text="#{module.common.license}"></a>
+									<a th:href="@{${@environment.getProperty('path.export')}}" class="dropdown-item" th:text="#{module.common.export}"></a>
 								</li>
 							</ul>
 						</li>
@@ -50,13 +58,7 @@
 								<li>
 									<a th:href="@{${@environment.getProperty('path.cache')}}" class="dropdown-item" th:text="#{module.common.cache}"></a>
 								</li>
-								<li>
-									<a th:href="@{${@environment.getProperty('path.logging')}}" class="dropdown-item" th:text="#{module.common.logging}"></a>
-								</li>
 							</ul>
-						</li>
-						<li class="nav-item">
-							<a th:href="@{${@environment.getProperty('path.configuration')}}" class="nav-link" th:text="#{module.configuration}"></a>
 						</li>
 						<li class="nav-item">
 							<a href="#" class="nav-link" target="_blank" onClick="window.open('/documentation', '_blank').focus();" th:text="#{module.common.documentation}"> </a>

@@ -30,19 +30,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.CsvUtils;
-import com.beanframework.console.PlatformExportWebConstants;
+import com.beanframework.console.ExportWebConstants;
 import com.beanframework.core.controller.AbstractController;
 
 @PreAuthorize("isAuthenticated()")
 @Controller
-public class PlatformExportController extends AbstractController {
+public class ExportController extends AbstractController {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(PlatformUpdateController.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(UpdateController.class);
 
-	@Value(PlatformExportWebConstants.Path.EXPORT)
+	@Value(ExportWebConstants.Path.EXPORT)
 	private String PATH_EXPORT;
 
-	@Value(PlatformExportWebConstants.View.EXPORT)
+	@Value(ExportWebConstants.View.EXPORT)
 	private String VIEW_EXPORT;
 
 	@Autowired
@@ -50,12 +50,12 @@ public class PlatformExportController extends AbstractController {
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH:mm:ss");
 
-	@GetMapping(value = PlatformExportWebConstants.Path.EXPORT)
+	@GetMapping(value = ExportWebConstants.Path.EXPORT)
 	public String exportView(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		return VIEW_EXPORT;
 	}
 
-	@PostMapping(value = PlatformExportWebConstants.Path.EXPORT)
+	@PostMapping(value = ExportWebConstants.Path.EXPORT)
 	public ResponseEntity<InputStreamResource> exportQuery(@RequestParam("query") String query, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) throws IOException {
 
