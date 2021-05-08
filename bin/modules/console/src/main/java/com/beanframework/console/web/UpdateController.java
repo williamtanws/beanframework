@@ -1,13 +1,11 @@
 package com.beanframework.console.web;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,8 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.UpdateWebConstants;
-import com.beanframework.imex.registry.ImportListener;
-import com.beanframework.imex.registry.ImportListenerRegistry;
+import com.beanframework.imex.ImexConstants;
 import com.beanframework.imex.service.ImexService;
 
 @Controller
@@ -42,9 +39,6 @@ public class UpdateController {
 	@Value(UpdateWebConstants.View.UPDATE)
 	private String VIEW_UPDATE;
 
-	@Autowired
-	private ImportListenerRegistry importListenerRegistry;
-
 	@Autowired(required = false)
 	private CacheManager cacheManager;
 
@@ -54,73 +48,67 @@ public class UpdateController {
 	@Autowired
 	private ImexService platformService;
 
+	@Value(ImexConstants.IMEX_IMPORT_UPDATE_LOCATIONS)
+	List<String> IMEX_IMPORT_LOCATIONS;
+
 	@GetMapping(value = UpdateWebConstants.Path.UPDATE)
-	public String list(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	public String list(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException {
 
-		Set<Entry<String, ImportListener>> mapEntries = importListenerRegistry.getListeners().entrySet();
-		List<Entry<String, ImportListener>> aList = new LinkedList<Entry<String, ImportListener>>(mapEntries);
-		Collections.sort(aList, new Comparator<Entry<String, ImportListener>>() {
-			@Override
-			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
-				Integer sort1 = ele1.getValue().getSort();
-				Integer sort2 = ele2.getValue().getSort();
-				return sort1.compareTo(sort2);
-			}
-		});
-
-		model.addAttribute("updates", aList);
-		model.addAttribute("clearSession", false);
-
+		model.addAttribute("updated", false);
 		return VIEW_UPDATE;
 	}
 
 	@PostMapping(value = UpdateWebConstants.Path.UPDATE)
 	public String update(Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
 
-		Set<String> keysToUpdate = new HashSet<String>();
+		if (requestParams.get("updateIds") == null) {
+			model.addAttribute("updated", false);
+			return VIEW_UPDATE;
+		}
 
-		for (Entry<String, ImportListener> entry : importListenerRegistry.getListeners().entrySet()) {
-			if (requestParams.get(entry.getKey()) != null) {
-				String keyValue = requestParams.get(entry.getKey()).toString();
-				if (parseBoolean(keyValue)) {
-					keysToUpdate.add(entry.getKey());
+		String[] updateIds = ((String) requestParams.get("updateIds")).split(",");
+		String[] messages = null;
+
+		TreeMap<String, Set<String>> locationAndFolders = new TreeMap<String, Set<String>>();
+
+		for (int i = 0; i < updateIds.length; i++) {
+
+			String[] values = updateIds[i].split(";");
+
+			if (values.length == 2) {
+				String location = values[0];
+				String folder = values[1];
+
+				if (locationAndFolders.get(location) == null) {
+					locationAndFolders.put(location, new HashSet<String>());
 				}
+
+				Set<String> folders = locationAndFolders.get(location);
+				folders.add(folder);
+
+				locationAndFolders.put(location, folders);
 			}
 		}
+
+		messages = platformService.importByFoldersByLocations(locationAndFolders);
 
 		clearAllCaches();
-
-		String[] messages = null;
-		if (keysToUpdate.isEmpty() == false)
-			messages = platformService.importByListenerKeys(keysToUpdate);
-
-		if (requestParams.get("clearsessions") != null) {
-			model.addAttribute("clearSession", true);
-
-			for (Object principal : sessionRegistry.getAllPrincipals()) {
-				List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principal, false);
-				for (SessionInformation sessionInformation : sessionInformations) {
-					sessionInformation.expireNow();
-				}
+		for (Object principal : sessionRegistry.getAllPrincipals()) {
+			List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principal, false);
+			for (SessionInformation sessionInformation : sessionInformations) {
+				sessionInformation.expireNow();
 			}
-
-			if (messages != null && messages[0].length() != 0)
-				model.addAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
-
-			if (messages != null && messages[1].length() != 0)
-				model.addAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
-
-			return VIEW_UPDATE;
-		} else {
-
-			if (messages != null && messages[0].length() != 0)
-				redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
-
-			if (messages != null && messages[1].length() != 0)
-				redirectAttributes.addFlashAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
-
-			return "redirect:" + PATH_UPDATE;
 		}
+
+		if (messages != null && messages[0].length() != 0)
+			model.addAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
+
+		if (messages != null && messages[1].length() != 0)
+			model.addAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
+
+		model.addAttribute("updated", true);
+
+		return VIEW_UPDATE;
 
 	}
 

@@ -3,6 +3,7 @@ package com.beanframework.imex.service;
 import java.io.File;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,7 +11,7 @@ import com.beanframework.imex.domain.Imex;
 
 public interface ImexService {
 
-	String[] importByListenerKeys(Set<String> keys);
+	String[] importByFolders(List<String> folders);
 
 	String[] importByMultipartFiles(MultipartFile[] files);
 
@@ -20,5 +21,7 @@ public interface ImexService {
 
 	void importExportMedia(Imex imex) throws Exception;
 
-	String[] importByKeysAndReader(Set<String> keys, List<String> locations);
+	String[] importByFoldersByLocations(List<String> folders, List<String> locations);
+
+	String[] importByFoldersByLocations(TreeMap<String, Set<String>> locationAndFolders);
 }

@@ -8,6 +8,6 @@ public class ImexConstants {
 	}
 
 	public static final String IMEX_MEDIA_FOLDER = "${module.imex.media.folder}";
-	public static final String IMEX_IMPORT_LOCATIONS = "#{'${module.imex.import.locations}'.split(',')}";
-	public static final String IMEX_IMPORT_LISTENER_TYPES = "#{'${module.imex.import.listener.types}'.split(',')}";
+	public static final String IMEX_IMPORT_INIT_LOCATIONS = "#{'${module.imex.import.init.locations}'.split(',')}";
+	public static final String IMEX_IMPORT_UPDATE_LOCATIONS = "#{'${module.imex.import.update.locations}'.split(',')}";
 }

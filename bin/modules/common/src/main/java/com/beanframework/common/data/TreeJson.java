@@ -1,4 +1,4 @@
-package com.beanframework.backoffice.api.data;
+package com.beanframework.common.data;
 
 import java.util.List;
 

@@ -15,9 +15,8 @@ database.backup.executecommand=C:\\xampp\\mysql\\bin\\mysqldump -u ${datasource.
 # ===============================
 # = IMEX
 # ===============================
-module.imex.import.listener.types=Configuration,Language,Currency,Country,Region,Enumeration,DynamicField,DynamicFieldSlot,DynamicFieldTemplate,UserRight,UserPermission,UserGroup,UserAuthority,Menu,Cronjob,Company,Address,Employee,Customer,Vendor,Site,Media,Imex,Training
-module.imex.import.locations=classpath*:import/dev/sampledata/**/*.csv
-module.imex.import.init.locations=classpath*:import/dev/initdata/**/*.csv
+module.imex.import.update.location=classpath*:import/dev/updatedata
+module.imex.import.init.location=classpath*:import/dev/initdata/**/*.csv
 
 # ===============================
 # = CACHE

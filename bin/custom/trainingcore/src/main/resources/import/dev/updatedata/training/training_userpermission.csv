@@ -1,0 +1,2 @@
+INSERT_UPDATE UserPermission,id,name,sort,dynamicFieldSlotIds
+,training		,Training			,300,userpermission_name_en=Training;userpermission_name_cn=训练

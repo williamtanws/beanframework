@@ -9,6 +9,10 @@ public class DocumentationConstants {
 	public interface View{
 		public static final String DOCUMENTATION = "${view.documentation}";
 	}
+	
+	public static interface Access {
+		public static final String DOCUMENTATION = "${module.documentation.access}";
+	}
 
 	public interface DocumentationPreAuthorizeEnum {
 		public static final String DOCUMENTATION_READ = "documentation_read";

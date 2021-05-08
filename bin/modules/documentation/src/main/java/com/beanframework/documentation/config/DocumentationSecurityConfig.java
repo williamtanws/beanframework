@@ -1,5 +1,6 @@
 package com.beanframework.documentation.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,15 +13,21 @@ import com.beanframework.documentation.DocumentationConstants;
 @EnableWebSecurity
 @Order(3)
 public class DocumentationSecurityConfig extends WebSecurityConfigurerAdapter {
-
+	
+	@Value(DocumentationConstants.Path.DOCUMENTATION)
+	private String PATH_DOCUMENTATION;
+	
+	@Value(DocumentationConstants.Access.DOCUMENTATION)
+	private String ACCESS_DOCUMENTATION;
+	
     protected void configure(HttpSecurity http) throws Exception {
     	http
     		.requestMatchers()
-    			.antMatchers(DocumentationConstants.Path.DOCUMENTATION+"/**")
+    			.antMatchers(PATH_DOCUMENTATION+"/**")
     			.and()
 	        .authorizeRequests()
-	        	.antMatchers(DocumentationConstants.Path.DOCUMENTATION+"/**").authenticated()
-	        	.antMatchers(DocumentationConstants.Path.DOCUMENTATION+"/**").hasAnyAuthority(DocumentationConstants.DocumentationPreAuthorizeEnum.DOCUMENTATION_READ);
+	        	.antMatchers(PATH_DOCUMENTATION+"/**").authenticated()
+	        	.antMatchers(PATH_DOCUMENTATION+"/**").hasAnyAuthority(ACCESS_DOCUMENTATION);
     	http.headers().frameOptions().sameOrigin();
     }
 }
