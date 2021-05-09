@@ -36,15 +36,17 @@ public class ArchiveFileProcessor {
 	byte[] buffer = new byte[1024];
 
 	public void process(Message<String> msg) throws Exception {
-
+		
 		if (ARCHIVE) {
 			String fileName = (String) msg.getHeaders().get(FileHeaders.FILENAME);
 
 			String date = DateTimeFormatter.ofPattern(dateFormat).format(LocalDateTime.now());
 
 			File processedFile = new File(inboundProcessedDirectory.getCanonicalPath() + File.separator + fileName);
-
+			
 			if (processedFile.exists()) {
+				//Result
+				File resultFile = new File(processedFile.getAbsoluteFile()+".result.txt");
 
 				if (ARCHIVE_FORMAT.equals("gz")) {
 					OutputStream outGzipFileStream = null;
@@ -56,8 +58,7 @@ public class ArchiveFileProcessor {
 						outGzipStream = (GzipCompressorOutputStream) new CompressorStreamFactory().createCompressorOutputStream(CompressorStreamFactory.GZIP, outGzipFileStream);
 
 						inTarFileStream = new FileInputStream(processedFile.getAbsolutePath());
-
-						IOUtils.copy(inTarFileStream, outGzipStream);
+						IOUtils.copy(inTarFileStream, outGzipStream);						
 
 						File gzFile = new File(processedFile.getAbsolutePath() + ".gz");
 						gzFile.renameTo(new File(processedFile.getAbsolutePath() + "." + date + ".gz"));
@@ -79,23 +80,36 @@ public class ArchiveFileProcessor {
 				} else if (ARCHIVE_FORMAT.equals("zip")) {
 					FileOutputStream fos = null;
 					ZipOutputStream zos = null;
-					FileInputStream fis = null;
+					FileInputStream fisProcessedFile = null;
+					FileInputStream fisResultFile = null;
 					try {
 
 						fos = new FileOutputStream(processedFile.getAbsolutePath() + "." + date + ".zip");
 						zos = new ZipOutputStream(fos);
 						ZipEntry ze = new ZipEntry(processedFile.getName());
 						zos.putNextEntry(ze);
-						fis = new FileInputStream(processedFile.getAbsolutePath());
+						fisProcessedFile = new FileInputStream(processedFile.getAbsolutePath());
 
 						int len;
-						while ((len = fis.read(buffer)) > 0) {
+						while ((len = fisProcessedFile.read(buffer)) > 0) {
+							zos.write(buffer, 0, len);
+						}
+						
+						ze = new ZipEntry(resultFile.getName());
+						zos.putNextEntry(ze);
+						fisResultFile = new FileInputStream(resultFile.getAbsolutePath());
+						
+						len = 0;
+						while ((len = fisResultFile.read(buffer)) > 0) {
 							zos.write(buffer, 0, len);
 						}
 
 					} finally {
-						if (fis != null) {
-							fis.close();
+						if (fisProcessedFile != null) {
+							fisProcessedFile.close();
+						}
+						if (fisResultFile != null) {
+							fisResultFile.close();
 						}
 
 						if (zos != null) {
@@ -109,7 +123,7 @@ public class ArchiveFileProcessor {
 					}
 
 				}
-
+				resultFile.delete();
 				processedFile.delete();
 			}
 		}

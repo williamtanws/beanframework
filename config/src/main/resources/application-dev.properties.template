@@ -13,6 +13,22 @@ database.backup.dir=${project.dir}/data/db
 database.backup.executecommand=C:\\xampp\\mysql\\bin\\mysqldump -u ${datasource.platform.username} -p ${datasource.platform.password}  --databases ${datasource.platform.database} -r 
 
 # ===============================
+# = INTERGRATION
+# ===============================
+integration.dir=${data.dir}/integration
+inbound.read.path=${integration.dir}/read
+inbound.processed.path=${integration.dir}/processed
+inbound.failed.path=${integration.dir}/failed
+inbound.file.poller.fixed.delay=1000
+inbound.file.poller.receive.timout=30000
+inbound.file.poller.max.messages.per.poll=1
+inbound.file.poller.thread.pool.size=1
+inbound.filename.regex=([^\s]+(\.(?i)(csv))$)
+inbound.filename.dateFormat=yyyyMMddHHmmss
+inbound.archive=true
+inbound.archive.format=gz
+
+# ===============================
 # = IMEX
 # ===============================
 module.imex.import.update.location=classpath*:import/dev/updatedata

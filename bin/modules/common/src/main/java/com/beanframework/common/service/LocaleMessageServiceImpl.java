@@ -46,7 +46,7 @@ public class LocaleMessageServiceImpl implements LocaleMessageService {
 	}
 
 	@Override
-	public String getMessageByLocale(String code, Object[] args, Locale locale) {
+	public String getMessage(String code, Object[] args, Locale locale) {
 		return messageSource.getMessage(code, args, locale);
 	}
 }
