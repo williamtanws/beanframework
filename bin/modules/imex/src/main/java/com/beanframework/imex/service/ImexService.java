@@ -11,8 +11,6 @@ import com.beanframework.imex.domain.Imex;
 
 public interface ImexService {
 
-	String[] importByFolders(List<String> folders);
-
 	String[] importByMultipartFiles(MultipartFile[] files);
 
 	String[] importByQuery(String importName, String query);
@@ -21,7 +19,7 @@ public interface ImexService {
 
 	void importExportMedia(Imex imex) throws Exception;
 
-	String[] importByFoldersByLocations(List<String> folders, List<String> locations);
+	String[] importByLocations(List<String> locations);
 
 	String[] importByFoldersByLocations(TreeMap<String, Set<String>> locationAndFolders);
 }

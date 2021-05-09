@@ -85,16 +85,11 @@ public class ImexServiceImpl implements ImexService {
 	private String MEDIA_URL;
 
 	@Override
-	public String[] importByFolders(List<String> folders) {
-		return importByFoldersByLocations(folders, IMEX_IMPORT_UPDATE_LOCATIONS);
-	}
-
-	@Override
 	public void importByFile(File file) throws Exception {
 
 		List<String> locations = new ArrayList<String>();
 		locations.add(file.getAbsolutePath());
-		importByFoldersByLocations(null, locations);
+		importByLocations(locations);
 	}
 
 	@Override
@@ -119,19 +114,16 @@ public class ImexServiceImpl implements ImexService {
 		for (MultipartFile multipartFile : files) {
 			if (StringUtils.isNotBlank(multipartFile.getOriginalFilename())) {
 
-				for (Entry<String, ImportListener> entry : sortedImportListeners) {
-
-					String content = null;
-					try {
-						content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
-					} catch (IOException e) {
-						e.printStackTrace();
-						LOGGER.error(e.getMessage(), e);
-					}
-					Reader reader = new StringReader(content);
-
-					importCsv(multipartFile.getOriginalFilename(), reader, entry.getValue(), successMessages, errorMessages);
+				String content = null;
+				try {
+					content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
+				} catch (IOException e) {
+					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 				}
+				Reader reader = new StringReader(content);
+
+				importCsv(multipartFile.getOriginalFilename(), reader, successMessages, errorMessages);
 			}
 		}
 
@@ -144,28 +136,12 @@ public class ImexServiceImpl implements ImexService {
 
 	@Override
 	public String[] importByQuery(String importName, String query) {
-
-		// Sort Import Listener
-		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
-		List<Entry<String, ImportListener>> sortedImportListeners = new LinkedList<Entry<String, ImportListener>>(importListeners);
-		Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
-			@Override
-			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
-				Integer sort1 = ele1.getValue().getSort();
-				Integer sort2 = ele2.getValue().getSort();
-				return sort1.compareTo(sort2);
-			}
-		});
-
 		// Messages
 		StringBuilder successMessages = new StringBuilder();
 		StringBuilder errorMessages = new StringBuilder();
 
-		for (Entry<String, ImportListener> entry : sortedImportListeners) {
-
-			Reader reader = new StringReader(query);
-			importCsv(importName, reader, entry.getValue(), successMessages, errorMessages);
-		}
+		Reader reader = new StringReader(query);
+		importCsv(importName, reader, successMessages, errorMessages);
 
 		String[] messages = new String[2];
 		messages[0] = successMessages.toString();
@@ -176,18 +152,6 @@ public class ImexServiceImpl implements ImexService {
 
 	@Override
 	public String[] importByFoldersByLocations(TreeMap<String, Set<String>> locationAndFolders) {
-		// Sort Import Listener
-		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
-		List<Entry<String, ImportListener>> sortedImportListeners = new LinkedList<Entry<String, ImportListener>>(importListeners);
-		Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
-			@Override
-			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
-				Integer sort1 = ele1.getValue().getSort();
-				Integer sort2 = ele2.getValue().getSort();
-				return sort1.compareTo(sort2);
-			}
-		});
-
 		// Messages
 		StringBuilder successMessages = new StringBuilder();
 		StringBuilder errorMessages = new StringBuilder();
@@ -203,9 +167,7 @@ public class ImexServiceImpl implements ImexService {
 					resources = loader.getResources(entry.getKey() + "/" + folder + "/**/*.csv");
 
 					if (resources != null) {
-						for (Entry<String, ImportListener> entryImportListener : sortedImportListeners) {
-							importResources(resources, entryImportListener.getValue(), successMessages, errorMessages);
-						}
+						importResources(resources, successMessages, errorMessages);
 					}
 				} catch (IOException e) {
 					errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { entry.getKey(), e.getMessage() }) + "<br><br>");
@@ -226,66 +188,26 @@ public class ImexServiceImpl implements ImexService {
 	}
 
 	@Override
-	public String[] importByFoldersByLocations(List<String> folders, List<String> locations) {
-
-		// Sort Import Listener
-		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
-		List<Entry<String, ImportListener>> sortedImportListeners = new LinkedList<Entry<String, ImportListener>>(importListeners);
-		Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
-			@Override
-			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
-				Integer sort1 = ele1.getValue().getSort();
-				Integer sort2 = ele2.getValue().getSort();
-				return sort1.compareTo(sort2);
-			}
-		});
+	public String[] importByLocations(List<String> locations) {
 
 		// Messages
 		StringBuilder successMessages = new StringBuilder();
 		StringBuilder errorMessages = new StringBuilder();
 
-		if (folders == null) {
+		for (String path : locations) {
+			LOGGER.info("Import location: " + path);
 
-			for (String path : locations) {
-				LOGGER.info("Import location: " + path);
+			Resource[] resources = null;
+			try {
+				PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+				resources = loader.getResources(path);
 
-				Resource[] resources = null;
-				try {
-					PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-					resources = loader.getResources(path);
-
-					if (resources != null) {
-						for (Entry<String, ImportListener> entry : sortedImportListeners) {
-							importResources(resources, entry.getValue(), successMessages, errorMessages);
-						}
-					}
-				} catch (IOException e) {
-					errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { path, e.getMessage() }) + "<br><br>");
-					LOGGER.error(e.getMessage(), e);
+				if (resources != null) {
+					importResources(resources, successMessages, errorMessages);
 				}
-			}
-
-		} else {
-			for (String folder : folders) {
-
-				for (String path : locations) {
-					LOGGER.info("Import location: " + path);
-
-					Resource[] resources = null;
-					try {
-						PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-						resources = loader.getResources(path + "/" + folder + "/**/*.csv");
-
-						if (resources != null) {
-							for (Entry<String, ImportListener> entry : sortedImportListeners) {
-								importResources(resources, entry.getValue(), successMessages, errorMessages);
-							}
-						}
-					} catch (IOException e) {
-						errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { path, e.getMessage() }) + "<br><br>");
-						LOGGER.error(e.getMessage(), e);
-					}
-				}
+			} catch (IOException e) {
+				errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { path, e.getMessage() }) + "<br><br>");
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 
@@ -300,7 +222,8 @@ public class ImexServiceImpl implements ImexService {
 		return messages;
 	}
 
-	private void importResources(Resource[] resources, ImportListener listener, StringBuilder successMessages, StringBuilder errorMessages) throws IOException {
+	private void importResources(Resource[] resources, StringBuilder successMessages, StringBuilder errorMessages) throws IOException {
+
 		for (Resource resource : resources) {
 
 			BufferedReader reader = null;
@@ -316,12 +239,28 @@ public class ImexServiceImpl implements ImexService {
 				LOGGER.error(e.getMessage(), e);
 			}
 
-			importCsv(importName, reader, listener, successMessages, errorMessages);
+			importCsv(importName, reader, successMessages, errorMessages);
 		}
 	}
 
+	private List<Entry<String, ImportListener>> getImportListeners() {
+		// Sort Import Listener
+		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
+		List<Entry<String, ImportListener>> sortedImportListeners = new LinkedList<Entry<String, ImportListener>>(importListeners);
+		Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
+			@Override
+			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
+				Integer sort1 = ele1.getValue().getSort();
+				Integer sort2 = ele2.getValue().getSort();
+				return sort1.compareTo(sort2);
+			}
+		});
+
+		return sortedImportListeners;
+	}
+
 	@SuppressWarnings({ "resource", "unchecked" })
-	private void importCsv(String importName, Reader reader, ImportListener listener, StringBuilder successMessages, StringBuilder errorMessages) {
+	private void importCsv(String importName, Reader reader, StringBuilder successMessages, StringBuilder errorMessages) {
 		try {
 			ICsvBeanReader beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
 			final String[] header = beanReader.getHeader(true);
@@ -329,85 +268,88 @@ public class ImexServiceImpl implements ImexService {
 			String mode = header[0].trim().replace("  ", " ").split(" ")[0];
 			String type = header[0].trim().replace("  ", " ").split(" ")[1];
 
-			if (type.equalsIgnoreCase(listener.getType())) {
-				LOGGER.info("Found import resource: " + importName);
-				LOGGER.info("Import mode=" + mode.toUpperCase() + ", type=" + type.toUpperCase());
+			for (Entry<String, ImportListener> entry : getImportListeners()) {
+				ImportListener listener = entry.getValue();
 
-				CellProcessor[] processors = null;
-				if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE") || mode.equalsIgnoreCase("INSERT_UPDATE")) {
-					Method method = listener.getClassCsv().getMethod("getUpdateProcessors", new Class[] {});
-					processors = (CellProcessor[]) method.invoke(listener.getClassCsv(), new Object[] {});
+				if (listener.getType().equals(type)) {
+					LOGGER.info("Found import resource: " + importName);
+					LOGGER.info("Import mode=" + mode.toUpperCase() + ", type=" + type.toUpperCase());
 
-				} else if (mode.equalsIgnoreCase("REMOVE")) {
-					Method method = listener.getClassCsv().getMethod("getRemoveProcessors", new Class[] {});
-					processors = (CellProcessor[]) method.invoke(listener.getClassCsv(), new Object[] {});
-				}
+					CellProcessor[] processors = null;
+					if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE") || mode.equalsIgnoreCase("INSERT_UPDATE")) {
+						Method method = listener.getClassCsv().getMethod("getUpdateProcessors", new Class[] {});
+						processors = (CellProcessor[]) method.invoke(listener.getClassCsv(), new Object[] {});
 
-				if (processors == null) {
-					throw new Exception("Cannot find CellProcessor[] for " + listener.getClassCsv());
-				}
+					} else if (mode.equalsIgnoreCase("REMOVE")) {
+						Method method = listener.getClassCsv().getMethod("getRemoveProcessors", new Class[] {});
+						processors = (CellProcessor[]) method.invoke(listener.getClassCsv(), new Object[] {});
+					}
 
-				Object csv;
-				while ((csv = beanReader.read(listener.getClassCsv(), header, processors)) != null) {
+					if (processors == null) {
+						throw new Exception("Cannot find CellProcessor[] for " + listener.getClassCsv());
+					}
 
-					boolean imported = false;
+					Object csv;
+					while ((csv = beanReader.read(listener.getClassCsv(), header, processors)) != null) {
 
-					listener.beforeImport(csv);
-					if (listener.isCustomImport()) {
-						imported = listener.customImport(csv);
-					} else {
+						boolean imported = false;
 
-						Object entity = null;
-						for (ConverterMapping converterMapping : converterMappings) {
-							if (converterMapping.getConverter() instanceof EntityCsvConverter) {
-								EntityCsvConverter<Object, ?> entityCsvConverter = (EntityCsvConverter<Object, ?>) converterMapping.getConverter();
-								if (converterMapping.getTypeCode().equals(listener.getClassCsv().getSimpleName())) {
-									entity = entityCsvConverter.convert(csv);
+						listener.beforeImport(csv);
+						if (listener.isCustomImport()) {
+							imported = listener.customImport(csv);
+						} else {
+
+							Object entity = null;
+							for (ConverterMapping converterMapping : converterMappings) {
+								if (converterMapping.getConverter() instanceof EntityCsvConverter) {
+									EntityCsvConverter<Object, ?> entityCsvConverter = (EntityCsvConverter<Object, ?>) converterMapping.getConverter();
+									if (converterMapping.getTypeCode().equals(listener.getClassCsv().getSimpleName())) {
+										entity = entityCsvConverter.convert(csv);
+									}
+								}
+							}
+
+							if (entity == null) {
+								throw new Exception("Cannot find EntityCsvConverter bean for " + listener.getClassCsv().getSimpleName());
+							}
+
+							Class<?> classEntity = listener.getClassEntity();
+
+							if (mode.equalsIgnoreCase("INSERT")) {
+								if (((GenericEntity) entity).getUuid() == null) {
+									((GenericEntity) entity).setLastModifiedDate(new Date());
+									modelService.saveEntity(entity);
+									imported = true;
+								}
+
+							} else if (mode.equalsIgnoreCase("UPDATE")) {
+								if (((GenericEntity) entity).getUuid() != null) {
+									((GenericEntity) entity).setLastModifiedDate(new Date());
+									modelService.saveEntity(entity);
+									imported = true;
+								}
+
+							} else if (mode.equalsIgnoreCase("INSERT_UPDATE")) {
+								((GenericEntity) entity).setLastModifiedDate(new Date());
+								modelService.saveEntity(entity);
+								imported = true;
+
+							} else if (mode.equalsIgnoreCase("REMOVE")) {
+								GenericEntity genericEntity = (GenericEntity) entity;
+								if (genericEntity.getUuid() != null) {
+									modelService.deleteEntity(genericEntity, classEntity);
+									imported = true;
 								}
 							}
 						}
+						listener.afterImport(csv);
 
-						if (entity == null) {
-							throw new Exception("Cannot find EntityCsvConverter bean for " + listener.getClassCsv().getSimpleName());
-						}
-
-						Class<?> classEntity = listener.getClassEntity();
-
-						if (mode.equalsIgnoreCase("INSERT")) {
-							if (((GenericEntity) entity).getUuid() == null) {
-								((GenericEntity) entity).setLastModifiedDate(new Date());
-								modelService.saveEntity(entity);
-								imported = true;
-							}
-
-						} else if (mode.equalsIgnoreCase("UPDATE")) {
-							if (((GenericEntity) entity).getUuid() != null) {
-								((GenericEntity) entity).setLastModifiedDate(new Date());
-								modelService.saveEntity(entity);
-								imported = true;
-							}
-
-						} else if (mode.equalsIgnoreCase("INSERT_UPDATE")) {
-							((GenericEntity) entity).setLastModifiedDate(new Date());
-							modelService.saveEntity(entity);
-							imported = true;
-
-						} else if (mode.equalsIgnoreCase("REMOVE")) {
-							GenericEntity genericEntity = (GenericEntity) entity;
-							if (genericEntity.getUuid() != null) {
-								modelService.deleteEntity(genericEntity, classEntity);
-								imported = true;
-							}
+						if (imported) {
+							LOGGER.info("Imported line: lineNo=" + beanReader.getLineNumber() + ", rowNo=" + beanReader.getRowNumber() + ", " + csv);
 						}
 					}
-					listener.afterImport(csv);
-
-					if (imported) {
-						LOGGER.info("Imported line: lineNo=" + beanReader.getLineNumber() + ", rowNo=" + beanReader.getRowNumber() + ", " + csv);
-					}
+					successMessages.append(localeMessageService.getMessage("module.common.update.success", new Object[] { importName }) + "<br>");
 				}
-				successMessages.append(localeMessageService.getMessage("module.common.update.success", new Object[] { importName }) + "<br>");
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
