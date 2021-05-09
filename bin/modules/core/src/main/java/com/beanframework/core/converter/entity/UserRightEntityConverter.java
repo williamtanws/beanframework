@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -18,6 +19,7 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.domain.UserRightAttribute;
 
+@Component
 public class UserRightEntityConverter implements EntityConverter<UserRightDto, UserRight> {
 
 	@Autowired

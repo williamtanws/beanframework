@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.SiteDto;
 @Configuration
 public class SiteDtoConfig {
 
-	@Bean
-	public SitePopulator sitePopulator() {
-		return new SitePopulator();
-	}
+	@Autowired
+	public SitePopulator sitePopulator;
 
 	@Bean
-	public SiteDtoConverter dtoSiteConverter() {
+	public SiteDtoConverter siteDtoConverter() {
 		SiteDtoConverter converter = new SiteDtoConverter();
-		converter.addPopulator(sitePopulator());
+		converter.addPopulator(sitePopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoSiteConverterMapping() {
+	public ConverterMapping siteDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoSiteConverter());
+		mapping.setConverter(siteDtoConverter());
 		mapping.setTypeCode(SiteDto.class.getSimpleName());
 
 		return mapping;

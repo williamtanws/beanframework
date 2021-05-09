@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Comment;
 import com.beanframework.common.converter.Populator;
@@ -12,6 +13,7 @@ import com.beanframework.core.data.CommentDto;
 import com.beanframework.core.data.UserDto;
 import com.beanframework.user.domain.User;
 
+@Component
 public class CommentPopulator extends AbstractPopulator<Comment, CommentDto> implements Populator<Comment, CommentDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(CommentPopulator.class);

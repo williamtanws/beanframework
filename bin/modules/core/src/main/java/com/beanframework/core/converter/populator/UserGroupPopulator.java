@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
@@ -21,6 +22,7 @@ import com.beanframework.user.domain.UserGroupAttribute;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserRight;
 
+@Component
 public class UserGroupPopulator extends AbstractPopulator<UserGroup, UserGroupDto> implements Populator<UserGroup, UserGroupDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserGroupPopulator.class);

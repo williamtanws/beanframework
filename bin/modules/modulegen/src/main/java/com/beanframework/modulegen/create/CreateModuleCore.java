@@ -24,7 +24,7 @@ public class CreateModuleCore {
 		createPom(context, moduleartifact, modulegroup, location);
 		createImportListenerConstants(context, moduleartifact, modulegroup, location);
 		createModuleConfig(context, moduleartifact, modulegroup, location);
-		createEntityCsvConverterConfig(context, moduleartifact, modulegroup, location);
+		createCsvEntityConverterConfig(context, moduleartifact, modulegroup, location);
 		createDtoConfig(context, moduleartifact, modulegroup, location);
 		createEntityConfig(context, moduleartifact, modulegroup, location);
 		createInterceptorConfig(context, moduleartifact, modulegroup, location);
@@ -112,15 +112,15 @@ public class CreateModuleCore {
 	}
 
 	// samplecore\src\main\java\com\beanframework\samplecore\config\EntityCsvConverterConfig.java
-	private void createEntityCsvConverterConfig(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
+	private void createCsvEntityConverterConfig(VelocityContext context, String moduleartifact, String modulegroup, String location) throws IOException {
 		String path = location + File.separator + moduleartifact + "core" + File.separator + "src/main/java/" + modulegroup.replace(".", "/") + File.separator + moduleartifact + "core" + File.separator + "config";
 
-		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleEntityCsvConverterConfig.java.vm");
+		Template template = velocityEngine.getTemplate("templates/modulecore/ModuleCsvEntityConverterConfig.java.vm");
 
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
 
-		File moduleEntity = new File(path + File.separator + StringUtils.capitalize(moduleartifact.toLowerCase()) + "EntityCsvConverterConfig.java");
+		File moduleEntity = new File(path + File.separator + StringUtils.capitalize(moduleartifact.toLowerCase()) + "CsvEntityConverterConfig.java");
 		FileUtils.write(moduleEntity, writer.toString(), StandardCharsets.UTF_8.name());
 		System.out.println("Written: " + moduleEntity.getPath());
 	}

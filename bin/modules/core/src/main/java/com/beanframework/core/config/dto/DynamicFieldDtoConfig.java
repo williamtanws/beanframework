@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,64 +18,58 @@ import com.beanframework.core.data.DynamicFieldTemplateDto;
 @Configuration
 public class DynamicFieldDtoConfig {
 	
-	@Bean
-	public DynamicFieldPopulator dynamicFieldPopulator() {
-		return new DynamicFieldPopulator();
-	}
+	@Autowired
+	public DynamicFieldPopulator dynamicFieldPopulator;
+	
+	@Autowired
+	public DynamicFieldSlotPopulator dynamicFieldSlotPopulator;
+	
+	@Autowired
+	public DynamicFieldTemplatePopulator dynamicFieldTemplatePopulator;
 
 	@Bean
-	public DynamicFieldDtoConverter dtoDynamicFieldConverter() {
+	public DynamicFieldDtoConverter dynamicFieldDtoConverter() {
 		DynamicFieldDtoConverter converter = new DynamicFieldDtoConverter();
-		converter.addPopulator(dynamicFieldPopulator());
+		converter.addPopulator(dynamicFieldPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoDynamicFieldConverterMapping() {
+	public ConverterMapping dynamicFieldDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoDynamicFieldConverter());
+		mapping.setConverter(dynamicFieldDtoConverter());
 		mapping.setTypeCode(DynamicFieldDto.class.getSimpleName());
 
 		return mapping;
 	}
-	
-	@Bean
-	public DynamicFieldSlotPopulator dynamicFieldSlotPopulator() {
-		return new DynamicFieldSlotPopulator();
-	}
 
 	@Bean
-	public DynamicFieldSlotDtoConverter dtoDynamicFieldSlotConverter() {
+	public DynamicFieldSlotDtoConverter dynamicFieldSlotDtoConverter() {
 		DynamicFieldSlotDtoConverter converter = new DynamicFieldSlotDtoConverter();
-		converter.addPopulator(dynamicFieldSlotPopulator());
+		converter.addPopulator(dynamicFieldSlotPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoDynamicFieldSlotConverterMapping() {
+	public ConverterMapping dynamicFieldSlotDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoDynamicFieldSlotConverter());
+		mapping.setConverter(dynamicFieldSlotDtoConverter());
 		mapping.setTypeCode(DynamicFieldSlotDto.class.getSimpleName());
 
 		return mapping;
 	}
-	
-	@Bean
-	public DynamicFieldTemplatePopulator dynamicFieldTemplatePopulator() {
-		return new DynamicFieldTemplatePopulator();
-	}
 
 	@Bean
-	public DynamicFieldTemplateDtoConverter dtoDynamicFieldTemplateConverter() {
+	public DynamicFieldTemplateDtoConverter dynamicFieldTemplateDtoConverter() {
 		DynamicFieldTemplateDtoConverter converter = new DynamicFieldTemplateDtoConverter();
-		converter.addPopulator(dynamicFieldTemplatePopulator());
+		converter.addPopulator(dynamicFieldTemplatePopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoDynamicFieldTemplateConverterMapping() {
+	public ConverterMapping dynamicFieldTemplateDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoDynamicFieldTemplateConverter());
+		mapping.setConverter(dynamicFieldTemplateDtoConverter());
 		mapping.setTypeCode(DynamicFieldTemplateDto.class.getSimpleName());
 
 		return mapping;

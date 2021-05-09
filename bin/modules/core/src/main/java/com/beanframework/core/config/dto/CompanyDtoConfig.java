@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.CompanyDto;
 @Configuration
 public class CompanyDtoConfig {
 
-	@Bean
-	public CompanyPopulator companyPopulator() {
-		return new CompanyPopulator();
-	}
+	@Autowired
+	public CompanyPopulator companyPopulator;
 
 	@Bean
-	public CompanyDtoConverter dtoCompanyConverter() {
+	public CompanyDtoConverter companyDtoConverter() {
 		CompanyDtoConverter converter = new CompanyDtoConverter();
-		converter.addPopulator(companyPopulator());
+		converter.addPopulator(companyPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoCompanyConverterMapping() {
+	public ConverterMapping companyDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoCompanyConverter());
+		mapping.setConverter(companyDtoConverter());
 		mapping.setTypeCode(CompanyDto.class.getSimpleName());
 
 		return mapping;

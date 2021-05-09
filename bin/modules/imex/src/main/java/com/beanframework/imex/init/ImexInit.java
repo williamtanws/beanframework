@@ -30,7 +30,7 @@ public class ImexInit implements ApplicationListener<ApplicationReadyEvent> {
 		try {
 
 			if (IMEX_IMPORT_INIT_LOCATIONS != null) {
-				imexService.importByFoldersByLocations(null, IMEX_IMPORT_INIT_LOCATIONS);
+				imexService.importByLocations(IMEX_IMPORT_INIT_LOCATIONS);
 			}
 
 		} catch (Exception e) {

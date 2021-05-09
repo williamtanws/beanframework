@@ -1,5 +1,6 @@
 package com.beanframework.core.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -50,311 +51,267 @@ import com.beanframework.core.csv.UserRightCsv;
 import com.beanframework.core.csv.VendorCsv;
 
 @Configuration
-public class CoreEntityCsvConverterConfig {
+public class CoreCsvEntityConverterConfig {
+
+	@Autowired
+	public ConfigurationCsvEntityConverter configurationCsvEntityConverter;
+
+	@Autowired
+	public CronjobCsvEntityConverter cronjobCsvEntityConverter;
+
+	@Autowired
+	public CustomerCsvEntityConverter customerCsvEntityConverter;
+
+	@Autowired
+	public DynamicFieldCsvEntityConverter dynamicFieldCsvEntityConverter;
+
+	@Autowired
+	public DynamicFieldSlotCsvEntityConverter dynamicFieldSlotCsvEntityConverter;
+
+	@Autowired
+	public DynamicFieldTemplateCsvEntityConverter dynamicFieldTemplateCsvEntityConverter;
+
+	@Autowired
+	public EmployeeCsvEntityConverter employeeCsvEntityConverter;
+
+	@Autowired
+	public EnumerationCsvEntityConverter enumerationCsvEntityConverter;
+
+	@Autowired
+	public ImexCsvEntityConverter imexCsvEntityConverter;
+
+	@Autowired
+	public LanguageCsvEntityConverter languageCsvEntityConverter;
+
+	@Autowired
+	public MediaCsvEntityConverter mediaCsvEntityConverter;
+
+	@Autowired
+	public MenuCsvEntityConverter menuCsvEntityConverter;
+
+	@Autowired
+	public SiteCsvEntityConverter siteCsvEntityConverter;
+
+	@Autowired
+	public UserGroupCsvEntityConverter userGroupCsvEntityConverter;
+
+	@Autowired
+	public UserPermissionCsvEntityConverter userPermissionCsvEntityConverter;
+
+	@Autowired
+	public UserRightCsvEntityConverter userRightCsvEntityConverter;
+
+	@Autowired
+	public VendorCsvEntityConverter vendorCsvEntityConverter;
+
+	@Autowired
+	public CountryCsvEntityConverter countryCsvEntityConverter;
+
+	@Autowired
+	public AddressCsvEntityConverter addressCsvEntityConverter;
+
+	@Autowired
+	public RegionCsvEntityConverter regionCsvEntityConverter;
+
+	@Autowired
+	public CurrencyCsvEntityConverter currencyCsvEntityConverter;
+
+	@Autowired
+	public CompanyCsvEntityConverter companyCsvEntityConverter;
 
 	@Bean
-	public ConfigurationCsvEntityConverter entityCsvConfigurationConverter() {
-		return new ConfigurationCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvConfigurationConverterMapping() {
+	public ConverterMapping configurationCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvConfigurationConverter());
+		mapping.setConverter(configurationCsvEntityConverter);
 		mapping.setTypeCode(ConfigurationCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public CronjobCsvEntityConverter entityCsvCronjobConverter() {
-		return new CronjobCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvCronjobConverterMapping() {
+	public ConverterMapping cronjobCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvCronjobConverter());
+		mapping.setConverter(cronjobCsvEntityConverter);
 		mapping.setTypeCode(CronjobCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public CustomerCsvEntityConverter entityCsvCustomerConverter() {
-		return new CustomerCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvCustomerConverterMapping() {
+	public ConverterMapping customerCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvCustomerConverter());
+		mapping.setConverter(customerCsvEntityConverter);
 		mapping.setTypeCode(CustomerCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public DynamicFieldCsvEntityConverter entityCsvDynamicFieldConverter() {
-		return new DynamicFieldCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvDynamicFieldConverterMapping() {
+	public ConverterMapping dynamicFieldCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvDynamicFieldConverter());
+		mapping.setConverter(dynamicFieldCsvEntityConverter);
 		mapping.setTypeCode(DynamicFieldCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public DynamicFieldSlotCsvEntityConverter entityCsvDynamicFieldSlotConverter() {
-		return new DynamicFieldSlotCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvDynamicFieldSlotConverterMapping() {
+	public ConverterMapping dynamicFieldSlotCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvDynamicFieldSlotConverter());
+		mapping.setConverter(dynamicFieldSlotCsvEntityConverter);
 		mapping.setTypeCode(DynamicFieldSlotCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public DynamicFieldTemplateCsvEntityConverter entityCsvDynamicFieldTemplateConverter() {
-		return new DynamicFieldTemplateCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvDynamicFieldTemplateConverterMapping() {
+	public ConverterMapping dynamicFieldTemplateCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvDynamicFieldTemplateConverter());
+		mapping.setConverter(dynamicFieldTemplateCsvEntityConverter);
 		mapping.setTypeCode(DynamicFieldTemplateCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public EmployeeCsvEntityConverter entityCsvEmployeeConverter() {
-		return new EmployeeCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvEmployeeConverterMapping() {
+	public ConverterMapping employeeCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvEmployeeConverter());
+		mapping.setConverter(employeeCsvEntityConverter);
 		mapping.setTypeCode(EmployeeCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public EnumerationCsvEntityConverter entityCsvEnumerationConverter() {
-		return new EnumerationCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvEnumerationConverterMapping() {
+	public ConverterMapping enumerationCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvEnumerationConverter());
+		mapping.setConverter(enumerationCsvEntityConverter);
 		mapping.setTypeCode(EnumerationCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public ImexCsvEntityConverter entityCsvImexConverter() {
-		return new ImexCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvImexConverterMapping() {
+	public ConverterMapping imexCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvImexConverter());
+		mapping.setConverter(imexCsvEntityConverter);
 		mapping.setTypeCode(ImexCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public LanguageCsvEntityConverter entityCsvLanguageConverter() {
-		return new LanguageCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvLanguageConverterMapping() {
+	public ConverterMapping languageCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvLanguageConverter());
+		mapping.setConverter(languageCsvEntityConverter);
 		mapping.setTypeCode(LanguageCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public MediaCsvEntityConverter entityCsvMediaConverter() {
-		return new MediaCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvMediaConverterMapping() {
+	public ConverterMapping mediaCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvMediaConverter());
+		mapping.setConverter(mediaCsvEntityConverter);
 		mapping.setTypeCode(MediaCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public MenuCsvEntityConverter entityCsvMenuConverter() {
-		return new MenuCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvMenuConverterMapping() {
+	public ConverterMapping menuCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvMenuConverter());
+		mapping.setConverter(menuCsvEntityConverter);
 		mapping.setTypeCode(MenuCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public SiteCsvEntityConverter entityCsvSiteConverter() {
-		return new SiteCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvSiteConverterMapping() {
+	public ConverterMapping siteCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvSiteConverter());
+		mapping.setConverter(siteCsvEntityConverter);
 		mapping.setTypeCode(SiteCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public UserGroupCsvEntityConverter entityCsvUserGroupConverter() {
-		return new UserGroupCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvUserGroupConverterMapping() {
+	public ConverterMapping userGroupCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvUserGroupConverter());
+		mapping.setConverter(userGroupCsvEntityConverter);
 		mapping.setTypeCode(UserGroupCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public UserPermissionCsvEntityConverter entityCsvUserPermissionConverter() {
-		return new UserPermissionCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvUserPermissionConverterMapping() {
+	public ConverterMapping userPermissionCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvUserPermissionConverter());
+		mapping.setConverter(userPermissionCsvEntityConverter);
 		mapping.setTypeCode(UserPermissionCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public UserRightCsvEntityConverter entityCsvUserRightConverter() {
-		return new UserRightCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvUserRightConverterMapping() {
+	public ConverterMapping userRightCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvUserRightConverter());
+		mapping.setConverter(userRightCsvEntityConverter);
 		mapping.setTypeCode(UserRightCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public VendorCsvEntityConverter entityCsvVendorConverter() {
-		return new VendorCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvVendorConverterMapping() {
+	public ConverterMapping vendorCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvVendorConverter());
+		mapping.setConverter(vendorCsvEntityConverter);
 		mapping.setTypeCode(VendorCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public CountryCsvEntityConverter entityCsvCountryConverter() {
-		return new CountryCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvCountryConverterMapping() {
+	public ConverterMapping countryCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvCountryConverter());
+		mapping.setConverter(countryCsvEntityConverter);
 		mapping.setTypeCode(CountryCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public AddressCsvEntityConverter entityCsvAddressConverter() {
-		return new AddressCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvAddressConverterMapping() {
+	public ConverterMapping addressCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvAddressConverter());
+		mapping.setConverter(addressCsvEntityConverter);
 		mapping.setTypeCode(AddressCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public RegionCsvEntityConverter entityCsvRegionConverter() {
-		return new RegionCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvRegionConverterMapping() {
+	public ConverterMapping regionCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvRegionConverter());
+		mapping.setConverter(regionCsvEntityConverter);
 		mapping.setTypeCode(RegionCsv.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public CurrencyCsvEntityConverter entityCsvCurrencyConverter() {
-		return new CurrencyCsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsvCurrencyConverterMapping() {
+	public ConverterMapping currencyCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvCurrencyConverter());
+		mapping.setConverter(currencyCsvEntityConverter);
 		mapping.setTypeCode(CurrencyCsv.class.getSimpleName());
 
 		return mapping;
 	}
-	
-	@Bean
-	public CompanyCsvEntityConverter entityCsvCompanyConverter() {
-		return new CompanyCsvEntityConverter();
-	}
 
 	@Bean
-	public ConverterMapping entityCsvCompanyConverterMapping() {
+	public ConverterMapping companyCsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsvCompanyConverter());
+		mapping.setConverter(companyCsvEntityConverter);
 		mapping.setTypeCode(CompanyCsv.class.getSimpleName());
 
 		return mapping;

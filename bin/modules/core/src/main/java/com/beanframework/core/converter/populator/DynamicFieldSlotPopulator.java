@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
@@ -16,7 +17,7 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.internationalization.domain.Language;
 
-
+@Component
 public class DynamicFieldSlotPopulator extends AbstractPopulator<DynamicFieldSlot, DynamicFieldSlotDto> implements Populator<DynamicFieldSlot, DynamicFieldSlotDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldSlotPopulator.class);
@@ -28,22 +29,22 @@ public class DynamicFieldSlotPopulator extends AbstractPopulator<DynamicFieldSlo
 			target.setName(source.getName());
 			target.setSort(source.getSort());
 			target.setDynamicField(populateDynamicField(source.getDynamicField()));
-			
+
 		} catch (Exception e) {
 			throw new PopulatorException(e.getMessage(), e);
 		}
 	}
-	
+
 	public DynamicFieldDto populateDynamicField(UUID uuid) throws PopulatorException {
 		if (uuid == null)
 			return null;
 
 		try {
 			DynamicField source = modelService.findOneByUuid(uuid, DynamicField.class);
-			if(source == null) {
+			if (source == null) {
 				return null;
 			}
-			
+
 			DynamicFieldDto target = new DynamicFieldDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -60,7 +61,7 @@ public class DynamicFieldSlotPopulator extends AbstractPopulator<DynamicFieldSlo
 			target.setGrid(source.getGrid());
 
 			target.setLanguage(populateLanguage(source.getLanguage()));
-			
+
 			for (UUID uuid1 : source.getEnumerations()) {
 				target.getEnumerations().add(populateEnumeration(uuid1));
 			}
@@ -70,17 +71,17 @@ public class DynamicFieldSlotPopulator extends AbstractPopulator<DynamicFieldSlo
 			throw new PopulatorException(e.getMessage(), e);
 		}
 	}
-	
+
 	public LanguageDto populateLanguage(UUID uuid) throws PopulatorException {
 		if (uuid == null)
 			return null;
 
 		try {
 			Language source = modelService.findOneByUuid(uuid, Language.class);
-			if(source == null) {
+			if (source == null) {
 				return null;
 			}
-			
+
 			LanguageDto target = new LanguageDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -98,17 +99,17 @@ public class DynamicFieldSlotPopulator extends AbstractPopulator<DynamicFieldSlo
 			throw new PopulatorException(e.getMessage(), e);
 		}
 	}
-	
+
 	public EnumerationDto populateEnumeration(UUID uuid) throws PopulatorException {
 		if (uuid == null)
 			return null;
 
 		try {
 			Enumeration source = modelService.findOneByUuid(uuid, Enumeration.class);
-			if(source == null) {
+			if (source == null) {
 				return null;
 			}
-			
+
 			EnumerationDto target = new EnumerationDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());

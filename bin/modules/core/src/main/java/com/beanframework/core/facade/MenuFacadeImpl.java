@@ -32,13 +32,13 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 	private static final Class<MenuDto> dtoClass = MenuDto.class;
 
 	@Autowired
-	private MenuTreeDtoConverter dtoMenuTreeConverter;
+	private MenuTreeDtoConverter menuTreeDtoConverter;
 
 	@Autowired
-	private MenuTreeByCurrentUserDtoConverter dtoMenuTreeByCurrentUserConverter;
+	private MenuTreeByCurrentUserDtoConverter menuTreeByCurrentUserDtoConverter;
 
 	@Autowired
-	private MenuBreadcrumbsDtoConverter dtoMenuBreadcrumbsConverter;
+	private MenuBreadcrumbsDtoConverter menuBreadcrumbsDtoConverter;
 
 	@Autowired
 	private MenuService menuService;
@@ -118,7 +118,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 
 			List<MenuDto> rootDto = new ArrayList<MenuDto>();
 			for (Menu menu : rootEntity) {
-				rootDto.add(dtoMenuTreeConverter.convert(menu, new MenuDto()));
+				rootDto.add(menuTreeDtoConverter.convert(menu, new MenuDto()));
 			}
 
 			return rootDto;
@@ -139,7 +139,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 
 		List<MenuDto> rootDto = new ArrayList<MenuDto>();
 		for (Menu menu : rootEntity) {
-			rootDto.add(dtoMenuTreeByCurrentUserConverter.convert(menu, new MenuDto()));
+			rootDto.add(menuTreeByCurrentUserDtoConverter.convert(menu, new MenuDto()));
 		}
 		return rootDto;
 
@@ -152,7 +152,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 
 		List<MenuDto> dtos = new ArrayList<MenuDto>();
 		for (Menu menu : models) {
-			dtos.add(dtoMenuBreadcrumbsConverter.convert(menu, new MenuDto()));
+			dtos.add(menuBreadcrumbsDtoConverter.convert(menu, new MenuDto()));
 		}
 
 		return dtos;

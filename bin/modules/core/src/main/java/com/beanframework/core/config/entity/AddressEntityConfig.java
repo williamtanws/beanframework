@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.user.domain.Address;
 @Configuration
 public class AddressEntityConfig {
 
-	@Bean
-	public AddressEntityConverter entityAddressConverter() {
-		return new AddressEntityConverter();
-	}
+	@Autowired
+	public AddressEntityConverter addressEntityConverter;
 
 	@Bean
-	public ConverterMapping entityAddressConverterMapping() {
+	public ConverterMapping addressEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityAddressConverter());
+		mapping.setConverter(addressEntityConverter);
 		mapping.setTypeCode(Address.class.getSimpleName());
 
 		return mapping;

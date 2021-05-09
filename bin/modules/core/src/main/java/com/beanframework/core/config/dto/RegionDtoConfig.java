@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.RegionDto;
 @Configuration
 public class RegionDtoConfig {
 
-	@Bean
-	public RegionPopulator regionPopulator() {
-		return new RegionPopulator();
-	}
+	@Autowired
+	public RegionPopulator regionPopulator;
 
 	@Bean
-	public RegionDtoConverter dtoRegionConverter() {
+	public RegionDtoConverter regionDtoConverter() {
 		RegionDtoConverter converter = new RegionDtoConverter();
-		converter.addPopulator(regionPopulator());
+		converter.addPopulator(regionPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoRegionConverterMapping() {
+	public ConverterMapping regionDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoRegionConverter());
+		mapping.setConverter(regionDtoConverter());
 		mapping.setTypeCode(RegionDto.class.getSimpleName());
 
 		return mapping;

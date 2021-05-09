@@ -11,7 +11,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
-import com.beanframework.core.config.dto.RevisionsDto;
+import com.beanframework.core.converter.dto.RevisionsDto;
 
 public class AbstractResource {
 

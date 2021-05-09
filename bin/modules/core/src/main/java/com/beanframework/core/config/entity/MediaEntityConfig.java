@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.media.domain.Media;
 @Configuration
 public class MediaEntityConfig {
 
+	@Autowired
+	public MediaEntityConverter mediaEntityConverter;
+	
 	@Bean
-	public MediaEntityConverter entityMediaConverter() {
-		return new MediaEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityMediaConverterMapping() {
+	public ConverterMapping mediaEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityMediaConverter());
+		mapping.setConverter(mediaEntityConverter);
 		mapping.setTypeCode(Media.class.getSimpleName());
 
 		return mapping;

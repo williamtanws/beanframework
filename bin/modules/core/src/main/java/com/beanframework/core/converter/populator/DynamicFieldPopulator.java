@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
@@ -14,6 +15,7 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.internationalization.domain.Language;
 
+@Component
 public class DynamicFieldPopulator extends AbstractPopulator<DynamicField, DynamicFieldDto> implements Populator<DynamicField, DynamicFieldDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldPopulator.class);
@@ -46,10 +48,10 @@ public class DynamicFieldPopulator extends AbstractPopulator<DynamicField, Dynam
 
 		try {
 			Language source = modelService.findOneByUuid(uuid, Language.class);
-			if(source == null) {
+			if (source == null) {
 				return null;
 			}
-			
+
 			LanguageDto target = new LanguageDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());
@@ -74,10 +76,10 @@ public class DynamicFieldPopulator extends AbstractPopulator<DynamicField, Dynam
 
 		try {
 			Enumeration source = modelService.findOneByUuid(uuid, Enumeration.class);
-			if(source == null) {
+			if (source == null) {
 				return null;
 			}
-			
+
 			EnumerationDto target = new EnumerationDto();
 			target.setUuid(source.getUuid());
 			target.setId(source.getId());

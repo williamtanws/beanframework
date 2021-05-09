@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,22 +19,26 @@ import com.beanframework.core.data.MenuDto;
 public class MenuDtoConfig {
 
 	// Menu
-	@Bean
-	public MenuPopulator menuPopulator() {
-		return new MenuPopulator();
-	}
+	@Autowired
+	public MenuPopulator menuPopulator;
+	@Autowired
+	public MenuTreePopulator menuTreePopulator;
+	@Autowired
+	public MenuTreeByCurrentUserPopulator menuTreeByCurrentUserPopulator;
+	@Autowired
+	public MenuBreadcrumbsPopulator menuBreadcrumbsPopulator;
 
 	@Bean
-	public MenuDtoConverter dtoMenuConverter() {
+	public MenuDtoConverter menuDtoConverter() {
 		MenuDtoConverter converter = new MenuDtoConverter();
-		converter.addPopulator(menuPopulator());
+		converter.addPopulator(menuPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoMenuConverterMapping() {
+	public ConverterMapping menuDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoMenuConverter());
+		mapping.setConverter(menuDtoConverter());
 		mapping.setTypeCode(MenuDto.class.getSimpleName());
 
 		return mapping;
@@ -41,49 +46,25 @@ public class MenuDtoConfig {
 
 	// Menu Tree
 	@Bean
-	public MenuTreePopulator menuTreePopulator() {
-		return new MenuTreePopulator();
-	}
-
-	@Bean
-	public MenuTreeDtoConverter dtoMenuTreeConverter() {
+	public MenuTreeDtoConverter menuTreeDtoConverter() {
 		MenuTreeDtoConverter converter = new MenuTreeDtoConverter();
-		converter.addPopulator(menuTreePopulator());
+		converter.addPopulator(menuTreePopulator);
 		return converter;
-	}
-
-	@Bean
-	public ConverterMapping dtoMenuTreeConverterMapping() {
-		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoMenuTreeConverter());
-		mapping.setTypeCode(MenuDto.class.getSimpleName());
-
-		return mapping;
 	}
 
 	// Menu Tree By Current User
 	@Bean
-	public MenuTreeByCurrentUserPopulator menuTreeByCurrentUserPopulator() {
-		return new MenuTreeByCurrentUserPopulator();
-	}
-
-	@Bean
-	public MenuTreeByCurrentUserDtoConverter dtoMenuTreeByCurrentUserConverter() {
+	public MenuTreeByCurrentUserDtoConverter menuTreeByCurrentUserDtoConverter() {
 		MenuTreeByCurrentUserDtoConverter converter = new MenuTreeByCurrentUserDtoConverter();
-		converter.addPopulator(menuTreeByCurrentUserPopulator());
+		converter.addPopulator(menuTreeByCurrentUserPopulator);
 		return converter;
 	}
 
 	// Menu Breadcrumbs
 	@Bean
-	public MenuBreadcrumbsPopulator menuBreadcrumbsPopulator() {
-		return new MenuBreadcrumbsPopulator();
-	}
-
-	@Bean
-	public MenuBreadcrumbsDtoConverter dtoMenuBreadcrumbsConverter() {
+	public MenuBreadcrumbsDtoConverter menuBreadcrumbsDtoConverter() {
 		MenuBreadcrumbsDtoConverter converter = new MenuBreadcrumbsDtoConverter();
-		converter.addPopulator(menuBreadcrumbsPopulator());
+		converter.addPopulator(menuBreadcrumbsPopulator);
 		return converter;
 	}
 }

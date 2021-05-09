@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -15,6 +16,7 @@ import com.beanframework.internationalization.domain.Region;
 import com.beanframework.user.domain.Address;
 import com.beanframework.user.domain.User;
 
+@Component
 public class AddressEntityConverter implements EntityConverter<AddressDto, Address> {
 
 	@Autowired

@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.CurrencyDto;
 @Configuration
 public class CurrencyDtoConfig {
 
-	@Bean
-	public CurrencyPopulator currencyPopulator() {
-		return new CurrencyPopulator();
-	}
+	@Autowired
+	public CurrencyPopulator currencyPopulator;
 
 	@Bean
-	public CurrencyDtoConverter dtoCurrencyConverter() {
+	public CurrencyDtoConverter currencyDtoConverter() {
 		CurrencyDtoConverter converter = new CurrencyDtoConverter();
-		converter.addPopulator(currencyPopulator());
+		converter.addPopulator(currencyPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoCurrencyConverterMapping() {
+	public ConverterMapping currencyDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoCurrencyConverter());
+		mapping.setConverter(currencyDtoConverter());
 		mapping.setTypeCode(CurrencyDto.class.getSimpleName());
 
 		return mapping;

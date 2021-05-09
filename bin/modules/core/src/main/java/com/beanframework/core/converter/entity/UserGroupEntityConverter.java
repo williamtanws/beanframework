@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -15,6 +16,7 @@ import com.beanframework.core.data.UserGroupDto;
 import com.beanframework.core.data.UserGroupAttributeDto;
 import com.beanframework.user.domain.UserGroup;
 
+@Component
 public class UserGroupEntityConverter implements EntityConverter<UserGroupDto, UserGroup> {
 
 	@Autowired

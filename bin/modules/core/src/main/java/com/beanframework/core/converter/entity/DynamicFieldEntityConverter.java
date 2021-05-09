@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -15,6 +16,7 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 import com.beanframework.enumuration.domain.Enumeration;
 import com.beanframework.internationalization.domain.Language;
 
+@Component
 public class DynamicFieldEntityConverter implements EntityConverter<DynamicFieldDto, DynamicField> {
 
 	@Autowired

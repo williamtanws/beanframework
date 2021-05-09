@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -18,6 +19,7 @@ import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.user.domain.Address;
 import com.beanframework.user.domain.Company;
 
+@Component
 public class CompanyCsvEntityConverter implements EntityCsvConverter<CompanyCsv, Company> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(CompanyCsvEntityConverter.class);

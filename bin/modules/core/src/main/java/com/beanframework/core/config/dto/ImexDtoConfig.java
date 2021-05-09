@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.ImexDto;
 @Configuration
 public class ImexDtoConfig {
 
-	@Bean
-	public ImexPopulator imexPopulator() {
-		return new ImexPopulator();
-	}
+	@Autowired
+	public ImexPopulator imexPopulator;
 
 	@Bean
-	public ImexDtoConverter dtoImexConverter() {
+	public ImexDtoConverter imexDtoConverter() {
 		ImexDtoConverter converter = new ImexDtoConverter();
-		converter.addPopulator(imexPopulator());
+		converter.addPopulator(imexPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoImexConverterMapping() {
+	public ConverterMapping imexDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoImexConverter());
+		mapping.setConverter(imexDtoConverter());
 		mapping.setTypeCode(ImexDto.class.getSimpleName());
 
 		return mapping;

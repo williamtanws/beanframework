@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Comment;
 import com.beanframework.common.converter.EntityConverter;
@@ -13,6 +14,7 @@ import com.beanframework.core.data.CommentDto;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
 
+@Component
 public class CommentEntityConverter implements EntityConverter<CommentDto, Comment> {
 
 	@Autowired

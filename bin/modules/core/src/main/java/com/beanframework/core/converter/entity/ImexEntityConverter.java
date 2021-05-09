@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -11,6 +12,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.ImexDto;
 import com.beanframework.imex.domain.Imex;
 
+@Component
 public class ImexEntityConverter implements EntityConverter<ImexDto, Imex> {
 
 	@Autowired

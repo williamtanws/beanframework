@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.EmailDto;
 @Configuration
 public class EmailDtoConfig {
 
-	@Bean
-	public EmailPopulator emailPopulator() {
-		return new EmailPopulator();
-	}
+	@Autowired
+	public EmailPopulator emailPopulator;
 
 	@Bean
-	public EmailDtoConverter dtoEmailConverter() {
+	public EmailDtoConverter emailDtoConverter() {
 		EmailDtoConverter converter = new EmailDtoConverter();
-		converter.addPopulator(emailPopulator());
+		converter.addPopulator(emailPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoEmailConverterMapping() {
+	public ConverterMapping emailDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoEmailConverter());
+		mapping.setConverter(emailDtoConverter());
 		mapping.setTypeCode(EmailDto.class.getSimpleName());
 
 		return mapping;

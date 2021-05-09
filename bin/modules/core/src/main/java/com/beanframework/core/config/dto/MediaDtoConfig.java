@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.MediaDto;
 @Configuration
 public class MediaDtoConfig {
 
-	@Bean
-	public MediaPopulator mediaPopulator() {
-		return new MediaPopulator();
-	}
+	@Autowired
+	public MediaPopulator mediaPopulator;
 
 	@Bean
-	public MediaDtoConverter dtoMediaConverter() {
+	public MediaDtoConverter mediaDtoConverter() {
 		MediaDtoConverter converter = new MediaDtoConverter();
-		converter.addPopulator(mediaPopulator());
+		converter.addPopulator(mediaPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoMediaConverterMapping() {
+	public ConverterMapping mediaDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoMediaConverter());
+		mapping.setConverter(mediaDtoConverter());
 		mapping.setTypeCode(MediaDto.class.getSimpleName());
 
 		return mapping;

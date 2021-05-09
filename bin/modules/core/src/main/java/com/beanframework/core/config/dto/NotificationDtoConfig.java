@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.NotificationDto;
 @Configuration
 public class NotificationDtoConfig {
 
-	@Bean
-	public NotificationPopulator notificationPopulator() {
-		return new NotificationPopulator();
-	}
+	@Autowired
+	public NotificationPopulator notificationPopulator;
 
 	@Bean
-	public NotificationDtoConverter dtoNotificationConverter() {
+	public NotificationDtoConverter notificationDtoConverter() {
 		NotificationDtoConverter converter = new NotificationDtoConverter();
-		converter.addPopulator(notificationPopulator());
+		converter.addPopulator(notificationPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoNotificationConverterMapping() {
+	public ConverterMapping notificationDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoNotificationConverter());
+		mapping.setConverter(notificationDtoConverter());
 		mapping.setTypeCode(NotificationDto.class.getSimpleName());
 
 		return mapping;

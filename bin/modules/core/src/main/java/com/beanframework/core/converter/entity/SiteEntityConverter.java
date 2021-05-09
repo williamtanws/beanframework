@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.cms.domain.Site;
 import com.beanframework.common.converter.EntityConverter;
@@ -11,6 +12,7 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.SiteDto;
 
+@Component
 public class SiteEntityConverter implements EntityConverter<SiteDto, Site> {
 
 	@Autowired

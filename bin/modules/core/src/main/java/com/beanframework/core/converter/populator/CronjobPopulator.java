@@ -2,12 +2,14 @@ package com.beanframework.core.converter.populator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.cronjob.domain.Cronjob;
 
+@Component
 public class CronjobPopulator extends AbstractPopulator<Cronjob, CronjobDto> implements Populator<Cronjob, CronjobDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(CronjobPopulator.class);

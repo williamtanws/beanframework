@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -13,6 +14,7 @@ import com.beanframework.core.data.RegionDto;
 import com.beanframework.internationalization.domain.Country;
 import com.beanframework.internationalization.domain.Region;
 
+@Component
 public class RegionEntityConverter implements EntityConverter<RegionDto, Region> {
 
 	@Autowired

@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -19,6 +20,7 @@ import com.beanframework.core.data.MenuAttributeDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.user.domain.UserGroup;
 
+@Component
 public class MenuEntityConverter implements EntityConverter<MenuDto, Menu> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuEntityConverter.class);

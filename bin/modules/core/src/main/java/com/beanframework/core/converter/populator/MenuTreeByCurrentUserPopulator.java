@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
@@ -24,6 +25,7 @@ import com.beanframework.user.service.UserService;
 /**
  * Populate enabled menu and filter by current user group
  */
+@Component
 public class MenuTreeByCurrentUserPopulator extends AbstractPopulator<Menu, MenuDto> implements Populator<Menu, MenuDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(MenuTreeByCurrentUserPopulator.class);
