@@ -32,11 +32,11 @@
 
 <style>
 table .selected {
-	background-color: rgba(0,0,0,.075);
+	background-color: rgba(0, 0, 0, .075);
 }
 
-.table-select{
-    background-color: #f7f7f7;
+.table-select {
+	background-color: #f7f7f7;
 }
 
 .modal {
@@ -151,5 +151,21 @@ table .selected {
 		<th:block th:insert="/backoffice/adminlte/common/fragment/toastr :: js"></th:block>
 	</th:block>
 	<th:block layout:fragment="js"></th:block>
+	<script th:inline="javascript">
+		$(document).ready(function() {
+			var x = document.getElementById("form-save-button-spin");
+			if (x.style.display === "none") {
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
+			var x = document.getElementById("form-save-button");
+			if (x.style.display === "none") {
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
+		});
+	</script>
 </body>
 </html>
