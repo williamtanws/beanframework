@@ -8,6 +8,7 @@ public interface MenuWebConstants {
 			public static final String MENU = "${path.api.menu}";
 			public static final String MENU_HISTORY = "${path.api.menu.history}";
 			public static final String MENU_CHECKID = "${path.api.menu.checkid}";
+			public static final String MENU_CHECKPATH = "${path.api.menu.checkpath}";
 			public static final String MENU_TREE = "${path.api.menu.tree}";
 		}
 

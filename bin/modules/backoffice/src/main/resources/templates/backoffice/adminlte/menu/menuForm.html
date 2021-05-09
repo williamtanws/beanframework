@@ -155,6 +155,19 @@
 									}
 								}
 							},
+							path: {
+								required: true,
+								remote: {
+									url: /*[[@{${@environment.getProperty('path.api.menu.checkpath')}}]]*/ ,
+									type: "get",
+									data: {
+										uuid: $('#form-save input[name=uuid]').val(),
+										id: function () {
+											return $("#form-save input[name='path']").val();
+										}
+									}
+								}
+							},
 			                name: {
 			                    required: true
 			                },
@@ -169,6 +182,9 @@
 			                id: {
 			                    required: /*[[#{module.common.id.required}]]*/ ,
 			                    remote: /*[[#{module.common.id.exists}]]*/
+			                },
+			                path: {
+			                    remote: /*[[#{module.menu.path.exists}]]*/
 			                },
 			                name: {
 			                    required: /*[[#{module.menu.name.required}]]*/
