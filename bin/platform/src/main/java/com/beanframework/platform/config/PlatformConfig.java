@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.beanframework.*.repository", entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
+@EnableJpaRepositories(basePackages = {"com.beanframework.*.repository"}, entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
 @EnableAsync
 @Order(0)

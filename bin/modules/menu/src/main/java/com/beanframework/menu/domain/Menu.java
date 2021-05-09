@@ -67,6 +67,7 @@ public class Menu extends GenericEntity {
 	private String icon;
 
 	@Audited(withModifiedFlag = true)
+	@Column(unique = true)
 	private String path;
 
 	@NotNull
@@ -77,7 +78,7 @@ public class Menu extends GenericEntity {
 	@Audited(withModifiedFlag = true)
 	@NotNull
 	private Boolean enabled;
-	
+
 	@JsonIgnore
 	@Audited(withModifiedFlag = true)
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -89,7 +90,7 @@ public class Menu extends GenericEntity {
 	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "parent")
 	@OrderBy(SORT + " ASC")
 	private List<Menu> childs = new ArrayList<Menu>();
-	
+
 	@Audited(withModifiedFlag = true)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = MenuConstants.Table.MENU_USER_GROUP_REL, joinColumns = @JoinColumn(name = "menu_uuid"))

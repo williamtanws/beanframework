@@ -93,6 +93,28 @@
 							</li>
 						</ul>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#idocs_configuration">Configuration</a>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_platform">Platform</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_project">Project</a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#idocs_development">Development</a>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_modulegen">Module Gen</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_moduledevelopment">Module Development</a>
+							</li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 
@@ -188,11 +210,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 										- Contains maven modules in project.
 									</li>
 									<li>
-										<code>beanframework/bin/server.bat.template</code>
+										<code>beanframework/bin/install/server.bat.template</code>
 										- Contains execute command to run application in windows environment.
 									</li>
 									<li>
-										<code>beanframework/bin/server.sh.template</code>
+										<code>beanframework/bin/install/server.sh.template</code>
 										- Contains execute command to run application in linux environment.
 									</li>
 									<li>
@@ -223,12 +245,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 								and run
 								<code>mvnw clean install</code>
 								command. - To download dependencies, compile project and package project into jar application.
+								<ul>
+									<li>
+										Optional: Execute command to startup application
+										<code>/beanframework/bin/install/server.bat</code>
+										or
+										<code>/beanframework/bin/install/server.sh</code>
+									</li>
+								</ul>
 							</li>
 							<li>
-								Optional: To run application, execute command
-								<code>/beanframework/bin/server.bat</code>
-								or
-								<code>/beanframework/bin/server.sh</code>
+								Optional: To run application as windows service, run app.exe at <code>/beanframework/bin/install/app.exe</code>
 							</li>
 							<li>
 								Access application endpoints:
@@ -286,7 +313,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 											</li>
 											<li>
 												<code>install</code>
-												- Install application as service in windows environments.
+												- Install/Run application manually or install as windows service.
 											</li>
 											<li>
 												<code>modules</code>
@@ -328,12 +355,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 														- Logback configuration for dev environments.
 													</li>
 													<li>
-														<code>import/dev/sampledata/*.csv</code>
-														- Contains sample data.
+														<code>import/dev/initdata/*.csv</code>
+														- Contains data to update everytime application startup
 														- This can be configured in application-dev.properties:
 														<ul>
 															<li>
-																<code>module.imex.import.locations=classpath*:import/dev/sampledata/*.csv</code>
+																<code>module.imex.import.locations=classpath*:import/dev/initdata/*.csv</code>
+															</li>
+														</ul>
+													</li>
+													<li>
+														<code>import/dev/updatedata/*.csv</code>
+														- Contains data to update when performing platform update.
+														- This can be configured in application-dev.properties:
+														<ul>
+															<li>
+																<code>module.imex.import.locations=classpath*:import/dev/updatedata/*.csv</code>
 															</li>
 														</ul>
 													</li>
@@ -364,7 +401,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 											</li>
 											<li>
 												<code>integration</code>
-												- Spring integration directory to process files. Can be used for import/export files.
+												- Spring integration directory to process files. Can be used for import imex files.
 											</li>
 										</ul>
 									</li>

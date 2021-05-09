@@ -66,6 +66,31 @@ public class MenuResource extends AbstractResource {
 	}
 
 	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
+	@RequestMapping(MenuWebConstants.Path.Api.MENU_CHECKPATH)
+	public boolean checkPath(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+
+		if (requestParams.get("path") == null || StringUtils.isBlank((String) requestParams.get("path"))) {
+			return true;
+		}
+
+		String path = (String) requestParams.get("path");
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(Menu.PATH, path);
+		MenuDto data = menuFacade.findOneProperties(properties);
+
+		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
+		if (StringUtils.isNotBlank(uuidStr)) {
+			UUID uuid = UUID.fromString(uuidStr);
+			if (data != null && data.getUuid().equals(uuid)) {
+				return true;
+			}
+		}
+
+		return data != null ? false : true;
+	}
+
+	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
 	@RequestMapping(MenuWebConstants.Path.Api.MENU_TREE)
 	public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams) throws BusinessException {
 		String uuid = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
@@ -147,7 +172,7 @@ public class MenuResource extends AbstractResource {
 
 		DataTableRequest dataTableRequest = new DataTableRequest();
 		dataTableRequest.prepareDataTableRequest(request);
-		
+
 		Page<MenuDto> pagination = menuFacade.findPage(dataTableRequest);
 
 		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();

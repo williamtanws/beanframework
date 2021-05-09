@@ -35,6 +35,7 @@
         <module>modules/console</module>
         <module>modules/backoffice</module>
         <module>modules/documentation</module>
+        <module>modules/modulegen</module>
 		<!-- Custom -->
 		<!--
 		<module>custom/training</module>

@@ -1,7 +1,9 @@
 package com.beanframework.core.integration.handle;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class ImportFileProcessor implements FileProcessor {
 	@Autowired
 	private ImexService platformService;
 
+	@Autowired
+	public File inboundProcessedDirectory;
+
 	@Override
 	public void process(Message<String> msg) throws Exception {
 		String fileName = (String) msg.getHeaders().get(FileHeaders.FILENAME);
@@ -28,6 +33,9 @@ public class ImportFileProcessor implements FileProcessor {
 
 		LOGGER.info(String.format(MSG, fileName, fileOriginalFile.getAbsolutePath()));
 
-		platformService.importByFile(fileOriginalFile);
+		String[] result = platformService.importByFileSystem(fileOriginalFile);
+		// Result
+		File resultFile = new File(inboundProcessedDirectory.getPath() + File.separator + fileOriginalFile.getName() + ".result.txt");
+		FileUtils.write(resultFile, result[0]+result[1], StandardCharsets.UTF_8.name());
 	}
 }

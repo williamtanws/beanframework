@@ -10,7 +10,7 @@ public interface LocaleMessageService {
 
 	public String getMessageByLocale(String code, Locale locale);
 
-	public String getMessageByLocale(String code, Object[] args, Locale locale);
+	public String getMessage(String code, Object[] args, Locale locale);
 
 	public String getMessage(String code, String defaultMessage);
 }

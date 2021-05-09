@@ -1,5 +1,6 @@
 package com.beanframework.console.web;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +44,7 @@ public class ImportController extends AbstractController {
 
 	@PostMapping(value = ImportWebConstants.Path.IMPORT, params="importFile")
 	public RedirectView importFile(@RequestParam("files") MultipartFile[] files, Model model, @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws IOException {
 
 		String[] messages = platformService.importByMultipartFiles(files);
 		

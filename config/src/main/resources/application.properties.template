@@ -7,6 +7,7 @@ webroots=console,backoffice
 favicon=/static/core/favicon.png
 spring.main.allow-bean-definition-overriding=true
 #Multiple values by split by ","
+spring.scanBasePackages=com.beanframework,com.sample
 jpa.domain.packagetoscans=com.beanframework.*.domain,com.sample.*.domain
 
 # ===============================

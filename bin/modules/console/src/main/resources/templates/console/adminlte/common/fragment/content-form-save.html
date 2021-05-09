@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 	<th:block th:fragment="action">
-		<button type="submit" class="btn btn-success" th:text="#{module.common.save}"></button>
+		<div class="spinner-border" role="status" id="form-save-button-spin"></div><button type="submit" class="btn btn-success" th:text="#{module.common.save}" id="form-save-button" style="display: none"></button>
 	</th:block>
 </body>
 </html>
