@@ -1,4 +1,4 @@
-package com.beanframework.core.integration.file;
+package com.beanframework.core.config.integration;
 
 import java.io.File;
 import java.util.Arrays;
@@ -42,7 +42,7 @@ import com.beanframework.core.integration.handle.ImportFileProcessor;
  *
  */
 @Configuration
-public class FilePollingIntegrationFlow {
+public class CoreFilePollingIntegrationFlowConfig {
 
 	@Autowired
 	public File inboundReadDirectory;

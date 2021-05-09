@@ -1,4 +1,4 @@
-package com.beanframework.core.integration.file;
+package com.beanframework.core.config.integration;
 
 import java.io.File;
 
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class FilePollingConfiguration {
+public class CoreFilePollingConfig {
 
 	@Bean(name = "inboundReadDirectory")
 	public File inboundReadDirectory(@Value("${inbound.read.path}") String path) {

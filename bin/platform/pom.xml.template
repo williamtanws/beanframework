@@ -53,9 +53,7 @@
 					<finalName>beanframework</finalName>
 					<mainClass>com.beanframework.platform.PlatformApplication</mainClass>
 					<exclude>../module/filemanager/angular-filemanager/**</exclude>
-					<outputDirectory>
-						..
-					</outputDirectory>
+					<outputDirectory>../install</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
