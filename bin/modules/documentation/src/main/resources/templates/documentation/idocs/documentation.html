@@ -19,6 +19,11 @@
 <link rel="stylesheet" type="text/css" th:href="@{/static/iDocs/assets/vendor/highlight.js/styles/github.css}" />
 <!-- Custom Stylesheet -->
 <link rel="stylesheet" type="text/css" th:href="@{/static/iDocs/assets/css/stylesheet.css}" />
+<style>
+pre {
+	margin-bottom: -30px;
+}
+</style>
 </head>
 
 <body data-spy="scroll" data-target=".idocs-navigation" data-offset="125">
@@ -94,24 +99,21 @@
 						</ul>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#idocs_configuration">Configuration</a>
+						<a class="nav-link active" href="#idocs_platform">Platform</a>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" href="#idocs_platform">Platform</a>
+								<a class="nav-link" href="#idocs_configuration">Configuration</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#idocs_project">Project</a>
+								<a class="nav-link" href="#idocs_importdata">Import Data</a>
 							</li>
 						</ul>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#idocs_development">Development</a>
+						<a class="nav-link active" href="#idocs_development">Development</a>
 						<ul class="nav flex-column">
 							<li class="nav-item">
 								<a class="nav-link" href="#idocs_modulegen">Module Gen</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#idocs_moduledevelopment">Module Development</a>
 							</li>
 						</ul>
 					</li>
@@ -149,7 +151,7 @@
 									</li>
 									<li>
 										<strong>Update:</strong>
-										2 May, 2021
+										9 May, 2021
 									</li>
 								</ul>
 							</div>
@@ -203,59 +205,59 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 								</pre>
 							</li>
 							<li>
-								Configure project by duplicating all .template files/folder in current location, without .template suffix:
+								Configure project by copy and remove
+								<b>.template</b>
+								suffix:
 								<ul>
 									<li>
-										<code>beanframework/bin/pom.xml.template</code>
-										- Contains maven modules in project.
+										<code>beanframework/bin/</code>
+										pom.xml.template
 									</li>
 									<li>
-										<code>beanframework/bin/install/server.bat.template</code>
-										- Contains execute command to run application in windows environment.
+										<code>beanframework/bin/install/</code>
+										server.bat.template
 									</li>
 									<li>
-										<code>beanframework/bin/install/server.sh.template</code>
-										- Contains execute command to run application in linux environment.
+										<code>beanframework/bin/install/</code>
+										server.sh.template
 									</li>
 									<li>
-										<code>beanframework/bin/install/app.xml.template</code>
-										- Contains exe progrom to run application as service in windows environment.
+										<code>beanframework/bin/platform/</code>
+										pom.xml.template
 									</li>
 									<li>
-										<code>beanframework/bin/platform/pom.xml.template</code>
-										- Contains platform maven configuration, such as configure jar packaging to include/exclude resources
+										<code>beanframework/config/</code>
+										pom.xml.template
 									</li>
 									<li>
-										<code>beanframework/config/pom.xml.template</code>
-										- Contains project modules/dependencies configuration.
-									</li>
-									<li>
-										<code>beanframework/config/src/main/resources/*.template</code>
-										- Contains application properties, ehcache and logback xml files for different environments.
+										<code>beanframework/config/src/main/resources/</code>
+										*.template
 									</li>
 									<li>
 										<code>beanframework/config/src/main/resources/import/dev.template</code>
-										- Contains init data, init sql data and sample data
 									</li>
-								</ul>
-							</li>
-							<li>
-								Optional: To startup application first time in command: Navigate to
-								<code>/beanframework/bin</code>
-								and run
-								<code>mvnw clean install</code>
-								command. - To download dependencies, compile project and package project into jar application.
-								<ul>
 									<li>
-										Optional: Execute command to startup application
-										<code>/beanframework/bin/install/server.bat</code>
-										or
-										<code>/beanframework/bin/install/server.sh</code>
+										Optional:
+										<code>beanframework/bin/install/</code>
+										app.xml.template
 									</li>
 								</ul>
 							</li>
 							<li>
-								Optional: To run application as windows service, run app.exe at <code>/beanframework/bin/install/app.exe</code>
+								Open command prompt and navigate to
+								<code>beanframework/bin</code>
+								directory run:
+								<pre>
+									 <code class="html">mvnw clean install</code>
+								</pre>
+							</li>
+							<li>
+								Navigate to
+								<code>beanframework/bin/install</code>
+								directory and run:
+								<pre>
+									 <code class="html">server.bat</code>
+								</pre>
 							</li>
 							<li>
 								Access application endpoints:
@@ -275,7 +277,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 								</ul>
 							</li>
 							<li>
-								Import sample data:
+								Import update data:
 								<ul>
 									<li>
 										Access Console:
@@ -283,11 +285,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 									</li>
 									<li>
 										Login with default admin account: username:
-										<code>admin</code>
+										<b>admin</b>
 										, password:
-										<code>admin</code>
+										<b>admin</b>
 									</li>
-									<li>Goto Platform->Update menu, check all and update.</li>
+									<li>
+										Goto menu
+										<code>Platform->Update</code>
+										, check all and update.
+									</li>
 								</ul>
 							</li>
 							<li>You are good to go for run your project now!</li>
@@ -301,7 +307,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 						<h2>Project Structure</h2>
 						<ol>
 							<li>
-								Below is the beanframework folder structure:
+								Below is the
+								<code>beanframework</code>
+								folder structure:
 								<ul>
 									<li>
 										<code>bin</code>
@@ -321,75 +329,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 											</li>
 											<li>
 												<code>platform</code>
-												- Platform that startup this application with default properties. With IDE, it can run on server at
-												<code>platform/src/main/java/com/beanframework/platform/PlatformApplication.java</code>
+												- Platform that startup this application with configured modules.
 											</li>
 										</ul>
 									</li>
 									<li>
 										<code>config</code>
-										- Mainly use for application properties and configurations for different environments. You can create more files prefix with different environments such as
-										<code>application-[environment].properties</code>
-										, and assign
-										<code>spring.profiles.active=[environment]</code>
-										in
-										<code>application.properties</code>
-										<ul>
-											<li>
-												<code>application.properties</code>
-												- Highest priority properties file in Spring Boot.
-											</li>
-											<li>
-												Example of dev environment properties and configurations:
-												<ul>
-													<li>
-														<code>application-dev.properties</code>
-														- Override default properties for dev environments.
-													</li>
-													<li>
-														<code>ehcache-dev.xml</code>
-														- Cache configuration for dev environments.
-													</li>
-													<li>
-														<code>logback-dev.xml</code>
-														- Logback configuration for dev environments.
-													</li>
-													<li>
-														<code>import/dev/initdata/*.csv</code>
-														- Contains data to update everytime application startup
-														- This can be configured in application-dev.properties:
-														<ul>
-															<li>
-																<code>module.imex.import.locations=classpath*:import/dev/initdata/*.csv</code>
-															</li>
-														</ul>
-													</li>
-													<li>
-														<code>import/dev/updatedata/*.csv</code>
-														- Contains data to update when performing platform update.
-														- This can be configured in application-dev.properties:
-														<ul>
-															<li>
-																<code>module.imex.import.locations=classpath*:import/dev/updatedata/*.csv</code>
-															</li>
-														</ul>
-													</li>
-													<li>
-														<code>import/dev/sql/*.sql</code>
-														- Contains SQL query to be automatically executed every time when datasource connection is established or server startup.<br>
-														- This can be configured in application-dev.properties:
-														<ul>
-															<li>
-																<code>platform.import.startup.enabled=true</code>
-															</li>
-															<li>
-																<code>platform.import.startup=classpath*:import/dev/sql/*.sql</code>
-															</li>
-														</ul>
-													</li>
-												</ul>
-											</li>
-										</ul>
+										- Mainly use for application properties and configurations for different environments.
 									</li>
 									<li>
 										<code>data</code>
@@ -401,13 +347,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 											</li>
 											<li>
 												<code>integration</code>
-												- Spring integration directory to process files. Can be used for import imex files.
+												- Spring Integration. Can be used for import data.
 											</li>
 										</ul>
 									</li>
 									<li>
 										<code>log</code>
-										- Application logging files, with archived rotated logging.
+										- Application logging files, with archived and rotated logging files.
 									</li>
 									<li>
 										<code>temp</code>
@@ -416,6 +362,150 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 								</ul>
 							</li>
 						</ol>
+					</section>
+
+					<hr class="divider">
+
+					<!-- Platform -->
+					<section id="idocs_platform">
+						<h2>Platform</h2>
+						<p class="lead mb-5">Platform Configuration and Import Data</p>
+					</section>
+
+					<!-- Configuration -->
+					<section id="idocs_configuration">
+						<h2>Configuration</h2>
+						<code>beanframework/bin/config/src/main/resources/</code>
+						<ul>
+							<li>
+								Configure environment:
+								<ul>
+									<li>
+										<code>application.properties</code>
+										<ul>
+											<li>
+												<b>spring.profiles.active=dev</b>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li>
+								Configure configurations and import data for environment:
+								<ul>
+									<li>
+										<code>application-dev.properties</code>
+										- Environment properties.
+									</li>
+									<li>
+										<code>ehcache-dev.xml</code>
+										- Cache configuration.
+									</li>
+									<li>
+										<code>logback-dev.xml</code>
+										- Logback configuration.
+									</li>
+									<li>
+										<code>import/dev</code>
+										- Contains data to import
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<hr class="divider">
+
+					<!-- Data -->
+					<section id="idocs_importdata">
+						<h2>Import Data</h2>
+						<code>beanframework/bin/config/src/main/resources/import/</code>
+						<ul>
+							<li>
+								<code>dev/initdata/**/*.csv</code>
+								- Contains data to import every time when application startup.
+								<ul>
+									<li>
+										<code>module.imex.import.init.locations=classpath*:import/dev/initdata/**/*.csv</code>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<code>dev/initsql/**/*.sql</code>
+								- Contains sql to execute every time when application startup.
+								<ul>
+									<li>
+										<code>platform.import.startup.enabled=true</code>
+									</li>
+									<li>
+										<code>platform.import.sql.locations=classpath*:import/dev/initsql/**/*.sql</code>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<code>dev/updatedata</code>
+								- Contains data to import when manually performing platform update.
+								<ul>
+									<li>
+										<code>module.imex.import.update.locations=classpath*:import/dev/updatedata</code>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<hr class="divider">
+
+					<!-- Development -->
+					<section id="idocs_development">
+						<h2>Development</h2>
+						<p class="lead mb-5">Development for developer</p>
+					</section>
+
+					<!-- Module Gen -->
+					<section id="idocs_modulegen">
+						<h2>Module Gen</h2>
+						<code>beanframework/bin/module/modulegen/</code>
+						<ul>
+							<li>
+								Set module configuration
+								<code>src/main/resources/application.properties</code>
+							</li>
+							<li>
+								Run
+								<code>src/main/java/com/beanframework/modulegen/ModulegenApplication.java</code>
+							</li>
+							<li>
+								Generated module output:
+								<code>beanframework/bin/module/custom/</code>
+							</li>
+						</ul>
+						Configure new module in project:
+						<ul>
+							<li>
+								Add new module in
+								<code>beanframework/bin/pom.xml</code>
+							</li>
+							<li>
+								Add new dependency in
+								<code>beanframework/config/pom.xml</code>
+							</li>
+							<li>
+								Add new profile and packages in
+								<code>beanframework/config/src/main/resources/application.properties</code>
+								<ul>
+									<li>
+										<b>spring.profiles.include=platform,console,backoffice,documentation,training</b>
+									</li>
+									<li>
+										<b>spring.scanBasePackages=com.beanframework,com.sample</b>
+									</li>
+									<li>
+										<b>jpa.domain.packagetoscans=com.beanframework.*.domain,com.sample.*.domain</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</section>
 				</div>
 			</div>
