@@ -88,8 +88,28 @@ public class ImexServiceImpl implements ImexService {
 	public void importByFile(File file) throws Exception {
 
 		List<String> locations = new ArrayList<String>();
-		locations.add(file.getAbsolutePath());
-		importByLocations(locations);
+		locations.add(formatPath(file.getAbsolutePath()));
+		importByClasspathLocations(locations);
+	}
+
+	private String formatPath(String absolutePath) {
+
+		if (absolutePath.contains("..")) {
+			List<String> formattedPath = new ArrayList<String>();
+
+			String[] arrayPath = absolutePath.split(File.separator.equals("\\") ? "\\\\" : "/");
+			for (String path : arrayPath) {
+				if (path.equals("..")) {
+					formattedPath.remove(formattedPath.size() - 1);
+				} else {
+					formattedPath.add(path);
+				}
+			}
+
+			return StringUtils.join(formattedPath, File.separator);
+		} else {
+			return absolutePath;
+		}
 	}
 
 	@Override
@@ -151,7 +171,7 @@ public class ImexServiceImpl implements ImexService {
 	}
 
 	@Override
-	public String[] importByFoldersByLocations(TreeMap<String, Set<String>> locationAndFolders) {
+	public String[] importByFoldersByClasspathLocations(TreeMap<String, Set<String>> locationAndFolders) {
 		// Messages
 		StringBuilder successMessages = new StringBuilder();
 		StringBuilder errorMessages = new StringBuilder();
@@ -188,7 +208,7 @@ public class ImexServiceImpl implements ImexService {
 	}
 
 	@Override
-	public String[] importByLocations(List<String> locations) {
+	public String[] importByClasspathLocations(List<String> locations) {
 
 		// Messages
 		StringBuilder successMessages = new StringBuilder();

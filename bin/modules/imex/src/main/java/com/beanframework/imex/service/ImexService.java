@@ -19,7 +19,7 @@ public interface ImexService {
 
 	void importExportMedia(Imex imex) throws Exception;
 
-	String[] importByLocations(List<String> locations);
+	String[] importByClasspathLocations(List<String> locations);
 
-	String[] importByFoldersByLocations(TreeMap<String, Set<String>> locationAndFolders);
+	String[] importByFoldersByClasspathLocations(TreeMap<String, Set<String>> locationAndFolders);
 }

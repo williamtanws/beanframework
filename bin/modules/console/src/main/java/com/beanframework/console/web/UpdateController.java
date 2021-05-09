@@ -90,7 +90,7 @@ public class UpdateController {
 			}
 		}
 
-		messages = platformService.importByFoldersByLocations(locationAndFolders);
+		messages = platformService.importByFoldersByClasspathLocations(locationAndFolders);
 
 		clearAllCaches();
 		for (Object principal : sessionRegistry.getAllPrincipals()) {
