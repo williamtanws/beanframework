@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,15 +12,13 @@ import com.beanframework.core.converter.populator.AuditorPopulator;
 @Configuration
 public class AuditorDtoConfig {
 
-	@Bean
-	public AuditorPopulator auditorPopulator() {
-		return new AuditorPopulator();
-	}
+	@Autowired
+	public AuditorPopulator auditorPopulator;
 
 	@Bean
 	public AuditorDtoConverter dtoAuditorConverter() {
 		AuditorDtoConverter converter = new AuditorDtoConverter();
-		converter.addPopulator(auditorPopulator());
+		converter.addPopulator(auditorPopulator);
 		return converter;
 	}
 

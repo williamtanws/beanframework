@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.email.domain.Email;
 @Configuration
 public class EmailEntityConfig {
 
-	@Bean
-	public EmailEntityConverter entityEmailConverter() {
-		return new EmailEntityConverter();
-	}
+	@Autowired
+	public EmailEntityConverter emailEntityConverter;
 
 	@Bean
-	public ConverterMapping entityEmailConverterMapping() {
+	public ConverterMapping emailEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityEmailConverter());
+		mapping.setConverter(emailEntityConverter);
 		mapping.setTypeCode(Email.class.getSimpleName());
 
 		return mapping;

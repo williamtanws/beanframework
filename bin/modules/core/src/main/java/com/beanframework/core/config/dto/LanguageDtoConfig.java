@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.LanguageDto;
 @Configuration
 public class LanguageDtoConfig {
 
-	@Bean
-	public LanguagePopulator languagePopulator() {
-		return new LanguagePopulator();
-	}
+	@Autowired
+	public LanguagePopulator languagePopulator;
 
 	@Bean
-	public LanguageDtoConverter dtoLanguageConverter() {
+	public LanguageDtoConverter languageDtoConverter() {
 		LanguageDtoConverter converter = new LanguageDtoConverter();
-		converter.addPopulator(languagePopulator());
+		converter.addPopulator(languagePopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoLanguageConverterMapping() {
+	public ConverterMapping languageDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoLanguageConverter());
+		mapping.setConverter(languageDtoConverter());
 		mapping.setTypeCode(LanguageDto.class.getSimpleName());
 
 		return mapping;

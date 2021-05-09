@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.CronjobDto;
 @Configuration
 public class CronjobDtoConfig {
 
-	@Bean
-	public CronjobPopulator cronjobPopulator() {
-		return new CronjobPopulator();
-	}
+	@Autowired
+	public CronjobPopulator cronjobPopulator;
 
 	@Bean
-	public CronjobDtoConverter dtoCronjobConverter() {
+	public CronjobDtoConverter cronjobDtoConverter() {
 		CronjobDtoConverter converter = new CronjobDtoConverter();
-		converter.addPopulator(cronjobPopulator());
+		converter.addPopulator(cronjobPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoCronjobConverterMapping() {
+	public ConverterMapping cronjobDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoCronjobConverter());
+		mapping.setConverter(cronjobDtoConverter());
 		mapping.setTypeCode(CronjobDto.class.getSimpleName());
 
 		return mapping;

@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -39,30 +40,55 @@ import com.beanframework.core.data.VendorDto;
 @Configuration
 public class UserDtoConfig {
 
+	@Autowired
+	public AuditorPopulator auditorPopulator;
+
+	@Autowired
+	public UserPopulator userPopulator;
+
+	@Autowired
+	public UserGroupPopulator userGroupPopulator;
+
+	@Autowired
+	public UserPermissionPopulator userPermissionPopulator;
+
+	@Autowired
+	public UserRightPopulator userRightPopulator;
+
+	@Autowired
+	public UserAuthorityPopulator userAuthorityPopulator;
+
+	@Autowired
+	public MyAccountPopulator myAccountPopulator;
+
+	@Autowired
+	public EmployeePopulator employeePopulator;
+
+	@Autowired
+	public CustomerPopulator customerPopulator;
+
+	@Autowired
+	public VendorPopulator vendorPopulator;
+
 	// Revision
 	@Bean
-	public RevisionsDtoConverter dtoRevisionsConverter() {
+	public RevisionsDtoConverter revisionsDtoConverter() {
 		RevisionsDtoConverter converter = new RevisionsDtoConverter();
 		return converter;
 	}
 
 	// Auditor
 	@Bean
-	public AuditorPopulator auditorPopulator() {
-		return new AuditorPopulator();
-	}
-
-	@Bean
-	public AuditorDtoConverter dtoAuditorConverter() {
+	public AuditorDtoConverter auditorDtoConverter() {
 		AuditorDtoConverter converter = new AuditorDtoConverter();
-		converter.addPopulator(auditorPopulator());
+		converter.addPopulator(auditorPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoAuditorConverterMapping() {
+	public ConverterMapping auditorDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoAuditorConverter());
+		mapping.setConverter(auditorDtoConverter());
 		mapping.setTypeCode(AuditorDto.class.getSimpleName());
 
 		return mapping;
@@ -70,21 +96,16 @@ public class UserDtoConfig {
 
 	// User
 	@Bean
-	public UserPopulator userPopulator() {
-		return new UserPopulator();
-	}
-
-	@Bean
-	public UserDtoConverter dtoUserConverter() {
+	public UserDtoConverter userDtoConverter() {
 		UserDtoConverter converter = new UserDtoConverter();
-		converter.addPopulator(userPopulator());
+		converter.addPopulator(userPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoUserConverterMapping() {
+	public ConverterMapping userDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoUserConverter());
+		mapping.setConverter(userDtoConverter());
 		mapping.setTypeCode(UserDto.class.getSimpleName());
 
 		return mapping;
@@ -92,21 +113,16 @@ public class UserDtoConfig {
 
 	// User Group
 	@Bean
-	public UserGroupPopulator userGroupPopulator() {
-		return new UserGroupPopulator();
-	}
-
-	@Bean
-	public UserGroupDtoConverter dtoUserGroupConverter() {
+	public UserGroupDtoConverter userGroupDtoConverter() {
 		UserGroupDtoConverter converter = new UserGroupDtoConverter();
-		converter.addPopulator(userGroupPopulator());
+		converter.addPopulator(userGroupPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoUserGroupConverterMapping() {
+	public ConverterMapping userGroupDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoUserGroupConverter());
+		mapping.setConverter(userGroupDtoConverter());
 		mapping.setTypeCode(UserGroupDto.class.getSimpleName());
 
 		return mapping;
@@ -114,21 +130,16 @@ public class UserDtoConfig {
 
 	// User Permission
 	@Bean
-	public UserPermissionPopulator userPermissionPopulator() {
-		return new UserPermissionPopulator();
-	}
-
-	@Bean
-	public UserPermissionDtoConverter dtoUserPermissionConverter() {
+	public UserPermissionDtoConverter uerPermissionDtoConverter() {
 		UserPermissionDtoConverter converter = new UserPermissionDtoConverter();
-		converter.addPopulator(userPermissionPopulator());
+		converter.addPopulator(userPermissionPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoUserPermissionConverterMapping() {
+	public ConverterMapping uerPermissionDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoUserPermissionConverter());
+		mapping.setConverter(uerPermissionDtoConverter());
 		mapping.setTypeCode(UserPermissionDto.class.getSimpleName());
 
 		return mapping;
@@ -136,21 +147,16 @@ public class UserDtoConfig {
 
 	// User Right
 	@Bean
-	public UserRightPopulator userRightPopulator() {
-		return new UserRightPopulator();
-	}
-
-	@Bean
-	public UserRightDtoConverter dtoUserRightConverter() {
+	public UserRightDtoConverter userRightDtoConverter() {
 		UserRightDtoConverter converter = new UserRightDtoConverter();
-		converter.addPopulator(userRightPopulator());
+		converter.addPopulator(userRightPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoUserRightConverterMapping() {
+	public ConverterMapping userRightDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoUserRightConverter());
+		mapping.setConverter(userRightDtoConverter());
 		mapping.setTypeCode(UserRightDto.class.getSimpleName());
 
 		return mapping;
@@ -158,43 +164,33 @@ public class UserDtoConfig {
 
 	// User Authority
 	@Bean
-	public UserAuthorityPopulator userAuthorityPopulator() {
-		return new UserAuthorityPopulator();
-	}
-
-	@Bean
-	public UserAuthorityDtoConverter dtoUserAuthorityConverter() {
+	public UserAuthorityDtoConverter userAuthorityDtoConverter() {
 		UserAuthorityDtoConverter converter = new UserAuthorityDtoConverter();
-		converter.addPopulator(userAuthorityPopulator());
+		converter.addPopulator(userAuthorityPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoUserAuthorityConverterMapping() {
+	public ConverterMapping userAuthorityDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoUserAuthorityConverter());
+		mapping.setConverter(userAuthorityDtoConverter());
 		mapping.setTypeCode(UserAuthorityDto.class.getSimpleName());
 
 		return mapping;
 	}
-	
+
 	// My Account
 	@Bean
-	public MyAccountPopulator myAccountPopulator() {
-		return new MyAccountPopulator();
-	}
-
-	@Bean
-	public MyAccountDtoConverter dtoMyAccountConverter() {
+	public MyAccountDtoConverter myAccountDtoConverter() {
 		MyAccountDtoConverter converter = new MyAccountDtoConverter();
-		converter.addPopulator(myAccountPopulator());
+		converter.addPopulator(myAccountPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoMyAccountConverterMapping() {
+	public ConverterMapping myAccountDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoMyAccountConverter());
+		mapping.setConverter(myAccountDtoConverter());
 		mapping.setTypeCode(MyAccountDto.class.getSimpleName());
 
 		return mapping;
@@ -202,21 +198,16 @@ public class UserDtoConfig {
 
 	// Employee
 	@Bean
-	public EmployeePopulator employeePopulator() {
-		return new EmployeePopulator();
-	}
-
-	@Bean
-	public EmployeeDtoConverter dtoEmployeeConverter() {
+	public EmployeeDtoConverter employeeDtoConverter() {
 		EmployeeDtoConverter converter = new EmployeeDtoConverter();
-		converter.addPopulator(employeePopulator());
+		converter.addPopulator(employeePopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoEmployeeConverterMapping() {
+	public ConverterMapping employeeDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoEmployeeConverter());
+		mapping.setConverter(employeeDtoConverter());
 		mapping.setTypeCode(EmployeeDto.class.getSimpleName());
 
 		return mapping;
@@ -224,21 +215,16 @@ public class UserDtoConfig {
 
 	// Customer
 	@Bean
-	public CustomerPopulator customerPopulator() {
-		return new CustomerPopulator();
-	}
-
-	@Bean
-	public CustomerDtoConverter dtoCustomerConverter() {
+	public CustomerDtoConverter customerDtoConverter() {
 		CustomerDtoConverter converter = new CustomerDtoConverter();
-		converter.addPopulator(customerPopulator());
+		converter.addPopulator(customerPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoCustomerConverterMapping() {
+	public ConverterMapping customerDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoCustomerConverter());
+		mapping.setConverter(customerDtoConverter());
 		mapping.setTypeCode(CustomerDto.class.getSimpleName());
 
 		return mapping;
@@ -246,21 +232,16 @@ public class UserDtoConfig {
 
 	// Vendor
 	@Bean
-	public VendorPopulator vendorPopulator() {
-		return new VendorPopulator();
-	}
-
-	@Bean
-	public VendorDtoConverter dtoVendorConverter() {
+	public VendorDtoConverter vendorDtoConverter() {
 		VendorDtoConverter converter = new VendorDtoConverter();
-		converter.addPopulator(vendorPopulator());
+		converter.addPopulator(vendorPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoVendorConverterMapping() {
+	public ConverterMapping vendorDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoVendorConverter());
+		mapping.setConverter(vendorDtoConverter());
 		mapping.setTypeCode(VendorDto.class.getSimpleName());
 
 		return mapping;

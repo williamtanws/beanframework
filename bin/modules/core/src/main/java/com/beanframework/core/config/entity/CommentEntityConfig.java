@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.core.converter.entity.CommentEntityConverter;
 @Configuration
 public class CommentEntityConfig {
 
-	@Bean
-	public CommentEntityConverter entityCommentConverter() {
-		return new CommentEntityConverter();
-	}
+	@Autowired
+	public CommentEntityConverter commentEntityConverter;
 
 	@Bean
-	public ConverterMapping entityCommentConverterMapping() {
+	public ConverterMapping commentEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCommentConverter());
+		mapping.setConverter(commentEntityConverter);
 		mapping.setTypeCode(Comment.class.getSimpleName());
 
 		return mapping;

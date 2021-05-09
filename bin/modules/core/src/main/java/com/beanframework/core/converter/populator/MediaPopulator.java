@@ -2,6 +2,7 @@ package com.beanframework.core.converter.populator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
@@ -9,7 +10,7 @@ import com.beanframework.common.utils.SizeUtils;
 import com.beanframework.core.data.MediaDto;
 import com.beanframework.media.domain.Media;
 
-
+@Component
 public class MediaPopulator extends AbstractPopulator<Media, MediaDto> implements Populator<Media, MediaDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(MediaPopulator.class);

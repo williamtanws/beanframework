@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.CountryDto;
 @Configuration
 public class CountryDtoConfig {
 
-	@Bean
-	public CountryPopulator countryPopulator() {
-		return new CountryPopulator();
-	}
+	@Autowired
+	public CountryPopulator countryPopulator;
 
 	@Bean
-	public CountryDtoConverter dtoCountryConverter() {
+	public CountryDtoConverter countryDtoConverter() {
 		CountryDtoConverter converter = new CountryDtoConverter();
-		converter.addPopulator(countryPopulator());
+		converter.addPopulator(countryPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoCountryConverterMapping() {
+	public ConverterMapping countryDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoCountryConverter());
+		mapping.setConverter(countryDtoConverter());
 		mapping.setTypeCode(CountryDto.class.getSimpleName());
 
 		return mapping;

@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.imex.domain.Imex;
 @Configuration
 public class ImexEntityConfig {
 
-	@Bean
-	public ImexEntityConverter entityImexConverter() {
-		return new ImexEntityConverter();
-	}
+	@Autowired
+	public ImexEntityConverter imexEntityConverter;
 
 	@Bean
-	public ConverterMapping entityImexConverterMapping() {
+	public ConverterMapping imexEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityImexConverter());
+		mapping.setConverter(imexEntityConverter);
 		mapping.setTypeCode(Imex.class.getSimpleName());
 
 		return mapping;

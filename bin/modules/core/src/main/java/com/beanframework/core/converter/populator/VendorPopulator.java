@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
@@ -14,6 +15,7 @@ import com.beanframework.core.data.VendorDto;
 import com.beanframework.user.domain.UserAttribute;
 import com.beanframework.user.domain.Vendor;
 
+@Component
 public class VendorPopulator extends AbstractPopulator<Vendor, VendorDto> implements Populator<Vendor, VendorDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(VendorPopulator.class);

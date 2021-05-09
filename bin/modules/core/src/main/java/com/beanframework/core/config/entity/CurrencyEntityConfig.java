@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.internationalization.domain.Currency;
 @Configuration
 public class CurrencyEntityConfig {
 
-	@Bean
-	public CurrencyEntityConverter entityCurrencyConverter() {
-		return new CurrencyEntityConverter();
-	}
+	@Autowired
+	public CurrencyEntityConverter currencyEntityConverter;
 
 	@Bean
-	public ConverterMapping entityCurrencyConverterMapping() {
+	public ConverterMapping currencyEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCurrencyConverter());
+		mapping.setConverter(currencyEntityConverter);
 		mapping.setTypeCode(Currency.class.getSimpleName());
 
 		return mapping;

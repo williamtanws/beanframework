@@ -1,5 +1,6 @@
 package ${modulegroup}.${moduleartifact}core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import ${modulegroup}.${moduleartifact}core.data.${Moduleartifact}Dto;
 @Configuration
 public class ${Moduleartifact}DtoConfig {
 
-	@Bean
-	public ${Moduleartifact}Populator ${moduleartifact}Populator() {
-		return new ${Moduleartifact}Populator();
-	}
+	@Autowired
+	public ${Moduleartifact}Populator ${moduleartifact}Populator;
 
 	@Bean
-	public ${Moduleartifact}DtoConverter dto${Moduleartifact}Converter() {
+	public ${Moduleartifact}DtoConverter ${moduleartifact}DtoConverter() {
 		${Moduleartifact}DtoConverter converter = new ${Moduleartifact}DtoConverter();
-		converter.addPopulator(${moduleartifact}Populator());
+		converter.addPopulator(${moduleartifact}Populator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dto${Moduleartifact}ConverterMapping() {
+	public ConverterMapping ${moduleartifact}DtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dto${Moduleartifact}Converter());
+		mapping.setConverter(${moduleartifact}DtoConverter());
 		mapping.setTypeCode(${Moduleartifact}Dto.class.getSimpleName());
 
 		return mapping;

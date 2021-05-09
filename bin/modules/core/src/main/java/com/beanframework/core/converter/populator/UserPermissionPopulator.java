@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
@@ -13,7 +14,7 @@ import com.beanframework.core.data.UserPermissionAttributeDto;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserPermissionAttribute;
 
-
+@Component
 public class UserPermissionPopulator extends AbstractPopulator<UserPermission, UserPermissionDto> implements Populator<UserPermission, UserPermissionDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(UserPermissionPopulator.class);
@@ -45,7 +46,7 @@ public class UserPermissionPopulator extends AbstractPopulator<UserPermission, U
 			throw new PopulatorException(e.getMessage(), e);
 		}
 	}
-	
+
 	public UserPermissionAttributeDto populateUserPermissionField(UserPermissionAttribute source) throws PopulatorException {
 		if (source == null)
 			return null;

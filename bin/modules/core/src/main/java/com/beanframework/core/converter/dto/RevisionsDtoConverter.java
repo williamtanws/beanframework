@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.config.dto.RevisionsDto;
 import com.beanframework.user.domain.RevisionsEntity;
 
 public class RevisionsDtoConverter {

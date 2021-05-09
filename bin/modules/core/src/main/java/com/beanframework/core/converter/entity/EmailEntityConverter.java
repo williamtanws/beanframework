@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -16,6 +17,7 @@ import com.beanframework.email.EmailConstants;
 import com.beanframework.email.domain.Email;
 import com.beanframework.media.domain.Media;
 
+@Component
 public class EmailEntityConverter implements EntityConverter<EmailDto, Email> {
 
 	@Value(EmailConstants.EMAIL_MEDIA_LOCATION)

@@ -1,5 +1,6 @@
 package ${modulegroup}.${moduleartifact}core.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,17 +9,15 @@ import ${modulegroup}.${moduleartifact}core.converter.entity.csv.${Moduleartifac
 import ${modulegroup}.${moduleartifact}core.csv.${Moduleartifact}Csv;
 
 @Configuration
-public class ${Moduleartifact}EntityCsvConverterConfig {
+public class ${Moduleartifact}CsvEntityConverterConfig {
+
+	@Autowired
+	public ${Moduleartifact}CsvEntityConverter ${moduleartifact}CsvEntityConverter;
 
 	@Bean
-	public ${Moduleartifact}CsvEntityConverter entityCsv${Moduleartifact}Converter() {
-		return new ${Moduleartifact}CsvEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCsv${Moduleartifact}ConverterMapping() {
+	public ConverterMapping ${moduleartifact}CsvEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCsv${Moduleartifact}Converter());
+		mapping.setConverter(${moduleartifact}CsvEntityConverter);
 		mapping.setTypeCode(${Moduleartifact}Csv.class.getSimpleName());
 
 		return mapping;

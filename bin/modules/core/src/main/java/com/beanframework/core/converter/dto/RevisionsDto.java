@@ -1,4 +1,4 @@
-package com.beanframework.core.config.dto;
+package com.beanframework.core.converter.dto;
 
 import java.util.Date;
 

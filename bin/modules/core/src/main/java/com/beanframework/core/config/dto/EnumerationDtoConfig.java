@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.EnumerationDto;
 @Configuration
 public class EnumerationDtoConfig {
 
-	@Bean
-	public EnumerationPopulator enumerationPopulator() {
-		return new EnumerationPopulator();
-	}
+	@Autowired
+	public EnumerationPopulator enumerationPopulator;
 
 	@Bean
-	public EnumerationDtoConverter dtoEnumerationConverter() {
+	public EnumerationDtoConverter enumerationDtoConverter() {
 		EnumerationDtoConverter converter = new EnumerationDtoConverter();
-		converter.addPopulator(enumerationPopulator());
+		converter.addPopulator(enumerationPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoEnumerationConverterMapping() {
+	public ConverterMapping enumerationDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoEnumerationConverter());
+		mapping.setConverter(enumerationDtoConverter());
 		mapping.setTypeCode(EnumerationDto.class.getSimpleName());
 
 		return mapping;

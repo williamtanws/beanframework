@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.menu.domain.Menu;
 @Configuration
 public class MenuEntityConfig {
 
-	@Bean
-	public MenuEntityConverter entityMenuConverter() {
-		return new MenuEntityConverter();
-	}
+	@Autowired
+	public MenuEntityConverter menuEntityConverter;
 
 	@Bean
-	public ConverterMapping entityMenuConverterMapping() {
+	public ConverterMapping menuEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityMenuConverter());
+		mapping.setConverter(menuEntityConverter);
 		mapping.setTypeCode(Menu.class.getSimpleName());
 
 		return mapping;

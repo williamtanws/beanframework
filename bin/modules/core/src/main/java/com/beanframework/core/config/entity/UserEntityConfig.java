@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,113 +25,97 @@ import com.beanframework.user.domain.Vendor;
 @Configuration
 public class UserEntityConfig {
 
-	@Bean
-	public UserGroupEntityConverter entityUserGroupConverter() {
-		return new UserGroupEntityConverter();
-	}
+	@Autowired
+	public UserGroupEntityConverter userGroupEntityConverter;
+
+	@Autowired
+	public UserPermissionEntityConverter userPermissionEntityConverter;
+
+	@Autowired
+	public UserRightEntityConverter userRightEntityConverter;
+
+	@Autowired
+	public MyAccountEntityConverter myAccountEntityConverter;
+
+	@Autowired
+	public UserEntityConverter userEntityConverter;
+
+	@Autowired
+	public EmployeeEntityConverter employeeEntityConverter;
+
+	@Autowired
+	public CustomerEntityConverter customerEntityConverter;
+
+	@Autowired
+	public VendorEntityConverter vendorEntityConverter;
 
 	@Bean
-	public ConverterMapping entityUserGroupConverterMapping() {
+	public ConverterMapping userGroupEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityUserGroupConverter());
+		mapping.setConverter(userGroupEntityConverter);
 		mapping.setTypeCode(UserGroup.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public UserPermissionEntityConverter entityUserPermissionConverter() {
-		return new UserPermissionEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityUserPermissionConverterMapping() {
+	public ConverterMapping userPermissionEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityUserPermissionConverter());
+		mapping.setConverter(userPermissionEntityConverter);
 		mapping.setTypeCode(UserPermission.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public UserRightEntityConverter entityUserRightConverter() {
-		return new UserRightEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityUserRightConverterMapping() {
+	public ConverterMapping userRightEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityUserRightConverter());
+		mapping.setConverter(userRightEntityConverter);
 		mapping.setTypeCode(UserRight.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public MyAccountEntityConverter entityMyAccountConverter() {
-		return new MyAccountEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityMyAccountConverterMapping() {
+	public ConverterMapping myAccountEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityMyAccountConverter());
+		mapping.setConverter(myAccountEntityConverter);
 		mapping.setTypeCode(CoreConstants.TypeCode.MYACCOUNT);
 
 		return mapping;
 	}
 
 	@Bean
-	public UserEntityConverter entityUserConverter() {
-		return new UserEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityUserConverterMapping() {
+	public ConverterMapping userEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityUserConverter());
+		mapping.setConverter(userEntityConverter);
 		mapping.setTypeCode(User.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public EmployeeEntityConverter entityEmployeeConverter() {
-		return new EmployeeEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityEmployeeConverterMapping() {
+	public ConverterMapping employeeEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityEmployeeConverter());
+		mapping.setConverter(employeeEntityConverter);
 		mapping.setTypeCode(Employee.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public CustomerEntityConverter entityCustomerConverter() {
-		return new CustomerEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityCustomerConverterMapping() {
+	public ConverterMapping customerEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCustomerConverter());
+		mapping.setConverter(customerEntityConverter);
 		mapping.setTypeCode(Customer.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public VendorEntityConverter entityVendorConverter() {
-		return new VendorEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityVendorConverterMapping() {
+	public ConverterMapping vendorEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityVendorConverter());
+		mapping.setConverter(vendorEntityConverter);
 		mapping.setTypeCode(Vendor.class.getSimpleName());
 
 		return mapping;

@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.cronjob.domain.Cronjob;
 @Configuration
 public class CronjobEntityConfig {
 
-	@Bean
-	public CronjobEntityConverter entityCronjobConverter() {
-		return new CronjobEntityConverter();
-	}
+	@Autowired
+	public CronjobEntityConverter cronjobEntityConverter;
 
 	@Bean
-	public ConverterMapping entityCronjobConverterMapping() {
+	public ConverterMapping cronjobEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCronjobConverter());
+		mapping.setConverter(cronjobEntityConverter);
 		mapping.setTypeCode(Cronjob.class.getSimpleName());
 
 		return mapping;

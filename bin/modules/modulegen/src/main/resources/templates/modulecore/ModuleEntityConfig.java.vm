@@ -1,5 +1,6 @@
 package ${modulegroup}.${moduleartifact}core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import ${modulegroup}.${moduleartifact}core.converter.entity.${Moduleartifact}En
 @Configuration
 public class ${Moduleartifact}EntityConfig {
 
-	@Bean
-	public ${Moduleartifact}EntityConverter entity${Moduleartifact}Converter() {
-		return new ${Moduleartifact}EntityConverter();
-	}
+	@Autowired
+	public ${Moduleartifact}EntityConverter ${moduleartifact}EntityConverter;
 
 	@Bean
-	public ConverterMapping entity${Moduleartifact}ConverterMapping() {
+	public ConverterMapping ${moduleartifact}EntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entity${Moduleartifact}Converter());
+		mapping.setConverter(${moduleartifact}EntityConverter);
 		mapping.setTypeCode(${Moduleartifact}.class.getSimpleName());
 
 		return mapping;

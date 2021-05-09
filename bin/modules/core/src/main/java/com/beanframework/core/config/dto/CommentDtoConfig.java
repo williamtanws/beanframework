@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.CommentDto;
 @Configuration
 public class CommentDtoConfig {
 
-	@Bean
-	public CommentPopulator commentPopulator() {
-		return new CommentPopulator();
-	}
+	@Autowired
+	public CommentPopulator commentPopulator;
 
 	@Bean
-	public CommentDtoConverter dtoCommentConverter() {
+	public CommentDtoConverter commentDtoConverter() {
 		CommentDtoConverter converter = new CommentDtoConverter();
-		converter.addPopulator(commentPopulator());
+		converter.addPopulator(commentPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoCommentConverterMapping() {
+	public ConverterMapping commentDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoCommentConverter());
+		mapping.setConverter(commentDtoConverter());
 		mapping.setTypeCode(CommentDto.class.getSimpleName());
 
 		return mapping;

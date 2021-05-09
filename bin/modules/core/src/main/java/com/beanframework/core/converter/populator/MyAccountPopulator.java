@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
@@ -13,6 +14,7 @@ import com.beanframework.core.data.UserAttributeDto;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAttribute;
 
+@Component
 public class MyAccountPopulator extends AbstractPopulator<User, MyAccountDto> implements Populator<User, MyAccountDto> {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(MyAccountPopulator.class);

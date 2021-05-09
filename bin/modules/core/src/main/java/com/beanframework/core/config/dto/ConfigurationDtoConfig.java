@@ -1,5 +1,6 @@
 package com.beanframework.core.config.dto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,20 @@ import com.beanframework.core.data.ConfigurationDto;
 @Configuration
 public class ConfigurationDtoConfig {
 
+	@Autowired
+	public ConfigurationPopulator configurationPopulator;
+	
 	@Bean
-	public ConfigurationPopulator configurationPopulator() {
-		return new ConfigurationPopulator();
-	}
-
-	@Bean
-	public ConfigurationDtoConverter dtoConfigurationConverter() {
+	public ConfigurationDtoConverter configurationDtoConverter() {
 		ConfigurationDtoConverter converter = new ConfigurationDtoConverter();
-		converter.addPopulator(configurationPopulator());
+		converter.addPopulator(configurationPopulator);
 		return converter;
 	}
 
 	@Bean
-	public ConverterMapping dtoConfigurationConverterMapping() {
+	public ConverterMapping configurationDtoConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(dtoConfigurationConverter());
+		mapping.setConverter(configurationDtoConverter());
 		mapping.setTypeCode(ConfigurationDto.class.getSimpleName());
 
 		return mapping;

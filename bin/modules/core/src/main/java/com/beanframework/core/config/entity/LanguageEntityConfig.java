@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.internationalization.domain.Language;
 @Configuration
 public class LanguageEntityConfig {
 
-	@Bean
-	public LanguageEntityConverter entityLanguageConverter() {
-		return new LanguageEntityConverter();
-	}
+	@Autowired
+	public LanguageEntityConverter languageEntityConverter;
 
 	@Bean
-	public ConverterMapping entityLanguageConverterMapping() {
+	public ConverterMapping languageEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityLanguageConverter());
+		mapping.setConverter(languageEntityConverter);
 		mapping.setTypeCode(Language.class.getSimpleName());
 
 		return mapping;

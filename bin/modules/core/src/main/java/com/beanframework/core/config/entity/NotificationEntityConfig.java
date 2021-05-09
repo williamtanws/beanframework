@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.notification.domain.Notification;
 @Configuration
 public class NotificationEntityConfig {
 
-	@Bean
-	public NotificationEntityConverter entityNotificationConverter() {
-		return new NotificationEntityConverter();
-	}
+	@Autowired
+	public NotificationEntityConverter notificationEntityConverter;
 
 	@Bean
-	public ConverterMapping entityNotificationConverterMapping() {
+	public ConverterMapping notificationEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityNotificationConverter());
+		mapping.setConverter(notificationEntityConverter);
 		mapping.setTypeCode(Notification.class.getSimpleName());
 
 		return mapping;

@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,13 @@ import com.beanframework.internationalization.domain.Country;
 @Configuration
 public class CountryEntityConfig {
 
-	@Bean
-	public CountryEntityConverter entityCountryConverter() {
-		return new CountryEntityConverter();
-	}
+	@Autowired
+	public CountryEntityConverter countryEntityConverter;
 
 	@Bean
-	public ConverterMapping entityCountryConverterMapping() {
+	public ConverterMapping countryEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityCountryConverter());
+		mapping.setConverter(countryEntityConverter);
 		mapping.setTypeCode(Country.class.getSimpleName());
 
 		return mapping;

@@ -1,5 +1,6 @@
 package com.beanframework.core.config.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,43 +15,37 @@ import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 @Configuration
 public class DynamicFieldEntityConfig {
 
-	@Bean
-	public DynamicFieldEntityConverter entityDynamicFieldConverter() {
-		return new DynamicFieldEntityConverter();
-	}
+	@Autowired
+	public DynamicFieldEntityConverter dynamicFieldEntityConverter;
+
+	@Autowired
+	public DynamicFieldSlotEntityConverter dynamicFieldSlotEntityConverter;
+
+	@Autowired
+	public DynamicFieldTemplateEntityConverter dynamicFieldTemplateEntityConverter;
 
 	@Bean
-	public ConverterMapping entityDynamicFieldConverterMapping() {
+	public ConverterMapping dynamicFieldEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityDynamicFieldConverter());
+		mapping.setConverter(dynamicFieldEntityConverter);
 		mapping.setTypeCode(DynamicField.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public DynamicFieldSlotEntityConverter entityDynamicFieldSlotConverter() {
-		return new DynamicFieldSlotEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityDynamicFieldSlotConverterMapping() {
+	public ConverterMapping dynamicFieldSlotEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityDynamicFieldSlotConverter());
+		mapping.setConverter(dynamicFieldSlotEntityConverter);
 		mapping.setTypeCode(DynamicFieldSlot.class.getSimpleName());
 
 		return mapping;
 	}
 
 	@Bean
-	public DynamicFieldTemplateEntityConverter entityDynamicFieldTemplateConverter() {
-		return new DynamicFieldTemplateEntityConverter();
-	}
-
-	@Bean
-	public ConverterMapping entityDynamicFieldTemplateConverterMapping() {
+	public ConverterMapping dynamicFieldTemplateEntityConverterMapping() {
 		ConverterMapping mapping = new ConverterMapping();
-		mapping.setConverter(entityDynamicFieldTemplateConverter());
+		mapping.setConverter(dynamicFieldTemplateEntityConverter);
 		mapping.setTypeCode(DynamicFieldTemplate.class.getSimpleName());
 
 		return mapping;

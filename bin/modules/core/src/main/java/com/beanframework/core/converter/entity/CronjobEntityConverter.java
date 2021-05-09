@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -13,6 +14,7 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.cronjob.domain.Cronjob;
 
+@Component
 public class CronjobEntityConverter implements EntityConverter<CronjobDto, Cronjob> {
 
 	@Autowired
