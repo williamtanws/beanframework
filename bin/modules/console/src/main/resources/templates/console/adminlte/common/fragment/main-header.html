@@ -39,6 +39,17 @@
 							</ul>
 						</li>
 						<li class="nav-item dropdown">
+							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.monitor}"></a>
+							<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+								<li>
+									<a th:href="@{${@environment.getProperty('path.cache')}}" class="dropdown-item" th:text="#{module.common.cache}"></a>
+								</li>
+								<li>
+									<a th:href="@{${@environment.getProperty('path.environment')}}" class="dropdown-item" th:text="#{module.environment}"></a>
+								</li>
+							</ul>
+						</li>
+						<li class="nav-item dropdown">
 							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.tools}"></a>
 							<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
 								<li>
@@ -49,14 +60,6 @@
 								</li>
 								<li>
 									<a th:href="@{${@environment.getProperty('path.export')}}" class="dropdown-item" th:text="#{module.common.export}"></a>
-								</li>
-							</ul>
-						</li>
-						<li class="nav-item dropdown">
-							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.monitor}"></a>
-							<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-								<li>
-									<a th:href="@{${@environment.getProperty('path.cache')}}" class="dropdown-item" th:text="#{module.common.cache}"></a>
 								</li>
 							</ul>
 						</li>

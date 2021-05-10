@@ -4,46 +4,21 @@
 	layout:decorate="~{console/adminlte/common/layout/layout}">
 
 <head>
-	<title th:utext="#{module.logging}"></title>
-	<!-- DataTables -->
-	<link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
-	<link rel="stylesheet"
-		th:href="@{/static/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
-	<link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
+	<title th:utext="#{module.environment}"></title>
 </head>
 
 <body>
 	<th:block layout:fragment="content">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.platform},breadcrumb2=#{module.logging}">
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.monitor},breadcrumb2=#{module.environment}">
 			<!-- Header -->
-			<th:block th:insert="~{console/adminlte/common/fragment/content-header :: title-breadcrumbs (title=#{module.logging}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
+			<th:block th:insert="~{console/adminlte/common/fragment/content-header :: title-breadcrumbs (title=#{module.environment}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
 		
 			<!-- Main content -->
 			<section class="content">
 				<div class="card">
 					<!-- /.card-header -->
 					<div class="card-body">
-						<table id="loggersTable" class="table table-hover">
-							<thead>
-								<tr>
-									<th th:text="#{module.logging.logger}"></th>
-									<th th:text="#{module.logging.effectivelevel}" style="width: 200px"></th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="logger : *{loggers.get('loggers')}">
-									<td th:text="${logger.key}"></td>
-									<td>
-										<select class="form-control" th:id="${logger.key}">
-											<option
-												th:selected="${logger.value.effectiveLevel.toString() == level.toString()}"
-												th:each="level : *{loggers.get('levels')}" th:text="${level}"></option>
-										</select>
-									</td>
-								</tr>
-							</tbody>
-						</table>
 						<div class="modal fade" id="modal-loading">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -57,6 +32,20 @@
 							<!-- /.modal-dialog -->
 						</div>
 						<!-- /.modal -->
+						<table id="envTable" class="table table-bordered dataTable dtr-inline">
+							<thead>
+								<tr>
+									<th th:text="#{module.common.key}"></th>
+									<th th:text="#{module.common.value}"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="env : *{envList}">
+									<td th:text="${env.key}"></td>
+									<td th:text="${env.value}"></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 					<!-- /.card-body -->
 				</div>
@@ -67,12 +56,8 @@
 	<th:block layout:fragment="js">
 		<script th:inline="javascript">
 			/*<![CDATA[*/
-
-			var locale = /*[[${#locale}]]*/;
-
-			var pathSetLoggerLevel = /*[[@{${@environment.getProperty('path.api.logging.setlevel')}}]]*/;
-
-			$('#loggersTable').DataTable({
+				
+			$('#envTable').DataTable({
 				"language": {
 		           	"decimal":        "",
 		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
@@ -118,34 +103,22 @@
 					{
 		                extend: 'csv',
 		                text: /*[[#{module.common.export.csv}]]*/,
-		                className: 'btn btn-default',
-		                exportOptions: {
-		                   columns: 'th:not(:last-child)'
-		                }
+		                className: 'btn btn-default'
 		            },
 		            {
 		                extend: 'excel',
 		                text: /*[[#{module.common.export.excel}]]*/,
-		                className: 'btn btn-default',
-		                exportOptions: {
-		                   columns: 'th:not(:last-child)'
-		                }
+		                className: 'btn btn-default'
 		            },
 		            {
 		                extend: 'pdf',
 		                text: /*[[#{module.common.export.pdf}]]*/,
-		                className: 'btn btn-default',
-		                exportOptions: {
-		                   columns: 'th:not(:last-child)'
-		                }
+		                className: 'btn btn-default'
 		            },
 		            {
 		                extend: 'print',
 		                text: /*[[#{module.common.print}]]*/,
-		                className: 'btn btn-default',
-		                exportOptions: {
-		                   columns: 'th:not(:last-child)'
-		                }
+		                className: 'btn btn-default'
 		            },
 		            {
 		                extend: 'colvis',
@@ -159,24 +132,7 @@
 						}
 					}
 				]
-			})
-
-			$('#loggersTable select').change(function () {
-				var opt = $(this).find('option:selected');
-
-				var id = $(this).attr('id');
-				var val = $(this).val();
-
-				$.ajax({
-					method: "GET",
-					url: pathSetLoggerLevel,
-					data: { name: id, level: val },
-					cache: false
-				}).done(function (response) {
-					location.reload();
-				});
 			});
-
 			/*]]>*/
 		</script>
 	</th:block>

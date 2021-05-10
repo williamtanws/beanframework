@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{console/adminlte/common/layout/layout}">
+
+<head>
+	<title th:utext="#{module.logging}"></title>
+</head>
+
+<body>
+	<th:block layout:fragment="content">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper" th:with="breadcrumb1=#{module.common.platform},breadcrumb2=#{module.logging}">
+			<!-- Header -->
+			<th:block th:insert="~{console/adminlte/common/fragment/content-header :: title-breadcrumbs (title=#{module.logging}, breadcrumbs=${#strings.arraySplit(breadcrumb1+','+breadcrumb2, ',')} )}"></th:block>
+		
+			<!-- Main content -->
+			<section class="content">
+				<div class="card">
+					<!-- /.card-header -->
+					<div class="card-body">
+						<div class="modal fade" id="modal-loading">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title" th:text="#{module.common.loading}"></h4>
+									</div>
+									<div class="modal-body" th:utext="#{module.common.update.loading}"></div>
+								</div>
+								<!-- /.modal-content -->
+							</div>
+							<!-- /.modal-dialog -->
+						</div>
+						<!-- /.modal -->
+						<table id="loggersTable" class="table table-hover">
+							<thead>
+								<tr>
+									<th th:text="#{module.logging.logger}"></th>
+									<th th:text="#{module.logging.effectivelevel}" style="width: 200px"></th>
+									<th th:text="#{module.logging.effectivelevel}" style="display:none"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="logger : *{loggers.get('loggers')}">
+									<td th:text="${logger.key}"></td>
+									<td>
+										<select class="form-control" th:id="${logger.key}">
+											<option
+												th:selected="${logger.value.effectiveLevel.toString() == level.toString()}"
+												th:each="level : *{loggers.get('levels')}" th:text="${level}"></option>
+										</select>
+									</td>
+									<td style="display:none">
+										<select class="form-control" th:id="${logger.key}">
+											<th:block th:each="level : *{loggers.get('levels')}">
+												<span th:text="${level}" th:if="${logger.value.effectiveLevel.toString() == level.toString()}"></span>
+											</th:block>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- /.card-body -->
+				</div>
+				<!-- /.card -->
+			</section>
+		</div>
+	</th:block>
+	<th:block layout:fragment="js">
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+
+			var pathSetLoggerLevel = /*[[@{${@environment.getProperty('path.api.logging.setlevel')}}]]*/;
+
+			$('#loggersTable').DataTable({
+				"language": {
+		           	"decimal":        "",
+		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
+		            "info":           /*[[#{module.common.datatable.info}]]*/,
+		            "infoEmpty":      /*[[#{module.common.datatable.infoEmpty}]]*/,
+		            "infoFiltered":   /*[[#{module.common.datatable.infoFiltered}]]*/,
+		            "infoPostFix":    "",
+		            "thousands":      ",",
+		            "lengthMenu":     /*[[#{module.common.datatable.lengthMenu}]]*/,
+		            "loadingRecords": /*[[#{module.common.datatable.loadingRecords}]]*/,
+		            "processing":     /*[[#{module.common.datatable.processing}]]*/,
+		            "search":         /*[[#{module.common.datatable.search}]]*/,
+		            "zeroRecords":    /*[[#{module.common.datatable.zeroRecords}]]*/,
+		            "paginate": {
+		                "first":      /*[[#{module.common.datatable.paginate.first}]]*/,
+		                "last":       /*[[#{module.common.datatable.paginate.last}]]*/,
+		                "next":       /*[[#{module.common.datatable.paginate.next}]]*/,
+		                "previous":   /*[[#{module.common.datatable.paginate.previous}]]*/
+		            },
+		            "aria": {
+		                "sortAscending":  /*[[#{module.common.datatable.aria.sortAscending}]]*/,
+		                "sortDescending": /*[[#{module.common.datatable.aria.sortDescending}]]*/
+		            }		            
+		        },
+				"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, /*[[#{module.common.datatable.all}]]*/] ],
+				"responsive": true,
+				'pageLength': 10,
+				'paging': true,
+				'lengthChange': true,
+				'searching': true,
+				'ordering': true,
+				'info': true,
+				'autoWidth': false,
+				'processing': false,
+				'serverSide': false,
+				'searchDelay': 1000,
+				'bStateSave': false,
+				'dom': "<'row'<'form-group col-sm-12 col-md-12'B>>" +
+					"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+					"<'row'<'col-sm-12'tr>>" +
+					"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+				"columnDefs": [ {
+						targets: -1,
+						visible: false,
+						className: 'noVis'
+				} ],
+				"buttons": [
+					{
+		                extend: 'csv',
+		                text: /*[[#{module.common.export.csv}]]*/,
+		                className: 'btn btn-default',
+		                exportOptions: { columns: [ 0, 2 ] }
+		            },
+		            {
+		                extend: 'excel',
+		                text: /*[[#{module.common.export.excel}]]*/,
+		                className: 'btn btn-default',
+		                exportOptions: { columns: [ 0, 2 ] }
+		            },
+		            {
+		                extend: 'pdf',
+		                text: /*[[#{module.common.export.pdf}]]*/,
+		                className: 'btn btn-default',
+		                exportOptions: { columns: [ 0, 2 ] }
+		            },
+		            {
+		                extend: 'print',
+		                text: /*[[#{module.common.print}]]*/,
+		                className: 'btn btn-default',
+		                exportOptions: { columns: [ 0, 2 ] }
+		            },
+		            {
+		                extend: 'colvis',
+		                text: /*[[#{module.common.columns}]]*/,
+		                className: 'btn btn-default',
+		                columns: ':not(.noVis)'
+		            },
+		        	{
+		                text: /*[[#{module.common.refresh}]]*/,
+						action: function (e, dt, node, config) {
+							location.reload();
+						}
+					}
+				]
+			});
+
+			$('#loggersTable select').change(function () {
+				var opt = $(this).find('option:selected');
+
+				var id = $(this).attr('id');
+				var val = $(this).val();
+
+				$.ajax({
+					method: "GET",
+					url: pathSetLoggerLevel,
+					data: { name: id, level: val },
+					cache: false
+				}).done(function (response) {
+					location.reload();
+				});
+			});
+
+			/*]]>*/
+		</script>
+	</th:block>
+</body>
+
+</html>
