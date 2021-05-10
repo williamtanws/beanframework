@@ -105,6 +105,23 @@
 						</ul>
 					</li>
 					<li class="nav-item">
+						<a class="nav-link active" href="#idocs_architecture">Architecture</a>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_springmvc">Spring MVC</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_applicationlayering">Application Layering</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_modelservice">Model Service</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_legacymode">Legacy Mode</a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link active" href="#idocs_development">Development</a>
 						<ul class="nav flex-column">
 							<li class="nav-item">
@@ -155,7 +172,7 @@
 									</li>
 									<li>
 										<strong>Update:</strong>
-										9 May, 2021
+										11 May, 2021
 									</li>
 								</ul>
 							</div>
@@ -456,6 +473,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 								</ul>
 							</li>
 						</ul>
+					</section>
+					
+					<!-- Architecture -->
+					<section id="idocs_architecture">
+						<h2>Architecture</h2>
+						<p class="lead mb-5">Architecture for development</p>
+					</section>
+
+					<!-- Spring MVC -->
+					<section id="idocs_springmvc">
+						<h2>Spring MVC</h2>
+						<p>Design Pattern used in this platform.</p>
+						<p><img class="img-fluid border" th:src="@{/static/beanframework/springmvc.png}" alt=""></p>
+					</section>
+
+					<!-- Spring MVC -->
+					<section id="idocs_applicationlayering">
+						<h2>Application Layering</h2>
+						<p>Spring application layers from the underlying platform.</p>
+						<p><img class="img-fluid border" th:src="@{/static/beanframework/applicationlayering.png}" alt=""></p>
+					</section>
+
+					<!-- Model Service -->
+					<section id="idocs_modelservice">
+						<h2>Model Service</h2>
+						<p>Model's life cycle involving listeners and interceptors.</p>
+						<p><img class="img-fluid border" th:src="@{/static/beanframework/modelservice.png}" alt=""></p>
+					</section>
+
+					<!-- Legacy Mode -->
+					<section id="idocs_legacymode">
+						<h2>Legacy Mode</h2>
+						<p>Performing model service with legacy mode ignoring listeners and interceptors.</p>
+						<p><img class="img-fluid border" th:src="@{/static/beanframework/legacymode.png}" alt=""></p>
 					</section>
 
 					<hr class="divider">
