@@ -1,2 +1,0 @@
-INSERT_UPDATE Region,id,name,active,countryId
-,MY-KL,Kuala Lumpur,true,MY
