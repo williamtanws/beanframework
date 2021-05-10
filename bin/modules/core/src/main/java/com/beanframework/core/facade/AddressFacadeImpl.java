@@ -46,7 +46,7 @@ public class AddressFacadeImpl extends AbstractFacade<Address, AddressDto> imple
 
 	@Override
 	public Page<AddressDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, AddressSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, AddressSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

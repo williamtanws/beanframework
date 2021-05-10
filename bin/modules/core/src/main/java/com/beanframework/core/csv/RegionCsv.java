@@ -6,9 +6,9 @@ import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
-import com.beanframework.common.data.AbstractCsv;
+import com.beanframework.common.data.GenericCsv;
 
-public class RegionCsv extends AbstractCsv {
+public class RegionCsv extends GenericCsv {
 
 	private String name;
 	private Boolean active;

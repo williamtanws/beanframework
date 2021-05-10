@@ -27,6 +27,18 @@ public class Region extends GenericEntity {
 	public static final String NAME = "name";
 	public static final String ACTIVE = "active";
 	public static final String COUNTRY = "country";
+	
+	public Region() {
+		super();
+	}
+
+	public Region(UUID uuid, String id, String name, Boolean active) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+		setActive(active);
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

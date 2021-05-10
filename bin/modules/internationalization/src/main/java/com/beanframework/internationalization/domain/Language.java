@@ -1,5 +1,7 @@
 package com.beanframework.internationalization.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -20,6 +22,18 @@ public class Language extends GenericEntity {
 	public static final String NAME = "name";
 	public static final String ACTIVE = "active";
 	public static final String SORT = "sort";
+	
+	public Language() {
+		super();
+	}
+
+	public Language(UUID uuid, String id, String name, Integer sort) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+		setSort(sort);
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

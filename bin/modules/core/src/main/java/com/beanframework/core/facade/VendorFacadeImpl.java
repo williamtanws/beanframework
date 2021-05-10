@@ -70,7 +70,7 @@ public class VendorFacadeImpl extends AbstractFacade<Vendor, VendorDto> implemen
 
 	@Override
 	public Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, VendorSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, VendorSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

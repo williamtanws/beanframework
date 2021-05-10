@@ -40,6 +40,17 @@ public class Imex extends GenericEntity {
 	public static final String HEADER = "header";
 	public static final String SEPERATOR = "seperator";
 	public static final String MEDIAS = "medias";
+	
+	public Imex() {
+		super();
+	}
+
+	public Imex(UUID uuid, String id, String fileName) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setFileName(fileName);
+	}
 
 	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)

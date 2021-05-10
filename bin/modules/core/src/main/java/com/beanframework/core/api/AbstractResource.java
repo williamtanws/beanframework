@@ -13,7 +13,7 @@ import com.beanframework.common.data.HistoryDataTableResponseData;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.core.converter.dto.RevisionsDto;
 
-public class AbstractResource {
+public abstract class AbstractResource {
 
 	@Autowired
 	private LocaleMessageService localeMessageService;

@@ -46,7 +46,7 @@ public class CompanyFacadeImpl extends AbstractFacade<Company, CompanyDto> imple
 
 	@Override
 	public Page<CompanyDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, CompanySpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, CompanySpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

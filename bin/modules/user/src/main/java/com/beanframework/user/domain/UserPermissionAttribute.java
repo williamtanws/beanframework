@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Audited
 @Table(name = UserPermissionConstants.Table.USER_PERMISSION_ATTRIBUTE)
 public class UserPermissionAttribute extends GenericEntity {
-
 	/**
 	 * 
 	 */

@@ -18,7 +18,7 @@
 
 	</th:block>
 	<th:block layout:fragment="js" th:with="addAuthority=${#authorization.expression('hasAuthority(''email_create'')')}">
-		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='emailTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.email')}}, formUrl=@{${@environment.getProperty('path.email.form')}}, addAuthority=${addAuthority}, selectAuthority=true  )}"></th:block>
+		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='emailTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.email')}}, formUrl=@{${@environment.getProperty('path.email.form')}}, addAuthority=${addAuthority}, selectAuthority=true )}"></th:block>
 	</th:block>
 </body>
 </html>

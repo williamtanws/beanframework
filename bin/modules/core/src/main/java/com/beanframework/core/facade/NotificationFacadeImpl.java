@@ -49,7 +49,7 @@ public class NotificationFacadeImpl extends AbstractFacade<Notification, Notific
 
 	@Override
 	public Page<NotificationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, NotificationSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, NotificationSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

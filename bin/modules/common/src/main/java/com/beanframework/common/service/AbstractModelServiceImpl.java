@@ -27,7 +27,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
@@ -46,6 +45,7 @@ import com.beanframework.common.interceptor.LoadInterceptor;
 import com.beanframework.common.interceptor.PrepareInterceptor;
 import com.beanframework.common.interceptor.RemoveInterceptor;
 import com.beanframework.common.interceptor.ValidateInterceptor;
+import com.beanframework.common.specification.AbstractSpecification;
 
 @SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
 public abstract class AbstractModelServiceImpl implements ModelService {
@@ -254,7 +254,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		throw new ConverterException("Cannot find any dto convert to convert target typeCode: " + typeCode);
 	}
 
-	protected <T> Page readPage(TypedQuery query, final Class domainClass, Pageable pageable, @Nullable Specification spec) {
+	protected <T> Page readPage(TypedQuery query, final Class domainClass, Pageable pageable, @Nullable AbstractSpecification spec) {
 
 		if (pageable.isPaged()) {
 			query.setFirstResult((int) pageable.getOffset());
@@ -264,7 +264,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return PageableExecutionUtils.getPage(query.getResultList(), pageable, () -> executeCountQuery(getCountQuery(spec, domainClass)));
 	}
 
-	protected <T> TypedQuery getCountQuery(@Nullable Specification spec, Class domainClass) {
+	protected <T> TypedQuery getCountQuery(@Nullable AbstractSpecification spec, Class domainClass) {
 
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
@@ -282,19 +282,19 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			query.select(builder.count(root));
 		}
 
-		// Remove all Orders the Specifications might have applied
+		// Remove all Orders the AbstractSpecifications might have applied
 		query.orderBy(Collections.<Order>emptyList());
 
 		return entityManager.createQuery(query);
 	}
 
-	protected <T> TypedQuery getQuery(@Nullable Specification spec, Pageable pageable, Class modelClass) {
+	protected <T> TypedQuery getQuery(@Nullable AbstractSpecification spec, Pageable pageable, Class modelClass) {
 
 		Sort sort = pageable.isPaged() ? pageable.getSort() : Sort.unsorted();
 		return getQuery(spec, modelClass, sort);
 	}
 
-	protected <T> TypedQuery getQuery(@Nullable Specification spec, Class domainClass, Sort sort) {
+	protected <T> TypedQuery getQuery(@Nullable AbstractSpecification spec, Class domainClass, Sort sort) {
 		Assert.notNull(domainClass, "Domain class must not be null!");
 
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -306,7 +306,13 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 			query.where(predicate);
 		}
 
-		query.select(root).distinct(true);
+		List selections = spec.toSelection(root);
+		if(selections != null) {
+			query.multiselect(selections).distinct(true);
+		}
+		else {
+			query.select(root).distinct(true);
+		}
 
 		if (sort != null && sort.isSorted()) {
 			query.orderBy(toOrders(sort, root, builder));
@@ -411,7 +417,7 @@ public abstract class AbstractModelServiceImpl implements ModelService {
 		return sortsBuilder.toString();
 	}
 
-	protected <T> Page<T> page(@Nullable Specification spec, Pageable pageable, Class modelClass) {
+	protected <T> Page<T> page(@Nullable AbstractSpecification spec, Pageable pageable, Class modelClass) {
 
 		TypedQuery<T> query = getQuery(spec, pageable, modelClass);
 		return pageable.isUnpaged() ? new PageImpl<T>(query.getResultList()) : readPage(query, modelClass, pageable, spec);

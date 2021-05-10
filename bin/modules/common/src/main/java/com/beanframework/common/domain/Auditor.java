@@ -1,5 +1,7 @@
 package com.beanframework.common.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -23,6 +25,17 @@ public class Auditor extends GenericEntity {
 	private static final long serialVersionUID = 2180422049651244927L;
 	public static final String NAME = "name";
 
+	public Auditor() {
+		super();
+	}
+
+	public Auditor(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
+	
 	@Audited(withModifiedFlag = true)
 	private String name;
 

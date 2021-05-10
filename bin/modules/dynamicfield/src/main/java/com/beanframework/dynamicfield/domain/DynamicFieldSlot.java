@@ -26,6 +26,18 @@ public class DynamicFieldSlot extends GenericEntity {
 	public static final String NAME = "name";
 	public static final String SORT = "sort";
 	public static final String DYNAMIC_FIELD = "dynamicField";
+	
+	public DynamicFieldSlot() {
+		super();
+	}
+
+	public DynamicFieldSlot(UUID uuid, String id, String name, Integer sort) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+		setSort(sort);
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

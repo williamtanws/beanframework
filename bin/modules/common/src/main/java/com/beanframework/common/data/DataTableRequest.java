@@ -27,7 +27,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 
 import com.beanframework.common.domain.GenericEntity;
-import com.beanframework.common.specification.AbstractSpecification;
+import com.beanframework.common.specification.CommonSpecification;
 import com.beanframework.common.utils.AppUtil;
 
 /**
@@ -399,12 +399,12 @@ public class DataTableRequest {
 
 		if (isGlobalSearch() && StringUtils.isNotEmpty(getSearch())) {
 			for (DataTableColumnSpecs specs : columns) {
-				orCriterion = AuditEntity.or(orCriterion, AuditEntity.property(specs.getData()).like(AbstractSpecification.convertToLikePattern(getSearch())));
+				orCriterion = AuditEntity.or(orCriterion, AuditEntity.property(specs.getData()).like(CommonSpecification.convertToLikePattern(getSearch())));
 			}
 		} else {
 			for (DataTableColumnSpecs specs : columns) {
 				if (StringUtils.isNotBlank(specs.getSearch())) {
-					orCriterion = AuditEntity.or(orCriterion, AuditEntity.property(specs.getData()).like(AbstractSpecification.convertToLikePattern(specs.getSearch())));
+					orCriterion = AuditEntity.or(orCriterion, AuditEntity.property(specs.getData()).like(CommonSpecification.convertToLikePattern(specs.getSearch())));
 				}
 			}
 		}

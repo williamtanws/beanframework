@@ -46,7 +46,7 @@ public class CurrencyFacadeImpl extends AbstractFacade<Currency, CurrencyDto> im
 
 	@Override
 	public Page<CurrencyDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, CurrencySpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, CurrencySpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

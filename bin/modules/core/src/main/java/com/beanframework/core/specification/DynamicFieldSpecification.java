@@ -10,19 +10,20 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.specification.AbstractSpecification;
+import com.beanframework.common.specification.CommonSpecification;
 import com.beanframework.dynamicfield.domain.DynamicField;
 
-public class DynamicFieldSpecification extends AbstractSpecification {
+public class DynamicFieldSpecification extends CommonSpecification {
 
-	public static <T> Specification<T> getSpecification(DataTableRequest dataTableRequest) {
-		return new Specification<T>() {
+	public static <T> AbstractSpecification<T> getPageSpecification(DataTableRequest dataTableRequest) {
+		return new AbstractSpecification<T>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -51,15 +52,25 @@ public class DynamicFieldSpecification extends AbstractSpecification {
 			public String toString() {
 				return dataTableRequest.toString();
 			}
+
+			@Override
+			public List<Selection<?>> toSelection(Root<T> root) {
+				List<Selection<?>> multiselect = new ArrayList<Selection<?>>();
+				multiselect.add(root.get(DynamicField.UUID));
+				multiselect.add(root.get(DynamicField.ID));
+				multiselect.add(root.get(DynamicField.NAME));
+				multiselect.add(root.get(DynamicField.TYPE));
+				return multiselect;
+			}
 		};
 	}
 
-	public static <T> Specification<T> getDynamicFieldByEnumerationUuid(UUID... uuid) {
+	public static <T> AbstractSpecification<T> getDynamicFieldByEnumerationUuid(UUID... uuid) {
 		if (uuid == null) {
 			throw new NullPointerException();
 		}
 
-		return new Specification<T>() {
+		return new AbstractSpecification<T>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -76,15 +87,21 @@ public class DynamicFieldSpecification extends AbstractSpecification {
 				return "uuid[" + uuid.toString() + "]" + ", getDynamicFieldByEnumerations";
 			}
 
+			@Override
+			public List<Selection<?>> toSelection(Root<T> root) {
+				
+				return null;
+			}
+
 		};
 	}
 
-	public static <T> Specification<T> getDynamicFieldByLanguageUuid(UUID uuid) {
+	public static <T> AbstractSpecification<T> getDynamicFieldByLanguageUuid(UUID uuid) {
 		if (uuid == null) {
 			throw new NullPointerException();
 		}
 
-		return new Specification<T>() {
+		return new AbstractSpecification<T>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -98,6 +115,12 @@ public class DynamicFieldSpecification extends AbstractSpecification {
 
 			public String toString() {
 				return "uuid[" + uuid.toString() + "]" + ", getDynamicFieldByEnumerations";
+			}
+
+			@Override
+			public List<Selection<?>> toSelection(Root<T> root) {
+				
+				return null;
 			}
 
 		};

@@ -46,7 +46,7 @@ public class SiteFacadeImpl extends AbstractFacade<Site, SiteDto> implements Sit
 
 	@Override
 	public Page<SiteDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, SiteSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, SiteSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

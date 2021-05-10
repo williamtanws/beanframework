@@ -8,18 +8,19 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.specification.AbstractSpecification;
+import com.beanframework.common.specification.CommonSpecification;
 import com.beanframework.notification.domain.Notification;
 
-public class NotificationSpecification extends AbstractSpecification {
-	public static <T> Specification<T> getSpecification(DataTableRequest dataTableRequest) {
-		return new Specification<T>() {
+public class NotificationSpecification extends CommonSpecification {
+	public static <T> AbstractSpecification<T> getPageSpecification(DataTableRequest dataTableRequest) {
+		return new AbstractSpecification<T>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -43,11 +44,21 @@ public class NotificationSpecification extends AbstractSpecification {
 			public String toString() {
 				return dataTableRequest.toString();
 			}
+
+			@Override
+			public List<Selection<?>> toSelection(Root<T> root) {
+				List<Selection<?>> multiselect = new ArrayList<Selection<?>>();
+				multiselect.add(root.get(Notification.UUID));
+				multiselect.add(root.get(Notification.TYPE));
+				multiselect.add(root.get(Notification.MESSAGE));
+				multiselect.add(root.get(Notification.CREATED_DATE));
+				return multiselect;
+			}
 		};
 	}
 
-	public static <T> Specification<T> getNewNotificationByFromDate(Date date) {
-		return new Specification<T>() {
+	public static <T> AbstractSpecification<T> getNewNotificationByFromDate(Date date) {
+		return new AbstractSpecification<T>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -64,11 +75,17 @@ public class NotificationSpecification extends AbstractSpecification {
 					return cb.or(predicates.toArray(new Predicate[predicates.size()]));
 				}
 			}
+
+			@Override
+			public List<Selection<?>> toSelection(Root<T> root) {
+				
+				return null;
+			}
 		};
 	}
 
-	public static <T> Specification<T> getOldNotificationByToDate(Date date) {
-		return new Specification<T>() {
+	public static <T> AbstractSpecification<T> getOldNotificationByToDate(Date date) {
+		return new AbstractSpecification<T>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -84,6 +101,12 @@ public class NotificationSpecification extends AbstractSpecification {
 				} else {
 					return cb.or(predicates.toArray(new Predicate[predicates.size()]));
 				}
+			}
+
+			@Override
+			public List<Selection<?>> toSelection(Root<T> root) {
+				
+				return null;
 			}
 		};
 	}

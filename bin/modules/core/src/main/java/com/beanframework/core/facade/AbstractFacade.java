@@ -13,17 +13,17 @@ import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.common.specification.AbstractSpecification;
 import com.beanframework.core.converter.dto.RevisionsDtoConverter;
 import com.beanframework.user.domain.RevisionsEntity;
 
-public class AbstractFacade<ENTITY extends GenericEntity, DTO extends GenericDto> {
+public abstract class AbstractFacade<ENTITY extends GenericEntity, DTO extends GenericDto> {
 
 	@Autowired
 	protected ModelService modelService;
@@ -39,7 +39,7 @@ public class AbstractFacade<ENTITY extends GenericEntity, DTO extends GenericDto
 		return modelService.getDto(modelService.findOneByProperties(properties, entityClass), dtoClass);
 	}
 
-	public Page<DTO> findPage(DataTableRequest dataTableRequest, Specification<ENTITY> specification, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
+	public Page<DTO> findPage(DataTableRequest dataTableRequest, AbstractSpecification<ENTITY> specification, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
 		Page<ENTITY> page = modelService.findPage(specification, dataTableRequest.getPageable(), entityClass);
 
 		List<DTO> dtos = modelService.getDtoList(page.getContent(), dtoClass);

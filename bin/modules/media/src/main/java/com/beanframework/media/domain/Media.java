@@ -1,5 +1,7 @@
 package com.beanframework.media.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -30,6 +32,17 @@ public class Media extends GenericEntity {
 	public static final String DESCRIPTION = "description";
 	public static final String URL = "url";
 	public static final String FOLDER = "folder";
+
+	public Media() {
+		super();
+	}
+
+	public Media(UUID uuid, String id, String fileName) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		this.fileName = fileName;
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String fileName;

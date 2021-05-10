@@ -6,9 +6,9 @@ import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
-import com.beanframework.common.data.AbstractCsv;
+import com.beanframework.common.data.GenericCsv;
 
-public class EnumerationCsv extends AbstractCsv {
+public class EnumerationCsv extends GenericCsv {
 
 	private String name;
 	private Integer sort;

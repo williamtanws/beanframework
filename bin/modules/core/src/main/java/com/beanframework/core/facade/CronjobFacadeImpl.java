@@ -67,7 +67,7 @@ public class CronjobFacadeImpl extends AbstractFacade<Cronjob, CronjobDto> imple
 
 	@Override
 	public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, CronjobSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, CronjobSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

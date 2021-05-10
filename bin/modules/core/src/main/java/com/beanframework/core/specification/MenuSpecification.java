@@ -10,21 +10,21 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.springframework.data.jpa.domain.Specification;
+import javax.persistence.criteria.Selection;
 
 import com.beanframework.common.specification.AbstractSpecification;
+import com.beanframework.common.specification.CommonSpecification;
 import com.beanframework.menu.domain.Menu;
 
-public class MenuSpecification extends AbstractSpecification {
+public class MenuSpecification extends CommonSpecification {
 
-	public static Specification<Menu> getMenuByEnabledByUserGroup(UUID parent, Set<UUID> userGroupsUuid) {
+	public static <T> AbstractSpecification<T> getMenuByEnabledByUserGroup(UUID parent, Set<UUID> userGroupsUuid) {
 
-		return new Specification<Menu>() {
+		return new AbstractSpecification<T>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Predicate toPredicate(Root<Menu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 				if(parent == null) {
@@ -43,7 +43,13 @@ public class MenuSpecification extends AbstractSpecification {
 			}
 
 			public String toString() {
-				return "userGroupUuid[" + userGroupsUuid.toString() + "]" + ", getSpecificationByUserGroup";
+				return "userGroupUuid[" + userGroupsUuid.toString() + "]" + ", getPageSpecificationByUserGroup";
+			}
+
+			@Override
+			public List<Selection<?>> toSelection(Root<T> root) {
+				
+				return null;
 			}
 
 		};

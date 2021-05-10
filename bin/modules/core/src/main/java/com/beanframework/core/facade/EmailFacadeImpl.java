@@ -46,7 +46,7 @@ public class EmailFacadeImpl  extends AbstractFacade<Email, EmailDto> implements
 
 	@Override
 	public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, EmailSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, EmailSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

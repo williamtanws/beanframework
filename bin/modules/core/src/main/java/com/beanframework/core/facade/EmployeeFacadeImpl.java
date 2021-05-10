@@ -74,7 +74,7 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto> im
 
 	@Override
 	public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, EmployeeSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, EmployeeSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

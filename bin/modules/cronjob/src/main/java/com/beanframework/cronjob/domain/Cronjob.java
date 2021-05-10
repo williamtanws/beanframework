@@ -3,6 +3,7 @@ package com.beanframework.cronjob.domain;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -52,6 +53,17 @@ public class Cronjob extends GenericEntity {
 	public static final String LAST_FINISH_EXECUTED_DATE = "lastFinishExecutedDate";
 	public static final String PARAMETERS = "parameters";
 	public static final String STATUS = "status";
+	
+	public Cronjob() {
+		super();
+	}
+
+	public Cronjob(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

@@ -18,7 +18,7 @@ import com.beanframework.core.facade.CommonFacade;
 
 import io.micrometer.core.instrument.util.StringUtils;
 
-public class AbstractController {
+public abstract class AbstractController {
 
 	public static final String ERROR = "error";
 	public static final String SUCCESS = "success";

@@ -10,11 +10,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.cms.domain.Comment;
 import com.beanframework.common.context.SpringContext;
@@ -22,14 +22,15 @@ import com.beanframework.common.data.DataTableColumnSpecs;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.specification.AbstractSpecification;
+import com.beanframework.common.specification.CommonSpecification;
 import com.beanframework.user.domain.User;
 
-public class CommentSpecification extends AbstractSpecification {
+public class CommentSpecification extends CommonSpecification {
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(CommentSpecification.class);
 
-	public static <T> Specification<T> getSpecification(DataTableRequest dataTableRequest) {
-		return new Specification<T>() {
+	public static <T> AbstractSpecification<T> getPageSpecification(DataTableRequest dataTableRequest) {
+		return new AbstractSpecification<T>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -39,6 +40,15 @@ public class CommentSpecification extends AbstractSpecification {
 
 			public String toString() {
 				return dataTableRequest.toString();
+			}
+
+			@Override
+			public List<Selection<?>> toSelection(Root<T> root) {
+				List<Selection<?>> multiselect = new ArrayList<Selection<?>>();
+				multiselect.add(root.get(Comment.UUID));
+				multiselect.add(root.get(Comment.USER));
+				multiselect.add(root.get(Comment.HTML));
+				return multiselect;
 			}
 		};
 	}

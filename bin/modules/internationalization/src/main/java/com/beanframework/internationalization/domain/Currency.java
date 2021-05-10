@@ -1,5 +1,7 @@
 package com.beanframework.internationalization.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -27,6 +29,18 @@ public class Currency extends GenericEntity {
 	public static final String CONVERTION = "conversion";
 	public static final String DIGIT = "digit";
 	public static final String SYMBOL = "symbol";
+	
+	public Currency() {
+		super();
+	}
+
+	public Currency(UUID uuid, String id, String name, Boolean active) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+		setActive(active);
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

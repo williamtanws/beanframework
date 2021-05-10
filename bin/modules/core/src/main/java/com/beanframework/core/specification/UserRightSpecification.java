@@ -8,18 +8,19 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.specification.AbstractSpecification;
+import com.beanframework.common.specification.CommonSpecification;
 import com.beanframework.user.domain.UserRight;
 
-public class UserRightSpecification extends AbstractSpecification {
-	public static <T> Specification<T> getSpecification(DataTableRequest dataTableRequest) {
-		return new Specification<T>() {
+public class UserRightSpecification extends CommonSpecification {
+	public static <T> AbstractSpecification<T> getPageSpecification(DataTableRequest dataTableRequest) {
+		return new AbstractSpecification<T>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -45,6 +46,16 @@ public class UserRightSpecification extends AbstractSpecification {
 
 			public String toString() {
 				return dataTableRequest.toString();
+			}
+
+			@Override
+			public List<Selection<?>> toSelection(Root<T> root) {
+				List<Selection<?>> multiselect = new ArrayList<Selection<?>>();
+				multiselect.add(root.get(UserRight.UUID));
+				multiselect.add(root.get(UserRight.ID));
+				multiselect.add(root.get(UserRight.NAME));
+				multiselect.add(root.get(UserRight.SORT));
+				return multiselect;
 			}
 		};
 	}

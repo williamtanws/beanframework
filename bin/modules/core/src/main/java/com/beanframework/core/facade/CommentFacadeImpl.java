@@ -46,7 +46,7 @@ public class CommentFacadeImpl extends AbstractFacade<Comment, CommentDto> imple
 
 	@Override
 	public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, CommentSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, CommentSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

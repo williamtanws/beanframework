@@ -71,7 +71,7 @@ public class MediaFacadeImpl extends AbstractFacade<Media, MediaDto> implements 
 
 	@Override
 	public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, MediaSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, MediaSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override
