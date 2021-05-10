@@ -101,10 +101,10 @@ public class UpdateController {
 		}
 
 		if (messages != null && messages[0].length() != 0)
-			model.addAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0]);
+			model.addAttribute(ConsoleWebConstants.Model.SUCCESS, messages[0].replace("\n", "<br>"));
 
 		if (messages != null && messages[1].length() != 0)
-			model.addAttribute(ConsoleWebConstants.Model.ERROR, messages[1]);
+			model.addAttribute(ConsoleWebConstants.Model.ERROR, messages[1].replace("\n", "<br>"));
 
 		model.addAttribute("updated", true);
 

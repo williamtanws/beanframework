@@ -110,6 +110,9 @@
 							<li class="nav-item">
 								<a class="nav-link" href="#idocs_modulegen">Module Gen</a>
 							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_dynamicattributes">Dynamic Attributes</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -499,6 +502,91 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 										<b>jpa.domain.packagetoscans=com.beanframework.*.domain,com.sample.*.domain</b>
 									</li>
 								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<hr class="divider">
+
+					<!-- Dynamic Attributes -->
+					<section id="idocs_dynamicattributes">
+						<h2>Dynamic Attributes</h2>
+						
+						<p>Optional: Please check example of dynamic attributes used in UserGroup module in project.</p>
+						
+						Example of create Dynamic Field for a Training Model:
+						<ul>
+							<li>Create/Reuse a new entry in DynamicField
+								<b>name_en</b>
+							</li>
+							<li>
+								Create a new entry in DynamicFieldSlot
+								<b>training_name_en</b>
+							</li>
+							<li>
+								Create a new entry in DynamicFieldTemplate
+								<b>training.dynamicfield.template</b>
+							</li>
+						</ul>
+
+						Example of create Attributes for a Training model:
+						<ul>
+							<li>
+								<code>TrainingAttribute.java</code>
+								- Create new entity
+							</li>
+							<li>
+								<code>Training.java</code>
+								- Insert attributes property
+							</li>
+							<li>
+								<code>TrainingAttributeDto.java</code>
+								- Insert attributes property
+							</li>
+							<li>
+								<code>TrainingDto.java</code>
+								- Insert attributes property
+							</li>
+							<li>
+								<code>TrainingPopulator.java</code>
+								- Insert attributes property
+							</li>
+							<li>
+								<code>TrainingEntityConvTraining.java</code>
+								- Insert attributes property
+							</li>
+							<li>
+								<code>TrainingServiceImpl.java</code>
+								- Create generateTrainingAttribute(...)
+							</li>
+							<li>
+								<code>TrainingLoadInterceptor.java</code>
+								- Insert trainingService.generateTrainingAttribute(...)
+							</li>
+							<li>
+								<code>TrainingInitialDefaultsInterceptor.java</code>
+								- Insert trainingService.generateTrainingAttribute(...)
+							</li>
+							<li>
+								<code>trainingForm.html</code>
+								- Insert:
+								<pre class="html">
+									<code class="html">
+...
+
+&lt;li class="nav-item"&gt;
+	&lt;a class="nav-link" id="custom-tabs-attribute-tab" data-toggle="pill" href="#custom-tabs-attribute" role="tab" aria-controls="custom-tabs-attribute" aria-selected="false" th:text="#{module.common.attribute}"&gt;&lt;/a&gt;
+&lt;/li&gt;
+
+...
+
+&lt;div class="tab-pane fade" id="custom-tabs-attribute" role="tabpanel" aria-labelledby="custom-tabs-attribute-tab"&gt;
+	&lt;th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-attribute :: form(attributes=*{attributes})}"&gt;&lt;/th:block&gt;
+&lt;/div&gt;
+
+...
+									</code>
+								</pre>
 							</li>
 						</ul>
 					</section>
