@@ -12,11 +12,11 @@ import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.exception.InterceptorException;
+import com.beanframework.common.specification.AbstractSpecification;
 
 @SuppressWarnings("rawtypes")
 public interface ModelService {
@@ -45,7 +45,7 @@ public interface ModelService {
 
 	int countByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
-	int countBySpecification(Specification specification, Class modelClass) throws Exception;
+	int countBySpecification(AbstractSpecification specification, Class modelClass) throws Exception;
 
 	boolean existsByProperties(Map<String, Object> properties, Class modelClass) throws Exception;
 
@@ -66,9 +66,9 @@ public interface ModelService {
 
 	<T extends Collection> T findByPropertiesBySortByResult(Map<String, Object> properties, Map<String, Sort.Direction> sorts, Integer firstResult, Integer maxResult, Class modelClass) throws Exception;
 
-	<T extends Collection> T findBySpecificationBySort(Specification specification, Sort sort, Class modelClass) throws Exception;
+	<T extends Collection> T findBySpecificationBySort(AbstractSpecification specification, Sort sort, Class modelClass) throws Exception;
 
-	<T extends Collection> T findBySpecification(Specification specification, Class modelClass) throws Exception;
+	<T extends Collection> T findBySpecification(AbstractSpecification specification, Class modelClass) throws Exception;
 
 	<T extends Collection> T findAll(Class modelClass);
 
@@ -80,7 +80,7 @@ public interface ModelService {
 
 	int countHistory(boolean selectDeletedEntities, List<AuditCriterion> auditCriterions, List<AuditOrder> auditOrders, Class modelClass) throws Exception;
 
-	<T> Page<T> findPage(Specification specification, Pageable pageable, Class modelClass) throws Exception;
+	<T> Page<T> findPage(AbstractSpecification specification, Pageable pageable, Class modelClass) throws Exception;
 
 	<T> T saveEntity(Object model) throws BusinessException;
 

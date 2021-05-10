@@ -1,7 +1,9 @@
 package com.beanframework.notification.domain;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -34,6 +36,18 @@ public class Notification extends GenericEntity {
 	@Column(name = "value")
 	@CollectionTable(name = NotificationConstants.Table.NOTIFICATION_PARAMETER, joinColumns = @JoinColumn(name = "notification_uuid"))
 	Map<String, String> parameters = new HashMap<String, String>();
+
+	public Notification() {
+		super();
+	}
+
+	public Notification(UUID uuid, String type, String message, Date createdDate) {
+		super();
+		setUuid(uuid);
+		this.type = type;
+		this.message = message;
+		setCreatedDate(createdDate);
+	}
 
 	public String getType() {
 		return type;

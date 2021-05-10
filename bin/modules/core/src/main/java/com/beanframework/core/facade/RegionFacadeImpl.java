@@ -46,7 +46,7 @@ public class RegionFacadeImpl extends AbstractFacade<Region, RegionDto> implemen
 
 	@Override
 	public Page<RegionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, RegionSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, RegionSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

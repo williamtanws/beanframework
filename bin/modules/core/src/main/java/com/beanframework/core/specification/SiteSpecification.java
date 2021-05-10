@@ -1,7 +1,41 @@
 package com.beanframework.core.specification;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
+
+import com.beanframework.cms.domain.Site;
+import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.specification.AbstractSpecification;
+import com.beanframework.common.specification.CommonSpecification;
 
-public class SiteSpecification extends AbstractSpecification {
+public class SiteSpecification extends CommonSpecification {
+	public static <T> AbstractSpecification<T> getPageSpecification(DataTableRequest dataTableRequest) {
+		return new AbstractSpecification<T>() {
+			private static final long serialVersionUID = 1L;
 
+			@Override
+			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return getPredicate(dataTableRequest, root, query, cb);
+			}
+
+			public String toString() {
+				return dataTableRequest.toString();
+			}
+
+			@Override
+			public List<Selection<?>> toSelection(Root<T> root) {
+				List<Selection<?>> multiselect = new ArrayList<Selection<?>>();
+				multiselect.add(root.get(Site.UUID));
+				multiselect.add(root.get(Site.ID));
+				multiselect.add(root.get(Site.NAME));
+				return multiselect;
+			}
+		};
+	}
 }

@@ -1,5 +1,6 @@
 package com.beanframework.cms.domain;
 
+import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -22,6 +23,17 @@ public class Site extends GenericEntity {
 	private static final long serialVersionUID = -5520792330246884683L;
 	public static final String NAME = "name";
 	public static final String URL = "url";
+	
+	public Site() {
+		super();
+	}
+
+	public Site(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

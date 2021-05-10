@@ -53,7 +53,7 @@ public class ConfigurationFacadeImpl extends AbstractFacade<Configuration, Confi
 
 	@Override
 	public Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, ConfigurationSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, ConfigurationSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

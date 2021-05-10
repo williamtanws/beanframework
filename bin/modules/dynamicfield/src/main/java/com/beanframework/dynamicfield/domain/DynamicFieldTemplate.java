@@ -41,6 +41,17 @@ public class DynamicFieldTemplate extends GenericEntity {
 	@CollectionTable(name = DynamicFieldTemplateConstants.Table.DYNAMIC_FIELD_TEMPLATE_FIELDSLOT_REL, joinColumns = @JoinColumn(name = "template_uuid"))
 	@Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)", nullable = false)
 	private Set<UUID> dynamicFieldSlots = new HashSet<UUID>();
+	
+	public DynamicFieldTemplate() {
+		super();
+	}
+
+	public DynamicFieldTemplate(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
 
 	public String getName() {
 		return name;

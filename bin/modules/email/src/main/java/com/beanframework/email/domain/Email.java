@@ -45,6 +45,17 @@ public class Email extends GenericEntity {
 	public static final String STATUS = "status";
 	public static final String RESULT = "result";
 	public static final String MESSAGE = "message";
+	
+	public Email() {
+		super();
+	}
+
+	public Email(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

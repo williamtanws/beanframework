@@ -2,6 +2,7 @@ package com.beanframework.user.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -33,6 +34,18 @@ public class UserRight extends GenericEntity {
 	public static final String NAME = "name";
 	public static final String ATTRIBUTES = "fields";
 	public static final String SORT = "sort";
+
+	public UserRight() {
+		super();
+	}
+
+	public UserRight(UUID uuid, String id, String name, Integer sort) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+		setSort(sort);
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

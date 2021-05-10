@@ -46,7 +46,7 @@ public class UserGroupFacadeImpl extends AbstractFacade<UserGroup, UserGroupDto>
 
 	@Override
 	public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, UserGroupSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, UserGroupSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

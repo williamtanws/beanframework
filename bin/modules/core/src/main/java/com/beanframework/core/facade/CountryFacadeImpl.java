@@ -46,7 +46,7 @@ public class CountryFacadeImpl extends AbstractFacade<Country, CountryDto> imple
 
 	@Override
 	public Page<CountryDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, CountrySpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, CountrySpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

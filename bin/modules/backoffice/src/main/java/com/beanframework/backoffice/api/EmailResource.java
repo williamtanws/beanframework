@@ -76,6 +76,7 @@ public class EmailResource extends AbstractResource {
 
 			EmailDataTableResponseData data = new EmailDataTableResponseData();
 			data.setUuid(dto.getUuid().toString());
+			data.setId(dto.getId());
 			data.setName(StringUtils.stripToEmpty(dto.getName()));
 			dataTableResponse.getData().add(data);
 		}

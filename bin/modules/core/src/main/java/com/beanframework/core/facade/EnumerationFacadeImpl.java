@@ -46,7 +46,7 @@ public class EnumerationFacadeImpl extends AbstractFacade<Enumeration, Enumerati
 
 	@Override
 	public Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, EnumerationSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, EnumerationSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

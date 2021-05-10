@@ -43,9 +43,20 @@ public class UserGroup extends GenericEntity {
 	public static final String USER_AUTHORITIES = "userAuthorities";
 	public static final String ATTRIBUTES = "fields";
 
+	public UserGroup() {
+		super();
+	}
+
+	public UserGroup(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
+
 	@Audited(withModifiedFlag = true)
 	private String name;
-	
+
 	@Audited(withModifiedFlag = true)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = UserGroupConstants.Table.USER_GROUP_USER_GROUP_REL, joinColumns = @JoinColumn(name = "usergroup_uuid"))

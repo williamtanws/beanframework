@@ -55,6 +55,17 @@ public class User extends GenericEntity {
 	public static final String NAME = "name";
 
 	private static final long serialVersionUID = -7444894280894062710L;
+	
+	public User() {
+		super();
+	}
+	
+	public User(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
 
 	@Column(insertable = false, updatable = false)
 	private String type;

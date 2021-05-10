@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -43,6 +42,7 @@ import com.beanframework.common.registry.BeforeSaveEvent;
 import com.beanframework.common.registry.BeforeSaveListener;
 import com.beanframework.common.registry.BeforeSaveListenerRegistry;
 import com.beanframework.common.repository.ModelRepository;
+import com.beanframework.common.specification.AbstractSpecification;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Service
@@ -184,7 +184,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public int countBySpecification(Specification specification, Class modelClass) throws Exception {
+	public int countBySpecification(AbstractSpecification specification, Class modelClass) throws Exception {
 		try {
 			Long count = (Long) executeCountQuery(getCountQuery(specification, modelClass));
 
@@ -244,7 +244,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T extends Collection> T findBySpecificationBySort(Specification specification, Sort sort, Class modelClass) throws Exception {
+	public <T extends Collection> T findBySpecificationBySort(AbstractSpecification specification, Sort sort, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
@@ -261,7 +261,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T extends Collection> T findBySpecification(Specification specification, Class modelClass) throws Exception {
+	public <T extends Collection> T findBySpecification(AbstractSpecification specification, Class modelClass) throws Exception {
 		Assert.notNull(modelClass, "modelClass was null");
 
 		try {
@@ -352,7 +352,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
 	}
 
 	@Override
-	public <T> Page<T> findPage(Specification spec, Pageable pageable, Class modelClass) throws Exception {
+	public <T> Page<T> findPage(AbstractSpecification spec, Pageable pageable, Class modelClass) throws Exception {
 		try {
 			Page<T> page = (Page<T>) page(spec, pageable, modelClass);
 

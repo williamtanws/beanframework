@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.springframework.context.ApplicationEvent;
 
-public class AbstractEvent extends ApplicationEvent {
+public abstract class AbstractEvent extends ApplicationEvent {
 	
 	public AbstractEvent(Object source, String message) {
         super(source);

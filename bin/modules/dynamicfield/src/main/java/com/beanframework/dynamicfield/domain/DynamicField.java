@@ -43,6 +43,18 @@ public class DynamicField extends GenericEntity {
 	public static final String LANGUAGE = "language";
 	public static final String ENUMERATIONS = "enumerations";
 
+	public DynamicField() {
+		super();
+	}
+
+	public DynamicField(UUID uuid, String id, String name, DynamicFieldType type) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+		this.type = type;
+	}
+
 	@Audited(withModifiedFlag = true)
 	private String name;
 

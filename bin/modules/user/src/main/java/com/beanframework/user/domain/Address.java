@@ -62,6 +62,17 @@ public class Address extends GenericEntity {
 	public static final String DEFAULT_PAYMENT_ADDRESS = "defaultPaymentAddress";
 	public static final String DEFAULT_SHIPMENT_ADDRESS = "defaultShipmentAddress";
 
+	public Address() {
+		super();
+	}
+
+	public Address(UUID uuid, String id, String streetName) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		this.streetName = streetName;
+	}
+
 	@Audited(withModifiedFlag = true)
 	@Column(name = "owner_uuid", columnDefinition = "BINARY(16)")
 	private UUID owner;

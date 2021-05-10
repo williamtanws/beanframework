@@ -30,7 +30,7 @@ public class AuditorFacadeImpl extends AbstractFacade<Auditor, AuditorDto> imple
 
 	@Override
 	public Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, AuditorSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, AuditorSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

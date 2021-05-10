@@ -46,7 +46,7 @@ public class DynamicFieldSlotFacadeImpl extends AbstractFacade<DynamicFieldSlot,
 
 	@Override
 	public Page<DynamicFieldSlotDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, DynamicFieldSlotSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, DynamicFieldSlotSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

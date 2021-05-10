@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.beanframework</groupId>
+    <artifactId>beanframework</artifactId>
+    <version>${beanframework.version}</version>
+    <packaging>pom</packaging>
+	
+	<properties>
+		<beanframework.version>3.0.0</beanframework.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+    <modules>
+    	<module>modules/common</module>
+    	<module>modules/enumeration</module>
+    	<module>modules/internationalization</module>
+    	<module>modules/user</module>
+    	<module>modules/email</module>
+    	<module>modules/cronjob</module>
+    	<module>modules/configuration</module>
+    	<module>modules/dynamicfield</module>
+    	<module>modules/menu</module>
+        <module>modules/filemanager</module>
+        <module>modules/media</module>
+        <module>modules/cms</module>
+        <module>modules/workflow</module>
+        <module>modules/imex</module>
+        <module>modules/notification</module>
+        <module>modules/core</module>
+		<module>modules/adminlte</module>
+        <module>modules/console</module>
+        <module>modules/backoffice</module>
+        <module>modules/documentation</module>
+        <module>modules/modulegen</module>
+		<!-- Custom -->
+        <module>custom/training</module>
+        <module>custom/trainingcore</module>
+        <module>custom/trainingbackoffice</module>
+        <module>platform</module>
+        <module>../config</module>
+    <module>custom/test</module>
+</modules>
+
+</project>

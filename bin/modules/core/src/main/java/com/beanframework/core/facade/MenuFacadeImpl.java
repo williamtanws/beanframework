@@ -73,7 +73,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 
 	@Override
 	public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, MenuSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, MenuSpecification.getCommonSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

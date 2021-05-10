@@ -54,6 +54,17 @@ public class Company extends GenericEntity {
 	public static final String BILLING_ADDRESS = "billingAddress";
 	public static final String CONTACT_ADDRESS = "contactAddress";
 
+	public Company() {
+		super();
+	}
+
+	public Company(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
+
 	@Audited(withModifiedFlag = true)
 	private String name;
 

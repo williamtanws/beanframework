@@ -1,5 +1,6 @@
 package ${modulegroup}.${moduleartifact}.domain;
 
+import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -22,6 +23,17 @@ public class ${Moduleartifact} extends GenericEntity {
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "name";
+	
+	public ${Moduleartifact}() {
+		super();
+	}
+
+	public ${Moduleartifact}(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

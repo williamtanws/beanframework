@@ -46,7 +46,7 @@ public class ImexFacadeImpl extends AbstractFacade<Imex, ImexDto> implements Ime
 
 	@Override
 	public Page<ImexDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, ImexSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, ImexSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

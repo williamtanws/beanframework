@@ -1,5 +1,7 @@
 package com.beanframework.enumuration.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
@@ -23,6 +25,18 @@ public class Enumeration extends GenericEntity {
 	public static final String ENUMERATION = "enumeration";
 	public static final String NAME = "name";
 	public static final String SORT = "sort";
+
+	public Enumeration() {
+		super();
+	}
+
+	public Enumeration(UUID uuid, String id, String name, Integer sort) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+		this.sort = sort;
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

@@ -29,6 +29,16 @@ public class Comment extends GenericEntity {
 	public static final String REPLIEDTO = "repliedTo";
 	public static final String USER = "user";
 
+	public Comment() {
+		super();
+	}
+
+	public Comment(UUID uuid, UUID user, String html) {
+		super();
+		setUuid(uuid);
+		this.html = html;
+	}
+
 	@Audited(withModifiedFlag = true)
 	@Lob
 	@Column(length = 100000)

@@ -2,6 +2,7 @@ package com.beanframework.user.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -34,6 +35,17 @@ public class UserPermission extends GenericEntity {
 	public static final String USER_PERMISSION_FIELD = "userPermissionField";
 	public static final String SORT = "sort";
 	public static final String ATTRIBUTES = "fields";
+
+	public UserPermission() {
+		super();
+	}
+
+	public UserPermission(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
 
 	@Audited(withModifiedFlag = true)
 	private String name;

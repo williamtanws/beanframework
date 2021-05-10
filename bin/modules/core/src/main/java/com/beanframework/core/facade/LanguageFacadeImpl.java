@@ -46,7 +46,7 @@ public class LanguageFacadeImpl extends AbstractFacade<Language, LanguageDto> im
 
 	@Override
 	public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, LanguageSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, LanguageSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

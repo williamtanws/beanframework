@@ -47,7 +47,7 @@ public class ${Moduleartifact}FacadeImpl extends AbstractFacade<${Moduleartifact
 
 	@Override
 	public Page<${Moduleartifact}Dto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, ${Moduleartifact}Specification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, ${Moduleartifact}Specification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

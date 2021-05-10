@@ -48,7 +48,7 @@ public class UserPermissionFacadeImpl extends AbstractFacade<UserPermission, Use
 
 	@Override
 	public Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
-		return findPage(dataTableRequest, UserPermissionSpecification.getSpecification(dataTableRequest), entityClass, dtoClass);
+		return findPage(dataTableRequest, UserPermissionSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
 	}
 
 	@Override

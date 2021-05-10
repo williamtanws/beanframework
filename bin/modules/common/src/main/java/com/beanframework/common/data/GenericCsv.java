@@ -5,7 +5,7 @@ import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
-public class AbstractCsv {
+public class GenericCsv {
 	protected String modeType;
 	protected String id;
 
