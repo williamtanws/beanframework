@@ -111,6 +111,12 @@
 								<a class="nav-link" href="#idocs_modulegen">Module Gen</a>
 							</li>
 							<li class="nav-item">
+								<a class="nav-link" href="#idocs_modelattribute">Module Attribute</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_datatable">Datatable</a>
+							</li>
+							<li class="nav-item">
 								<a class="nav-link" href="#idocs_dynamicattributes">Dynamic Attributes</a>
 							</li>
 						</ul>
@@ -457,7 +463,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 					<!-- Development -->
 					<section id="idocs_development">
 						<h2>Development</h2>
-						<p class="lead mb-5">Development for developer</p>
+						<p class="lead mb-5">Development guide for Spring Boot developer</p>
 					</section>
 
 					<!-- Module Gen -->
@@ -508,15 +514,172 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 					<hr class="divider">
 
+					<!-- Model Attribute -->
+					<section id="idocs_modelattribute">
+						<h2>Model Attribute</h2>
+
+						Example of adding new attribute in Model
+						<ul>
+							<li>
+								<code>Training.java</code>
+								- Add new attribute
+							</li>
+							<li>
+								<code>TrainingDto.java</code>
+								- Add new attribute
+							</li>
+							<li>
+								<code>TrainingPopulator.java</code>
+								- Add new attribute
+							</li>
+							<li>
+								<code>TrainingEntityConverter.java</code>
+								- Add new attribute
+							</li>
+							<li>
+								<code>trainingForm.html</code>
+								- Add new input
+								<pre class="html">
+									<code class="html">
+...
+
+&lt;div class="col-md-3"&gt;
+	&lt;div class="form-group"&gt;
+		&lt;label for="name" th:text="#{module.training.name}"&gt;&lt;/label&gt;
+		&lt;input type="text" class="form-control" name="name" th:value="*{name}"&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+
+...
+									</code>
+								</pre>
+							</li>
+						</ul>
+					</section>
+
+					<hr class="divider">
+
+					<!-- Datatable -->
+					<section id="idocs_datatable">
+						<h2>Datatable</h2>
+
+						Example of adding new column in datatable
+						<ul>
+							<li>
+								<code>training.html</code>
+								- Add new attribute, for example "name":
+								<pre class="html">
+									<code class="html">
+...
+
+&lt;th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: datatable (title=#{module.training}, tableId='trainingTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, selectAuthority=true )}"&gt;&lt;/th:block&gt;
+
+...
+
+&lt;th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='trainingTable', columns=${#strings.arraySplit('id,<b>name</b>', ',')}, pageUrl=@{${@environment.getProperty('path.api.training')}}, formUrl=@{${@environment.getProperty('path.training.form')}}, addAuthority=${addAuthority}, selectAuthority=true )}"&gt;&lt;/th:block&gt;
+
+
+...
+									</code>
+								</pre>
+							</li>
+							<li>
+								<code>Training.java</code>
+								- Add new attribute, for example "name":
+								<pre class="html">
+									<code class="html">
+...
+
+public Training(UUID uuid, String id, String name) {
+		super();
+		setUuid(uuid);
+		setId(id);
+		setName(name);
+	}
+...
+									</code>
+								</pre>
+							</li>
+							<li>
+								<code>TrainingSpecification.java</code>
+								- Add new attribute, for example "name":
+
+								<pre class="html">
+									<code class="html">
+...
+
+@Override
+public Predicate toPredicate(Root&lt;T&gt; root, CriteriaQuery&lt;?&gt;; query, CriteriaBuilder cb) {
+		List&lt;Predicate&gt; predicates = new ArrayList&lt;Predicate&gt;();
+
+		String search = clean(dataTableRequest.getSearch());
+
+		if (StringUtils.isNotBlank(search)) {
+			predicates.add(cb.or(cb.like(root.get(TRAINING.ID), convertToLikePattern(search))));
+			predicates.add(cb.or(cb.like(root.get(TRAINING.NAME), convertToLikePattern(search))));
+		}
+
+		if (predicates.isEmpty()) {
+			return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+		} else {
+			return cb.or(predicates.toArray(new Predicate[predicates.size()]));
+		}
+}
+									</code>
+								</pre>
+								<pre class="html">
+									<code class="html">
+...
+
+@Override
+public List&lt;Selection&lt;?&gt;&gt; toSelection(Root&lt;T&gt; root) {
+		List&lt;Selection&lt;?&gt;&gt; multiselect = new ArrayList&lt;Selection&lt;?&gt;&gt;();
+		multiselect.add(root.get(Training.UUID));
+		multiselect.add(root.get(Training.ID));
+		multiselect.add(root.get(Training.NAME));
+		return multiselect;
+}
+...
+									</code>
+								</pre>
+
+							</li>
+							<li>
+								<code>TrainingDataTableResponseData.java</code>
+								- Add new property, for example "name"
+							</li>
+							<li>
+								<code>TrainingResource.java</code>
+								- Add new data, for example "name":
+								<pre class="html">
+									<code class="html">
+...
+
+for (TrainingDto dto : pagination.getContent()) {
+
+		TrainingDataTableResponseData data = new TrainingDataTableResponseData();
+		data.setUuid(dto.getUuid().toString());
+		data.setId(StringUtils.stripToEmpty(dto.getId()));
+		data.setName(StringUtils.stripToEmpty(dto.getName()));
+		dataTableResponse.getData().add(data);
+}
+...
+									</code>
+								</pre>
+							</li>
+						</ul>
+					</section>
+
 					<!-- Dynamic Attributes -->
 					<section id="idocs_dynamicattributes">
 						<h2>Dynamic Attributes</h2>
-						
-						<p>Optional: Please check example of dynamic attributes used in UserGroup module in project.</p>
-						
-						Example of create Dynamic Field for a Training Model:
+
+						<p>*Please check example of dynamic attributes used in UserGroup module in project.</p>
+
+						Example of creating Dynamic Field for a Training Model:
 						<ul>
-							<li>Create/Reuse a new entry in DynamicField
+							<li>
+								Create/Reuse a new entry in DynamicField
 								<b>name_en</b>
 							</li>
 							<li>
@@ -529,7 +692,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 							</li>
 						</ul>
 
-						Example of create Attributes for a Training model:
+						Example of creating Attributes for a Training model:
 						<ul>
 							<li>
 								<code>TrainingAttribute.java</code>
@@ -590,6 +753,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 							</li>
 						</ul>
 					</section>
+
+
+					<hr class="divider">
 				</div>
 			</div>
 
