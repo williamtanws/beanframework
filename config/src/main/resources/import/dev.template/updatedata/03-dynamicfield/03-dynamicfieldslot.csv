@@ -1,0 +1,17 @@
+INSERT_UPDATE DynamicFieldSlot,id,name,sort,dynamicFieldId
+,menu_name_en			,Menu Name(en)				,0,name_en
+,menu_name_cn			,Menu Name(cn)				,1,name_cn
+,menu_header_en			,Menu Header(en)			,2,header_en
+,menu_header_cn			,Menu Header(cn)			,3,header_cn
+,userright_name_en		,User Right Name(en)		,0,name_en
+,userright_name_cn		,User Right Name(cn)		,1,name_cn
+,userpermission_name_en	,User Permission Name(en)	,0,name_en
+,userpermission_name_cn	,User Permission Name(cn)	,1,name_cn
+,usergroup_name_en		,User Group Name(en)		,0,name_en
+,usergroup_name_cn		,User Group Name(cn)		,1,name_cn
+,employee_name_en		,Employee Name(en)			,0,name_en
+,employee_name_cn		,Employee Name(cn)			,1,name_cn
+,customer_name_en		,Customer Name(en)			,0,name_en
+,customer_name_cn		,Customer Name(cn)			,1,name_cn
+,vendor_name_en			,Vendor Name(en)			,0,name_en
+,vendor_name_cn			,Vendor Name(cn)			,1,name_cn

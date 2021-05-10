@@ -1,0 +1,12 @@
+INSERT_UPDATE Configuration,id,value
+,demo										,true
+,footer										,"<div class='pull-right hidden-xs'><b>Version</b> 2.0.x </div><strong>Copyright &copy; 2018-2020 <a href='https://beanframework.com'>Beanframework</a>.</strong> All rights reserved."
+,defaultavatar								,"/static/core/img/avatar.png"
+,employee.dynamicfield.template				,"employeetemplate"
+,customer.dynamicfield.template				,"customertemplate"
+,vendor.dynamicfield.template				,"vendortemplate"
+,menu.dynamicfield.template					,"menutemplate"
+,usergroup.dynamicfield.template			,"usergrouptemplate"
+,userright.dynamicfield.template			,"userrighttemplate"
+,userpermission.dynamicfield.template		,"userpermissiontemplate"
+,notification.interval						,"5000"
